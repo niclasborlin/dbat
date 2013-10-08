@@ -1,0 +1,10 @@
+calcProblemData=false;
+vetoAll=false;
+largePert=false;
+smallPert=true;
+doSave=true;
+doPlot=false;
+doPlotX0veto=false;
+doBench=false;
+mirror=false;
+vetoTiming=false;
