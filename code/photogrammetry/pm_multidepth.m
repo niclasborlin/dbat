@@ -10,7 +10,7 @@ function d=pm_multidepth(IO,EO,OP,vis,camNo)
 %   D     - M-by-N array with depths for each OP w.r.t. each camera is it
 %           visible in.
 
-% $Id: 6ed9c01f5458d66c478f3d8d17703876cf9c9738 $
+% $Id$
 
 [m,n]=size(vis);
 

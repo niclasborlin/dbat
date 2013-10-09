@@ -22,7 +22,7 @@ function pm_plotmulti(IO,EO,OP,isCtrl,EOplot,cIO,cEO,cOP,X,ixIO,ixEO,ixOP,l,camS
 %            to eye(4).
 %  str     - Title string.
 
-% $Id: c4951afb71a4ff3532cf754ec7a83b90cd755b6e $
+% $Id$
 
 if nargin<16, T0=eye(4); end
 if nargin<17, str=''; end

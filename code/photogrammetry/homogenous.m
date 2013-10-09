@@ -7,7 +7,7 @@ function Y=homogenous(X)
 %
 %See also: EUCLIDEAN.
 
-% $Id: e5c2450808b5148e865a913f5453dbdf106f7c6b $
+% $Id$
 
 % Append unity.
 Y=X;
