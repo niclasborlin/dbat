@@ -6,7 +6,7 @@ function [EO,OP]=pm_multixform(EO,OP,T)
 %   OP - 3-by-N array with object point coordinates.
 %   T  - 4x4 homogenous array with point transformation.
 
-% $Id: 2bfce3b6b000033f2ebcf37cfe1ec0ffaee8937a $
+% $Id$
 
 % Transform points.
 if ~isempty(OP)

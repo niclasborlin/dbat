@@ -21,7 +21,7 @@ function [x,code,n,X,alphas,F]=gaussn_paper(prob,veto,x0,tol,maxIter,alphaMin,mu
 %X        - iteration trace. X(:,i+1) is the ith iteration.
 %alphas   - vector of accepted step lengths. alphas(i) is the ith step length.
 
-% $Id: 1bb9f7fbe63b5fdb469df5a3f464a6f9583de211 $
+% $Id$
 
 x=x0;
 X=x;

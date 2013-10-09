@@ -7,7 +7,7 @@ function [OP,r]=pm_forwintersect3(P,xy)
 %OP     - 3-by-K array with estimated OP coordinates.
 %r      - 1-by-K vector with averaged squared residual.
 
-% $Id: 1b7157a8fd28144f78d5c1c1303de07d32b6ad78 $
+% $Id$
 
 n=size(P,3);
 k=size(xy,3);
