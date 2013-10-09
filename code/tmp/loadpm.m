@@ -35,7 +35,7 @@ function [prob,err]=loadpm(name,skip)
 %       featVis  - matrix with rows [i,j] indicating that feature j is 
 %                  visible in photo i.
 
-% $Id$
+% $Id: d5ccc0b15978aebe302a734ca890c48b92abed81 $
 
 if nargin<2, skip=true; end
 
