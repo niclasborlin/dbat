@@ -7,6 +7,7 @@ if ~exist('fName','var')
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
+    disp(' ')
 end
     
 fprintf('Loading data file %s...',fName);
