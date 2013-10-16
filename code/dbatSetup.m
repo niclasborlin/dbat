@@ -1,3 +1,5 @@
+% $Id$
+
 % Get dir of executing (i.e. this!) file.
 baseDir=fileparts(mfilename('fullpath'));
 
