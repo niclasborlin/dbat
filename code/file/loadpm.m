@@ -9,7 +9,7 @@ function [prob,err]=loadpm(name,varargin)
 %   S=LOADPM(NAME,IMSZ) with IMSZ=[w,h] overrides any information stored
 %   in NAME or the image files.
 %
-%   ...=LOADPM(...,TRUE) skips loading of feature information (faster).
+%   ...=LOADPM(...,FALSE) also loads the feature information (slower).
 %
 %   [S,ERR]=LOADPM(...) will return an error string ERR on error instead of
 %   throwing an error.
@@ -29,6 +29,7 @@ function [prob,err]=loadpm(name,varargin)
 %                               format size xs,ys (mm),
 %                               lens distortion parameters K1,K2,K3,P1,P2].
 %                  defCamStd - standard deviation for defCam parameters.
+%                  imSz      - [width, height] in pixels, or [NaN, NaN].
 %       images   - array of structs with fields
 %                  imName   - image name.
 %                  outer    - outer orientation parameters 
@@ -40,9 +41,9 @@ function [prob,err]=loadpm(name,varargin)
 %                              lens distortion K1,K2,K3,P1,P2].
 %                  innerStd - standard deviation of inner parameters.
 %                  imSz     - [width, height] in pixels, or [NaN, NaN].
-%       ctrlPts  - array of control points [pos x,y,z (m),stdev x,y,z (m)].
-%       objPts   - array of object points [pos x,y,z (m),stdev x,y,z (m)].
-%       markPts  - array of marked points [photo#,pt#,pos x,y(px),std x,y(mm)].
+%       ctrlPts  - array of control points [id,pos x,y,z (m),stdev x,y,z (m)].
+%       objPts   - array of object points [id,pos x,y,z (m),stdev x,y,z (m)].
+%       markPts  - array of marked points [photo#,id,pos x,y(px),std x,y(mm)].
 %       features - cell array of vectors with points numbers in each
 %                  feature (optional).
 %       featVis  - array with rows [i,j] indicating that feature j is 
@@ -114,7 +115,8 @@ end
 
 % Package global information.
 job=struct('title',title,'tol',tol(1),'maxIter',tol(2),...
-		   'defStd',defStd,'defCam',defCam,'defCamStd',defCamStd);
+		   'defStd',defStd,'defCam',defCam,'defCamStd',defCamStd,...
+           'imSz',globalImSz);
 
 % Created images struct array.
 images=struct('imName',cell(0,1),... % Image file names.
@@ -122,9 +124,9 @@ images=struct('imName',cell(0,1),... % Image file names.
                                  ... % [X,Y,Z (m),kappa,phi,omega (degrees)]
               'outerStd',zeros(0,6),...  % ...standard deviations...
               'outerCov',zeros(0,3),...  % ...and XYZ covariances.
-              'inner',zeros(0,9),... % Inner orientation parameter values...
-                                ...  % [c,xp,yp,xs,ys,K1,K2,P1,P2]
-              'innerStd',zeros(0,9),...  % ...and standard deviations.
+              'inner',zeros(0,10),... % Inner orientation parameter values...
+                                ...  % [c,xp,yp,xs,ys,K1,K2,K3,P1,P2]
+              'innerStd',zeros(0,10),...  % ...and standard deviations.
               'imSz',zeros(0,2));    % Image size [w,h].
 
 % Scan the file line by line.
