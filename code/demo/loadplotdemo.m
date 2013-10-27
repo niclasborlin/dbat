@@ -14,4 +14,4 @@ fprintf('Loading data file %s...',fName);
 prob=loadpm(fName);
 disp('done.')
 
-
+s=prob2dbatstruct(prob);
