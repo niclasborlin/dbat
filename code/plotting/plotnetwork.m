@@ -237,7 +237,8 @@ while true
     set(ax,'projection','perspective')
     axis(ax,'tight');
     view(ax,3)
-    
+
+    % Set title, optionally with iteration number.
     if ~isempty(titleStr)
         switch titleStrNums
         case 0
@@ -249,6 +250,7 @@ while true
         end
     end
 
+    % Pause if requested unless after showing last iteration.
     if ~isempty(pauseMode) && iter<size(X,2)-1
         if ischar(pauseMode)
             pause
@@ -259,6 +261,7 @@ while true
     
     iter=iter+1;
     
+    % Stop after last iteration.
     if iter>=size(X,2)
         break;
     end
