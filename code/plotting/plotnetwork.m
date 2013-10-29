@@ -1,4 +1,4 @@
-function hh=plotnetwork(S,varargin)
+function hh=plotnetwork(s,varargin)
 %PLOTNETWORK Plot DBAT camera network.
 %
 %  PLOTNETWORK(S), where S is a struct returned by PROB2DBATSTRUCT, plots
@@ -6,9 +6,12 @@ function hh=plotnetwork(S,varargin)
 %
 %  PLOTNETWORK(S,X), where X is a MPARAMS-by-NITER numeric array with
 %  estimates of the MPARAMS free parameters in S, plots the network with
-%  estimates during iterations 0,...,NITER-1. The camera position estimates
-%  are shown as trace plots of camera icons connected by lines. The object
-%  points are re-plotted for every iteration.
+%  estimates during iterations 0,...,NITER-1. Each column of X is assumed to
+%  hold the estimated parameters for successive iterations. The order is
+%  assumed to be consistent with the cIO, cEO, and cOP fields of S, in that
+%  order. The camera position estimates are shown as trace plots of camera
+%  icons connected by lines. The object points are re-plotted for every
+%  iteration.
 %
 %  H=PLOTNETWORK(...) returns the axes handle as H.
 %
@@ -16,6 +19,11 @@ function hh=plotnetwork(S,varargin)
 %  matrix, applies the transformation T to all points and cameras before
 %  plotting.
 %
+%  PLOTNETWORK(...,'align',N), where N=I is an integer, aligns the network
+%  such that camera I defines the origin and coordinate axes. If N=[I,RA],
+%  camera I is assumed to have roll angle RA radians. Any transformation
+%  T is applied after the alignment.
+
 %  PLOTNETWORK(...,'lines',L), where L is a cell array of vectors with
 %  object point indices, connects the object points specified in L by lines.
 %
@@ -24,8 +32,9 @@ function hh=plotnetwork(S,varargin)
 %  CSZ defaults to [1,0.73,0.36]. If CSZ is a scalar, the default values are
 %  scaled by CSZ instead.
 %
-%  PLOTNETWORK(...,'axes',AX), where AX is an axes handle, plots the network
-%  in AX instead of in GCA.
+%  PLOTNETWORK(...,'axes',AX), where AX is an axes or figure handle,
+%  plots the network in AX instead of in GCA. If AX is a figure handle,
+%  gca(AX) is used.
 %
 %  PLOTNETWORK(...,'plotx0pts',B), plots the initial object point
 %  estimates separately.
@@ -34,16 +43,37 @@ function hh=plotnetwork(S,varargin)
 %  STR contains a '%d', it is replaced by the iteration number. If STR
 %  contains a second '%d', it is replaced by the total iteration count.
 %
-%See also: PROB2DBATSTRUCT, CAMERAICON.
+%  PLOTNETWORK(...,'pause',P), where P is numeric scalar, pauses between
+%  each iteration for P seconds. If P is 'on', waits for keypress between
+%  iterations instead.
+%
+%  PLOTNETWORK(...,'EOplot',I), plots all cameras in the vector I. I
+%  defaults to all.
+%
+%  PLOTNETWORK(...,'ixIO',ixIO), PLOTNETWORK(...,'ixEO',ixEO),
+%  PLOTNETWORK(...,'ixOP',ixOP), specifies what rows of X correspond to
+%  each unknown IO/EO/OP parameter. No error checking is done on the ixXX
+%  arguments.
+%
+%See also: PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
+
+% $Id$
 
 % Defaults.
 X=[];
 T=eye(4);
 L={};
-CSZ=[1,0.73,0.36];
-AX=[];
+camSize=[1,0.73,0.36];
+ax=[];
 plotX0pts=false;
 titleStr='';
+titleStrNums=0;
+ixIO=[];
+ixEO=[];
+ixOP=[];
+EOplot=[];
+pauseMode=[];
+align=[];
 
 while ~isempty(varargin)
     if isnumeric(varargin{1})
@@ -54,85 +84,133 @@ while ~isempty(varargin)
         if length(varargin)<2
             error('DBAT:plotnetwork:badInput','Missing argument');
         end
-        s=[varargin{1},'  '];
-        % TODO: Add parameter tests.
-        switch lower(s(1:2))
-        case 'tr' % 'trans'
+        arg=[varargin{1},repmat(' ',1,3)];
+        switch lower(arg(1:3))
+        case 'tra' % 'trans'
             T=varargin{2};
-        case 'li' % 'lines'
+            % T should be numeric 4x4
+            if ~isnumeric(T) || ndims(T)~=2 || any(size(T)~=4)
+                error('DBAT:plotnetwork:badInput','T should be numeric 4x4');
+            end
+        case 'lin' % 'lines'
             L=varargin{2};
-        case 'ca' % 'camerasize'
-            XX=varargin{2};
-        case 'ax' % 'axes'
-            AX=varargin{2};
-        case 'pl'
+            % L should be cell array of vectors of indices, or empty.
+            if ~isempty(L) && ~iscell(L)
+                error('DBAT:plotnetwork:badInput',...
+                      'L should be cell array of vectors of OP indices');
+            end
+        case 'cam' % 'camerasize'
+            v=varargin{2};
+            % CA should be scalar or 1-by-3.
+            if ~isnumeric(v) || all([1,3]~=length(v))
+                error('DBAT:plotnetwork:badInput',...
+                      'CSZ should be scalar or 3-vector'); 
+            end
+            if isscalar(v)
+                camSize=v*camSize;
+            else
+                camSize=v;
+            end
+        case 'axe' % 'axes'
+            ax=varargin{2};
+            % AX should be an axes or figure handle.
+            if ~ishandle(ax) || ~ismember(get(ax,'type'),{'axes','figure'})
+                error('DBAT:plotnetwork:badInput',...
+                      'AX should be an axes or figure handle'); 
+            end
+            if strcmp(get(ax,'type'),'figure')
+                ax=gca(ax);
+            end
+        case 'plo'
             plotX0pts=varargin{2};
-        case 'ti'
+            % plotx0pts should be scalar logical.
+            if ~isscalar(plotX0pts) || ~islogical(plotX0pts)
+                error('DBAT:plotnetwork:badInput',...
+                      'B should be scalar boolean'); 
+            end
+        case 'tit'
             titleStr=varargin{2};
-            
-            
+            % title string should be a string
+            if ~ischar(titleStr)
+                error('DBAT:plotnetwork:badInput',...
+                      'STR should be a string'); 
+            end
+            % How many %d does the title string have?
+            titleStrNums=length(strfind(titleStr,'%d'));
+        case 'ali' % 'align'
+            align=varargin{2};
+            if ~isnumeric(align) || length(align)>2
+                error('DBAT:plotnetwork:badInput',...
+                      'P should be numeric scalar or 2-vector'); 
+            end
+        case 'pau' % 'pause'
+            pauseMode=varargin{2};
+        case 'ixi'
+            ixIO=varargin{2};
+        case 'ixe'
+            ixEO=varargin{2};
+        case 'ixo'
+            ixOP=varargin{2};
+        case 'eop'
+            EOplot=varargin{2};
+        otherwise
+            error('DBAT:plotnetwork:badInput','Bad attribute string');
+        end
+        % Remove processed arguments.
+        varargin(1:2)=[];
     else
         error('DBAT:plotnetwork:badInput','Expected char parameter');
     end
 end
 
+if isempty(ax), ax=gca; end
+if isempty(ixIO), ixIO=find(s.cIO); end
+if isempty(ixEO), ixEO=nnz(ixIO)+find(s.cEO); end
+if isempty(ixOP), ixOP=nnz(ixIO)+nnz(ixEO)+find(s.cOP); end
+if isempty(EOplot), EOplot=1:size(s.EO,2); end
 
-
-%  pm_plotmulti(IO,EO,OP,isCtrl,EOplot,cIO,cEO,cOP,X,ixIO,ixEO,ixOP,l,camSize,fig[,T0[,str]])
-%  IO      - 7+nK+nP-by-K interior orientation [pp;f;K;P;a;u].
-%  EO      - 7-by-N exterior orientation [C;ang;0]
-%  OP      - 3-by-M object points.
-%  isCtrl  - M-by-1 logical indicating which OP are control points.
-%  EOplot  - N-by-1 logical with which cameras to plot.
-%  cIO     - logical(size(IO)) indicating which IO elements that were estimated.
-%  cEO     - logical(size(EO)) indicating which EO elements that were estimated.
-%  cOP     - logical(size(OP)) indicating which OP elements that were estimated.
-%  X       - P-by-nIter array with iterates. X==[] means plot what is in
-%            IO, EO, OP.
-%  ixIO    - indices of rows in X that containt IO elements.
-%  ixEO    - indices of rows in X that containt EO elements.
-%  ixOP    - indices of rows in X that containt OP elements.
-%  l       - cell array with indices of object points to connect by lines.
-%  camSize - size of camera icons.
-%  fig     - figure to plot in.
-%  T0      - 4x4 transformation matrix to improve visualisation. Defaults
-%            to eye(4).
-%  str     - Title string.
-
-% $Id$
-
-if nargin<16, T0=eye(4); end
-if nargin<17, str=''; end
-
-clf(fig);
-ax=gca(fig);
-
-for iter=1:max(1,size(X,2))
-    % Extract estimated values.
+iter=0;
+while true
+    % Extract base parameters.
+    IO=s.IO;
+    EO=s.EO;
+    OP=s.OP;
     if ~isempty(X)
-        IO(cIO)=X(ixIO,iter);
-        EO(cEO)=X(ixEO,iter);
-        OP(cOP)=X(ixOP,iter);
+        % Replace unknown parameters with estimated value at iteration iter.
+        IO(s.cIO)=X(ixIO,iter+1);
+        EO(s.cEO)=X(ixEO,iter+1);
+        OP(s.cOP)=X(ixOP,iter+1);
     end
 
-    % Plot transformed object points.
-    [EOT,OPT]=pm_multixform(EO,OP,T0);
-    plot3(ax,OPT(1,~isCtrl),OPT(2,~isCtrl),OPT(3,~isCtrl),'b.',...
-          OPT(1,isCtrl),OPT(2,isCtrl),OPT(3,isCtrl),'r^');
+    if ~isempty(align)
+        if length(align)==2
+            [EO,OP]=pm_multialign(EO,OP,align(1),align(2));
+        else
+            [EO,OP]=pm_multialign(EO,OP,align(1));
+        end
+    end
+    
+    % Transform points and cameras.
+    [EO,OP]=pm_multixform(EO,OP,T);
+    
+    % Plot points.
+    plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.', ...
+          OP(1,s.isCtrl),OP(2,s.isCtrl),OP(3,s.isCtrl),'r^');
     axis(ax,'equal');
     colormap(ax,[1,0,0;0,1,0;0.5,0.5,1])	
-        
+
+    % Plot cameras.
     for i=find(EOplot)
         % Get camera icon.
-        [cam,camCol]=cameraicon(camSize*[0.11,0.08,0.04]);
+        [cam,camCol]=cameraicon(camSize);
         cam(:,:,3)=-cam(:,:,3);
         [m,n,p]=size(cam);
             
         % Camera center.
-        CC=EOT(1:3,i);
+        CC=EO(1:3,i);
             
         % Camera orientation.
-        ang=EOT(4:6,i);
+        ang=EO(4:6,i);
         RR=pm_eulerrotmat(ang);
             
         % Apply transformation.
@@ -144,10 +222,10 @@ for iter=1:max(1,size(X,2))
         surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol);
         hold(ax,'off');
     end
-
+    
     % Draw 3d lines.
-    for i=1:length(l)
-        f=l{i};
+    for i=1:length(L)
+        f=L{i};
         if (length(f)>1)
             xyz=OPT(:,f);
             if (~any(all(xyz==0)))
@@ -160,8 +238,28 @@ for iter=1:max(1,size(X,2))
     axis(ax,'tight');
     view(ax,3)
     
-    title(ax,[str,sprintf(' Iteration %d of %d',iter-1,size(X,2)-1)]);
-    if iter<size(X,2)
-        pause
+    if ~isempty(titleStr)
+        switch titleStrNums
+        case 0
+            title(ax,titleStr);
+        case 1
+            title(ax,sprintf(str,iter));
+        otherwise
+            title(ax,sprintf(str,iter,size(X,2)-1))
+        end
+    end
+
+    if ~isempty(pauseMode) && iter<size(X,2)-1
+        if ischar(pauseMode)
+            pause
+        else
+            pause(pauseMode);
+        end
+    end
+    
+    iter=iter+1;
+    
+    if iter>=size(X,2)
+        break;
     end
 end
