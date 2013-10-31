@@ -28,14 +28,16 @@ function [s,X]=bundle(s,varargin)
 %   [S,OK,S0,X,CXX]=... returns the covariance matrix CXX of the final X,
 %   scaled by sigma0.
 %
-%References: Börlin, Grussenmeyer (2013), "Bundle Adjustment with and
-%   without Damping", Photogrammetric Record 28(144), pp. XX-YY. DOI
-%   10.1111/phor.12037.
+%   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
+%       Without Damping". Photogrammetric Record 28(144), pp. XX-YY. DOI
+%       10.1111/phor.12037.
+%
+%   See also PROB2DBATSTRUCT, BROWN_EULER_CAM.
 
 % $Id$
 
 maxIter=20;
-damp='gna';
+damping='gna';
 veto=false;
 
 while ~isempty(varargin)
@@ -48,7 +50,7 @@ while ~isempty(varargin)
         switch lower(varargin{1})
           case {'none','gm','gna','lm','lmp'}
             % OK
-            damp=varargin{1};
+            damping=varargin{1};
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -62,12 +64,10 @@ while ~isempty(varargin)
 end
 
 % Create indices into the vector of unknowns.
-ixIO=find(s.cIO);
-ixEO=nnz(ixIO)+find(s.cEO);
-ixOP=nnz(ixIO)+nnz(ixEO)+find(s.cOP);
+[ixIO,ixEO,ixOP,n]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
 % Number of unknowns.
-n=nnz(ixIO)+nnz(ixEO)+nnz(ixOP);
+n=max(ixOP);
 
 % Set up vector of initial values.
 x0=nan(n,1);
@@ -76,10 +76,10 @@ x0(ixEO)=s.EO(s.cEO);
 x0(ixOP)=s.OP(s.cOP);
 
 % Residual function.
-resFun=@pm_eulerbundle1p_f;
+resFun=@browneulercam;
 
 if veto
-    vetoFun=@pm_chirality;
+    vetoFun=@chirality;
 else
     vetoFun='';
 end
@@ -96,13 +96,13 @@ params={s};
 % - ok, -1 - too many iterations) and the number of required iterations are
 % returned.
 
-switch lower(damp)
+switch lower(damping)
   case {'none','gm'}
     % Gauss-Markov with no damping.
     
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
-    [x,code,iters,X,f,J]=gauss_markov(resFun,x0,convTol,maxIter,params);
+    [x,code,iters,X,f,J]=gauss_markov(resFun,x0,maxIter,convTol,params);
     time=cputime-stopWatch;
   case 'gna'
     % Gauss-Newton with Armijo linesearch.
@@ -116,8 +116,8 @@ switch lower(damp)
     % returned with the step lengths used at each iteration.
     stopWatch=cputime;
     [x,code,iters,X,f,J,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
-                                                   alphaMin,convTol, ...
-                                                   maxIter,params);
+                                                   alphaMin,maxIter, ...
+                                                   convTol,params);
     time=cputime-stopWatch;
   case 'lm'
     % Original Levenberg-Marquardt "lambda"-version.
@@ -134,7 +134,8 @@ switch lower(damp)
     % values used at each iteration.
     stopWatch=cputime;
     [x,code,iters,X,f,J,lambdas]=levenberg_marquardt(resFun,vetoFun,x0, ...
-                                                     f0,J0,lambda0, ...
+                                                     f0,J0,maxIter, ...
+                                                     convTol,lambda0, ...
                                                      lambdaMin,params);
     time=cputime-stopWatch;
   case 'lmp'
@@ -154,6 +155,7 @@ switch lower(damp)
     stopWatch=cputime;
     [x,code,iters,X,f,J,deltas,rhos]=levenberg_marquardt_powell(resFun, ...
                                                       vetoFun,x0,delta0, ...
+                                                      maxIter,convTol, ...
                                                       rhoBad,rhoGood,params);
     time=cputime-stopWatch;
   otherwise
