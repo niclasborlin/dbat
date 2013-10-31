@@ -1,144 +1,77 @@
-function [x,code,n,X,alphas,F]=gaussn_paper(prob,veto,x0,tol,maxIter,alphaMin,mu,W,params)
-%GAUSSN Damped Gauss-Newton method, Goldstein-Armijo linesearch.
+function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,params)
+%GAUSS_MARKOV Gauss-Markov least squares adjustment algorithm.
 %
-%[x,code,n,X,alphas]=gaussn(prob,veto,x0,tol,maxIter,alphaMin,mu,W,params)
-%prob     - name of problem.
-%veto     - name of veto function.
-%x0       - starting approximation.
-%tol      - convergence tolerance.
-%maxiter  - maximum number of iterations.
-%alphaMin - shortest accepted step length.
-%mu       - constant in Armijo's condition.
-%W        - weight matrix. Use W=1 for unweighted problems.
-%params   - cell array with additional arguments to residual and jacobian funs.
-%x        - optimal solution.
-%code     - error code
-%              0 - OK
-%             -1 - Too many iterations
-%             -2 - No acceptable reduction found in line search.
-%             -3 - Matrix is singular or close to singular.
-%n        - number of consumed iterations.
-%X        - iteration trace. X(:,i+1) is the ith iteration.
-%alphas   - vector of accepted step lengths. alphas(i) is the ith step length.
+%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,N,TOL,PARAMS) runs the Gauss-Markov least
+%   squares adjustment algorithm on the problem with residual function RES
+%   and with initial values X0. A maximum of N iterations are allowed and
+%   the convergence tolerance is TOL. The final estimate is returned in X.
+%   The number of iteration I and a success code (0 - OK, -1 - too many
+%   iterations) are also returned.
+%
+%   [X,CODE,I,F,J]=... also returns the final estimates of the residual
+%   vector F and jacobian matrix J.
+%
+%   [X,CODE,I,F,J,T]=... returns the iteration trace as successive columns
+%   in T.
+%
+%   The function RES is assumed to return the residual function and its
+%   jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
+%   PARAMS contains any extra parameters for the residual function.
+%
+%See also: BUNDLE, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
+%   LEVENBERG_MARQUARDT_POWELL.
 
 % $Id$
 
+% Initialize current estimate and iteration trace.
 x=x0;
-X=x;
-alphas=[];
+
+if nargout>6
+    % Pre-allocate fixed block if trace is asked for.
+    blockSize=50;
+    T=nan(length(x),min(blockSize,maxIter+1));
+    % Enter x0 as first column.
+    T(:,1)=x0;
+end
 
 n=0;
 
 % OK until proven otherwise.
 code=0;
 
-% Clear warning.
-lastwarn('');
-
-alpha=1;
-
 while true
     % Calculate residual and jacobian at current point.
-    [F,J]=feval(prob,x,params{:});
-    % Gradient.
-    g=J'*F;
-    % Calculate Gauss-Newton search direction.
-	JTJ=J'*J;
-    p=JTJ\-(J'*F);
+    [f,J]=feval(resFun,x,params{:});
 
-    % Check if we got the 'Matrix is singular to working precision.' warning.
-    [warnmsg,msgid]=lastwarn;
-    if strcmp(msgid,'MATLAB:singularMatrix') || ...
-            strcmp(msgid,'MATLAB:nearlySingularMatrix')
-        code=-3;
-        break
-    end
-    
+    % Solve normal equations.
+    p=(J'*J)\-(J'*f);
+
     % Terminate if angle between projected residual is smaller than
-    % threshold. 
-    % A cleaner test would be the strict relative test
-    % norm(J*p)>tol*norm(F), but that wouldn't work on synthetic data
-    % with norm(F) very small at solution.
-	%[norm(p),max(abs(p(6:end)))]
-	%if (max(abs(p([1,2,6:end])))<tol)
-    Jp=J*p;
-	if norm(Jp)<tol*norm(F) && alpha==1
+    % threshold. Warning! This test may be very strict on synthetic data
+    % where norm(f) is close to zero at the solution.
+    if norm(J*p)<=tol*norm(f)
         % Converged.
-		%X=[X,x+p];
         break;
     end
+    
+    % Update iteration count.
     n=n+1;
+    
+    % Terminate with error code if too many iterations.
     if n>maxIter
         code=-1; % Too many iterations.
         break;
     end
-    % Perform line search along p.
-    [alpha,newX,newF]=linesearch(prob,veto,x,p,alphaMin,F,g'*p,mu,W,params);
-	%alpha
-	
-    % Always update current point and residual. 
-    x=newX;
-    F=newF;
 
-    % Store iteration trace and algorithm performance parameters.
-    X=[X,x];
-    alphas=[alphas alpha];
+    % Update estimate.
+    x=x+p;
 
-    if alpha==0
-        code=-2; % Not sufficient descent.
-        break;
+    if nargout>6
+        % Store iteration trace.
+        if n+1>size(T,2)
+            % Expand by blocksize if needed.
+            T=[T,nan(length(x),blockSize)];
+        end
+        T(n+1,:)=x;
     end
 end
-
-
-% Exit.
-
-function [alpha,newx,newF]=linesearch(fun,vetoFun,x,p,alphaMin,F0,fp0,mu,W,params)
-%LINESEARCH Perform Armijo linesearch with backtracking.
-%
-%[alpha,newx,newF]=linesearch(fun,vetoFun,x,p,alphaMin,F0,fp0,mu,W,params)
-%fun      - name of the objective function.
-%x        - current x value.
-%p        - current search direction.
-%alphaMin - shortest step-length allowed.
-%F0       - residual function value at alpha=0.
-%fp0      - gradient along line at alpha=0.
-%mu       - Armijo constant.
-%W        - weight matrix.
-%params   - additional parameters to the objective function.
-%alpha    - first step length that satisfied Armijos condition, or 0 if
-%           no such alpha>=alphaMin is found.
-
-% Calculate current objective function value.
-f=0.5*F0'*W*F0;
-
-% Start with full step length.
-alpha=1.0;
-
-% Continue while step length is long enough
-while alpha>=alphaMin
-    % Examine residual at proposed point.
-    newx=x+alpha*p;
-    newF=feval(fun,newx,params{:});
-    newf=0.5*newF'*W*newF;
-
-    % Is the reduction large enough?
-    red=newf<f+mu*alpha*fp0;
-    veto=false;
-    if red && ~isempty(vetoFun)
-        % Only calculate veto function if reduction is large enough.
-        veto=feval(vetoFun,newx,params{:});
-    end
-	if red && ~veto
-        % If reduction is large enough, we're done.
-        return;
-    else
-        % Otherwise, try with half the step length.
-        alpha=alpha/2;
-    end
-end
-
-% No acceptable reduction found. Return alpha=0.
-alpha=0;
-newx=x;
-newF=F0;
