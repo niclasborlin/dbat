@@ -9,10 +9,14 @@ if ~exist('fName','var')
           'you wish to use another file.']);
     disp(' ')
 end
-    
-fprintf('Loading data file %s...',fName);
-prob=loadpm(fName);
-disp('done.')
 
-s=prob2dbatstruct(prob);
+if ~exist('prob','var')
+    fprintf('Loading data file %s...',fName);
+    prob=loadpm(fName);
+    disp('done.')
+else
+    disp('Using pre-loaded data. Do ''clear prob'' to reload.');
+end
+s0=prob2dbatstruct(prob);
 
+s1=bundle(s0,'none');
