@@ -46,6 +46,10 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                 are considered free and should be estimated by the
 %                 bundle. Defaults to true for object points, false for
 %                 control points.
+%       nK      - scalar indicating how many (potentially zero) K values
+%                 are used in the model. nK=3.
+%       nP      - scalar indicating how many (potentially zero) P values
+%                 are used in the model. nK=2.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -115,25 +119,29 @@ IOstd(1:2,:)=innerStd(2:3,:);
 IO(3,:)=inner(1,:);
 IOstd(3,:)=innerStd(1,:);
 % Radial distortion coefficients K1, K2, K3.
-IO(4:6,:)=-inner(6:8,:);
-IOstd(4:6,:)=innerStd(6:8,:);
+nK=3;
+IO(3+(1:nK),:)=-inner(5+(1:nK),:);
+IOstd(3+(1:nK),:)=innerStd(5+(1:nK),:);
 % Tangential distortion coefficients P1, P2.
-IO(7:8,:)=-inner(9:10,:);
-IOstd(7:8,:)=innerStd(9:10,:);
+nP=2;
+IO(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
+IOstd(3+nK+(1:nP),:)=innerStd(5+nK+(1:nP),:);
 % Skew (not used).
-IO(9:10,:)=0;
-IOstd(9:10,:)=0;
+IO(3+nK+nP+(1:2),:)=0;
+IOstd(3+nK+nP+(1:2),:)=0;
 % Sensor size in camera units.
-IO(11:12,:)=inner(4:5,:);
-IOstd(11:12,:)=innerStd(4:5,:);
+IO(3+nK+nP+2+(1:2),:)=inner(4:5,:);
+IOstd(3+nK+nP+2+(1:2),:)=innerStd(4:5,:);
 % Image size in pixels.
-IO(13:14,:)=imSz;
-IOstd(13:14,:)=0;
+IO(3+nK+nP+4+(1:2),:)=imSz;
+IOstd(3+nK+nP+4+(1:2),:)=0;
 % Sensor resolution.
-IO(15:16,:)=IO(13:14,:)./IO(11:12,:);
+IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
 % First-order error propagation.
 % C=A/B; std(C) = abs(A/B^2)*std(B).
-IOstd(15:16,:)=abs(IO(13:14,:)./IO(11:12,:).^2).*IOstd(11:12,:);
+IOstd(3+nK+nP+6+(1:2),:)=...
+    abs(IO(3+nK+nP+4+(1:2),:)./...
+        IO(3+nK+nP+2+(1:2),:).^2).*IOstd(3+nK+nP+2+(1:2),:);
 
 
 % External orientation.    
@@ -211,4 +219,4 @@ cOP=repmat(~isCtrl,3,1);
 s=struct('IO',IO,'IOstd',IOstd,'EO',EO,'EOstd',EOstd,'cams',cams, ...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,'isCtrl',isCtrl, 'markPts', ...
          markPts,'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
-         'cEO',cEO,'cOP',cOP);
+         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP);
