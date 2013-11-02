@@ -10,8 +10,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
 %   The struct S has fields:
-%       IO      - 17-by-nCams array with internal orientation for each camera.
-%       IOstd   - 17-by-nCams array with standard deviations for the IO
+%       IO      - 16-by-nCams array with internal orientation for each camera.
+%       IOstd   - 16-by-nCams array with standard deviations for the IO
 %                 parameters.
 %       EO      - 7-by-nImages array with external orientation for each image.
 %       EOstd   - 7-by-nImages array with standard deviations for the EO
