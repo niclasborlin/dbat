@@ -76,7 +76,7 @@ x0(ixEO)=s.EO(s.cEO);
 x0(ixOP)=s.OP(s.cOP);
 
 % Residual function.
-resFun=@browneulercam;
+resFun=@brown_euler_cam;
 
 if veto
     vetoFun=@chirality;
