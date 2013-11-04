@@ -57,7 +57,6 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
 	
     % Preallocate point matrix for speed.
     xy=zeros(2*nProj,1);
-    xyBase=1;
 
     for i=find(any(vis))
         % Get camera station.
@@ -72,7 +71,7 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
         
         % Get inner orientation.
         camNo=cams(i);
-        [pp,f,K,P,a,u]=UnpackIO(IO(:,camNo),nK,nP);
+        [pp,f,K,P,a,u]=unpackio(IO(:,camNo),nK,nP);
 	
         % Get object points visible in this image
         v=vis(:,i);
@@ -82,7 +81,7 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
         imPt=pm_eulerpinhole1(pp,f,obj,center,ang,seq);
 	
         % Find out where to store points.
-        [ixPt,xyBase]=pindex(nnz(v)*2,xyBase);
+        ixPt=indvec(nnz(v)*2);
         xy(ixPt)=imPt(:);
     end
 else
@@ -99,7 +98,7 @@ else
     dIO=sparse([],[],[],nProj*2,ioCols,ioMaxNnz);
     
     % Create arrays of columns indices for IO derivatives.
-    [ixpp,ixf,ixK,ixP,ixa,ixu]=CreateIOColumnIndices(cIO,nK,nP);
+    [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP);
     
     
     % Which EO partial derivatives are requested?
@@ -120,7 +119,7 @@ else
     dEOix=0;
     
     % Create arrays of columns indices for EO derivatives.
-    [ixC,ixAng]=CreateEOColumnIndices(cEO);
+    [ixC,ixAng]=createeocolumnindices(cEO);
     
     
     % Which OP partial derivatives are requested?
@@ -140,11 +139,12 @@ else
     dOPix=0;
 
     % Create array of columns indices for OP derivatives.
-    ixOP=CreateOPColumnIndices(cOP);
+    ixOP=createopcolumnindices(cOP);
 	
     % Preallocate point matrix for speed.
     xy=zeros(2*nProj,1);
-    xyBase=1;
+    % Last used row index into xy.
+    xyBase=0;
 
     for i=find(any(vis))
         % Get camera station.
@@ -163,10 +163,10 @@ else
         
         % Get inner orientation.
         camNo=cams(i);
-        [pp,f,K,P,a,u]=UnpackIO(IO(:,camNo),nK,nP);
+        [pp,f,K,P,a,u]=unpackio(IO(:,camNo),nK,nP);
 	
         % Which inner orientation parameters are interesting?
-        [cpp,cf,cK,cP,ca,cu]=UnpackIO(cIO(:,camNo),nK,nP);
+        [cpp,cf,cK,cP,ca,cu]=unpackio(cIO(:,camNo),nK,nP);
         
         % Get object points visible in this image
         v=vis(:,i);
@@ -182,7 +182,7 @@ else
                              any(cpp),cf,cObj,any(cC),any(cAng));
 	
         % Find out where to store points.
-        [ixPt,xyBase]=pindex(nnz(v)*2,xyBase);
+        [ixPt,xyBase]=indvec(nnz(v)*2,xyBase);
         xy(ixPt)=imPt(:);
         
         % IO jacobians.
@@ -232,58 +232,3 @@ else
     %disp([nnz(dIO),ioMaxNnz]);
     %disp([nnz(dOP),opMaxNnz]);
 end
-
-
-function [pp,f,K,P,a,u]=UnpackIO(IO,nK,nP)
-%Unpack inner orientation vector.
-
-pp=IO(1:2);
-f=IO(3);
-K=IO(3+(1:nK));
-P=IO(3+nK+(1:nP));
-a=IO(3+nK+nP+(1:2));
-u=IO(3+nK+nP+2+(1:2));
-
-function [ixpp,ixf,ixK,ixP,ixa,ixu]=CreateIOColumnIndices(cIO,nK,nP);
-% Create arrays of columns indices for IO derivatives.
-% A zero element means that the partial derivative should not be
-% calculated/stored.
-
-% How many cameras do we have?
-nCams=size(cIO,2);
-
-ix=reshape(cumsum(cIO(:)),11+nK+nP,nCams).*cIO;
-
-ixpp=ix(1:2,:);
-ixf=ix(3,:);
-ixK=ix(3+(1:nK),:);
-ixP=ix(3+nK+(1:nP),:);
-ixa=ix(3+nK+nP+(1:2),:);
-ixu=ix(3+nK+nP+6+(1:2),:);
-
-function [ixC,ixAng]=CreateEOColumnIndices(cEO);
-% Create arrays of columns indices for EO derivatives.
-% A zero element means that the partial derivative should not be
-% calculated/stored.
-
-if (size(cEO,1)>6)
-	cEO=cEO(1:6,:);
-end
-
-% How many photos do we have?
-nPhotos=size(cEO,2);
-
-ix=reshape(cumsum(cEO(:)),6,nPhotos).*cEO;
-
-ixC=ix(1:3,:);
-ixAng=ix(4:6,:);
-
-function ixOP=CreateOPColumnIndices(cOP);
-% Create arrays of columns indices for OP derivatives.
-% A zero element means that the partial derivative should not be
-% calculated/stored.
-
-% How many points do we have?
-nObjs=size(cOP,2);
-
-ixOP=reshape(cumsum(cOP(:)),3,nObjs).*cOP;
