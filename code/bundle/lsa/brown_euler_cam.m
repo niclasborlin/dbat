@@ -40,7 +40,7 @@ if (nargout<2)
     xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
 
     % Remove lens distortion from measured points.
-    ptCorr=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP,s.cams, ...
+    ptCorr=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP,s.ptCams, ...
                              size(IO,2));
 	
     f=xy(:)-ptCorr(:);
@@ -51,7 +51,7 @@ else
 	
     % Remove lens distortion from measured points.
     [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-                                    s.cams,size(IO,2),s.cIO);
+                                    s.ptCams,size(IO,2),s.cIO);
 
     f=xy(:)-ptCorr(:);
 	

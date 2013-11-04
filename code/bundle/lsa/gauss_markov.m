@@ -26,7 +26,7 @@ function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,params)
 % Initialize current estimate and iteration trace.
 x=x0;
 
-if nargout>6
+if nargout>5
     % Pre-allocate fixed block if trace is asked for.
     blockSize=50;
     T=nan(length(x),min(blockSize,maxIter+1));
@@ -49,7 +49,7 @@ while true
     % Terminate if angle between projected residual is smaller than
     % threshold. Warning! This test may be very strict on synthetic data
     % where norm(f) is close to zero at the solution.
-    if norm(J*p)<=tol*norm(f)
+    if norm(J*p)<=convTol*norm(f)
         % Converged.
         break;
     end
@@ -66,12 +66,17 @@ while true
     % Update estimate.
     x=x+p;
 
-    if nargout>6
+    if nargout>5
         % Store iteration trace.
         if n+1>size(T,2)
             % Expand by blocksize if needed.
             T=[T,nan(length(x),blockSize)];
         end
-        T(n+1,:)=x;
+        T(:,n+1)=x;
     end
+end
+
+% Trim unused trace columns.
+if nargout>5
+    T=T(:,1:n+1);
 end
