@@ -44,7 +44,7 @@ if (all(~cIO(:)) & ~(any(cp)))
     
     for i=1:nCams
         % Get inner orientation.
-        [pp,f,K,P,a,u]=UnpackIO(IO(:,i),nK,nP);
+        [pp,f,K,P,a,u]=unpackio(IO(:,i),nK,nP);
 	
         % Get points taken with this camera.
         ix=cams==i;
@@ -78,7 +78,7 @@ else
     dIO=sparse([],[],[],nPts*2,ioCols,ioMaxNnz);
     
     % Create arrays of columns indices for IO derivatives.
-    [ixpp,ixf,ixK,ixP,ixa,ixu]=CreateIOColumnIndices(cIO,nK,nP);
+    [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP);
     
     % Number of wanted points.
     ptCols=2*nnz(cp);
@@ -86,17 +86,17 @@ else
     dp=sparse([],[],[],nPts*2,ptCols,ptMaxNnz);
     
     % Create array of columns indices for point derivatives.
-    ixCol=CreatePtColumnIndices(cp);
+    ixCol=createptcolumnindices(cp);
     
     % Preallocate point matrix for speed.
     xy=zeros(size(p));
     
     for i=1:nCams
         % Get inner orientation.
-        [pp,f,K,P,a,u]=UnpackIO(IO(:,i),nK,nP);
+        [pp,f,K,P,a,u]=unpackio(IO(:,i),nK,nP);
 	
         % Which inner orientation parameters are interesting?
-        [cpp,cf,cK,cP,ca,cu]=UnpackIO(cIO(:,i),nK,nP);
+        [cpp,cf,cK,cP,ca,cu]=unpackio(cIO(:,i),nK,nP);
         
         % Get points taken with this camera.
         ix=find(cams==i);
@@ -161,43 +161,3 @@ else
     %disp([nnz(dIO),ioMaxNnz]);
     %disp([nnz(dp),ptMaxNnz]);
 end
-
-
-function [pp,f,K,P,a,u]=UnpackIO(IO,nK,nP)
-%Unpack inner orientation vector.
-
-pp=IO(1:2);
-f=IO(3);
-K=IO(3+[1:nK]);
-P=IO(3+nK+[1:nP]);
-a=IO(3+nK+nP+[1:2]);
-u=IO(3+nK+nP+2+[1:2]);
-
-function [ixpp,ixf,ixK,ixP,ixa,ixu]=CreateIOColumnIndices(cIO,nK,nP);
-% Create arrays of columns indices for IO derivatives.
-% A zero element means that the partial derivative should not be
-% calculated/stored.
-
-% How many cameras do we have?
-nCams=size(cIO,2);
-
-ix=reshape(cumsum(cIO(:)),7+nK+nP,nCams).*cIO;
-
-ixpp=ix(1:2,:);
-ixf=ix(3,:);
-ixK=ix(3+[1:nK],:);
-ixP=ix(3+nK+[1:nP],:);
-ixa=ix(3+nK+nP+[1:2],:);
-ixu=ix(3+nK+nP+2+[1:2],:);
-
-function ixp=CreatePtColumnIndices(cp);
-% Create arrays of columns indices for OP derivatives.
-% A zero element means that the partial derivative should not be
-% calculated/stored.
-
-cp=[cp;cp];
-
-% How many points do we have?
-nPts=size(cp,2);
-
-ixp=reshape(cumsum(cp(:)),2,nPts).*cp;
