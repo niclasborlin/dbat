@@ -16,17 +16,19 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       EO      - 7-by-nImages array with external orientation for each image.
 %       EOstd   - 7-by-nImages array with standard deviations for the EO
 %                 parameters.
-%       cams    - 1-by-nImages numerical array indicating which column in
-%                 IO corresponds to each image.
+%       cams    - 1-by-nImages numerical array indicating which IO column
+%                 correspond to which image. 
 %       OP      - 3-by-nOP array with object and control points.
 %       OPstd   - 3-by-nOP array with standard deviations for the OP
 %                 coordinates.
 %       OPid    - 1-by-nOP array with object points ids.
 %       isCtrl  - 1-by-nOP logical vector indicating which OP are control
 %                 points.
-%       markPts - 2-by-nMarkPos array with measured image coordinates in
+%       markPts - 2-by-nMarkPts array with measured image coordinates in
 %                 pixels, stored in image-major order.
-%       markStd - 2-by-nMarkPos array with standard deviations for the
+%       ptCams  - 1-by-nMarkPts array indicating which IO column
+%                 correspond to which measured point.
+%       markStd - 2-by-nMarkPts array with standard deviations for the
 %                 markPts coordinates.
 %       vis     - nOP-by-nImage sparse logical array indicating in which
 %                 image(s) each OP is visible. vis(I,J)==true if object
@@ -211,12 +213,16 @@ for i=1:nImages
     ii=ii+nnz(valid);
 end
 
+% Pre-calculate which camera corresponds to each point.
+[i,j]=find(vis);
+ptCams=cams(j);
+
 cIO=false(size(IO));
 cEO=true(size(EO));
 cEO(end,:)=false;
-cOP=repmat(~isCtrl,3,1);
+cOP=repmat(~isCtrl(:)',3,1);
 
 s=struct('IO',IO,'IOstd',IOstd,'EO',EO,'EOstd',EOstd,'cams',cams, ...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,'isCtrl',isCtrl, 'markPts', ...
-         markPts,'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
-         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP);
+         markPts,'ptCams',ptCams,'markStd',markStd,'vis',vis,'colPos', ...
+         colPos,'cIO',cIO, 'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP);
