@@ -17,6 +17,9 @@ function [s,ok,iters,s0,X,CXX]=bundle(s,varargin)
 %   (Gauss-Newton with Armijo linesearch, default), 'LM' (original
 %   Levenberg-Marquardt) , 'LMP' (Levenberg-Marquardt with Powell dogleg).
 %
+%   ...=BUNDLE(S,...,TRACE), where TRACE is a string='trace' specifies
+%   that the bundle should print an trace during the iterations.
+%
 %   ...=BUNDLE(S,...,CHI), where CHI is a logical scalar, specifies if
 %   chirality veto damping should be used (default: false). Chirality
 %   veto damping is ignored for the undamped bundle.
@@ -39,6 +42,7 @@ function [s,ok,iters,s0,X,CXX]=bundle(s,varargin)
 maxIter=20;
 damping='gna';
 veto=false;
+trace=false;
 
 while ~isempty(varargin)
     if isnumeric(varargin{1}) && isscalar(varargin{1})
@@ -46,11 +50,14 @@ while ~isempty(varargin)
         maxIter=varargin{1};
         varargin(1)=[];
     elseif ischar(varargin{1})
-        % DAMP
+        % DAMP or TRACE
         switch lower(varargin{1})
           case {'none','gm','gna','lm','lmp'}
             % OK
             damping=varargin{1};
+            varargin(1)=[];
+          case 'trace'
+            trace=true;
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -102,7 +109,7 @@ switch lower(damping)
     
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
-    [x,code,iters,f,J,X]=gauss_markov(resFun,x0,maxIter,convTol,params);
+    [x,code,iters,f,J,X]=gauss_markov(resFun,x0,maxIter,convTol,trace,params);
     time=cputime-stopWatch;
   case 'gna'
     % Gauss-Newton with Armijo linesearch.
@@ -117,7 +124,7 @@ switch lower(damping)
     stopWatch=cputime;
     [x,code,iters,f,J,X,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
                                                    alphaMin,maxIter, ...
-                                                   convTol,params);
+                                                   convTol,trace,params);
     time=cputime-stopWatch;
   case 'lm'
     % Original Levenberg-Marquardt "lambda"-version.
@@ -136,7 +143,7 @@ switch lower(damping)
     [x,code,iters,f,J,X,lambdas]=levenberg_marquardt(resFun,vetoFun,x0, ...
                                                      f0,J0,maxIter, ...
                                                      convTol,lambda0, ...
-                                                     lambdaMin,params);
+                                                     lambdaMin,trace,params);
     time=cputime-stopWatch;
   case 'lmp'
     % Levenberg-Marquardt-Powell trust-region, "delta"-version with
@@ -156,7 +163,8 @@ switch lower(damping)
     [x,code,iters,f,J,X,deltas,rhos]=levenberg_marquardt_powell(resFun, ...
                                                       vetoFun,x0,delta0, ...
                                                       maxIter,convTol, ...
-                                                      rhoBad,rhoGood,params);
+                                                      rhoBad,rhoGood, ...
+                                                      trace,params);
     time=cputime-stopWatch;
   otherwise
     error('DBAT:bundle:internal','Unknown damping');
@@ -178,5 +186,7 @@ s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
 % Calculate CXX only if asked to.
 if nargout>5
-    % stuff...
+    warning(['Only naive CXX calculation implemented so far. May cause ' ...
+             'out of memory']);
+    CXX=s0^2*(J'*J)\speye(size(J,2));
 end
