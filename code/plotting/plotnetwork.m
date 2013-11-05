@@ -15,8 +15,8 @@ function hh=plotnetwork(s,varargin)
 %
 %  H=PLOTNETWORK(...) returns the axes handle as H.
 %
-%  PLOTNETWORK(...,'trans',T), where T is a 4x4 homogeneous transformation
-%  matrix, applies the transformation T to all points and cameras before
+%  PLOTNETWORK(...,'trans',T0), where T0 is a 4x4 homogeneous transformation
+%  matrix, applies the transformation T0 to all points and cameras before
 %  plotting.
 %
 %  PLOTNETWORK(...,'align',N), where N=I is an integer, aligns the network
@@ -61,7 +61,7 @@ function hh=plotnetwork(s,varargin)
 
 % Defaults.
 X=[];
-T=eye(4);
+T0=eye(4);
 L={};
 camSize=[1,0.73,0.36];
 ax=[];
@@ -87,10 +87,10 @@ while ~isempty(varargin)
         arg=[varargin{1},repmat(' ',1,3)];
         switch lower(arg(1:3))
         case 'tra' % 'trans'
-            T=varargin{2};
-            % T should be numeric 4x4
-            if ~isnumeric(T) || ndims(T)~=2 || any(size(T)~=4)
-                error('DBAT:plotnetwork:badInput','T should be numeric 4x4');
+            T0=varargin{2};
+            % T0 should be numeric 4x4
+            if ~isnumeric(T0) || ndims(T0)~=2 || any(size(T0)~=4)
+                error('DBAT:plotnetwork:badInput','T0 should be numeric 4x4');
             end
         case 'lin' % 'lines'
             L=varargin{2};
@@ -164,9 +164,9 @@ while ~isempty(varargin)
 end
 
 if isempty(ax), ax=gca; end
-if isempty(ixIO), ixIO=find(s.cIO); end
-if isempty(ixEO), ixEO=nnz(ixIO)+find(s.cEO); end
-if isempty(ixOP), ixOP=nnz(ixIO)+nnz(ixEO)+find(s.cOP); end
+if isempty(ixIO), ixIO=indvec(nnz(s.cIO)); end
+if isempty(ixEO), ixEO=indvec(nnz(s.cEO),nnz(ixIO)); end
+if isempty(ixOP), ixOP=indvec(nnz(s.cOP),nnz(ixIO)+nnz(ixEO)); end
 if isempty(EOplot), EOplot=1:size(s.EO,2); end
 
 iter=0;
@@ -191,7 +191,7 @@ while true
     end
     
     % Transform points and cameras.
-    [EO,OP]=pm_multixform(EO,OP,T);
+    [EO,OP]=pm_multixform(EO,OP,T0);
     
     % Plot points.
     plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.', ...
@@ -244,9 +244,9 @@ while true
         case 0
             title(ax,titleStr);
         case 1
-            title(ax,sprintf(str,iter));
+            title(ax,sprintf(titleStr,iter));
         otherwise
-            title(ax,sprintf(str,iter,size(X,2)-1))
+            title(ax,sprintf(titleStr,iter,size(X,2)-1))
         end
     end
 
