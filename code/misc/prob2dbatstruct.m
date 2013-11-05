@@ -139,6 +139,9 @@ IO(3+nK+nP+4+(1:2),:)=imSz;
 IOstd(3+nK+nP+4+(1:2),:)=0;
 % Sensor resolution.
 IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
+% Fix to force square pixels.
+IO(3+nK+nP+6+(1:2),:)=mean(IO(3+nK+nP+6+(1:2),:),1);
+
 % First-order error propagation.
 % C=A/B; std(C) = abs(A/B^2)*std(B).
 IOstd(3+nK+nP+6+(1:2),:)=...
