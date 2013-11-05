@@ -20,4 +20,5 @@ s=prob2dbatstruct(prob);
 % Rotate to have +Z up.
 T0=blkdiag(1,[0,-1;1,0],1);
 
-plotnetwork(s,'title','Roma','align',17,'trans',T0,'camerasize',0.2);
+plotnetwork(s,'title','Camera calibration data set','align',17,'trans', ...
+            T0,'camerasize',0.2);
