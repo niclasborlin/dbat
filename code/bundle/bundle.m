@@ -1,16 +1,16 @@
-function [s,X]=bundle(s,varargin)
+function [s,ok,iters,s0,X,CXX]=bundle(s,varargin)
 %BUNDLE Run bundle adjustment iterations on a camera network.
 %
-%   [S,OK]=BUNDLE(S), where S is a struct returned by PROB2DBATSTRUCT, runs
-%   the damped bundle adjustment on the camera network in the structure
+%   [S,OK,N]=BUNDLE(S), where S is a struct returned by PROB2DBATSTRUCT,
+%   runs the damped bundle adjustment on the camera network in the structure
 %   S. The parameter values in S are used as initial values. The cIO, cEO,
 %   cOP fields of S are used to indicate which parameters are free. OK is
 %   returned as true if the bundle converged within the allowed number of
-%   iterations. On return, the parameter values in S are updated if the
-%   bundle converged.
+%   iterations. N gives the number of iterations. On return, the parameter
+%   values in S are updated if the bundle converged.
 %
-%   ...=BUNDLE(S,...,N), where N is an integer, sets the maximum number of
-%   iterations to N (default: 20).
+%   ...=BUNDLE(S,...,K), where K is an integer, sets the maximum number of
+%   iterations to K (default: 20).
 %
 %   ...=BUNDLE(S,...,DAMP), where DAMP is a string, specifies which damping
 %   to use: 'none' or 'GM' (classic bundle with no damping), 'GNA'
@@ -21,11 +21,11 @@ function [s,X]=bundle(s,varargin)
 %   chirality veto damping should be used (default: false). Chirality
 %   veto damping is ignored for the undamped bundle.
 %
-%   [S,OK,S0]=... returns the sigma0 for the last iteration.
+%   [S,OK,N,S0]=... returns the sigma0 for the last iteration.
 %
-%   [S,OK,S0,X]=... returns successive parameter estimates as columns in X.
+%   [S,OK,N,S0,X]=... returns successive parameter estimates as columns in X.
 %
-%   [S,OK,S0,X,CXX]=... returns the covariance matrix CXX of the final X,
+%   [S,OK,N,S0,X,CXX]=... returns the covariance matrix CXX of the final X,
 %   scaled by sigma0.
 %
 %   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
@@ -162,4 +162,21 @@ switch lower(damping)
     error('DBAT:bundle:internal','Unknown damping');
 end
 
-% Handle returned values...
+% Handle returned values.
+ok=code==0;
+
+% Update s if optimization converged.
+if ok
+    s.IO(s.cIO)=x0(ixIO);
+    s.EO(s.cEO)=x0(ixEO);
+    s.OP(s.cOP)=x0(ixOP);
+end
+
+% s0=sqrt(f'*f/(m-n)) in mm.
+% convert to pixels.
+s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
+
+% Calculate CXX only if asked to.
+if nargout>5
+    % stuff...
+end
