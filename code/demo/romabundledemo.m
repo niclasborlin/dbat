@@ -26,5 +26,18 @@ camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
 [i,j]=find(camDiff==max(camDiff(:)));
 s0.cEO(i,j)=false;
 
+disp('Running the bundle');
 % Run the bundle.
-s1=bundle(s0,'none');
+[s1,ok,iters,s0,X]=bundle(s0,'none','trace');
+
+if ok
+    fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n',iters,s0);
+else
+    fprintf('Bundle failed after %d iterations. Last sigma0 estimate=%.2f pixels\n',iters, s0);
+end
+
+% Rotate to have +Z up.
+T0=blkdiag(1,[0,-1;1,0],1);
+
+plotnetwork(s1,X,'trans',T0,'align',1,'title','Iteration %d of %d', ...
+            'pause','on');
