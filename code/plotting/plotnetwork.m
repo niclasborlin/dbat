@@ -23,7 +23,7 @@ function hh=plotnetwork(s,varargin)
 %  such that camera I defines the origin and coordinate axes. If N=[I,RA],
 %  camera I is assumed to have roll angle RA radians. Any transformation
 %  T is applied after the alignment.
-
+%
 %  PLOTNETWORK(...,'lines',L), where L is a cell array of vectors with
 %  object point indices, connects the object points specified in L by lines.
 %
