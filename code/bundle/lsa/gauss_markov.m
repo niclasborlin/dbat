@@ -1,12 +1,13 @@
-function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,params)
+function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,trace,params)
 %GAUSS_MARKOV Gauss-Markov least squares adjustment algorithm.
 %
-%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,N,TOL,PARAMS) runs the Gauss-Markov least
-%   squares adjustment algorithm on the problem with residual function RES
-%   and with initial values X0. A maximum of N iterations are allowed and
-%   the convergence tolerance is TOL. The final estimate is returned in X.
-%   The number of iteration I and a success code (0 - OK, -1 - too many
-%   iterations) are also returned.
+%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,N,TOL,TRACE,PARAMS) runs the Gauss-Markov
+%   least squares adjustment algorithm on the problem with residual function
+%   RES and with initial values X0. A maximum of N iterations are allowed
+%   and the convergence tolerance is TOL. The final estimate is returned in
+%   X. The number of iteration I and a success code (0 - OK, -1 - too many
+%   iterations) are also returned. If TRACE is true, output sigma0
+%   estimates at each iteration.
 %
 %   [X,CODE,I,F,J]=... also returns the final estimates of the residual
 %   vector F and jacobian matrix J.
@@ -43,6 +44,11 @@ while true
     % Calculate residual and jacobian at current point.
     [f,J]=feval(resFun,x,params{:});
 
+    if trace
+        s0=sqrt(f'*f/(size(J,1)-size(J,2)));
+        fprintf('Gauss-Markov: iteration %d, s0 estimate=%.1g\n',n,s0);
+    end
+    
     % Solve normal equations.
     p=(J'*J)\-(J'*f);
 
