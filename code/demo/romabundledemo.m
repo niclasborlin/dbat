@@ -19,16 +19,16 @@ else
 end
 s0=prob2dbatstruct(prob);
 
-% Solve the datum problem by fixing camera 1...
+% Fix the datum by fixing camera 1...
 s0.cEO(:,1)=false;
-% ...and the largest absolute camera coordinate.
+% ...and the largest other absolute camera coordinate.
 camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
 [i,j]=find(camDiff==max(camDiff(:)));
 s0.cEO(i,j)=false;
 
 disp('Running the bundle');
 % Run the bundle.
-[s1,ok,iters,s0,X]=bundle(s0,'none','trace');
+[s1,ok,iters,s0,E]=bundle(s0,'none','trace');
 
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n',iters,s0);
@@ -39,5 +39,5 @@ end
 % Rotate to have +Z up.
 T0=blkdiag(1,[0,-1;1,0],1);
 
-plotnetwork(s1,X,'trans',T0,'align',1,'title','Iteration %d of %d', ...
+plotnetwork(s1,E,'trans',T0,'align',1,'title','Iteration %d of %d', ...
             'pause','on');
