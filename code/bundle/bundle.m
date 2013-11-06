@@ -1,4 +1,4 @@
-function [s,ok,iters,s0,X,CXX]=bundle(s,varargin)
+function [s,ok,iters,s0,E,CXX]=bundle(s,varargin)
 %BUNDLE Run bundle adjustment iterations on a camera network.
 %
 %   [S,OK,N]=BUNDLE(S), where S is a struct returned by PROB2DBATSTRUCT,
@@ -26,10 +26,17 @@ function [s,ok,iters,s0,X,CXX]=bundle(s,varargin)
 %
 %   [S,OK,N,S0]=... returns the sigma0 for the last iteration.
 %
-%   [S,OK,N,S0,X]=... returns successive parameter estimates as columns in X.
+%   [S,OK,N,S0,E]=... returns damping-dependent trace data in the struct E:
+%       E.damping - string with the name of the damping scheme.
+%       E.trace   - NOBS-by-(N+1) array with successive parameter estimates.
+%   Furthermore,
+%       for GNA damping: E.alpha  - (N+1)-vector with used steplength.
+%       for LM damping:  E.lambda - (N+1)-vector with used lambda values.
+%       for LMP damping: E.delta  - (N+1)-vector with used trust region sizes,
+%                        E.rho    - (N+1)-vector with gain ratios.
 %
-%   [S,OK,N,S0,X,CXX]=... returns the covariance matrix CXX of the final X,
-%   scaled by sigma0.
+%   [S,OK,N,S0,E,CXX]=... returns the covariance matrix CXX of the final
+%   X, scaled by sigma0.
 %
 %   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
 %       Without Damping". Photogrammetric Record 28(144), pp. XX-YY. DOI
@@ -103,6 +110,8 @@ params={s};
 % - ok, -1 - too many iterations) and the number of required iterations are
 % returned.
 
+E=struct('damping',damping);
+
 switch lower(damping)
   case {'none','gm'}
     % Gauss-Markov with no damping.
@@ -126,6 +135,7 @@ switch lower(damping)
                                                    alphaMin,maxIter, ...
                                                    convTol,trace,params);
     time=cputime-stopWatch;
+    E.alpha=alpha;
   case 'lm'
     % Original Levenberg-Marquardt "lambda"-version.
 
@@ -140,11 +150,12 @@ switch lower(damping)
     % recomputing them. The vector lambdas is returned with the lambda
     % values used at each iteration.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,lambdas]=levenberg_marquardt(resFun,vetoFun,x0, ...
-                                                     f0,J0,maxIter, ...
-                                                     convTol,lambda0, ...
-                                                     lambdaMin,trace,params);
+    [x,code,iters,f,J,X,lambda]=levenberg_marquardt(resFun,vetoFun,x0, ...
+                                                    f0,J0,maxIter, ...
+                                                    convTol,lambda0, ...
+                                                    lambdaMin,trace,params);
     time=cputime-stopWatch;
+    E.lambda=lambda;
   case 'lmp'
     % Levenberg-Marquardt-Powell trust-region, "delta"-version with
     % Powell dogleg.
@@ -160,15 +171,18 @@ switch lower(damping)
     % and rhos are returned with the used delta and computed rho values for
     % each iteration.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,deltas,rhos]=levenberg_marquardt_powell(resFun, ...
+    [x,code,iters,f,J,X,delta,rho]=levenberg_marquardt_powell(resFun, ...
                                                       vetoFun,x0,delta0, ...
                                                       maxIter,convTol, ...
                                                       rhoBad,rhoGood, ...
                                                       trace,params);
     time=cputime-stopWatch;
+    E.delta=delta;
+    E.rho=rho;
   otherwise
     error('DBAT:bundle:internal','Unknown damping');
 end
+E.trace=X;
 
 % Handle returned values.
 ok=code==0;

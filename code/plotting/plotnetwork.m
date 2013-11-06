@@ -4,14 +4,10 @@ function hh=plotnetwork(s,varargin)
 %  PLOTNETWORK(S), where S is a struct returned by PROB2DBATSTRUCT, plots
 %  the camera network and object points in S.
 %
-%  PLOTNETWORK(S,X), where X is a MPARAMS-by-NITER numeric array with
-%  estimates of the MPARAMS free parameters in S, plots the network with
-%  estimates during iterations 0,...,NITER-1. Each column of X is assumed to
-%  hold the estimated parameters for successive iterations. The order is
-%  assumed to be consistent with the cIO, cEO, and cOP fields of S, in that
-%  order. The camera position estimates are shown as trace plots of camera
-%  icons connected by lines. The object points are re-plotted for every
-%  iteration.
+%  PLOTNETWORK(S,E), where E is a struct returned by BUNDLE, plots a trace
+%  of bundle iterations. The camera position estimates are shown as trace
+%  plots of camera icons connected by lines. The object points are
+%  re-plotted for every iteration.
 %
 %  H=PLOTNETWORK(...) returns the axes handle as H.
 %
@@ -50,17 +46,12 @@ function hh=plotnetwork(s,varargin)
 %  PLOTNETWORK(...,'EOplot',I), plots all cameras in the vector I. I
 %  defaults to all.
 %
-%  PLOTNETWORK(...,'ixIO',ixIO), PLOTNETWORK(...,'ixEO',ixEO),
-%  PLOTNETWORK(...,'ixOP',ixOP), specifies what rows of X correspond to
-%  each unknown IO/EO/OP parameter. No error checking is done on the ixXX
-%  arguments.
-%
 %See also: PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
 
 % $Id$
 
 % Defaults.
-X=[];
+E=[];
 T0=eye(4);
 L={};
 camSize=[1,0.73,0.36];
@@ -68,18 +59,18 @@ ax=[];
 plotX0pts=false;
 titleStr='';
 titleStrNums=0;
-ixIO=[];
-ixEO=[];
-ixOP=[];
 EOplot=[];
 pauseMode=[];
 align=[];
 
 while ~isempty(varargin)
-    if isnumeric(varargin{1})
-        % PLOTNETWORKS(S,X)
-        X=varargin{1};
+    if isstruct(varargin{1})
+        % PLOTNETWORKS(S,E)
+        E=varargin{1};
         varargin(1)=[];
+        if ~isfield(E,{'trace','damping'})
+            error('Bad E struct.');
+        end
     elseif ischar(varargin{1})
         if length(varargin)<2
             error('DBAT:plotnetwork:badInput','Missing argument');
@@ -145,12 +136,6 @@ while ~isempty(varargin)
             end
         case 'pau' % 'pause'
             pauseMode=varargin{2};
-        case 'ixi'
-            ixIO=varargin{2};
-        case 'ixe'
-            ixEO=varargin{2};
-        case 'ixo'
-            ixOP=varargin{2};
         case 'eop'
             EOplot=varargin{2};
         otherwise
@@ -164,10 +149,16 @@ while ~isempty(varargin)
 end
 
 if isempty(ax), ax=gca; end
-if isempty(ixIO), ixIO=indvec(nnz(s.cIO)); end
-if isempty(ixEO), ixEO=indvec(nnz(s.cEO),nnz(ixIO)); end
-if isempty(ixOP), ixOP=indvec(nnz(s.cOP),nnz(ixIO)+nnz(ixEO)); end
 if isempty(EOplot), EOplot=1:size(s.EO,2); end
+
+[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+
+if ~isempty(E)
+    % Number of iterations.
+    nIters=size(E.trace,2)-1;
+else
+    nIters=0;
+end
 
 iter=0;
 while true
@@ -175,11 +166,11 @@ while true
     IO=s.IO;
     EO=s.EO;
     OP=s.OP;
-    if ~isempty(X)
+    if ~isempty(E)
         % Replace unknown parameters with estimated value at iteration iter.
-        IO(s.cIO)=X(ixIO,iter+1);
-        EO(s.cEO)=X(ixEO,iter+1);
-        OP(s.cOP)=X(ixOP,iter+1);
+        IO(s.cIO)=E.trace(ixIO,iter+1);
+        EO(s.cEO)=E.trace(ixEO,iter+1);
+        OP(s.cOP)=E.trace(ixOP,iter+1);
     end
 
     if ~isempty(align)
@@ -246,12 +237,12 @@ while true
         case 1
             title(ax,sprintf(titleStr,iter));
         otherwise
-            title(ax,sprintf(titleStr,iter,size(X,2)-1))
+            title(ax,sprintf(titleStr,iter,nIters));
         end
     end
 
     % Pause if requested unless after showing last iteration.
-    if ~isempty(pauseMode) && iter<size(X,2)-1
+    if ~isempty(pauseMode) && iter<nIters
         if ischar(pauseMode)
             pause
         else
@@ -262,7 +253,7 @@ while true
     iter=iter+1;
     
     % Stop after last iteration.
-    if iter>=size(X,2)
+    if iter>nIters
         break;
     end
 end
