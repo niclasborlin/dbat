@@ -26,18 +26,36 @@ camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
 [i,j]=find(camDiff==max(camDiff(:)));
 s0.cEO(i,j)=false;
 
-disp('Running the bundle');
-% Run the bundle.
-[s1,ok,iters,s0,E]=bundle(s0,'none','trace');
+dampings={'none','gna','lm','lmp'};
 
-if ok
-    fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n',iters,s0);
-else
-    fprintf('Bundle failed after %d iterations. Last sigma0 estimate=%.2f pixels\n',iters, s0);
+dampings=dampings(2);
+
+result=cell(size(dampings));
+ok=nan(size(dampings));
+iters=nan(size(dampings));
+sigma0=nan(size(dampings));
+E=cell(size(dampings));
+
+for i=1:length(dampings)
+    fprintf('Running the bundle with damping %s...\n',dampings{i});
+
+    % Run the bundle.
+    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s0,dampings{i},'trace');
+
+    if ok(i)
+        fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
+                iters(i),sigma0(i));
+    else
+        fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
+                 'pixels\n'],iters(i),sigma0(i));
+    end
 end
 
 % Rotate to have +Z up.
 T0=blkdiag(1,[0,-1;1,0],1);
 
-plotnetwork(s1,E,'trans',T0,'align',1,'title','Iteration %d of %d', ...
-            'pause','on');
+for i=1:length(E)
+    plotnetwork(result{i},E{i},'trans',T0,'align',1,'title',...
+                ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
+                'axes',figure(i),'pause','on');
+end
