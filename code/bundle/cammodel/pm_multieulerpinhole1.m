@@ -57,6 +57,8 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
 	
     % Preallocate point matrix for speed.
     xy=zeros(2*nProj,1);
+    % Last used row index into xy.
+    xyBase=0;
 
     for i=find(any(vis))
         % Get camera station.
@@ -81,7 +83,7 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
         imPt=pm_eulerpinhole1(pp,f,obj,center,ang,seq);
 	
         % Find out where to store points.
-        ixPt=indvec(nnz(v)*2);
+        [ixPt,xyBase]=indvec(nnz(v)*2,xyBase);
         xy(ixPt)=imPt(:);
     end
 else
