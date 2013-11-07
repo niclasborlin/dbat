@@ -20,6 +20,11 @@ function [s,ok,iters,s0,E,CXX]=bundle(s,varargin)
 %   ...=BUNDLE(S,...,TRACE), where TRACE is a string='trace' specifies
 %   that the bundle should print an trace during the iterations.
 %
+%   ...=BUNDLE(S,...,SINGULAR_TEST), where SINGULAR_TEST is the
+%   string='singular_test' specifies that the bundle should stop
+%   immediately if a 'Matrix is singular' or 'Matrix is almost singular'
+%   warning is issued on the normal matrix.
+%
 %   ...=BUNDLE(S,...,CHI), where CHI is a logical scalar, specifies if
 %   chirality veto damping should be used (default: false). Chirality
 %   veto damping is ignored for the undamped bundle.
@@ -49,6 +54,7 @@ function [s,ok,iters,s0,E,CXX]=bundle(s,varargin)
 maxIter=20;
 damping='gna';
 veto=false;
+singular_test=false;
 trace=false;
 
 while ~isempty(varargin)
@@ -66,6 +72,9 @@ while ~isempty(varargin)
           case 'trace'
             trace=true;
             varargin(1)=[];
+          case 'singular_test'
+            singular_test=true;
+            varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
         end
@@ -78,7 +87,7 @@ while ~isempty(varargin)
 end
 
 % Create indices into the vector of unknowns.
-[ixIO,ixEO,ixOP,n]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
 % Number of unknowns.
 n=max(ixOP);
@@ -118,7 +127,8 @@ switch lower(damping)
     
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
-    [x,code,iters,f,J,X]=gauss_markov(resFun,x0,maxIter,convTol,trace,params);
+    [x,code,iters,f,J,X]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
+                                      singular_test,params);
     time=cputime-stopWatch;
   case 'gna'
     % Gauss-Newton with Armijo linesearch.
@@ -132,8 +142,9 @@ switch lower(damping)
     % returned with the step lengths used at each iteration.
     stopWatch=cputime;
     [x,code,iters,f,J,X,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
-                                                   alphaMin,maxIter, ...
-                                                   convTol,trace,params);
+                                                   mu,alphaMin,maxIter, ...
+                                                   convTol,trace, ...
+                                                   singular_test,params);
     time=cputime-stopWatch;
     E.alpha=alpha;
   case 'lm'
@@ -183,6 +194,7 @@ switch lower(damping)
     error('DBAT:bundle:internal','Unknown damping');
 end
 E.trace=X;
+E.time=time;
 
 % Handle returned values.
 ok=code==0;

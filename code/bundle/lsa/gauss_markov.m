@@ -1,13 +1,16 @@
-function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,trace,params)
+function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
+                                       sTest,params)
 %GAUSS_MARKOV Gauss-Markov least squares adjustment algorithm.
 %
-%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,N,TOL,TRACE,PARAMS) runs the Gauss-Markov
-%   least squares adjustment algorithm on the problem with residual function
-%   RES and with initial values X0. A maximum of N iterations are allowed
-%   and the convergence tolerance is TOL. The final estimate is returned in
-%   X. The number of iteration I and a success code (0 - OK, -1 - too many
-%   iterations) are also returned. If TRACE is true, output sigma0
-%   estimates at each iteration.
+%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,N,TOL,TRACE,STEST,PARAMS) runs the
+%   Gauss-Markov least squares adjustment algorithm on the problem with
+%   residual function RES and with initial values X0. A maximum of N
+%   iterations are allowed and the convergence tolerance is TOL. The final
+%   estimate is returned in X. If STEST is true, the iterations are
+%   terminated if a (near) singularity warning on the normal matrix is
+%   issued. The number of iteration I and a success code (0 - OK, -1 - too
+%   many iterations, -2 - matrix is singular) are also returned. If TRACE is
+%   true, the sigma0 estimates are printed at each iteration.
 %
 %   [X,CODE,I,F,J]=... also returns the final estimates of the residual
 %   vector F and jacobian matrix J.
@@ -35,6 +38,12 @@ if nargout>5
     T(:,1)=x0;
 end
 
+if sTest
+    % Clear last warning.
+    lastwarn('');
+end
+
+% Iteration counter.
 n=0;
 
 % OK until proven otherwise.
@@ -52,23 +61,27 @@ while true
     % Solve normal equations.
     p=(J'*J)\-(J'*f);
 
+    if sTest
+        % Check if we got the 'Matrix is singular to working precision' warning.
+        [warnmsg,msgid]=lastwarn; %#ok<ASGLU>
+        if strcmp(msgid,'MATLAB:singularMatrix') || ...
+                strcmp(msgid,'MATLAB:nearlySingularMatrix')
+            code=-2;
+            break
+        end
+    end
+
     % Terminate if angle between projected residual is smaller than
     % threshold. Warning! This test may be very strict on synthetic data
     % where norm(f) is close to zero at the solution.
     if norm(J*p)<=convTol*norm(f)
         % Converged.
-        break;
+        break
     end
     
     % Update iteration count.
     n=n+1;
     
-    % Terminate with error code if too many iterations.
-    if n>maxIter
-        code=-1; % Too many iterations.
-        break;
-    end
-
     % Update estimate.
     x=x+p;
 
@@ -76,9 +89,15 @@ while true
         % Store iteration trace.
         if n+1>size(T,2)
             % Expand by blocksize if needed.
-            T=[T,nan(length(x),blockSize)];
+            T=[T,nan(length(x),blockSize)]; %#ok<AGROW>
         end
         T(:,n+1)=x;
+    end
+
+    % Terminate with error code if too many iterations.
+    if n>maxIter
+        code=-1; % Too many iterations.
+        break;
     end
 end
 
