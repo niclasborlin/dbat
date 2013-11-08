@@ -68,7 +68,8 @@ while true
                     n,s0)
         else
             fprintf(['Gauss-Newton-Armijo: iteration %d, s0 estimate=%.1g, ' ...
-                     'last alpha=%s\n'],n,s0,rats(alphas(end)));
+                     'last alpha=%s\n'],n,s0,...
+                    fliplr(deblank(fliplr(deblank(rats(alphas(end)))))));
         end
     end
     
