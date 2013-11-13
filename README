@@ -3,18 +3,10 @@
 #
 # For install instructions, see the file INSTALL.
 #
-# For usage, see the files in the doc directory.
+# For usage, see the files in the doc/manual directory.
 
-# This is free software. It is freely distributable under the terms of
-# ZZZ. You can use the software for anything you wish, including for
-# commercial purposes. The only restriction is that
-# a) any scientific publication should make proper references to one
-#    or more of the papers underlying the methods in this toolbox. See
-#    the list below for the current list.
-# b) any commercial software that uses the code or derivatives thereof
-#    must include a statement "Includes code derived from the Damped
-#    Bundle Adjustment Toolbox".
-#
+# Licensing stuff.
+
 # The software is provided as is. Any use is completely at your own risk.
 
 # $Id$
