@@ -1,5 +1,10 @@
 \documentclass{article}
 
+\usepackage[T1]{fontenc}
+\usepackage{svninfo}
+
+% $Id$
+
 \begin{document}
 
 \newcommand{\dbatversion}{0.1}
@@ -35,18 +40,20 @@ Licensing.
 Refer to any of the papers...
 
 \section{Installation}
+\label{sec:install}
 
-\begin{itemize}
+\begin{enumerate}
 \item Download the package file {\tt
   \verb+dbat_+\dbatversion\verb+.zip+}.
 \item Unpack the package into a directory \emph{dbat}.
-\item Inside Matlab, do the following:\\
+\item \label{step:dbatInit}
+Inside Matlab, do the following initialization:\\
 \verb+cd dbat % the directory where you installed the files.+\\
-\verb+dbatSetup % set paths, etc.+\\
-\verb+loadplotdemo % installation test demo+
-\item If loadplotdemo runs without error and generates a figure with a
-  camera network, the installation is ok.
-\end{itemize}
+\verb+dbatSetup % set paths, etc.+
+\item Test the installation by executing \texttt{loadplotdemo}.
+\item If \texttt{loadplotdemo} runs without errors and generates a
+  figure with a camera network, the installation is ok.
+\end{enumerate}
 
 \section{Usage}
 
@@ -61,12 +68,69 @@ Refer to any of the papers...
 \subsection{Using your own data}
 
 \subsubsection{Enabling text export from Photomodeler}
+\label{sec:enableTextExport}.
+
+Some versions of Photomodeler do not have the text file export option
+enabled by default. In that case, follow the following steps to enable
+it:
+\begin{enumerate}
+\item Right-click on the main window toolbar, select \emph{Customize toolbar...}.
+\item In the \emph{Commands} tab, select the \emph{File} category.
+\item Drag the \emph{Export Text File...} command to a toolbar of
+  your choice.
+\item Now you should be able to export your project as a text file by
+  clicking on the \emph{Export Text File} button.
+\end{enumerate}
 
 \subsubsection{Export from Photomodeler}
 
-\subsubsection{Updating the export file}
+To import a Photomodeler project into the toolbox, the following
+steps are valid in Photomodeler Scanner 2012:
+
+\begin{enumerate}
+\item Export the project using \emph{Export Text File}. If the
+  \emph{Export Text File} command is not available, follow the
+  instructions in Section~\ref{sec:enableTextExport}.
+\item After export, open the \emph{Project/Cameras...} dialog and
+  select the camera that was used in your project.
+\item Open the generated text file in a text editor.
+  \begin{enumerate}
+  \item On the 2nd line (usually reading \texttt{0.00005 20}), append
+    the width and height in pixels of your images, e.g. to
+    \texttt{0.000500 20 5616 3744}.
+  \item Inspect the 4th line. For instance,
+    the original data in \texttt{roma.txt} was (some trailing zeros removed):
+
+    \texttt{24.3581 18.1143 12.0 35.96404 24.0 0.00022 -0.0 0.0 0.0 0.0}
+
+    The values correspond to the following camera parameters:
+
+    \texttt{focal pp\_x pp\_y format\_w format\_h K1 K2 K3 P1 P2}.
+
+    Notice that most of the significant digits of K1--K3 were lost in
+    the text export.
+  \item Update the parameter values on the 4th line with values from
+    the camera dialog \emph{for each parameter with a larger number of
+      significant digits in the dialog}. This usually means all
+    parameters except \texttt{format\_w}. In the \texttt{roma.txt}
+    test case, the 4th line was modified to:
+
+    \texttt{24.3581 18.1143 12 35.96404 24 2.174e-4 -1.518e-7 0 0 0}.
+
+  \end{enumerate}
+\end{enumerate}
 
 \subsubsection{Loading into Matlab}
+
+\begin{enumerate}
+\item In matlab, run step~\ref{step:dbatInit} from
+  Section~\ref{sec:install} if not already done.
+\item \sloppy Set the variable \texttt{fName} to the text export file name \texttt{fName='c:/path/to/exported/file.txt';}, or
+  select it using \texttt{[f,p]=uigetfile('*.txt'); fName=[f,p];}
+\item Run the \texttt{loadplotdemo} script. A figure with your camera
+  network, aligned with the first camera and rotated to have +Z 'up',
+  should now have been generated.
+\end{enumerate}
 
 \appendix
 
