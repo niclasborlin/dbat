@@ -48,7 +48,12 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %   parameters), 'CEO' (external parameters), 'COP' (object points), or
 %   'CXX' (all parameters). CIO, CEO, COP will be zero-padded for fixed
 %   elements. CXX corresponds directly to the estimated vector and is not
-%   zero-padded.
+%   zero-padded. As default, the returned component covariance matrices CIO,
+%   CEO, and COP are sparse matrices with the block-diagonal part of CXX
+%   only, i.e. the inter- and intra-IO/EO/OP parts are not returned. Use
+%   CCA='CIOF','CEOF', or 'COPF' obtain full component covariance matrices.
+%
+%   Warning! Especially CXX and COPF may require a lot of memory!
 %
 %   [S,OK,N,S0,E,CA,CB,...]=BUNDLE(S,...,CCA,CCB,...) returns multiple
 %   covariance matrices CA, CB, ...
@@ -86,7 +91,7 @@ while ~isempty(varargin)
           case 'singular_test'
             singular_test=true;
             varargin(1)=[];
-          case {'cxx','cio','ceo','cop'}
+          case {'cxx','cio','ceo','cop','ciof','ceof','copf'}
             covMatrices{end+1}=lower(varargin{1});
             varargin(1)=[];
           otherwise
@@ -225,14 +230,85 @@ s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
 % Compute covariance matrices.
 if ~isempty(covMatrices)
+    % We may need J'*J many times, precalculate and prefactor.
+    JTJ=s0^2*J'*J;
+    % Use column count reordering to reduce fill-in in Cholesky factor.
+    p=colperm(JTJ);
+    R=chol(JTJ(p,p));
+    % Permute the identity to match permutation of JTJ.
+    Ip=speye(size(JTJ,2));
+    Ip=Ip(p,:);
     for i=1:length(covMatrices)
-        
+        switch covMatrices{i}
+          case 'cxx' % Raw, whole covariance matrix.
+
+            C=zeros(size(JTJ));
+            C(p,:)=R\(R'\Ip);
+            
+          case 'ciof' % Whole CIO covariance matrix.
+            
+            % Pre-allocate matrix with place for nnz(s.cIO)^2 elements.
+            C=spalloc(numel(s.IO),numel(s.IO),nnz(s.cIO)^2);
+            
+            % Compute needed part of inverse.
+            cc=zeros(size(JTJ,1),length(ixIO));
+            cc(p,:)=R\(R'\Ip(:,ixIO));
+            
+            % We get the full columns. Extract only the interesting block
+            % and put it into the right part of C.
+            C(s.cIO(:),s.cIO(:))=cc(ixIO,:);
+            
+          case 'ceof' % Whole CEO covariance matrix.
+            
+            % Pre-allocate matrix with place for nnz(s.cEO)^2 elements.
+            C=spalloc(numel(s.EO),numel(s.EO),nnz(s.cEO)^2);
+            
+            % Compute needed part of inverse.
+            cc=zeros(size(JTJ,1),length(ixEO));
+            cc(p,:)=R\(R'\Ip(:,ixEO));
+            
+            % We get the full columns. Extract only the interesting block
+            % and put it into the right part of C.
+            C(s.cEO(:),s.cEO(:))=cc(ixEO,:);
+            
+          case 'copf' % Whole COP covariance matrix.
+            
+            % Pre-allocate matrix with place for nnz(s.cOP)^2 elements.
+            C=spalloc(numel(s.OP),numel(s.OP),nnz(s.cOP)^2);
+            
+            % Compute needed part of inverse.
+            cc=zeros(size(JTJ,1),length(ixOP));
+            cc(p,:)=R\(R'\Ip(:,ixOP));
+            
+            % We get the full columns. Extract only the interesting block
+            % and put it into the right part of C.
+            C(s.cOP(:),s.cOP(:))=cc(ixOP,:);
+            
+          case 'ceo' % Block-diagonal CEO
+            
+            % Pre-allocate matrix with place for the diagonal blocks.
+            C=spalloc(numel(s.EO),numel(s.EO),sum(sum(s.cEO,1).^2));
+                     
+            % Pack indices as the data
+            ix=zeros(size(s.EO));
+            ix(s.cEO)=ixEO;
+            
+            % Construct corresponding indexing among the EO parameters.
+            ixInt=reshape(1:numel(s.EO),size(s.EO));
+            
+            % Loop over each EO column with element to compute.
+            for j=find(any(s.cEO~=0))
+                ii=ix(:,j);
+                ii=ii(ii~=0);
+                % Compute needed part of inverse.
+                cc=zeros(size(JTJ,1),length(ii));
+                cc(p,:)=R\(R'\Ip(:,ii));
+                % We get the full columns. Extract only the interesting block
+                % and put it into the right part of C.
+                C(s.cEO(:,j),s.cEO(:,j))=cc(ii,:);
+            end
+            
+        end
+        varargout{i}=C;
     end
-    
-    
-% Calculate CXX only if asked to.
-if nargout>5
-    warning(['Only naive CXX calculation implemented so far. May cause ' ...
-             'out of memory']);
-    CXX=s0^2*(J'*J)\speye(size(J,2));
 end
