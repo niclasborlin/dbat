@@ -228,6 +228,7 @@ end
 % s0=sqrt(f'*f/(m-n)) in mm, convert to pixels.
 s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
+covMatrices={'cop'};
 % Compute covariance matrices.
 if ~isempty(covMatrices)
     % We may need J'*J many times, precalculate and prefactor.
@@ -254,12 +255,13 @@ if ~isempty(covMatrices)
             cc=zeros(size(JTJ,1),length(ixIO));
             cc(p,:)=R\(R'\Ip(:,ixIO));
             
-            % We get the full columns. Extract only the interesting block
-            % and put it into the right part of C.
+            % We get the full columns of the inverse. Extract only the
+            % interesting block and put it into the right part of C.
             C(s.cIO(:),s.cIO(:))=cc(ixIO,:);
             
           case 'ceof' % Whole CEO covariance matrix.
             
+            start=clock;
             % Pre-allocate matrix with place for nnz(s.cEO)^2 elements.
             C=spalloc(numel(s.EO),numel(s.EO),nnz(s.cEO)^2);
             
@@ -270,6 +272,8 @@ if ~isempty(covMatrices)
             % We get the full columns. Extract only the interesting block
             % and put it into the right part of C.
             C(s.cEO(:),s.cEO(:))=cc(ixEO,:);
+
+            etime(clock,start)
             
           case 'copf' % Whole COP covariance matrix.
             
@@ -284,7 +288,54 @@ if ~isempty(covMatrices)
             % and put it into the right part of C.
             C(s.cOP(:),s.cOP(:))=cc(ixOP,:);
             
+          case 'cio' % Block-diagonal CIO
+
+            % Delayed progress dialog.
+            start=clock;
+            h=[];
+            
+            % Pre-allocate matrix with place for the diagonal blocks.
+            C=spalloc(numel(s.IO),numel(s.IO),sum(sum(s.cIO,1).^2));
+                     
+            % Pack indices as the data
+            ix=zeros(size(s.IO));
+            ix(s.cIO)=ixIO;
+            
+            % Construct corresponding indexing among the IO parameters.
+            ixInt=reshape(1:numel(s.IO),size(s.IO));
+            
+            % Loop over each IO column.
+            for j=1:size(ix,2)
+                % Indices into J.
+                jix=ix(s.cIO(:,j),j);
+                % Indices into s.IO
+                eix=ixInt(s.cIO(:,j),j);
+
+                % Compute needed part of inverse.
+                cc=zeros(size(JTJ,1),length(jix));
+                cc(p,:)=R\(R'\Ip(:,jix));
+                % We get the full columns. Extract only the interesting block
+                % and put it into the right part of C.
+                C(eix,eix)=cc(jix,:);
+                
+                if (isempty(h) && etime(clock,start)>1)
+                    % Create dialog.
+                    h=waitbar(j/size(ix,2),'Computing IO covariances');
+                elseif rem(j,floor(sqrt(size(ix,2))))==0
+                    % Update dialog.
+                    if ishandle(h) % Guard against window close.
+                        waitbar(j/size(ix,2),h);
+                    end
+                end
+            end
+            if ishandle(h), close(h), end
+            
           case 'ceo' % Block-diagonal CEO
+            
+            % Delayed progress dialog.
+            start=clock;
+            lapTime=start;
+            h=[];
             
             % Pre-allocate matrix with place for the diagonal blocks.
             C=spalloc(numel(s.EO),numel(s.EO),sum(sum(s.cEO,1).^2));
@@ -295,19 +346,118 @@ if ~isempty(covMatrices)
             
             % Construct corresponding indexing among the EO parameters.
             ixInt=reshape(1:numel(s.EO),size(s.EO));
+
+            % Determine block column size such that computed part of inverse is
+            % approximately 10M-elements.
+            bsElems=10*1024^2;
+            bsCols=floor(bsElems/size(JTJ,1)/max(sum(ix~=0,1)));
+            bsCols=min(max(bsCols,1),size(ix,2));
             
-            % Loop over each EO column with element to compute.
-            for j=find(any(s.cEO~=0))
-                ii=ix(:,j);
-                ii=ii(ii~=0);
+            % Loop over each EO column.
+            for j=1:bsCols:size(ix,2)
+                % Columns in block.
+                jCols=j:min(j+bsCols-1,size(ix,2));
+                
+                % Indices into J.
+                jixBlock=ix(:,jCols);
+                jix=jixBlock(s.cEO(:,jCols));
+                % Indices into s.EO
+                eixBlock=ixInt(:,jCols);
+                eix=eixBlock(s.cEO(:,jCols));
+
                 % Compute needed part of inverse.
-                cc=zeros(size(JTJ,1),length(ii));
-                cc(p,:)=R\(R'\Ip(:,ii));
-                % We get the full columns. Extract only the interesting block
-                % and put it into the right part of C.
-                C(s.cEO(:,j),s.cEO(:,j))=cc(ii,:);
+                cc=zeros(size(JTJ,1),length(jix));
+                cc(p,:)=R\(R'\Ip(:,jix));
+                % We get the full columns of the inverse. Extract only
+                % the interesting block...
+                Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
+                Cblock(eix,eix)=cc(jix,:);
+                % ...make it block-diagonal...
+                Cblock=mkblkdiag(Cblock,size(ix,1));
+                % ...and put it into the right part of C.
+                C(eix,eix)=Cblock(eix,eix);
+                
+                if (isempty(h) && etime(clock,start)>1) && ...
+                        jCols(end)~=size(ix,2)
+                    % Only create dialog if execution takes more than 1s
+                    % and this iteration is not the last.
+                    h=waitbar(jCols(end)/size(ix,2),'Computing EO covariances');
+                    lapTime=clock;
+                elseif etime(clock,lapTime)>1
+                    % Update dialog.
+                    if ishandle(h) % Guard against window close.
+                        waitbar(jCols(end)/size(ix,2),h);
+                    end
+                    lapTime=clock;
+                end
             end
+            if ishandle(h), close(h), end
+            etime(clock,start)
+            %            max(max(abs(mkblkdiag(varargout{i-1},size(ix,1))-C)))
             
+          case 'cop' % Block-diagonal COP
+            
+            % Delayed progress dialog.
+            start=clock;
+            lapTime=start;
+            h=[];
+
+            % Pre-allocate matrix with place for the diagonal blocks.
+            C=spalloc(numel(s.OP),numel(s.OP),sum(sum(s.cOP,1).^2));
+                     
+            % Pack indices as the data
+            ix=zeros(size(s.OP));
+            ix(s.cOP)=ixOP;
+            
+            % Construct corresponding indexing among the OP parameters.
+            ixInt=reshape(1:numel(s.OP),size(s.OP));
+            
+            % Determine block column size such that computed part of inverse is
+            % approximately 10M-elements.
+            bsElems=100*1024^2;
+            bsCols=floor(bsElems/size(JTJ,1)/max(sum(ix~=0,1)))
+            bsCols=min(max(bsCols,1),size(ix,2));
+            
+            % Loop over each OP column.
+            for j=1:bsCols:size(ix,2)
+                % Columns in block.
+                jCols=j:min(j+bsCols-1,size(ix,2));
+
+                % Indices into J.
+                jixBlock=ix(:,jCols);
+                jix=jixBlock(s.cOP(:,jCols));
+                % Indices into s.OP
+                eixBlock=ixInt(:,jCols);
+                eix=eixBlock(s.cOP(:,jCols));
+
+                % Compute needed part of inverse.
+                cc=zeros(size(JTJ,1),length(jix));
+                cc(p,:)=R\(R'\Ip(:,jix));
+                % We get the full columns of the inverse. Extract only
+                % the interesting block...
+                Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
+                Cblock(eix,eix)=cc(jix,:);
+                % ...make it block-diagonal...
+                Cblock=mkblkdiag(Cblock,size(ix,1));
+                % ...and put it into the right part of C.
+                C(eix,eix)=Cblock(eix,eix);
+                
+                if (isempty(h) && etime(clock,start)>1) && ...
+                        jCols(end)~=size(ix,2)
+                    % Only create dialog if execution takes more than 1s
+                    % and this iteration is not the last.
+                    h=waitbar(jCols(end)/size(ix,2),'Computing OP covariances');
+                    lapTime=clock;
+                elseif etime(clock,lapTime)>1
+                    % Update dialog.
+                    if ishandle(h) % Guard against window close.
+                        waitbar(jCols(end)/size(ix,2),h);
+                    end
+                    lapTime=clock;
+                end
+            end
+            if ishandle(h), close(h), end
+            etime(clock,start)
         end
         varargout{i}=C;
     end
