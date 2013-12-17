@@ -1,4 +1,4 @@
-function [s,ok,iters,s0,E,CXX]=bundle(s,varargin)
+function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %BUNDLE Run bundle adjustment iterations on a camera network.
 %
 %   [S,OK,N]=BUNDLE(S), where S is a struct returned by PROB2DBATSTRUCT,
@@ -40,11 +40,21 @@ function [s,ok,iters,s0,E,CXX]=bundle(s,varargin)
 %       for LMP damping: E.delta  - (N+1)-vector with used trust region sizes,
 %                        E.rho    - (N+1)-vector with gain ratios.
 %
-%   [S,OK,N,S0,E,CXX]=... returns the covariance matrix CXX of the final
-%   X, scaled by sigma0.
+%   [S,OK,N,S0,E,CXX]=BUNDLE(S,...,'CXX') computes and returns the
+%   covariance matrix CXX for all estimated parameters, scaled by sigma0^2.
+%
+%   [S,OK,N,S0,E,CA]=BUNDLE(S,...,CCA) computes and returns a selected
+%   covariance matrix CA. CCA should be one of 'CIO' (covariance of internal
+%   parameters), 'CEO' (external parameters), 'COP' (object points), or
+%   'CXX' (all parameters). CIO, CEO, COP will be zero-padded for fixed
+%   elements. CXX corresponds directly to the estimated vector and is not
+%   zero-padded.
+%
+%   [S,OK,N,S0,E,CA,CB,...]=BUNDLE(S,...,CCA,CCB,...) returns multiple
+%   covariance matrices CA, CB, ...
 %
 %   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
-%       Without Damping". Photogrammetric Record 28(144), pp. XX-YY. DOI
+%       Without Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
 %
 %   See also PROB2DBATSTRUCT, BROWN_EULER_CAM.
@@ -56,6 +66,7 @@ damping='gna';
 veto=false;
 singular_test=false;
 trace=false;
+covMatrices={};
 
 while ~isempty(varargin)
     if isnumeric(varargin{1}) && isscalar(varargin{1})
@@ -63,7 +74,7 @@ while ~isempty(varargin)
         maxIter=varargin{1};
         varargin(1)=[];
     elseif ischar(varargin{1})
-        % DAMP or TRACE
+        % DAMP, TRACE, or CXX
         switch lower(varargin{1})
           case {'none','gm','gna','lm','lmp'}
             % OK
@@ -74,6 +85,9 @@ while ~isempty(varargin)
             varargin(1)=[];
           case 'singular_test'
             singular_test=true;
+            varargin(1)=[];
+          case {'cxx','cio','ceo','cop'}
+            covMatrices{end+1}=lower(varargin{1});
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -206,10 +220,16 @@ if ok
     s.OP(s.cOP)=x0(ixOP);
 end
 
-% s0=sqrt(f'*f/(m-n)) in mm.
-% convert to pixels.
+% s0=sqrt(f'*f/(m-n)) in mm, convert to pixels.
 s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
+% Compute covariance matrices.
+if ~isempty(covMatrices)
+    for i=1:length(covMatrices)
+        
+    end
+    
+    
 % Calculate CXX only if asked to.
 if nargout>5
     warning(['Only naive CXX calculation implemented so far. May cause ' ...
