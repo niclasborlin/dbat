@@ -228,14 +228,48 @@ end
 % s0=sqrt(f'*f/(m-n)) in mm, convert to pixels.
 s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
-covMatrices={'cop'};
+covMatrices={'ceof'};
 % Compute covariance matrices.
 if ~isempty(covMatrices)
     % We may need J'*J many times, precalculate and prefactor.
     JTJ=s0^2*J'*J;
-    % Use column count reordering to reduce fill-in in Cholesky factor.
-    p=colperm(JTJ);
+    
+    % Use block column count reordering to reduce fill-in in Cholesky factor.
+    
+    % IO blocks.
+    bixIO=double(s.cIO);
+    bixIO(s.cIO)=ixIO;
+    % EO blocks.
+    bixEO=double(s.cEO);
+    bixEO(s.cEO)=ixEO;
+    % OP blocks.
+    bixOP=double(s.cOP);
+    bixOP(s.cOP)=ixOP;
+    
+    p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
+    
+    % Inverse permutation.
+    invP=zeros(size(p));
+    invP(p)=1:length(p);
+    
     R=chol(JTJ(p,p));
+    RT=R';
+    % Do a split of R into [R1, R12;
+    %                        0   R2]
+    % R1 will generally be block-diagonal - use sparse storage.
+    % R12, R2 will generally be dense - use full storage.
+    
+    % Find jump in column density.
+    colDens=full(sum(R~=0,1))/size(R,1);
+    [dummy,i]=max(diff(colDens));
+    ix1=1:i;
+    ix2=i+1:size(R,1);
+    R1=R(ix1,ix1);
+    R12s=R(ix1,ix2);
+    R12=full(R12s);
+    R2s=R(ix2,ix2);
+    R2=full(R2s);
+    
     % Permute the identity to match permutation of JTJ.
     Ip=speye(size(JTJ,2));
     Ip=Ip(p,:);
@@ -414,7 +448,7 @@ if ~isempty(covMatrices)
             
             % Determine block column size such that computed part of inverse is
             % approximately 10M-elements.
-            bsElems=100*1024^2;
+            bsElems=50*1024^2;
             bsCols=floor(bsElems/size(JTJ,1)/max(sum(ix~=0,1)))
             bsCols=min(max(bsCols,1),size(ix,2));
             
@@ -432,7 +466,22 @@ if ~isempty(covMatrices)
 
                 % Compute needed part of inverse.
                 cc=zeros(size(JTJ,1),length(jix));
-                cc(p,:)=R\(R'\Ip(:,jix));
+                % Original command:
+                %cc(p,:)=R\(R'\Ip(:,jix));
+                
+                % Split computation into several steps:
+                tmp1=Ip(:,jix);
+                tmp2=RT\tmp1;
+                cc0pt2=R2\tmp2(ix2,:);
+                tmp3s=R12s*cc0pt2;
+                tmp4=tmp2(ix1,:)-tmp3s;
+                cc0pt1=R1\tmp4;
+                
+                cc(p,:)=[cc0pt1;cc0pt2];
+                
+                % Compare actual computation with slow result.
+                % max(max(abs([cc0pt1;cc0pt2]-R\(R'\Ip(:,jix)))))
+                
                 % We get the full columns of the inverse. Extract only
                 % the interesting block...
                 Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
