@@ -228,7 +228,7 @@ end
 % s0=sqrt(f'*f/(m-n)) in mm, convert to pixels.
 s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
-covMatrices={'ceof'};
+covMatrices={'cop'};
 % Compute covariance matrices.
 if ~isempty(covMatrices)
     % We may need J'*J many times, precalculate and prefactor.
@@ -253,45 +253,21 @@ if ~isempty(covMatrices)
     invP(p)=1:length(p);
     
     R=chol(JTJ(p,p));
-    RT=R';
-    % Do a split of R into [R1, R12;
-    %                        0   R2]
-    % R1 will generally be block-diagonal - use sparse storage.
-    % R12, R2 will generally be dense - use full storage.
-    
-    % Find jump in column density.
-    colDens=full(sum(R~=0,1))/size(R,1);
-    [dummy,i]=max(diff(colDens));
-    ix1=1:i;
-    ix2=i+1:size(R,1);
-    R1=R(ix1,ix1);
-    R12s=R(ix1,ix2);
-    R12=full(R12s);
-    R2s=R(ix2,ix2);
-    R2=full(R2s);
-    
-    % Permute the identity to match permutation of JTJ.
-    Ip=speye(size(JTJ,2));
-    Ip=Ip(p,:);
+
     for i=1:length(covMatrices)
         switch covMatrices{i}
           case 'cxx' % Raw, whole covariance matrix.
 
-            C=zeros(size(JTJ));
-            C(p,:)=R\(R'\Ip);
+            C=invblock(R,p,1:size(R,1),'direct');
             
           case 'ciof' % Whole CIO covariance matrix.
             
             % Pre-allocate matrix with place for nnz(s.cIO)^2 elements.
             C=spalloc(numel(s.IO),numel(s.IO),nnz(s.cIO)^2);
             
-            % Compute needed part of inverse.
-            cc=zeros(size(JTJ,1),length(ixIO));
-            cc(p,:)=R\(R'\Ip(:,ixIO));
-            
-            % We get the full columns of the inverse. Extract only the
-            % interesting block and put it into the right part of C.
-            C(s.cIO(:),s.cIO(:))=cc(ixIO,:);
+            % Compute needed part of inverse and put it into the right
+            % part of C.
+            C(s.cIO(:),s.cIO(:))=invblock(R,p,ixIO,'split');
             
           case 'ceof' % Whole CEO covariance matrix.
             
@@ -299,13 +275,9 @@ if ~isempty(covMatrices)
             % Pre-allocate matrix with place for nnz(s.cEO)^2 elements.
             C=spalloc(numel(s.EO),numel(s.EO),nnz(s.cEO)^2);
             
-            % Compute needed part of inverse.
-            cc=zeros(size(JTJ,1),length(ixEO));
-            cc(p,:)=R\(R'\Ip(:,ixEO));
-            
-            % We get the full columns. Extract only the interesting block
-            % and put it into the right part of C.
-            C(s.cEO(:),s.cEO(:))=cc(ixEO,:);
+            % Compute needed part of inverse and put it into the right
+            % part of C.
+            C(s.cEO(:),s.cEO(:))=invblock(R,p,ixEO,'split');
 
             etime(clock,start)
             
@@ -314,13 +286,9 @@ if ~isempty(covMatrices)
             % Pre-allocate matrix with place for nnz(s.cOP)^2 elements.
             C=spalloc(numel(s.OP),numel(s.OP),nnz(s.cOP)^2);
             
-            % Compute needed part of inverse.
-            cc=zeros(size(JTJ,1),length(ixOP));
-            cc(p,:)=R\(R'\Ip(:,ixOP));
-            
-            % We get the full columns. Extract only the interesting block
-            % and put it into the right part of C.
-            C(s.cOP(:),s.cOP(:))=cc(ixOP,:);
+            % Compute needed part of inverse and put it into the right
+            % part of C.
+            C(s.cOP(:),s.cOP(:))=invblock(R,p,ixOP,'split');
             
           case 'cio' % Block-diagonal CIO
 
@@ -345,12 +313,9 @@ if ~isempty(covMatrices)
                 % Indices into s.IO
                 eix=ixInt(s.cIO(:,j),j);
 
-                % Compute needed part of inverse.
-                cc=zeros(size(JTJ,1),length(jix));
-                cc(p,:)=R\(R'\Ip(:,jix));
-                % We get the full columns. Extract only the interesting block
-                % and put it into the right part of C.
-                C(eix,eix)=cc(jix,:);
+                % Compute needed part of inverse and put it into the
+                % right part of C.
+                C(eix,eix)=invblock(R,p,jix,'split');
                 
                 if (isempty(h) && etime(clock,start)>1)
                     % Create dialog.
@@ -399,14 +364,11 @@ if ~isempty(covMatrices)
                 eixBlock=ixInt(:,jCols);
                 eix=eixBlock(s.cEO(:,jCols));
 
-                % Compute needed part of inverse.
-                cc=zeros(size(JTJ,1),length(jix));
-                cc(p,:)=R\(R'\Ip(:,jix));
-                % We get the full columns of the inverse. Extract only
-                % the interesting block...
+                % Compute needed part of inverse and put it into a
+                % temporary matrix.
                 Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
-                Cblock(eix,eix)=cc(jix,:);
-                % ...make it block-diagonal...
+                Cblock(eix,eix)=invblock(R,p,jix,'split');
+                % Make it block-diagonal...
                 Cblock=mkblkdiag(Cblock,size(ix,1));
                 % ...and put it into the right part of C.
                 C(eix,eix)=Cblock(eix,eix);
@@ -448,7 +410,7 @@ if ~isempty(covMatrices)
             
             % Determine block column size such that computed part of inverse is
             % approximately 10M-elements.
-            bsElems=50*1024^2;
+            bsElems=100*1024^2;
             bsCols=floor(bsElems/size(JTJ,1)/max(sum(ix~=0,1)))
             bsCols=min(max(bsCols,1),size(ix,2));
             
@@ -464,29 +426,11 @@ if ~isempty(covMatrices)
                 eixBlock=ixInt(:,jCols);
                 eix=eixBlock(s.cOP(:,jCols));
 
-                % Compute needed part of inverse.
-                cc=zeros(size(JTJ,1),length(jix));
-                % Original command:
-                %cc(p,:)=R\(R'\Ip(:,jix));
-                
-                % Split computation into several steps:
-                tmp1=Ip(:,jix);
-                tmp2=RT\tmp1;
-                cc0pt2=R2\tmp2(ix2,:);
-                tmp3s=R12s*cc0pt2;
-                tmp4=tmp2(ix1,:)-tmp3s;
-                cc0pt1=R1\tmp4;
-                
-                cc(p,:)=[cc0pt1;cc0pt2];
-                
-                % Compare actual computation with slow result.
-                % max(max(abs([cc0pt1;cc0pt2]-R\(R'\Ip(:,jix)))))
-                
-                % We get the full columns of the inverse. Extract only
-                % the interesting block...
+                % Compute needed part of inverse and put it into a
+                % temporary matrix.
                 Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
-                Cblock(eix,eix)=cc(jix,:);
-                % ...make it block-diagonal...
+                Cblock(eix,eix)=invblock(R,p,jix,'split');
+                % Make it block-diagonal...
                 Cblock=mkblkdiag(Cblock,size(ix,1));
                 % ...and put it into the right part of C.
                 C(eix,eix)=Cblock(eix,eix);
