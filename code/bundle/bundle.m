@@ -410,14 +410,21 @@ if ~isempty(covMatrices)
             
             % Determine block column size such that computed part of inverse is
             % approximately 10M-elements.
-            bsElems=100*1024^2;
+            bsElems=1*1024^2;
             bsCols=floor(bsElems/size(JTJ,1)/max(sum(ix~=0,1)))
             bsCols=min(max(bsCols,1),size(ix,2));
+            
+            % Create inverse permutation.
+            invP=zeros(size(p));
+            invP(p)=1:length(p);
+            
+            % Sort permuted columns.
+            [dummy,pix]=sort(invP(ix(1,:)));
             
             % Loop over each OP column.
             for j=1:bsCols:size(ix,2)
                 % Columns in block.
-                jCols=j:min(j+bsCols-1,size(ix,2));
+                jCols=pix(j:min(j+bsCols-1,size(ix,2)));
 
                 % Indices into J.
                 jixBlock=ix(:,jCols);
@@ -439,12 +446,12 @@ if ~isempty(covMatrices)
                         jCols(end)~=size(ix,2)
                     % Only create dialog if execution takes more than 1s
                     % and this iteration is not the last.
-                    h=waitbar(jCols(end)/size(ix,2),'Computing OP covariances');
+                    h=waitbar(min(j+bsCols-1,size(ix,2))/size(ix,2),'Computing OP covariances');
                     lapTime=clock;
                 elseif etime(clock,lapTime)>1
                     % Update dialog.
                     if ishandle(h) % Guard against window close.
-                        waitbar(jCols(end)/size(ix,2),h);
+                        waitbar(min(j+bsCols-1,size(ix,2))/size(ix,2),h);
                     end
                     lapTime=clock;
                 end
