@@ -7,6 +7,11 @@ function x=invblock(R,p,ix,method)
 
 % $Id$
 
+if isempty(ix)
+    x=[];
+    return;
+end
+
 % Create inverse permutation.
 invP=zeros(size(p));
 invP(p)=1:length(p);
