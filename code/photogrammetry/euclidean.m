@@ -1,11 +1,11 @@
 function Y=euclidean(X)
-%EUCLIDEAN Convert homogenous coordinates to Euclidean.
+%EUCLIDEAN Convert homogeneous coordinates to Euclidean.
 %
-%   EUCLIDIAN(X) converts the (K+1)-by-N array X with K-dimensional
-%   homogenous coordinates to a K-by-N array with the corresponding
+%   EUCLIDEAN(X) converts the (K+1)-by-N array X with K-dimensional
+%   homogeneous coordinates to a K-by-N array with the corresponding
 %   Euclidean coordinates. X can have multiple layers.
 %
-%See also: HOMOGENOUS.
+%See also: HOMOGENEOUS.
 
 % $Id$
 

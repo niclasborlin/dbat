@@ -503,8 +503,8 @@ if doPlot || calcProblemData
         pts1=correctedPt(:,colPos(i,cam1));
         pts2=correctedPt(:,colPos(i,cam2));
         % Normalize
-        pt1n=camCalMat\homogenous(pts1);
-        pt2n=camCalMat\homogenous(pts2);
+        pt1n=camCalMat\homogeneous(pts1);
+        pt2n=camCalMat\homogeneous(pts2);
         Evec=essmat5(pt2n,pt1n);
         bestSp=-inf;
         bestErr=inf;
@@ -542,7 +542,7 @@ if doPlot || calcProblemData
                 ci=best(i);
                 P1=PP1{ci};
                 P2=PP2{ci};
-                Xnew=homogenous(XXX{ci});
+                Xnew=homogeneous(XXX{ci});
                 bestErr(i)=sum(sum((euclidean(P1*Xnew)-euclidean(pt1n)).^2))+...
                     sum(sum((euclidean(P2*Xnew)-euclidean(pt2n)).^2));
                 bestErrMax(i)=max(...
