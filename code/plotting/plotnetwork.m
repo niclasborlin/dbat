@@ -160,6 +160,9 @@ else
     nIters=0;
 end
 
+% Camera centers.
+camC=cell(size(EOplot));
+
 iter=0;
 while true
     % Extract base parameters.
@@ -183,7 +186,7 @@ while true
     
     % Transform points and cameras.
     [EO,OP]=pm_multixform(EO,OP,T0);
-    
+
     % Plot points.
     plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.', ...
           OP(1,s.isCtrl),OP(2,s.isCtrl),OP(3,s.isCtrl),'r^');
@@ -200,6 +203,8 @@ while true
         % Camera center.
         CC=EO(1:3,i);
             
+        camC{i}(:,end+1)=CC;
+        
         % Camera orientation.
         ang=EO(4:6,i);
         RR=pm_eulerrotmat(ang);
@@ -211,6 +216,7 @@ while true
             
         hold(ax,'on');
         surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol);
+        line(camC{i}(1,:),camC{i}(2,:),camC{i}(3,:),'marker','x','parent',ax);
         hold(ax,'off');
     end
     
