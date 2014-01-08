@@ -3,10 +3,12 @@ function d=ptdepth(P,X)
 %
 %d=ptdepth(P,X)
 %P - 3x4 camera matrix.
-%X - 3xn (euclidian) or 4xn (homogenous) matrix with object coordinates.
+%X - 3xn (Euclidean) or 4xn (homogeneous) matrix with object coordinates.
 %d - n-vector with depth of each point.
 
-if (size(X,1)<4), X=homogenous(X); end
+% $Id$
+
+if size(X,1)<4, X=homogeneous(X); end
 
 x=P*X;
 M=P(:,1:3);

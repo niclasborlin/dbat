@@ -1,25 +1,25 @@
 function y=applyhomoxform(A,x)
-%APPLYHOMOXFORM Apply homogenous transformation to non-homogenous points.
+%APPLYHOMOXFORM Apply homogeneous transformation to non-homogeneous points.
 %
 %y=applyhomoxform(A,x)
-%x - matrix with points as columns. Points may be homogenous or non-homogenous.
-%A - homogenous transformation matrix.
+%x - matrix with points as columns. Points may be homogeneous or non-homogeneous.
+%A - homogeneous transformation matrix.
 %y - points after transformation. y will be of same homogenity and size as x.
 
-% v1.0  2004-04-05. Niclas Borlin, niclas@cs.umu.se.
+% $Id$
 
-% Determine if x is homogenous or not.
+% Determine if x is homogeneous or not.
 [m,n]=size(A);
 isHomo=size(x,1)==m;
-if (~isHomo)
-	% Add row of ones if not homogenous.
-	x=[x;ones(1,size(x,2))];
+if ~isHomo
+    % Add row of ones if not homogeneous.
+    x=[x;ones(1,size(x,2))];
 end
 
 % Apply transformation.
 y=A*x;
 
-if (~isHomo)
-	% Normalize if input was not homogenous.
-	y=y(1:end-1,:)./repmat(y(end,:),m-1,1);
+if ~isHomo
+    % Normalize if input was not homogeneous.
+    y=y(1:end-1,:)./repmat(y(end,:),m-1,1);
 end
