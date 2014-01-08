@@ -2,8 +2,10 @@ function Evec=essmat5(Q1,Q2)
 %ESSMAT5 Calculate essential matrices from >=5 pt correspondences.
 %
 %EE=essmat5(Q1,Q2)
-%Q1,Q2 - 3xn matrices of normalized homogenous coordinates.
+%Q1,Q2 - 3xn matrices of normalized homogeneous coordinates.
 %EE    - 9xk matrix with essential matrices unrolled as columns.
+
+% $Id$
 
 Q1 = Q1';
 Q2 = Q2';
