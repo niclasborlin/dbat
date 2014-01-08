@@ -26,6 +26,14 @@ s0.cOP(3,ismember(s0.OPid,1003))=false;
 % Estimate px,py,c,K1-K3,P1-P2.
 s0.cIO(1:8,:)=true;
 
+% Set initial IO parameters.
+s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
+s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
+s0.IO(3)=s0.IO(3)*4;   % c = half of true
+s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
+
+s=resect(s0,'all',1001:1004);
+
 dampings={'none','gna','lm','lmp'};
 
 dampings=dampings(2);
@@ -41,31 +49,9 @@ for i=1:length(dampings)
 
     % Run the bundle.
     [result{i},ok(i),iters(i),sigma0(i),E{i},CXX,CIOF,CIO,CEOF,CEO,COPF,COP]=...
-        bundle(s0,dampings{i},'trace','cxx','ciof','cio','ceof','ceo', ...
+        bundle(s,dampings{i},'trace','cxx','ciof','cio','ceof','ceo', ...
                'copf','cop');
     
-    if true
-        disp('Comparing CIOF with CIO')
-        disp(full(max(max(abs(mkblkdiag(CIOF,size(s0.cIO,1))-CIO)))))
-        disp('Comparing CEOF with CEO')
-        disp(full(max(max(abs(mkblkdiag(CEOF,size(s0.cEO,1))-CEO)))))
-        disp('Comparing COPF with COP')
-        disp(full(max(max(abs(mkblkdiag(COPF,size(s0.cOP,1))-COP)))))
-
-        nIO=nnz(s0.cIO);
-        nEO=nnz(s0.cEO);
-        nOP=nnz(s0.cOP);
-        disp('Comparing CIOF with CXX')
-        disp(full(max(max(abs(CIOF(s0.cIO(:),s0.cIO(:))-...
-                              CXX(1:nIO,1:nIO))))))
-        disp('Comparing CEOF with CXX')
-        disp(full(max(max(abs(CEOF(s0.cEO(:),s0.cEO(:))-...
-                              CXX(nIO+(1:nEO),nIO+(1:nEO)))))))
-        disp('Comparing COPF with CXX')
-        disp(full(max(max(abs(COPF(s0.cOP(:),s0.cOP(:))-...
-                              CXX(nIO+nEO+(1:nOP),nIO+nEO+(1:nOP)))))))
-    end
-
     if ok(i)
         fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
                 iters(i),sigma0(i));
@@ -81,5 +67,5 @@ T0=blkdiag(1,[0,-1;1,0],1);
 for i=1:length(E)
     plotnetwork(result{i},E{i},'trans',T0,'align',1,'title',...
                 ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                'axes',figure(i),'pause','on','camerasize',0.25);
+                'axes',figure(i),'pause','on','camerasize',0.1);
 end
