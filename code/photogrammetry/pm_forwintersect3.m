@@ -18,8 +18,8 @@ for i=1:n
     C(:,i)=euclidean(null(P(:,:,i)));
 end
 
-% Expand pts to homogenous.
-xy1=homogenous(xy);
+% Expand pts to homogeneous.
+xy1=homogeneous(xy);
 
 % Get a second point on each ray and ray direction vector.
 Ppx=zeros(4,k,n);
@@ -30,7 +30,7 @@ for i=1:n
     % Move any points "close" to infinity closer.
     far=abs(Ppx(end,:,i))<1e-8;
     % Replace with closer points.
-    Ppx(:,far,i)=Ppx(:,far,i)+repmat(homogenous(C(:,i)),1,nnz(far));
+    Ppx(:,far,i)=Ppx(:,far,i)+repmat(homogeneous(C(:,i)),1,nnz(far));
 end
     
 % Direction vector for each ray.
