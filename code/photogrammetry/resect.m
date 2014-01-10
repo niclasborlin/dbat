@@ -17,6 +17,16 @@ function [s,rms]=resect(s0,cams,cpId,chkId)
 %
 %   [S,RES]=... also returns the rms RES of the residuals of the check
 %   points. A failed resection is indicated by a NaN rms.
+%
+%References:
+%Haralick et al., "Review and Analysis of Solutions of the Three Point
+%   Perspective Pose Estimation Problem", Int J Comp Vis, 13(3):331-356,
+%   1994.
+%McGlone et al., "Manual of Photogrammetry", Chapter 11.1.3.4,
+%   pp. 786-788, American Society of Photogrammetry and Remote Sensing,
+%   2004.
+%
+%See also: PM_RESECT_3PT.
 
 % $Id$
 
