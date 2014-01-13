@@ -220,9 +220,9 @@ ok=code==0;
 
 % Update s if optimization converged.
 if ok
-    s.IO(s.cIO)=x0(ixIO);
-    s.EO(s.cEO)=x0(ixEO);
-    s.OP(s.cOP)=x0(ixOP);
+    s.IO(s.cIO)=x(ixIO);
+    s.EO(s.cEO)=x(ixEO);
+    s.OP(s.cOP)=x(ixOP);
 end
 
 % s0=sqrt(f'*f/(m-n)) in mm, convert to pixels.
