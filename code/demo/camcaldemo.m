@@ -29,10 +29,11 @@ s0.cIO(1:8,:)=true;
 % Set initial IO parameters.
 s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
 s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
-s0.IO(3)=s0.IO(3)*4;   % c = half of true
+s0.IO(3)=s0.IO(3)*1;   % c = half of true
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 s=resect(s0,'all',1001:1004);
+s=forwintersect(s,'all');
 
 dampings={'none','gna','lm','lmp'};
 
