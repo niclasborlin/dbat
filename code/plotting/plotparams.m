@@ -132,6 +132,10 @@ if any(s.cEO)
     % Line styles.
     ls={'-','--','-.'};
 
+    % Callback to clear all highlights in figure and highlight lines
+    % corresponding to clicked line.
+    cb=@highlight;
+    
     % Plot each coordinate as the outer loop to get a better legend.
     for i=1:3
         % For each camera.
@@ -148,14 +152,10 @@ if any(s.cEO)
             if i==1
                 lgs{end+1}=sprintf('C%d',ci);
             end
-            % Function to clear all highlights in figure and highlight
-            % lines corresponding to clicked line.
-            fun='set(findobj(gcbf,''type'',''line''),''selected'',''off'');set(findobj(gcbf,''type'',''line'',''userdata'',get(gcbo,''userdata'')),''selected'',''on'');';
             line(0:size(e.trace,2)-1,c(i,:),'parent',ax,'linestyle',ls{i},...
                  'marker','x','color',color,...
                  'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
-                 'userdata',ci,...
-                 'buttondownfcn',fun);
+                 'userdata',ci,'buttondownfcn',cb);
         end
         if i==1
             [legh,objh,outh,outm]=legend(lgs);
@@ -164,70 +164,68 @@ if any(s.cEO)
             % Set lines to highlight when selected.
             set(lineH','selectionhighlight','on');
             for j=1:size(s.EO,2)
-                set(lineH(:,j),'userdata',j,'buttondownfcn',fun,'hittest','on');
+                set(lineH(:,j),'userdata',j,'buttondownfcn',cb,'hittest','on');
             end
         end
     end
     title(ax,'Camera center');
     
-    asfds
-    ax=subplot(3,1,2,'parent',fig);
-    % Legend strings.
-    lgs={};
+    ax=subplot(2,1,2,'parent',fig);
+    % Angle strings.
+    aStrs={'\omega','\phi','\kappa'};
+    
     % For each camera.
     for ci=1:size(s.EO,2)
         % Create array with K1-K3 parameters.
-        K=repmat(s.EO(4:6,ci),1,size(e.trace,2));
+        angles=repmat(s.EO(4:6,ci),1,size(e.trace,2));
         % Update with estimated values.
         ixp=ixPos(4:6,ci);
-        K(s.cEO(4:6,ci),:)=e.trace(ixp(s.cEO(4:6,ci)),:);
-        % Scale K values.
-        v=diag(100.^(0:size(K,1)-1))*K;
-        for i=1:size(v,1)
-            if i==1
-                prefix='';
-            else
-                prefix=sprintf('10^%d',(i-1)*2);
-            end
-            if size(s.EO,2)==1
-                color=cc(i,:);
-                lgs{end+1}=sprintf('%sK%d',prefix,i);
-            else
-                color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('%sK%d-%d',prefix,i,ci);
-            end
+        angles(s.cEO(4:6,ci),:)=e.trace(ixp(s.cEO(4:6,ci)),:);
+        % Convert to degrees.
+        angles=angles*180/pi;
+        for i=1:size(angles,1)
+            color=cc(rem(ci-1,size(cc,1))+1,:);
             
-            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color);
-        end
-        legend(lgs);
-    end
-    title(ax,'Radial distortion');
-    
-    ax=subplot(3,1,3,'parent',fig);
-    % Legend strings.
-    lgs={};
-    % For each camera.
-    for ci=1:size(s.EO,2)
-        % Create array with P1-P2 parameters.
-        P=repmat(s.EO(7:8,ci),1,size(e.trace,2));
-        % Update with estimated values.
-        ixp=ixPos(7:8,ci);
-        P(s.cEO(7:8,ci),:)=e.trace(ixp(s.cEO(7:8,ci)),:);
-        for i=1:size(P,1)
-            if size(s.EO,2)==1
-                color=cc(i,:);
-                lgs{end+1}=sprintf('P%d',i);
-            else
-                color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('P%d-%d',i,ci);
-            end
+            line(0:size(e.trace,2)-1,angles(i,:),'parent',ax,...
+                 'linestyle',ls{i}, ... 
+                 'marker','x','color',color,...
+                 'tag',sprintf('%s-%d',aStrs{i},ci),'userdata',ci,...
+                 'buttondownfcn',cb);
 
-            line(0:size(e.trace,2)-1,P(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color);
         end
-        legend(lgs);
     end
-    title(ax,'Tangential distortion');
+    title(ax,'Euler angles [degrees]');
+end
+
+function highlight(obj,event)
+
+if nargin<1, obj=gcbo; end
+fig=gcbf;
+
+% Get object number.
+num=get(obj,'userdata');
+
+% All objects.
+all=findobj(fig,'type','line');
+% All matching objects.
+sel=findobj(all,'flat','userdata',num);
+
+% Clear any previous highlights.
+set(all,'selected','off','linewidth',0.5);
+% Select and set thick lines.
+set(sel,'selected','on','linewidth',2);
+
+% Move selected object to the front.
+
+% Get all axes that are parents to selected objects.
+ax=unique(cell2mat(get(sel,'parent')));
+for i=1:length(ax)
+    if strcmp(get(ax(i),'type'),'axes')
+        ch=get(ax(i),'children');
+        % Find out which of the selected objects are in this axes.
+        j=ismember(ch,sel);
+        [dummy,k]=sort(j);
+        set(ax(i),'children',ch(k));
+    end
 end
 
