@@ -1,4 +1,4 @@
-function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
+function [x,code,n,f,J,T,rr]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
                                        sTest,params)
 %GAUSS_MARKOV Gauss-Markov least squares adjustment algorithm.
 %
@@ -15,8 +15,8 @@ function [x,code,n,f,J,T]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
 %   [X,CODE,I,F,J]=... also returns the final estimates of the residual
 %   vector F and jacobian matrix J.
 %
-%   [X,CODE,I,F,J,T]=... returns the iteration trace as successive columns
-%   in T.
+%   [X,CODE,I,F,J,T,RR]=... also returns the iteration trace as successive
+%   columns in T and successive values of the residual norm in RR.
 %
 %   The function RES is assumed to return the residual function and its
 %   jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
@@ -49,13 +49,16 @@ n=0;
 % OK until proven otherwise.
 code=0;
 
+% Residual norm trace.
+rr=[];
+
 while true
     % Calculate residual and jacobian at current point.
     [f,J]=feval(resFun,x,params{:});
 
+    rr(end+1)=sqrt(f'*f);
     if trace
-        s0=sqrt(f'*f/(size(J,1)-size(J,2)));
-        fprintf('Gauss-Markov: iteration %d, s0 estimate=%.1g\n',n,s0);
+        fprintf('Gauss-Markov: iteration %d, residual norm=%.1g\n',n,rr(end));
     end
     
     % Solve normal equations.

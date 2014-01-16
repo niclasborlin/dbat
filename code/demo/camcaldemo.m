@@ -62,11 +62,13 @@ for i=1:length(dampings)
     end
 end
 
+plotparams(result{1},E{1});
+
 % Rotate to have +Z up.
 T0=blkdiag(1,[0,-1;1,0],1);
 
 for i=1:length(E)
     plotnetwork(result{i},E{i},'trans',T0,'align',1,'title',...
                 ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                'axes',figure(i),'pause','on','camerasize',0.1);
+                'axes',tagfigure(sprintf('network%d',i)),'pause','on','camerasize',0.1);
 end
