@@ -5,19 +5,21 @@ function hh=plotparams(s,e,varargin)
 %   is a struct returned by BUNDLE, plots the iteration trace of the
 %   parameters estimated by BUNDLE.
 %
-%   
+%See also: BUNDLE, PROB2DBATSTRUCT.
+
+% $Id$
 
 h=nan(3,1);
 
 [ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
-if any(s.cIO)
+if any(s.cIO(:))
     ixPos=double(s.cIO);
     ixPos(s.cIO)=ixIO;
     
     % IO parameter plot.
-    h(1)=tagfigure('paramplot_io');
-    fig=h(1);
+    fig=tagfigure(sprintf('paramplot_io_%s',e.damping));
+    h(1)=fig;
     clf(fig);
 
     ax=subplot(3,1,1,'parent',fig);
@@ -53,7 +55,7 @@ if any(s.cIO)
         end
         legend(lgs);
     end
-    title(ax,'Focal length, principal point');
+    title(ax,sprintf('Focal length, principal point (%s)',e.damping));
     
     ax=subplot(3,1,2,'parent',fig);
     % Legend strings.
@@ -115,13 +117,13 @@ if any(s.cIO)
     title(ax,'Tangential distortion');
 end
 
-if any(s.cEO)
+if any(s.cEO(:))
     ixPos=double(s.cEO);
     ixPos(s.cEO)=ixEO;
 
     % EO parameter plot.
-    h(2)=tagfigure('paramplot_eo');
-    fig=h(2);
+    fig=tagfigure(sprintf('paramplot_eo_%s',e.damping));
+    h(2)=fig;
     clf(fig);
 
     ax=subplot(2,1,1,'parent',fig);
@@ -168,7 +170,7 @@ if any(s.cEO)
             end
         end
     end
-    title(ax,'Camera center');
+    title(ax,sprintf('Camera center (%s)',e.damping));
     
     ax=subplot(2,1,2,'parent',fig);
     % Angle strings.
@@ -196,6 +198,64 @@ if any(s.cEO)
     end
     title(ax,'Euler angles [degrees]');
 end
+
+if any(s.cOP(:))
+    ixPos=double(s.cOP);
+    ixPos(s.cOP)=ixOP;
+
+    % OP parameter plot.
+    fig=tagfigure(sprintf('paramplot_op_%s',e.damping));
+    h(3)=fig;
+    clf(fig);
+
+    ax=subplot(1,1,1,'parent',fig);
+    cla(ax);
+    cc=get(ax,'colororder');
+    % Legend strings.
+    lgs={};
+    % Line styles.
+    ls={'-','--','-.'};
+
+    % Callback to clear all highlights in figure and highlight lines
+    % corresponding to clicked line.
+    cb=@highlight;
+    
+    % Plot each coordinate as the outer loop to get a better legend.
+    for i=1:3
+        % For each point.
+        for ci=1:size(s.OP,2)
+            % Create array with OP coordinates.
+            c=repmat(s.OP(1:3,ci),1,size(e.trace,2));
+            % Update with estimated values.
+            ixp=ixPos(1:3,ci);
+            c(s.cOP(1:3,ci),:)=e.trace(ixp(s.cOP(1:3,ci)),:);
+            % Line style and legend strings.
+            ls={'-','--','-.'};
+            fps={'X','Y','Z'};
+            color=cc(rem(ci-1,size(cc,1))+1,:);
+            if i==1
+                lgs{end+1}=sprintf('P%d',ci);
+            end
+            line(0:size(e.trace,2)-1,c(i,:),'parent',ax,'linestyle',ls{i},...
+                 'marker','x','color',color,...
+                 'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
+                 'userdata',ci,'buttondownfcn',cb);
+        end
+        if i==1
+            [legh,objh,outh,outm]=legend(lgs);
+            % First comes text handles, then line handles.
+            lineH=reshape(objh(size(s.OP,2)+1:end),2,[]);
+            % Set lines to highlight when selected.
+            set(lineH','selectionhighlight','on');
+            for j=1:size(s.OP,2)
+                set(lineH(:,j),'userdata',j,'buttondownfcn',cb,'hittest','on');
+            end
+        end
+    end
+    title(ax,sprintf('Object points (%s)',e.damping));
+end    
+
+if nargout>0, hh=h; end
 
 function highlight(obj,event)
 
@@ -228,4 +288,3 @@ for i=1:length(ax)
         set(ax(i),'children',ch(k));
     end
 end
-
