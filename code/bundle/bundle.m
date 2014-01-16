@@ -34,6 +34,7 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %   [S,OK,N,S0,E]=... returns damping-dependent trace data in the struct E:
 %       E.damping - string with the name of the damping scheme.
 %       E.trace   - NOBS-by-(N+1) array with successive parameter estimates.
+%       E.res     - (N+1)-vector with the residual norm at every iteration.
 %   Furthermore,
 %       for GNA damping: E.alpha  - (N+1)-vector with used steplength.
 %       for LM damping:  E.lambda - (N+1)-vector with used lambda values.
@@ -138,7 +139,7 @@ params={s};
 % - ok, -1 - too many iterations) and the number of required iterations are
 % returned.
 
-E=struct('damping',damping);
+E=struct('damping','');
 
 switch lower(damping)
   case {'none','gm'}
@@ -146,9 +147,10 @@ switch lower(damping)
     
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
-    [x,code,iters,f,J,X]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
+    [x,code,iters,f,J,X,res]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
                                       singular_test,params);
     time=cputime-stopWatch;
+    E.damping='gm';
   case 'gna'
     % Gauss-Newton with Armijo linesearch.
 
@@ -160,12 +162,13 @@ switch lower(damping)
     % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
     % returned with the step lengths used at each iteration.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
+    [x,code,iters,f,J,X,res,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
                                                    mu,alphaMin,maxIter, ...
                                                    convTol,trace, ...
                                                    singular_test,params);
     time=cputime-stopWatch;
     E.alpha=alpha;
+    E.damping='gna';
   case 'lm'
     % Original Levenberg-Marquardt "lambda"-version.
 
@@ -186,6 +189,7 @@ switch lower(damping)
                                                     lambdaMin,trace,params);
     time=cputime-stopWatch;
     E.lambda=lambda;
+    E.damping='lm';
   case 'lmp'
     % Levenberg-Marquardt-Powell trust-region, "delta"-version with
     % Powell dogleg.
@@ -209,9 +213,11 @@ switch lower(damping)
     time=cputime-stopWatch;
     E.delta=delta;
     E.rho=rho;
+    E.damping='lmp';
   otherwise
     error('DBAT:bundle:internal','Unknown damping');
 end
+E.res=res;
 E.trace=X;
 E.time=time;
 
@@ -225,7 +231,7 @@ if ok
     s.OP(s.cOP)=x(ixOP);
 end
 
-% s0=sqrt(f'*f/(m-n)) in mm, convert to pixels.
+% Sigma0 is sqrt(f'*f/(m-n)) in mm, convert to pixels.
 s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
 % Compute covariance matrices.
@@ -279,7 +285,7 @@ if ~isempty(covMatrices)
             % part of C.
             C(s.cEO(:),s.cEO(:))=invblock(R,p,ixEO,'split');
 
-            etime(clock,start)
+            %etime(clock,start)
             
           case 'copf' % Whole COP covariance matrix.
             
@@ -291,7 +297,7 @@ if ~isempty(covMatrices)
             % part of C.
             C(s.cOP(:),s.cOP(:))=invblock(R,p,ixOP,'split');
             
-            etime(clock,start)
+            %etime(clock,start)
           
           case 'cio' % Block-diagonal CIO
 
@@ -341,7 +347,7 @@ ixInt=reshape(1:numel(calc),size(calc));
 
 % Determine block column size such that computed part of inverse is
 % approximately bsElems elements.
-bsCols=floor(bsElems/size(R,1)/max(sum(ix~=0,1)))
+bsCols=floor(bsElems/size(R,1)/max(sum(ix~=0,1)));
 bsCols=min(max(bsCols,1),size(ix,2));
 
 % Create inverse permutation.
@@ -394,4 +400,4 @@ for j=1:bsCols:size(ix,2)
     end
 end
 if ishandle(h), close(h), end
-etime(clock,start)
+%etime(clock,start)
