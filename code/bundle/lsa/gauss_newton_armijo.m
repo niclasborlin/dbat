@@ -1,4 +1,4 @@
-function [x,code,n,f,J,T,alphas]=gauss_newton_armijo(resFun,vetoFun,x0,mu, ...
+function [x,code,n,f,J,T,rr,alphas]=gauss_newton_armijo(resFun,vetoFun,x0,mu, ...
                                                   alphaMin, maxIter, ...
                                                   convTol,trace, sTest,params)
 %GAUSS_NEWTON_ARMIJO Gauss-Newton-Armijo least squares adjustment algorithm.
@@ -20,8 +20,9 @@ function [x,code,n,f,J,T,alphas]=gauss_newton_armijo(resFun,vetoFun,x0,mu, ...
 %   [X,CODE,I,F,J]=... also returns the final estimates of the residual
 %   vector F and jacobian matrix J.
 %
-%   [X,CODE,I,F,J,T,ALPHAS]=... returns the iteration trace as successive
-%   columns in T and the used steplengths in ALPHAS.
+%   [X,CODE,I,F,J,T,RR,ALPHAS]=... returns the iteration trace as successive
+%   columns in T, the successive estimates of sigma0 in RR, and the used
+%   steplengths in ALPHAS.
 %
 %   The function RES is assumed to return the residual function and its
 %   jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
@@ -54,6 +55,9 @@ n=0;
 % OK until proven otherwise.
 code=0;
 
+% Residual norm trace.
+rr=[];
+
 % Steplength vector.
 alphas=[];
 
@@ -61,14 +65,14 @@ while true
     % Calculate residual and jacobian at current point.
     [f,J]=feval(resFun,x,params{:});
 
+    rr(end+1)=sqrt(f'*f);
     if trace
-        s0=sqrt(f'*f/(size(J,1)-size(J,2)));
         if isempty(alphas)
-            fprintf('Gauss-Newton-Armijo: iteration %d, s0 estimate=%.1g\n', ...
-                    n,s0)
+            fprintf('Gauss-Newton-Armijo: iteration %d, residual norm=%.1g\n', ...
+                    n,rr(end))
         else
-            fprintf(['Gauss-Newton-Armijo: iteration %d, s0 estimate=%.1g, ' ...
-                     'last alpha=%s\n'],n,s0,...
+            fprintf(['Gauss-Newton-Armijo: iteration %d, residual norm=%.1g, ' ...
+                     'last alpha=%s\n'],n,rr(end),...
                     fliplr(deblank(fliplr(deblank(rats(alphas(end)))))));
         end
     end

@@ -9,7 +9,7 @@ function hh=plotparams(s,e,varargin)
 
 % $Id$
 
-h=nan(3,1);
+h=nan(4,1);
 
 [ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
@@ -254,6 +254,33 @@ if any(s.cOP(:))
     end
     title(ax,sprintf('Object points (%s)',e.damping));
 end    
+
+if true
+    % Always generate iteration method plot.
+    
+    % IO parameter plot.
+    fig=tagfigure(sprintf('paramplot_damping_%s',e.damping));
+    h(4)=fig;
+    clf(fig);
+
+    switch e.damping
+      case {'gm','gna'}
+        if strcmp(e.damping,'gna')
+            alpha=e.alpha;
+        else
+            alpha=ones(1,length(e.res)-1);
+        end
+        ax=subplot(2,1,1,'parent',fig);
+        semilogy(ax,0:length(e.res)-1,e.res,'x-');
+        title(ax,sprintf('Residual norm (%s)',e.damping));
+        ax=subplot(2,1,2,'parent',fig);
+        plot(ax,0:length(e.res)-1,[nan,alpha],'x-');
+        set(ax,'ylim',[0,1])
+        title(ax,'Step length (alpha)');
+      case 'lm'
+      case 'lmp'
+    end
+end
 
 if nargout>0, hh=h; end
 
