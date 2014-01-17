@@ -20,8 +20,8 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %   ...=BUNDLE(S,...,TRACE), where TRACE is a string='trace' specifies
 %   that the bundle should print an trace during the iterations.
 %
-%   ...=BUNDLE(S,...,SINGULAR_TEST), where SINGULAR_TEST is the
-%   string='singular_test' specifies that the bundle should stop
+%   ...=BUNDLE(S,...,SINGULARTEST), where SINGULARTEST is the
+%   string='singulartest' specifies that the bundle should stop
 %   immediately if a 'Matrix is singular' or 'Matrix is almost singular'
 %   warning is issued on the normal matrix.
 %
@@ -37,20 +37,21 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %       E.damping - struct with damping-specific information, including
 %           E.damping.name - the name of the damping scheme used.
 %
-%   Use BUNDLE_COV(S,E) to compute covariances, etc., of the result.
+%   Use BUNDLE_COV to compute covariances, etc., of the result or
+%   BUNDLE_RESULT_FILE to generate a result file.
 %
 %   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
 %       Without Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
 %
-%   See also PROB2DBATSTRUCT, BROWN_EULER_CAM, BUNDLE_COV.
+%   See also PROB2DBATSTRUCT, BROWN_EULER_CAM, BUNDLE_COV, BUNDLE_RESULT_FILE.
 
 % $Id$
 
 maxIter=20;
 damping='gna';
 veto=false;
-singular_test=false;
+singularTest=false;
 trace=false;
 
 while ~isempty(varargin)
@@ -68,8 +69,8 @@ while ~isempty(varargin)
           case 'trace'
             trace=true;
             varargin(1)=[];
-          case 'singular_test'
-            singular_test=true;
+          case 'singularTest'
+            singularTest=true;
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -116,8 +117,12 @@ params={s};
 % iterations) and the number of required iterations are returned.
 
 % Set up return struct with bundle setup.
-E=struct('maxIter',maxIter,'convTol',convTol,'singular_test',singular_test,...
-         'chirality',veto);
+
+% Version string.
+[v,d]=dbatversion;
+E=struct('maxIter',maxIter,'convTol',convTol,'singularTest',singularTest,...
+         'chirality',veto,'dateStamp',datestr(now),...
+         'version',sprintf(['%s (%s)'],v,d));
 
 switch lower(damping)
   case {'none','gm'}
@@ -126,7 +131,7 @@ switch lower(damping)
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
     [x,code,iters,f,J,X,res]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
-                                      singular_test,params);
+                                      singularTest,params);
     time=cputime-stopWatch;
     E.damping=struct('name','gm');
   case 'gna'
@@ -143,7 +148,7 @@ switch lower(damping)
     [x,code,iters,f,J,X,res,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
                                                    mu,alphaMin,maxIter, ...
                                                    convTol,trace, ...
-                                                   singular_test,params);
+                                                   singularTest,params);
     time=cputime-stopWatch;
     E.damping=struct('name','gna','alpha',alpha,'mu',mu,'alphaMin',alphaMin);
   case 'lm'
