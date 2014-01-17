@@ -18,7 +18,7 @@ if any(s.cIO(:))
     ixPos(s.cIO)=ixIO;
     
     % IO parameter plot.
-    fig=tagfigure(sprintf('paramplot_io_%s',e.damping));
+    fig=tagfigure(sprintf('paramplot_io_%s',e.damping.name));
     h(1)=fig;
     clf(fig);
 
@@ -55,7 +55,7 @@ if any(s.cIO(:))
         end
         legend(lgs);
     end
-    title(ax,sprintf('Focal length, principal point (%s)',e.damping));
+    title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
     
     ax=subplot(3,1,2,'parent',fig);
     % Legend strings.
@@ -122,7 +122,7 @@ if any(s.cEO(:))
     ixPos(s.cEO)=ixEO;
 
     % EO parameter plot.
-    fig=tagfigure(sprintf('paramplot_eo_%s',e.damping));
+    fig=tagfigure(sprintf('paramplot_eo_%s',e.damping.name));
     h(2)=fig;
     clf(fig);
 
@@ -170,7 +170,7 @@ if any(s.cEO(:))
             end
         end
     end
-    title(ax,sprintf('Camera center (%s)',e.damping));
+    title(ax,sprintf('Camera center (%s)',e.damping.name));
     
     ax=subplot(2,1,2,'parent',fig);
     % Angle strings.
@@ -204,7 +204,7 @@ if any(s.cOP(:))
     ixPos(s.cOP)=ixOP;
 
     % OP parameter plot.
-    fig=tagfigure(sprintf('paramplot_op_%s',e.damping));
+    fig=tagfigure(sprintf('paramplot_op_%s',e.damping.name));
     h(3)=fig;
     clf(fig);
 
@@ -252,27 +252,27 @@ if any(s.cOP(:))
             end
         end
     end
-    title(ax,sprintf('Object points (%s)',e.damping));
+    title(ax,sprintf('Object points (%s)',e.damping.name));
 end    
 
 if true
     % Always generate iteration method plot.
     
     % IO parameter plot.
-    fig=tagfigure(sprintf('paramplot_damping_%s',e.damping));
+    fig=tagfigure(sprintf('paramplot_damping_%s',e.damping.name));
     h(4)=fig;
     clf(fig);
 
-    switch e.damping
+    switch e.damping.name
       case {'gm','gna'}
-        if strcmp(e.damping,'gna')
-            alpha=e.alpha;
+        if strcmp(e.damping.name,'gna')
+            alpha=e.damping.alpha;
         else
             alpha=ones(1,length(e.res)-1);
         end
         ax=subplot(2,1,1,'parent',fig);
         semilogy(ax,0:length(e.res)-1,e.res,'x-');
-        title(ax,sprintf('Residual norm (%s)',e.damping));
+        title(ax,sprintf('Residual norm (%s)',e.damping.name));
         ax=subplot(2,1,2,'parent',fig);
         plot(ax,0:length(e.res)-1,[nan,alpha],'x-');
         set(ax,'ylim',[0,1])
