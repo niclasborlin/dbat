@@ -2,7 +2,8 @@ function varargout=bundle_cov(s,e,varargin)
 %BUNDLE_COV Compute covariances from bundle result.
 %
 %   BUNDLE_COV(S,E,CC) computes and returns a component covariance matrix
-%   specified by the string CC. CC should be one of 
+%   specified by the string CC from the BUNDLE result files S and E. CC
+%   should be one of
 %       'CIO' - covariance of estimated internal parameters,
 %       'CEO' - covariance of estimated external parameters, or
 %       'COP' - covariance of estimated object points.
