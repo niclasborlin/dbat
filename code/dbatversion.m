@@ -8,10 +8,15 @@ function [v,date]=dbatversion
 
 % $Id$
 
-% These strings are updated by subversion on commit.
-idStr="$Id$";
-dateStr="$Date$";
-revisionStr="$Revision$";
+toolboxVersion='0.2.0';
 
-% Parse date string
-d=
+% This strings is updated by subversion on commit.
+idStr='$Id$';
+
+% Parse string to get revision and UTC date.
+z=regexp(idStr,['\$Id:\s*\S+\s+(\d+)\s+([\d-]+\s[\d:]+)Z'],'tokens','once');
+
+rev=z{1};
+date=z{2};
+
+v=[toolboxVersion,'.',rev];
