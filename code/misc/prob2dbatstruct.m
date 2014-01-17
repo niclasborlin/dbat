@@ -169,6 +169,12 @@ else
     cams=ones(1,nImages);
 end
 
+imNames={prob.images.imName};
+for i=1:length(imNames)
+    % Remove image directory.
+    [p,n,e]=fileparts(strrep(imNames{i},'\','/'));
+    imNames{i}=[n,e];
+end
 
 % Object and control points.
 OP=nan(3,nOP);
@@ -225,7 +231,8 @@ cEO=true(size(EO));
 cEO(end,:)=false;
 cOP=repmat(~isCtrl(:)',3,1);
 
-s=struct('IO',IO,'IOstd',IOstd,'EO',EO,'EOstd',EOstd,'cams',cams, ...
-         'OP',OP,'OPstd',OPstd,'OPid',OPid,'isCtrl',isCtrl, 'markPts', ...
-         markPts,'ptCams',ptCams,'markStd',markStd,'vis',vis,'colPos', ...
-         colPos,'cIO',cIO, 'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP);
+s=struct('title',prob.job.title,'imNames',{imNames},'IO',IO,'IOstd',IOstd,...
+         'EO',EO,'EOstd',EOstd,'cams',cams,'OP',OP,'OPstd',OPstd,'OPid',OPid, ...
+         'isCtrl',isCtrl,'markPts',markPts,'ptCams',ptCams,...
+         'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
+         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP);
