@@ -49,9 +49,7 @@ for i=1:length(dampings)
     fprintf('Running the bundle with damping %s...\n',dampings{i});
 
     % Run the bundle.
-    [result{i},ok(i),iters(i),sigma0(i),E{i},CXX,CIOF,CIO,CEOF,CEO,COPF,COP]=...
-        bundle(s,dampings{i},'trace','cxx','ciof','cio','ceof','ceo', ...
-               'copf','cop');
+    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
     
     if ok(i)
         fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
