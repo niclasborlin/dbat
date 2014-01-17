@@ -8,9 +8,9 @@ function [v,date]=dbatversion
 
 % $Id$
 
-% $Author$
+dateStr="$Date$";
+revisionStr="$Revision$";
+
 % $Date$
-% $Id$
-% $HeadURL$
 % $Revision$
 
