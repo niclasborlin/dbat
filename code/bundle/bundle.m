@@ -31,39 +31,19 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %
 %   [S,OK,N,S0]=... returns the sigma0 for the last iteration.
 %
-%   [S,OK,N,S0,E]=... returns damping-dependent trace data in the struct E:
-%       E.damping - string with the name of the damping scheme.
+%   [S,OK,N,S0,E]=... returns a struct E with information about the iterations:
 %       E.trace   - NOBS-by-(N+1) array with successive parameter estimates.
 %       E.res     - (N+1)-vector with the residual norm at every iteration.
-%   Furthermore,
-%       for GNA damping: E.alpha  - (N+1)-vector with used steplength.
-%       for LM damping:  E.lambda - (N+1)-vector with used lambda values.
-%       for LMP damping: E.delta  - (N+1)-vector with used trust region sizes,
-%                        E.rho    - (N+1)-vector with gain ratios.
+%       E.damping - struct with damping-specific information, including
+%           E.damping.name - the name of the damping scheme used.
 %
-%   [S,OK,N,S0,E,CXX]=BUNDLE(S,...,'CXX') computes and returns the
-%   covariance matrix CXX for all estimated parameters, scaled by sigma0^2.
-%
-%   [S,OK,N,S0,E,CA]=BUNDLE(S,...,CCA) computes and returns a selected
-%   covariance matrix CA. CCA should be one of 'CIO' (covariance of internal
-%   parameters), 'CEO' (external parameters), 'COP' (object points), or
-%   'CXX' (all parameters). CIO, CEO, COP will be zero-padded for fixed
-%   elements. CXX corresponds directly to the estimated vector and is not
-%   zero-padded. As default, the returned component covariance matrices CIO,
-%   CEO, and COP are sparse matrices with the block-diagonal part of CXX
-%   only, i.e. the inter- and intra-IO/EO/OP parts are not returned. Use
-%   CCA='CIOF','CEOF', or 'COPF' obtain full component covariance matrices.
-%
-%   Warning! Especially CXX and COPF may require a lot of memory!
-%
-%   [S,OK,N,S0,E,CA,CB,...]=BUNDLE(S,...,CCA,CCB,...) returns multiple
-%   covariance matrices CA, CB, ...
+%   Use BUNDLE_COV(S,E) to compute covariances, etc., of the result.
 %
 %   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
 %       Without Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
 %
-%   See also PROB2DBATSTRUCT, BROWN_EULER_CAM.
+%   See also PROB2DBATSTRUCT, BROWN_EULER_CAM, BUNDLE_COV.
 
 % $Id$
 
@@ -72,7 +52,6 @@ damping='gna';
 veto=false;
 singular_test=false;
 trace=false;
-covMatrices={};
 
 while ~isempty(varargin)
     if isnumeric(varargin{1}) && isscalar(varargin{1})
@@ -91,9 +70,6 @@ while ~isempty(varargin)
             varargin(1)=[];
           case 'singular_test'
             singular_test=true;
-            varargin(1)=[];
-          case {'cxx','cio','ceo','cop','ciof','ceof','copf'}
-            covMatrices{end+1}=lower(varargin{1});
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -135,11 +111,13 @@ params={s};
 
 % For all optimization methods below, the final estimate is returned in x.
 % The final residual vector and jacobian are returned as f and J. Successive
-% estimates of x are returned as columns of X. Furthermore, a status code (0
-% - ok, -1 - too many iterations) and the number of required iterations are
-% returned.
+% estimates of x and norm(f) are returned as columns of X and elements of
+% res, respectively. Furthermore, a status code (0 - ok, -1 - too many
+% iterations) and the number of required iterations are returned.
 
-E=struct('damping','');
+% Set up return struct with bundle setup.
+E=struct('maxIter',maxIter,'convTol',convTol,'singular_test',singular_test,...
+         'chirality',veto);
 
 switch lower(damping)
   case {'none','gm'}
@@ -150,7 +128,7 @@ switch lower(damping)
     [x,code,iters,f,J,X,res]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
                                       singular_test,params);
     time=cputime-stopWatch;
-    E.damping='gm';
+    E.damping=struct('name','gm');
   case 'gna'
     % Gauss-Newton with Armijo linesearch.
 
@@ -167,8 +145,7 @@ switch lower(damping)
                                                    convTol,trace, ...
                                                    singular_test,params);
     time=cputime-stopWatch;
-    E.alpha=alpha;
-    E.damping='gna';
+    E.damping=struct('name','gna','alpha',alpha,'mu',mu,'alphaMin',alphaMin);
   case 'lm'
     % Original Levenberg-Marquardt "lambda"-version.
 
@@ -217,9 +194,16 @@ switch lower(damping)
   otherwise
     error('DBAT:bundle:internal','Unknown damping');
 end
+% Store iteration results.
 E.res=res;
 E.trace=X;
 E.time=time;
+E.code=code;
+E.usedIters=iters;
+
+% Store final residual and Jacobian for later covariance calculations.
+E.J=J;
+E.f=f;
 
 % Handle returned values.
 ok=code==0;
@@ -234,170 +218,4 @@ end
 % Sigma0 is sqrt(f'*f/(m-n)) in mm, convert to pixels.
 s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
 
-% Compute covariance matrices.
-if ~isempty(covMatrices)
-    % We may need J'*J many times. Precalculate and prefactor.
-    JTJ=s0^2*J'*J;
-    
-    % Use block column count reordering to reduce fill-in in Cholesky factor.
-    
-    % IO blocks.
-    bixIO=double(s.cIO);
-    bixIO(s.cIO)=ixIO;
-    % EO blocks.
-    bixEO=double(s.cEO);
-    bixEO(s.cEO)=ixEO;
-    % OP blocks.
-    bixOP=double(s.cOP);
-    bixOP(s.cOP)=ixOP;
-    
-    p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
-
-    % Perform Cholesky on permuted J'*J.
-    R=chol(JTJ(p,p));
-
-    % Inverse permutation.
-    invP=zeros(size(p));
-    invP(p)=1:length(p);
-    
-    for i=1:length(covMatrices)
-        switch covMatrices{i}
-          case 'cxx' % Raw, whole covariance matrix.
-
-            C=invblock(R,p,1:size(R,1),'direct');
-            
-          case 'ciof' % Whole CIO covariance matrix.
-            
-            % Pre-allocate matrix with place for nnz(s.cIO)^2 elements.
-            C=spalloc(numel(s.IO),numel(s.IO),nnz(s.cIO)^2);
-            
-            % Compute needed part of inverse and put it into the right
-            % part of C.
-            C(s.cIO(:),s.cIO(:))=invblock(R,p,ixIO,'split');
-            
-          case 'ceof' % Whole CEO covariance matrix.
-            
-            start=clock;
-            % Pre-allocate matrix with place for nnz(s.cEO)^2 elements.
-            C=spalloc(numel(s.EO),numel(s.EO),nnz(s.cEO)^2);
-            
-            % Compute needed part of inverse and put it into the right
-            % part of C.
-            C(s.cEO(:),s.cEO(:))=invblock(R,p,ixEO,'split');
-
-            %etime(clock,start)
-            
-          case 'copf' % Whole COP covariance matrix.
-            
-            start=clock;
-            % Pre-allocate matrix with place for nnz(s.cOP)^2 elements.
-            C=spalloc(numel(s.OP),numel(s.OP),nnz(s.cOP)^2);
-            
-            % Compute needed part of inverse and put it into the right
-            % part of C.
-            C(s.cOP(:),s.cOP(:))=invblock(R,p,ixOP,'split');
-            
-            %etime(clock,start)
-          
-          case 'cio' % Block-diagonal CIO
-
-            C=BlockDiagonalC(R,p,s.cIO,ixIO,1,'Computing IO covariances');
-            
-          case 'ceo' % Block-diagonal CEO
-            
-            C=BlockDiagonalC(R,p,s.cEO,ixEO,1,'Computing EO covariances');
-
-          case 'cop' % Block-diagonal COP
-            
-            C=BlockDiagonalC(R,p,s.cOP,ixOP,1,'Computing OP covariances');
-
-        end
-        varargout{i}=C;
-    end
-end
-
-
-function C=BlockDiagonalC(R,p,calc,xIx,bsElems,msg)
-%R       - Cholesky factor of the permuted normal matrix A(p,p).
-%p       - Corresponding permutation vector.
-%calc    - logical M-by-N array indicating which data elements have been
-%          estimated and whose covariances should be computed.
-%xIx     - vector of length nnz(calc) with indices of the estimated
-%          elements in the x vector.
-%bsElems - how many elements of the inverse should at most be calculated
-%          at each block iteration? bsElems=1 will use unblocked algorithm.
-%msg     - waitbar message to present. No waitbar is shown if message is empty.
-%C       - M-by-M block-diagonal covariance matrix of size
-%          nnz(calc)-by-nnz(calc).
-
-% Delayed progress dialog.
-start=clock;
-lapTime=start;
-h=[];
-
-% Pre-allocate sparse matrix with place for all diagonal blocks.
-C=spalloc(numel(calc),numel(calc),sum(sum(calc,1).^2));
-
-% Pack indices as the data
-ix=zeros(size(calc));
-ix(calc)=xIx;
-
-% Construct corresponding indexing among the OP parameters.
-ixInt=reshape(1:numel(calc),size(calc));
-
-% Determine block column size such that computed part of inverse is
-% approximately bsElems elements.
-bsCols=floor(bsElems/size(R,1)/max(sum(ix~=0,1)));
-bsCols=min(max(bsCols,1),size(ix,2));
-
-% Create inverse permutation.
-invP=zeros(size(p));
-invP(p)=1:length(p);
-
-% Sort by original column.
-
-% Current column (one from each block). Will be zero for fixed data.
-cCol=max(ix,[],1);
-% Corresponding original column.
-oCol=zeros(size(cCol));
-oCol(cCol>0)=invP(cCol(cCol>0));
-
-% Get permutation to sort by increasing original column number. This will
-% move fixed columns to the beginning, becoming part of the first blocks.
-[dummy,colPerm]=sort(oCol);
-
-% Loop over each column in bsCols blocks.
-for j=1:bsCols:size(ix,2)
-    % Columns in block.
-    jCols=colPerm(j:min(j+bsCols-1,size(ix,2)));
-
-    % Indices into J.
-    jixBlock=ix(:,jCols);
-    jix=jixBlock(calc(:,jCols));
-    % Indices into data.
-    eixBlock=ixInt(:,jCols);
-    eix=eixBlock(calc(:,jCols));
-
-    % Compute needed part of inverse and put it into a temporary matrix.
-    Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
-    Cblock(eix,eix)=invblock(R,p,jix,'split');
-    % Make it block-diagonal...
-    Cblock=mkblkdiag(Cblock,size(ix,1));
-    % ...and put it into the right part of C.
-    C(eix,eix)=Cblock(eix,eix);
-    
-    if isempty(h) && etime(clock,start)>1 && j+bsCols-1<size(ix,2)
-        % Only create dialog if execution takes more than 1s and this
-        % iteration is not the last.
-        h=waitbar(min(j+bsCols-1,size(ix,2))/size(ix,2),msg);
-        lapTime=clock;
-    elseif etime(clock,lapTime)>1
-        % Update dialog every 1 s.
-        if ishandle(h) % Guard against window close.
-            waitbar(min(j+bsCols-1,size(ix,2))/size(ix,2),h);
-        end
-        lapTime=clock;
-    end
-end
-if ishandle(h), close(h), end
-%etime(clock,start)
+E.s0=s0;
