@@ -60,6 +60,8 @@ for i=1:length(dampings)
     end
 end
 
+bundle_result_file(result{1},E{1},'/tmp/bundle.txt');
+
 plotparams(result{1},E{1});
 
 % Rotate to have +Z up.
