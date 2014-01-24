@@ -13,7 +13,8 @@ function hh=plotnetwork(s,varargin)
 %
 %  PLOTNETWORK(...,'trans',T0), where T0 is a 4x4 homogeneous transformation
 %  matrix, applies the transformation T0 to all points and cameras before
-%  plotting.
+%  plotting. Supplying T0='up' uses T0=blkdiag(1,[0,-1;1,0],1) that rotates
+%  +Z from begin 'forward' to being 'up'.
 %
 %  PLOTNETWORK(...,'align',N), where N=I is an integer, aligns the network
 %  such that camera I defines the origin and coordinate axes. If N=[I,RA],
@@ -79,6 +80,9 @@ while ~isempty(varargin)
         switch lower(arg(1:3))
         case 'tra' % 'trans'
             T0=varargin{2};
+            if ischar(T0) && strcmp(lower(T0),'up')
+                T0=blkdiag(1,[0,-1;1,0],1);
+            end
             % T0 should be numeric 4x4
             if ~isnumeric(T0) || ndims(T0)~=2 || any(size(T0)~=4)
                 error('DBAT:plotnetwork:badInput','T0 should be numeric 4x4');
