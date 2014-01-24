@@ -1,4 +1,4 @@
-function [R,s]=corrmat(C)
+function [R,s]=corrmat(C,nodiag)
 %CORRMAT Calculate correlation matrix from covariance matrix.
 %
 %   CORRMAT(C), returns the correlation matrix corresponding to the
@@ -10,13 +10,18 @@ function [R,s]=corrmat(C)
 %
 %   The correlation coefficients will always be in the range [-1,1].
 %
+%   CORRMAT(C,TRUE) returns the correlation matrix with the diagonal set
+%   to zero. Useful when looking for the largest correlations.
+%
 %   [R,s]=CORRMAT(C) also returns a vector of the standard deviations.
 %
 %See also COV, CORRCOEF, VAR, STD.
 
 % $Id$
 
-error(nargchk(nargin,1,1));
+error(nargchk(1,2,nargin));
+
+if nargin<2, nodiag=false; end
 
 % Extract standard deviations.
 s=sqrt(diag(C));
@@ -31,8 +36,13 @@ i=isnan(R);
 
 % Force all elements to be between -1 and 1.
 R=max(min(R,1),-1);
-% Set diagonal elements to exactly 1.
-R(speye(size(R))~=0)=1;
+if nodiag
+    % Set diagonal elements to exactly 0.
+    R(speye(size(R))~=0)=0;
+else
+    % Set diagonal elements to exactly 1.
+    R(speye(size(R))~=0)=1;
+end
 
 % Return any NaN's.
 R(i)=NaN;
