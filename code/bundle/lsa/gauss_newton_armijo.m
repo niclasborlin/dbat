@@ -1,6 +1,5 @@
-function [x,code,n,f,J,T,rr,alphas]=gauss_newton_armijo(resFun,vetoFun,x0,mu, ...
-                                                  alphaMin, maxIter, ...
-                                                  convTol,trace, sTest,params)
+function [x,code,n,f,J,T,rr,alphas]=gauss_newton_armijo(...
+    resFun,vetoFun,x0,mu,alphaMin, maxIter,convTol,trace, sTest,params)
 %GAUSS_NEWTON_ARMIJO Gauss-Newton-Armijo least squares adjustment algorithm.
 %
 %   [X,CODE,I]=GAUSS_NEWTON_ARMIJO(RES,VETO,X0,MU,AMIN,N,TOL,TRACE,STEST,PARAMS)
@@ -123,13 +122,18 @@ while true
     end
 
     if alpha==0
-        code=-2; % Not sufficient descent.
+        % Not sufficient descent, stop.
+        code=-2;
+        % Ensure that length of residual norm vector matches length of alpha.
+        rr(end+1)=rr(end);
         break;
     end
     
-    % Terminate with error code if too many iterations.
     if n>maxIter
-        code=-1; % Too many iterations.
+        % Too many iterations, stop.
+        code=-1; %
+        % Ensure that length of residual norm vector matches length of alpha.
+        rr(end+1)=nan;
         break;
     end
 
