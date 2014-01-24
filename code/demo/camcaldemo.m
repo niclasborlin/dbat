@@ -13,13 +13,24 @@ end
 if ~exist('prob','var')
     fprintf('Loading data file %s...',fName);
     prob=loadpm(fName);
+    if any(isnan(cat(2,prob.images.imSz)))
+        error('Image sizes unknown!');
+    end
     disp('done.')
 else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
 end
 s0=prob2dbatstruct(prob);
 
-% Fix the datum by fixing CP 1, 2 + the Z coordinate of OP 3.
+% Set CP 1-4 to nominal coordinates. Everything is computed based on
+% these points.
+s0.OP(:)=nan;
+s0.OP(:,ismember(s0.OPid,1001))=[0,1,0]';
+s0.OP(:,ismember(s0.OPid,1002))=[1,1,0]';
+s0.OP(:,ismember(s0.OPid,1003))=[0,0,0]';
+s0.OP(:,ismember(s0.OPid,1004))=[1,0,0]';
+
+% Fix the bundle datum by fixing CP 1, 2 + the Z coordinate of OP 3.
 s0.cOP(:,ismember(s0.OPid,1001:1002))=false;
 s0.cOP(3,ismember(s0.OPid,1003))=false;
 
@@ -32,8 +43,16 @@ s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
 s0.IO(3)=s0.IO(3)*1;   % c = half of true
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
-s=resect(s0,'all',1001:1004);
-s=forwintersect(s,'all');
+cpId=1001:1004;
+s1=resect(s0,'all',cpId,cpId);
+s2=forwintersect(s1,'all');
+
+s2.x0desc='focal = 1/2 of true';
+
+s=s2;
+plotnetwork(s,'title','Initial network',...
+            'axes',tagfigure(sprintf('network%d',i)),'pause','on',...
+            'camerasize',0.1);
 
 dampings={'none','gna','lm','lmp'};
 
@@ -64,11 +83,8 @@ bundle_result_file(result{1},E{1},'/tmp/bundle.txt');
 
 plotparams(result{1},E{1});
 
-% Rotate to have +Z up.
-T0=blkdiag(1,[0,-1;1,0],1);
-
 for i=1:length(E)
-    plotnetwork(result{i},E{i},'trans',T0,'align',1,'title',...
+    plotnetwork(result{i},E{i},'title',...
                 ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
                 'axes',tagfigure(sprintf('network%d',i)),'pause','on','camerasize',0.1);
 end
