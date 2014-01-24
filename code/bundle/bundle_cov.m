@@ -49,7 +49,7 @@ end
 [ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
 % We may need J'*J many times. Precalculate and prefactor.
-JTJ=e.s0^2*e.J'*e.J;
+JTJ=e.J'*e.J;
     
 % Use block column count reordering to reduce fill-in in Cholesky factor.
     
@@ -132,7 +132,7 @@ for i=1:length(varargin)
         C=BlockDiagonalC(R,p,s.cOP,ixOP,1,'Computing OP covariances');
         
     end
-    varargout{i}=C;
+    varargout{i}=e.s0mm^2*C;
 end
 
 
