@@ -5,10 +5,10 @@ function [s,rms]=resect(s0,cams,cpId,chkId)
 %   resection on the cameras stations of the project dbatstruct S0 listed in
 %   the N-vector CAMS using the object points listed in CP_ID as control
 %   points. CP_ID must contain at least 3 object points IDs visible in each
-%   of the camera stations. If CP_ID is longer than 3, the first 3 IDs
-%   visible in each image is used. All object points in S0 not used to
-%   compute the resection is used to as check points to distinguish between
-%   possible solutions.
+%   of the camera stations. If CP_ID is longer than three, the three points
+%   covering the largest triangle in each image is used. All object points
+%   in S0 not used to compute the resection is used to as check points to
+%   distinguish between possible solutions.
 %
 %   S=RESECT(S0,'all',CP_ID) does spatial resection on all cameras.
 %
@@ -53,9 +53,17 @@ for i=1:length(cams)
     
     % What control points are visible in this camera?
     vis=find(ismember(cpId,s0.OPid(s0.vis(:,camIx))));
-
-    % Pick the first 3 pts if we have more.
-    if length(vis)>3, vis=vis(1:3); end
+    
+    % If we have more than 3 points, pick the ones covering the largest
+    % measured area.
+    if length(vis)>3
+        % TODO: Verify this works for cpId='all'.
+        % Visible measured points.
+        meaIx=find(s0.vis(:,camIx) & ismember(s0.OPid,cpId));
+        mea=xy(:,s0.colPos(meaIx,camIx));
+        [tri,area,T,A]=largesttriangle(mea);
+        vis=vis(tri);
+    end
        
     if length(vis)==3
         % We have the 3 pts we need.
@@ -68,9 +76,14 @@ for i=1:length(cams)
     
         % Corresponding object pts.
         pt3=s0.OP(:,s0.vis(:,camIx));
-
         visId=s0.OPid(s0.vis(:,camIx));
-
+        
+        % Only keep check points.
+        keep=ismember(visId,union(cpId,chkId));
+        pt2N=pt2N(:,keep);
+        pt3=pt3(:,keep);
+        visId=visId(keep);
+        
         [P,PP,res]=pm_resect_3pt(pt3,pt2N,ismember(visId,useId),true);
         rms(i)=min(res);
         
