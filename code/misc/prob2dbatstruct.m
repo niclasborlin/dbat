@@ -52,6 +52,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                 are used in the model. nK=3.
 %       nP      - scalar indicating how many (potentially zero) P values
 %                 are used in the model. nK=2.
+%       x0desc  - comment string on the initial values used by bundle.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -235,4 +236,4 @@ s=struct('title',prob.job.title,'imNames',{imNames},'IO',IO,'IOstd',IOstd,...
          'EO',EO,'EOstd',EOstd,'cams',cams,'OP',OP,'OPstd',OPstd,'OPid',OPid, ...
          'isCtrl',isCtrl,'markPts',markPts,'ptCams',ptCams,...
          'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
-         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP);
+         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP,'x0desc','');
