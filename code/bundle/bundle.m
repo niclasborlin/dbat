@@ -29,7 +29,7 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %   chirality veto damping should be used (default: false). Chirality
 %   veto damping is ignored for the undamped bundle.
 %
-%   [S,OK,N,S0]=... returns the sigma0 for the last iteration.
+%   [S,OK,N,S0]=... returns the sigma0 (in pixel units) for the last iteration.
 %
 %   [S,OK,N,S0,E]=... returns a struct E with information about the iterations:
 %       E.trace   - NOBS-by-(N+1) array with successive parameter estimates.
@@ -221,6 +221,9 @@ if ok
 end
 
 % Sigma0 is sqrt(f'*f/(m-n)) in mm, convert to pixels.
-s0=sqrt(f'*f/(length(f)-length(x)))*mean(s.IO(end-1:end));
+s0mm=sqrt(f'*f/(length(f)-length(x)));
+s0px=s0mm*mean(s.IO(end-1:end));
+s0=s0px;
 
-E.s0=s0;
+E.s0mm=s0mm;
+E.s0px=s0px;
