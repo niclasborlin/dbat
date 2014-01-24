@@ -46,10 +46,14 @@ fprintf(fid,[p,p,p,'Chirality veto: %s\n'],offon{double(e.chirality)+1});
 fprintf(fid,[p,p,p,'Damping: %s\n'],e.damping.name);
 
 fprintf(fid,[p,p,'Total error:\n']);
+fprintf(fid,[p,p,p,'Initial value comment: %s\n'],s.x0desc);
 fprintf(fid,[p,p,p,'Number of stages: %d\n'],1);
 fprintf(fid,[p,p,p,'Number of iterations: %d\n'],e.usedIters);
 fprintf(fid,[p,p,p,'First error: %g\n'],e.res(1));
 fprintf(fid,[p,p,p,'Last error: %g\n'],e.res(end));
+
+fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
+fprintf(fid,[p,p,p,'Photograph Standard Deviations:\n']);
 
 
 fclose(fid);
