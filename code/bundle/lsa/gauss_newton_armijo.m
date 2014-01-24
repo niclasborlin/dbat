@@ -132,8 +132,11 @@ while true
     if n>maxIter
         % Too many iterations, stop.
         code=-1; %
-        % Ensure that length of residual norm vector matches length of alpha.
-        rr(end+1)=nan;
+        % Ensure that length of residual norm vector matches length of  alpha.
+        rr(end+1)=rr(end); % This is technically not true, since we have
+                           % a new x but no new residual vector. However,
+                           % the return value is used to estimate sigma0
+                           % and we signal failure anyway.
         break;
     end
 
