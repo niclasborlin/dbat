@@ -16,10 +16,37 @@ if fid<0
           ['Failed to open file ''',f,''' for writing.']);
 end
 
+corrThreshold=0.95;
+
 % Header info
 fprintf(fid,'Damped Bundle Adjustment Toolbox result file\n');
 p=repmat(' ',1,3);
 fprintf(fid,[p,'Project Name: %s\n'],s.title);
+
+fprintf(fid,[p,'Problems and suggestions:\n']);
+fprintf(fid,[p,p,'Project Problems: Not evaluated\n']);
+
+% Check if we have any large correlations.
+[iio,jio,kio,vio,CIO]=high_io_correlations(s,e,corrThreshold);
+[ieo,jeo,keo,veo,CEO]=high_eo_correlations(s,e,corrThreshold);
+[iop,jop,kop,vop,COP]=high_op_correlations(s,e,corrThreshold);
+
+n=any(iio)+any(ieo)+any(iop);
+
+fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
+
+if any(iio)
+    fprintf(fid,[p,p,p,'One or more of the camera parameter deviations ' ...
+                 'has a high correlation.\n']);
+end
+if any(ieo)
+    fprintf(fid,[p,p,p,'One or more of the camera station parameter ' ...
+                 'deviations has a high correlation.\n']);
+end
+if any(iop)
+    fprintf(fid,[p,p,p,'One or more of the object point coordinate ' ...
+                 'deviations has a high correlation.\n']);
+end
 
 % Info about last bundle.
 fprintf(fid,[p,'Information from last bundle\n']);
@@ -54,16 +81,12 @@ fprintf(fid,[p,p,p,'Last error: %g\n'],e.res(end));
 
 fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
 
-corrThreshold=0.95;
-
 if any(s.cIO(:))
     % Camera calibration results.
     fprintf(fid,[p,p,p,'Camera Calibration Standard Deviations:\n']);
     
-    % Extract IO covariances and correlations.
-    CIO=bundle_cov(s,e,'CIOF');
-    [CIOC,ioSigma]=corrmat(CIO,true);
-    ioSigma=reshape(ioSigma,size(s.IO,1),[]);
+    % IO standard devation. Correlations were computed far above.
+    ioSigma=reshape(sqrt(diag(CIO)),size(s.IO,1),[]);
 
     % Headers and values to print.
     head={'Focal Length','Xp - principal point x','Yp - principal point y',...
@@ -74,15 +97,22 @@ if any(s.cIO(:))
     names={'Focal','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2'};
     unit={'mm','mm','mm','mm','mm','mm^(-2)','mm^(-4)','mm^(-6)',...
            'mm^(-2)','mm^(-2)'};
-    rows=[3,1:2,11:12,4:6,7:8];    
+    % Original-to-presentation order mapping and inverse.
+    rows=[3,1:2,11:12,4:6,7:8];
+    irows=sparse(rows,1,1:length(rows));
 
     S=diag([1,1,-1,1,1,-1,-1,-1,-1,-1]);
+
+    % Add symmetric correlations.
+    iio0=iio;
+    iio=[iio;jio];
+    jio=[jio;iio0];
+    kio=repmat(kio,2,1);
+    vio=repmat(vio,2,1);
     
     for i=1:size(s.cIO,2)
         vals=S*full(s.IO(rows,i));
         sigma=full(ioSigma(rows,i));
-        nIO=size(s.IO,1);
-        corr=full(CIOC((i-1)*nIO+rows,(i-1)*nIO+rows));
         fprintf(fid,[p,p,p,p,'Camera%d: Unknown\n'],i);
         for j=1:length(head)
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
@@ -91,11 +121,13 @@ if any(s.cIO(:))
                 fprintf(fid,[p,p,p,p,p,p,' Deviation: %.1g %s\n'],...
                         sigma(j),unit{j});
             end
-            highCorr=find(abs(corr(j,:))>corrThreshold);
+            highCorr=find(kio==i & iio==rows(j));
             if any(highCorr)
+                otherParam=irows(jio(highCorr));
                 ss='';
-                for k=highCorr(:)'
-                    ss=[ss,sprintf(' %s:%.1f%%,',names{k},corr(j,k)*100)];
+                for kk=1:length(otherParam)
+                    ss=[ss,sprintf(' %s:%.1f%%,',names{otherParam(kk)},...
+                                   vio(highCorr(kk))*100)];
                 end
                 ss(end)='.';
                 fprintf(fid,[p,p,p,p,p,p,' Correlations over %.1f%%:%s\n'],...
@@ -117,33 +149,50 @@ eoSigma=reshape(eoSigma,6,[]);
 head={'Omega','Phi','Kappa','Xc','Yc','Zc'};
 unit={'deg','deg','deg','','',''};
 names=head;
+
+% Original-to-presentation order mapping and inverse.
 rows=[4:6,1:3];
+irows=sparse(rows,1,1:length(rows));
+
 % Scaling matrix to degrees.
 S=diag([180/pi*ones(1,3),ones(1,3)]);
+
+% Add symmetric correlations.
+ieo0=ieo;
+ieo=[ieo;jeo];
+jeo=[jeo;ieo0];
+keo=repmat(keo,2,1);
+veo=repmat(veo,2,1);
 
 for i=1:size(s.EO,2)
     fprintf(fid,[p,p,p,p,'Photo %d: %s\n'],i,s.imNames{i});
     vals=S*s.EO(rows,i);
     sigma=S*eoSigma(rows,i);
-    nEO=size(s.EO,1)-1;
-    corr=full(CEOC((i-1)*nEO+rows,(i-1)*nEO+rows));
     for j=1:6
         fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
         fprintf(fid,[p,p,p,p,p,p,'Value: %.6f %s\n'],vals(j),unit{j});
         if sigma(j)~=0
             fprintf(fid,[p,p,p,p,p,p,'Deviation: %.1g %s\n'],sigma(j),unit{j});
         end
-        highCorr=find(abs(corr(j,:))>corrThreshold);
+        highCorr=find(keo==i & ieo==rows(j));
         if any(highCorr)
+            otherParam=irows(jeo(highCorr));
             ss='';
-            for k=highCorr(:)'
-                ss=[ss,sprintf(' %s:%.1f%%,',names{k},corr(j,k)*100)];
+            for kk=1:length(otherParam)
+                ss=[ss,sprintf(' %s:%.1f%%,',names{otherParam(kk)},...
+                               veo(highCorr(kk))*100)];
             end
             ss(end)='.';
-            fprintf(fid,[p,p,p,p,p,p,' Correlations over %.1f%%:%s\n'],...
+            fprintf(fid,[p,p,p,p,p,p,'Correlations over %.1f%%:%s\n'],...
                     corrThreshold*100,ss);
         end
     end
 end
+
+fprintf(fid,[p,'Quality\n']);
+
+fprintf(fid,[p,p,'Photographs\n']);
+fprintf(fid,[p,p,p,'Total number: %d\n'],length(s.imNames));
+fprintf(fid,[p,p,p,'Numbers used: %d\n'],size(s.EO,2));
 
 fclose(fid);
