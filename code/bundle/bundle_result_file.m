@@ -37,11 +37,11 @@ fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
 if any(iio)
     fprintf(fid,[p,p,p,'One or more of the camera parameter deviations ' ...
-                 'has a high correlation.\n']);
+                 'has a high correlation (see below).\n']);
 end
 if any(ieo)
     fprintf(fid,[p,p,p,'One or more of the camera station parameter ' ...
-                 'deviations has a high correlation.\n']);
+                 'deviations has a high correlation (see below).\n']);
 end
 if any(iop)
     fprintf(fid,[p,p,p,'One or more of the object point coordinate ' ...
@@ -194,5 +194,52 @@ fprintf(fid,[p,'Quality\n']);
 fprintf(fid,[p,p,'Photographs\n']);
 fprintf(fid,[p,p,p,'Total number: %d\n'],length(s.imNames));
 fprintf(fid,[p,p,p,'Numbers used: %d\n'],size(s.EO,2));
+
+fprintf(fid,[p,p,'Cameras\n']);
+fprintf(fid,[p,p,p,'Total number: %d\n'],size(s.IO,2));
+for i=1:size(s.IO,2)
+    fprintf(fid,[p,p,p,'Camera%d:\n'],i);
+
+    if any(s.cIO(:,i))
+        fprintf(fid,[p,p,p,p,'Calibration: yes\n']);
+    else
+        fprintf(fid,[p,p,p,p,'Calibration: <not available>\n']);
+    end
+
+    fprintf(fid,[p,p,p,p,'Number of photos using camera: %d\n'],nnz(s.cams==i));
+
+    % Compute individual and union coverage.
+    [c,cr]=coverage(s,find(s.cams==i));
+    [uc,ucr]=coverage(s,find(s.cams==i),true);
+    fprintf(fid,[p,p,p,p,'Photo point coverage:\n']);
+    fprintf(fid,[p,p,p,p,p,'Rectangular: %d%%-%d%% ',...
+                 '(%d%% average, %d%% median, %d%% union)\n'],...
+            round(min(cr*100)),round(max(cr*100)),round(mean(cr*100)),...
+            round(median(cr*100)),round(ucr*100));
+    fprintf(fid,[p,p,p,p,p,'Convex hull: %d%%-%d%% ',...
+                 '(%d%% average, %d%% median, %d%% union)\n'],...
+            round(min(c*100)),round(max(c*100)),round(mean(c*100)),...
+            round(median(c*100)),round(uc*100));
+end
+
+fprintf(fid,[p,p,'Photo Coverage\n']);
+fprintf(fid,[p,p,p,'References points outside calibrated region:\n']);
+if any(s.cIO(:))
+    % Print nothing.
+else
+    fprintf(fid,[p,p,p,p,'<not available>\n']);
+end
+
+fprintf(fid,[p,p,'Point Marking Residuals\n']);
+
+% stuff
+
+fprintf(fid,[p,p,'Point Precision\n']);
+
+% stuff
+
+% total variance
+
+fprintf(fid,[p,p,'Point Angles\n']);
 
 fclose(fid);
