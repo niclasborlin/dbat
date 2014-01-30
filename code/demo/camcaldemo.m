@@ -45,7 +45,7 @@ s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 cpId=1001:1004;
 s1=resect(s0,'all',cpId,cpId);
-s2=forwintersect(s1,'all');
+s2=forwintersect(s1,'all',true);
 
 s2.x0desc='focal = 1/2 of true';
 
@@ -79,7 +79,11 @@ for i=1:length(dampings)
     end
 end
 
-bundle_result_file(result{1},E{1},'/tmp/bundle.txt');
+resFile='/tmp/bundle.txt';
+
+bundle_result_file(result{1},E{1},resFile);
+
+fprintf('Bundle result file %s generated.\n',resFile);
 
 plotparams(result{1},E{1});
 
