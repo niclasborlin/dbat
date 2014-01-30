@@ -230,16 +230,83 @@ else
     fprintf(fid,[p,p,p,p,'<not available>\n']);
 end
 
-fprintf(fid,[p,p,'Point Marking Residuals\n']);
+% Get all residuals.
+[rms,res]=bundle_residuals(s,e);
 
-% stuff
+fprintf(fid,[p,p,'Point Marking Residuals\n']);
+fprintf(fid,[p,p,p,'Overall point RMS: %.3f pixels\n'],rms);
+
+fprintf(fid,[p,p,p,'Mark point residuals:\n']);
+fprintf(fid,[p,p,p,p,'Maximum: ']);
+
+[mx,i]=max(res(:));
+[mxi,mxj]=ind2sub(size(res),i);
+fprintf(fid,'%.3f pixels (OP %d on photo %d)\n',full(mx),s.OPid(mxi),mxj);
+
+% Compute averages per object point.
+nOP=full(sum(s.vis,2));
+sqSumOP=full(sum(res.^2,2));
+meanOP=sqrt(sqSumOP./nOP);
+
+fprintf(fid,[p,p,p,'Object point residuals (RMS over all images):\n']);
+
+[mn,mni]=min(meanOP);
+[mx,mxi]=max(meanOP);
+fprintf(fid,[p,p,p,p,'Minimum: ']);
+fprintf(fid,'%.3f pixels (OP %d over %d images)\n',mn,s.OPid(mni),nOP(mni));
+fprintf(fid,[p,p,p,p,'Maximum: ']);
+fprintf(fid,'%.3f pixels (OP %d over %d images)\n',mx,s.OPid(mxi),nOP(mxi));
+
+% Compute averages per photo.
+nPhoto=full(sum(s.vis,1));
+sqSumPhoto=full(sum(res.^2,1));
+meanPhoto=sqrt(sqSumPhoto./nPhoto);
+
+fprintf(fid,[p,p,p,'Photo residuals (RMS over all points):\n']);
+
+[mn,mni]=min(meanPhoto);
+[mx,mxi]=max(meanPhoto);
+fprintf(fid,[p,p,p,p,'Minimum: ']);
+fprintf(fid,'%.3f pixels (photo %d over %d points)\n',mn,mni,nPhoto(mni));
+fprintf(fid,[p,p,p,p,'Maximum: ']);
+fprintf(fid,'%.3f pixels (photo %d over %d points)\n',mx,mxi,nPhoto(mxi));
 
 fprintf(fid,[p,p,'Point Precision\n']);
 
-% stuff
+% Variance for each OP.
+v=reshape(full(diag(COP)),3,[]);
+% Mask fixed OPs.
+v(~s.cOP)=nan;
+% Total variance.
+tVar=sum(v,1);
+% Total standard deviation.
+tStd=sqrt(tVar);
 
-% total variance
+fprintf(fid,[p,p,p,'Total standard deviation (RMS of X/Y/Z std):\n']);
+
+[mn,mni]=min(tStd);
+[mx,mxi]=max(tStd);
+fprintf(fid,[p,p,p,p,'Minimum: ']);
+fprintf(fid,'%.2g (OP %d)\n',mn,s.OPid(mni));
+fprintf(fid,[p,p,p,p,'Maximum: ']);
+fprintf(fid,'%.2g (OP %d)\n',mx,s.OPid(mxi));
+
+% Component-wise.
+[mx,mxi]=max(sqrt(v),[],2);
+for i=1:3
+    fprintf(fid,[p,p,p,'Maximum %c standard deviation: %.2g (OP %d)\n'],...
+                 abs('X')+i-1,mx(i),s.OPid(mxi(i)));
+end
 
 fprintf(fid,[p,p,'Point Angles\n']);
+
+% Maximum angle between rays.
+a=angles(s)*180/pi;
+
+[mn,mni]=min(a);
+[mx,mxi]=max(a);
+fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,s.OPid(mni));
+fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,s.OPid(mxi));
+fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(a));
 
 fclose(fid);
