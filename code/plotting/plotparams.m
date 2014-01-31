@@ -5,6 +5,8 @@ function hh=plotparams(s,e,varargin)
 %   is a struct returned by BUNDLE, plots the iteration trace of the
 %   parameters estimated by BUNDLE.
 %
+%   H=... also returns the figure handles for the IO/EO/OP/damping plots.
+%
 %See also: BUNDLE, PROB2DBATSTRUCT.
 
 % $Id$
@@ -139,6 +141,7 @@ if any(s.cEO(:))
     cb=@highlight;
     
     % Plot each coordinate as the outer loop to get a better legend.
+    % (There is a better way, but now this works.)
     for i=1:3
         % For each camera.
         for ci=1:size(s.EO,2)
@@ -284,6 +287,8 @@ end
 
 if nargout>0, hh=h; end
 
+
+% Callback function to highlight selected object(s).
 function highlight(obj,event)
 
 if nargin<1, obj=gcbo; end
