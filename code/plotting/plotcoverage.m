@@ -85,7 +85,7 @@ end
 clh=[cl,ch];
 lh(end+1)=line(clh(1,[1,2,2,1,1]),clh(2,[1,1,2,2,1]),'linestyle','--',...
                'color',cc(rem(ii-1,size(cc,1))+1,:),...
-               'tag','rectall','userdata',0,...
+               'tag','rectall','userdata',-1,...
                'parent',ax,...
                'buttondownfcn',cb);
 lgs{end+1}='Rect hull';
@@ -94,7 +94,7 @@ ii=ii+1;
 % Conver hull for all images.
 lh(end+1)=line(cHull{1}(1,:),cHull{1}(2,:),'linestyle','-',...
                'color',cc(rem(ii-1,size(cc,1))+1,:),...
-               'tag','rectall','userdata',0,...
+               'tag','rectall','userdata',-2,...
                'parent',ax,...
                'buttondownfcn',cb);
 lgs{end+1}='Convex hull';
@@ -102,7 +102,7 @@ ii=ii+1;
 
 [legh,objh,outh,outm]=legend(ax,lh,lgs{:});
 
-set(objh,'selectionhighlight','on');
+set(objh,'selectionhighlight','off');
 tags=get(objh,'tag');
 for i=1:length(lh)
     % Set callback on legend lines, too.
@@ -123,6 +123,8 @@ end
 xlabel(ax,sprintf('Rectangular coverage=%d%%. Convex hull coverage=%d%%.',...
                   round(c*100),round(cr*100)));
 
+if nargout>0, hh=h; end
+
 
 % Callback function to highlight selected object(s).
 function highlight(obj,event)
@@ -139,9 +141,9 @@ all=findobj(fig,'type','line');
 sel=findobj(all,'flat','userdata',num);
 
 % Clear any previous highlights.
-set(all,'selected','off','linewidth',0.5);
+set(all,'linewidth',0.5);
 % Select and set thick lines.
-set(sel,'selected','on','linewidth',2);
+set(sel,'linewidth',2);
 
 % Move selected object to the front.
 
