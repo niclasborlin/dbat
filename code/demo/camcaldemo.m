@@ -79,11 +79,11 @@ for i=1:length(dampings)
     end
 end
 
-resFile='/tmp/bundle.txt';
+resFile=strrep(fName,'.txt','_result_file.txt');
 
 bundle_result_file(result{1},E{1},resFile);
 
-fprintf('Bundle result file %s generated.\n',resFile);
+fprintf('\nBundle result file %s generated.\n',resFile);
 
 plotparams(result{1},E{1});
 
