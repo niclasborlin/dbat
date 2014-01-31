@@ -33,12 +33,13 @@ ax=subplot(5,1,1,'parent',h);
 bar(ax,ix,[cr;c]'*100,'grouped');
 legend(ax,'Rectangular','Convex')
 title(ax,'Image coverage (percent)')
-set(ax,'ylim',[0,100]);
+set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,100]);
 
 % Point count plot.
 ax=subplot(5,1,2,'parent',h);
 n=sum(s.vis(:,ix),1);
 bar(ax,ix,n);
+set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,max(n)+1]);
 title(ax,'Point count')
 
 % Residuals.
@@ -49,6 +50,7 @@ nPhoto=full(sum(s.vis,1));
 sqSumPhoto=full(sum(res.^2,1));
 meanPhoto=sqrt(sqSumPhoto./nPhoto);
 bar(ax,ix,meanPhoto(ix));
+set(ax,'xlim',[0.5,max(ix)+0.5]);
 title(ax,'RMS point residuals (-- = global RMS)')
 line(get(ax,'xlim'),rms*[1,1],'marker','none','linestyle','--',...
      'color',0.5*[0,1,0],'parent',ax);
@@ -61,6 +63,7 @@ ax=subplot(5,1,4,'parent',h);
 bar(ax,ix,sqrt([var(1:3,ix);sum(var(1:3,ix),1)]'));
 ylabel(ax,'Project units')
 legend(ax,'X','Y','Z','Total')
+set(ax,'xlim',[0.5,max(ix)+0.5]);
 title(ax,'Spatial standard deviations (camera station)')
 
 ax=subplot(5,1,5,'parent',h);
@@ -68,4 +71,5 @@ bar(ax,ix,sqrt([var(4:6,ix);sum(var(4:6,ix),1)]'*180/pi));
 ylabel(ax,'Degrees')
 legend(ax,'omega','phi','kappa','Total')
 title(ax,'Rotational standard deviations (camera station)')
+set(ax,'xlim',[0.5,max(ix)+0.5]);
 xlabel(ax,'Image number')
