@@ -8,13 +8,14 @@ function hh=plotimagestats(s,e,ix)
 %   - point count,
 %   - RMS residual,
 %   - camera station X/Y/Z/total variance.
+%   - camera station omega/phi/kappa/total variance.
 %
 %   PLOTIMAGESTATS(S,E,IX) plots the stats for the images in IX only.
 %   IX='all' plots for all images.
 %
 %   H=... returns the handle to the plot figure.
 %
-%See also: BUNDLE, COVERAGE.
+%See also: BUNDLE, COVERAGE, PLOTOPSTATS.
 
 % $Id$
 
@@ -38,7 +39,7 @@ set(ax,'ylim',[0,100]);
 ax=subplot(5,1,2,'parent',h);
 n=sum(s.vis(:,ix),1);
 bar(ax,ix,n);
-title('Point count')
+title(ax,'Point count')
 
 % Residuals.
 ax=subplot(5,1,3,'parent',h);
