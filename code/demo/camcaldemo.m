@@ -3,7 +3,7 @@ curDir=fileparts(mfilename('fullpath'));
 
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
-    fName=fullfile(curDir,'data','C4040Z-2272x1704.txt');
+    fName=fullfile(curDir,'data','C4040Z-2272x1704_few_cams.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
@@ -86,6 +86,10 @@ bundle_result_file(result{1},E{1},resFile);
 fprintf('Bundle result file %s generated.\n',resFile);
 
 plotparams(result{1},E{1});
+
+plotcoverage(result{1});
+
+plotimagestats(result{1},E{1});
 
 for i=1:length(E)
     plotnetwork(result{i},E{i},'title',...
