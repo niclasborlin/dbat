@@ -1,38 +1,61 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
 # v0.2.0 for Matlab (R), below called the Toolbox.
 #
-# The toolbox is
-# Copyright (C) 2013-14, Niclas Börlin, niclas.borlin@cs.umu.se,
-# Department of Computing Science, Umeå University, Sweden.
+# The Toolbox is released under a variant of the BSD license. The full
+# text of the license is given below. In summary, you use the code
+# at your own risk and may use it for any purpose, including
+# commercial, as long as you give due credit.
 #
-# The toolbox is made available under the BSD license, stated below,
-# with three additions. In summary, you use the code at your own
-# risk and may use it for any purpose. You may copy, distribute and
-# modify the software as long as you track changes and dates of in
-# source files and keep modifications under GPL. You can distribute
-# your application using a GPL library commercially, but you must also
-# provide the source code. The additions are:
-# 
-# 1) If you use the code from the Toolbox (or derivatives thereof) to
-#    create a scientific paper, you should refer to at least one of the
-#    following papers:
-#    [list]
-#
-# 2) If you use the code for commercial work, you should acknowledge the
-#    use by including the phrase "Uses code from the Damped Bundle
-#    Adjustment Toolbox v0.2.0." in an About box or similar.
-#
-# 3) If you port algorithms from the toolbox to other applications,
-#    you should acknowledge the fact by including a statement "Uses
-#    algorithms from the Damped Bundle Adjustment Toolbox v0.2.0." in
-#    an About box or similar.
-#
-# For install instructions, see the file INSTALL.
+# For installation instructions, see the file INSTALL.
 #
 # For usage, see the files in the doc/manual directory.
-
-# Licensing stuff.
-
-# The software is provided as is. Any use is completely at your own risk.
+#
+# == LICENSE ==
+#
+# Copyright (C) 2013-14, Niclas Börlin, niclas.borlin@cs.umu.se,
+# Department of Computing Science, Umeå University, Sweden. All right
+# reserved.
+#
+# With contributions from Pierre Grussenmeyer,
+# pierre.grussenmeyer@insa-strasbourg.fr, ICube Laboratory UMR 7357,
+# Photogrammetry and Geomatics Group, Institut national des sciences
+# appliquées de Strasbourg, Strasbourg, France.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+# 1. Redistributions of source code must retain the above copyright
+#    notice, this list of conditions and the following disclaimer.
+#
+# 2. Redistributions in binary form must reproduce the above copyright
+#    notice, this list of conditions and the following disclaimer in
+#    the documentation and/or other materials provided with the
+#    distribution.
+#
+# 3. If you use the code, or derivatives thereof, for scientific
+#    publications, you should refer to at least one of the following
+#    papers:
+#
+#    Börlin and Grussenmeyer (2013). "Bundle adjustment with and
+#        without damping", Photogrammetric Record, vol. 28(144):396-415.
+#    Börlin and Grussenmeyer (2013). "Experiments with
+#        Metadata-derived Initial Values and Linesearch Bundle
+#        Adjustment in Architectural Photogrammetry", ISPRS Annals of
+#        the Photogrammetry, Remote Sensing, and Spatial Information
+#        Sciences, vol II-5/W1:43-48.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+# FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+# COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+# INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+# BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+# LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+# ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
 
 # $Id$
