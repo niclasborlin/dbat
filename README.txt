@@ -1,12 +1,27 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
 # v0.2.0 for Matlab (R), below called the Toolbox.
 #
+# == LEGAL STUFF ==
+#
 # The Toolbox is released under a variant of the BSD license. The full
 # text of the license is given below. In summary, you use the code
 # at your own risk and may use it for any purpose, including
-# commercial, as long as you give due credit.
+# commercial, as long as you give due credit. Furthermore, if you use
+# the code, or derivatives thereof, for scientific publications, you
+# should refer to on or more of the following papers:
 #
-# For installation instructions, see the file INSTALL.
+# Börlin and Grussenmeyer (2013). "Bundle adjustment with and without
+#     damping", Photogrammetric Record, vol. 28(144):396-415.
+# Börlin and Grussenmeyer (2013). "Experiments with Metadata-derived
+#     Initial Values and Linesearch Bundle Adjustment in Architectural
+#     Photogrammetry", ISPRS Annals of the Photogrammetry, Remote
+#     Sensing, and Spatial Information Sciences, vol II-5/W1:43-48.
+#
+# == INSTALLATION ==
+#
+# For installation instructions, see the file INSTALL.txt.
+#
+# == USAGE ==
 #
 # For usage, see the files in the doc/manual directory.
 #
@@ -33,17 +48,6 @@
 #    the documentation and/or other materials provided with the
 #    distribution.
 #
-# 3. If you use the code, or derivatives thereof, for scientific
-#    publications, you should refer to at least one of the following
-#    papers:
-#
-#    Börlin and Grussenmeyer (2013). "Bundle adjustment with and
-#        without damping", Photogrammetric Record, vol. 28(144):396-415.
-#    Börlin and Grussenmeyer (2013). "Experiments with
-#        Metadata-derived Initial Values and Linesearch Bundle
-#        Adjustment in Architectural Photogrammetry", ISPRS Annals of
-#        the Photogrammetry, Remote Sensing, and Spatial Information
-#        Sciences, vol II-5/W1:43-48.
 #
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 # "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -57,5 +61,10 @@
 # LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 # ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
+#
+# == TRADEMARKS ==
+#
+# Matlab is a registered trademark by The Mathworks, Inc., Natick MA,
+# USA.
 
 # $Id$
