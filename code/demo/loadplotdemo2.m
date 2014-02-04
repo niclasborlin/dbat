@@ -1,3 +1,5 @@
+clear
+
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
@@ -11,14 +13,13 @@ if ~exist('fName','var')
     disp(' ')
 end
     
+% Load data...
 fprintf('Loading data file %s...',fName);
 prob=loadpm(fName);
 disp('done.')
 
+% ...convert to useful struct...
 s=prob2dbatstruct(prob);
 
-% Rotate to have +Z up.
-T0=blkdiag(1,[0,-1;1,0],1);
-
-plotnetwork(s,'title','Camera calibration data set','align',17,'trans', ...
-            T0,'camerasize',0.2);
+% ...plot it.
+plotnetwork(s,'title','Camera calibration data set','camerasize',0.2);

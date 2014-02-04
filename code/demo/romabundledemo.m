@@ -51,11 +51,24 @@ for i=1:length(dampings)
     end
 end
 
-% Rotate to have +Z up.
-T0=blkdiag(1,[0,-1;1,0],1);
+if 0
+    resFile=strrep(fName,'.txt','_result_file.txt');
+
+    bundle_result_file(result{1},E{1},resFile);
+
+    fprintf('\nBundle result file %s generated.\n',resFile);
+
+    plotparams(result{1},E{1});
+end
+
+plotcoverage(result{1},true);
+
+plotimagestats(result{1},E{1});
+
+%plotopstats(result{1},E{1});
 
 for i=1:length(E)
-    plotnetwork(result{i},E{i},'trans',T0,'align',1,'title',...
+    plotnetwork(result{i},E{i},'trans','up','align',1,'title',...
                 ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
                 'axes',figure(i),'pause','on');
 end
