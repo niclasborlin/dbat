@@ -100,7 +100,7 @@ lh(end+1)=line(cHull{1}(1,:),cHull{1}(2,:),'linestyle','-',...
 lgs{end+1}='Convex hull';
 ii=ii+1;
 
-[legh,objh,outh,outm]=legend(ax,lh,lgs{:});
+[legh,objh,outh,outm]=legend(ax,lh,lgs{:},'Location','NorthEastOutside');
 
 set(objh,'selectionhighlight','off');
 tags=get(objh,'tag');
