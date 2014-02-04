@@ -213,13 +213,13 @@ for i=1:size(s.IO,2)
     [uc,ucr]=coverage(s,find(s.cams==i),true);
     fprintf(fid,[p,p,p,p,'Photo point coverage:\n']);
     fprintf(fid,[p,p,p,p,p,'Rectangular: %d%%-%d%% ',...
-                 '(%d%% average, %d%% median, %d%% union)\n'],...
+                 '(%d%% average, %d%% union)\n'],...
             round(min(cr*100)),round(max(cr*100)),round(mean(cr*100)),...
-            round(median(cr*100)),round(ucr*100));
+            round(ucr*100));
     fprintf(fid,[p,p,p,p,p,'Convex hull: %d%%-%d%% ',...
-                 '(%d%% average, %d%% median, %d%% union)\n'],...
+                 '(%d%% average, %d%% union)\n'],...
             round(min(c*100)),round(max(c*100)),round(mean(c*100)),...
-            round(median(c*100)),round(uc*100));
+            round(uc*100));
 end
 
 fprintf(fid,[p,p,'Photo Coverage\n']);
@@ -248,7 +248,7 @@ nOP=full(sum(s.vis,2));
 sqSumOP=full(sum(res.^2,2));
 meanOP=sqrt(sqSumOP./nOP);
 
-fprintf(fid,[p,p,p,'Object point residuals (RMS over all images):\n']);
+fprintf(fid,[p,p,p,'Object point residuals (RMS over all images of a point):\n']);
 
 [mn,mni]=min(meanOP);
 [mx,mxi]=max(meanOP);
@@ -262,7 +262,7 @@ nPhoto=full(sum(s.vis,1));
 sqSumPhoto=full(sum(res.^2,1));
 meanPhoto=sqrt(sqSumPhoto./nPhoto);
 
-fprintf(fid,[p,p,p,'Photo residuals (RMS over all points):\n']);
+fprintf(fid,[p,p,p,'Photo residuals (RMS over all points in an image):\n']);
 
 [mn,mni]=min(meanPhoto);
 [mx,mxi]=max(meanPhoto);
@@ -305,8 +305,8 @@ a=angles(s)*180/pi;
 
 [mn,mni]=min(a);
 [mx,mxi]=max(a);
-fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,s.OPid(mni));
-fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,s.OPid(mxi));
-fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(a));
+fprintf(fid,[p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,s.OPid(mni));
+fprintf(fid,[p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,s.OPid(mxi));
+fprintf(fid,[p,p,p,'Average: %.1f degrees\n'],mean(a));
 
 fclose(fid);
