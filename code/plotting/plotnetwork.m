@@ -155,6 +155,9 @@ end
 if isempty(ax), ax=gca; end
 if isempty(EOplot), EOplot=1:size(s.EO,2); end
 
+% Activate camera toolbar.
+cameratoolbar(get(ax,'parent'),'show');
+
 [ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
 if ~isempty(E)
