@@ -76,7 +76,7 @@ var=reshape(diag(COP),3,[]);
 ax=subplot(3,1,3,'parent',fig);
 bar(ax,ix,sqrt([var(1:3,ix);sum(var(1:3,ix),1)]'));
 ylabel(ax,'Project units')
-legend(ax,'X','Y','Z','Total')
+legend(ax,'X','Y','Z','Total','location','NorthEastOutside')
 title(ax,'OP standard deviations')
 set(ax,'xtick',ticks,'xgrid','on')
 set(ax,'xlim',[1,nPts])
@@ -99,13 +99,17 @@ for i=1:length(ax)
     yLim(i,:)=get(ax(i),'ylim');
 end
 
+% Scale plots to have equal width.
+scalewidth(axH);
+
 % Keep xlim equal during zoom in all plots.
 h=zoom(fig);
 set(h,'actionpostcallback',@postzoom);
 set(h,'motion','horizontal');
 set(fig,'userdata',struct('ax',axH));
 
-function postcallback(obj,evd)
+% Callback function after zooming.
+function postzoom(obj,evd)
 
 % Get limit of current axes.
 xLim=get(evd.Axes,'xlim');
