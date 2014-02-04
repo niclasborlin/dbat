@@ -22,8 +22,8 @@ else
 end
 s0=prob2dbatstruct(prob);
 
-% Set CP 1-4 to nominal coordinates. Everything is computed based on
-% these points.
+% Set CP 1-4 to nominal coordinates. Initial values for the EO and OP
+% parameters are computed based on these points.
 s0.OP(:)=nan;
 s0.OP(:,ismember(s0.OPid,1001))=[0,1,0]';
 s0.OP(:,ismember(s0.OPid,1002))=[1,1,0]';
@@ -40,14 +40,14 @@ s0.cIO(1:8,:)=true;
 % Set initial IO parameters.
 s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
 s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
-s0.IO(3)=s0.IO(3)*1;   % c = half of true
+s0.IO(3)=s0.IO(3);     % c = half of true
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 cpId=1001:1004;
 s1=resect(s0,'all',cpId,cpId);
 s2=forwintersect(s1,'all',true);
 
-s2.x0desc='focal = 1/2 of true';
+s2.x0desc='Camera calibration';
 
 s=s2;
 plotnetwork(s,'title','Initial network',...
