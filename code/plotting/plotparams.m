@@ -24,7 +24,10 @@ if any(s.cIO(:))
     h(1)=fig;
     clf(fig);
 
+    % Axes in this plot.
+    axH=[];
     ax=subplot(3,1,1,'parent',fig);
+    axH(end+1)=ax;
     cla(ax);
     cc=get(ax,'colororder');
     % Legend strings.
@@ -41,6 +44,8 @@ if any(s.cIO(:))
         fp(s.cIO(1:3,ci),:)=e.trace(ixp(s.cIO(1:3,ci)),:);
         % Flip y coordinate.
         v=diag([1,-1,1])*fp;
+        % Change order to be f, px, py.
+        v=v([3,1,2],:);
         % Line style and legend strings.
         ls={'-','--','-.'};
         fps={'f','px','py'};
@@ -55,11 +60,14 @@ if any(s.cIO(:))
             line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
                  'marker','x','color',color);
         end
-        legend(lgs);
     end
+    legh=legend(lgs,'location','NorthEastOutside');
     title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
+    set(ax,'xtick',0:size(e.trace,2)-1);
+    set(ax,'xlim',[0,size(e.trace,2)-1]);
     
     ax=subplot(3,1,2,'parent',fig);
+    axH(end+1)=ax;
     % Legend strings.
     lgs={};
     % For each camera.
@@ -88,11 +96,13 @@ if any(s.cIO(:))
             line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
                  'marker','x','color',color);
         end
-        legend(lgs);
+        legend(lgs,'location','NorthEastOutside');
     end
     title(ax,'Radial distortion');
+    set(ax,'xtick',0:size(e.trace,2)-1);
     
     ax=subplot(3,1,3,'parent',fig);
+    axH(end+1)=ax;
     % Legend strings.
     lgs={};
     % For each camera.
@@ -114,9 +124,14 @@ if any(s.cIO(:))
             line(0:size(e.trace,2)-1,P(i,:),'parent',ax,'linestyle',ls{i},...
                  'marker','x','color',color);
         end
-        legend(lgs);
+        legend(lgs,'location','NorthEastOutside');
     end
     title(ax,'Tangential distortion');
+    set(ax,'xtick',0:size(e.trace,2)-1);
+    xlabel(ax,'Iteration count')
+
+    % Scale axes to have same width.
+    scalewidth(axH);
 end
 
 if any(s.cEO(:))
@@ -128,7 +143,10 @@ if any(s.cEO(:))
     h(2)=fig;
     clf(fig);
 
+    % Axes in this plot.
+    axH=[];
     ax=subplot(2,1,1,'parent',fig);
+    axH(end+1)=ax;
     cla(ax);
     cc=get(ax,'colororder');
     % Legend strings.
@@ -163,7 +181,7 @@ if any(s.cEO(:))
                  'userdata',ci,'buttondownfcn',cb);
         end
         if i==1
-            [legh,objh,outh,outm]=legend(lgs);
+            [legh,objh,outh,outm]=legend(lgs,'location','NorthEastOutside');
             % First comes text handles, then line handles.
             lineH=reshape(objh(size(s.EO,2)+1:end),2,[]);
             % Set lines to highlight when selected.
@@ -173,9 +191,11 @@ if any(s.cEO(:))
             end
         end
     end
+    set(ax,'xtick',0:size(e.trace,2)-1);
     title(ax,sprintf('Camera center (%s)',e.damping.name));
     
     ax=subplot(2,1,2,'parent',fig);
+    axH(end+1)=ax;
     % Angle strings.
     aStrs={'\omega','\phi','\kappa'};
     
@@ -200,6 +220,11 @@ if any(s.cEO(:))
         end
     end
     title(ax,'Euler angles [degrees]');
+    set(ax,'xtick',0:size(e.trace,2)-1);
+    xlabel(ax,'Iteration count')
+
+    % Scale axes to have same width.
+    scalewidth(axH);
 end
 
 if any(s.cOP(:))
@@ -245,7 +270,7 @@ if any(s.cOP(:))
                  'userdata',ci,'buttondownfcn',cb);
         end
         if i==1
-            [legh,objh,outh,outm]=legend(lgs);
+            [legh,objh,outh,outm]=legend(lgs,'location','NorthEastOutside');
             % First comes text handles, then line handles.
             lineH=reshape(objh(size(s.OP,2)+1:end),2,[]);
             % Set lines to highlight when selected.
@@ -256,6 +281,11 @@ if any(s.cOP(:))
         end
     end
     title(ax,sprintf('Object points (%s)',e.damping.name));
+    set(ax,'xtick',0:size(e.trace,2)-1);
+    xlabel(ax,'Iteration count')
+
+    % Scale axes to have same width.
+    scalewidth(ax);
 end    
 
 if true
@@ -275,10 +305,13 @@ if true
         end
         ax=subplot(2,1,1,'parent',fig);
         semilogy(ax,0:length(e.res)-1,e.res,'x-');
+        set(ax,'xtick',0:size(e.trace,2)-1);
         title(ax,sprintf('Residual norm (%s)',e.damping.name));
         ax=subplot(2,1,2,'parent',fig);
         plot(ax,0:length(e.res)-1,[nan,alpha],'x-');
         set(ax,'ylim',[0,1])
+        set(ax,'xtick',0:size(e.trace,2)-1);
+        xlabel('Iteration count')
         title(ax,'Step length (alpha)');
       case 'lm'
       case 'lmp'
