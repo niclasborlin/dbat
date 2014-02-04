@@ -8,6 +8,7 @@ function [v,date]=dbatversion
 
 % $Id$
 
+% Should always be x.y.z.
 toolboxVersion='0.2.0';
 
 % This strings is updated by subversion on commit.
