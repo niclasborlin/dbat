@@ -27,7 +27,7 @@ i=1:length(ix); % Identity sort.
 
 fig=tagfigure('opstats');
 
-axH=zeros(3,1);
+axH=zeros(4,1);
 
 clf(fig);
 
@@ -43,7 +43,7 @@ ticks(jump+1)=true;
 ticks=find(ticks);
 
 % Point count plot.
-ax=subplot(3,1,1,'parent',fig);
+ax=subplot(4,1,1,'parent',fig);
 n=sum(s.vis(ix,:),2);
 bar(ax,1:nPts,n);
 title(ax,'Point count')
@@ -52,8 +52,21 @@ set(ax,'xlim',[1,nPts],'ylim',[0,max(n)+1]);
 set(ax,'xticklabel',[])
 axH(1)=ax;
 
+
+% Angles..
+ax=subplot(4,1,2,'parent',fig);
+ang=angles(s)*180/pi;
+bar(ax,ix,ang(ix))
+title(ax,'Maximum intersection angles')
+set(ax,'xtick',ticks,'xgrid','on')
+set(ax,'xlim',[1,nPts]);
+set(ax,'ylim',[0,91])
+set(ax,'xticklabel',[])
+axH(2)=ax;
+
+
 % Residuals.
-ax=subplot(3,1,2,'parent',fig);
+ax=subplot(4,1,3,'parent',fig);
 [rms,res]=bundle_residuals(s,e);
 % Compute averages per OP.
 nOP=full(sum(s.vis,2));
@@ -66,14 +79,14 @@ line(get(ax,'xlim'),rms*[1,1],'marker','none','linestyle','--',...
 set(ax,'xtick',ticks,'xgrid','on')
 set(ax,'xlim',[1,nPts]);
 set(ax,'xticklabel',[])
-axH(2)=ax;
+axH(3)=ax;
 
 
 % Variance
 COP=bundle_cov(s,e,'COP');
 var=reshape(diag(COP),3,[]);
 
-ax=subplot(3,1,3,'parent',fig);
+ax=subplot(4,1,4,'parent',fig);
 bar(ax,ix,sqrt([var(1:3,ix);sum(var(1:3,ix),1)]'));
 ylabel(ax,'Project units')
 legend(ax,'X','Y','Z','Total','location','NorthEastOutside')
@@ -81,7 +94,7 @@ title(ax,'OP standard deviations')
 set(ax,'xtick',ticks,'xgrid','on')
 set(ax,'xlim',[1,nPts])
 set(ax,'xticklabel',' ')
-axH(3)=ax;
+axH(4)=ax;
 
 pos=ticks;
 labelIds=id(ticks);
