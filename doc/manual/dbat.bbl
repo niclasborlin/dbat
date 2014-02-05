@@ -1,4 +1,4 @@
-\begin{thebibliography}{2}
+\begin{thebibliography}{4}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -19,5 +19,18 @@ N.~B{\"o}rlin and P.~Grussenmeyer.
   bundle adjustment in architectural photogrammetry.
 \newblock \emph{ISPRS Annals of the Photogrammetry, Remote Sensing, and Spatial
   Information Sciences}, II-5/W1:\penalty0 43--48, Sept. 2013{\natexlab{b}}.
+
+\bibitem[Haralick et~al.(1994)Haralick, Lee, Ottenberg, and
+  N{\"o}lle]{Haralick1994:Review}
+R.~M. Haralick, C.-N. Lee, K.~Ottenberg, and M.~N{\"o}lle.
+\newblock Review and analysis of solutions of the three point perspective pose
+  estimation problem.
+\newblock \emph{Int J Comp Vis}, 13\penalty0 (3):\penalty0 331--356, 1994.
+
+\bibitem[McGlone et~al.(2004)McGlone, Mikhail, and Bethel]{McGlone2004:Manual}
+C.~McGlone, E.~Mikhail, and J.~Bethel, editors.
+\newblock \emph{Manual of Photogrammetry}.
+\newblock ASPRS, 5th edition, July 2004.
+\newblock ISBN 1-57083-071-1.
 
 \end{thebibliography}
