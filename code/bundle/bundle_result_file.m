@@ -113,7 +113,7 @@ if any(s.cIO(:))
     for i=1:size(s.cIO,2)
         vals=S*full(s.IO(rows,i));
         sigma=full(ioSigma(rows,i));
-        fprintf(fid,[p,p,p,p,'Camera%d: Unknown\n'],i);
+        fprintf(fid,[p,p,p,p,'Camera%d\n'],i);
         for j=1:length(head)
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
             fprintf(fid,[p,p,p,p,p,p,' Value: %g %s\n'],vals(j),unit{j});
