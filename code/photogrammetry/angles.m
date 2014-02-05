@@ -3,8 +3,8 @@ function a=angles(s)
 %
 %   A=ANGLES(S), where S is a struct returned by PROB2DBATSTRUCT with N
 %   object points, returns an N-vector A with the maximum angle in radians
-%   between rays for each object point. The "maximum" angle is the angle
-%   closest to being orthogonal.
+%   between rays for each object point. The maximum angle is the angle
+%   closest to being orthogonal between pairs of rays for each object point.
 
 % $Id$
 
