@@ -270,3 +270,5 @@ while true
         break;
     end
 end
+
+if nargout>0, hh=ax; end
