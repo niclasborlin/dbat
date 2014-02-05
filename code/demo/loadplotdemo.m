@@ -1,5 +1,7 @@
 clear
 
+genfigures=true;
+
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
@@ -23,4 +25,13 @@ s=prob2dbatstruct(prob);
 % ...plot it.
 disp(['Plotting the camera network aligned with camera 1 and with +Z being ' ...
       '''up'''])
-plotnetwork(s,'title','Roma','align',1,'trans','up');
+h=plotnetwork(s,'title','Roma data (computed by Photomodeler)','align',1,'trans','up');
+
+if genfigures
+    h=get(h,'parent');
+    figDir=fullfile('..','doc','manual','ill');
+    files={'roma.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
