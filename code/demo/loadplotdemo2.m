@@ -24,13 +24,10 @@ disp('done.')
 s=prob2dbatstruct(prob);
 
 % ...plot it.
-h=plotnetwork(s,'title','Camera calibration data set (computed by Photomodeler)','camerasize',0.2);
+h=plotnetwork(s,'axes',tagfigure('camcaldata'),'title',...
+              'Camera calibration data set (computed by Photomodeler)',...
+              'camerasize',0.2);
 
-if genfigures
-    h=get(h,'parent');
-    figDir=fullfile('..','doc','manual','ill');
-    files={'ccam.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
+if printdemofigures
+    doprintdemofigures(h,'ccam.eps');
 end

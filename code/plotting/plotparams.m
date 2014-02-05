@@ -309,7 +309,7 @@ if true
         title(ax,sprintf('Residual norm (%s)',e.damping.name));
         ax=subplot(2,1,2,'parent',fig);
         plot(ax,0:length(e.res)-1,[nan,alpha],'x-');
-        set(ax,'ylim',[0,1])
+        set(ax,'ylim',[0,1.1])
         set(ax,'xtick',0:size(e.trace,2)-1);
         xlabel('Iteration count')
         title(ax,'Step length (alpha)');
