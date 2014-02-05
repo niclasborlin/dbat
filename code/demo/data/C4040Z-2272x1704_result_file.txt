@@ -1,0 +1,496 @@
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Problems and suggestions:
+      Project Problems: Not evaluated
+      Problems related to the processing: (1)
+         One or more of the camera parameter deviations has a high correlation (see below).
+   Information from last bundle
+      Last Bundle Run: 05-Feb-2014 09:41:47
+      DBAT version: 0.2.0.136 (2014-02-04 12:25:53)
+      Status: OK (0)
+      Sigma0 (pixels): 0.15106
+      Sigma0 (mm): 0.000482148
+      Processing options:
+         Orientation: on
+         Global optimization: on
+         Calibration: on
+         Constraints: off
+         Maximum # of iterations: 20
+         Convergence tolerance: 0.001
+         Singular test: off
+         Chirality veto: off
+         Damping: gna
+      Total error:
+         Initial value comment: Camera calibration from EXIF value
+         Number of stages: 1
+         Number of iterations: 7
+         First error: 9.83211
+         Last error: 0.029411
+      Precisions / Standard Deviations:
+         Camera Calibration Standard Deviations:
+            Camera1
+               Focal Length:
+                   Value: 7.45885 mm
+                   Deviation: 0.001 mm
+               Xp - principal point x:
+                   Value: 3.61622 mm
+                   Deviation: 0.0008 mm
+               Yp - principal point y:
+                   Value: 2.60928 mm
+                   Deviation: 0.0009 mm
+               Fw - format width:
+                   Value: 7.25319 mm
+               Fh - format height:
+                   Value: 5.43764 mm
+               K1 - radial distortion 1:
+                   Value: 0.00458073 mm^(-2)
+                   Deviation: 2e-05 mm^(-2)
+               K2 - radial distortion 2:
+                   Value: -4.34384e-05 mm^(-4)
+                   Deviation: 2e-06 mm^(-4)
+                   Correlations over 95.0%: K3:-97.9%.
+               K3 - radial distortion 3:
+                   Value: -2.12972e-06 mm^(-6)
+                   Deviation: 9e-08 mm^(-6)
+                   Correlations over 95.0%: K2:-97.9%.
+               P1 - decentering distortion 1:
+                   Value: -6.5472e-05 mm^(-2)
+                   Deviation: 3e-06 mm^(-2)
+               P2 - decentering distortion 2:
+                   Value: -3.13472e-05 mm^(-2)
+                   Deviation: 4e-06 mm^(-2)
+         Photograph Standard Deviations:
+            Photo 1: P8250021.JPG
+               Omega:
+                  Value: -39.351249 deg
+                  Deviation: 0.008 deg
+               Phi:
+                  Value: -1.118298 deg
+                  Deviation: 0.008 deg
+               Kappa:
+                  Value: -179.789856 deg
+                  Deviation: 0.004 deg
+               Xc:
+                  Value: 0.457102 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 1.791883 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.470537 
+                  Deviation: 0.0002 
+            Photo 2: P8250022.JPG
+               Omega:
+                  Value: -39.685329 deg
+                  Deviation: 0.008 deg
+               Phi:
+                  Value: -1.780295 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: -90.072092 deg
+                  Deviation: 0.004 deg
+               Xc:
+                  Value: 0.472848 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 2.025193 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.640340 
+                  Deviation: 0.0002 
+            Photo 3: P8250023.JPG
+               Omega:
+                  Value: -27.138663 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: -28.492210 deg
+                  Deviation: 0.007 deg
+               Kappa:
+                  Value: -141.803027 deg
+                  Deviation: 0.006 deg
+               Xc:
+                  Value: -0.642405 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 1.464301 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.584180 
+                  Deviation: 0.0002 
+            Photo 4: P8250024.JPG
+               Omega:
+                  Value: -28.457824 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: -30.254755 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: -49.739815 deg
+                  Deviation: 0.005 deg
+               Xc:
+                  Value: -0.641529 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 1.488834 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.639798 
+                  Deviation: 0.0003 
+            Photo 5: P8250025.JPG
+               Omega:
+                  Value: 4.466506 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: -34.587369 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: -87.138133 deg
+                  Deviation: 0.005 deg
+               Xc:
+                  Value: -0.669026 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 0.414948 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.411542 
+                  Deviation: 0.0002 
+            Photo 6: P8250026.JPG
+               Omega:
+                  Value: 2.178274 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: -33.933210 deg
+                  Deviation: 0.008 deg
+               Kappa:
+                  Value: 1.508365 deg
+                  Deviation: 0.006 deg
+               Xc:
+                  Value: -0.711764 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 0.473876 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.466180 
+                  Deviation: 0.0002 
+            Photo 7: P8250027.JPG
+               Omega:
+                  Value: 27.414156 deg
+                  Deviation: 0.008 deg
+               Phi:
+                  Value: -28.231197 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: -44.244123 deg
+                  Deviation: 0.005 deg
+               Xc:
+                  Value: -0.532982 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: -0.352021 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.403373 
+                  Deviation: 0.0002 
+            Photo 8: P8250028.JPG
+               Omega:
+                  Value: 26.985700 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: -28.058053 deg
+                  Deviation: 0.008 deg
+               Kappa:
+                  Value: 44.828446 deg
+                  Deviation: 0.006 deg
+               Xc:
+                  Value: -0.716774 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: -0.469486 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.714875 
+                  Deviation: 0.0003 
+            Photo 9: P8250029.JPG
+               Omega:
+                  Value: 30.468217 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: 0.250318 deg
+                  Deviation: 0.008 deg
+               Kappa:
+                  Value: 0.047930 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.526664 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: -0.545910 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.532293 
+                  Deviation: 0.0002 
+            Photo 10: P8250030.JPG
+               Omega:
+                  Value: 31.087536 deg
+                  Deviation: 0.008 deg
+               Phi:
+                  Value: 1.784642 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 89.502165 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.556001 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: -0.596059 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.615082 
+                  Deviation: 0.0002 
+            Photo 11: P8250031.JPG
+               Omega:
+                  Value: 27.723782 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: 30.811666 deg
+                  Deviation: 0.008 deg
+               Kappa:
+                  Value: 42.299557 deg
+                  Deviation: 0.006 deg
+               Xc:
+                  Value: 1.772257 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: -0.427739 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.549588 
+                  Deviation: 0.0003 
+            Photo 12: P8250032.JPG
+               Omega:
+                  Value: 24.740164 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: 30.297921 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 133.170183 deg
+                  Deviation: 0.005 deg
+               Xc:
+                  Value: 1.867195 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: -0.483593 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.610904 
+                  Deviation: 0.0003 
+            Photo 13: P8250033.JPG
+               Omega:
+                  Value: 0.588864 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: 33.218811 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 88.710084 deg
+                  Deviation: 0.005 deg
+               Xc:
+                  Value: 1.632713 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 0.495638 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.469834 
+                  Deviation: 0.0002 
+            Photo 14: P8250034.JPG
+               Omega:
+                  Value: -1.672700 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: 33.702692 deg
+                  Deviation: 0.008 deg
+               Kappa:
+                  Value: 180.207124 deg
+                  Deviation: 0.006 deg
+               Xc:
+                  Value: 1.799100 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 0.523277 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.596449 
+                  Deviation: 0.0002 
+            Photo 15: P8250035.JPG
+               Omega:
+                  Value: -30.718433 deg
+                  Deviation: 0.008 deg
+               Phi:
+                  Value: 28.233510 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 138.476706 deg
+                  Deviation: 0.005 deg
+               Xc:
+                  Value: 1.673807 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 1.552641 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.500635 
+                  Deviation: 0.0002 
+            Photo 16: P8250036.JPG
+               Omega:
+                  Value: -29.833414 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: 27.039011 deg
+                  Deviation: 0.007 deg
+               Kappa:
+                  Value: -134.589751 deg
+                  Deviation: 0.006 deg
+               Xc:
+                  Value: 1.696282 
+                  Deviation: 0.0002 
+               Yc:
+                  Value: 1.617454 
+                  Deviation: 0.0002 
+               Zc:
+                  Value: 1.589335 
+                  Deviation: 0.0002 
+            Photo 17: P8250037.JPG
+               Omega:
+                  Value: -8.451426 deg
+                  Deviation: 0.01 deg
+               Phi:
+                  Value: -0.433324 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 179.408213 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.427541 
+                  Deviation: 0.0003 
+               Yc:
+                  Value: 0.820375 
+                  Deviation: 0.0003 
+               Zc:
+                  Value: 1.972374 
+                  Deviation: 0.0002 
+            Photo 18: P8250038.JPG
+               Omega:
+                  Value: -4.708524 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: 0.753060 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 88.792605 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.484948 
+                  Deviation: 0.0003 
+               Yc:
+                  Value: 0.924120 
+                  Deviation: 0.0003 
+               Zc:
+                  Value: 1.885585 
+                  Deviation: 0.0002 
+            Photo 19: P8250039.JPG
+               Omega:
+                  Value: -4.340053 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: -0.332365 deg
+                  Deviation: 0.009 deg
+               Kappa:
+                  Value: 88.250472 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.464573 
+                  Deviation: 0.0003 
+               Yc:
+                  Value: 0.576072 
+                  Deviation: 0.0003 
+               Zc:
+                  Value: 1.875229 
+                  Deviation: 0.0002 
+            Photo 20: P8250040.JPG
+               Omega:
+                  Value: -7.538665 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: -1.480764 deg
+                  Deviation: 0.01 deg
+               Kappa:
+                  Value: -180.040138 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.704529 
+                  Deviation: 0.0003 
+               Yc:
+                  Value: 0.779987 
+                  Deviation: 0.0003 
+               Zc:
+                  Value: 1.925875 
+                  Deviation: 0.0002 
+            Photo 21: P8250041.JPG
+               Omega:
+                  Value: -8.620639 deg
+                  Deviation: 0.009 deg
+               Phi:
+                  Value: 1.135800 deg
+                  Deviation: 0.01 deg
+               Kappa:
+                  Value: -182.602051 deg
+                  Deviation: 0.003 deg
+               Xc:
+                  Value: 0.271704 
+                  Deviation: 0.0003 
+               Yc:
+                  Value: 0.818510 
+                  Deviation: 0.0003 
+               Zc:
+                  Value: 1.906172 
+                  Deviation: 0.0002 
+   Quality
+      Photographs
+         Total number: 21
+         Numbers used: 21
+      Cameras
+         Total number: 1
+         Camera1:
+            Calibration: yes
+            Number of photos using camera: 21
+            Photo point coverage:
+               Rectangular: 41%-83% (61% average, 92% union)
+               Convex hull: 31%-62% (46% average, 87% union)
+      Photo Coverage
+         References points outside calibrated region:
+      Point Marking Residuals
+         Overall point RMS: 0.202 pixels
+         Mark point residuals:
+            Maximum: 0.793 pixels (OP 8 on photo 19)
+         Object point residuals (RMS over all images of a point):
+            Minimum: 0.097 pixels (OP 67 over 21 images)
+            Maximum: 0.392 pixels (OP 90 over 16 images)
+         Photo residuals (RMS over all points in an image):
+            Minimum: 0.131 pixels (photo 8 over 98 points)
+            Maximum: 0.281 pixels (photo 6 over 93 points)
+      Point Precision
+         Total standard deviation (RMS of X/Y/Z std):
+            Minimum: 8.1e-05 (OP 22)
+            Maximum: 0.00016 (OP 88)
+         Maximum X standard deviation: 7.2e-05 (OP 90)
+         Maximum Y standard deviation: 7.7e-05 (OP 90)
+         Maximum Z standard deviation: 0.00012 (OP 88)
+      Point Angles
+         Minimum: 79.6 degrees (OP 90)
+         Maximum: 90.0 degrees (OP 43)
+         Average: 86.4 degrees
