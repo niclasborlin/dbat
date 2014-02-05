@@ -7,6 +7,7 @@
 \usepackage{verbatim}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{times}
 
 \begin{document}
 
@@ -50,8 +51,8 @@ What it cannot do.
 
 Refer to any of the papers...
 
-\cite{Borlin2013:Bundle}
-\cite{Borlin2013:Experiments}
+\citet{Borlin2013:Bundle}
+\citet{Borlin2013:Experiments}
 
 \section{Installation}
 \label{sec:install}
@@ -77,7 +78,7 @@ Inside Matlab, do the following initialization:\\
 
 The \verb+loadplotdemo+ demo loads a modified Photomodeler text export
 file of the 60-camera, 26000-point project used
-in~\cite{Borlin2013:Bundle}. The camera network, as computed by
+in~\citet{Borlin2013:Bundle}. The camera network, as computed by
 Photomodeler, is plotted with camera 1 aligned to the cardinal axes.
 The result should look like Figure~\ref{fig:roma}. The figure is a
 standard Matlab 3D figure and may e.g.\ be rotated or zoomed using the
@@ -106,33 +107,38 @@ look like Figure~\ref{fig:camcalib}. The figure is a standard Matlab
   \label{fig:camcalib}
 \end{figure*}
 
-\subsubsection{romabundledemo}
-
 \subsubsection{camcaldemo}
 
-The \verb+loadplotdemo2+ demo loads the camera calibration export file
+The \verb+camcaldemo+ demo loads the camera calibration export file
 from Section~\ref{sec:camcaldata} and runs a camera calibration. The
-true focal length is used as initial value. The other values are set
-to ``default'' values, e.g.\ the principal point is the center of the
-sensor and all lens distortion parameters are zero.
+EXIF focal length is used as the initial value. The other values are
+set to ``default'' values, e.g.\ the principal point at the center of
+the sensor and all lens distortion parameters equal to zero. The
+initial value for the EO parameters are computed by spatial
+resection~\citep[Chap.~11.1.3.4]{Haralick1994:Review,McGlone2004:Manual} using
+the control points defined for the Photomodeler calibration sheet. The
+initial OP coordinates are subsequently computed by forward
+intersection.
 
 The bundle adjustment is run with Gauss-Newton-Armijo damping. The
-result is given in a number of plots and a Photomodeler-style result
-text file. The result file is listed in Appendix~\ref{sec:resultFile}.
+result is given in a number of plot windows and a Photomodeler-style
+result text file, listed in Appendix~\ref{sec:resultFile}.
 
 The result plots are of two kinds: Plots that show the evolution of
 the iterations and plots that show the quality of the input or output
 data. The former plots may be useful to understand how the bundle
 adjustment works but also to ``debug'' a difficult network that has
 convergence difficulties. The latter plots give information about the
-quality of the result and may also provide clues to how to improve a
-network where the bundle did converge.
+quality of the result and may also provide clues on how to improve a
+network when the bundle did converge.
+
+\paragraph{Evolution plots}
 
 \begin{figure*}
   \centering
   \begin{subfigure}[b]{0.49\textwidth}
     \includegraphics[width=\textwidth]{ill/ccamx0}
-    \caption{Initial network configuration.}
+    \caption{Initial network configuration.\\~}
     \label{fig:camx0}
   \end{subfigure}%
   \begin{subfigure}[b]{0.49\textwidth}
@@ -141,17 +147,20 @@ network where the bundle did converge.
       center trace lines.}
     \label{fig:camxfinal}
   \end{subfigure}
-  \caption{3D network evolution during the iterations. The evolution
-    of the IO parameters are not visible.}\label{fig:net3DTrace}
+  \caption{3D network evolution during the iterations. Only the EO and
+    OP parameters are illustrated. In this example, the variation of
+    the OP coordinates is barely visible. }\label{fig:net3DTrace}
 \end{figure*}
 
-
-Figure~\ref{fig:netTrace} contains three figures showing the evolution
-of the internal orientation (IO), external orientation (EO), and
-object point (OP), respectively, during the iterations. The EO and OP
-plots are interactive. Lines in the plots or legends may be selected
-and all corresponding lines will be highlighted. In
-Figure~\ref{fig:EOtrace}, it is clear that
+The evolution plots are collected in
+figures~\ref{fig:net3DTrace}--\ref{fig:gnatrace}.
+Figure~\ref{fig:net3DTrace} shows a snapshot of the 3D trace figure at
+the beginning and end of the iterations. As default, the evolution is
+presented iteration by iteration with intervening presses of the
+return key. The figure window is interactive and may be rotated,
+zoomed, etc. In this example, it is clear in
+Figure~\ref{fig:camxfinal} that one camera station had poorer initial
+values than the rest.
 
 \begin{figure*}
   \centering
@@ -170,10 +179,83 @@ Figure~\ref{fig:EOtrace}, it is clear that
     \caption{OP parameters}
     \label{fig:OPtrace}
   \end{subfigure}
-  \caption{Evolution of all parameters of the network during the
-    iteration sequence.}\label{fig:netTrace}
+  \caption{Evolution of network parameters during the iteration
+    sequence.}\label{fig:netTrace}
 \end{figure*}
 
+Figure~\ref{fig:netTrace} contains three plots showing the evolution
+of the internal orientation (IO), external orientation (EO), and
+object point (OP), respectively, during the iterations. The IO plot is
+split into a focal/principal point panel and a radial and tangential
+distortion panel, where the radial distortion parameters are scaled to
+provide more information. The EO plot contains a camera center panel
+and an $\omega$-$\phi$-$\kappa$ Euler angle panel. The EO and OP plots
+are interactive. Lines in the plots or legends may be selected and all
+corresponding lines will be highlighted. In the top panel of
+Figure~\ref{fig:EOtrace}, the motion of one camera stands out.
+Clicking that line reveals that it belongs to camera station~21, which
+can be further investigated to decide if it should be excluded from
+the calibration.
+
+\begin{figure*}
+  \centering
+  \includegraphics[width=0.5\textwidth]{ill/ccamgnatrace}
+  \caption{Residual evolution and damping behaviour during the
+    iterations.}
+  \label{fig:gnatrace}
+\end{figure*}
+
+The final evolution plot, shown in Figure~\ref{fig:gnatrace},
+illustrates the evolution of the norm of the total residual and the
+damping behaviour, if any, during the bundle iterations. In this
+example, the Gauss-Newton-Armijo linesearch damping is active during
+the first two iterations. For further details on the damping,
+see~\citet{Borlin2013:Bundle}.
+
+\paragraph{Quality plots}
+
+\begin{figure*}
+  \centering
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{ill/ccamcoverage}
+    \caption{Image coverage}
+    \label{fig:ccamCoverage}
+  \end{subfigure}%
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{ill/ccamimstats}
+    \caption{Image statistics}
+    \label{fig:ccamImstats}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \includegraphics[width=\textwidth]{ill/ccamopstats}
+    \caption{Object point statistics}
+    \label{fig:ccamOPstats}
+  \end{subfigure}
+  \caption{Plots of input/output statistics.}\label{fig:ccamQuality}
+\end{figure*}
+
+The quality plots a gathered in Figure~\ref{fig:ccamQuality}.
+Per-image quality statistics is shown in Figure~\ref{fig:ccamImstats}.
+The statistics presented for each image are the image coverage; the
+number of measured points; the average (RMS) point residual; and the
+standard deviations for the EO parameters for the camera stations. In
+this example, the data does not give any obvious support to exclude
+the suspected image~21 from the calibration.
+
+The image coverage is detailed in a separate
+Figure~\ref{fig:ccamCoverage}. The plotted data is selectable. All
+observations from a specific image, including their convex hull, will
+be highlighted when a point or line is selected.
+
+Finally, the per-OP quality statistics in Figure~\ref{fig:ccamOPstats}
+show the number of observations per OP; the maximum ray intersection
+angle; the average (RMS) point residual; and the OP coordinate
+standard deviation. The presentation may be zoomed to show only a
+subset of the OPs by activating the ``zoom'' function of the window.
+
+\subsubsection{romabundledemo}
+
+\newpage
 \subsection{Using your own data}
 
 \subsubsection{Enabling text export from Photomodeler}
@@ -244,6 +326,8 @@ steps are valid in Photomodeler Scanner 2012:
 \bibliography{ref}
 
 \appendix
+
+\newpage
 
 \section{Camera model}
 
