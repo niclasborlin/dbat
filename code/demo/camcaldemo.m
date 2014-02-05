@@ -1,3 +1,5 @@
+genfigures=true;
+
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
@@ -40,19 +42,29 @@ s0.cIO(1:8,:)=true;
 % Set initial IO parameters.
 s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
 s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
-s0.IO(3)=s0.IO(3);     % c = half of true
+s0.IO(3)=7.3;          % c = EXIF value.
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 cpId=1001:1004;
 s1=resect(s0,'all',cpId,cpId);
 s2=forwintersect(s1,'all',true);
 
-s2.x0desc='Camera calibration';
+s2.x0desc='Camera calibration from EXIF value';
 
 s=s2;
-plotnetwork(s,'title','Initial network',...
-            'axes',tagfigure(sprintf('network%d',i)),'pause','on',...
-            'camerasize',0.1);
+h=plotnetwork(s,'title','Initial network',...
+              'axes',tagfigure(sprintf('network%d',i)),...
+              'camerasize',0.1);
+
+if genfigures
+    h=get(h,'parent');
+    figDir=fullfile('..','doc','manual','ill');
+    files={'ccamx0.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
 
 dampings={'none','gna','lm','lmp'};
 
@@ -85,16 +97,61 @@ bundle_result_file(result{1},E{1},resFile);
 
 fprintf('\nBundle result file %s generated.\n',resFile);
 
-plotparams(result{1},E{1});
+h=plotparams(result{1},E{1});
 
-plotcoverage(result{1},true);
+if genfigures
+    figDir=fullfile('..','doc','manual','ill');
+    files={'ccamiotrace.eps','ccameotrace.eps','ccamoptrace.eps', ...
+           'ccamgnatrace.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
 
-plotimagestats(result{1},E{1});
+h=plotcoverage(result{1},true);
 
-plotopstats(result{1},E{1});
+if genfigures
+    figDir=fullfile('..','doc','manual','ill');
+    files={'ccamcoverage.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+h=plotimagestats(result{1},E{1});
+
+if genfigures
+    figDir=fullfile('..','doc','manual','ill');
+    files={'ccamimstats.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+h=plotopstats(result{1},E{1});
+
+if genfigures
+    figDir=fullfile('..','doc','manual','ill');
+    files={'ccamopstats.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+if genfigures, doPause=0; else doPause='on'; end
 
 for i=1:length(E)
-    plotnetwork(result{i},E{i},'title',...
-                ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                'axes',tagfigure(sprintf('network%d',i)),'pause','on','camerasize',0.1);
+    h=plotnetwork(result{i},E{i},'title',...
+                  ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
+                  'axes',tagfigure(sprintf('network%d',i)),...
+                  'pause',doPause,'camerasize',0.1); 
+end
+
+if genfigures
+    h=get(h,'parent');
+    figDir=fullfile('..','doc','manual','ill');
+    files={'ccamxfinal.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
 end
