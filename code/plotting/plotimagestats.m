@@ -84,3 +84,5 @@ xlabel(ax,'Image number')
 
 % Scale axes to have the same width.
 scalewidth(axH);
+
+if nargout>0, hh=h; end
