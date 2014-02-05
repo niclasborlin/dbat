@@ -38,14 +38,16 @@ bar(ax,ix,[cr;c]'*100,'grouped');
 legend(ax,'Rectangular','Convex','Location','NorthEastOutside')
 title(ax,'Image coverage (percent)')
 set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,100]);
+set(ax,'xticklabel','')
 
 % Point count plot.
 ax=subplot(5,1,2,'parent',h);
 axH(end+1)=ax;
 n=sum(s.vis(:,ix),1);
 bar(ax,ix,n);
-set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,max(n)+1]);
+set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,max(n)*1.05]);
 title(ax,'Point count')
+set(ax,'xticklabel','')
 
 % Residuals.
 ax=subplot(5,1,3,'parent',h);
@@ -60,6 +62,7 @@ set(ax,'xlim',[0.5,max(ix)+0.5]);
 title(ax,'RMS point residuals (-- = global RMS)')
 line(get(ax,'xlim'),rms*[1,1],'marker','none','linestyle','--',...
      'color',0.5*[0,1,0],'parent',ax);
+set(ax,'xticklabel','')
 
 % Variance
 CEO=bundle_cov(s,e,'CEO');
@@ -72,6 +75,7 @@ ylabel(ax,'Project units')
 legend(ax,'X','Y','Z','Total','Location','NorthEastOutside')
 set(ax,'xlim',[0.5,max(ix)+0.5]);
 title(ax,'Spatial standard deviations (camera station)')
+set(ax,'xticklabel','')
 
 ax=subplot(5,1,5,'parent',h);
 axH(end+1)=ax;

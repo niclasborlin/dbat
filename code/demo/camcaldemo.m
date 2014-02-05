@@ -1,5 +1,3 @@
-genfigures=true;
-
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
@@ -56,7 +54,7 @@ h=plotnetwork(s,'title','Initial network',...
               'axes',tagfigure(sprintf('network%d',i)),...
               'camerasize',0.1);
 
-if genfigures
+if printdemofigures
     h=get(h,'parent');
     figDir=fullfile('..','doc','manual','ill');
     files={'ccamx0.eps'};
@@ -99,7 +97,7 @@ fprintf('\nBundle result file %s generated.\n',resFile);
 
 h=plotparams(result{1},E{1});
 
-if genfigures
+if printdemofigures
     figDir=fullfile('..','doc','manual','ill');
     files={'ccamiotrace.eps','ccameotrace.eps','ccamoptrace.eps', ...
            'ccamgnatrace.eps'};
@@ -110,7 +108,7 @@ end
 
 h=plotcoverage(result{1},true);
 
-if genfigures
+if printdemofigures
     figDir=fullfile('..','doc','manual','ill');
     files={'ccamcoverage.eps'};
     for i=1:length(h)
@@ -120,7 +118,7 @@ end
 
 h=plotimagestats(result{1},E{1});
 
-if genfigures
+if printdemofigures
     figDir=fullfile('..','doc','manual','ill');
     files={'ccamimstats.eps'};
     for i=1:length(h)
@@ -130,7 +128,7 @@ end
 
 h=plotopstats(result{1},E{1});
 
-if genfigures
+if printdemofigures
     figDir=fullfile('..','doc','manual','ill');
     files={'ccamopstats.eps'};
     for i=1:length(h)
@@ -138,7 +136,7 @@ if genfigures
     end
 end
 
-if genfigures, doPause=0; else doPause='on'; end
+if printdemofigures, doPause=0; else doPause='on'; end
 
 for i=1:length(E)
     h=plotnetwork(result{i},E{i},'title',...
@@ -147,7 +145,7 @@ for i=1:length(E)
                   'pause',doPause,'camerasize',0.1); 
 end
 
-if genfigures
+if printdemofigures
     h=get(h,'parent');
     figDir=fullfile('..','doc','manual','ill');
     files={'ccamxfinal.eps'};
