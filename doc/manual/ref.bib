@@ -1,0 +1,92 @@
+@string{ isprsannals = "ISPRS Annals of the Photogrammetry, Remote Sensing, and Spatial Information Sciences" }
+@string{ PhotogrammRec = "Photogramm Rec" }
+@string{ PhotogrammRecLong = "Photogrammetric Record" }
+
+@Article(Borlin2013:Experiments,
+  seqno =	 815,
+  author = 	 {Niclas B{\"o}rlin and Pierre Grussenmeyer},
+  title = 	 {Experiments with Metadata-derived Initial Values and
+                  Linesearch Bundle Adjustment in Architectural
+                  Photogrammetry},
+  journal = 	 isprsannals,
+  year = 	 2013,
+  volume =	 {II-5/W1},
+  pages =	 {43-48},
+  month = 	 sep,
+  keywords =	 {Bundle adjustment, convergence, initial values,
+                  metadata, architectural photogrammetry},
+  abstract =	 {According to the Waldhausl and Ogleby (1994) "3x3
+                  rules", a well-designed close-range architectural
+                  photogrammetric project should include a sketch of
+                  the project site with the approximate position and
+                  viewing direction of each image. This orientation
+                  metadata is important to determine which part of the
+                  object each image covers. In principle, the metadata
+                  could be used as initial values for the camera
+                  external orientation (EO) parameters. However, this
+                  has rarely been used, partly due to convergence
+                  problem for the bundle adjustment procedure.  In
+                  this paper we present a photogrammetric
+                  reconstruction pipeline based on classical methods
+                  and investigate if and how the linesearch bundle
+                  algorithm of Borlin et al. (2004) and/or metadata
+                  can be used to aid the reconstruction process in
+                  architectural photogrammetry when the classical
+                  methods fail.  The primary initial values for the
+                  bundle are calculated by the five-point algorithm by
+                  Nist{\'e}r (Stewenius et al., 2006). Should the
+                  bundle fail, initial values derived from metadata
+                  are calculated and used for a second bundle attempt.
+                  The pipeline was evaluated on an image set of the
+                  INSA building in Strasbourg. The data set includes
+                  mixed convex and non-convex subnetworks and a
+                  combination of manual and automatic measurements.
+                  The results show that, in general, the classical
+                  bundle algorithm with five-point initial values
+                  worked well. However, in cases where it did fail,
+                  linesearch bundle and/or metadata initial values did
+                  help. The presented approach is interesting for
+                  solving EO problems when the automatic orientation
+                  processes fail as well as to simplify keeping a link
+                  between the metadata containing the plan of how the
+                  project should have become and the actual
+                  reconstructed network as it turned out to be.},
+  haveit =	 {pdf}
+)
+
+@Article(Borlin2013:Bundle,
+  seqno =	 817,
+  author = 	 {Niclas B{\"o}rlin and Pierre Grussenmeyer},
+  title = 	 {Bundle Adjustment with and without Damping},
+  journal = 	 PhotogrammRecLong,
+  year = 	 2013,
+  volume =	 28,
+  number =	 144,
+  pages = 	 {396-415},
+  month =	 dec,
+  doi =          {10.1111/phor.12037},
+  keywords =	 {adjustment, bundle, convergence, initial values,
+                  least squares, terrestrial photogrammetry},
+  abstract =	 {The least squares adjustment (LSA) method is studied
+                  as an optimisation problem and shown to be
+                  equivalent to the undamped Gauss–Newton (GN)
+                  optimisation method. Three problem-independent
+                  damping modifications of the GN method are
+                  presented: the line search method of Armijo (GNA);
+                  the Levenberg– Marquardt algorithm (LM); and
+                  Levenberg–Marquardt with Powell dogleg (LMP).
+                  Furthermore, an additional problem-specific "veto"
+                  damping technique, based on the chirality condition,
+                  is suggested. In a perturbation study on a
+                  terrestrial bundle adjustment problem, the GNA and
+                  LMP methods with veto damping can increase the size
+                  of the pull-in region compared to the undamped
+                  method; the LM method showed less improvement. The
+                  results suggest that damped methods can, in many
+                  cases, provide a solution where undamped methods
+                  fail and should be available in any LSA software
+                  package. Matlab code for the algorithms discussed is
+                  available from the authors.},
+  haveit =	 {pdf}
+)
+
