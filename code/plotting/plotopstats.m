@@ -108,6 +108,8 @@ set(h,'actionpostcallback',@postzoom);
 set(h,'motion','horizontal');
 set(fig,'userdata',struct('ax',axH));
 
+if nargout>0, hh=fig; end
+
 % Callback function after zooming.
 function postzoom(obj,evd)
 
