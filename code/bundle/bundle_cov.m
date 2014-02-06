@@ -66,17 +66,16 @@ bixOP(s.cOP)=ixOP;
 p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
 % Perform Cholesky on permuted J'*J.
-R=chol(JTJ(p,p));
+L=chol(JTJ(p,p))';
 
-% Construct inverse permutation.
-invP=zeros(size(p));
-invP(p)=1:length(p);
-    
+% Memory limit in elements.
+memLimit=1e7;
+
 for i=1:length(varargin)
     switch varargin{i}
       case 'cxx' % Raw, whole covariance matrix.
 
-        C=invblock(R,p,1:size(R,1),'direct');
+        C=invblock(L,p,1:size(L,1),'direct');
             
       case 'ciof' % Whole CIO covariance matrix.
             
@@ -85,17 +84,17 @@ for i=1:length(varargin)
         
         % Compute needed part of inverse and put it into the right
         % part of C.
-        C(s.cIO(:),s.cIO(:))=invblock(R,p,ixIO,'split');
+        C(s.cIO(:),s.cIO(:))=invblock(L,p,ixIO,'sqrt');
         
       case 'ceof' % Whole CEO covariance matrix.
         
-        start=clock;
+        start=clock; %#ok<NASGU>
         % Pre-allocate matrix with place for nnz(s.cEO)^2 elements.
         C=spalloc(numel(s.EO),numel(s.EO),nnz(s.cEO)^2);
         
         % Compute needed part of inverse and put it into the right
         % part of C.
-        C(s.cEO(:),s.cEO(:))=invblock(R,p,ixEO,'split');
+        C(s.cEO(:),s.cEO(:))=invblock(L,p,ixEO,'sqrt');
 
         % Remove axis indicator psuedo-elements.
         keep=rem(1:size(C,1),7)~=0;
@@ -105,23 +104,23 @@ for i=1:length(varargin)
         
       case 'copf' % Whole COP covariance matrix.
         
-        start=clock;
+        start=clock; %#ok<NASGU>
         % Pre-allocate matrix with place for nnz(s.cOP)^2 elements.
         C=spalloc(numel(s.OP),numel(s.OP),nnz(s.cOP)^2);
         
         % Compute needed part of inverse and put it into the right
         % part of C.
-        C(s.cOP(:),s.cOP(:))=invblock(R,p,ixOP,'split');
+        C(s.cOP(:),s.cOP(:))=invblock(L,p,ixOP,'sqrt');
         
         %etime(clock,start)
         
       case 'cio' % Block-diagonal CIO
         
-        C=BlockDiagonalC(R,p,s.cIO,ixIO,1,'Computing IO covariances');
+        C=BlockDiagonalC(L,p,s.cIO,ixIO,memLimit,'Computing IO covariances');
         
       case 'ceo' % Block-diagonal CEO
         
-        C=BlockDiagonalC(R,p,s.cEO,ixEO,1,'Computing EO covariances');
+        C=BlockDiagonalC(L,p,s.cEO,ixEO,memLimit,'Computing EO covariances');
 
         % Remove axis indicator psuedo-elements.
         keep=rem(1:size(C,1),7)~=0;
@@ -129,15 +128,15 @@ for i=1:length(varargin)
         
       case 'cop' % Block-diagonal COP
         
-        C=BlockDiagonalC(R,p,s.cOP,ixOP,1,'Computing OP covariances');
+        C=BlockDiagonalC(L,p,s.cOP,ixOP,memLimit,'Computing OP covariances');
         
     end
-    varargout{i}=e.s0mm^2*C;
+    varargout{i}=e.s0mm^2*C; %#ok<*AGROW>
 end
 
 
-function C=BlockDiagonalC(R,p,calc,xIx,bsElems,msg)
-%R       - Cholesky factor of the permuted normal matrix A(p,p).
+function C=BlockDiagonalC(L,p,calc,xIx,bsElems,msg)
+%L       - Cholesky factor of the permuted normal matrix A(p,p).
 %p       - Corresponding permutation vector.
 %calc    - logical M-by-N array indicating which data elements have been
 %          estimated and whose covariances should be computed.
@@ -166,7 +165,7 @@ ixInt=reshape(1:numel(calc),size(calc));
 
 % Determine block column size such that computed part of inverse is
 % approximately bsElems elements.
-bsCols=floor(bsElems/size(R,1)/max(sum(ix~=0,1)));
+bsCols=floor(bsElems/size(L,1)/max(sum(ix~=0,1)));
 bsCols=min(max(bsCols,1),size(ix,2));
 
 % Create inverse permutation.
@@ -183,7 +182,7 @@ oCol(cCol>0)=invP(cCol(cCol>0));
 
 % Get permutation to sort by increasing original column number. This will
 % move fixed columns to the beginning, becoming part of the first blocks.
-[dummy,colPerm]=sort(oCol);
+[~,colPerm]=sort(oCol);
 
 % Loop over each column in bsCols blocks.
 for j=1:bsCols:size(ix,2)
@@ -199,7 +198,12 @@ for j=1:bsCols:size(ix,2)
 
     % Compute needed part of inverse and put it into a temporary matrix.
     Cblock=spalloc(size(C,1),size(C,1),length(eix)^2);
-    Cblock(eix,eix)=invblock(R,p,jix,'split');
+    Z2=invblock(L,p,jix,'sqrt');
+    %Z3=invblock(L,p,jix,'sqrtsplit');
+    %Z4=invblock(L,p,jix,'direct');
+    %max(max(abs(Z2-Z3)))
+    %max(max(abs(Z3-Z4)))
+    Cblock(eix,eix)=Z2;
     % Make it block-diagonal...
     Cblock=mkblkdiag(Cblock,size(ix,1));
     % ...and put it into the right part of C.
