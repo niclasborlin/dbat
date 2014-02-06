@@ -51,24 +51,23 @@ for i=1:length(dampings)
     end
 end
 
-if 0
-    resFile=strrep(fName,'.txt','_result_file.txt');
+resFile=strrep(fName,'.txt','_result_file.txt');
 
-    bundle_result_file(result{1},E{1},resFile);
+COP=bundle_result_file(result{1},E{1},resFile);
 
-    fprintf('\nBundle result file %s generated.\n',resFile);
+fprintf('\nBundle result file %s generated.\n',resFile);
 
-    plotparams(result{1},E{1});
-end
+plotparams(result{1},E{1},'noop');
 
 plotcoverage(result{1},true);
 
 plotimagestats(result{1},E{1});
 
-%plotopstats(result{1},E{1});
+plotopstats(result{1},E{1},COP);
 
 for i=1:length(E)
     plotnetwork(result{i},E{i},'trans','up','align',1,'title',...
                 ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                'axes',figure(i),'pause','on');
+                'axes',tagfigure(sprintf('network%d',i)),...
+                'pause','on');
 end
