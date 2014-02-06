@@ -1,10 +1,15 @@
-function bundle_result_file(s,e,f)
+function COP=bundle_result_file(s,e,f,COP)
 %BUNDLE_RESULT_FILE Generate result file of bundle run.
 %
 %   BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return files and
 %   F is a string, writes a text result file to the file F. The text
 %   result file contain information about the project, the status of the
 %   estimation process, and the quality of the result.
+%
+%   BUNDLE_RESULT_FILE(S,E,F,COP) supplies a pre-computed OP covariance
+%   matrix COP.
+%
+%   COP=... returns the computed OP covariance matrix.
 %
 %See also: BUNDLE, BUNDLE_COV. 
 
@@ -29,7 +34,10 @@ fprintf(fid,[p,p,'Project Problems: Not evaluated\n']);
 % Check if we have any large correlations.
 [iio,jio,kio,vio,CIO]=high_io_correlations(s,e,corrThreshold);
 [ieo,jeo,keo,veo,CEO]=high_eo_correlations(s,e,corrThreshold);
-[iop,jop,kop,vop,COP]=high_op_correlations(s,e,corrThreshold);
+if nargin<4
+    COP=bundle_cov(s,e,'COP');
+end
+[iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
 
 n=any(iio)+any(ieo)+any(iop);
 
@@ -140,7 +148,7 @@ end
 fprintf(fid,[p,p,p,'Photograph Standard Deviations:\n']);
 
 % Get camera station covariances.
-CEO=bundle_cov(s,e,'CEOF');
+% CEO=bundle_cov(s,e,'CEOF');
 % Compute corresponding correlations and standard deviations.
 [CEOC,eoSigma]=corrmat(CEO,true);
 eoSigma=reshape(eoSigma,6,[]);
@@ -301,7 +309,7 @@ end
 fprintf(fid,[p,p,'Point Angles\n']);
 
 % Maximum angle between rays.
-a=angles(s)*180/pi;
+a=angles(s,'Computing angles')*180/pi;
 
 [mn,mni]=min(a);
 [mx,mxi]=max(a);
