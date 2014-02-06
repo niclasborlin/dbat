@@ -1,14 +1,23 @@
-function a=angles(s)
+function a=angles(s,msg)
 %ANGLES Object point angles for a project.
 %
 %   A=ANGLES(S), where S is a struct returned by PROB2DBATSTRUCT with N
 %   object points, returns an N-vector A with the maximum angle in radians
 %   between rays for each object point. The maximum angle is the angle
 %   closest to being orthogonal between pairs of rays for each object point.
+%
+%   A=ANGLES(S,MSG), uses MSG as the message for a delayed waitbar.
 
 % $Id$
 
+if nargin<2, msg=''; end
+
 a=nan(size(s.OPid));
+
+% Delayed progress dialog.
+start=clock;
+lapTime=start;
+h=[];
 
 for i=1:length(s.OPid)
     % Point
@@ -23,4 +32,22 @@ for i=1:length(s.OPid)
     ip=max(min(dn'*dn,1),-1);
     % Angle is acos of inner product of normalized vectors.
     a(i)=max(acos(abs(ip(:))));
+    
+    if ~isempty(msg)
+        % Use waitbar only if we have a message.
+        if isempty(h) && etime(clock,start)>1 && i~=length(s.OPid)
+            % Only create dialog if execution takes more than 1s and this
+            % iteration is not the last.
+            h=waitbar(i/length(s.OPid),msg);
+            lapTime=clock;
+        elseif etime(clock,lapTime)>1
+            % Update dialog every 1 s.
+            if ishandle(h) % Guard against window close.
+                waitbar(i/length(s.OPid),h);
+            end
+            lapTime=clock;
+        end
+    end
 end
+
+if ishandle(h), close(h), end
