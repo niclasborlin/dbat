@@ -1,9 +1,12 @@
-function hh=plotparams(s,e,varargin)
+function hh=plotparams(s,e,noop)
 %PLOTPARAMS Plot bundle iteration parameters.
 %
 %   PLOTPARAMS(S,E), where S is a struct returned by PROB2DBATSTRUCT and E
 %   is a struct returned by BUNDLE, plots the iteration trace of the
 %   parameters estimated by BUNDLE.
+%
+%   PLOTPARAMS(S,E,'noop') does not plot the OP plot. Necessary for large
+%   point clouds.
 %
 %   H=... also returns the figure handles for the IO/EO/OP/damping plots.
 %
@@ -11,6 +14,12 @@ function hh=plotparams(s,e,varargin)
 
 % $Id$
 
+if nargin<3
+    plotOP=true;
+else
+    plotOP=~strcmp(lower(noop),'noop');
+end
+    
 h=nan(4,1);
 
 [ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
@@ -227,7 +236,7 @@ if any(s.cEO(:))
     scalewidth(axH);
 end
 
-if any(s.cOP(:))
+if plotOP && any(s.cOP(:))
     ixPos=double(s.cOP);
     ixPos(s.cOP)=ixOP;
 
