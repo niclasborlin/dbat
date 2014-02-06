@@ -1,9 +1,9 @@
-function x=invblock(R,p,ix,method)
+function x=invblock(L,p,ix,method)
 %INVBLOCK Compute one block of normal matrix inverse.
 %
-%   X=INVBLOCK(R,p,IX) computes the block M(IX,IX) of the inverse M of the
-%   normal matrix N. R was computed as chol(N(p,p)), where p is a
-%   permutation vector.
+%   X=INVBLOCK(L,p,IX) computes the block M(IX,IX) of the inverse M of the
+%   normal matrix N. L should have been computed as chol(N(p,p))', where p
+%   is a permutation vector.
 
 % $Id$
 
@@ -19,64 +19,71 @@ invP(p)=1:length(p);
 switch method
   case 'verify'
     % Reconstruct N and solve via full inverse.
-    RTR=R'*R;
-    N=RTR(invP,invP);
+    LLT=L*L';
+    N=LLT(invP,invP);
     invN=inv(N);
     x=invN(ix,ix);
-  case 'split'
-    % Do a split of R into [R1, R12;
-    %                        0   R2]
-    % R1 will generally be block-diagonal - use sparse storage.
-    % R12, R2 will generally be dense - use full storage.
-    
-    % Permute the identity matrix.
-    Ip=speye(size(R,2));
-    Ip=Ip(p,:);
+  case 'sqrt'
+    % Let E contain the wanted columns of I. Then our wanted block is
+    % B=E'*(A\E)=E'*(inv(A)*E). With A=L*L',
+    % B=E'*(inv(L*L')*E)=E'*inv(L')*inv(L)*E. With W=L\E=inv(L)*E, B=W'*W.
 
-    % We are interested in the following rows of the solution.
-    wIx=invP(ix);
-    
-    % Find jump in column density.
-    colDens=full(sum(R~=0,1))/size(R,1);
-    [~,i]=max(diff(colDens));
-    ix1=1:i;
-    ix2=i+1:size(R,1);
-    
-    % Which parts do our wanted rows belong to?
-    wIx1=wIx<=i;
-    wIx2=wIx>i;
-    
-    % Extract (1,1) block and (1,2) block as sparse matrices.
-    R1=R(ix1,ix1);
-    R12=R(ix1,ix2);
-    % Extract (2,2) block as dense matrix.
-    R2=full(R(ix2,ix2));
+    % Permute the identity matrix.
+    Ip=speye(size(L,2));
+    Ip=Ip(p,:);
 
     % Run computation on multiple rows to enable profiling.
     v1=Ip(:,ix);
-    v2=R'\v1;
-    x2=R2\v2(ix2,:);
+    v2=L\v1;
+    x=v2'*v2;
+  case 'sqrtsplit'
+    % Let E contain the wanted columns of I. Then our wanted block is
+    % B=E'*(A\E)=E'*(inv(A)*E). With A=L*L',
+    % B=E'*(inv(L*L')*E)=E'*inv(L')*inv(L)*E. With W=L\E=inv(L)*E, B=W'*W.
+
+    % Do a split of L into [L1,  0;
+    %                       L21, L2]
+    % L1 will generally be block-diagonal - use sparse storage.
+    % L21 will generally be sparse - use sparse storage.
+    % L2 will generally be dense - use full storage.
     
-    if all(wIx2)
-        % Wanted rows are all in x2, we are done.
-        x=x2(wIx-i,:);
-    else
-        % Which is the first row we need?
-        minR=min(wIx);
-        
-        % Only backsubstitute until the first row we need.
-        v3=R12(minR:end,:)*x2;
-        v4=v2(minR:i,:)-v3;
-        x1=R1(minR:i,minR:i)\v4;
-    
-        xx=[zeros(minR-1,size(x1,2));x1;x2];
-    
-        x=xx(invP(ix),:);
-    end
-  case 'direct'
-    Ip=speye(size(R,2));
+    % Permute the identity matrix.
+    Ip=speye(size(L,2));
     Ip=Ip(p,:);
-    A=R\(R'\Ip(:,ix));
+
+    % Find jump in row density.
+    colDens=full(sum(L~=0,2))/size(L,1);
+    [~,i]=max(diff(colDens));
+    ix1=1:i;
+    ix2=i+1:size(L,1);
+    
+    % Extract (1,1) block and (2,1) block as sparse matrices.
+    L1=L(ix1,ix1);
+    L21=L(ix2,ix1);
+    % Extract (2,2) block as dense matrix.
+    L2=full(L(ix2,ix2));
+
+    % Permute the identity matrix.
+    Ip=speye(size(L,2));
+    Ip=Ip(p,:);
+
+    % Run computation on multiple rows to enable profiling.
+    % [L1    0  ] [ a ]   [ c ]
+    % [L21   L2 ] [ b ] = [ d ]
+    % a=L1\c
+    % b=L2\(d-L21*a)
+    cd=Ip(:,ix);
+    c=cd(ix1,:);
+    d=cd(ix2,:);
+    a=L1\c;
+    L21a=L21*a;
+    dmL21a=d-L21a;
+    b=L2\dmL21a;
+    x=a'*a+b'*b;
+  case 'direct'
+    Ip=speye(size(L,2));
+    Ip=Ip(p,:);
+    A=L'\(L\Ip(:,ix));
     x=A(invP(ix),:);
   otherwise
     error('Bad method');
