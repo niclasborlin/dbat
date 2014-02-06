@@ -91,7 +91,7 @@ end
 
 resFile=strrep(fName,'.txt','_result_file.txt');
 
-bundle_result_file(result{1},E{1},resFile);
+COP=bundle_result_file(result{1},E{1},resFile);
 
 fprintf('\nBundle result file %s generated.\n',resFile);
 
@@ -126,7 +126,7 @@ if printdemofigures
     end
 end
 
-h=plotopstats(result{1},E{1});
+h=plotopstats(result{1},E{1},COP);
 
 if printdemofigures
     figDir=fullfile('..','doc','manual','ill');
