@@ -122,15 +122,13 @@ intersection.
 
 The bundle adjustment is run with Gauss-Newton-Armijo damping. The
 result is given in a number of plot windows and a Photomodeler-style
-result text file, listed in Appendix~\ref{sec:resultFile}.
-
-The result plots are of two kinds: Plots that show the evolution of
-the iterations and plots that show the quality of the input or output
-data. The former plots may be useful to understand how the bundle
-adjustment works but also to ``debug'' a difficult network that has
-convergence difficulties. The latter plots give information about the
-quality of the result and may also provide clues on how to improve a
-network when the bundle did converge.
+result text file. The result plots are of two kinds: Plots that show
+the evolution of the iterations and plots that show the quality of the
+input or output data. The former plots may be useful to understand how
+the bundle adjustment works but also to ``debug'' a difficult network
+that has convergence difficulties. The latter plots give information
+about the quality of the result and may also provide clues on how to
+improve a network when the bundle did converge.
 
 \paragraph{Evolution plots}
 
@@ -251,7 +249,12 @@ Finally, the per-OP quality statistics in Figure~\ref{fig:ccamOPstats}
 show the number of observations per OP; the maximum ray intersection
 angle; the average (RMS) point residual; and the OP coordinate
 standard deviation. The presentation may be zoomed to show only a
-subset of the OPs by activating the ``zoom'' function of the window.
+subset of the OPs by activating the ``zoom'' function of the figure
+window.
+
+\paragraph{Result file}
+
+The result file is listed in Appendix~\ref{sec:resultFile}.
 
 \subsubsection{romabundledemo}
 
