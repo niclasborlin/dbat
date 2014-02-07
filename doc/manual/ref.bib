@@ -3,6 +3,9 @@
 @string{ PhotogrammRecLong = "Photogrammetric Record" }
 @string{ IntJCompVis = "Int J Comp Vis" }
 @string{ IntJCompVisLong = "International Journal of Computer Vision" }
+@string{ IJPRS = "ISPRS J Photogramm" }
+@string{ IJPRSLong = "ISPRS Journal of Photogrammetry and Remote Sensing" }
+@string{ PhotogrammetricEngineering = "Photogrammetric Engineering" }
 
 @Article(Borlin2013:Experiments,
   seqno =	 815,
@@ -147,5 +150,77 @@
   pages =	 {763-948},
   abstract = {-},
   haveit = "pdf"
+}
+
+@Article{Stewenius2006:Recent,
+  seqno = 270,
+  author = 	 {Henrik Stew\'enius and Christopher Engels and David Nist\'er},
+  title = 	 {Recent developments on direct relative orientation},
+  journal = 	 IJPRS,
+  year = 	 2006,
+  volume =	 60,
+  number =	 4,
+  pages =	 {284-294},
+  month =	 jun,
+  keywords = {Relative orientation; Five-point method; Six-point method; Gr{\"o}bner basis},
+  abstract = {This paper presents a novel version of the five-point
+                  relative orientation algorithm given in Nister
+                  [Nister, D., 2004. An efficient solution to the
+                  five-point relative pose problem, IEEE Transactions
+                  on Pattern Analysis and Machine Intelligence, 26
+                  (6), 756--770]. The name of the algorithm arises
+                  from the fact that it can operate even on the
+                  minimal five-point correspondences required for a
+                  finite number of solutions to relative
+                  orientation. For the minimal five correspondences,
+                  the algorithm returns up to 10 real solutions. The
+                  algorithm can also operate on many points. Like the
+                  previous version of the five-point algorithm, our
+                  method can operate correctly even in the face of
+                  critical surfaces, including planar and ruled
+                  quadric scenes. The paper presents comparisons with
+                  other direct methods, including the previously
+                  developed five-point method, two different six-point
+                  methods, the seven-point method, and the eight-point
+                  method. It is shown that the five-point method is
+                  superior in most cases among the direct methods. The
+                  new version of the algorithm was developed from the
+                  perspective of algebraic geometry and is presented
+                  in the context of computing a Gr{\"o}bner basis. The
+                  constraints are formulated in terms of polynomial
+                  equations in the entries of the fundamental
+                  matrix. The polynomial equations generate an
+                  algebraic ideal for which a Gr{\"o}bner basis is
+                  computed. The Gr{\"o}bner basis is used to compute
+                  the action matrix for multiplication by a single
+                  variable monomial. The eigenvectors of the action
+                  matrix give the solutions for all the variables and
+                  thereby also relative orientation. Using a
+                  Gr{\"o}bner basis makes the solution clear and easy
+                  to explain.},
+  haveit = "pdf"
+}
+
+@article{Brown1971:Close-range,
+   seqno = 75,
+   author = "D. C. Brown",
+   journal = PhotogrammetricEngineering,
+   number = 8,
+   pages = "855--866",
+   title = "Close-range camera calibration",
+   volume = 37,
+   year = 1971,
+   abstract = {For highest accuracies it is necessary in close range
+                  photogrammetry to account for the variation of lens
+                  distortion within the photographic field. A theory
+                  to accomplish this is developed along with a
+                  practical method for calibrating radial and
+                  decentering distortion of close-range cameras. This
+                  method, the analytical plumb line method, is applied
+                  in an experimental investigation leading to
+                  confirmation of the validity of the theoretical
+                  development accounting for variation of distortion
+                  with object distance.},
+   haveit = "pdf"
 }
 
