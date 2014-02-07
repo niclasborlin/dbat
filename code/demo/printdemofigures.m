@@ -6,4 +6,4 @@ function b=PRINTDEMOFIGURES
 
 % $Id$
 
-b=true;
+b=false;

@@ -1,0 +1,11 @@
+Summary changelog file. Detail are found in the file ChangeLog.
+
+Release 0.2.0, Feb 7, 2014.
+ - First publically released version with manual.
+ - Added Photomodeler-style result file.
+ - Added plots for bundle result and iteration trace.
+ - Speedup of covariance computations for the roma demo from 20
+   minutes to 20 seconds.
+
+Release 0.1.0, Nov 13, 2013.
+ - First packaged version.
