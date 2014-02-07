@@ -8,6 +8,7 @@
 \usepackage{caption}
 \usepackage{subcaption}
 \usepackage{times}
+\usepackage{authblk}
 
 \begin{document}
 
@@ -18,8 +19,12 @@
 \newcommand{\dbatversion}{0.2}
 
 \title{The Damped Bundle Adjustment Toolbox\\v\dbatversion{} for Matlab}
-\author{Niclas B{\"o}rlin\\Department of Computing Science\\Ume{\aa}
-  University\\niclas.borlin@cs.umu.se}
+
+\author[1]{Niclas B{\"o}rlin}
+\author[2]{Pierre Grussenmeyer}
+\affil[1]{Department of Computing Science, Ume{\aa} University,
+  Sweden, \texttt{niclas.borlin@cs.umu.se}}
+\affil[2]{ICube Laboratory UMR 7357, Photogrammetry and Geomatics Group, INSA Strasbourg, France}
 \date{\today}
 
 \maketitle
@@ -34,25 +39,87 @@
 
 \subsection{Purpose}
 
-Matlab toolbox with freely available code for bundle adjustment.
-Intention to be state-of-the-art.
+This purpose of the Damped Bundle Adjustment toolbox is to be a
+high-level toolbox for photogrammetry in general and bundle adjustment
+in particular. It is the hope of the authors that the high-level
+nature of the code will inspire algorithm development. The code is
+written in Matlab and is verified to work with Matlab version 8
+(release R2012B). The intention is that at least the computation
+routines will be Octave-compatible. This has however not been tested
+yet.
 
-\subsection{Limitations}
+\subsection{Capabilities}
 
-What it can do.
+The toolbox currently includes routines for (function names in parentheses):
+\begin{itemize}
+\item File handling:
+  \begin{itemize}
+  \item Reading Photomodeler-style text export files (\texttt{loadpm}).
+  \item Writing Photomodeler-style text result files
+    (\texttt{bundle\_result\_file}).
+  \end{itemize}
+\item Photogrammetric calculations, including:
+  \begin{itemize}
+  \item Spatial resection (\texttt{resect}).
+  \item Forward intersection (\texttt{forwintersect}).
+  \item Relative orientation based on the Nist{\'e}r 5-point algorithm
+    \citep{Stewenius2006:Recent} will be added in the future.
+  \end{itemize}
+\item Bundle adjustment
+  \begin{itemize}
+  \item Bundle adjustment proper (\texttt{bundle}) using either
+    Classical, Gauss-Newton-Armijo, Levenberg-Marquardt, or
+    Levenberg-Marquardt-Powell damping schemes
+    \citep{Borlin2013:Bundle}. The latter two damping schemes are so
+    far not included. They will be added in the near future, as will
+    chirality damping.
+  \item Covariance calculations (\texttt{bundle\_cov}) from the bundle
+    result.
+  \end{itemize}
+\item Various plotting functions, including:
+  \begin{itemize}
+  \item Plot image area covered by measurements
+    (\texttt{plotcoverage}).
+  \item Plot camera network (\texttt{plotnetwork}), either static
+    (as-loaded) or as an illustration of the bundle iterations.
+  \item Plot of the iteration trace of parameters estimated by bundle
+    (\texttt{plotparams}).
+  \item Plots of quality statistics from the bundle result
+    (\texttt{plotimagestats, plotopstats}).
+  \end{itemize}
+\item Demo functions using the above functions. The demo functions are
+  detailed in Section~\ref{sec:demos}.
+\end{itemize}
 
-What it cannot do.
+This manual does not contain detailed information about how to use
+each function. More information may be found by typing \texttt{help
+  <function name>} at the Matlab prompt, studying the source code of
+the demo functions, and reading the source code of each file directly.
+
+Things to be added in the near future:
+\begin{itemize}
+\item Weights on the observations.
+\item Chirality damping.
+\item Levenberg-Marquardt and Levenberg-Marquardt-Powell damping.
+\item Test octave compatibility.
+\item Azimuth-tilt-swing camera model.
+\end{itemize}
 
 \subsection{Legal}
 
-
-
-\subsection{Scientific publications}
-
-Refer to any of the papers...
-
-\citet{Borlin2013:Bundle}
-\citet{Borlin2013:Experiments}
+The licence detail are described in the \texttt{README.txt} file
+included in the distribution. In summary:
+\begin{itemize}
+\item You use the code at your own risk.
+\item You may use the code for any purpose, including commercial, as
+  long as you give due credit. Specifically, if you use the code, or
+  derivatives thereof, for scientific publications, you should refer
+  to on or more of the papers
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments} that the code is
+  based on.
+\item You may modify and redistribute the code as long as the
+  licensing details are also redistributed.
+\end{itemize}
 
 \section{Installation}
 \label{sec:install}
@@ -65,16 +132,18 @@ Refer to any of the papers...
 Inside Matlab, do the following initialization:\\
 \verb+cd dbat % the directory where you installed the files.+\\
 \verb+dbatSetup % set paths, etc.+
-\item Test the installation by executing \texttt{loadplotdemo}.
-\item If \texttt{loadplotdemo} runs without errors and generates a
-  figure with a camera network, the installation is ok.
+\item Test the installation by executing the supplied demos described
+  in Section~\ref{sec:demos}.
 \end{enumerate}
 
 \section{Usage}
 
 \subsection{Demos}
+\label{sec:demos}
 
 \subsubsection{loadplotdemo}
+\label{sec:loadplotdemo}
+\label{sec:loadroma}
 
 The \verb+loadplotdemo+ demo loads a modified Photomodeler text export
 file of the 60-camera, 26000-point project used
@@ -86,7 +155,7 @@ camera toolbar.
 
 \begin{figure*}
   \centering
-  \includegraphics[width=0.6\hsize]{ill/roma}
+  \includegraphics[width=0.5\hsize]{ill/roma}
   \caption{The figure generated by the \texttt{loadplotdemo} demo.}
   \label{fig:roma}
 \end{figure*}
@@ -102,7 +171,7 @@ look like Figure~\ref{fig:camcalib}. The figure is a standard Matlab
 
 \begin{figure*}
   \centering
-  \includegraphics[width=0.6\hsize]{ill/ccam}
+  \includegraphics[width=0.5\hsize]{ill/ccam}
   \caption{The figure generated by the \texttt{loadplotdemo2} demo.}
   \label{fig:camcalib}
 \end{figure*}
@@ -259,23 +328,25 @@ The result file is listed in Appendix~\ref{sec:resultFile}.
 
 \subsubsection{romabundledemo}
 
-\newpage
+The \texttt{romabundledemo} function loads the project from
+Section~\ref{sec:loadroma} and present essentially the same plots and
+the \texttt{camcaldemo}. This demo uses the Photomodeler file as input
+to the bundle adjustment that runs a few iterations until convergence.
+The same result file and result plots as \texttt{camcaldemo} are
+essentially generated. Since the project is larger (60 cams/26~000
+points) than the previous example (20 cams/100 points), the
+computation will take a bit longer. Computation time was around one
+minute running on a HP compaq dc7800 with an Intel Core2 Quad CPU
+Q9300 @ 2.50GHz under 64-bit Ubuntu 12.04 (kernel 3.5.0-45).
+
 \subsection{Using your own data}
 
-\subsubsection{Enabling text export from Photomodeler}
-\label{sec:enableTextExport}.
-
-Some versions of Photomodeler do not have the text file export option
-enabled by default. In that case, follow the following steps to enable
-it:
-\begin{enumerate}
-\item Right-click on the main window toolbar, select \emph{Customize toolbar...}.
-\item In the \emph{Commands} tab, select the \emph{File} category.
-\item Drag the \emph{Export Text File...} command to a toolbar of
-  your choice.
-\item Now you should be able to export your project as a text file by
-  clicking on the \emph{Export Text File} button.
-\end{enumerate}
+This section describes how to import you own data using Photomodeler
+text export files. If you have another type of input file, you may be
+able to write your own loader. Otherwise, if you have a text file you
+wish to import, feel free to mail the file to the the toolbox authors
+and request an import function. Althought we cannot guarantee
+anything, we may adhere to the request, time permitting.
 
 \subsubsection{Export from Photomodeler}
 
@@ -283,9 +354,9 @@ To import a Photomodeler project into the toolbox, the following
 steps are valid in Photomodeler Scanner 2012:
 
 \begin{enumerate}
-\item Export the project using \emph{Export Text File}. If the
-  \emph{Export Text File} command is not available, follow the
-  instructions in Section~\ref{sec:enableTextExport}.
+\item Export the project using the \emph{Export Text File} menu
+  command. If the command is not available, follow the instructions in
+  Appendix~\ref{sec:enableTextExport}.
 \item After export, open the \emph{Project/Cameras...} dialog and
   select the camera that was used in your project.
 \item Open the generated text file in a text editor.
@@ -327,15 +398,34 @@ steps are valid in Photomodeler Scanner 2012:
   should now have been generated.
 \end{enumerate}
 
+\newpage
 \bibliography{ref}
 
 \appendix
 
 \newpage
 
+\section{Enabling text export from Photomodeler}
+\label{sec:enableTextExport}.
+
+Some versions of Photomodeler do not have the text file export option
+enabled by default. In that case, the following steps worked in
+Photomodeler Scanner 2012:
+\begin{enumerate}
+\item Right-click on the main window toolbar, select \emph{Customize toolbar...}.
+\item In the \emph{Commands} tab, select the \emph{File} category.
+\item Drag the \emph{Export Text File...} command to a toolbar of
+  your choice.
+\item Now you should be able to export your project as a text file by
+  clicking on the \emph{Export Text File} button.
+\end{enumerate}
+
+
 \section{Camera model}
 
-\newpage
+Currently, the only supported camera model is the omega-phi-kappa
+Euler angle camera model \citep[Ch.~2.1.2.3]{McGlone2004:Manual} with
+the \citet{Brown1971:Close-range} lens distortion model.
 
 \section{Result file example}
 \label{sec:resultFile}
