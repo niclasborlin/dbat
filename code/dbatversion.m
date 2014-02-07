@@ -19,5 +19,5 @@ z=regexp(idStr,['\$Id:\s*\S+\s+(\d+)\s+([\d-]+\s[\d:]+)Z'],'tokens','once');
 
 rev=z{1};
 date=z{2};
-
+ 
 v=[toolboxVersion,'.',rev];
