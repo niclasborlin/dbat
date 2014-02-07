@@ -154,7 +154,7 @@ for i=1:length(ax)
         ch=get(ax(i),'children');
         % Find out which of the selected objects are in this axes.
         j=ismember(ch,sel);
-        [dummy,k]=sort(j);
+        [~,k]=sort(j,'descend');
         set(ax(i),'children',ch(k));
     end
 end
