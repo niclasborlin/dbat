@@ -1,4 +1,4 @@
-Summary changelog file. Detail are found in the file ChangeLog.
+Summary changelog file for release.
 
 Release 0.2.0, Feb 7, 2014.
  - First publically released version with manual.
