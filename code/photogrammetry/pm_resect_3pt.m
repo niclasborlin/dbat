@@ -14,13 +14,13 @@ function [P,PP,res]=pm_resect_3pt(X,x,use,behind,relax)
 %PP     - m-cell array of all suggested camera matrices.
 %res    - m-vector with average projection residuals for each camera.
 %
-%References:
-%Haralick et al., "Review and Analysis of Solutions of the Three Point
-%   Perspective Pose Estimation Problem", Int J Comp Vis, 13(3):331-356,
-%   1994.
-%McGlone et al., "Manual of Photogrammetry", Chapter 11.1.3.4,
-%   pp. 786-788, American Society of Photogrammetry and Remote Sensing,
-%   2004.
+%   References:
+%     Haralick, Lee, Ottenberg, Nölle (1994), "Review and Analysis of Solutions
+%       of the Three Point Perspective Pose Estimation Problem".
+%       Internation Journal of Computer Vision, 13(3):331-356.
+%     McGlone, Mikhail, Bethel, eds. (2004), "Manual of Photogrammetry",
+%       5th ed., Chapter 11.1.3.4, pp. 786-788. American Society of
+%       Photogrammetry and Remote Sensing.
 
 % $Id$
 
