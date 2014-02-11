@@ -121,6 +121,13 @@ params={s};
 
 % Set up return struct with bundle setup.
 
+% TODO: Verify consistent return sizes of trace array, residual
+% estimates, and damping et al. vectors given
+% 1) x* = x0
+% 2) x* found before maxIter
+% 3) x* found at maxIter
+% 4) x* not found at maxIter
+
 % Version string.
 [v,d]=dbatversion;
 E=struct('maxIter',maxIter,'convTol',convTol,'singularTest',singularTest,...
@@ -188,18 +195,15 @@ switch lower(damping)
     % and rhos are returned with the used delta and computed rho values for
     % each iteration.
     stopWatch=cputime;
-    [x,code,iters,r,J,X,delta,rho]=levenberg_marquardt_powell(resFun, ...
-                                                      vetoFun,x0,delta0, ...
-                                                      maxIter,convTol, ...
-                                                      rhoBad,rhoGood, ...
-                                                      trace,params);
+    [x,code,iters,r,J,X,res,delta,rho,step]=levenberg_marquardt_powell(...
+        resFun,vetoFun,x0,maxIter,convTol,trace, delta0,rhoBad,rhoGood,params);
     time=cputime-stopWatch;
-    E.delta=delta;
-    E.rho=rho;
-    E.damping='lmp';
+    E.damping=struct('name','lmp','delta',delta,'rho',rho,'delta0',delta0,...
+                     'rhoBad',rhoBad,'rhoGood',rhoGood,'step',step);
   otherwise
     error('DBAT:bundle:internal','Unknown damping');
 end
+
 % Store iteration results.
 E.res=res;
 E.trace=X;
