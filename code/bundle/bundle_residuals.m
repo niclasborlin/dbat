@@ -11,7 +11,7 @@ function [rms,res]=bundle_residuals(s,e)
 % $Id$
 
 % Compute residuals for each point.
-ptRes=sqrt(sum((diag(s.IO(end-1:end))*reshape(e.f,2,[])).^2,1));
+ptRes=sqrt(sum((diag(s.IO(end-1:end))*reshape(e.r,2,[])).^2,1));
 
 % Residual array has same sparsity as vis.
 res=double(s.vis);

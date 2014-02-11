@@ -40,11 +40,14 @@ function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
 %   Use BUNDLE_COV to compute covariances, etc., of the result or
 %   BUNDLE_RESULT_FILE to generate a result file.
 %
-%   References: Börlin, Grussenmeyer (2013), "Bundle Adjustment With and
-%       Without Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
+%   References:
+%     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
+%       Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
 %
-%   See also PROB2DBATSTRUCT, BROWN_EULER_CAM, BUNDLE_COV, BUNDLE_RESULT_FILE.
+%See also: GAUSS_MARKOV, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
+%   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM, BUNDLE_COV,
+%   PROB2DBATSTRUCT, BUNDLE_RESULT_FILE
 
 % $Id$
 
@@ -111,8 +114,8 @@ convTol=1e-3;
 params={s};
 
 % For all optimization methods below, the final estimate is returned in x.
-% The final residual vector and jacobian are returned as f and J. Successive
-% estimates of x and norm(f) are returned as columns of X and elements of
+% The final residual vector and Jacobian are returned as r and J. Successive
+% estimates of x and norm(r) are returned as columns of X and elements of
 % res, respectively. Furthermore, a status code (0 - ok, -1 - too many
 % iterations) and the number of required iterations are returned.
 
@@ -130,7 +133,7 @@ switch lower(damping)
     
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,res]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
+    [x,code,iters,r,J,X,res]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
                                       singularTest,params);
     time=cputime-stopWatch;
     E.damping=struct('name','gm');
@@ -145,33 +148,31 @@ switch lower(damping)
     % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
     % returned with the step lengths used at each iteration.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,res,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
-                                                   mu,alphaMin,maxIter, ...
-                                                   convTol,trace, ...
-                                                   singularTest,params);
+    [x,code,iters,r,J,X,res,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
+                                                      maxIter,convTol,trace, ...
+                                                      singularTest, ...
+                                                      mu,alphaMin,params);  
     time=cputime-stopWatch;
     E.damping=struct('name','gna','alpha',alpha,'mu',mu,'alphaMin',alphaMin);
   case 'lm'
     % Original Levenberg-Marquardt "lambda"-version.
 
-    % Estimate initial lambda value.
-    [f0,J0]=resfun(x0,params{:});
-    lambda0=1e-10*trace(J0'*J0)/n;
+    % Initial lambda value. A negative value tells levenberg_marquardt to
+    % scale lambda0 by trace(J0'*J0)/size(J0,2).
+    lambda0=-1e-10;
 
-    % Set value below which all lambda values are considered zero.
+    % Use lambda0 as lower damping cutoff value.
     lambdaMin=lambda0;
 
-    % Call Levenberg-Marquardt optimization routine. Supply f0, J0 to avoid
-    % recomputing them. The vector lambdas is returned with the lambda
-    % values used at each iteration.
+    % Call Levenberg-Marquardt optimization routine. The vector lambdas is
+    % returned with the lambda values used at each iteration.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,lambda]=levenberg_marquardt(resFun,vetoFun,x0, ...
-                                                    f0,J0,maxIter, ...
-                                                    convTol,lambda0, ...
-                                                    lambdaMin,trace,params);
+    [x,code,iters,r,J,X,res,lambda]=levenberg_marquardt(resFun,vetoFun,x0, ...
+                                                      maxIter,convTol,trace, ...
+                                                      lambda0,lambdaMin,params);
     time=cputime-stopWatch;
-    E.lambda=lambda;
-    E.damping='lm';
+    E.damping=struct('name','lm','lambda',lambda,'lambda0',lambda(1), ...
+                     'lambdaMin',lambda(1));
   case 'lmp'
     % Levenberg-Marquardt-Powell trust-region, "delta"-version with
     % Powell dogleg.
@@ -187,7 +188,7 @@ switch lower(damping)
     % and rhos are returned with the used delta and computed rho values for
     % each iteration.
     stopWatch=cputime;
-    [x,code,iters,f,J,X,delta,rho]=levenberg_marquardt_powell(resFun, ...
+    [x,code,iters,r,J,X,delta,rho]=levenberg_marquardt_powell(resFun, ...
                                                       vetoFun,x0,delta0, ...
                                                       maxIter,convTol, ...
                                                       rhoBad,rhoGood, ...
@@ -208,7 +209,7 @@ E.usedIters=iters;
 
 % Store final residual and Jacobian for later covariance calculations.
 E.J=J;
-E.f=f;
+E.r=r;
 
 % Handle returned values.
 ok=code==0;
@@ -220,8 +221,8 @@ if ok
     s.OP(s.cOP)=x(ixOP);
 end
 
-% Sigma0 is sqrt(f'*f/(m-n)) in mm, convert to pixels.
-s0mm=sqrt(f'*f/(length(f)-length(x)));
+% Sigma0 is sqrt(r'*r/(m-n)) in mm, convert to pixels.
+s0mm=sqrt(r'*r/(length(r)-length(x)));
 s0px=s0mm*mean(s.IO(end-1:end));
 s0=s0px;
 
