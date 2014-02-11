@@ -26,9 +26,9 @@ function [x,code,n,f,J,T,rr]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
 %     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
 %       Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
-%     McGlone et al. (2004), "Manual of Photogrammetry", 5th ed. American
-%       Society for Photogrammetry and Remote Sensing, Bethesda, Maryland,
-%       USA. ISBN 978-1570830716.
+%     McGlone, Mikhail, Bethel, eds. (2004), "Manual of Photogrammetry",
+%       5th ed., Chapter 11.1.3.4, pp. 786-788. American Society of
+%       Photogrammetry and Remote Sensing.
 %
 %See also: BUNDLE, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
 %   LEVENBERG_MARQUARDT_POWELL.
