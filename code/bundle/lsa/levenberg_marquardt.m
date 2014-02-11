@@ -1,5 +1,5 @@
 function [x,code,n,r,J,T,rr,lambdas]=levenberg_marquardt(...
-    resFun,vetoFun,x0,maxIter,convTol,doTrace,lambda0,lambdaMin,params);
+    resFun,vetoFun,x0,maxIter,convTol,doTrace,lambda0,lambdaMin,params)
 %LEVENBERG_MARQUARDT Levenberg-Marquardt least squares adjustment algorithm.
 %
 %   [X,CODE,I]=LEVENBERG_MARQUARDT(RES,VETO,X0,N,TOL,TRACE,L0,MINL,PARAMS)
@@ -35,7 +35,7 @@ function [x,code,n,r,J,T,rr,lambdas]=levenberg_marquardt(...
 %       Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
 %     Nocedal, Wright (2006), "Numerical Optimization", 2nd ed.
-%       Springer. ISBN 978-0-387-40065-5.
+%       Springer, Berlin, Germany. ISBN 978-0-387-40065-5.
 %     Levenberg (1944), "A method for the solution of certain nonlinear
 %       problems in least squares", Quarterly Journal of Applied
 %       Mathematics, 2(2):164-168.
@@ -98,9 +98,6 @@ prevLambda=nan;
 
 % Damping matrix.
 I=speye(size(J,2));
-
-if doTrace
-end
 
 while true
     % Stay in inner loop until a  better point is found or we run out of
@@ -201,10 +198,6 @@ end
 
 if nargout>5
     % Store final point.
-    if n+1>size(T,2)
-        % Expand by blocksize if needed.
-        T=[T,nan(length(x),blockSize)]; %#ok<AGROW>
-    end
     T(:,n+1)=x;
 end
 
