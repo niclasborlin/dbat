@@ -16,7 +16,7 @@
 
 \svnInfo $Id$
 
-\newcommand{\dbatversion}{0.2}
+\newcommand{\dbatversion}{0.3}
 
 \title{The Damped Bundle Adjustment Toolbox\\v\dbatversion{} for Matlab}
 
@@ -70,9 +70,7 @@ The toolbox currently includes routines for (function names in parentheses):
   \item Bundle adjustment proper (\texttt{bundle}) using either
     Classical, Gauss-Newton-Armijo, Levenberg-Marquardt, or
     Levenberg-Marquardt-Powell damping schemes
-    \citep{Borlin2013:Bundle}. The latter two damping schemes are so
-    far not included. They will be added in the near future, as will
-    chirality damping.
+    \citep{Borlin2013:Bundle}.
   \item Covariance calculations (\texttt{bundle\_cov}) from the bundle
     result.
   \end{itemize}
@@ -98,9 +96,9 @@ the demo functions, and reading the source code of each file directly.
 
 Things to be added in the near future:
 \begin{itemize}
-\item Weights on the observations.
+\item Testing of all dampings for return parameter consistency.
 \item Chirality damping.
-\item Levenberg-Marquardt and Levenberg-Marquardt-Powell damping.
+\item Weights on the observations.
 \item Test octave compatibility.
 \item Azimuth-tilt-swing camera model.
 \end{itemize}
