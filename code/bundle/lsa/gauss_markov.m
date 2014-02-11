@@ -13,14 +13,22 @@ function [x,code,n,f,J,T,rr]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
 %   true, the sigma0 estimates are printed at each iteration.
 %
 %   [X,CODE,I,F,J]=... also returns the final estimates of the residual
-%   vector F and jacobian matrix J.
+%   vector F and Jacobian matrix J.
 %
 %   [X,CODE,I,F,J,T,RR]=... also returns the iteration trace as successive
 %   columns in T and successive values of the residual norm in RR.
 %
 %   The function RES is assumed to return the residual function and its
-%   jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
+%   Jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
 %   PARAMS contains any extra parameters for the residual function.
+%
+%   References:
+%     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
+%       Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
+%       10.1111/phor.12037.
+%     McGlone et al. (2004), "Manual of Photogrammetry", 5th ed. American
+%       Society for Photogrammetry and Remote Sensing, Bethesda, Maryland,
+%       USA. ISBN 978-1570830716.
 %
 %See also: BUNDLE, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
 %   LEVENBERG_MARQUARDT_POWELL.
@@ -53,12 +61,12 @@ code=0;
 rr=[];
 
 while true
-    % Calculate residual and jacobian at current point.
+    % Calculate residual and Jacobian at current point.
     [f,J]=feval(resFun,x,params{:});
 
     rr(end+1)=sqrt(f'*f);
     if trace
-        fprintf('Gauss-Markov: iteration %d, residual norm=%.1g\n',n,rr(end));
+        fprintf('Gauss-Markov: iteration %d, residual norm=%.2g\n',n,rr(end));
     end
     
     % Solve normal equations.
