@@ -32,7 +32,7 @@ function [x,code,n,r,J,T,rr,alphas]=gauss_newton_armijo(...
 %       Damping". Photogrammetric Record 28(144), pp. 396-415. DOI
 %       10.1111/phor.12037.
 %     Nocedal, Wright (2006), "Numerical Optimization", 2nd ed.
-%       Springer. ISBN 978-0-387-40065-5.
+%       Springer, Berlin, Germany. ISBN 978-0-387-40065-5.
 %     Armijo (1966), "Minimization of Functions Having Lipschitz
 %       Continuous First Partial Derivatives", Pacific Journal of
 %       Mathematics, 16(1):1-3.
