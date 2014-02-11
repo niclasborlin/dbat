@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.3.0, Feb 11, 2014.
+ - Added Levenberg-Marquardt and Levenberg-Marquardt-Powell damping.
+ - Internal release only due to more testing needed.
+
 Release 0.2.0, Feb 7, 2014.
  - First publically released version with manual.
  - Added Photomodeler-style result file.
