@@ -316,13 +316,41 @@ if true
         semilogy(ax,0:length(e.res)-1,e.res,'x-');
         set(ax,'xtick',0:size(e.trace,2)-1);
         title(ax,sprintf('Residual norm (%s)',e.damping.name));
+        
         ax=subplot(2,1,2,'parent',fig);
         plot(ax,0:length(e.res)-1,[nan,alpha],'x-');
         set(ax,'ylim',[0,1.1])
         set(ax,'xtick',0:size(e.trace,2)-1);
-        xlabel('Iteration count')
+        xlabel(ax,'Iteration count')
         title(ax,'Step length (alpha)');
       case 'lm'
+        % Replace zero lambda by non-zero to appear in log plot.
+        lambda=e.damping.lambda;
+        lambda(lambda==0)=e.damping.lambdaMin/100;
+        ax=subplot(2,1,1,'parent',fig);
+        semilogy(ax,0:length(e.res)-1,e.res,'x-');
+        set(ax,'xtick',0:size(e.trace,2)-1);
+        title(ax,sprintf('Residual norm (%s)',e.damping.name));
+        ax1=ax;
+        
+        % Use plotyy to be able to set 0 label in semilogy plot.
+        ax=subplot(2,1,2,'parent',fig);
+        [h,l1,l2]=plotyy(ax,0:length(e.res)-1,lambda,[0,length(e.res)-1],e.damping.lambda0*[1,1],'semilogy','semilogy');
+        set(l1,'marker','x');
+        set(l2,'linestyle','--');
+        set(h,'xtick',0:size(e.trace,2)-1);
+        % Same y limits.
+        set(h(2),'ylim',get(h(1),'ylim'));
+        % Remove all primary yticks below lambdaMin.
+        yTick=get(h(1),'ytick');
+        set(h(1),'ytick',yTick(yTick>=e.damping.lambdaMin));
+        % Set secondary yticks and labels.
+        set(h(2),'ytick',e.damping.lambdaMin*[1/100,1]);
+        set(h(2),'yticklabel',{'0','lambdaMin'})
+        % Move y axis to the left and set default colors.
+        set(h,'yaxislocation','left','ycolor',get(ax1,'ycolor'));
+        xlabel(ax,'Iteration count')
+        title(ax,'Damping (lambda)')
       case 'lmp'
     end
 end
