@@ -66,7 +66,7 @@ end
 
 dampings={'none','gna','lm','lmp'};
 
-dampings=dampings(4);
+dampings=dampings(2);
 
 result=cell(size(dampings));
 ok=nan(size(dampings));
