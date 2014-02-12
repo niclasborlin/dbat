@@ -1,19 +1,23 @@
-function [c,cr,cc,cl,ch]=coverage(s,varargin)
+function [c,cr,crr,cc,cl,ch,crp]=coverage(s,varargin)
 %COVERAGE Percentange of image covered by measurements.
 %
 %   C=COVERAGE(S), where S is a struct returned by PROB2DBATSTRUCT with N
 %   images, returns an N-vector C with the coverage of each image in S. The
 %   covered is computed as the area of the convex hull of all measured
-%   points in the image, as a percentage of the total area.
+%   points in the image, as a fraction of the total area.
 %
-%   [C,CR]=COVERAGE(S) furthermore returns the rectangular coverage of
-%   each image in the N-vector CR.
+%   [C,CR,CRR]=COVERAGE(S) furthermore returns the rectangular coverage of
+%   each image in the N-vector CR and the radial coverage in the N-vector
+%   CRR. The radial coverage is computed as the fraction of the maximum
+%   radial distance to the principal point.
 %
-%   [C,CR,CC,CL,CH]=... returns details about each computed coverage. The
-%   N-cell array CC contains 2-by-M arrays with the point defining the
-%   convex hull as a closed polygon (first point repeated at end). The
-%   2-by-N arrays CL=[XMIN;YMIN] and CH=[XMAX,YMAX] contains the minimum and
-%   maximum X and Y values, respectively.
+%   [C,CR,CRR,CC,CL,CH,CRP]=... returns details about each computed
+%   coverage. The N-cell array CC contains 2-by-M arrays with the point
+%   defining the convex hull as a closed polygon (first point repeated at
+%   end). The 2-by-N arrays CL=[XMIN;YMIN] and CH=[XMAX,YMAX] contains the
+%   minimum and maximum X and Y values, respectively. The 2-by-2-by-N array
+%   CRP contains the principal point in the first column and the point with
+%   the maximum radial distance as the second over all 1:N images.
 %
 %   ...=COVERAGE(S,IX), where IX is an N-vector of indices, returns the
 %   coverage for the images in IX only. IX='all' corresponds to all images.
@@ -47,6 +51,23 @@ if union
     % Assume identical image sizes.
     totArea=prod(s.IO(end-3:end-2,s.cams(ix(1))),1);
 
+    % Set up for computation of radial distance.
+    
+    % Scaling matrix from mm to pixels.
+    S=diag([1,-1,1])*diag([s.IO(end-1:end,s.cams(ix(1)));1]);
+    % Subtract principal point.
+    PP=eye(3);
+    PP(1:2,3)=s.IO(1:2,s.cams(ix(1)));
+    % Principal point in pixels.
+    pp=euclidean(S*PP*homogeneous(zeros(2,1)));
+
+    % Determine maximum radial distance.
+    xx=[1,s.IO(end-3,s.cams(ix(1)))]+0.5*[-1,1];
+    yy=[1,s.IO(end-2,s.cams(ix(1)))]+0.5*[-1,1];
+    corners=[xx([1,1,2,2]);yy([1,2,2,1])];
+    radCorner=sqrt(sum(euclidean(PP\(S\homogeneous(corners))).^2,1));
+    maxRad=max(radCorner);
+    
     % Extract all points from the requested images.
     i=s.colPos(:,ix);
     pts=s.markPts(:,i(i~=0));
@@ -57,7 +78,15 @@ if union
         cc={pts};
         c=0;
         cr=0;
+        crr=0;
+        crp=zeros(2,2,0);
     else
+        % Radial extent.
+        radPts=sqrt(sum(euclidean(PP\(S\homogeneous(pts))).^2,1));
+        [ptRadMax,pri]=max(radPts);
+        crr=ptRadMax/maxRad;
+        crp=[pp,pts(:,pri)];
+        
         % Rectangular extents.
         cl=min(pts,[],2);
         ch=max(pts,[],2);
@@ -93,10 +122,39 @@ else
     ch=nan(2,length(ix));
     
     hullArea=nan(size(ix));
+    crr=nan(size(ix));
+
+    crp=nan(2,2,length(ix));
     
     for i=1:length(ix)
+        % Set up for computation of radial distance for the camera used
+        % for image ix(i).
+    
+        % Scaling matrix from mm to pixels.
+        S=diag([1,-1,1])*diag([s.IO(end-1:end,s.cams(ix(i)));1]);
+        % Subtract principal point.
+        PP=eye(3);
+        PP(1:2,3)=s.IO(1:2,s.cams(ix(i)));
+        % Principal point in pixels.
+        pp=euclidean(S*PP*homogeneous(zeros(2,1)));
+
+        % Determine maximum radial distance. With the center of the
+        % pixels at [1,w] x [1,h], the outermost coordinates in the image
+        % becomes [0.5,w+0.5] x [0.5,h+0.5].
+        xx=[1,s.IO(end-3,s.cams(ix(i)))]+0.5*[-1,1];
+        yy=[1,s.IO(end-2,s.cams(ix(i)))]+0.5*[-1,1];
+        corners=[xx([1,1,2,2]);yy([1,2,2,1])];
+        radCorner=sqrt(sum(euclidean(PP\(S\homogeneous(corners))).^2,1));
+        maxRad=max(radCorner);
+        
         % Extract points measured in this image.
         pts=s.markPts(:,s.colPos(s.vis(:,ix(i)),ix(i)));
+        
+        % Radial extent.
+        radPts=sqrt(sum(euclidean(PP\(S\homogeneous(pts))).^2,1));
+        [ptRadMax,pri]=max(radPts);
+        crr(i)=ptRadMax/maxRad;
+        crp(:,:,i)=[pp,pts(:,pri)];
         
         % Rectangular extents.
         cl(:,i)=min(pts,[],2);
