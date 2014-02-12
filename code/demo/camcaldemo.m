@@ -56,7 +56,7 @@ h=plotnetwork(s,'title','Initial network',...
 
 if printdemofigures
     h=get(h,'parent');
-    figDir=fullfile('..','doc','manual','ill');
+    figDir=fullfile('..','docsrc','manual','ill');
     files={'ccamx0.eps'};
     for i=1:length(h)
         print(h(i),'-depsc2',fullfile(figDir,files{i}));
@@ -98,7 +98,7 @@ fprintf('\nBundle result file %s generated.\n',resFile);
 h=plotparams(result{1},E{1});
 
 if printdemofigures
-    figDir=fullfile('..','doc','manual','ill');
+    figDir=fullfile('..','docsrc','manual','ill');
     files={'ccamiotrace.eps','ccameotrace.eps','ccamoptrace.eps', ...
            'ccamgnatrace.eps'};
     for i=1:length(h)
@@ -109,7 +109,7 @@ end
 h=plotcoverage(result{1},true);
 
 if printdemofigures
-    figDir=fullfile('..','doc','manual','ill');
+    figDir=fullfile('..','docsrc','manual','ill');
     files={'ccamcoverage.eps'};
     for i=1:length(h)
         print(h(i),'-depsc2',fullfile(figDir,files{i}));
@@ -119,7 +119,7 @@ end
 h=plotimagestats(result{1},E{1});
 
 if printdemofigures
-    figDir=fullfile('..','doc','manual','ill');
+    figDir=fullfile('..','docsrc','manual','ill');
     files={'ccamimstats.eps'};
     for i=1:length(h)
         print(h(i),'-depsc2',fullfile(figDir,files{i}));
@@ -129,7 +129,7 @@ end
 h=plotopstats(result{1},E{1},COP);
 
 if printdemofigures
-    figDir=fullfile('..','doc','manual','ill');
+    figDir=fullfile('..','docsrc','manual','ill');
     files={'ccamopstats.eps'};
     for i=1:length(h)
         print(h(i),'-depsc2',fullfile(figDir,files{i}));
@@ -147,7 +147,7 @@ end
 
 if printdemofigures
     h=get(h,'parent');
-    figDir=fullfile('..','doc','manual','ill');
+    figDir=fullfile('..','docsrc','manual','ill');
     files={'ccamxfinal.eps'};
     for i=1:length(h)
         print(h(i),'-depsc2',fullfile(figDir,files{i}));
