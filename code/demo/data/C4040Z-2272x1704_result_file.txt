@@ -5,8 +5,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter deviations has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 05-Feb-2014 09:41:47
-      DBAT version: 0.2.0.136 (2014-02-04 12:25:53)
+      Last Bundle Run: 12-Feb-2014 15:52:20
+      DBAT version: 0.3.0.189 (2014-02-11 21:36:25)
       Status: OK (0)
       Sigma0 (pixels): 0.15106
       Sigma0 (mm): 0.000482148
@@ -471,6 +471,7 @@ Damped Bundle Adjustment Toolbox result file
             Photo point coverage:
                Rectangular: 41%-83% (61% average, 92% union)
                Convex hull: 31%-62% (46% average, 87% union)
+               Radial: 60%-92% (73% average, 92% union)
       Photo Coverage
          References points outside calibrated region:
       Point Marking Residuals
