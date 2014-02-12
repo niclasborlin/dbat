@@ -5,8 +5,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter deviations has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 05-Feb-2014 07:47:15
-      DBAT version: 0.2.0.136 (2014-02-04 12:25:53)
+      Last Bundle Run: 12-Feb-2014 16:00:15
+      DBAT version: 0.3.0.189 (2014-02-11 21:36:25)
       Status: OK (0)
       Sigma0 (pixels): 0.15106
       Sigma0 (mm): 0.000482148
@@ -21,14 +21,14 @@ Damped Bundle Adjustment Toolbox result file
          Chirality veto: off
          Damping: gna
       Total error:
-         Initial value comment: Camera calibration
+         Initial value comment: Camera calibration from EXIF value
          Number of stages: 1
          Number of iterations: 7
-         First error: 9.28313
+         First error: 9.83211
          Last error: 0.029411
       Precisions / Standard Deviations:
          Camera Calibration Standard Deviations:
-            Camera1:
+            Camera1
                Focal Length:
                    Value: 7.45885 mm
                    Deviation: 0.001 mm
@@ -43,10 +43,10 @@ Damped Bundle Adjustment Toolbox result file
                Fh - format height:
                    Value: 5.43764 mm
                K1 - radial distortion 1:
-                   Value: 0.0045807 mm^(-2)
+                   Value: 0.00458073 mm^(-2)
                    Deviation: 2e-05 mm^(-2)
                K2 - radial distortion 2:
-                   Value: -4.34359e-05 mm^(-4)
+                   Value: -4.34384e-05 mm^(-4)
                    Deviation: 2e-06 mm^(-4)
                    Correlations over 95.0%: K3:-97.9%.
                K3 - radial distortion 3:
@@ -54,18 +54,18 @@ Damped Bundle Adjustment Toolbox result file
                    Deviation: 9e-08 mm^(-6)
                    Correlations over 95.0%: K2:-97.9%.
                P1 - decentering distortion 1:
-                   Value: -6.54637e-05 mm^(-2)
+                   Value: -6.5472e-05 mm^(-2)
                    Deviation: 3e-06 mm^(-2)
                P2 - decentering distortion 2:
-                   Value: -3.13246e-05 mm^(-2)
+                   Value: -3.13472e-05 mm^(-2)
                    Deviation: 4e-06 mm^(-2)
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
                Omega:
-                  Value: -39.351215 deg
+                  Value: -39.351249 deg
                   Deviation: 0.008 deg
                Phi:
-                  Value: -1.118308 deg
+                  Value: -1.118298 deg
                   Deviation: 0.008 deg
                Kappa:
                   Value: -179.789856 deg
@@ -77,20 +77,20 @@ Damped Bundle Adjustment Toolbox result file
                   Value: 1.791883 
                   Deviation: 0.0002 
                Zc:
-                  Value: 1.470536 
+                  Value: 1.470537 
                   Deviation: 0.0002 
             .
             .
             .
             Photo 21: P8250041.JPG
                Omega:
-                  Value: -8.620606 deg
+                  Value: -8.620639 deg
                   Deviation: 0.009 deg
                Phi:
-                  Value: 1.135801 deg
+                  Value: 1.135800 deg
                   Deviation: 0.01 deg
                Kappa:
-                  Value: -182.602049 deg
+                  Value: -182.602051 deg
                   Deviation: 0.003 deg
                Xc:
                   Value: 0.271704 
@@ -99,7 +99,7 @@ Damped Bundle Adjustment Toolbox result file
                   Value: 0.818510 
                   Deviation: 0.0003 
                Zc:
-                  Value: 1.906171 
+                  Value: 1.906172 
                   Deviation: 0.0002 
    Quality
       Photographs
@@ -113,6 +113,7 @@ Damped Bundle Adjustment Toolbox result file
             Photo point coverage:
                Rectangular: 41%-83% (61% average, 92% union)
                Convex hull: 31%-62% (46% average, 87% union)
+               Radial: 60%-92% (73% average, 92% union)
       Photo Coverage
          References points outside calibrated region:
       Point Marking Residuals
