@@ -192,7 +192,7 @@ while true
     end
     
     % Transform points and cameras.
-    [EO,OP]=pm_multixform(EO,OP,T0);
+    [EO,OP,fail]=pm_multixform(EO,OP,T0);
 
     % Plot points.
     plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.', ...

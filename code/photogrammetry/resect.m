@@ -85,9 +85,15 @@ for i=1:length(cams)
         visId=visId(keep);
         
         [P,PP,res]=pm_resect_3pt(pt3,pt2N,ismember(visId,useId),true);
-        rms(i)=min(res);
-        
-        s.EO(1:3,camIx)=euclidean(null(P));
-        s.EO(4:6,camIx)=derotmat3d(P(:,1:3));
+        if ~isempty(res)
+            rms(i)=min(res);
+        end
+
+        if ~isempty(P)
+            s.EO(1:3,camIx)=euclidean(null(P));
+            s.EO(4:6,camIx)=derotmat3d(P(:,1:3));
+        else
+            s.EO(1:6,camIx)=nan;
+        end
     end
 end
