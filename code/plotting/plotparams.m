@@ -1,12 +1,14 @@
-function hh=plotparams(s,e,noop)
+function hh=plotparams(s,e,varargin)
 %PLOTPARAMS Plot bundle iteration parameters.
 %
 %   PLOTPARAMS(S,E), where S is a struct returned by PROB2DBATSTRUCT and E
 %   is a struct returned by BUNDLE, plots the iteration trace of the
 %   parameters estimated by BUNDLE.
 %
-%   PLOTPARAMS(S,E,'noop') does not plot the OP plot. Necessary for large
-%   point clouds.
+%   PLOTPARAMS(...,'noop') does not plot the OP plot.
+%   PLOTPARAMS(...,'noeo') does not plot the EO plot.
+%   PLOTPARAMS(...,'noio') does not plot the IO plot.
+%   PLOTPARAMS(...,'noparams') does not plot the params plot.
 %
 %   H=... also returns the figure handles for the IO/EO/OP/damping plots.
 %
@@ -14,17 +16,34 @@ function hh=plotparams(s,e,noop)
 
 % $Id$
 
-if nargin<3
-    plotOP=true;
-else
-    plotOP=~strcmp(lower(noop),'noop');
+plotIO=true;
+plotEO=true;
+plotOP=true;
+plotParams=true;
+
+for i=1:length(varargin)
+    if ~ischar(varargin{i})
+        error('Bad argument');
+    end
+    switch lower(varargin{i})
+      case 'noio'
+        plotIO=false;
+      case 'noeo'
+        plotEO=false;
+      case 'noop'
+        plotOP=false;
+      case 'noparams'
+        plotParams=false;
+      otherwise
+        error('Bad string argument');
+    end
 end
     
 h=nan(4,1);
 
 [ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
-if any(s.cIO(:))
+if plotIO && any(s.cIO(:))
     ixPos=double(s.cIO);
     ixPos(s.cIO)=ixIO;
     
@@ -143,7 +162,7 @@ if any(s.cIO(:))
     scalewidth(axH);
 end
 
-if any(s.cEO(:))
+if plotEO && any(s.cEO(:))
     ixPos=double(s.cEO);
     ixPos(s.cEO)=ixEO;
 
@@ -297,7 +316,7 @@ if plotOP && any(s.cOP(:))
     scalewidth(ax);
 end    
 
-if true
+if plotParams
     % Always generate iteration method plot.
     
     % IO parameter plot.
@@ -374,11 +393,11 @@ if true
         title(ax,'Step type');
         
         ax=subplot(4,1,4,'parent',fig);
-        plot(ax,0:length(e.res)-2,e.damping.rho,'x-');
-        line([0,length(e.res)-1],e.damping.rhoBad*[1,1],'linestyle','--',...
-             'parent',ax);
-        line([0,length(e.res)-1],e.damping.rhoGood*[1,1],'linestyle','--',...
-             'parent',ax);
+        plot(ax,0:length(e.damping.rho)-1,e.damping.rho,'x-');
+        line([0,length(e.damping.rho)-1],e.damping.rhoBad*[1,1],...
+             'linestyle','--','parent',ax);
+        line([0,length(e.damping.rho)-1],e.damping.rhoGood*[1,1],...
+             'linestyle','--','parent',ax);
         set(ax,'xtick',0:size(e.trace,2)-1);
         set(ax,'xlim',[0,size(e.trace,2)]);
         set(ax,'ylim',[-0.1,1.1]);
