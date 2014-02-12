@@ -86,11 +86,8 @@ while ~isempty(varargin)
     end
 end
 
-% Create indices into the vector of unknowns.
-[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
-
-% Number of unknowns.
-n=max(ixOP);
+% Create indices into the vector of unknowns. n is the number of unknowns.
+[ixIO,ixEO,ixOP,n]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
 
 % Set up vector of initial values.
 x0=nan(n,1);
@@ -150,7 +147,7 @@ switch lower(damping)
     % Armijo parameter.
     mu=0.1;
     % Shortest allowed step length.
-    alphaMin=1e-3;
+    alphaMin=1e-6;
     
     % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
     % returned with the step lengths used at each iteration.
