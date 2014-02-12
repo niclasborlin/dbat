@@ -1,4 +1,4 @@
-function [s,ok,iters,s0,E,varargout]=bundle(s,varargin)
+function [s,ok,iters,s0,E]=bundle(s,varargin)
 %BUNDLE Run bundle adjustment iterations on a camera network.
 %
 %   [S,OK,N]=BUNDLE(S), where S is a struct returned by PROB2DBATSTRUCT,
@@ -72,7 +72,7 @@ while ~isempty(varargin)
           case 'trace'
             trace=true;
             varargin(1)=[];
-          case 'singularTest'
+          case 'singulartest'
             singularTest=true;
             varargin(1)=[];
           otherwise
@@ -132,7 +132,7 @@ params={s};
 [v,d]=dbatversion;
 E=struct('maxIter',maxIter,'convTol',convTol,'singularTest',singularTest,...
          'chirality',veto,'dateStamp',datestr(now),...
-         'version',sprintf(['%s (%s)'],v,d));
+         'version',sprintf('%s (%s)',v,d));
 
 switch lower(damping)
   case {'none','gm'}
