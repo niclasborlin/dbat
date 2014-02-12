@@ -1,12 +1,14 @@
-function [EO,OP]=pm_multixform(EO,OP,T)
+function [EO,OP,fail]=pm_multixform(EO,OP,T)
 %PM_MULTIXFORM Transform a network.
 %
-%   [EO,OP]=pm_multixform(EO,OP,T)
+%   [EO,OP,fail]=pm_multixform(EO,OP,T)
 %   EO - 7-by-M array with EO camera parameters.
 %   OP - 3-by-N array with object point coordinates.
 %   T  - 4x4 homogeneous array with point transformation.
 
 % $Id$
+
+fail=false;
 
 % Transform points.
 if ~isempty(OP)
@@ -23,7 +25,16 @@ for i=1:size(EO,2)
     % Apply point transformation to camera.
     P=(T'\P')';
     % Extract camera center.
-    EO(1:3,i)=euclidean(null(P));
-    % Extract angles.
-    EO(4:6,i)=derotmat3d(P(:,1:3));
+    if any(isnan(P(:)))
+        C=[];
+    else
+        C=null(P);
+    end
+    if size(C,2)~=1
+        fail=true;
+    else
+        EO(1:3,i)=euclidean(C);
+        % Extract angles.
+        EO(4:6,i)=derotmat3d(P(:,1:3));
+    end
 end
