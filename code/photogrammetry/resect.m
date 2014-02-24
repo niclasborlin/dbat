@@ -1,4 +1,4 @@
-function [s,rms]=resect(s0,cams,cpId,chkId)
+function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
 %RESECT Perform spatial resection on cameras in a project.
 %
 %   S=RESECT(S0,CAMS,CP_ID) uses the 3-point algorithm to performs spatial
@@ -7,13 +7,20 @@ function [s,rms]=resect(s0,cams,cpId,chkId)
 %   points. CP_ID must contain at least 3 object points IDs visible in each
 %   of the camera stations. If CP_ID is longer than three, the three points
 %   covering the largest triangle in each image is used. All object points
-%   in S0 not used to compute the resection is used to as check points to
+%   in S0 not used to compute the resection are used as check points to
 %   distinguish between possible solutions.
 %
-%   S=RESECT(S0,'all',CP_ID) does spatial resection on all cameras.
+%   S=RESECT(S0,CAMS,CP_ID,N), where N is an integer or Inf, returns the
+%   resection based on the N largest triangles that result in the smallest
+%   reprojection error.
 %
-%   S=RESECT(S0,CAMS,CP_ID,CHK_ID) uses the object points with IDs in CHK_ID
-%   as check points. CP_ID and CHK_ID may contain the same IDs.
+%   S=RESECT(S0,CAMS,CP_ID,N,V), where V is a scalar 0<V<1, tries the N
+%   largest triangles that also have an area of at least V times the largest.
+%
+%   S=RESECT(S0,'all',...) does spatial resection on all cameras.
+%
+%   S=RESECT(S0,CAMS,CP_ID,N,V,CHK_ID) uses the object points with IDs in
+%   CHK_ID as check points. CP_ID and CHK_ID may contain the same IDs.
 %
 %   [S,RES]=... also returns the rms RES of the residuals of the check
 %   points. A failed resection is indicated by a NaN rms.
@@ -31,7 +38,9 @@ function [s,rms]=resect(s0,cams,cpId,chkId)
 % $Id$
 
 % Handle defaults.
-if nargin<4, chkId=s0.OPid; end
+if nargin<4, n=1; end
+if nargin<5, v=0; end
+if nargin<6, chkId=s0.OPid; end
 
 if strcmp(cams,'all'), cams=1:size(s0.EO,2); end
 
@@ -53,7 +62,7 @@ for i=1:length(cams)
     
     % What control points are visible in this camera?
     vis=find(ismember(cpId,s0.OPid(s0.vis(:,camIx))));
-    
+
     % If we have more than 3 points, pick the ones covering the largest
     % measured area.
     if length(vis)>3
@@ -62,13 +71,22 @@ for i=1:length(cams)
         meaIx=find(s0.vis(:,camIx) & ismember(s0.OPid,cpId));
         mea=xy(:,s0.colPos(meaIx,camIx));
         [tri,area,T,A]=largesttriangle(mea);
-        vis=vis(tri);
+        tryPt=T((1:end)'<=n & A>=v*A(1),:);
+    elseif length(vis)==3
+        % We have max 3, use all.
+        tryPt=vis;
+    else
+        % We have too few.
+        tryPt=[];
     end
-       
-    if length(vis)==3
-        % We have the 3 pts we need.
+
+    bestRes=inf;
+    bestP=[];
+    
+    for j=1:size(tryPt,1)
+        use=tryPt(j,:);
         
-        useId=cpId(vis);
+        useId=cpId(use);
 
         % Normalize all measured coordinates visible in this image.
         pt2=xy(:,s0.colPos(s0.vis(:,camIx),camIx));
@@ -85,15 +103,18 @@ for i=1:length(cams)
         visId=visId(keep);
         
         [P,PP,res]=pm_resect_3pt(pt3,pt2N,ismember(visId,useId),true);
-        if ~isempty(res)
-            rms(i)=min(res);
+        if ~isempty(res) && min(res)<bestRes
+            bestRes=min(res);
+            bestP=P;
         end
+    end
+       
+    rms(i)=bestRes;
 
-        if ~isempty(P)
-            s.EO(1:3,camIx)=euclidean(null(P));
-            s.EO(4:6,camIx)=derotmat3d(P(:,1:3));
-        else
-            s.EO(1:6,camIx)=nan;
-        end
+    if ~isempty(bestP)
+        s.EO(1:3,camIx)=euclidean(null(bestP));
+        s.EO(4:6,camIx)=derotmat3d(bestP(:,1:3));
+    else
+        s.EO(1:6,camIx)=nan;
     end
 end
