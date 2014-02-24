@@ -66,28 +66,34 @@ for i=1:length(cams)
     % If we have more than 3 points, pick the ones covering the largest
     % measured area.
     if length(vis)>3
-        % TODO: Verify this works for cpId='all'.
         % Visible measured points.
         meaIx=find(s0.vis(:,camIx) & ismember(s0.OPid,cpId));
         mea=xy(:,s0.colPos(meaIx,camIx));
         [tri,area,T,A]=largesttriangle(mea);
+        % Try triangles among N best and above v times highest area.
         tryPt=T((1:end)'<=n & A>=v*A(1),:);
+        % Ids of points to try.
+        tryId=s0.OPid(meaIx(tryPt));
     elseif length(vis)==3
         % We have max 3, use all.
-        tryPt=vis;
+        tryId=cpId(vis);
     else
-        % We have too few.
-        tryPt=[];
+        % We have too few. Use this to fall through loop below.
+        tryId=[];
     end
 
+    % Ensure that each index/ID triplet is stored  row-wise.
+    if isvector(tryId)
+        tryId=reshape(tryId,1,[]);
+    end
+    
     bestRes=inf;
     bestP=[];
     
-    for j=1:size(tryPt,1)
-        use=tryPt(j,:);
+    for j=1:size(tryId,1)
+        % Ids of points to try.
+        useId=tryId(j,:);
         
-        useId=cpId(use);
-
         % Normalize all measured coordinates visible in this image.
         pt2=xy(:,s0.colPos(s0.vis(:,camIx),camIx));
         pt2N=K\homogeneous(pt2);
