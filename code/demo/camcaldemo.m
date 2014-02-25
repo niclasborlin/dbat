@@ -44,6 +44,7 @@ s0.IO(3)=7.3;          % c = EXIF value.
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 cpId=1001:1004;
+s0.isCtrl=ismember(s0.OPid,cpId);
 s1=resect(s0,'all',cpId,1,0,cpId);
 s2=forwintersect(s1,'all',true);
 
