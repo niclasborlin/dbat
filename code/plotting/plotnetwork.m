@@ -209,22 +209,27 @@ while true
             
         % Camera center.
         CC=EO(1:3,i);
+
+        % Don't try to plot cameras that are far away or undefined.
+        if all(isfinite(CC))
             
-        camC{i}(:,end+1)=CC;
+            camC{i}(:,end+1)=CC;
         
-        % Camera orientation.
-        ang=EO(4:6,i);
-        RR=pm_eulerrotmat(ang);
+            % Camera orientation.
+            ang=EO(4:6,i);
+            RR=pm_eulerrotmat(ang);
             
-        % Apply transformation.
-        T=RR*[eye(3),-CC];
-        T(4,4)=1;
-        cam1=reshape(applyhomoxform(inv(T),reshape(cam,m*n,p)')',m,n,p);
+            % Apply transformation.
+            T=RR*[eye(3),-CC];
+            T(4,4)=1;
+            cam1=reshape(applyhomoxform(inv(T),reshape(cam,m*n,p)')',m,n,p);
             
-        hold(ax,'on');
-        surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol);
-        line(camC{i}(1,:),camC{i}(2,:),camC{i}(3,:),'marker','x','parent',ax);
-        hold(ax,'off');
+            hold(ax,'on');
+            surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol);
+            line(camC{i}(1,:),camC{i}(2,:),camC{i}(3,:),'marker','x',...
+                 'parent',ax);
+            hold(ax,'off');
+        end
     end
     
     % Draw 3d lines.
