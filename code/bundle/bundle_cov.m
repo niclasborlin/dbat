@@ -31,6 +31,9 @@ function varargout=bundle_cov(s,e,varargin)
 % $Id$
 
 if isempty(varargin)
+    if nargout>0
+        error('DBAT:BUNDLE_COV:badInput','Too few input arguments');
+    end
     return;
 end
 
