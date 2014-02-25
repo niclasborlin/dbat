@@ -30,10 +30,6 @@ s0.OP(:,ismember(s0.OPid,1002))=[1,1,0]';
 s0.OP(:,ismember(s0.OPid,1003))=[0,0,0]';
 s0.OP(:,ismember(s0.OPid,1004))=[1,0,0]';
 
-% Fix the bundle datum by fixing CP 1, 2 + the Z coordinate of OP 3.
-s0.cOP(:,ismember(s0.OPid,1001:1002))=false;
-s0.cOP(3,ismember(s0.OPid,1003))=false;
-
 % Estimate px,py,c,K1-K3,P1-P2.
 s0.cIO(1:8,:)=true;
 
@@ -45,6 +41,10 @@ s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 cpId=1001:1004;
 s0.isCtrl=ismember(s0.OPid,cpId);
+
+% Fix the bundle datum by fixing all control points.
+s0.cOP(:,ismember(s0.OPid,cpId))=false;
+
 s1=resect(s0,'all',cpId,1,0,cpId);
 s2=forwintersect(s1,'all',true);
 
