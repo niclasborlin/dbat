@@ -21,7 +21,10 @@ if fid<0
           ['Failed to open file ''',f,''' for writing.']);
 end
 
+% Signal high correlation above this value.
 corrThreshold=0.95;
+% Signal low significance below this value.
+sigThreshold=0.95;
 
 % Header info
 fprintf(fid,'Damped Bundle Adjustment Toolbox result file\n');
@@ -38,23 +41,28 @@ if nargin<4
     COP=bundle_cov(s,e,'COP');
 end
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
-
-n=any(iio)+any(ieo)+any(iop);
+% Compute p values for distortion parameters.
+[pk,pp]=test_distortion_params(s,e);
+n=any(iio)+any(ieo)+any(iop)+any([pk;pp]<sigThreshold);
 
 fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
 if any(iio)
-    fprintf(fid,[p,p,p,'One or more of the camera parameter deviations ' ...
+    fprintf(fid,[p,p,p,'One or more of the camera parameter ' ...
                  'has a high correlation (see below).\n']);
 end
 if any(ieo)
-    fprintf(fid,[p,p,p,'One or more of the camera station parameter ' ...
-                 'deviations has a high correlation (see below).\n']);
+    fprintf(fid,[p,p,p,'One or more of the camera station parameters ' ...
+                 'has a high correlation (see below).\n']);
 end
 if any(iop)
     fprintf(fid,[p,p,p,'One or more of the object point coordinate ' ...
-                 'deviations has a high correlation.\n']);
+                 'has a high correlation.\n']);
 end
+if any([pk;pp]<sigThreshold)
+    fprintf(fid,[p,p,p,'One or more estimated lens distortion coefficients ' ...
+                 'failed significance test (see below).\n']);
+end    
 
 % Info about last bundle.
 fprintf(fid,[p,'Information from last bundle\n']);
@@ -111,6 +119,10 @@ if any(s.cIO(:))
 
     S=diag([1,1,-1,1,1,-1,-1,-1,-1,-1]);
 
+    % Significance values.
+    sig=nan(size(rows));
+    sig(6:8)=pk;
+    sig(9:10)=pp;
     % Add symmetric correlations.
     iio0=iio;
     iio=[iio;jio];
@@ -128,6 +140,9 @@ if any(s.cIO(:))
             if sigma(j)~=0
                 fprintf(fid,[p,p,p,p,p,p,' Deviation: %.1g %s\n'],...
                         sigma(j),unit{j});
+            end
+            if ~isnan(sig(j))
+                fprintf(fid,[p,p,p,p,p,p,' Significance: p=%.2f\n'],sig(j));
             end
             highCorr=find(kio==i & iio==rows(j));
             if any(highCorr)
