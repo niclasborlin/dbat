@@ -112,7 +112,7 @@ else
     % Number of wanted parameters
     eoCols=nnz(cEO);
     % Max number of non-zero elements.
-    eoMaxNnz=nProj*2*max(sum(cEO));
+    eoMaxNnz=nProj*2*max([0,sum(cEO)]);
     dEO=sparse([],[],[],nProj*2,eoCols,eoMaxNnz);
     % Collect (i,j) indices and values of dEO during loop.
     dEOi=zeros(eoMaxNnz,1);
