@@ -56,7 +56,7 @@ if any(ieo)
                  'has a high correlation (see below).\n']);
 end
 if any(iop)
-    fprintf(fid,[p,p,p,'One or more of the object point coordinate ' ...
+    fprintf(fid,[p,p,p,'One or more of the object point coordinates ' ...
                  'has a high correlation.\n']);
 end
 if any([pk;pp]<sigThreshold)
@@ -66,36 +66,53 @@ end
 
 % Info about last bundle.
 fprintf(fid,[p,'Information from last bundle\n']);
-fprintf(fid,[p,p,'Last Bundle Run: %s\n'],e.dateStamp);
-fprintf(fid,[p,p,'DBAT version: %s\n'],e.version);
+
 if e.code==0
     status='OK';
 else
     status='fail';
 end
-fprintf(fid,[p,p,'Status: %s (%d)\n'],status,e.code);
-fprintf(fid,[p,p,'Sigma0 (pixels): %g\n'],e.s0px);
-fprintf(fid,[p,p,'Sigma0 (mm): %g\n'],e.s0mm);
+% Values are {name,format string,value}
+values={'Last Bundle Run:','%s',e.dateStamp,
+        'DBAT version:','%s',e.version,
+        'Status:','%s (%d)',{status,e.code},
+        'Sigma0 (pixels):','%g',e.s0px,
+        'Sigma0 (mm):','%g',e.s0mm};
+pretty_print(fid,repmat(p,1,2),values);
+    
 fprintf(fid,[p,p,'Processing options:\n']);
-fprintf(fid,[p,p,p,'Orientation: on\n']);
-fprintf(fid,[p,p,p,'Global optimization: on\n']);
+
 offon={'off','on'};
-fprintf(fid,[p,p,p,'Calibration: %s\n'],offon{double(any(s.cIO(:)))+1});
-fprintf(fid,[p,p,p,'Constraints: off\n']);
-fprintf(fid,[p,p,p,'Maximum # of iterations: %d\n'],e.maxIter);
-fprintf(fid,[p,p,p,'Convergence tolerance: %g\n'],e.convTol);
-fprintf(fid,[p,p,p,'Singular test: %s\n'],offon{double(e.singularTest)+1});
-fprintf(fid,[p,p,p,'Chirality veto: %s\n'],offon{double(e.chirality)+1});
-fprintf(fid,[p,p,p,'Damping: %s\n'],e.damping.name);
+
+values={'Orientation:','%s','on',
+        'Global optimization:','%s','on',
+        'Calibration:','%s',offon{double(any(s.cIO(:)))+1},
+        'Constraints:','%s','off',
+        'Maximum # of iterations:','%d',e.maxIter,
+        'Convergence tolerance:','%g',e.convTol,
+        'Singular test:','%s',offon{double(e.singularTest)+1},
+        'Chirality veto:','%s',offon{double(e.chirality)+1},
+        'Damping:','%s',e.damping.name,
+        'Camera unit (cu):','%s',s.camUnit,
+        'Object space unit (ou):','%s',s.objUnit,
+        'Initial value comment:','%s',s.x0desc};
+
+pretty_print(fid,repmat(p,1,3),values);
 
 fprintf(fid,[p,p,'Total error:\n']);
-fprintf(fid,[p,p,p,'Initial value comment: %s\n'],s.x0desc);
-fprintf(fid,[p,p,p,'Number of stages: %d\n'],1);
-fprintf(fid,[p,p,p,'Number of iterations: %d\n'],e.usedIters);
-fprintf(fid,[p,p,p,'First error: %g\n'],e.res(1));
-fprintf(fid,[p,p,p,'Last error: %g\n'],e.res(end));
+
+values={
+    'Number of stages:','%d',1,
+    'Number of iterations:','%d',e.usedIters,
+    'First error:','%g',e.res(1),
+    'Last error:','%g',e.res(end)
+    };
+
+pretty_print(fid,repmat(p,1,3),values);
 
 fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
+
+corrStr=sprintf('Correlations over %g%%:',corrThreshold*100);
 
 if any(s.cIO(:))
     % Camera calibration results.
@@ -109,15 +126,20 @@ if any(s.cIO(:))
           'Fw - format width','Fh - format height',...
           'K1 - radial distortion 1','K2 - radial distortion 2',...
           'K3 - radial distortion 3',...
-          'P1 - decentering distortion 1','P2 - decentering distortion 2'};
-    names={'Focal','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2'};
-    unit={'mm','mm','mm','mm','mm','mm^(-2)','mm^(-4)','mm^(-6)',...
-           'mm^(-2)','mm^(-2)'};
+          'P1 - decentering distortion 1','P2 - decentering distortion 2',...
+         'Iw - image width','Ih - image height',...
+          'Xr - X resolution','Yr - Y resolution',...
+         'Pw - pixel width','Ph - pixel height'};
+    names={'f','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2','Iw','Ih','Xr','Yr','Pw','Ph'};
+    unit={'cu','cu','cu','cu','cu','cu^(-3)','cu^(-5)','cu^(-7)',...
+           'cu^(-3)','cu^(-3)','px','px','px/cu','px/cu','cu','cu'};
     % Original-to-presentation order mapping and inverse.
-    rows=[3,1:2,11:12,4:6,7:8];
+    rows=[3,1:2,11:12,4:6,7:8,13:14,15:16,17:18]; % Last two are not in
+                                                  % real vector.
     irows=sparse(rows,1,1:length(rows));
 
-    S=diag([1,1,-1,1,1,-1,-1,-1,-1,-1]);
+    % Flip signs of rows 3,6-10.
+    S=diag((-1).^double(ismember(1:length(rows),[3,6:10])));
 
     % Significance values.
     sig=nan(size(rows));
@@ -129,20 +151,25 @@ if any(s.cIO(:))
     jio=[jio;iio0];
     kio=repmat(kio,2,1);
     vio=repmat(vio,2,1);
+
+    % Create fake IO vector.
+    sIO=[s.IO;1./s.IO(end-1:end,:)];
+    % Extend ioSigma. Need to be fixed when Fw, Fh estimation is implemented.
+    ioSigma(end+2,1)=0;
     
+    padLength=length('Significance:');
     for i=1:size(s.cIO,2)
-        vals=S*full(s.IO(rows,i));
+        vals=S*full(sIO(rows,i));
         sigma=full(ioSigma(rows,i));
         fprintf(fid,[p,p,p,p,'Camera%d\n'],i);
         for j=1:length(head)
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
-            fprintf(fid,[p,p,p,p,p,p,' Value: %g %s\n'],vals(j),unit{j});
+            values={'Value:','%g %s',{vals(j),unit{j}}};
             if sigma(j)~=0
-                fprintf(fid,[p,p,p,p,p,p,' Deviation: %.1g %s\n'],...
-                        sigma(j),unit{j});
+                values(end+1,:)={'Deviation:','%.1g %s',{sigma(j),unit{j}}};
             end
             if ~isnan(sig(j))
-                fprintf(fid,[p,p,p,p,p,p,' Significance: p=%.2f\n'],sig(j));
+                values(end+1,:)={'Significance:','p=%.2f',sig(j)};
             end
             highCorr=find(kio==i & iio==rows(j));
             if any(highCorr)
@@ -153,10 +180,10 @@ if any(s.cIO(:))
                                    vio(highCorr(kk))*100)];
                 end
                 ss(end)='.';
-                fprintf(fid,[p,p,p,p,p,p,' Correlations over %.1f%%:%s\n'],...
-                        corrThreshold*100,ss);
+                values(end+1,:)={corrStr,'%s',ss};
             end
-        end    
+            pretty_print(fid,[repmat(p,1,6),'  '],values,padLength,padLength);
+        end 
     end
 end
 
@@ -170,7 +197,7 @@ eoSigma=reshape(eoSigma,6,[]);
 
 % Headers and values to print.
 head={'Omega','Phi','Kappa','Xc','Yc','Zc'};
-unit={'deg','deg','deg','','',''};
+unit={'deg','deg','deg','ou','ou','ou'};
 names=head;
 
 % Original-to-presentation order mapping and inverse.
@@ -187,15 +214,16 @@ jeo=[jeo;ieo0];
 keo=repmat(keo,2,1);
 veo=repmat(veo,2,1);
 
+padLength=length('Deviation:');
 for i=1:size(s.EO,2)
     fprintf(fid,[p,p,p,p,'Photo %d: %s\n'],i,s.imNames{i});
     vals=S*s.EO(rows,i);
     sigma=S*eoSigma(rows,i);
     for j=1:6
         fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
-        fprintf(fid,[p,p,p,p,p,p,'Value: %.6f %s\n'],vals(j),unit{j});
+        values={'Value:','%.6f %s',{vals(j),unit{j}}};
         if sigma(j)~=0
-            fprintf(fid,[p,p,p,p,p,p,'Deviation: %.1g %s\n'],sigma(j),unit{j});
+            values(end+1,:)={'Deviation:','%.1g %s',{sigma(j),unit{j}}};
         end
         highCorr=find(keo==i & ieo==rows(j));
         if any(highCorr)
@@ -206,53 +234,58 @@ for i=1:size(s.EO,2)
                                veo(highCorr(kk))*100)];
             end
             ss(end)='.';
-            fprintf(fid,[p,p,p,p,p,p,'Correlations over %.1f%%:%s\n'],...
-                    corrThreshold*100,ss);
+            values{end+1,:}={corrStr,'%s',ss};
         end
+        pretty_print(fid,repmat(p,1,6),values,padLength,padLength);
     end
 end
 
 fprintf(fid,[p,'Quality\n']);
 
 fprintf(fid,[p,p,'Photographs\n']);
-fprintf(fid,[p,p,p,'Total number: %d\n'],length(s.imNames));
-fprintf(fid,[p,p,p,'Numbers used: %d\n'],size(s.EO,2));
+values={
+    'Total number:','%d',length(s.imNames),
+    'Numbers used:','%d',size(s.EO,2)
+    };
+pretty_print(fid,repmat(p,1,3),values);
 
 fprintf(fid,[p,p,'Cameras\n']);
 fprintf(fid,[p,p,p,'Total number: %d\n'],size(s.IO,2));
 for i=1:size(s.IO,2)
     fprintf(fid,[p,p,p,'Camera%d:\n'],i);
 
-    if any(s.cIO(:,i))
-        fprintf(fid,[p,p,p,p,'Calibration: yes\n']);
-    else
-        fprintf(fid,[p,p,p,p,'Calibration: <not available>\n']);
-    end
-
-    fprintf(fid,[p,p,p,p,'Number of photos using camera: %d\n'],nnz(s.cams==i));
+    calStrs={'<not available>','yes'};
+    values={
+        'Calibration:','%s',calStrs{any(s.cIO(:,i))},
+        'Number of photos using camera:','%d',nnz(s.cams==i)
+        };
+    pretty_print(fid,repmat(p,1,4),values);
 
     % Compute individual and union coverage.
     [c,cr,crr]=coverage(s,find(s.cams==i));
     [uc,ucr,ucrr]=coverage(s,find(s.cams==i),true);
     fprintf(fid,[p,p,p,p,'Photo point coverage:\n']);
-    fprintf(fid,[p,p,p,p,p,'Rectangular: %d%%-%d%% ',...
-                 '(%d%% average, %d%% union)\n'],...
-            round(min(cr*100)),round(max(cr*100)),round(mean(cr*100)),...
-            round(ucr*100));
-    fprintf(fid,[p,p,p,p,p,'Convex hull: %d%%-%d%% ',...
-                 '(%d%% average, %d%% union)\n'],...
-            round(min(c*100)),round(max(c*100)),round(mean(c*100)),...
-            round(uc*100));
-    fprintf(fid,[p,p,p,p,p,'Radial: %d%%-%d%% ',...
-                 '(%d%% average, %d%% union)\n'],...
-            round(min(crr*100)),round(max(crr*100)),round(mean(crr*100)),...
-            round(ucrr*100));
+    values={
+        'Rectangular:','%s',...
+        sprintf('%d%%-%d%% (%d%% average, %d%% union)',...
+                round(min(cr*100)),round(max(cr*100)),round(mean(cr*100)),...
+                round(ucr*100)),
+        'Convex hull:','%s',...
+        sprintf('%d%%-%d%% (%d%% average, %d%% union)',...
+                round(min(c*100)),round(max(c*100)),round(mean(c*100)),...
+                round(uc*100)),
+        'Radial:','%s',...
+        sprintf('%d%%-%d%% (%d%% average, %d%% union)',...
+                round(min(crr*100)),round(max(crr*100)),round(mean(crr*100)),...
+                round(ucrr*100));
+        };
+    pretty_print(fid,repmat(p,1,5),values);
 end
 
 fprintf(fid,[p,p,'Photo Coverage\n']);
 fprintf(fid,[p,p,p,'References points outside calibrated region:\n']);
 if any(s.cIO(:))
-    % Print nothing.
+    fprintf(fid,[p,p,p,p,'none\n']);
 else
     fprintf(fid,[p,p,p,p,'<not available>\n']);
 end
@@ -337,3 +370,20 @@ fprintf(fid,[p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,s.OPid(mxi));
 fprintf(fid,[p,p,p,'Average: %.1f degrees\n'],mean(a));
 
 fclose(fid);
+
+
+function pretty_print(fid,prefix,values,minLen,maxLen)
+% Pretty-prints the values in values with prefix.
+
+if nargin<4, minLen=inf; end
+if nargin<5, maxLen=-inf; end
+
+% Determine padding.
+nameLen=cellfun(@length,values(:,1));
+pad=max(max(min(minLen,max(nameLen)),maxLen)+1-nameLen,0);
+for i=1:size(values,1)
+    val=values{i,3};
+    if ~iscell(val), val={val}; end
+    fprintf(fid,[prefix,'%s%s',values{i,2},'\n'],values{i,1},...
+            repmat(' ',1,pad(i)),val{:});
+end
