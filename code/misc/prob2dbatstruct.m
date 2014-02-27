@@ -52,6 +52,12 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                 are used in the model. nK=3.
 %       nP      - scalar indicating how many (potentially zero) P values
 %                 are used in the model. nK=2.
+%       camUnit - string with the unit used internally by the camera
+%                 mm     - nominal mm
+%                 35mm   - '35 mm equivalent' units, i.e. sensor height=24mm,
+%                 pixels - pixels
+%                 unity  - sensor height=1
+%       objUnit - string with the object space unit,
 %       x0desc  - comment string on the initial values used by bundle.
 %
 %   Each IO column stores the parameters below. Currently, only the first
@@ -232,8 +238,13 @@ cEO=true(size(EO));
 cEO(end,:)=false;
 cOP=repmat(~isCtrl(:)',3,1);
 
+% Default camera and object space units.
+camUnit='mm';
+objUnit='m';
+
 s=struct('title',prob.job.title,'imNames',{imNames},'IO',IO,'IOstd',IOstd,...
          'EO',EO,'EOstd',EOstd,'cams',cams,'OP',OP,'OPstd',OPstd,'OPid',OPid, ...
          'isCtrl',isCtrl,'markPts',markPts,'ptCams',ptCams,...
          'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
-         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP,'x0desc','');
+         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP,'camUnit',camUnit,...
+         'objUnit',objUnit,'x0desc','');
