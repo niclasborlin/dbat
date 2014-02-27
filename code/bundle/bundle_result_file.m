@@ -161,7 +161,7 @@ if any(s.cIO(:))
     for i=1:size(s.cIO,2)
         vals=S*full(sIO(rows,i));
         sigma=full(ioSigma(rows,i));
-        fprintf(fid,[p,p,p,p,'Camera%d\n'],i);
+        fprintf(fid,[p,p,p,p,'Camera%d (cu=%s)\n'],i,s.camUnit);
         for j=1:length(head)
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
             values={'Value:','%g %s',{vals(j),unit{j}}};
@@ -185,6 +185,22 @@ if any(s.cIO(:))
             pretty_print(fid,[repmat(p,1,6),'  '],values,padLength,padLength);
         end 
     end
+    % Compute largest distortion.
+    xx=[1,s.IO(end-3)]+0.5*[-1,1];
+    yy=[1,s.IO(end-2)]+0.5*[-1,1];
+    corners=[xx([1,1,2,2]);yy([1,2,2,1])];
+    xr=corners(1,:)/s.IO(end-1)-s.IO(1);
+    yr=corners(2,:)/s.IO(end)+s.IO(2);
+    r2=xr.^2+yr.^2;
+    xcorrR=xr.*(s.IO(4)*r2+s.IO(5)*r2.^2+s.IO(6)*r2.^3);
+    ycorrR=yr.*(s.IO(4)*r2+s.IO(5)*r2.^2+s.IO(6)*r2.^3);
+    xcorrT=s.IO(7)*(r2+2*xr.^2)+2*s.IO(8)*xr.*yr;
+    ycorrT=s.IO(8)*(r2+2*yr.^2)+2*s.IO(7)*xr.*yr;
+    xCorr=xcorrR+xcorrT;
+    yCorr=ycorrR+ycorrT;
+    mx=max(sqrt(xCorr.^2)+sqrt(yCorr.^2));
+    fprintf(fid,[p,p,p,p,'Largest distortion: %.2g cu (%.1f px, %.1f%% of Fw)\n'],...
+                 mx,mx*mean(s.IO(end-1:end)),mx/s.IO(end-5)*100);
 end
 
 fprintf(fid,[p,p,p,'Photograph Standard Deviations:\n']);
@@ -234,7 +250,7 @@ for i=1:size(s.EO,2)
                                veo(highCorr(kk))*100)];
             end
             ss(end)='.';
-            values{end+1,:}={corrStr,'%s',ss};
+            values(end+1,:)={corrStr,'%s',ss};
         end
         pretty_print(fid,repmat(p,1,6),values,padLength,padLength);
     end
