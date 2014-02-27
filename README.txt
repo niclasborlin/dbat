@@ -22,6 +22,10 @@
 # For installation instructions, see the Installation section of the
 # manual found in the doc/manual directory.
 #
+# == NEWS ==
+# 
+# For a list of recent changes, consult the ChangeLog.txt file.
+#
 # == USAGE ==
 #
 # For examples of usage, see the usage section of the manual found in
