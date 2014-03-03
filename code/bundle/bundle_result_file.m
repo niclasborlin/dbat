@@ -161,7 +161,7 @@ if any(s.cIO(:))
     for i=1:size(s.cIO,2)
         vals=S*full(sIO(rows,i));
         sigma=full(ioSigma(rows,i));
-        fprintf(fid,[p,p,p,p,'Camera%d (cu=%s)\n'],i,s.camUnit);
+        fprintf(fid,[p,p,p,p,'Camera%d (camera unit cu=%s)\n'],i,s.camUnit);
         for j=1:length(head)
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
             values={'Value:','%g %s',{vals(j),unit{j}}};
@@ -185,7 +185,10 @@ if any(s.cIO(:))
             pretty_print(fid,[repmat(p,1,6),'  '],values,padLength,padLength);
         end 
     end
-    % Compute largest distortion.
+    % Print field of view.
+    aov=2*atan(s.IO(11:12)/s.IO(3))*180/pi;
+    fprintf(fid,[p,p,p,p,'Rated angle of view: (%.0f, %.0f) deg\n'],aov);
+    % Compute distortion at the sensor corners.
     xx=[1,s.IO(end-3)]+0.5*[-1,1];
     yy=[1,s.IO(end-2)]+0.5*[-1,1];
     corners=[xx([1,1,2,2]);yy([1,2,2,1])];
