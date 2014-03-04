@@ -47,6 +47,11 @@ function hh=plotnetwork(s,varargin)
 %  PLOTNETWORK(...,'EOplot',I), plots all cameras in the vector I. I
 %  defaults to all.
 %
+%  PLOTNETWORK(...,'iterations',I), plots only the iterations listed in
+%  the vector I. The values in I are 0-based, i.e. the value of 0 means
+%  the initial values in the first trace column of E. The value 'inf' may
+%  be used to mean the last iteration. I defaults to all.
+%
 %See also: PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
 
 % $Id$
@@ -63,6 +68,7 @@ titleStrNums=0;
 EOplot=[];
 pauseMode=[];
 align=[];
+iters=[];
 
 while ~isempty(varargin)
     if isstruct(varargin{1})
@@ -78,7 +84,7 @@ while ~isempty(varargin)
         end
         arg=[varargin{1},repmat(' ',1,3)];
         switch lower(arg(1:3))
-        case 'tra' % 'trans'
+          case 'tra' % 'trans'
             T0=varargin{2};
             if ischar(T0) && strcmp(lower(T0),'up')
                 T0=blkdiag(1,[0,-1;1,0],1);
@@ -87,14 +93,14 @@ while ~isempty(varargin)
             if ~isnumeric(T0) || ndims(T0)~=2 || any(size(T0)~=4)
                 error('DBAT:plotnetwork:badInput','T0 should be numeric 4x4');
             end
-        case 'lin' % 'lines'
+          case 'lin' % 'lines'
             L=varargin{2};
             % L should be cell array of vectors of indices, or empty.
             if ~isempty(L) && ~iscell(L)
                 error('DBAT:plotnetwork:badInput',...
                       'L should be cell array of vectors of OP indices');
             end
-        case 'cam' % 'camerasize'
+          case 'cam' % 'camerasize'
             v=varargin{2};
             % CA should be scalar or 1-by-3.
             if ~isnumeric(v) || all([1,3]~=length(v))
@@ -106,7 +112,7 @@ while ~isempty(varargin)
             else
                 camSize=v;
             end
-        case 'axe' % 'axes'
+          case 'axe' % 'axes'
             ax=varargin{2};
             % AX should be an axes or figure handle.
             if ~ishandle(ax) || ~ismember(get(ax,'type'),{'axes','figure'})
@@ -116,14 +122,14 @@ while ~isempty(varargin)
             if strcmp(get(ax,'type'),'figure')
                 ax=gca(ax);
             end
-        case 'plo'
+          case 'plo'
             plotX0pts=varargin{2};
             % plotx0pts should be scalar logical.
             if ~isscalar(plotX0pts) || ~islogical(plotX0pts)
                 error('DBAT:plotnetwork:badInput',...
                       'B should be scalar boolean'); 
             end
-        case 'tit'
+          case 'tit'
             titleStr=varargin{2};
             % title string should be a string
             if ~ischar(titleStr)
@@ -132,17 +138,19 @@ while ~isempty(varargin)
             end
             % How many %d does the title string have?
             titleStrNums=length(strfind(titleStr,'%d'));
-        case 'ali' % 'align'
+          case 'ali' % 'align'
             align=varargin{2};
             if ~isnumeric(align) || length(align)>2
                 error('DBAT:plotnetwork:badInput',...
                       'P should be numeric scalar or 2-vector'); 
             end
-        case 'pau' % 'pause'
+          case 'ite' % 'iterations'
+            iters=varargin{2};
+          case 'pau' % 'pause'
             pauseMode=varargin{2};
-        case 'eop'
+          case 'eop'
             EOplot=varargin{2};
-        otherwise
+          otherwise
             error('DBAT:plotnetwork:badInput','Bad attribute string');
         end
         % Remove processed arguments.
@@ -154,6 +162,11 @@ end
 
 if isempty(ax), ax=gca; end
 if isempty(EOplot), EOplot=1:size(s.EO,2); end
+if isempty(iters) && ~isempty(E), iters=0:size(E.trace,2)-1; end
+
+if ~isempty(E)
+    iters=unique(min(iters,size(E.trace,2)-1));
+end
 
 % Activate camera toolbar.
 cameratoolbar(get(ax,'parent'),'show');
@@ -170,8 +183,7 @@ end
 % Camera centers.
 camC=cell(size(EOplot));
 
-iter=0;
-while true
+for iter=iters
     % Extract base parameters.
     IO=s.IO;
     EO=s.EO;
@@ -268,12 +280,6 @@ while true
         end
     end
     
-    iter=iter+1;
-    
-    % Stop after last iteration.
-    if iter>nIters
-        break;
-    end
 end
 
 if nargout>0, hh=ax; end
