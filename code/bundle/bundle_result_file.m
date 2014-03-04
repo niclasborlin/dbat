@@ -309,6 +309,16 @@ else
     fprintf(fid,[p,p,p,p,'<not available>\n']);
 end
 
+fprintf(fid,[p,p,'Point Measurements\n']);
+rays=full(sum(s.vis,2));
+mn=min(rays);
+mx=max(rays);
+avg=mean(rays);
+fprintf(fid,[p,p,p,'Ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+
+fprintf(fid,[p,p,p,'Number of control pts: %d\n'],nnz(s.isCtrl));
+fprintf(fid,[p,p,p,'Number of object pts: %d\n'],nnz(~s.isCtrl));
+
 % Get all residuals.
 [rms,res]=bundle_residuals(s,e);
 
