@@ -147,7 +147,7 @@ switch lower(damping)
     % Armijo parameter.
     mu=0.1;
     % Shortest allowed step length.
-    alphaMin=1e-6;
+    alphaMin=1e-9;
     
     % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
     % returned with the step lengths used at each iteration.
