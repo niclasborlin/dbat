@@ -26,7 +26,7 @@ s=prob2dbatstruct(prob);
 % ...plot it.
 h=plotnetwork(s,'axes',tagfigure('camcaldata'),'title',...
               'Camera calibration data set (computed by Photomodeler)',...
-              'camerasize',0.2);
+              'camsize',0.2);
 
 if printdemofigures
     doprintdemofigures(h,'ccam.eps');
