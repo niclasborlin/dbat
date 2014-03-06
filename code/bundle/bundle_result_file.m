@@ -202,8 +202,10 @@ if any(s.cIO(:))
     xCorr=xcorrR+xcorrT;
     yCorr=ycorrR+ycorrT;
     mx=max(sqrt(xCorr.^2)+sqrt(yCorr.^2));
-    fprintf(fid,[p,p,p,p,'Largest distortion: %.2g cu (%.1f px, %.1f%% of Fw)\n'],...
-                 mx,mx*mean(s.IO(end-1:end)),mx/s.IO(end-5)*100);
+    % Length of sensor half-diagonal.
+    d=sqrt(s.IO(end-5)^2+s.IO(end-4)^2)/2;
+    fprintf(fid,[p,p,p,p,'Largest distortion: %.2g cu (%.1f px, %.1f%% of half-diagonal)\n'],...
+                 mx,mx*mean(s.IO(end-1:end)),mx/d*100);
 end
 
 fprintf(fid,[p,p,p,'Photograph Standard Deviations:\n']);
