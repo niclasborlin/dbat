@@ -24,7 +24,7 @@ function hh=plotnetwork(s,varargin)
 %  PLOTNETWORK(...,'lines',L), where L is a cell array of vectors with
 %  object point indices, connects the object points specified in L by lines.
 %
-%  PLOTNETWORK(...,'camerasize',CSZ), where CSZ is a 1-by-3 vector
+%  PLOTNETWORK(...,'camsize',CSZ), where CSZ is a 1-by-3 vector
 %  [W,H,D], scales the camera icons to have width W, height H, and depth D.
 %  CSZ defaults to [1,0.73,0.36]. If CSZ is a scalar, the default values are
 %  scaled by CSZ instead.
@@ -47,10 +47,15 @@ function hh=plotnetwork(s,varargin)
 %  PLOTNETWORK(...,'EOplot',I), plots all cameras in the vector I. I
 %  defaults to all.
 %
-%  PLOTNETWORK(...,'iterations',I), plots only the iterations listed in
-%  the vector I. The values in I are 0-based, i.e. the value of 0 means
-%  the initial values in the first trace column of E. The value 'inf' may
-%  be used to mean the last iteration. I defaults to all.
+%  PLOTNETWORK(...,'iters',I), plots only the iterations listed in the
+%  vector I. The values in I are 0-based, i.e. the value of 0 means the
+%  initial values in the first trace column of E. The value 'inf' may be
+%  used to mean the last iteration. I defaults to all.
+%
+%  PLOTNETWORK(...,'camiters',I), plots separate camera icons for the
+%  iterations listed in the vector I. The default is to plot a single
+%  camera per station and move it during the iteration. Use I=nan to get
+%  the default behaviour.
 %
 %See also: PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
 
@@ -69,6 +74,7 @@ EOplot=[];
 pauseMode=[];
 align=[];
 iters=[];
+camIters=nan;
 
 while ~isempty(varargin)
     if isstruct(varargin{1})
@@ -83,8 +89,8 @@ while ~isempty(varargin)
             error('DBAT:plotnetwork:badInput','Missing argument');
         end
         arg=[varargin{1},repmat(' ',1,3)];
-        switch lower(arg(1:3))
-          case 'tra' % 'trans'
+        switch lower(arg(1:4))
+          case 'tran' % 'trans'
             T0=varargin{2};
             if ischar(T0) && strcmp(lower(T0),'up')
                 T0=blkdiag(1,[0,-1;1,0],1);
@@ -93,14 +99,14 @@ while ~isempty(varargin)
             if ~isnumeric(T0) || ndims(T0)~=2 || any(size(T0)~=4)
                 error('DBAT:plotnetwork:badInput','T0 should be numeric 4x4');
             end
-          case 'lin' % 'lines'
+          case 'line' % 'lines'
             L=varargin{2};
             % L should be cell array of vectors of indices, or empty.
             if ~isempty(L) && ~iscell(L)
                 error('DBAT:plotnetwork:badInput',...
                       'L should be cell array of vectors of OP indices');
             end
-          case 'cam' % 'camerasize'
+          case 'cams' % 'camsize'
             v=varargin{2};
             % CA should be scalar or 1-by-3.
             if ~isnumeric(v) || all([1,3]~=length(v))
@@ -112,7 +118,7 @@ while ~isempty(varargin)
             else
                 camSize=v;
             end
-          case 'axe' % 'axes'
+          case 'axes' % 'axes'
             ax=varargin{2};
             % AX should be an axes or figure handle.
             if ~ishandle(ax) || ~ismember(get(ax,'type'),{'axes','figure'})
@@ -122,14 +128,14 @@ while ~isempty(varargin)
             if strcmp(get(ax,'type'),'figure')
                 ax=gca(ax);
             end
-          case 'plo'
+          case 'plot'
             plotX0pts=varargin{2};
             % plotx0pts should be scalar logical.
             if ~isscalar(plotX0pts) || ~islogical(plotX0pts)
                 error('DBAT:plotnetwork:badInput',...
                       'B should be scalar boolean'); 
             end
-          case 'tit'
+          case 'titl'
             titleStr=varargin{2};
             % title string should be a string
             if ~ischar(titleStr)
@@ -138,17 +144,19 @@ while ~isempty(varargin)
             end
             % How many %d does the title string have?
             titleStrNums=length(strfind(titleStr,'%d'));
-          case 'ali' % 'align'
+          case 'alig' % 'align'
             align=varargin{2};
             if ~isnumeric(align) || length(align)>2
                 error('DBAT:plotnetwork:badInput',...
                       'P should be numeric scalar or 2-vector'); 
             end
-          case 'ite' % 'iterations'
+          case 'iter' % 'iterations'
             iters=varargin{2};
-          case 'pau' % 'pause'
+          case 'cami' % 'camiterations'
+            camIters=varargin{2};
+          case 'paus' % 'pause'
             pauseMode=varargin{2};
-          case 'eop'
+          case 'eopl'
             EOplot=varargin{2};
           otherwise
             error('DBAT:plotnetwork:badInput','Bad attribute string');
@@ -162,9 +170,19 @@ end
 
 if isempty(ax), ax=gca; end
 if isempty(EOplot), EOplot=1:size(s.EO,2); end
-if isempty(iters) && ~isempty(E), iters=0:size(E.trace,2)-1; end
+if isempty(iters)
+    if isempty(E)
+        iters=0;
+    else
+        iters=0:size(E.trace,2)-1;
+    end
+end
+
+movingCamera=any(isnan(camIters));
+camIters(any(isnan(camIters)))=[];
 
 if ~isempty(E)
+    camIters=unique(min(camIters,size(E.trace,2)-1));
     iters=unique(min(iters,size(E.trace,2)-1));
 end
 
@@ -182,6 +200,11 @@ end
 
 % Camera centers.
 camC=cell(size(EOplot));
+
+% Store EO for all cameras that should be plotted.
+EOsave=nan(size(s.EO,1),size(s.EO,2),length(iters));
+
+x0OP=s.OP;
 
 for iter=iters
     % Extract base parameters.
@@ -202,45 +225,70 @@ for iter=iters
             [EO,OP]=pm_multialign(EO,OP,align(1));
         end
     end
-    
+
     % Transform points and cameras.
     [EO,OP,fail]=pm_multixform(EO,OP,T0);
 
+    EOsave(:,:,iter==iters)=EO;
+    if iter==0
+        x0OP=OP;
+    end
+    
     % Plot points.
-    plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.', ...
-          OP(1,s.isCtrl),OP(2,s.isCtrl),OP(3,s.isCtrl),'r^');
+    plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.',...
+          'tag','OP');
+    hold(ax,'on');
+    plot3(ax,OP(1,s.isCtrl),OP(2,s.isCtrl),OP(3,s.isCtrl),'r^','tag','CP');
+    hold(ax,'off');
+
+    if plotX0pts
+        hold(ax,'on');
+        plot3(ax,x0OP(1,~s.isCtrl),x0OP(2,~s.isCtrl),x0OP(3,~s.isCtrl),'.',...
+              'color',0.5*ones(1,3),'tag','x0OP');
+        hold(ax,'off');
+    end
+
     axis(ax,'equal');
     colormap(ax,[1,0,0;0,1,0;0.5,0.5,1])	
 
-    % Plot cameras.
-    for i=find(EOplot)
-        % Get camera icon.
-        [cam,camCol]=cameraicon(camSize);
-        cam(:,:,3)=-cam(:,:,3);
-        [m,n,p]=size(cam);
-            
-        % Camera center.
-        CC=EO(1:3,i);
-
-        % Don't try to plot cameras that are far away or undefined.
-        if all(isfinite(CC))
-            
-            camC{i}(:,end+1)=CC;
+    % Plot cameras for each of these iterations.
+    plotCamIters=[camIters(camIters<iter),iter];
         
-            % Camera orientation.
-            ang=EO(4:6,i);
-            RR=pm_eulerrotmat(ang);
+    for ci=plotCamIters
+        % Plot cameras.
+        EO=EOsave(:,:,ci==iters);
+        for i=find(EOplot)
+            % Get camera icon.
+            [cam,camCol]=cameraicon(camSize);
+            cam(:,:,3)=-cam(:,:,3);
+            [m,n,p]=size(cam);
             
-            % Apply transformation.
-            T=RR*[eye(3),-CC];
-            T(4,4)=1;
-            cam1=reshape(applyhomoxform(inv(T),reshape(cam,m*n,p)')',m,n,p);
+            % Camera center.
+            CC=EO(1:3,i);
+
+            % Don't try to plot cameras that are far away or undefined.
+            if all(isfinite(CC))
+
+                if ci==iter
+                    camC{i}(:,end+1)=CC;
+                end
+        
+                % Camera orientation.
+                ang=EO(4:6,i);
+                RR=pm_eulerrotmat(ang);
             
-            hold(ax,'on');
-            surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol);
-            line(camC{i}(1,:),camC{i}(2,:),camC{i}(3,:),'marker','x',...
-                 'parent',ax);
-            hold(ax,'off');
+                % Apply transformation.
+                T=RR*[eye(3),-CC];
+                T(4,4)=1;
+                cam1=reshape(applyhomoxform(inv(T),reshape(cam,m*n,p)')',m,n,p);
+            
+                hold(ax,'on');
+                surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol,...
+                     'tag',sprintf('iter%d',ci),'userdata',i);
+                line(camC{i}(1,:),camC{i}(2,:),camC{i}(3,:),'marker','x',...
+                     'parent',ax);
+                hold(ax,'off');
+            end
         end
     end
     

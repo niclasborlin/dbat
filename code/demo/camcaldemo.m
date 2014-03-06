@@ -53,7 +53,7 @@ s2.x0desc='Camera calibration from EXIF value';
 s=s2;
 h=plotnetwork(s,'title','Initial network',...
               'axes',tagfigure(sprintf('network%d',i)),...
-              'camerasize',0.1);
+              'camsize',0.1);
 
 if printdemofigures
     h=get(h,'parent');
@@ -143,7 +143,7 @@ for i=1:length(E)
     h=plotnetwork(result{i},E{i},'title',...
                   ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
                   'axes',tagfigure(sprintf('network%d',i)),...
-                  'pause',doPause,'camerasize',0.1); 
+                  'pause',doPause,'camsize',0.1); 
 end
 
 if printdemofigures
