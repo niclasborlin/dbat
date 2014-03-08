@@ -34,7 +34,7 @@ function hh=plotnetwork(s,varargin)
 %  gca(AX) is used.
 %
 %  PLOTNETWORK(...,'plotx0pts',B), plots the initial object point
-%  estimates separately.
+%  estimates separately if B is true.
 %
 %  PLOTNETWORK(...,'title',STR), uses STR as the title of the axes. If
 %  STR contains a '%d', it is replaced by the iteration number. If STR
@@ -57,23 +57,36 @@ function hh=plotnetwork(s,varargin)
 %  camera per station and move it during the iteration. Use I=nan to get
 %  the default behaviour.
 %
-%See also: PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
+%See also: PLOTIMAGES, PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
 
 % $Id$
 
 % Defaults.
+
+% Iteration trace info.
 E=[];
+% Default transformation.
 T0=eye(4);
+% Lines.
 L={};
+% Default camera size.
 camSize=[1,0.73,0.36];
+% Default axes.
 ax=[];
+% Should we plot X0 points separately?
 plotX0pts=false;
+% Title string.
 titleStr='';
 titleStrNums=0;
+% Which cameras to plot.
 EOplot=[];
+% Pause or not.
 pauseMode=[];
+% Which camera to align to.
 align=[];
+% Which iters to plot.
 iters=[];
+% Which iters to leave separate camera icons for.
 camIters=nan;
 
 while ~isempty(varargin)
