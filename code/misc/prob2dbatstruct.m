@@ -207,7 +207,7 @@ else
 end
 
 % Remove image directory from image names.
-imNames=cellfun(@(x)x(length(imDir):end),imNames,'uniformoutput',false);
+imNames=cellfun(@(x)x(length(imDir)+1:end),imNames,'uniformoutput',false);
 
 % Object and control points.
 OP=nan(3,nOP);
