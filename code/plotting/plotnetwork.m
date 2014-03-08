@@ -91,7 +91,7 @@ camIters=nan;
 
 while ~isempty(varargin)
     if isstruct(varargin{1})
-        % PLOTNETWORKS(S,E)
+        % PLOTNETWORK(S,E)
         E=varargin{1};
         varargin(1)=[];
         if ~isfield(E,{'trace','damping'})
@@ -101,7 +101,7 @@ while ~isempty(varargin)
         if length(varargin)<2
             error('DBAT:plotnetwork:badInput','Missing argument');
         end
-        arg=[varargin{1},repmat(' ',1,3)];
+        arg=[varargin{1},repmat(' ',1,4)];
         switch lower(arg(1:4))
           case 'tran' % 'trans'
             T0=varargin{2};
