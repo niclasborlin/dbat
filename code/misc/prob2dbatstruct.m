@@ -59,6 +59,9 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                 unity  - sensor height=1
 %       objUnit - string with the object space unit,
 %       x0desc  - comment string on the initial values used by bundle.
+%       title   - title string.
+%       imNames - nEO-cell array with image names.
+%       imDir   - string with image directory.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -176,12 +179,35 @@ else
     cams=ones(1,nImages);
 end
 
-imNames={prob.images.imName};
-for i=1:length(imNames)
-    % Remove image directory.
-    [p,n,e]=fileparts(strrep(imNames{i},'\','/'));
-    imNames{i}=[n,e];
+imNames=cellfun(@(x)strrep(x,'\','/'),{prob.images.imName},...
+                'uniformoutput',false);
+
+% Find shortest common dir prefix.
+imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
+
+while length(imDirs)>1
+    % More than one, check if shortest is prefix to others.
+    [~,i]=min(cellfun(@length,imDirs));
+    testDir=fullfile(imDirs{i},filesep);
+    isPrefixed=strncmp(testDir,imNames,length(testDir));
+    if all(isPrefixed)
+        % Yes.
+        imDirs=imDirs{i};
+    else
+        % No, trim again.
+        imDirs=unique(cellfun(@fileparts,imDirs,'uniformoutput',false));
+    end
 end
+
+if isempty(imDirs)
+    imDir='';
+else
+    % Pick remaining dir and append / safely.
+    imDir=fullfile(imDirs{:},filesep);
+end
+
+% Remove image directory from image names.
+imNames=cellfun(@(x)x(length(imDir):end),imNames,'uniformoutput',false);
 
 % Object and control points.
 OP=nan(3,nOP);
@@ -242,7 +268,8 @@ cOP=repmat(~isCtrl(:)',3,1);
 camUnit='mm';
 objUnit='m';
 
-s=struct('title',prob.job.title,'imNames',{imNames},'IO',IO,'IOstd',IOstd,...
+s=struct('title',prob.job.title,'imDir',imDir,'imNames',{imNames},...
+         'IO',IO,'IOstd',IOstd,...
          'EO',EO,'EOstd',EOstd,'cams',cams,'OP',OP,'OPstd',OPstd,'OPid',OPid, ...
          'isCtrl',isCtrl,'markPts',markPts,'ptCams',ptCams,...
          'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
