@@ -277,7 +277,7 @@ for i=1:size(s.IO,2)
 
     calStrs={'<not available>','yes'};
     values={
-        'Calibration:','%s',calStrs{any(s.cIO(:,i))},
+        'Calibration:','%s',calStrs{any(s.cIO(:,i))+1},
         'Number of photos using camera:','%d',nnz(s.cams==i)
         };
     pretty_print(fid,repmat(p,1,4),values);
