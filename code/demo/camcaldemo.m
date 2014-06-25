@@ -1,6 +1,10 @@
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
+dampings={'none','gna','lm','lmp'};
+
+dampings=dampings(2);
+
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
     fName=fullfile(curDir,'data','C4040Z-2272x1704.txt');
@@ -21,6 +25,9 @@ else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
 end
 s0=prob2dbatstruct(prob);
+
+fprintf(['Using damping %s. To use another damping, modify line 6 ' ...
+         'of camcaldemo.m\n'],dampings{1});
 
 % Set CP 1-4 to nominal coordinates. Initial values for the EO and OP
 % parameters are computed based on these points.
@@ -64,10 +71,6 @@ if printdemofigures
     end
 end
 
-
-dampings={'none','gna','lm','lmp'};
-
-dampings=dampings(2);
 
 result=cell(size(dampings));
 ok=nan(size(dampings));
@@ -140,10 +143,12 @@ end
 if printdemofigures, doPause=0; else doPause='on'; end
 
 for i=1:length(E)
+    h=plotparams(result{i},E{i},'noio','noeo','noop');
+    fig=tagfigure(sprintf('network%d',i));
+    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,fig);
     h=plotnetwork(result{i},E{i},'title',...
                   ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                  'axes',tagfigure(sprintf('network%d',i)),...
-                  'pause',doPause,'camsize',0.1); 
+                  'axes',fig,'pause',doPause,'camsize',0.1); 
 end
 
 if printdemofigures
