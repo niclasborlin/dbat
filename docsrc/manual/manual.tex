@@ -17,7 +17,7 @@
 
 \svnInfo $Id$
 
-\newcommand{\dbatversion}{0.3.1}
+\newcommand{\dbatversion}{0.4}
 
 \title{The Damped Bundle Adjustment Toolbox\\v\dbatversion{} for Matlab}
 
@@ -71,7 +71,7 @@ The toolbox currently includes routines for (function names in parentheses):
   \item Bundle adjustment proper (\texttt{bundle}) using either
     Classical, Gauss-Newton-Armijo, Levenberg-Marquardt, or
     Levenberg-Marquardt-Powell damping schemes
-    \citep{Borlin2013:Bundle}.
+    \citep{Borlin2013:Bundle,Borlin2014:Camera}.
   \item Covariance calculations (\texttt{bundle\_cov}) from the bundle
     result.
   \end{itemize}
@@ -114,8 +114,8 @@ included in the distribution. In summary:
   long as you give due credit. Specifically, if you use the code, or
   derivatives thereof, for scientific publications, you should refer
   to on or more of the papers
-  \citet{Borlin2013:Bundle,Borlin2013:Experiments} that the code is
-  based on.
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera}
+  that the code is based on.
 \item You may modify and redistribute the code as long as the
   licensing details are also redistributed.
 \end{itemize}
@@ -139,6 +139,9 @@ Inside Matlab, do the following initialization:\\
 
 \subsection{Demos}
 \label{sec:demos}
+
+{\bf Hint: You may wish to use the commands {\tt clear} and {\tt close
+    all} between the demos to close all windows and clear all variables.}
 
 \subsubsection{loadplotdemo}
 \label{sec:loadplotdemo}
@@ -344,6 +347,11 @@ computation will take a bit longer. Computation time was around one
 minute running on a HP compaq dc7800 with an Intel Core2 Quad CPU
 Q9300 @ 2.50GHz under 64-bit Ubuntu 12.04 (kernel 3.5.0-45).
 
+\subsubsection{Camera calibration demos}
+
+The camera calibration demos from \citet{Borlin2014:Camera} will be
+added to the next version of the toolbox.
+
 \subsection{Using your own data}
 
 This section describes how to import you own data using Photomodeler
@@ -403,7 +411,6 @@ steps are valid in Photomodeler Scanner 2012:
   should now have been generated.
 \end{enumerate}
 
-\newpage
 \bibliography{ref}
 
 \appendix
