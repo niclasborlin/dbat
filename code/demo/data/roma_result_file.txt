@@ -6,8 +6,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run: 25-Jun-2014 15:18:31
-      DBAT version:    0.3.1.203 (2014-02-12 16:27:27)
+      Last Bundle Run: 25-Jun-2014 15:31:54
+      DBAT version:    0.4.0.203 (2014-02-12 16:27:27)
       Status:          OK (0)
       Sigma0 (pixels): 0.610237
       Sigma0 (mm):     0.00390982
