@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.3.1 for Matlab (R), below called the Toolbox.
+# v0.4.0 for Matlab (R), below called the Toolbox.
 #
 # == LEGAL STUFF ==
 #
@@ -16,6 +16,10 @@
 #     Initial Values and Linesearch Bundle Adjustment in Architectural
 #     Photogrammetry", ISPRS Annals of the Photogrammetry, Remote
 #     Sensing, and Spatial Information Sciences, vol II-5/W1:43-48.
+# Börlin and Grussenmeyer (2014). "Camera Calibration using the Damped
+#     Bundle Adjustment Toolbox", ISPRS Annals of the Photogrammetry,
+#     Remote Sensing, and Spatial Information Sciences, vol
+#     II-5:89-96.
 #
 # == INSTALLATION ==
 #
