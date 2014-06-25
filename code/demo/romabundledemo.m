@@ -66,8 +66,9 @@ plotimagestats(result{1},E{1});
 plotopstats(result{1},E{1},COP);
 
 for i=1:length(E)
+    fig=tagfigure(sprintf('network%d',i));
+    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,fig);
     plotnetwork(result{i},E{i},'trans','up','align',1,'title',...
                 ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                'axes',tagfigure(sprintf('network%d',i)),...
-                'pause','on');
+                'axes',fig,'pause','on');
 end
