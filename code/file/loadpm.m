@@ -153,7 +153,7 @@ while ~feof(fid)
     % N STDC STDYP etc.
 
 	% Get photo name.
-	[photo,count,err,next]=sscanf(s,'%d');
+	[photo,count,err,next]=sscanf(s,'%d'); %#ok<ASGLU>
 	if isempty(photo)
         % Photo block sequence terminated by blank line.
 		break;
@@ -199,7 +199,7 @@ while ~feof(fid)
     images(end+1)=struct('imName',imName,'outer',outer,...
                          'outerStd',outerStd,'outerCov',outerCov,...
                          'inner',inner,'innerStd',innerStd,...
-                         'imSz',imSz);
+                         'imSz',imSz); %#ok<AGROW>
 end
 waitbar(ftell(fid)/sz,h);
 
@@ -227,7 +227,7 @@ while ~feof(fid)
     nCtrlPts=nCtrlPts+1;
     if size(ctrlPts,1)<nCtrlPts
         % Expand by 1000 points at a time to avoid memory fragmentation.
-        ctrlPts(end+1000,1)=0;
+        ctrlPts(end+1000,1)=0; %#ok<AGROW>
     end
     ctrlPts(nCtrlPts,:)=cp;
 end
@@ -258,7 +258,7 @@ while ~feof(fid)
     nObjPts=nObjPts+1;
     if size(objPts,1)<nObjPts
         % Expand by 10000 points at a time to avoid memory fragmentation.
-        objPts(end+10000,1)=0;
+        objPts(end+10000,1)=0; %#ok<AGROW>
     end
     objPts(nObjPts,:)=op;
 end
@@ -290,7 +290,7 @@ while ~feof(fid)
     nMarkPts=nMarkPts+1;
     if size(markPts,1)<nMarkPts
         % Expand by 10000 points at a time to avoid memory fragmentation.
-        markPts(end+10000,1)=0;
+        markPts(end+10000,1)=0; %#ok<AGROW>
     end
     markPts(nMarkPts,:)=mp;
 end
@@ -335,7 +335,25 @@ if ~skipFeatures
         if isempty(fp)
             break;
         end
-        featVis=[featVis;fp];
+        featVis=[featVis;fp]; %#ok<AGROW>
+    end
+end
+
+% Check for overlapping ids for smartpoints and others.
+if ~isempty(objPts)
+    % Are all object point ids increasing?
+    split=find(diff(objPts(:,1))<0);
+    if length(split)==1
+        % If not, first sequence is object point ids, second sequence is
+        % smart point ids.
+        objId=objPts(1:split,1);
+        smartObjId=objPts(split+1:end,1);
+        % Shift all smart point ids to fall above normal object ids.
+        shift=max(objId)+1-min(smartObjId);
+        objPts(split+1:end,1)=objPts(split+1:end,1)+shift;
+        % Smart mark points have zeros in columns 5-6.
+        smartMarkPts=all(markPts(:,5:6)==0,2);
+        markPts(smartMarkPts,2)=markPts(smartMarkPts,2)+shift;
     end
 end
 
