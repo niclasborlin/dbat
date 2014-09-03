@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.4.1, Sep 3, 2014.
+- Added hadling of id collisions in Photomodeler export files between 
+  smartpoints and normal points.
+
 Release 0.4.0, Jun 25, 2014.
  - Simplified switching between running Gauss-Markov,
    Gauss-Newton-Armijo, Levenberg-Marquardt, and
