@@ -1,5 +1,3 @@
-clear
-
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
