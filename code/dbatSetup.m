@@ -14,6 +14,6 @@ addpath(fullfile(baseDir,'photogrammetry'),'-end')
 addpath(fullfile(baseDir,'demo'),'-end')
 addpath(baseDir,'-end')
 
-disp('You can now access DBAT from everywhere.')
+fprintf('You can now access DBAT v%s from everywhere.\n',dbatversion)
 
 clear baseDir
