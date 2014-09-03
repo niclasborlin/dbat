@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.4.0 for Matlab (R), below called the Toolbox.
+# v0.4.1 for Matlab (R), below called the Toolbox.
 #
 # == LEGAL STUFF ==
 #
