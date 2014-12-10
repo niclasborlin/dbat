@@ -13,10 +13,12 @@ function [xy,dIO,dEO,dOP]=pm_multieulerpinhole1(IO,nK,nP,EO,cams,OP,vis,cIO,cEO,
 %nP     - number of tangential koefficients.
 %EO     - matrix with photo camera outer orientation as columns
 %         C     - camera center [Xc,Yc,Zc].
-%         ang   - Euler angles.
-%         ax    - Euler axis sequence
-%                 0 - 'xyz'.
-%                 1 - 'zxz'.
+%         rotP  - rotation parameters.
+%         rotM  - rotation model.
+%                 0 - Original Euler 'xyz'.
+%                 1 - New Euler 'xyz'.
+%                 2 - Euler 'zxz'.
+%                 3 - Rodriguez abc.
 %cams   - vector of camera numbers for each photo.
 %OP     - 3 x nObj matrix with object coordinates
 %vis    - sparse matrix indicating if obj point i is visible in photo j.
@@ -64,12 +66,10 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
         % Get camera station.
         camStation=EO(:,i);
         center=camStation(1:3);
-        ang=camStation(4:6);
-        if (camStation(7)==0)
-            seq='xyz';
-        else
-            seq='zxz';
-        end
+        % Rotation parameters.
+        rotP=camStation(4:end-1);
+        % Rotation model.
+        rotM=camStation(end);
         
         % Get inner orientation.
         camNo=cams(i);
@@ -80,7 +80,7 @@ if (all(~cIO(:)) & all(~cEO(:)) & all(~cOP(:)))
         obj=OP(:,v);
 	
         % Project into image.
-        imPt=pm_eulerpinhole1(pp,f,obj,center,ang,seq);
+        imPt=pm_eulerpinhole1(pp,f,obj,center,rotP,rotM);
 	
         % Find out where to store points.
         [ixPt,xyBase]=indvec(nnz(v)*2,xyBase);
@@ -104,8 +104,9 @@ else
     
     
     % Which EO partial derivatives are requested?
-    if (length(cEO)==1)
-        cEO=repmat(cEO,6,nPhotos);
+    if length(cEO)==1
+        cEO=repmat(cEO,size(EO));
+        cEO(end,:)=false;
     end
     
     % Preallocate EO jacobian.
@@ -121,7 +122,7 @@ else
     dEOix=0;
     
     % Create arrays of columns indices for EO derivatives.
-    [ixC,ixAng]=createeocolumnindices(cEO);
+    [ixC,ixRotP]=createeocolumnindices(cEO);
     
     
     % Which OP partial derivatives are requested?
@@ -152,16 +153,14 @@ else
         % Get camera station.
         camStation=EO(:,i);
         center=camStation(1:3);
-        ang=camStation(4:6);
-        if (camStation(7)==0)
-            seq='xyz';
-        else
-            seq='zxz';
-        end
+        % Rotation parameters.
+        rotP=camStation(4:end-1);
+        % Rotation model.
+        rotM=camStation(end);
         
         % Which outer orientation parameters are interesting?
         cC=cEO(1:3,i);
-        cAng=cEO(4:6,i);
+        cRotP=cEO(4:end-1,i);
         
         % Get inner orientation.
         camNo=cams(i);
@@ -179,9 +178,9 @@ else
         ixObj=ixOP(:,v);
         
         % Project into image.
-        [imPt,dpp,df,dO,dC,dAng]=...
-            pm_eulerpinhole1(pp,f,obj,center,ang,seq,...
-                             any(cpp),cf,cObj,any(cC),any(cAng));
+        [imPt,dpp,df,dO,dC,dRotP]=...
+            pm_eulerpinhole1(pp,f,obj,center,rotP,rotM,...
+                             any(cpp),cf,cObj,any(cC),any(cRotP));
 	
         % Find out where to store points.
         [ixPt,xyBase]=indvec(nnz(v)*2,xyBase);
@@ -205,10 +204,10 @@ else
             dEOv(dEOix+(1:length(ii)))=vv;
             dEOix=dEOix+length(ii);
         end
-        if (any(cAng))
-            %dEO(ixPt,ixAng(cAng,i))=dAng(:,cAng);
-            [ii,jj,vv]=find(dAng(:,cAng));
-            ix2=ixAng(cAng,i);
+        if (any(cRotP))
+            %dEO(ixPt,ixRotP(cRotP,i))=dRotP(:,cRotP);
+            [ii,jj,vv]=find(dRotP(:,cRotP));
+            ix2=ixRotP(cRotP,i);
             dEOi(dEOix+(1:length(ii)))=ixPt(ii);
             dEOj(dEOix+(1:length(ii)))=ix2(jj);
             dEOv(dEOix+(1:length(ii)))=vv;

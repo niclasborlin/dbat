@@ -34,13 +34,13 @@ n=size(P,2);
 
 if (nargout==1)
 	% Rotate point to camera coordinate system.
-	T=pm_roteuler1(ang,ax,P,C);
+	T=pm_roteuler2(ang,ax,P,C);
 
 	% Project rotated point into camera.
 	p=pm_proj1(p0,f,T);
 else
 	% Rotate point to camera coordinate system.
-	[T,dTdAng,dTdP,dTdC]=pm_roteuler1(ang,ax,P,C,cAng,cP,cC);
+	[T,dTdAng,dTdP,dTdC]=pm_roteuler2(ang,ax,P,C,cAng,cP,cC);
 
 	% Project rotated point into camera.
 	[p,dpdp0,dpdf,dpdT]=pm_proj1(p0,f,T,cp0,cf,any(cP(:)) | cC | cAng);
