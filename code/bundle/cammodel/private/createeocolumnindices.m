@@ -1,4 +1,4 @@
-yfunction [ixC,ixAng]=createeocolumnindices(cEO);
+function [ixC,ixAng]=createeocolumnindices(cEO);
 % Create arrays of columns indices for EO derivatives.
 % A zero element means that the partial derivative should not be
 % calculated/stored.
