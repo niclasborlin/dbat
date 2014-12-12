@@ -65,7 +65,7 @@ while ~isempty(varargin)
     elseif ischar(varargin{1})
         % DAMP, TRACE, or CXX
         switch lower(varargin{1})
-          case {'none','gm','gna','lm','lmp'}
+          case {'none','gm','gna','lm','lmp','lwb'}
             % OK
             damping=varargin{1};
             varargin(1)=[];
@@ -95,8 +95,9 @@ x0(ixIO)=s.IO(s.cIO);
 x0(ixEO)=s.EO(s.cEO);
 x0(ixOP)=s.OP(s.cOP);
 
-% Residual function.
+% Residual and constraint functions.
 resFun=@brown_euler_cam;
+conFun=@brown_euler_cam_c;
 
 if veto
     vetoFun=@chirality;
@@ -106,6 +107,8 @@ end
 
 % Convergence tolerance.
 convTol=1e-3;
+% Constraint tolerance.
+constrTol=1e-8;
 
 % Set up cell array of extra parameters.
 params={s};
@@ -197,6 +200,23 @@ switch lower(damping)
     time=cputime-stopWatch;
     E.damping=struct('name','lmp','delta',delta,'rho',rho,'delta0',delta0,...
                      'rhoBad',rhoBad,'rhoGood',rhoGood,'step',step);
+  case 'lwb'
+    % Lindstrom-Wedin-Borlin constrained.
+
+    % Armijo parameter.
+    mu=0.1;
+    nu0=0.1;
+    % Shortest allowed step length.
+    alphaMin=1e-9;
+    
+    % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
+    % returned with the step lengths used at each iteration.
+    stopWatch=cputime;
+    [x,code,iters,l,X,alpha,C,L,nus,r,J,A,res]=sqpsq(resFun,conFun,vetoFun,x0, ...
+                                         maxIter,convTol,constrTol,trace, ...
+                                         singularTest,mu,nu0,alphaMin,params);  
+    time=cputime-stopWatch;
+    E.damping=struct('name','lwb','alpha',alpha,'mu',mu,'alphaMin',alphaMin);
   otherwise
     error('DBAT:bundle:internal','Unknown damping');
 end

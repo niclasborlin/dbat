@@ -1,12 +1,8 @@
-function [f,J,JJ]=brown_euler_cam(x,s)
-%BROWN_EULER_CAM Residual function for the Brown camera model.
+function [c,A,AA]=brown_euler_cam_c(x,s)
+%BROWN_EULER_CAM Constraint function for the Brown camera model.
 %
 %   F=BROWN_EULER_CAM(X,S) returns the residual vector F of the camera
 %   network defined in S evaluated with the approximate values in X.
-%
-%   [F,J]=... also returns the analytical Jacobian J.
-%
-%   [F,J,JJ]=... also returns the numerical Jacobian JJ. Used for testing only.
 %
 %   The internal camera model is from Brown (1971) with K1, K2, K3, P1, and
 %   P2. The external orientation uses Euler omega-phi-kappa angles.
@@ -34,31 +30,20 @@ OP(s.cOP)=x(ixOP);
 
 if (nargout>2)
     % Numerical approximation of Jacobian (for debugging only).
-    JJ=jacapprox(mfilename,x,1e-6,{s});
+    AA=jacapprox(mfilename,x,1e-6,{s});
 end
 
-if (nargout<2)
-    % Only residual vector requested.
+if nargout<2
+    % Only constraint vector requested.
     
     % Project into pinhole camera.
-    xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
-
-    % Remove lens distortion from measured points.
-    ptCorr=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP,s.ptCams, ...
-                             size(IO,2));
+    c=pm_multirotconstr(IO,s.nK,s.nP,EO,s.cams,OP,s.vis,s.cIO,s.cEO,s.cOP);
 	
-    f=xy(:)-ptCorr(:);
 else
     % Project into pinhole camera.
-    [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                            s.vis,s.cIO,s.cEO,s.cOP);
+    [c,dIO,dEO,dOP]=pm_multirotconstr(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                              s.vis,s.cIO,s.cEO,s.cOP);
 	
-    % Remove lens distortion from measured points.
-    [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-                                    s.ptCams,size(IO,2),s.cIO);
-
-    f=xy(:)-ptCorr(:);
-	
-    J=[dIO1-dIO2,dEO,dOP];
+    A=[dIO,dEO,dOP];
 end
 
