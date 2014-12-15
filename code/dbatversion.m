@@ -9,7 +9,7 @@ function [v,date]=dbatversion
 % $Id$
 
 % Should always be x.y.z.
-toolboxVersion='0.4.1m';
+toolboxVersion='0.4.2m';
 
 % This strings is updated by subversion on commit.
 idStr='$Id$';
