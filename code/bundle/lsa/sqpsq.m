@@ -67,7 +67,7 @@ while (1)
     nus=[nus,nu];
 
     % Calculate steplength.
-    alpha=linesearch(fun,con,x,p,alphaMin,nu,r,c,-mu*(J'*r+nu*(A'*c))'*p,params);
+    alpha=linesearch(fun,con,x,p,alphaMin,nu,r,c,-mu*((J'*r+nu*(A'*c))'*p),params);
     a=[a,alpha];
     if (alpha==0)
         code=2;
