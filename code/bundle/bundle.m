@@ -65,7 +65,7 @@ while ~isempty(varargin)
     elseif ischar(varargin{1})
         % DAMP, TRACE, or CXX
         switch lower(varargin{1})
-          case {'none','gm','gna','lm','lmp','lwb'}
+          case {'none','gm','gna','lm','lmp','gh','lwb'}
             % OK
             damping=varargin{1};
             varargin(1)=[];
@@ -134,6 +134,9 @@ E=struct('maxIter',maxIter,'convTol',convTol,'singularTest',singularTest,...
          'chirality',veto,'dateStamp',datestr(now),...
          'version',sprintf('%s (%s)',v,d));
 
+% Vector of Lagrange multipliers. Empty for unconstrained problems.
+l=[];
+
 switch lower(damping)
   case {'none','gm'}
     % Gauss-Markov with no damping.
@@ -200,6 +203,23 @@ switch lower(damping)
     time=cputime-stopWatch;
     E.damping=struct('name','lmp','delta',delta,'rho',rho,'delta0',delta0,...
                      'rhoBad',rhoBad,'rhoGood',rhoGood,'step',step);
+  case 'gh'
+    % Gauss-Helmert constrained.
+
+    % Armijo parameter.
+    mu=-inf; % Always accept.
+    nu0=0.1;
+    % Shortest allowed step length.
+    alphaMin=1e-9;
+    
+    % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
+    % returned with the step lengths used at each iteration.
+    stopWatch=cputime;
+    [x,code,iters,l,X,alpha,C,L,nus,r,J,A,res]=sqpsq(resFun,conFun,vetoFun,x0, ...
+                                         maxIter,convTol,constrTol,trace, ...
+                                         singularTest,mu,nu0,alphaMin,params);  
+    time=cputime-stopWatch;
+    E.damping=struct('name','gh','alpha',alpha,'mu',mu,'alphaMin',alphaMin);
   case 'lwb'
     % Lindstrom-Wedin-Borlin constrained.
 
@@ -243,7 +263,7 @@ if ok
 end
 
 % Sigma0 is sqrt(r'*r/(m-n)) in mm, convert to pixels.
-s0mm=sqrt(r'*r/(length(r)-length(x)));
+s0mm=sqrt(r'*r/(length(r)-length(x)+length(l)));
 s0px=s0mm*mean(s.IO(end-1:end));
 s0=s0px;
 
