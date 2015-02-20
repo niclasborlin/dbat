@@ -186,8 +186,8 @@ if any(s.cIO(:))
         end 
     end
     % Print field of view.
-    aov=2*atan(s.IO(11:12)/s.IO(3))*180/pi;
-    fprintf(fid,[p,p,p,p,'Rated angle of view: (%.0f, %.0f) deg\n'],aov);
+    aov=2*atan([s.IO(11:12);norm(s.IO(11:12))]/(2*s.IO(3)))*180/pi;
+    fprintf(fid,[p,p,p,p,'Rated angle of view (h,v,d): (%.0f, %.0f, %.0f) deg\n'],aov);
     % Compute distortion at the sensor corners.
     xx=[1,s.IO(end-3)]+0.5*[-1,1];
     yy=[1,s.IO(end-2)]+0.5*[-1,1];
