@@ -1,7 +1,7 @@
 function [T,dAng,dP,dC]=pm_roteuler1(ang,ax,P,C,cAng,cP,cC)
 %PM_ROTEULER1 Camera model point rotation using Euler angles.
 %
-%[T,dAng,dP,dC]=pm_rot2(ang,ax,P,C[,cAng,cP,cC])
+%[T,dAng,dP,dC]=pm_roteuler1(ang,ax,P,C[,cAng,cP,cC])
 %ang  - Euler angles.
 %ax   - Euler axis sequence.
 %P    - 3xn matrix of object points [X;Y;Z].
@@ -10,10 +10,6 @@ function [T,dAng,dP,dC]=pm_roteuler1(ang,ax,P,C,cAng,cP,cC)
 %       elementwise indication.
 %T    - 3xn matrix of transformed object points [U;V;W].
 %d[x] - jacobian of T w.r.t. x.
-
-% v1.0  2003-10-21. Niclas Borlin, niclas@cs.umu.se.
-% v1.1  2003-10-30. Now handles cP as matrix, i.e. derivatives
-%                   w.r.t. individual point elements.
 
 if (nargin<5), cAng=(nargout>1); end
 if (nargin<6), cP=(nargout>2); end
@@ -33,20 +29,20 @@ deltaP=P-repmat(C,1,n);
 T=M*deltaP;
 
 if (cAng)
-	dA1=da1*deltaP;
-	dA2=da2*deltaP;
-	dA3=da3*deltaP;
-	dAng=[dA1(:),dA2(:),dA3(:)];
+    dA1=da1*deltaP;
+    dA2=da2*deltaP;
+    dA3=da3*deltaP;
+    dAng=[dA1(:),dA2(:),dA3(:)];
 end
 
 if (any(cP(:)))
-	dP=kron(speye(n),M);
-	if (length(cP)>1 & any(~cP(:)))
-		% Remove unwanted columns.
-		dP=dP(:,cP(:));
-	end
+    dP=kron(speye(n),M);
+    if (length(cP)>1 & any(~cP(:)))
+        % Remove unwanted columns.
+        dP=dP(:,cP(:));
+    end
 end
 
 if (cC)
-	dC=kron(ones(n,1),-M);
+    dC=kron(ones(n,1),-M);
 end
