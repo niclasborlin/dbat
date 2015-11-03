@@ -10,70 +10,79 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
 %   The struct S has fields:
-%       IO      - 16-by-nCams array with estimates of the internal
-%                 orientation for each camera.
-%       IOobs   - 16-by-nCams array with prior observations of the IO
-%                 parameters, or NaN if none.
-%       IOstd   - 16-by-nCams array with prior standard deviations for
-%                 the IO parameters, 0 if exact, NaN if none.
-%       IOcov   - 16-by-16-by-nCams array with prior covariance matrices
-%                 for the IO parameters, or empty if none.
-%       EO      - 7-by-nImages array with the external orientation for
-%                 each image.
-%       EOobs   - 7-by-nImages array with prior observations of the EO
-%                 parameters, 0 if exact, or NaN if none. 
-%       EOstd   - 7-by-nImages array with prior standard deviations for
-%                 the EO parameters.
-%       EOcov   - 6-by-6-by-nImages array with prior covariance matrices for
-%                 the EO parameters, or empty if none.
-%       cams    - 1-by-nImages numerical array indicating which IO column
-%                 correspond to which image. 
-%       OP      - 3-by-nOP array with object and control points.
-%       OPobs   - 3-by-nOP array with prior observations of control points.
-%       OPstd   - 3-by-nOP array with prior OP standard deviations, 0 if
-%                 exact, NaN if none.
-%       OPcov   - 3-by-3-by-nOP array with prior covariance matrices for
-%                 the OP parameters, or empty if none.
-%       OPid    - 1-by-nOP array with object points ids.
-%       isCtrl  - 1-by-nOP logical vector indicating which OP are control
-%                 points.
-%       markPts - 2-by-nMarkPts array with measured image coordinates in
-%                 pixels, stored in image-major order.
-%       ptCams  - 1-by-nMarkPts array indicating which IO column
-%                 correspond to which measured point.
-%       markStd - 2-by-nMarkPts array with standard deviations for the
-%                 markPts coordinates.
-%       vis     - nOP-by-nImage sparse logical array indicating in which
-%                 image(s) each OP is visible. vis(I,J)==true if object
-%                 point I has a measured coordinate in image J.
-%       colPos  - nOP-by-nImage numerical array indicating which column
-%                 in markPts the corresponding measurement is
-%                 stored. colPos(I,J)==K indicates the the measurement of
-%                 object point I in image J is stored in column K of markPts.
-%       cIO     - 12-by-nCams logical array indicating which internal
-%                 parameters should be estimated by the bundle. Defaults
-%                 to all false.
-%       cEO     - 7-by-nImages logical array indicating which external
-%                 parameters should be estimated by the bundle. Defaults
-%                 to true for all real camera parameters (first 6 rows).
-%       cOP     - 3-by-nOP logical array indicating which OP parameters
-%                 are considered free and should be estimated by the
-%                 bundle. Defaults to true for object points, false for
-%                 control points.
-%       nK      - scalar indicating how many (potentially zero) K values
-%                 are used in the model. nK=3.
-%       nP      - scalar indicating how many (potentially zero) P values
-%                 are used in the model. nK=2.
-%       camUnit - string with the unit used internally by the camera
-%                 mm     - nominal mm,
-%                 35mm   - '35 mm equivalent' units, i.e. sensor height=24mm,
-%                 pixels - pixels,
-%                 unity  - sensor height=1.
-%       objUnit - string with the object space unit.
-%       x0desc  - comment string on the initial values used by bundle.
-%       title   - title string.
-%       imNames - nEO-cell array with image names.
-%       imDir   - string with the image directory.
+%       IO       - 16-by-nCams array with estimates of the internal
+%                  orientation for each camera.
+%       IOobs    - 16-by-nCams array with prior observations of the IO
+%                  parameters, or NaN if none.
+%       IOstd    - 16-by-nCams array with prior standard deviations for
+%                  the IO parameters, 0 if exact, NaN if none.
+%       IOcov    - 16-by-16-by-nCams array with prior covariance matrices
+%                  for the IO parameters, or empty if none.
+%       EO       - 7-by-nImages array with the external orientation for
+%                  each image.
+%       EOobs    - 7-by-nImages array with prior observations of the EO
+%                  parameters, 0 if exact, or NaN if none. 
+%       EOstd    - 7-by-nImages array with prior standard deviations for
+%                  the EO parameters.
+%       EOcov    - 6-by-6-by-nImages array with prior covariance
+%                  matrices for the EO parameters, or empty if none.
+%       cams     - 1-by-nImages numerical array indicating which IO column
+%                  correspond to which image. 
+%       OP       - 3-by-nOP array with object and control points.
+%       OPobs    - 3-by-nOP array with prior observations of control points.
+%       OPstd    - 3-by-nOP array with prior OP standard deviations, 0 if
+%                  exact, NaN if none.
+%       OPcov    - 3-by-3-by-nOP array with prior covariance matrices for
+%                  the OP parameters, or empty if none.
+%       OPid     - 1-by-nOP array with object points ids.
+%       isCtrl   - 1-by-nOP logical vector indicating which OP are control
+%                  points.
+%       markPts  - 2-by-nMarkPts array with measured image coordinates in
+%                  pixels, stored in image-major order.
+%       ptCams   - 1-by-nMarkPts array indicating which IO column
+%                  correspond to which measured point.
+%       markStd  - 2-by-nMarkPts array with standard deviations for the
+%                  markPts coordinates.
+%       vis      - nOP-by-nImage sparse logical array indicating in which
+%                  image(s) each OP is visible. vis(I,J)==true if object
+%                  point I has a measured coordinate in image J.
+%       colPos   - nOP-by-nImage numerical array indicating which column
+%                  in markPts the corresponding measurement is
+%                  stored. colPos(I,J)==K indicates the the measurement of
+%                  object point I in image J is stored in column K of markPts.
+%       estIO    - 12-by-nCams logical array indicating which internal
+%                  parameters should be estimated by the bundle. Defaults
+%                  to all false.
+%       estEO    - 7-by-nImages logical array indicating which external
+%                  parameters should be estimated by the bundle. Defaults
+%                  to true for all real camera parameters (first 6 rows).
+%       estOP    - 3-by-nOP logical array indicating which OP parameters
+%                  are considered free and should be estimated by the
+%                  bundle. Defaults to true for object points, false for
+%                  control points.
+%       useIOobs - 12-by-nCams logical array indicating which prior IO
+%                  observations should be used by the bundle. Defaults 
+%                  to all false.
+%       useEOobs - 7-by-nCams logical array indicating which prior EO
+%                  observations should be used by the bundle. Defaults 
+%                  to all false.
+%       useOPobs - 3-by-nOP logical array indicating which prior OP
+%                  observations should be used by the bundle. Defaults 
+%                  to true for control points.
+%       nK       - scalar indicating how many (potentially zero) K values
+%                  are used in the model. nK=3.
+%       nP       - scalar indicating how many (potentially zero) P values
+%                  are used in the model. nK=2.
+%       camUnit  - string with the unit used internally by the camera
+%                  mm     - nominal mm,
+%                  35mm   - '35 mm equivalent' units, i.e. sensor height=24mm,
+%                  pixels - pixels,
+%                  unity  - sensor height=1.
+%       objUnit  - string with the object space unit.
+%       x0desc   - comment string on the initial values used by bundle.
+%       title    - title string.
+%       imNames  - nEO-cell array with image names.
+%       imDir    - string with the image directory.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -139,42 +148,44 @@ else
 end
 
 % Principal point. Flip y coordinate.
-IOobs(1:2,:)=diag([1,-1])*inner(2:3,:);
+IO(1:2,:)=diag([1,-1])*inner(2:3,:);
 IOstd(1:2,:)=innerStd(2:3,:);
 % Camera constant.
-IOobs(3,:)=inner(1,:);
+IO(3,:)=inner(1,:);
 IOstd(3,:)=innerStd(1,:);
 % Radial distortion coefficients K1, K2, K3.
 nK=3;
-IOobs(3+(1:nK),:)=-inner(5+(1:nK),:);
+IO(3+(1:nK),:)=-inner(5+(1:nK),:);
 IOstd(3+(1:nK),:)=innerStd(5+(1:nK),:);
 % Tangential distortion coefficients P1, P2.
 nP=2;
-IOobs(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
+IO(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
 IOstd(3+nK+(1:nP),:)=innerStd(5+nK+(1:nP),:);
 % Skew (not used).
-IOobs(3+nK+nP+(1:2),:)=0;
+IO(3+nK+nP+(1:2),:)=0;
 IOstd(3+nK+nP+(1:2),:)=0;
 % Sensor size in camera units.
-IOobs(3+nK+nP+2+(1:2),:)=inner(4:5,:);
+IO(3+nK+nP+2+(1:2),:)=inner(4:5,:);
 IOstd(3+nK+nP+2+(1:2),:)=innerStd(4:5,:);
 % Image size in pixels.
-IOobs(3+nK+nP+4+(1:2),:)=imSz;
+IO(3+nK+nP+4+(1:2),:)=imSz;
 IOstd(3+nK+nP+4+(1:2),:)=0;
 % Sensor resolution.
-IOobs(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IOobs(3+nK+nP+2+(1:2),:);
+IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
 % Fix to force square pixels.
-IOobs(3+nK+nP+6+(1:2),:)=repmat(mean(IOobs(3+nK+nP+6+(1:2),:),1),2,1);
+IO(3+nK+nP+6+(1:2),:)=mean(IO(3+nK+nP+6+(1:2),:),1);
 
 % First-order error propagation.
 % C=A/B; std(C) = abs(A/B^2)*std(B).
 IOstd(3+nK+nP+6+(1:2),:)=...
-    abs(IOobs(3+nK+nP+4+(1:2),:)./...
-        IOobs(3+nK+nP+2+(1:2),:).^2).*IOstd(3+nK+nP+2+(1:2),:);
+    abs(IO(3+nK+nP+4+(1:2),:)./...
+        IO(3+nK+nP+2+(1:2),:).^2).*IOstd(3+nK+nP+2+(1:2),:);
 
 
 % External orientation.    
 EO=nan(7,nImages);
+EOobs=nan(7,nImages);
+EOcov=[];
 
 outer=cat(1,prob.images.outer)';
 outerStd=cat(1,prob.images.outerStd)';
@@ -225,7 +236,9 @@ imNames=cellfun(@(x)x(length(imDir)+1:end),imNames,'uniformoutput',false);
 
 % Object and control points.
 OP=nan(3,nOP);
+OPobs=nan(3,nOP);
 OPstd=nan(3,nOP);
+OPcov=[];
 OPid=unique([prob.ctrlPts(:,1);prob.objPts(:,1)]);
 isCtrl=ismember(OPid,prob.ctrlPts(:,1));
 
@@ -273,19 +286,27 @@ end
 [i,j]=find(vis);
 ptCams=cams(j);
 
-cIO=false(size(IO));
-cEO=true(size(EO));
-cEO(end,:)=false;
-cOP=repmat(~isCtrl(:)',3,1);
+estIO=false(size(IO));
+useIOobs=false(size(IO));
+estEO=true(size(EO));
+estEO(end,:)=false;
+useEOobs=false(size(EO));
+estOP=repmat(~isCtrl(:)',3,1);
+useOPobs=repmat(isCtrl(:)',3,1);
 
 % Default camera and object space units.
 camUnit='mm';
 objUnit='m';
 
 s=struct('title',prob.job.title,'imDir',imDir,'imNames',{imNames},...
-         'IO',IO,'IOstd',IOstd,...
-         'EO',EO,'EOstd',EOstd,'cams',cams,'OP',OP,'OPstd',OPstd,'OPid',OPid, ...
-         'isCtrl',isCtrl,'markPts',markPts,'ptCams',ptCams,...
-         'markStd',markStd,'vis',vis,'colPos',colPos,'cIO',cIO, ...
-         'cEO',cEO,'cOP',cOP,'nK',nK,'nP',nP,'camUnit',camUnit,...
+         'IO',IO,'IOobs',IO,'IOstd',IOstd,'IOcov',IOcov,...
+         'EO',EO,'EOobs',EO,'EOstd',EOstd,'EOcov',EOcov,...
+         'cams',cams,...
+         'OP',OP,'OPobs',OP,'OPstd',OPstd,'OPcov',OPcov,'OPid',OPid,...
+         'isCtrl',isCtrl,...
+         'markPts',markPts,'markStd',markStd,'ptCams',ptCams,...
+         'vis',vis,'colPos',colPos,...
+         'estIO',estIO,'estEO',estEO,'estOP',estOP,...
+         'useIOobs',useIOobs,'useEOobs',useEOobs,'useOPobs',useOPobs,...
+         'nK',nK,'nP',nP,'camUnit',camUnit,...
          'objUnit',objUnit,'x0desc','');

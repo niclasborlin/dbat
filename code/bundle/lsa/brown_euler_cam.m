@@ -4,10 +4,10 @@ function [f,J,JJ]=brown_euler_cam(x,s)
 %   F=BROWN_EULER_CAM(X,S) returns the residual vector F of the camera
 %   network defined in S evaluated with the approximate values in X.
 %
-%   The internal camera model is from Brown (1971) with K1, K2, K3, P1, and
-%   P2. The external orientation uses Euler omega-phi-kappa angles.
-%   The values of S.cIO, S.cEO, and S.cOP indicate which parameters in
-%   S.IO, S.EO, and S.OP, respectively are unknown.
+%   The internal camera model is from Brown (1971) with K1, K2, K3,
+%   P1, and P2. The external orientation uses Euler omega-phi-kappa
+%   angles.  The values of S.estIO, S.estEO, and S.estOP indicate what
+%   parameters in S.IO, S.EO, and S.OP, respectively are unknown.
 %
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
@@ -18,15 +18,15 @@ function [f,J,JJ]=brown_euler_cam(x,s)
 % $Id$
 
 % Create index vectors for unknown parameters.
-[ixIO,ixEO,ixOP,n]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 % Copy the current approximations of the unknown values.
 IO=s.IO;
-IO(s.cIO)=x(ixIO);
+IO(s.estIO)=x(ixIO);
 EO=s.EO;
-EO(s.cEO)=x(ixEO);
+EO(s.estEO)=x(ixEO);
 OP=s.OP;
-OP(s.cOP)=x(ixOP);
+OP(s.estOP)=x(ixOP);
 
 if (nargout>2)
     % Numerical approximation of Jacobian (for debugging only).
@@ -47,11 +47,11 @@ if (nargout<2)
 else
     % Project into pinhole camera.
     [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                            s.vis,s.cIO,s.cEO,s.cOP);
+                                            s.vis,s.estIO,s.estEO,s.estOP);
 	
     % Remove lens distortion from measured points.
     [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-                                    s.ptCams,size(IO,2),s.cIO);
+                                    s.ptCams,size(IO,2),s.estIO);
 
     f=xy(:)-ptCorr(:);
 	
