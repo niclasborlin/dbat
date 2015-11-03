@@ -10,17 +10,30 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
 %   The struct S has fields:
-%       IO      - 16-by-nCams array with internal orientation for each camera.
-%       IOstd   - 16-by-nCams array with standard deviations for the IO
-%                 parameters.
-%       EO      - 7-by-nImages array with external orientation for each image.
-%       EOstd   - 7-by-nImages array with standard deviations for the EO
-%                 parameters.
+%       IO      - 16-by-nCams array with estimates of the internal
+%                 orientation for each camera.
+%       IOobs   - 16-by-nCams array with prior observations of the IO
+%                 parameters, or NaN if none.
+%       IOstd   - 16-by-nCams array with prior standard deviations for
+%                 the IO parameters, 0 if exact, NaN if none.
+%       IOcov   - 16-by-16-by-nCams array with prior covariance matrices
+%                 for the IO parameters, or empty if none.
+%       EO      - 7-by-nImages array with the external orientation for
+%                 each image.
+%       EOobs   - 7-by-nImages array with prior observations of the EO
+%                 parameters, 0 if exact, or NaN if none. 
+%       EOstd   - 7-by-nImages array with prior standard deviations for
+%                 the EO parameters.
+%       EOcov   - 6-by-6-by-nImages array with prior covariance matrices for
+%                 the EO parameters, or empty if none.
 %       cams    - 1-by-nImages numerical array indicating which IO column
 %                 correspond to which image. 
 %       OP      - 3-by-nOP array with object and control points.
-%       OPstd   - 3-by-nOP array with standard deviations for the OP
-%                 coordinates.
+%       OPobs   - 3-by-nOP array with prior observations of control points.
+%       OPstd   - 3-by-nOP array with prior OP standard deviations, 0 if
+%                 exact, NaN if none.
+%       OPcov   - 3-by-3-by-nOP array with prior covariance matrices for
+%                 the OP parameters, or empty if none.
 %       OPid    - 1-by-nOP array with object points ids.
 %       isCtrl  - 1-by-nOP logical vector indicating which OP are control
 %                 points.
@@ -38,12 +51,11 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                 stored. colPos(I,J)==K indicates the the measurement of
 %                 object point I in image J is stored in column K of markPts.
 %       cIO     - 12-by-nCams logical array indicating which internal
-%                 parameters are considered free and should be estimated
-%                 by the bundle. Defaults to all false.
+%                 parameters should be estimated by the bundle. Defaults
+%                 to all false.
 %       cEO     - 7-by-nImages logical array indicating which external
-%                 parameters are considered free and should be estimated
-%                 by the bundle. Defaults to true for all real camera
-%                 parameters (first 6 rows).
+%                 parameters should be estimated by the bundle. Defaults
+%                 to true for all real camera parameters (first 6 rows).
 %       cOP     - 3-by-nOP logical array indicating which OP parameters
 %                 are considered free and should be estimated by the
 %                 bundle. Defaults to true for object points, false for
@@ -53,15 +65,15 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       nP      - scalar indicating how many (potentially zero) P values
 %                 are used in the model. nK=2.
 %       camUnit - string with the unit used internally by the camera
-%                 mm     - nominal mm
+%                 mm     - nominal mm,
 %                 35mm   - '35 mm equivalent' units, i.e. sensor height=24mm,
-%                 pixels - pixels
-%                 unity  - sensor height=1
-%       objUnit - string with the object space unit,
+%                 pixels - pixels,
+%                 unity  - sensor height=1.
+%       objUnit - string with the object space unit.
 %       x0desc  - comment string on the initial values used by bundle.
 %       title   - title string.
 %       imNames - nEO-cell array with image names.
-%       imDir   - string with image directory.
+%       imDir   - string with the image directory.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -112,7 +124,9 @@ nOP=length(unique([prob.ctrlPts(:,1);prob.objPts(:,1)]));
 
 % Internal orientation.
 IO=nan(16,nCams);
+IOobs=nan(16,nCams);
 IOstd=nan(16,nCams);
+IOcov=[];
 
 if individualCameras
     inner=cat(1,prob.images.inner)';
@@ -125,38 +139,38 @@ else
 end
 
 % Principal point. Flip y coordinate.
-IO(1:2,:)=diag([1,-1])*inner(2:3,:);
+IOobs(1:2,:)=diag([1,-1])*inner(2:3,:);
 IOstd(1:2,:)=innerStd(2:3,:);
 % Camera constant.
-IO(3,:)=inner(1,:);
+IOobs(3,:)=inner(1,:);
 IOstd(3,:)=innerStd(1,:);
 % Radial distortion coefficients K1, K2, K3.
 nK=3;
-IO(3+(1:nK),:)=-inner(5+(1:nK),:);
+IOobs(3+(1:nK),:)=-inner(5+(1:nK),:);
 IOstd(3+(1:nK),:)=innerStd(5+(1:nK),:);
 % Tangential distortion coefficients P1, P2.
 nP=2;
-IO(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
+IOobs(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
 IOstd(3+nK+(1:nP),:)=innerStd(5+nK+(1:nP),:);
 % Skew (not used).
-IO(3+nK+nP+(1:2),:)=0;
+IOobs(3+nK+nP+(1:2),:)=0;
 IOstd(3+nK+nP+(1:2),:)=0;
 % Sensor size in camera units.
-IO(3+nK+nP+2+(1:2),:)=inner(4:5,:);
+IOobs(3+nK+nP+2+(1:2),:)=inner(4:5,:);
 IOstd(3+nK+nP+2+(1:2),:)=innerStd(4:5,:);
 % Image size in pixels.
-IO(3+nK+nP+4+(1:2),:)=imSz;
+IOobs(3+nK+nP+4+(1:2),:)=imSz;
 IOstd(3+nK+nP+4+(1:2),:)=0;
 % Sensor resolution.
-IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
+IOobs(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IOobs(3+nK+nP+2+(1:2),:);
 % Fix to force square pixels.
-IO(3+nK+nP+6+(1:2),:)=mean(IO(3+nK+nP+6+(1:2),:),1);
+IOobs(3+nK+nP+6+(1:2),:)=repmat(mean(IOobs(3+nK+nP+6+(1:2),:),1),2,1);
 
 % First-order error propagation.
 % C=A/B; std(C) = abs(A/B^2)*std(B).
 IOstd(3+nK+nP+6+(1:2),:)=...
-    abs(IO(3+nK+nP+4+(1:2),:)./...
-        IO(3+nK+nP+2+(1:2),:).^2).*IOstd(3+nK+nP+2+(1:2),:);
+    abs(IOobs(3+nK+nP+4+(1:2),:)./...
+        IOobs(3+nK+nP+2+(1:2),:).^2).*IOstd(3+nK+nP+2+(1:2),:);
 
 
 % External orientation.    
