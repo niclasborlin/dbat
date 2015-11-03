@@ -1,19 +1,20 @@
 function [x,code,n,r,J,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
-    resFun,vetoFun,x0,maxIter,convTol,doTrace,delta0,mu,eta,params)
+    resFun,vetoFun,x0,W,maxIter,convTol,doTrace,delta0,mu,eta)
 %LEVENBERG_MARQUARDT_POWELL Levenberg-Marquardt algorithm with Powell dogleg.
 %
-%   [X,CODE,I]=LEVENBERG_MARQUARDT_POWELL(RES,VETO,X0,N,TOL,TRACE,D0,MU,ETA,PARAMS)
-%   runs the trust-region verions of the Levenberg-Marquardt least squares
-%   adjustment algorithm with Powell dogleg on the problem with residual
-%   function RES and with initial values X0. A maximum of N iterations are
-%   allowed and the convergence tolerance is TOL. The final estimate is
-%   returned in X. The damping algorithm uses D0 as the initial delta value.
-%   The quality of each proposed step is determined by the constants 0 < MU
-%   < ETA < 1. In addition, if supplied and non-empty, the VETO function is
-%   called to verify that the suggested trial point is not invalid. The
-%   number of iteration I and a success code (0 - OK, -1 - too many
-%   iterations) are also returned. If TRACE is true, output sigma0 estimates
-%   at each iteration.
+%   [X,CODE,I]=LEVENBERG_MARQUARDT_POWELL(RES,VETO,X0,W,N,TOL,TRACE,D0,MU,ETA)
+%   runs the trust-region verions of the Levenberg-Marquardt least
+%   squares adjustment algorithm with weight matrix W and Powell
+%   dogleg on the problem with residual function RES and with initial
+%   values X0. A maximum of N iterations are allowed and the
+%   convergence tolerance is TOL. The final estimate is returned in
+%   X. The damping algorithm uses D0 as the initial delta value.  The
+%   quality of each proposed step is determined by the constants 0 <
+%   MU < ETA < 1. In addition, if supplied and non-empty, the VETO
+%   function is called to verify that the suggested trial point is not
+%   invalid. The number of iteration I and a success code (0 - OK, -1
+%   - too many iterations) are also returned. If TRACE is true, output
+%   sigma0 estimates at each iteration.
 %
 %   [X,CODE,I,F,J]=... also returns the final estimates of the residual
 %   vector F and Jacobian matrix J.
@@ -27,8 +28,7 @@ function [x,code,n,r,J,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
 %     1 - Interpolated between Gauss-Newton and Cauchy.
 %
 %   The function RES is assumed to return the residual function and its
-%   jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
-%   PARAMS contains any extra parameters for the residual function.
+%   jacobian when called [F,J]=feval(RES,X0).
 %
 %   References:
 %     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
@@ -81,8 +81,18 @@ rhos=[];
 % Step types.
 steps=[];
 
+% Compute Cholesky factor of weight matrix.
+R=chol(W);
+
+% Handle to weighted residual function. Works for single-return
+% call only. Used by linesearch.
+wResFun=@(x)R*feval(resFun,x);
+
 % Compute residual, Jacobian, and objective function value.
-[r,J]=feval(resFun,x,params{:});
+[s,K]=feval(resFun,x);
+% Scale by Cholesky factor.
+r=R*s;
+J=R*K;
 f=1/2*r'*r;
 
 % Residual norm trace.
@@ -110,12 +120,12 @@ while true
 
     % Evalutate residual and objective function value in trial point.
     t=x+p;
-    rt=feval(resFun,t,params{:});
+    rt=feval(wResFun,t);
     ft=1/2*rt'*rt;
     if isempty(vetoFun)
         veto=false;
     else
-        veto=feval(vetoFun,t,params{:});
+        veto=feval(vetoFun,t);
     end
 
     % Compare actual vs. predicted reduction.
@@ -152,7 +162,10 @@ while true
         
         % Calculate residual, Jacobian, and objective function value at
         % new point.
-        [r,J]=feval(resFun,x,params{:});
+        [s,K]=feval(resFun,x);
+        % Scale by Cholesky factor.
+        r=R*s;
+        J=R*K;
         f=1/2*r'*r;
 
         % Increase trust region size if reduction was good.

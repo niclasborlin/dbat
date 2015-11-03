@@ -49,7 +49,7 @@ for i=1:length(varargin)
 end
 
 % Create indices into the vector of unknowns.
-[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 % We may need J'*J many times. Precalculate and prefactor.
 JTJ=e.J'*e.J;
@@ -57,14 +57,14 @@ JTJ=e.J'*e.J;
 % Use block column count reordering to reduce fill-in in Cholesky factor.
     
 % IO blocks.
-bixIO=double(s.cIO);
-bixIO(s.cIO)=ixIO;
+bixIO=double(s.estIO);
+bixIO(s.estIO)=ixIO;
 % EO blocks.
-bixEO=double(s.cEO);
-bixEO(s.cEO)=ixEO;
+bixEO=double(s.estEO);
+bixEO(s.estEO)=ixEO;
 % OP blocks.
-bixOP=double(s.cOP);
-bixOP(s.cOP)=ixOP;
+bixOP=double(s.estOP);
+bixOP(s.estOP)=ixOP;
     
 p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
@@ -82,22 +82,22 @@ for i=1:length(varargin)
             
       case 'ciof' % Whole CIO covariance matrix.
             
-        % Pre-allocate matrix with place for nnz(s.cIO)^2 elements.
-        C=spalloc(numel(s.IO),numel(s.IO),nnz(s.cIO)^2);
+        % Pre-allocate matrix with place for nnz(s.estIO)^2 elements.
+        C=spalloc(numel(s.IO),numel(s.IO),nnz(s.estIO)^2);
         
         % Compute needed part of inverse and put it into the right
         % part of C.
-        C(s.cIO(:),s.cIO(:))=invblock(L,p,ixIO,'sqrt');
+        C(s.estIO(:),s.estIO(:))=invblock(L,p,ixIO,'sqrt');
         
       case 'ceof' % Whole CEO covariance matrix.
         
         start=clock; %#ok<NASGU>
-        % Pre-allocate matrix with place for nnz(s.cEO)^2 elements.
-        C=spalloc(numel(s.EO),numel(s.EO),nnz(s.cEO)^2);
+        % Pre-allocate matrix with place for nnz(s.estEO)^2 elements.
+        C=spalloc(numel(s.EO),numel(s.EO),nnz(s.estEO)^2);
         
         % Compute needed part of inverse and put it into the right
         % part of C.
-        C(s.cEO(:),s.cEO(:))=invblock(L,p,ixEO,'sqrt');
+        C(s.estEO(:),s.estEO(:))=invblock(L,p,ixEO,'sqrt');
 
         % Remove axis indicator psuedo-elements.
         keep=rem(1:size(C,1),7)~=0;
@@ -108,22 +108,22 @@ for i=1:length(varargin)
       case 'copf' % Whole COP covariance matrix.
         
         start=clock; %#ok<NASGU>
-        % Pre-allocate matrix with place for nnz(s.cOP)^2 elements.
-        C=spalloc(numel(s.OP),numel(s.OP),nnz(s.cOP)^2);
+        % Pre-allocate matrix with place for nnz(s.estOP)^2 elements.
+        C=spalloc(numel(s.OP),numel(s.OP),nnz(s.estOP)^2);
         
         % Compute needed part of inverse and put it into the right
         % part of C.
-        C(s.cOP(:),s.cOP(:))=invblock(L,p,ixOP,'sqrt');
+        C(s.estOP(:),s.estOP(:))=invblock(L,p,ixOP,'sqrt');
         
         %etime(clock,start)
         
       case 'cio' % Block-diagonal CIO
         
-        C=BlockDiagonalC(L,p,s.cIO,ixIO,memLimit,'Computing IO covariances');
+        C=BlockDiagonalC(L,p,s.estIO,ixIO,memLimit,'Computing IO covariances');
         
       case 'ceo' % Block-diagonal CEO
         
-        C=BlockDiagonalC(L,p,s.cEO,ixEO,memLimit,'Computing EO covariances');
+        C=BlockDiagonalC(L,p,s.estEO,ixEO,memLimit,'Computing EO covariances');
 
         % Remove axis indicator psuedo-elements.
         keep=rem(1:size(C,1),7)~=0;
@@ -131,7 +131,7 @@ for i=1:length(varargin)
         
       case 'cop' % Block-diagonal COP
         
-        C=BlockDiagonalC(L,p,s.cOP,ixOP,memLimit,'Computing OP covariances');
+        C=BlockDiagonalC(L,p,s.estOP,ixOP,memLimit,'Computing OP covariances');
         
     end
     varargout{i}=e.s0mm^2*C; %#ok<*AGROW>

@@ -1,20 +1,22 @@
 function [x,code,n,r,J,T,rr,alphas]=gauss_newton_armijo(...
-    resFun,vetoFun,x0,maxIter,convTol,trace,sTest,mu,alphaMin,params)
+    resFun,vetoFun,x0,W,maxIter,convTol,trace,sTest,mu,alphaMin)
 %GAUSS_NEWTON_ARMIJO Gauss-Newton-Armijo least squares adjustment algorithm.
 %
-%   [X,CODE,I]=GAUSS_NEWTON_ARMIJO(RES,VETO,X0,N,TOL,TRACE,STEST,MU,AMIN,PARAMS)
-%   runs the Gauss-Newton-Armijo least squares adjustment algorithm on the
-%   problem with residual function RES and with initial values X0. A maximum
-%   of N iterations are allowed and the convergence tolerance is TOL. The
-%   final estimate is returned in X. If STEST is true, the iterations are
-%   terminated if a (near) singularity warning on the normal matrix is
-%   issued. The steplength algorithm uses the constant MU for the Armijo
-%   condition and accepts steplengths down to AMIN. In addition, if supplied
-%   and non-empty, the VETO function is called to verify that the steplength
-%   does not generate an invalid point. The number of iteration I and a
-%   success code (0 - OK, -1 - too many iterations, -2 - matrix is singular,
-%   -3 - no alpha found) are also returned. If TRACE is true, output sigma0
-%   estimates at each iteration.
+%   [X,CODE,I]=GAUSS_NEWTON_ARMIJO(RES,VETO,X0,W,N,TOL,TRACE,STEST,MU,AMIN)
+%   runs the Gauss-Newton-Armijo least squares adjustment algorithm
+%   with weight matrix W on the problem with residual function RES and
+%   with initial values X0. A maximum of N iterations are allowed and
+%   the convergence tolerance is TOL. The final estimate is returned
+%   in X. If STEST is true, the iterations are terminated if a (near)
+%   singularity warning on the normal matrix is issued. The steplength
+%   algorithm uses the constant MU for the Armijo condition and
+%   accepts steplengths down to AMIN. In addition, if supplied and
+%   non-empty, the VETO function is called to verify that the
+%   steplength does not generate an invalid point. The number of
+%   iteration I and a success code (0 - OK, -1 - too many iterations,
+%   -2 - matrix is singular, -3 - no alpha found) are also
+%   returned. If TRACE is true, output sigma0 estimates at each
+%   iteration.
 %
 %   [X,CODE,I,R,J]=... also returns the final estimates of the residual
 %   vector R and Jacobian matrix J.
@@ -23,9 +25,8 @@ function [x,code,n,r,J,T,rr,alphas]=gauss_newton_armijo(...
 %   columns in T, the successive estimates of sigma0 in RR, and the used
 %   steplengths in ALPHAS.
 %
-%   The function RES is assumed to return the residual function and its
-%   Jacobian when called [R,J]=feval(RES,X0,PARAMS{:}), where the cell array
-%   PARAMS contains any extra parameters for the residual function.
+%   The function RES is assumed to return the residual function and
+%   its Jacobian when called [R,J]=feval(RES,X0).
 %
 %   References:
 %     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
@@ -70,9 +71,19 @@ rr=[];
 % Steplength vector.
 alphas=[];
 
+% Compute Cholesky factor of weight matrix.
+R=chol(W);
+
+% Handle to weighted residual function. Works for single-return
+% call only. Used by linesearch.
+wResFun=@(x)R*feval(resFun,x);
+
 while true
-    % Calculate residual and Jacobian at current point.
-    [r,J]=feval(resFun,x,params{:});
+    % Calculate unweighted residual and Jacobian at current point.
+    [s,K]=feval(resFun,x);
+    % Scale by Cholesky factor.
+    r=R*s;
+    J=R*K;
 
     rr(end+1)=sqrt(r'*r);
     if trace
@@ -86,7 +97,7 @@ while true
         end
     end
     
-    % Solve normal equations.
+    % Solve normal equations. Corresponds to p=(K'*W*K)\-(K'*W*s).
     p=(J'*J)\-(J'*r);
 
     if sTest
@@ -114,7 +125,7 @@ while true
     n=n+1;
     
     % Perform line search along p.
-    [alpha,xNew,rNew]=linesearch(resFun,vetoFun,x,p,alphaMin,r,r'*Jp,mu,params);
+    [alpha,xNew,rNew]=linesearch(wResFun,vetoFun,x,p,alphaMin,r,r'*Jp,mu);
 	
     % Always update current point and residual. 
     x=xNew;
@@ -156,7 +167,7 @@ if nargout>5
 end
 
 
-function [alpha,xNew,rNew]=linesearch(fun,veto,x,p,alphaMin,r0,fp0,mu,params)
+function [alpha,xNew,rNew]=linesearch(fun,veto,x,p,alphaMin,r0,fp0,mu)
 %LINESEARCH Perform Armijo linesearch with backtracking.
 
 % Calculate current objective function value.
@@ -169,7 +180,7 @@ alpha=1;
 while alpha>=alphaMin
     % Examine residual at trial point.
     t=x+alpha*p;
-    r=feval(fun,t,params{:});
+    r=feval(fun,t);
     f=1/2*(r'*r);
 
     % Is the reduction large enough to satisfy the Armijo condition?
@@ -177,7 +188,7 @@ while alpha>=alphaMin
 
     if redOK && ~isempty(veto)
         % Call veto function only if reduction is large enough.
-        fail=feval(veto,t,params{:});
+        fail=feval(veto,t);
     else
         fail=false;
     end

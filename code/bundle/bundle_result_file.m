@@ -86,7 +86,7 @@ offon={'off','on'};
 
 values={'Orientation:','%s','on',
         'Global optimization:','%s','on',
-        'Calibration:','%s',offon{double(any(s.cIO(:)))+1},
+        'Calibration:','%s',offon{double(any(s.estIO(:)))+1},
         'Constraints:','%s','off',
         'Maximum # of iterations:','%d',e.maxIter,
         'Convergence tolerance:','%g',e.convTol,
@@ -114,7 +114,7 @@ fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
 
 corrStr=sprintf('Correlations over %g%%:',corrThreshold*100);
 
-if any(s.cIO(:))
+if any(s.estIO(:))
     % Camera calibration results.
     fprintf(fid,[p,p,p,'Camera Calibration Standard Deviations:\n']);
     
@@ -158,7 +158,7 @@ if any(s.cIO(:))
     ioSigma(end+2,1)=0;
     
     padLength=length('Significance:');
-    for i=1:size(s.cIO,2)
+    for i=1:size(s.estIO,2)
         vals=S*full(sIO(rows,i));
         sigma=full(ioSigma(rows,i));
         fprintf(fid,[p,p,p,p,'Camera%d (camera unit cu=%s)\n'],i,s.camUnit);
@@ -277,7 +277,7 @@ for i=1:size(s.IO,2)
 
     calStrs={'<not available>','yes'};
     values={
-        'Calibration:','%s',calStrs{any(s.cIO(:,i))+1},
+        'Calibration:','%s',calStrs{any(s.estIO(:,i))+1},
         'Number of photos using camera:','%d',nnz(s.cams==i)
         };
     pretty_print(fid,repmat(p,1,4),values);
@@ -305,7 +305,7 @@ end
 
 fprintf(fid,[p,p,'Photo Coverage\n']);
 fprintf(fid,[p,p,p,'References points outside calibrated region:\n']);
-if any(s.cIO(:))
+if any(s.estIO(:))
     fprintf(fid,[p,p,p,p,'none\n']);
 else
     fprintf(fid,[p,p,p,p,'<not available>\n']);
@@ -367,7 +367,7 @@ fprintf(fid,[p,p,'Point Precision\n']);
 % Variance for each OP.
 v=reshape(full(diag(COP)),3,[]);
 % Mask fixed OPs.
-v(~s.cOP)=nan;
+v(~s.estOP)=nan;
 % Total variance.
 tVar=sum(v,1);
 % Total standard deviation.
