@@ -1,26 +1,25 @@
-function [x,code,n,f,J,T,rr]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
-                                       sTest,params)
+function [x,code,n,r,J,T,rr]=gauss_markov(resFun,x0,W,maxIter,convTol,trace,sTest)
 %GAUSS_MARKOV Gauss-Markov least squares adjustment algorithm.
 %
-%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,N,TOL,TRACE,STEST,PARAMS) runs the
-%   Gauss-Markov least squares adjustment algorithm on the problem with
-%   residual function RES and with initial values X0. A maximum of N
-%   iterations are allowed and the convergence tolerance is TOL. The final
-%   estimate is returned in X. If STEST is true, the iterations are
-%   terminated if a (near) singularity warning on the normal matrix is
-%   issued. The number of iteration I and a success code (0 - OK, -1 - too
-%   many iterations, -2 - matrix is singular) are also returned. If TRACE is
-%   true, the sigma0 estimates are printed at each iteration.
+%   [X,CODE,I]=GAUSS_MARKOV(RES,X0,W,N,TOL,TRACE,STEST) runs the
+%   Gauss-Markov least squares adjustment algorithm with weight matrix
+%   W on the problem with residual function RES and with initial
+%   values X0. A maximum of N iterations are allowed and the
+%   convergence tolerance is TOL. The final estimate is returned in
+%   X. If STEST is true, the iterations are terminated if a (near)
+%   singularity warning on the normal matrix is issued. The number of
+%   iteration I and a success code (0 - OK, -1 - too many iterations,
+%   -2 - matrix is singular) are also returned. If TRACE is true, the
+%   sigma0 estimates are printed at each iteration.
 %
-%   [X,CODE,I,F,J]=... also returns the final estimates of the residual
-%   vector F and Jacobian matrix J.
+%   [X,CODE,I,R,J]=... also returns the final estimates of the residual
+%   vector R and Jacobian matrix J.
 %
-%   [X,CODE,I,F,J,T,RR]=... also returns the iteration trace as successive
+%   [X,CODE,I,R,J,T,RR]=... also returns the iteration trace as successive
 %   columns in T and successive values of the residual norm in RR.
 %
 %   The function RES is assumed to return the residual function and its
-%   Jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
-%   PARAMS contains any extra parameters for the residual function.
+%   Jacobian when called [R,J]=feval(RES,X0).
 %
 %   References:
 %     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
@@ -60,17 +59,23 @@ code=0;
 % Residual norm trace.
 rr=[];
 
-while true
-    % Calculate residual and Jacobian at current point.
-    [f,J]=feval(resFun,x,params{:});
+% Compute Cholesky factor of weight matrix.
+R=chol(W);
 
-    rr(end+1)=sqrt(f'*f);
+while true
+    % Calculate unweighted residual and Jacobian at current point.
+    [s,K]=feval(resFun,x);
+    % Scale by Cholesky factor.
+    r=R*s;
+    J=R*K;
+    
+    rr(end+1)=sqrt(r'*r);
     if trace
         fprintf('Gauss-Markov: iteration %d, residual norm=%.2g\n',n,rr(end));
     end
     
-    % Solve normal equations.
-    p=(J'*J)\-(J'*f);
+    % Solve normal equations. Corresponds to p=(K'*W*K)\-(K'*W*s).
+    p=(J'*J)\-(J'*r);
 
     if sTest
         % Check if we got the 'Matrix is singular to working precision' warning.
@@ -84,8 +89,8 @@ while true
 
     % Terminate if angle between projected residual is smaller than
     % threshold. Warning! This test may be very strict on synthetic data
-    % where norm(f) is close to zero at the solution.
-    if norm(J*p)<=convTol*norm(f)
+    % where norm(r) is close to zero at the solution.
+    if norm(J*p)<=convTol*norm(r)
         % Converged.
         break
     end

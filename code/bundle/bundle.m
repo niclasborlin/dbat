@@ -86,17 +86,24 @@ while ~isempty(varargin)
     end
 end
 
+% Clean up estimation/use observations arrays. If we shouldn't
+% estimate a parameter, we are not going to use the prior
+% observation of it during the bundle.
+s.useIOobs(~s.estIO)=false;
+s.useEOobs(~s.estEO)=false;
+s.useOPobs(~s.estOP)=false;
+
 % Create indices into the vector of unknowns. n is the number of unknowns.
-[ixIO,ixEO,ixOP,n]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 % Set up vector of initial values.
 x0=nan(n,1);
-x0(ixIO)=s.IO(s.cIO);
-x0(ixEO)=s.EO(s.cEO);
-x0(ixOP)=s.OP(s.cOP);
+x0(ixIO)=s.IO(s.estIO);
+x0(ixEO)=s.EO(s.estEO);
+x0(ixOP)=s.OP(s.estOP);
 
 % Residual function.
-resFun=@brown_euler_cam;
+resFun=@(x)brown_euler_cam(x,s);
 
 if veto
     vetoFun=@chirality;
@@ -104,11 +111,22 @@ else
     vetoFun='';
 end
 
+% Weights.
+
+% Weights for mark points.
+wMark=1./s.markStd(:,s.colPos(s.vis));
+% Weights for prior IO observations.
+wIO=1./s.IOstd(s.useIOobs);
+% Weights for prior EO observations.
+wEO=1./s.EOstd(s.useEOobs);
+% Weights for prior OP observations.
+wOP=1./s.OPstd(s.useOPobs);
+nWeights=length(wMark(:))+length(wIO(:))+length(wEO(:))+length(wOP(:));
+% Weight matrix.
+W=spdiags([wMark(:);wIO(:);wEO(:);wOP(:)],0,nWeights,nWeights);
+
 % Convergence tolerance.
 convTol=1e-3;
-
-% Set up cell array of extra parameters.
-params={s};
 
 % For all optimization methods below, the final estimate is returned in x.
 % The final residual vector and Jacobian are returned as r and J. Successive
@@ -137,8 +155,8 @@ switch lower(damping)
     
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
-    [x,code,iters,r,J,X,res]=gauss_markov(resFun,x0,maxIter,convTol,trace, ...
-                                      singularTest,params);
+    [x,code,iters,r,J,X,res]=gauss_markov(resFun,x0,W,maxIter, ...
+                                          convTol,trace, singularTest);
     time=cputime-stopWatch;
     E.damping=struct('name','gm');
   case 'gna'
@@ -152,10 +170,12 @@ switch lower(damping)
     % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
     % returned with the step lengths used at each iteration.
     stopWatch=cputime;
-    [x,code,iters,r,J,X,res,alpha]=gauss_newton_armijo(resFun,vetoFun,x0, ...
-                                                      maxIter,convTol,trace, ...
+    [x,code,iters,r,J,X,res,alpha]=gauss_newton_armijo(resFun, ...
+                                                      vetoFun,x0,W, ...
+                                                      maxIter, ...
+                                                      convTol,trace, ...
                                                       singularTest, ...
-                                                      mu,alphaMin,params);  
+                                                      mu,alphaMin);  
     time=cputime-stopWatch;
     E.damping=struct('name','gna','alpha',alpha,'mu',mu,'alphaMin',alphaMin);
   case 'lm'
@@ -172,8 +192,9 @@ switch lower(damping)
     % returned with the lambda values used at each iteration.
     stopWatch=cputime;
     [x,code,iters,r,J,X,res,lambda]=levenberg_marquardt(resFun,vetoFun,x0, ...
-                                                      maxIter,convTol,trace, ...
-                                                      lambda0,lambdaMin,params);
+                                                      W,maxIter, ...
+                                                      convTol,trace, ...
+                                                      lambda0,lambdaMin);
     time=cputime-stopWatch;
     E.damping=struct('name','lm','lambda',lambda,'lambda0',lambda(1), ...
                      'lambdaMin',lambda(1));
@@ -193,7 +214,7 @@ switch lower(damping)
     % each iteration.
     stopWatch=cputime;
     [x,code,iters,r,J,X,res,delta,rho,step]=levenberg_marquardt_powell(...
-        resFun,vetoFun,x0,maxIter,convTol,trace, delta0,rhoBad,rhoGood,params);
+        resFun,vetoFun,x0,W,maxIter,convTol,trace, delta0,rhoBad,rhoGood);
     time=cputime-stopWatch;
     E.damping=struct('name','lmp','delta',delta,'rho',rho,'delta0',delta0,...
                      'rhoBad',rhoBad,'rhoGood',rhoGood,'step',step);
@@ -217,9 +238,9 @@ ok=code==0;
 
 % Update s if optimization converged.
 if ok
-    s.IO(s.cIO)=x(ixIO);
-    s.EO(s.cEO)=x(ixEO);
-    s.OP(s.cOP)=x(ixOP);
+    s.IO(s.estIO)=x(ixIO);
+    s.EO(s.estEO)=x(ixEO);
+    s.OP(s.estOP)=x(ixOP);
 end
 
 % Sigma0 is sqrt(r'*r/(m-n)) in mm, convert to pixels.
