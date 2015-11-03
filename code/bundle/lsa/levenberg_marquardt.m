@@ -1,18 +1,19 @@
 function [x,code,n,r,J,T,rr,lambdas]=levenberg_marquardt(...
-    resFun,vetoFun,x0,maxIter,convTol,doTrace,lambda0,lambdaMin,params)
+    resFun,vetoFun,x0,W,maxIter,convTol,doTrace,lambda0,lambdaMin,params)
 %LEVENBERG_MARQUARDT Levenberg-Marquardt least squares adjustment algorithm.
 %
-%   [X,CODE,I]=LEVENBERG_MARQUARDT(RES,VETO,X0,N,TOL,TRACE,L0,MINL,PARAMS)
-%   runs the Levenberg-Marquardt least squares adjustment algorithm on the
-%   problem with residual function RES and with initial values X0. A maximum
-%   of N iterations are allowed and the convergence tolerance is TOL. The
-%   final estimate is returned in X. The damping algorithm uses L0 as the
-%   initial lambda value. Any lambda value below MINL is considered to be
-%   zero. In addition, if supplied and non-empty, the VETO function is
-%   called to verify that the suggested trial point is not invalid. The
+%   [X,CODE,I]=LEVENBERG_MARQUARDT(RES,VETO,X0,N,TOL,TRACE,L0,MINL)
+%   runs the Levenberg-Marquardt least squares adjustment algorithm
+%   with weight matrix W on the problem with residual function RES and
+%   with initial values X0. A maximum of N iterations are allowed and
+%   the convergence tolerance is TOL. The final estimate is returned
+%   in X. The damping algorithm uses L0 as the initial lambda
+%   value. Any lambda value below MINL is considered to be zero. In
+%   addition, if supplied and non-empty, the VETO function is called
+%   to verify that the suggested trial point is not invalid. The
 %   number of iteration I and a success code (0 - OK, -1 - too many
-%   iterations, -2 - matrix is singular) are also returned. If TRACE is
-%   true, output sigma0 estimates at each iteration.
+%   iterations, -2 - matrix is singular) are also returned. If TRACE
+%   is true, output sigma0 estimates at each iteration.
 %
 %   If the supplied L0 is negative, the initial lambda is calculated as
 %   abs(L0)*trace(J0'*J0)/NN, where J0 is the Jacobian of the residual
@@ -27,8 +28,7 @@ function [x,code,n,r,J,T,rr,lambdas]=levenberg_marquardt(...
 %   the used damping values in LAMBDAS.
 %
 %   The function RES is assumed to return the residual function and its
-%   jacobian when called [F,J]=feval(RES,X0,PARAMS{:}), where the cell array
-%   PARAMS contains any extra parameters for the residual function.
+%   jacobian when called [F,J]=feval(RES,X0).
 %
 %   References:
 %     Börlin, Grussenmeyer (2013), "Bundle Adjustment With and Without
@@ -63,8 +63,17 @@ n=0;
 % OK until signalled otherwise.
 code=0;
 
+% Compute Cholesky factor of weight matrix.
+R=chol(W);
+
+% Handle to weighted residual function.
+wResFun=@(x)R*feval(resFun,x);
+
 % Compute initial residual and Jacobian.
-[r,J]=feval(resFun,x,params{:});
+[s,K]=feval(resFun,x);
+% Scale by Cholesky factor.
+r=R*s;
+J=R*K;
 f=1/2*r'*r;
 JTJ=J'*J;
 JTr=J'*r;
@@ -136,14 +145,15 @@ while true
         % Pre-calculate J*p.
         Jp=J*p;
 
-        % Compute residual and objective function value at trial point.
+        % Compute weighted residual and objective function value at trial
+        % point.
         t=x+p;
-        rNew=feval(resFun,t,params{:});
+        rNew=feval(wResFun,t);
         fNew=1/2*rNew'*rNew;
         
         if fNew<f && ~isempty(vetoFun)
             % Call veto function only if we have a better point.
-            fail=feval(vetoFun,t,params{:});
+            fail=feval(vetoFun,t);
         else
             fail=false;
         end
@@ -158,9 +168,11 @@ while true
                 lambda=0;
             end
 
-            % Evaluate residual, Jacobian, and objective function at new
-            % point.
-            [r,J]=feval(resFun,x,params{:});
+            % Evaluate unweighted residual and Jacobian at new point.
+            [s,K]=feval(resFun,x);
+            % Scale by Cholesky factor.
+            r=R*s;
+            J=R*K;
             f=1/2*r'*r;
             JTJ=J'*J;
             JTr=J'*r;

@@ -19,12 +19,31 @@ else
 end
 s0=prob2dbatstruct(prob);
 
+% Don't estimate IO data (treat it as exact).
+s0.IO=s0.IOobs; % No really necessary...
+s0.estIO=false(size(s0.IO));
+s0.useIOobs=false(size(s0.IO));
+
+% Use supplied EO data as initial values. Treat EO data as free.
+s0.EO=s0.EOobs; % No really necessary...
+s0.estEO(1:6,:)=true;
+s0.useEOobs=false(size(s0.EO));
+
+% Use supplied OP data as initial values. Treat control points as
+% exact.
+s0.OP=s0.OPobs; % No really necessary...
+s0.estOP=repmat(~s0.isCtrl(:)',3,1);
+s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
+
+% Use sigma0=1 as first approximation.
+s0.markStd(:)=1;
+
 % Fix the datum by fixing camera 1...
-s0.cEO(:,1)=false;
+s0.estEO(:,1)=false;
 % ...and the largest other absolute camera coordinate.
 camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
 [i,j]=find(camDiff==max(camDiff(:)));
-s0.cEO(i,j)=false;
+s0.estEO(i,j)=false;
 
 dampings={'none','gna','lm','lmp'};
 
@@ -41,7 +60,7 @@ for i=1:length(dampings)
 
     % Run the bundle.
     [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s0,dampings{i},'trace');
-
+    
     if ok(i)
         fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
                 iters(i),sigma0(i));
