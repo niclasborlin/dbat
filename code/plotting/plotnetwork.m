@@ -202,7 +202,7 @@ end
 % Activate camera toolbar.
 cameratoolbar(get(ax,'parent'),'show');
 
-[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 if ~isempty(E)
     % Number of iterations.
@@ -226,9 +226,9 @@ for iter=iters
     OP=s.OP;
     if ~isempty(E)
         % Replace unknown parameters with estimated value at iteration iter.
-        IO(s.cIO)=E.trace(ixIO,iter+1);
-        EO(s.cEO)=E.trace(ixEO,iter+1);
-        OP(s.cOP)=E.trace(ixOP,iter+1);
+        IO(s.estIO)=E.trace(ixIO,iter+1);
+        EO(s.estEO)=E.trace(ixEO,iter+1);
+        OP(s.estOP)=E.trace(ixOP,iter+1);
     end
 
     if ~isempty(align)
