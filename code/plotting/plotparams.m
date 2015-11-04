@@ -41,11 +41,11 @@ end
     
 h=nan(4,1);
 
-[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
-if plotIO && any(s.cIO(:))
-    ixPos=double(s.cIO);
-    ixPos(s.cIO)=ixIO;
+if plotIO && any(s.estIO(:))
+    ixPos=double(s.estIO);
+    ixPos(s.estIO)=ixIO;
     
     % IO parameter plot.
     fig=tagfigure(sprintf('paramplot_io_%s',e.damping.name));
@@ -69,7 +69,7 @@ if plotIO && any(s.cIO(:))
         fp=repmat(s.IO(1:3,ci),1,size(e.trace,2));
         % Update with estimated values.
         ixp=ixPos(1:3,ci);
-        fp(s.cIO(1:3,ci),:)=e.trace(ixp(s.cIO(1:3,ci)),:);
+        fp(s.estIO(1:3,ci),:)=e.trace(ixp(s.estIO(1:3,ci)),:);
         % Flip y coordinate.
         v=diag([1,-1,1])*fp;
         % Change order to be f, px, py.
@@ -104,7 +104,7 @@ if plotIO && any(s.cIO(:))
         K=repmat(s.IO(4:6,ci),1,size(e.trace,2));
         % Update with estimated values.
         ixp=ixPos(4:6,ci);
-        K(s.cIO(4:6,ci),:)=e.trace(ixp(s.cIO(4:6,ci)),:);
+        K(s.estIO(4:6,ci),:)=e.trace(ixp(s.estIO(4:6,ci)),:);
         % Scale K values.
         v=diag(100.^(0:size(K,1)-1))*K;
         for i=1:size(v,1)
@@ -139,7 +139,7 @@ if plotIO && any(s.cIO(:))
         P=repmat(s.IO(7:8,ci),1,size(e.trace,2));
         % Update with estimated values.
         ixp=ixPos(7:8,ci);
-        P(s.cIO(7:8,ci),:)=e.trace(ixp(s.cIO(7:8,ci)),:);
+        P(s.estIO(7:8,ci),:)=e.trace(ixp(s.estIO(7:8,ci)),:);
         for i=1:size(P,1)
             if size(s.IO,2)==1
                 color=cc(i,:);
@@ -162,9 +162,9 @@ if plotIO && any(s.cIO(:))
     scalewidth(axH);
 end
 
-if plotEO && any(s.cEO(:))
-    ixPos=double(s.cEO);
-    ixPos(s.cEO)=ixEO;
+if plotEO && any(s.estEO(:))
+    ixPos=double(s.estEO);
+    ixPos(s.estEO)=ixEO;
 
     % EO parameter plot.
     fig=tagfigure(sprintf('paramplot_eo_%s',e.damping.name));
@@ -195,7 +195,7 @@ if plotEO && any(s.cEO(:))
             c=repmat(s.EO(1:3,ci),1,size(e.trace,2));
             % Update with estimated values.
             ixp=ixPos(1:3,ci);
-            c(s.cEO(1:3,ci),:)=e.trace(ixp(s.cEO(1:3,ci)),:);
+            c(s.estEO(1:3,ci),:)=e.trace(ixp(s.estEO(1:3,ci)),:);
             % Line style and legend strings.
             ls={'-','--','-.'};
             fps={'X0','Y0','Z0'};
@@ -233,7 +233,7 @@ if plotEO && any(s.cEO(:))
         angles=repmat(s.EO(4:6,ci),1,size(e.trace,2));
         % Update with estimated values.
         ixp=ixPos(4:6,ci);
-        angles(s.cEO(4:6,ci),:)=e.trace(ixp(s.cEO(4:6,ci)),:);
+        angles(s.estEO(4:6,ci),:)=e.trace(ixp(s.estEO(4:6,ci)),:);
         % Convert to degrees.
         angles=angles*180/pi;
         for i=1:size(angles,1)
@@ -255,9 +255,9 @@ if plotEO && any(s.cEO(:))
     scalewidth(axH);
 end
 
-if plotOP && any(s.cOP(:))
-    ixPos=double(s.cOP);
-    ixPos(s.cOP)=ixOP;
+if plotOP && any(s.estOP(:))
+    ixPos=double(s.estOP);
+    ixPos(s.estOP)=ixOP;
 
     % OP parameter plot.
     fig=tagfigure(sprintf('paramplot_op_%s',e.damping.name));
@@ -284,7 +284,7 @@ if plotOP && any(s.cOP(:))
             c=repmat(s.OP(1:3,ci),1,size(e.trace,2));
             % Update with estimated values.
             ixp=ixPos(1:3,ci);
-            c(s.cOP(1:3,ci),:)=e.trace(ixp(s.cOP(1:3,ci)),:);
+            c(s.estOP(1:3,ci),:)=e.trace(ixp(s.estOP(1:3,ci)),:);
             % Line style and legend strings.
             ls={'-','--','-.'};
             fps={'X','Y','Z'};

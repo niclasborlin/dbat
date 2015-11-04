@@ -140,7 +140,7 @@ if isempty(iters)
     end
 end
 
-[ixIO,ixEO,ixOP]=indvec([nnz(s.cIO),nnz(s.cEO),nnz(s.cOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 if ~isempty(E)
     % Number of iterations.
