@@ -22,7 +22,7 @@ K=nan(3,1);
 for i=1:length(K)
     % Chi-square statistic is (x-mu)'*inv(C)*(x-mu), where x is N(mu,C).
     ix=3+i;
-    if s.cIO(ix)
+    if s.estIO(ix)
         v=(x(ix)-0)^2/CIO(ix,ix);
         K(i)=cumchi2(v,1);
     end
@@ -30,7 +30,7 @@ end
 
 % Test tangential coefficients together.
 ix=7:8;
-if all(s.cIO(ix))
+if all(s.estIO(ix))
     v=x(ix)'*(CIO(ix,ix)\x(ix));
     P=cumchi2(v,2);
 else
