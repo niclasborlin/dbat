@@ -37,8 +37,23 @@ s0.OP(:,ismember(s0.OPid,1002))=[1,1,0]';
 s0.OP(:,ismember(s0.OPid,1003))=[0,0,0]';
 s0.OP(:,ismember(s0.OPid,1004))=[1,0,0]';
 
+cpId=1001:1004;
+s0.isCtrl=ismember(s0.OPid,cpId);
+
+% Don't estimate the control points.
+s0.estOP(:,ismember(s0.OPid,cpId))=false;
+s0.useOPobs(:,ismember(s0.OPid,cpId))=true;
+s0.OPstd(:,ismember(s0.OPid,cpId))=0;
+
+% Estimate all EO parameters from mark points only.
+s0.estEO(1:6,:)=true;
+s0.useEOobs(:)=false;
+s0.EO(1:6,:)=nan;
+
 % Estimate px,py,c,K1-K3,P1-P2.
-s0.cIO(1:8,:)=true;
+s0.estIO(1:8,:)=true;
+% No prior observations.
+s0.useIOobs(:)=false;
 
 % Set initial IO parameters.
 s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
@@ -46,11 +61,8 @@ s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
 s0.IO(3)=7.3;          % c = EXIF value.
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
-cpId=1001:1004;
-s0.isCtrl=ismember(s0.OPid,cpId);
-
-% Fix the bundle datum by fixing all control points.
-s0.cOP(:,ismember(s0.OPid,cpId))=false;
+% Use sigma0=1 as first approximation.
+s0.markStd(:)=1;
 
 s1=resect(s0,'all',cpId,1,0,cpId);
 s2=forwintersect(s1,'all',true);
@@ -145,7 +157,7 @@ if printdemofigures, doPause=0; else doPause='on'; end
 for i=1:length(E)
     h=plotparams(result{i},E{i},'noio','noeo','noop');
     fig=tagfigure(sprintf('network%d',i));
-    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,fig);
+    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,double(fig));
     h=plotnetwork(result{i},E{i},'title',...
                   ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
                   'axes',fig,'pause',doPause,'camsize',0.1); 
