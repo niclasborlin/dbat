@@ -40,10 +40,11 @@ s0.OP(:,ismember(s0.OPid,1004))=[1,0,0]';
 cpId=1001:1004;
 s0.isCtrl=ismember(s0.OPid,cpId);
 
-% Don't estimate the control points.
-s0.estOP(:,ismember(s0.OPid,cpId))=false;
+% Estimate the control points.
+s0.OPobs=s0.OP;
+s0.estOP(:,ismember(s0.OPid,cpId))=true;
 s0.useOPobs(:,ismember(s0.OPid,cpId))=true;
-s0.OPstd(:,ismember(s0.OPid,cpId))=0;
+s0.OPstd(:,ismember(s0.OPid,cpId))=0.01;
 
 % Estimate all EO parameters from mark points only.
 s0.estEO(1:6,:)=true;
@@ -60,6 +61,10 @@ s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
 s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
 s0.IO(3)=7.3;          % c = EXIF value.
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
+
+s0.IOobs(3)=7.3;
+s0.IOstd(3)=0.1;
+s0.useIOobs(3)=true;
 
 % Use sigma0=1 as first approximation.
 s0.markStd(:)=1;

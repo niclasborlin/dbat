@@ -42,8 +42,10 @@ if (nargout<2)
     % Remove lens distortion from measured points.
     ptCorr=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP,s.ptCams, ...
                              size(IO,2));
-	
-    f=xy(:)-ptCorr(:);
+
+    fPre=pm_preobs(x,s);
+    
+    f=[xy(:)-ptCorr(:);fPre];
 else
     % Project into pinhole camera.
     [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
@@ -53,8 +55,10 @@ else
     [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
                                     s.ptCams,size(IO,2),s.estIO);
 
-    f=xy(:)-ptCorr(:);
+    [fPre,Jpre]=pm_preobs(x,s);
+
+    f=[xy(:)-ptCorr(:);fPre];
 	
-    J=[dIO1-dIO2,dEO,dOP];
+    J=[dIO1-dIO2,dEO,dOP;Jpre];
 end
 
