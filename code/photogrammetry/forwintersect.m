@@ -9,7 +9,7 @@ function [s,id,res]=forwintersect(s0,ids,skipFixed)
 %
 %   S=FORWINTERSECT(S0,...,TRUE) does not compute OP coordinates for points
 %   with any fixed coordinate(s), i.e. with a FALSE in the corresponding
-%   S0.cOP entry.
+%   S0.estOP entry.
 
 %   [S,ID,RES]=... returns the IDs of each computed points in ID and the
 %   corresponding rms object space residual in RES.
@@ -28,7 +28,7 @@ xy=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,s0.nK,s0.nP, ...
 
 % Extract wanted points.
 if skipFixed
-    isFree=all(s0.cOP,1)';
+    isFree=all(s0.estOP,1)';
 else
     isFree=true;
 end
