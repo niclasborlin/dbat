@@ -1,8 +1,11 @@
 function [f,J,JJ]=brown_euler_cam(x,s)
 %BROWN_EULER_CAM Residual function for the Brown camera model with Euler angles.
 %
-%   F=BROWN_EULER_CAM(X,S) returns the residual vector F of the camera
+%   R=BROWN_EULER_CAM(X,S) returns the residual vector R of the camera
 %   network defined in S evaluated with the approximate values in X.
+%
+%   Use [R,J]=... or [R,J,JJ]=... to get the analytical Jacobian J
+%   and the numerical Jacobian JJ.
 %
 %   The internal camera model is from Brown (1971) with K1, K2, K3,
 %   P1, and P2. The external orientation uses Euler omega-phi-kappa
