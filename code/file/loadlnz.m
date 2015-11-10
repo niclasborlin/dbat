@@ -26,13 +26,27 @@ else
     docs=obj.getChildNodes;
     for iDoc=0:docs.getLength()-1
         doc=docs.item(iDoc);
-        if ~strcmp(doc.getNodeName(),"document")
+        if ~strcmp(doc.getNodeName(),'document')
             warning('Not a document');
         elseif ~obj.hasChildNodes
             warning('No groups/reports found');
         else
             % Document should have groups and reports.
-            
+            groups=doc.getChildNodes;
+            for iGroup=0:groups.getLength()-1
+                group=groups.item(iGroup);
+                switch char(group.getNodeName())
+                  case 'group'
+                    disp('Group');
+                  case 'report'
+                    disp('Report');
+                  case '#text'
+                    % Ignore #text as it is usually just linebreaks.
+                  otherwise
+                    warning(sprintf('Expected group or report, got %s.',...
+                                  char(group.getNodeName())));
+                end
+            end
             
         end
     end
