@@ -1,0 +1,113 @@
+
+Status Report Tree
+   Project Name: ctrlpttest.pmr
+   Problems and Suggestions (3)
+      Project Problems (3)
+         Problem: The following cameras are incorrectly set up and are being used for processing: [Canon EOS 7D [20.00]]
+            Suggestion: Projects that are set up using the Quick Setup method are not intended for processing. You cannot have confidence in the result even if the processing was successful. Replace the camera(s) with calibrated ones.
+         Problem: The following cameras are not calibrated: Canon EOS 7D [20.00].
+            Suggestion: For best results you should use fully calibrated cameras. If you are having accuracy problems, you should calibrate your camera (it is easy and does not take long - See Camera Calibration in the User Manual).
+         Problem: A large percentage of your points are sub-pixel marked so it is assumed you are striving for a high accuracy result. The largest residual (Point9 - 12.51) is greater than 1.00 pixels. 
+            Suggestion: In high accuracy projects, strive to get all point residuals under 1.00 pixels. If you have just a few high residual points, study them on each photo to ensure they are marked and referenced correctly. If many of your points have high residuals then make sure the camera stations are solving correctly. Ensure that you are using the best calibrated camera possible. Remove points that have been manually marked unless you need them.
+      Problems related to most recent processing (0)
+   Information from most recent processing
+      Last Processing Attempt: Thu Nov 26 09:51:42 2015
+      PhotoModeler Version: 2011.1.0.541 - final,full (64-bit)
+      Status: successful
+      Processing Options
+         Orientation: off
+         Global Optimization: on
+         Calibration: off
+         Constraints: on
+      Total Error
+         Number of Processing Iterations: 1
+         Number of Processing Stages: 1
+         First Error: 49.459
+         Last Error: 49.459
+      Precisions / Standard Deviations
+         Photograph Standard Deviations
+            Photo 1: img_2034.jpg
+               Omega
+                    Value: 33.551157 deg
+                    Deviation: Omega: 0.159 deg
+               Phi
+                    Value: 0.693505 deg
+                    Deviation: Phi: 0.226 deg
+                    Correlations over  95.0%: X:99.3%
+               Kappa
+                    Value: -0.821385 deg
+                    Deviation: Kappa: 0.093 deg
+               Xc
+                    Value: 0.531361 
+                    Deviation: X: 0.007 
+                    Correlations over  95.0%: Phi:99.3%
+               Yc
+                    Value: -0.515776 
+                    Deviation: Y: 0.004 
+               Zc
+                    Value: 1.326904 
+                    Deviation: Z: 0.004 
+            Photo 2: img_2036.jpg
+               Omega
+                    Value: 28.686944 deg
+                    Deviation: Omega: 0.211 deg
+               Phi
+                    Value: -26.630107 deg
+                    Deviation: Phi: 0.177 deg
+               Kappa
+                    Value: -41.946283 deg
+                    Deviation: Kappa: 0.113 deg
+               Xc
+                    Value: -0.371229 
+                    Deviation: X: 0.004 
+               Yc
+                    Value: -0.364649 
+                    Deviation: Y: 0.004 
+               Zc
+                    Value: 1.306444 
+                    Deviation: Z: 0.006 
+   Quality
+      Photographs
+         Total Number: 2
+            Bad Photos: 0
+            Weak Photos: 0
+            OK Photos: 2
+         Number Oriented: 2
+         Number with inverse camera flags set: 0
+      Cameras
+         Camera1: Canon EOS 7D [20.00]
+            Calibration: no
+            Number of photos using camera: 2
+      Point Marking Residuals
+         Overall RMS: 5.643 pixels
+         Maximum: 12.513 pixels
+            Point 9 on Photo 2
+         Minimum: 0.659 pixels
+            Point 7 on Photo 2
+         Maximum RMS: 9.268 pixels
+            Point 9
+         Minimum RMS: 0.649 pixels
+            Point 7
+      Point Tightness
+         Maximum: 0.0042 m
+            Point 9
+         Minimum: 0.00048 m
+            Point 7
+      Point Precisions
+         Overall RMS Vector Length: 0.00574 m
+         Maximum Vector Length: 0.00633 m
+            Point 7
+         Minimum Vector Length: 0.00524 m
+            Point 8
+         Maximum X: 0.00235 m
+         Maximum Y: 0.00404 m
+         Maximum Z: 0.00454 m
+         Minimum X: 0.00153 m
+         Minimum Y: 0.00258 m
+         Minimum Z: 0.00413 m
+      Point Angles
+         Maximum: 36.2 degrees
+            Point 9
+         Minimum: 22.99 degrees
+            Point 12
+         Average: 29.51 degrees
