@@ -5,7 +5,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 26-Nov-2015 11:15:56
+      Last Bundle Run: 26-Nov-2015 12:24:05
       DBAT version:    0.4.1.241 (2014-09-03 15:23:47)
       Status:          OK (0)
       Sigma0 (pixels): 7.82036
@@ -25,50 +25,50 @@ Damped Bundle Adjustment Toolbox result file
          Initial value comment:   
       Total error:
          Number of stages:     1
-         Number of iterations: 1
-         First error:          0.0980394
+         Number of iterations: 2
+         First error:          2.40152
          Last error:           0.0951506
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: img_2034.jpg
                Omega:
-                  Value:     33.551193 deg
+                  Value:     33.551278 deg
                   Deviation: 0.3 deg
                Phi:
-                  Value:     0.693547 deg
+                  Value:     0.693686 deg
                   Deviation: 0.4 deg
                   Correlations over 95%: Xc:99.3%.
                Kappa:
-                  Value:     -0.821399 deg
+                  Value:     -0.821455 deg
                   Deviation: 0.1 deg
                Xc:
-                  Value:     0.531362 ou
+                  Value:     0.531367 ou
                   Deviation: 0.01 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -0.515779 ou
+                  Value:     -0.515781 ou
                   Deviation: 0.006 ou
                Zc:
-                  Value:     1.326907 ou
+                  Value:     1.326905 ou
                   Deviation: 0.006 ou
             Photo 2: img_2036.jpg
                Omega:
-                  Value:     28.686898 deg
+                  Value:     28.687049 deg
                   Deviation: 0.3 deg
                Phi:
-                  Value:     -26.629967 deg
+                  Value:     -26.630309 deg
                   Deviation: 0.3 deg
                Kappa:
-                  Value:     -41.946328 deg
+                  Value:     -41.946146 deg
                   Deviation: 0.2 deg
                Xc:
-                  Value:     -0.371227 ou
+                  Value:     -0.371235 ou
                   Deviation: 0.007 ou
                Yc:
-                  Value:     -0.364651 ou
+                  Value:     -0.364652 ou
                   Deviation: 0.007 ou
                Zc:
-                  Value:     1.306451 ou
+                  Value:     1.306443 ou
                   Deviation: 0.01 ou
    Quality
       Photographs
@@ -93,12 +93,12 @@ Damped Bundle Adjustment Toolbox result file
       Point Marking Residuals
          Overall point RMS: 5.530 pixels
          Mark point residuals:
-            Maximum: 12.207 pixels (OP 9 on photo 2)
+            Maximum: 12.212 pixels (OP 9 on photo 2)
          Object point residuals (RMS over all images of a point):
-            Minimum: 0.643 pixels (OP 7 over 2 images)
-            Maximum: 9.041 pixels (OP 9 over 2 images)
+            Minimum: 0.642 pixels (OP 7 over 2 images)
+            Maximum: 9.044 pixels (OP 9 over 2 images)
          Photo residuals (RMS over all points in an image):
-            Minimum: 3.436 pixels (photo 1 over 8 points)
+            Minimum: 3.437 pixels (photo 1 over 8 points)
             Maximum: 7.025 pixels (photo 2 over 8 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
