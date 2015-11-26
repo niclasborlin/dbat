@@ -1,0 +1,12 @@
+Project Units: meters
+Units & Scale - Inactive, Translate - Inactive, Rotate - Inactive
+
+Id,Name,X (project units),Y (project units),Z (project units),X Precision,Y Precision,Z Precision,Photos (used),Tightness (percent),Tightness (project units),Angle (deg.),RMS Residual (pixels),Largest Residual (pixels),Photo Largest Residual,Material,Layer,Tagged,Type,Use In Processing,Frozen,Precision Vector Length,Photos (marked),Color (R),Color (G),Color (B),Control Name,#Constraints,Target Code,Target Bits,Ref. Check Tag
+5," ",0.280044,0.424374,0.010936,0.001788,0.003441,0.004847,"1,2",0.254547,0.003600,32.153825,5.272372,5.311359,2,White,Default, ,Regular,yes,no,0.006208,1,2,0.000000,0.000000,0.000000, ,0,n/a,n/a, 
+6," ",0.719805,0.425989,0.006032,0.002743,0.003756,0.005336,"1,2",0.049057,0.000694,29.128530,0.958875,1.020022,2,White,Default, ,Regular,yes,no,0.007078,1,2,0.000000,0.000000,0.000000, ,0,n/a,n/a, 
+7," ",0.426340,0.716337,0.008646,0.002157,0.004731,0.005286,"1,2",0.048862,0.000691,28.653855,0.934184,0.948930,2,White,Default, ,Regular,yes,no,0.007415,1,2,0.000000,0.000000,0.000000, ,0,n/a,n/a, 
+8," ",0.426030,0.276917,0.012281,0.002032,0.003024,0.004947,"1,2",0.234000,0.003309,32.942232,4.967757,5.140536,2,White,Default, ,Regular,yes,no,0.006144,1,2,0.000000,0.000000,0.000000, ,0,n/a,n/a, 
+9," ",0.000000,0.000000,0.000000,fixed,fixed,fixed,"2,1",0.370484,0.005240,35.976567,11.419823,15.184986,2,White,Default, ,Control,yes,no,fixed,2,1,0.000000,0.000000,0.000000,IP #1,0,n/a,n/a, 
+11," ",1.000000,0.000000,0.000000,fixed,fixed,fixed,"2,1",0.185897,0.002629,27.383872,7.987420,10.575424,2,White,Default, ,Control,yes,no,fixed,2,1,0.000000,0.000000,0.000000,IP #3,0,n/a,n/a, 
+12," ",1.000000,1.000000,0.000000,fixed,fixed,fixed,"2,1",0.295381,0.004177,22.929550,7.367105,9.542784,2,White,Default, ,Control,yes,no,fixed,2,1,0.000000,0.000000,0.000000,IP #4,0,n/a,n/a, 
+17," ",0.000000,1.000000,0.000000,fixed,fixed,fixed,"1,2",0.053562,0.000758,25.919924,6.870077,8.654396,2,White,Default, ,Control,yes,no,fixed,1,2,0.000000,0.000000,0.000000,IP #2,0,n/a,n/a, 
