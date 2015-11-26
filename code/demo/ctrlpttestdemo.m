@@ -35,6 +35,11 @@ s0.OP=s0.OPobs; % No really necessary...
 s0.estOP=repmat(~s0.isCtrl(:)',3,1);
 s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
 
+% Adjust EO and OP to not be exactly what was given by PM.
+s0.EO(1:3,:)=round(s0.EO(1:3,:)*10)/10;
+s0.EO(4:6,:)=round(s0.EO(4:6,:)*10)/10;
+s0.OP=round(s0.OP*10)/10;
+
 % Use sigma0=1 as first approximation.
 s0.markStd(:)=1;
 
