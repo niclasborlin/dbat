@@ -114,7 +114,8 @@ end
 % Weights.
 
 % Weights for mark points.
-wMark=1./s.markStd(:,s.colPos(s.vis));
+ptCols=s.colPos(s.vis);
+wMark=s.IO(end-1:end,s.ptCams(ptCols))./s.markStd(:,ptCols);
 % Weights for prior IO observations.
 wIO=1./s.IOstd(s.useIOobs);
 % Weights for prior EO observations.
