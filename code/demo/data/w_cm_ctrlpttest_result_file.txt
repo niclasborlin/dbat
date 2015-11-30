@@ -1,0 +1,113 @@
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln 
+   Problems and suggestions:
+      Project Problems: Not evaluated
+      Problems related to the processing: (1)
+         One or more of the camera station parameters has a high correlation (see below).
+   Information from last bundle
+      Last Bundle Run: 30-Nov-2015 12:01:06
+      DBAT version:    0.4.1.241 (2014-09-03 15:23:47)
+      Status:          OK (0)
+      Sigma0 (pixels): 387.888
+      Sigma0 (mm):     1.66858
+      Processing options:
+         Orientation:             on
+         Global optimization:     on
+         Calibration:             off
+         Constraints:             off
+         Maximum # of iterations: 20
+         Convergence tolerance:   0.001
+         Singular test:           off
+         Chirality veto:          off
+         Damping:                 gna
+         Camera unit (cu):        mm
+         Object space unit (ou):  m
+         Initial value comment:   
+      Total error:
+         Number of stages:     1
+         Number of iterations: 5
+         First error:          4473.2
+         Last error:           4.71945
+      Precisions / Standard Deviations:
+         Photograph Standard Deviations:
+            Photo 1: img_2034.jpg
+               Omega:
+                  Value:     31.661340 deg
+                  Deviation: 1 deg
+               Phi:
+                  Value:     0.254787 deg
+                  Deviation: 0.9 deg
+                  Correlations over 95%: Xc:95.6%.
+               Kappa:
+                  Value:     -0.700737 deg
+                  Deviation: 0.8 deg
+               Xc:
+                  Value:     0.517555 ou
+                  Deviation: 0.03 ou
+                  Correlations over 95%: Phi:95.6%.
+               Yc:
+                  Value:     -0.477249 ou
+                  Deviation: 0.03 ou
+               Zc:
+                  Value:     1.375184 ou
+                  Deviation: 0.03 ou
+            Photo 2: img_2036.jpg
+               Omega:
+                  Value:     27.946288 deg
+                  Deviation: 1 deg
+               Phi:
+                  Value:     -28.141272 deg
+                  Deviation: 0.9 deg
+               Kappa:
+                  Value:     -41.896937 deg
+                  Deviation: 0.8 deg
+               Xc:
+                  Value:     -0.414262 ou
+                  Deviation: 0.03 ou
+               Yc:
+                  Value:     -0.331279 ou
+                  Deviation: 0.03 ou
+               Zc:
+                  Value:     1.293568 ou
+                  Deviation: 0.03 ou
+   Quality
+      Photographs
+         Total number: 2
+         Numbers used: 2
+      Cameras
+         Total number: 1
+         Camera1:
+            Calibration:                   <not available>
+            Number of photos using camera: 2
+            Photo point coverage:
+               Rectangular: 48%-64% (56% average, 64% union)
+               Convex hull: 32%-40% (36% average, 52% union)
+               Radial:      65%-67% (66% average, 67% union)
+      Photo Coverage
+         References points outside calibrated region:
+            <not available>
+      Point Measurements
+         Ray count: 2-2 (2.0 avg)
+         Number of control pts: 4
+         Number of object pts: 4
+      Point Marking Residuals
+         Overall point RMS: 242.278 pixels
+         Mark point residuals:
+            Maximum: 466.733 pixels (OP 6 on photo 2)
+         Object point residuals (RMS over all images of a point):
+            Minimum: 34.934 pixels (OP 17 over 2 images)
+            Maximum: 441.098 pixels (OP 6 over 2 images)
+         Photo residuals (RMS over all points in an image):
+            Minimum: 234.064 pixels (photo 1 over 8 points)
+            Maximum: 250.223 pixels (photo 2 over 8 points)
+      Point Precision
+         Total standard deviation (RMS of X/Y/Z std):
+            Minimum: 0.016 (OP 6)
+            Maximum: 0.022 (OP 9)
+         Maximum X standard deviation: 0.012 (OP 9)
+         Maximum Y standard deviation: 0.012 (OP 9)
+         Maximum Z standard deviation: 0.015 (OP 11)
+      Point Angles
+         Minimum: 23.9 degrees (OP 12)
+         Maximum: 37.0 degrees (OP 9)
+         Average: 30.4 degrees
