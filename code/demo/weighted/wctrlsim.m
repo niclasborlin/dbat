@@ -66,7 +66,7 @@ for ii=1:length(ctrlId)
         ctrlStr=sprintf('imported c%d',ctrlId(ii));
         
         fprintf(' %d %d (%d)',imNo,markId,ctrlId(ii));
-        cmd=sprintf('MP %d %d %.10g %.10g %s',imNo,markId,xy,ctrlStr)
+        cmd=sprintf('MP %d %d %.10g %.10g %s',imNo,markId,xy,ctrlStr);
         [ok,num,str]=ddecmd(ch,cmd); %#ok<NASGU>
         if (~ok), ddepmterm(ch); cmd, error('Failed to set mark.'); end
     end
@@ -87,7 +87,7 @@ for ii=1:length(nonCtrlId)
         imNo=images(jj);
         
         fprintf(' %d %d',imNo,markId);
-        cmd=sprintf('MP %d %d %.10g %.10g',imNo,markId,xy)
+        cmd=sprintf('MP %d %d %.10g %.10g',imNo,markId,xy);
         [ok,num,str]=ddecmd(ch,cmd); %#ok<NASGU>
         if (~ok), ddepmterm(ch); cmd, error('Failed to set mark.'); end
     end
