@@ -150,30 +150,32 @@ else
         % Extract points measured in this image.
         pts=s.markPts(:,s.colPos(s.vis(:,ix(i)),ix(i)));
         
-        % Radial extent.
-        radPts=sqrt(sum(euclidean(PP\(S\homogeneous(pts))).^2,1));
-        [ptRadMax,pri]=max(radPts);
-        crr(i)=ptRadMax/maxRad;
-        crp(:,:,i)=[pp,pts(:,pri)];
+        if ~isempty(pts)
+            % Radial extent.
+            radPts=sqrt(sum(euclidean(PP\(S\homogeneous(pts))).^2,1));
+            [ptRadMax,pri]=max(radPts);
+            crr(i)=ptRadMax/maxRad;
+            crp(:,:,i)=[pp,pts(:,pri)];
         
-        % Rectangular extents.
-        cl(:,i)=min(pts,[],2);
-        ch(:,i)=max(pts,[],2);
+            % Rectangular extents.
+            cl(:,i)=min(pts,[],2);
+            ch(:,i)=max(pts,[],2);
         
-        % Convex hull.
-        if nnz(s.vis(:,ix(i)))<3
-            % Less that 3 points gives empty convex hull.
-            hullArea(i)=0;
-            if nargout>2
-                % All points are on the border of the convex hull.
-                cc{i}=pts;
-            end
-        else            
-            % Find convex hull.
-            [j,hullArea(i)]=convhull(pts');
-            if nargout>2
-                % Store hull points if asked for.
-                cc{i}=pts(:,j);
+            % Convex hull.
+            if nnz(s.vis(:,ix(i)))<3
+                % Less that 3 points gives empty convex hull.
+                hullArea(i)=0;
+                if nargout>2
+                    % All points are on the border of the convex hull.
+                    cc{i}=pts;
+                end
+            else            
+                % Find convex hull.
+                [j,hullArea(i)]=convhull(pts');
+                if nargout>2
+                    % Store hull points if asked for.
+                    cc{i}=pts(:,j);
+                end
             end
         end
     end
