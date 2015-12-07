@@ -13,6 +13,7 @@ OP=OP(:,OPkeep);
 OPid=OPid(OPkeep);
 OPctrl=OPctrl(OPkeep);
 
+IO(4:8)=0;
 EO=EO(:,1:20);
 
 K0=diag([-IO(3),-IO(3),1]);
@@ -21,12 +22,12 @@ K0=diag([1,-1,1])*K0;
 K=diag([IO(end-1:end);1])*K0;
 
 images=1:size(EO,2);
-%images=[1,3];
+images=[1,3];
 
 mAll=cell(1,length(images));
 mVis=cell(1,length(images));
 
-vis=false(size(OP,2),length(images));
+vis=false(size(OP,2),size(EO,2));
 
 for ii=1:length(images)
     imNo=images(ii);
@@ -35,20 +36,157 @@ for ii=1:length(images)
     P0=R*[eye(3),-C];
     P=K*P0;
 
-    mAll{ii}=euclidean(P*homogeneous(OP));
-    vis(:,ii)=mAll{ii}(1,:)>0 & mAll{ii}(1,:)<IO(end-3) & ...
-              mAll{ii}(2,:)>0 & mAll{ii}(2,:)<IO(end-2);
-    mVis{ii}=mAll{ii}(:,vis(:,ii));
+    mAll{imNo}=euclidean(P*homogeneous(OP));
+    vis(:,imNo)=mAll{imNo}(1,:)>0 & mAll{imNo}(1,:)<IO(end-3) & ...
+              mAll{imNo}(2,:)>0 & mAll{imNo}(2,:)<IO(end-2);
+    mVis{imNo}=mAll{imNo}(:,vis(:,imNo));
     
     subplot(floor(sqrt(length(images))),ceil(sqrt(length(images))),ii)
-    plot(mAll{ii}(1,:),mAll{ii}(2,:),'x-')
+    plot(mAll{imNo}(1,:),mAll{imNo}(2,:),'x-')
     axis equal ij
     axis([0,IO(end-3),0,IO(end-2)])
     if 0
         hold on
-        plot(mAll{ii}(1,~vis(:,ii)),mAll{ii}(2,~vis(:,ii)),'ro-')
+        plot(mAll{imNo}(1,~vis(:,imNo)),mAll{imNo}(2,~vis(:,imNo)),'ro-')
         axis tight
         hold off
     end
 end
 
+ss=struct('title','Synthetic camera calibration data');
+ss.imDir='';
+ss.imNames=cell(1,size(EO,2));
+ss.IO=IO;
+ss.IOobs=IO;
+ss.IOstd=zeros(size(IO));
+ss.IOcov=[];
+ss.EO=EO;
+ss.EOobs=EO;
+ss.EOstd=zeros(size(EO));
+ss.EOcov=[];
+ss.cams=ones(1,size(EO,2));
+ss.OP=OP;
+ss.OPobs=OP;
+ss.OPstd=zeros(size(OP));
+ss.OPcov=[];
+ss.OPid=OPid(:);
+ss.isCtrl=OPctrl;
+ss.vis=vis;
+ss.colPos=reshape(cumsum(vis(:)),size(vis)).*vis;
+ss.markPts=cat(2,mVis{:});
+% Use same data as Photomodeler gets.
+ss.markPts=reshape(sscanf(sprintf('%.10g ',ss.markPts),'%g'),size(ss.markPts));
+ss.markStd=ones(size(ss.markPts));
+ss.ptCams=ones(1,size(ss.markPts,2));
+ss.estIO=false(size(IO));
+ss.estEO=repmat((1:7)'<7,1,size(EO,2));
+ss.estEO(:,~ismember(1:size(EO,2),images))=false;
+ss.estOP=repmat(~OPctrl,3,1);
+ss.useIOobs=true(size(IO));
+ss.useEOobs=false(size(EO));
+ss.useOPobs=repmat(OPctrl,3,1);
+ss.nK=3;
+ss.nP=2;
+ss.camUnit='mm';
+ss.objUnit='m';
+ss.x0desc='';
+
+cpId=ss.OPid(ss.isCtrl);
+ss1=resect(ss,'all',cpId,1,0,cpId);
+ss2=forwintersect(ss1,'all',true);
+
+s=ss2;
+
+h=plotnetwork(s,'title','Initial network',...
+              'axes',tagfigure(sprintf('network%d',i)),...
+              'camsize',0.1);
+
+dampings={'gna'};
+
+result=cell(size(dampings));
+ok=nan(size(dampings));
+iters=nan(size(dampings));
+sigma0=nan(size(dampings));
+E=cell(size(dampings));
+
+for i=1:length(dampings)
+    fprintf('Running the bundle with damping %s...\n',dampings{i});
+
+    % Run the bundle.
+    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
+    
+    if ok(i)
+        fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
+                iters(i),sigma0(i));
+    else
+        fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
+                 'pixels\n'],iters(i),sigma0(i));
+    end
+end
+
+resFile=fullfile(pwd,'data','unweighted_dbat_out.txt');
+
+COP=bundle_result_file(result{1},E{1},resFile);
+
+fprintf('\nBundle result file %s generated.\n',resFile);
+
+h=plotparams(result{1},E{1});
+
+if printdemofigures
+    figDir=fullfile('..','docsrc','manual','ill');
+    files={'ccamiotrace.eps','ccameotrace.eps','ccamoptrace.eps', ...
+           'ccamgnatrace.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+h=plotcoverage(result{1},true);
+
+if printdemofigures
+    figDir=fullfile('..','docsrc','manual','ill');
+    files={'ccamcoverage.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+h=plotimagestats(result{1},E{1});
+
+if printdemofigures
+    figDir=fullfile('..','docsrc','manual','ill');
+    files={'ccamimstats.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+h=plotopstats(result{1},E{1},COP);
+
+if printdemofigures
+    figDir=fullfile('..','docsrc','manual','ill');
+    files={'ccamopstats.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
+
+if printdemofigures, doPause=0; else doPause='on'; end
+
+for i=1:length(E)
+    h=plotparams(result{i},E{i},'noio','noeo','noop');
+    fig=tagfigure(sprintf('network%d',i));
+    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,double(fig));
+    h=plotnetwork(result{i},E{i},'title',...
+                  ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
+                  'axes',fig,'pause',doPause,'camsize',0.1); 
+end
+
+if printdemofigures
+    h=get(h,'parent');
+    figDir=fullfile('..','docsrc','manual','ill');
+    files={'ccamxfinal.eps'};
+    for i=1:length(h)
+        print(h(i),'-depsc2',fullfile(figDir,files{i}));
+    end
+end
