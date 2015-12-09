@@ -22,7 +22,7 @@ K0=diag([1,-1,1])*K0;
 K=diag([IO(end-1:end);1])*K0;
 
 images=1:size(EO,2);
-images=[1,3];
+%images=[1,3];
 
 mAll=cell(1,length(images));
 mVis=cell(1,length(images));
