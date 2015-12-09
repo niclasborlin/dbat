@@ -124,7 +124,8 @@ wEO=1./s.EOstd(s.useEOobs);
 wOP=1./s.OPstd(s.useOPobs);
 nWeights=length(wMark(:))+length(wIO(:))+length(wEO(:))+length(wOP(:));
 % Weight matrix.
-W=spdiags([wMark(:);wIO(:);wEO(:);wOP(:)].^2,0,nWeights,nWeights);
+wAll=[wMark(:);wIO(:);wEO(:);wOP(:)];
+W=spdiags((wAll/sum(wAll)).^2,0,nWeights,nWeights);
 
 % Convergence tolerance.
 convTol=1e-3;
