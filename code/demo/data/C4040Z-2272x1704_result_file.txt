@@ -5,11 +5,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 25-Jun-2014 15:33:03
-      DBAT version:    0.4.0.203 (2014-02-12 16:27:27)
+      Last Bundle Run: 04-Mar-2016 09:39:17
+      DBAT version:    0.4.1.241 (2014-09-03 15:23:47)
       Status:          OK (0)
-      Sigma0 (pixels): 0.168901
-      Sigma0 (mm):     0.000539091
+      Sigma0 (pixels): 4.07186e-05
+      Sigma0 (mm):     1.29964e-07
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -26,8 +26,8 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 7
-         First error:          9.85752
-         Last error:           0.0329067
+         First error:          0.00237645
+         Last error:           7.93314e-06
       Precisions / Standard Deviations:
          Camera Calibration Standard Deviations:
             Camera1 (camera unit cu=mm)
@@ -78,7 +78,7 @@ Damped Bundle Adjustment Toolbox result file
                     Value:        0.00319176 cu
                Ph - pixel height:
                     Value:        0.00319176 cu
-            Rated angle of view: (88, 72) deg
+            Rated angle of view (h,v,d): (52, 40, 63) deg
             Largest distortion: 0.37 cu (116.4 px, 8.2% of half-diagonal)
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
@@ -501,15 +501,15 @@ Damped Bundle Adjustment Toolbox result file
          Number of control pts: 4
          Number of object pts: 96
       Point Marking Residuals
-         Overall point RMS: 0.226 pixels
+         Overall point RMS: 0.000 pixels
          Mark point residuals:
-            Maximum: 0.952 pixels (OP 1003 on photo 5)
+            Maximum: 0.000 pixels (OP 1003 on photo 5)
          Object point residuals (RMS over all images of a point):
-            Minimum: 0.101 pixels (OP 67 over 21 images)
-            Maximum: 0.569 pixels (OP 1004 over 21 images)
+            Minimum: 0.000 pixels (OP 67 over 21 images)
+            Maximum: 0.000 pixels (OP 1004 over 21 images)
          Photo residuals (RMS over all points in an image):
-            Minimum: 0.178 pixels (photo 4 over 97 points)
-            Maximum: 0.318 pixels (photo 6 over 93 points)
+            Minimum: 0.000 pixels (photo 4 over 97 points)
+            Maximum: 0.000 pixels (photo 6 over 93 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
             Minimum: 8.6e-05 (OP 49)
