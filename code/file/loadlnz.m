@@ -1,4 +1,4 @@
-function [p,doc]=loadlnz(fName)
+function [p,obj]=loadlnz(fName)
 %LOADLNZ Load Photoscan LNZ camera calibration file.
 %
 %
@@ -11,11 +11,14 @@ if length(files)~=1
 end
 
 % Read the doc.xml file.
-obj=xmlread(files{1});
+obj=xml2struct(files{1});
 
 % Clean up the file and dir.
 delete(files{1});
 rmdir(tmpDir);
+
+p=[];
+return;
 
 p=struct('group',[],'report',[]);
 
