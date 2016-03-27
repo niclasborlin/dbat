@@ -1,0 +1,12 @@
+Project Units: meters
+Units & Scale - Active, Translate - Active, Rotate - Active
+
+Id,Name,Photos (used),X (project units),Y (project units),Z (project units),X Precision,Y Precision,Z Precision,Precision Vector Length,Tightness (percent),Tightness (project units),Angle (deg.),Control Name,RMS Residual (pixels),Largest Residual (pixels),Photo Largest Residual,Material,Layer,Tagged,Type,Use In Processing,Frozen,#Constraints,Target Code,Target Bits,Ref. Check Tag,Photos (marked),Color (R),Color (G),Color (B)
+5," ","1,2",0.276016,0.431835,0.005255,0.077379,0.077387,0.080938,0.136114,0.058989,0.000845,33.233952, ,1.235991,1.237365,1,White,Default, ,Regular,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+6," ","1,2",0.720378,0.433348,0.003008,0.077251,0.077255,0.080735,0.135846,0.100820,0.001443,30.204288, ,1.984766,2.100824,2,White,Default, ,Regular,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+7," ","1,2",0.425200,0.719926,0.002498,0.077312,0.077327,0.081181,0.136188,0.046817,0.000670,29.723916, ,0.906423,0.915547,2,White,Default, ,Regular,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+8," ","1,2",0.422635,0.286566,0.006372,0.077157,0.077157,0.080812,0.135783,0.058389,0.000836,34.011826, ,1.248746,1.281566,2,White,Default, ,Regular,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+9," ","1,2",-0.013258,0.006147,0.001464,0.104266,0.104261,0.127663,0.195037,0.017386,0.000249,37.036040,IP #1,0.456966,0.472097,1,White,Default, ,Control,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+11," ","1,2",1.011209,0.007778,-0.001464,0.104064,0.104070,0.127700,0.194852,0.009073,0.000130,28.387358,IP #3,0.197146,0.219640,2,White,Default, ,Control,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+12," ","1,2",1.002203,0.994271,0.001464,0.103693,0.103707,0.126774,0.193853,0.044338,0.000635,23.916017,IP #4,0.780105,0.829952,2,White,Default, ,Control,yes,no,0,n/a,n/a, ,"1,2",255,255,255
+17," ","1,2",-0.000154,0.991804,-0.001464,0.103463,0.103475,0.126731,0.193578,0.005994,0.000086,27.062128,IP #2,0.118171,0.124193,1,White,Default, ,Control,yes,no,0,n/a,n/a, ,"1,2",255,255,255
