@@ -6,8 +6,8 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    fName=fullfile(curDir,'data','weighted','w0cm','w0cm-pmexport.txt');
-    cpName=fullfile(curDir,'data','weighted','w0cm','ctrlpts.txt');
+    fName=fullfile(curDir,'data','weighted','sxb','fixed','gcponly-pmexport.txt');
+    cpName=fullfile(curDir,'data','weighted','sxb','fixed','ctrlpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
@@ -26,7 +26,9 @@ if ~exist('prob','var')
     end
     % Replace XYZ positions.
     [~,ia,ib]=intersect(cpID,prob.ctrlPts(:,1));
-    prob.ctrlPts(ib,2:4)=CP(:,ia)';
+    % Determine offset.
+    offset=mean(CP(:,ia)'-prob.ctrlPts(ib,2:4),1)';
+    prob.ctrlPts(ib,2:4)=CP(:,ia)'-repmat(offset',length(ia),1);
     % Replace sigmas.
     prob.ctrlPts(ib,5:7)=CPS(:,ia)';
     % Keep track of control point names.
@@ -56,7 +58,7 @@ s0.OP(s0.estOP)=nan;
 s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
 
 % Use sigma0=.1 pixels as first approximation.
-s0.markStd(:)=.1;
+s0.markStd(:)=1;
 
 s1=resect(s0,'all',cpID,1,0,cpID);
 s2=forwintersect(s1,'all',true);
