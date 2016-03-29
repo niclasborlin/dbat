@@ -13,7 +13,8 @@ function [rms,res]=bundle_residuals(s,e)
 nPts=nnz(s.vis);
 
 % Compute residuals for each point.
-ptRes=sqrt(sum((diag(s.IO(end-1:end))*reshape(e.r(1:nPts*2),2,[])).^2,1));
+ptRes=sqrt(sum((diag(s.IO(end-1:end))*...
+                reshape(e.final.unweighted.r(1:nPts*2),2,[])).^2,1));
 
 % Residual array has same sparsity as vis.
 res=double(s.vis);
