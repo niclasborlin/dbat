@@ -166,7 +166,7 @@ if any(s.estIO(:))
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
             values={'Value:','%g %s',{vals(j),unit{j}}};
             if sigma(j)~=0
-                values(end+1,:)={'Deviation:','%.1g %s',{sigma(j),unit{j}}};
+                values(end+1,:)={'Deviation:','%.3g %s',{sigma(j),unit{j}}};
             end
             if ~isnan(sig(j))
                 values(end+1,:)={'Significance:','p=%.2f',sig(j)};
@@ -244,7 +244,7 @@ for i=1:size(s.EO,2)
         fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
         values={'Value:','%.6f %s',{vals(j),unit{j}}};
         if sigma(j)~=0
-            values(end+1,:)={'Deviation:','%.1g %s',{sigma(j),unit{j}}};
+            values(end+1,:)={'Deviation:','%.3g %s',{sigma(j),unit{j}}};
         end
         highCorr=find(keo==i & ieo==rows(j));
         if any(highCorr)
