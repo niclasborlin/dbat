@@ -131,7 +131,7 @@ wOP=1./s.OPstd(s.useOPobs);
 nWeights=length(wMark(:))+length(wIO(:))+length(wEO(:))+length(wOP(:));
 % Weight matrix.
 wAll=[wMark(:);wIO(:);wEO(:);wOP(:)];
-W=spdiags((wAll/sum(wAll)).^2,0,nWeights,nWeights);
+W=spdiags(wAll.^2,0,nWeights,nWeights);
 
 % Convergence tolerance.
 convTol=1e-3;
@@ -178,7 +178,7 @@ switch lower(damping)
     % Call Gauss-Newton-Armijo optimization routine. The vector alpha is
     % returned with the step lengths used at each iteration.
     stopWatch=cputime;
-    [x,code,iters,r,J,X,res,alpha]=gauss_newton_armijo(resFun, ...
+    [x,code,iters,final,X,res,alpha]=gauss_newton_armijo(resFun, ...
                                                       vetoFun,x0,W, ...
                                                       maxIter, ...
                                                       convTol,trace, ...
@@ -237,9 +237,8 @@ E.time=time;
 E.code=code;
 E.usedIters=iters;
 
-% Store final residual and Jacobian for later covariance calculations.
-E.J=J;
-E.r=r;
+% Store final weighted residual and Jacobian for later covariance calculations.
+E.final=final;
 
 % Handle returned values.
 ok=code==0;
@@ -251,8 +250,8 @@ if ok
     s.OP(s.estOP)=x(ixOP);
 end
 
-% Sigma0 is sqrt(r'*r/(m-n)) in mm, convert to pixels.
-s0mm=sqrt(r'*r/(length(r)-length(x)));
+% Sigma0 is sqrt(r'*r/(m-n)).
+s0mm=sqrt(E.final.weighted.r'*E.final.weighted.r/(length(E.final.weighted.r)-length(x)));
 s0px=s0mm*mean(s.IO(end-1:end));
 s0=s0px;
 

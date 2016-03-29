@@ -55,8 +55,8 @@ s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
 s0.OP(s0.estOP)=nan;
 s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
 
-% Use sigma0=1 as first approximation.
-s0.markStd(:)=1;
+% Use sigma0=.1 pixels as first approximation.
+s0.markStd(:)=.1;
 
 s1=resect(s0,'all',cpID,1,0,cpID);
 s2=forwintersect(s1,'all',true);
