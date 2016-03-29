@@ -6,7 +6,7 @@ function [id,XYZ,sigma,name]=loadcpt(fName)
 %   N-vector ID with point ids, the 3-by-N array XYZ with
 %   coordinates, the 3-by-N array SIGMA with coordinate standard
 %   deviations, and the N-cell array NAME with point names.  If no
-%   standard deviations are given, SIGMA=[].
+%   standard deviations are given, SIGMA is the 3-by-N zero matrix.
 
 % $Id$
 
@@ -44,6 +44,7 @@ while ~feof(fid)
     switch n
       case 3
         XYZ(:,end+1)=a;
+        sigma(:,end+1)=0;
       case 6
         XYZ(:,end+1)=a(1:3);
         sigma(:,end+1)=a(4:6);
