@@ -1,4 +1,4 @@
-function [x,code,n,r,J,T,rr,alphas]=gauss_newton_armijo(...
+function [x,code,n,final,T,rr,alphas]=gauss_newton_armijo(...
     resFun,vetoFun,x0,W,maxIter,convTol,trace,sTest,mu,alphaMin)
 %GAUSS_NEWTON_ARMIJO Gauss-Newton-Armijo least squares adjustment algorithm.
 %
@@ -18,10 +18,13 @@ function [x,code,n,r,J,T,rr,alphas]=gauss_newton_armijo(...
 %   returned. If TRACE is true, output sigma0 estimates at each
 %   iteration.
 %
-%   [X,CODE,I,R,J]=... also returns the final estimates of the residual
-%   vector R and Jacobian matrix J.
+%   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
+%   estimates of the weighted and unweighted residual vector and
+%   Jacobian matrix. The weighted estimates are returned as fields
+%   weighted.r and weighted.J, respectively, the unweighted as
+%   unweighted.r and unweighted.J, respectively.
 %
-%   [X,CODE,I,R,J,T,RR,ALPHAS]=... returns the iteration trace as successive
+%   [X,CODE,I,FINAL,T,RR,ALPHAS]=... returns the iteration trace as successive
 %   columns in T, the successive estimates of sigma0 in RR, and the used
 %   steplengths in ALPHAS.
 %
@@ -46,7 +49,7 @@ function [x,code,n,r,J,T,rr,alphas]=gauss_newton_armijo(...
 % Initialize current estimate and iteration trace.
 x=x0;
 
-if nargout>5
+if nargout>4
     % Pre-allocate fixed block if trace is asked for.
     blockSize=50;
     T=nan(length(x),min(blockSize,maxIter+1));
@@ -134,7 +137,7 @@ while true
     % Store iteration trace and algorithm performance parameters.
     alphas(end+1)=alpha; %#ok<AGROW>
     
-    if nargout>5
+    if nargout>4
         % Store iteration trace.
         if n+1>size(T,2)
             % Expand by blocksize if needed.
@@ -161,8 +164,13 @@ while true
 
 end
 
+if nargout>3
+    final=struct('unweighted',struct('r',s,'J',K),...
+                 'weighted',struct('r',r,'J',J));
+end
+
 % Trim unused trace columns.
-if nargout>5
+if nargout>4
     T=T(:,1:n+1);
 end
 
