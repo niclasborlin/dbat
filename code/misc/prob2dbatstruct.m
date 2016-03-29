@@ -12,28 +12,11 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   The struct S has fields:
 %       IO       - 16-by-nCams array with estimates of the internal
 %                  orientation for each camera.
-%       IOobs    - 16-by-nCams array with prior observations of the IO
-%                  parameters, or NaN if none.
-%       IOstd    - 16-by-nCams array with prior standard deviations for
-%                  the IO parameters, 0 if exact, NaN if none.
-%       IOcov    - 16-by-16-by-nCams array with prior covariance matrices
-%                  for the IO parameters, or empty if none.
 %       EO       - 7-by-nImages array with the external orientation for
 %                  each image.
-%       EOobs    - 7-by-nImages array with prior observations of the EO
-%                  parameters, 0 if exact, or NaN if none. 
-%       EOstd    - 7-by-nImages array with prior standard deviations for
-%                  the EO parameters.
-%       EOcov    - 6-by-6-by-nImages array with prior covariance
-%                  matrices for the EO parameters, or empty if none.
 %       cams     - 1-by-nImages numerical array indicating which IO column
 %                  correspond to which image. 
 %       OP       - 3-by-nOP array with object and control points.
-%       OPobs    - 3-by-nOP array with prior observations of control points.
-%       OPstd    - 3-by-nOP array with prior OP standard deviations, 0 if
-%                  exact, NaN if none.
-%       OPcov    - 3-by-3-by-nOP array with prior covariance matrices for
-%                  the OP parameters, or empty if none.
 %       OPid     - 1-by-nOP array with object points ids.
 %       isCtrl   - 1-by-nOP logical vector indicating which OP are control
 %                  points.
@@ -50,6 +33,28 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  in markPts the corresponding measurement is
 %                  stored. colPos(I,J)==K indicates the the measurement of
 %                  object point I in image J is stored in column K of markPts.
+%       prior    - struct with prior observations
+%                  IO    - 16-by-nCams array with prior observations of
+%                          the IO parameters, or NaN if no observation.
+%                  IOstd - 16-by-nCams array with prior standard
+%                          deviations for the IO parameters, 0 if
+%                          exact, NaN if none.
+%                  IOcov - 16-by-16-by-nCams array with prior
+%                          covariance matrices for the IO
+%                          parameters, or empty if none.
+%                  EO    - 7-by-nImages array with prior observations of
+%                          the EO parameters, or NaN if none.
+%                  EOstd - 7-by-nImages array with prior standard
+%                          deviations for the EO parameters, 0 if exact,
+%                          NaN if none.
+%                  EOcov - 6-by-6-by-nImages array with prior covariance
+%                          matrices for the EO parameters, or empty if none.
+%                  OP    - 3-by-nOP array with prior observations of
+%                          control points, NaN if none.
+%                  OPstd - 3-by-nOP array with prior OP standard
+%                          deviations, 0 if exact, NaN if none.
+%                  OPcov - 3-by-3-by-nOP array with prior covariance
+%                          matrices for the OP parameters, or empty if none.
 %       estIO    - 12-by-nCams logical array indicating which internal
 %                  parameters should be estimated by the bundle. Defaults
 %                  to all false.
@@ -58,8 +63,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  to true for all real camera parameters (first 6 rows).
 %       estOP    - 3-by-nOP logical array indicating which OP parameters
 %                  are considered free and should be estimated by the
-%                  bundle. Defaults to true for object points, false for
-%                  control points.
+%                  bundle. Defaults to true for all but fixed control
+%                  points.
 %       useIOobs - 12-by-nCams logical array indicating which prior IO
 %                  observations should be used by the bundle. Defaults 
 %                  to all false.
@@ -68,7 +73,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  to all false.
 %       useOPobs - 3-by-nOP logical array indicating which prior OP
 %                  observations should be used by the bundle. Defaults 
-%                  to true for control points.
+%                  to true for non-fixed control points.
 %       nK       - scalar indicating how many (potentially zero) K values
 %                  are used in the model. nK=3.
 %       nP       - scalar indicating how many (potentially zero) P values
@@ -130,10 +135,8 @@ end
 nImages=length(prob.images);
 nOP=length(unique([prob.ctrlPts(:,1);prob.objPts(:,1)]));
 
-
 % Internal orientation.
 IO=nan(16,nCams);
-IOobs=nan(16,nCams);
 IOstd=nan(16,nCams);
 IOcov=[];
 
@@ -184,7 +187,6 @@ IOstd(3+nK+nP+6+(1:2),:)=...
 
 % External orientation.    
 EO=nan(7,nImages);
-EOobs=nan(7,nImages);
 EOcov=[];
 
 outer=cat(1,prob.images.outer)';
@@ -236,9 +238,10 @@ imNames=cellfun(@(x)x(length(imDir)+1:end),imNames,'uniformoutput',false);
 
 % Object and control points.
 OP=nan(3,nOP);
-OPobs=nan(3,nOP);
 OPstd=nan(3,nOP);
-OPcov=[];
+CP=nan(3,nOP);
+CPstd=nan(3,nOP);
+CPcov=[];
 OPid=unique([prob.ctrlPts(:,1);prob.objPts(:,1)]);
 isCtrl=ismember(OPid,prob.ctrlPts(:,1));
 
@@ -246,10 +249,11 @@ isCtrl=ismember(OPid,prob.ctrlPts(:,1));
 [~,ia,ib]=intersect(OPid,prob.objPts(:,1));
 OP(:,ia)=prob.objPts(ib,2:4)';
 OPstd(:,ia)=prob.objPts(ib,5:7)';
-% ...and control point coordinates (duplicates will overwrites OP coords).
+
+% ...and control point coordinates.
 [~,ia,ib]=intersect(OPid,prob.ctrlPts(:,1));
-OP(:,ia)=prob.ctrlPts(ib,2:4)';
-OPstd(:,ia)=prob.ctrlPts(ib,5:7)';
+CP(:,ia)=prob.ctrlPts(ib,2:4)';
+CPstd(:,ia)=prob.ctrlPts(ib,5:7)';
 
 % Find out how many mark points have corresponding object/control points.
 imId=unique(prob.markPts(:,1:2),'rows');
@@ -286,26 +290,36 @@ end
 [i,j]=find(vis);
 ptCams=cams(j);
 
+prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
+             'EO',EO,'EOstd',EOstd,'EOcov',EOcov,...
+             'OP',CP,'OPstd',CPstd,'OPcov',CPcov);
+
+% Treat IO as fixed.
 estIO=false(size(IO));
 useIOobs=false(size(IO));
+% Treat EO as free.
 estEO=true(size(EO));
 estEO(end,:)=false;
 useEOobs=false(size(EO));
-estOP=repmat(~isCtrl(:)',3,1);
-useOPobs=repmat(isCtrl(:)',3,1);
+% Estimate all non-fixed OP.
+estOP=~(prior.OPstd==0);
+% Use all non-fixed CP observations. For fixed CP, we only need the
+% current "observation".
+useOPobs=~isnan(prior.OP) & ~(prior.OPstd==0);
 
 % Default camera and object space units.
 camUnit='mm';
 objUnit='m';
 
-s=struct('title',prob.job.title,'imDir',imDir,'imNames',{imNames},...
-         'IO',IO,'IOobs',IO,'IOstd',IOstd,'IOcov',IOcov,...
-         'EO',EO,'EOobs',EO,'EOstd',EOstd,'EOcov',EOcov,...
+s=struct('title',prob.job.title,'imDir',imDir,'imNames',{imNames}, ...
+         'IO',IO,'IOobs',IO,'IOstd',IOstd, ...
+         'EO',EO,'EOobs',EO,'EOstd',EOstd, ...
          'cams',cams,...
-         'OP',OP,'OPobs',OP,'OPstd',OPstd,'OPcov',OPcov,'OPid',OPid,...
+         'OP',OP,'OPobs',OP,'OPstd',OPstd,'OPid',OPid,...
          'isCtrl',isCtrl,...
          'markPts',markPts,'markStd',markStd,'ptCams',ptCams,...
          'vis',vis,'colPos',colPos,...
+         'prior',prior,...
          'estIO',estIO,'estEO',estEO,'estOP',estOP,...
          'useIOobs',useIOobs,'useEOobs',useEOobs,'useOPobs',useOPobs,...
          'nK',nK,'nP',nP,'camUnit',camUnit,...
