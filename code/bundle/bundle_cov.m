@@ -52,7 +52,7 @@ end
 [ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 % We may need J'*J many times. Precalculate and prefactor.
-JTJ=e.J'*e.J;
+JTJ=e.final.weighted.J'*e.final.weighted.J;
     
 % Use block column count reordering to reduce fill-in in Cholesky factor.
     
