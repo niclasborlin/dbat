@@ -5,9 +5,9 @@ dampings={'none','gna','lm','lmp'};
 
 dampings=dampings(2);
 
-% Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
-    fName=fullfile(curDir,'data','cpt_pmsave.txt');
+    fName=fullfile(curDir,'data','weighted','w0cm','w0cm-pmexport.txt');
+    cpName=fullfile(curDir,'data','weighted','w0cm','ctrlpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
@@ -20,46 +20,45 @@ if ~exist('prob','var')
     if any(isnan(cat(2,prob.images.imSz)))
         error('Image sizes unknown!');
     end
+    [cpID,CP,CPS,cpNames]=loadcpt(cpName);
+    if ~isequal(sort(cpID(:)),prob.ctrlPts(:,1))
+        error('Control point id mismatch.');
+    end
+    % Replace XYZ positions.
+    [~,ia,ib]=intersect(cpID,prob.ctrlPts(:,1));
+    prob.ctrlPts(ib,2:4)=CP(:,ia)';
+    % Replace sigmas.
+    prob.ctrlPts(ib,5:7)=CPS(:,ia)';
+    % Keep track of control point names.
+    names=cell(size(cpNames));
+    names(ib)=cpNames(ia);
+    cpNames=names;
     disp('done.')
 else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
 end
-s0=prob2dbatstruct(prob);
+ss0=prob2dbatstruct(prob);
 
 fprintf(['Using damping %s. To use another damping, modify line 6 ' ...
-         'of camcaldemo.m\n'],dampings{1});
+         'of %s\n'],dampings{1},mfilename);
 
-% Set CP 1-4 to nominal coordinates. Initial values for the EO and OP
-% parameters are computed based on these points.
-s0.OP(:)=nan;
-s0.OP(:,ismember(s0.OPid,1001))=[0,0,0]';
-s0.OP(:,ismember(s0.OPid,1002))=[0,1,0]';
-s0.OP(:,ismember(s0.OPid,1003))=[1,0,0]';
-s0.OP(:,ismember(s0.OPid,1004))=[1,1,0]';
+% Optionally, change estimate/prior handling.
 
-cpId=1001:1004;
-s0.isCtrl=ismember(s0.OPid,cpId);
+s0=ss0;
+% Reset all parameters to be estimated.
+s0.IO(s0.estIO)=nan;
+s0.IO(s0.useIOobs)=s0.prior.IO(s0.useIOobs);
 
-% Treat control points as exact.
-s0.OPobs(:)=nan;
-s0.estOP(:,ismember(s0.OPid,cpId))=false;
-s0.useOPobs(:,ismember(s0.OPid,cpId))=true;
-s0.OPstd(:)=nan;
+s0.EO(s0.estEO)=nan;
+s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
 
-% Estimate all EO parameters from mark points only.
-s0.estEO(1:6,:)=true;
-s0.useEOobs(:)=false;
-s0.EO(1:6,:)=nan;
-
-% No camera calibration.
-s0.estIO(1:8,:)=false;
-% No prior observations.
-s0.useIOobs(:)=false;
+s0.OP(s0.estOP)=nan;
+s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
 
 % Use sigma0=1 as first approximation.
 s0.markStd(:)=1;
 
-s1=resect(s0,'all',cpId,1,0,cpId);
+s1=resect(s0,'all',cpID,1,0,cpID);
 s2=forwintersect(s1,'all',true);
 
 s2.x0desc='Camera calibration from EXIF value';
