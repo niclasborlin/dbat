@@ -86,12 +86,18 @@ while ~isempty(varargin)
     end
 end
 
-% Clean up estimation/use observations arrays. If we shouldn't
-% estimate a parameter, we are not going to use the prior
+% Verify a consistent estimation/use observations arrays. If we
+% shouldn't estimate a parameter, we should not use the prior
 % observation of it during the bundle.
-s.useIOobs(~s.estIO)=false;
-s.useEOobs(~s.estEO)=false;
-s.useOPobs(~s.estOP)=false;
+if any(s.useIOobs(~s.estIO))
+    error('DBAT:bundle:badInput','IO estimate/use prior obs mismatch');
+end
+if any(s.useEOobs(~s.estEO))
+    error('DBAT:bundle:badInput','EO estimate/use prior obs mismatch');
+end
+if any(s.useOPobs(~s.estOP))
+    error('DBAT:bundle:badInput','OP estimate/use prior obs mismatch');
+end
 
 % Create indices into the vector of unknowns. n is the number of unknowns.
 [ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
