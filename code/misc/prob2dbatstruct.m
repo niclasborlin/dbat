@@ -34,28 +34,31 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  stored. colPos(I,J)==K indicates the the measurement of
 %                  object point I in image J is stored in column K of markPts.
 %       prior    - struct with prior observations
-%                  IO    - 16-by-nCams array with prior observations of
-%                          the IO parameters, or NaN if no observation.
-%                  IOstd - 16-by-nCams array with prior standard
-%                          deviations for the IO parameters, 0 if
-%                          exact, NaN if none.
-%                  IOcov - 16-by-16-by-nCams array with prior
-%                          covariance matrices for the IO
-%                          parameters, or empty if none.
-%                  EO    - 7-by-nImages array with prior observations of
-%                          the EO parameters, or NaN if none.
-%                  EOstd - 7-by-nImages array with prior standard
-%                          deviations for the EO parameters, 0 if exact,
-%                          NaN if none.
-%                  EOcov - 6-by-6-by-nImages array with prior covariance
-%                          matrices for the EO parameters, or empty if none.
-%                  OP    - 3-by-nOP array with prior observations of
-%                          control points, NaN if none.
-%                  OPstd - 3-by-nOP array with prior OP standard
-%                          deviations, 0 if exact, NaN if none.
-%                  OPcov - 3-by-3-by-nOP array with prior covariance
-%                          matrices for the OP parameters, or empty if none.
-%                  sigmas - single or multiple sigmas for different measurements
+%                  IO     - 16-by-nCams array with prior observations of
+%                           the IO parameters, or NaN if no observation.
+%                  IOstd  - 16-by-nCams array with prior standard
+%                           deviations for the IO parameters, 0 if
+%                           exact, NaN if none.
+%                  IOcov  - 16-by-16-by-nCams array with prior
+%                           covariance matrices for the IO
+%                           parameters, or empty if none.
+%                  EO     - 7-by-nImages array with prior observations of
+%                           the EO parameters, or NaN if none.
+%                  EOstd  - 7-by-nImages array with prior standard
+%                           deviations for the EO parameters, 0 if exact,
+%                           NaN if none.
+%                  EOcov  - 6-by-6-by-nImages array with prior covariance
+%                           matrices for the EO parameters, or empty if none.
+%                  OP     - 3-by-nOP array with prior observations of
+%                           control points, NaN if none.
+%                  OPstd  - 3-by-nOP array with prior OP standard
+%                           deviations, 0 if exact, NaN if none.
+%                  OPcov  - 3-by-3-by-nOP array with prior covariance
+%                           matrices for the OP parameters, or empty if none.
+%                  sigmas - single or multiple sigmas for different
+%                           measurement types.
+%       sigmas   - vector with a posteriori standard deviations
+%                  (prior.sigmas scaled by estimated sigma0).
 %       estIO    - 12-by-nCams logical array indicating which internal
 %                  parameters should be estimated by the bundle. Defaults
 %                  to all false.

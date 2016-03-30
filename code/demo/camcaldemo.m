@@ -7,7 +7,7 @@ dampings=dampings(2);
 
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
-    fName=fullfile(curDir,'data','C4040Z-2272x1704.txt');
+    fName=fullfile(curDir,'data','weighted','camcal','fixed','c4040z-pmexport.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
@@ -27,6 +27,10 @@ end
 s0=prob2dbatstruct(prob);
 
 ss0=s0;
+
+% Camera calibrator uses circular targets. Assume a measurement
+% sigma of 0.1 pixels.
+s0.prior.sigmas(1)=0.1;
 
 fprintf(['Using damping %s. To use another damping, modify line 6 ' ...
          'of camcaldemo.m\n'],dampings{1});
@@ -51,7 +55,7 @@ s0.useEOobs(:)=false;
 s0.EO(1:6,:)=nan;
 
 % Estimate px,py,c,K1-K3,P1-P2.
-s0.estIO(1:8,:)=true;
+s0.estIO([1:5,7:8],:)=true;
 % No prior observations.
 s0.useIOobs(:)=false;
 
@@ -97,11 +101,12 @@ for i=1:length(dampings)
     [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
     
     if ok(i)
-        fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
-                iters(i),sigma0(i));
+        fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n', ...
+                iters(i),sigma0(i),sigma0(i)*s.prior.sigmas(1));
     else
         fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-                 'pixels\n'],iters(i),sigma0(i));
+                 '(%.2f pixels)\n'],iters(i),sigma0(i),...
+                sigma0(i)*s.prior.sigmas(1));
     end
 end
 
