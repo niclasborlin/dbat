@@ -26,12 +26,13 @@ else
 end
 s0=prob2dbatstruct(prob);
 
+ss0=s0;
+
 fprintf(['Using damping %s. To use another damping, modify line 6 ' ...
          'of camcaldemo.m\n'],dampings{1});
 
 % Set CP 1-4 to nominal coordinates. Initial values for the EO and OP
 % parameters are computed based on these points.
-s0.OP(:)=nan;
 s0.OP(:,ismember(s0.OPid,1001))=[0,1,0]';
 s0.OP(:,ismember(s0.OPid,1002))=[1,1,0]';
 s0.OP(:,ismember(s0.OPid,1003))=[0,0,0]';
@@ -41,9 +42,7 @@ cpId=1001:1004;
 s0.isCtrl=ismember(s0.OPid,cpId);
 
 % Treat control points as exact.
-s0.OPobs(:)=nan;
 s0.estOP(:,ismember(s0.OPid,cpId))=false;
-s0.useOPobs(:,ismember(s0.OPid,cpId))=true;
 s0.OPstd(:)=nan;
 
 % Estimate all EO parameters from mark points only.
@@ -63,7 +62,7 @@ s0.IO(3)=7.3;          % c = EXIF value.
 s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 
 % Use sigma0=1 as first approximation.
-s0.markStd(:)=1;
+s0.markStd(:)=s0.prior.sigmas(1);
 
 s1=resect(s0,'all',cpId,1,0,cpId);
 s2=forwintersect(s1,'all',true);
