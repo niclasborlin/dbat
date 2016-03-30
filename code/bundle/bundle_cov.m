@@ -134,7 +134,7 @@ for i=1:length(varargin)
         C=BlockDiagonalC(L,p,s.estOP,ixOP,memLimit,'Computing OP covariances');
         
     end
-    varargout{i}=e.s0mm^2*C; %#ok<*AGROW>
+    varargout{i}=e.s0^2*C; %#ok<*AGROW>
 end
 
 

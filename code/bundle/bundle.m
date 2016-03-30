@@ -117,29 +117,33 @@ else
     vetoFun='';
 end
 
-% Weights.
+% Covariance estimates for observations.
 
-% Weights for mark points.
+% Mark points. Standard deviation is given in pixel units, the
+% residuals are in mm, so scale the variance.
 ptCols=s.colPos(s.vis);
-wMark=s.IO(end-1:end,s.ptCams(ptCols))./s.markStd(:,ptCols);
-% Weights for prior IO observations.
-wIO=1./s.IOstd(s.useIOobs);
-% Weights for prior EO observations.
-wEO=1./s.EOstd(s.useEOobs);
-% Weights for prior OP observations.
-wOP=1./s.OPstd(s.useOPobs);
-nWeights=length(wMark(:))+length(wIO(:))+length(wEO(:))+length(wOP(:));
+varMark=(s.markStd(:,ptCols)./s.IO(end-1:end,s.ptCams(ptCols))).^2;
+% Prior IO observations.
+varIO=s.IOstd(s.useIOobs).^2;
+% Prior EO observations.
+varEO=s.EOstd(s.useEOobs).^2;
+% Prior OP observations.
+varOP=s.OPstd(s.useOPobs).^2;
+nObs=numel(varMark)+numel(varIO)+numel(varEO)+numel(varOP);
 % Weight matrix.
-wAll=[wMark(:);wIO(:);wEO(:);wOP(:)];
-W=spdiags(wAll.^2,0,nWeights,nWeights);
+varAll=[varMark(:);varIO(:);varEO(:);varOP(:)];
+Cobs=spdiags(varAll,0,nObs,nObs);
+% Use the inverse as the weight matrix.
+W=inv(Cobs);
 
 % Convergence tolerance.
 convTol=1e-3;
 
-% For all optimization methods below, the final estimate is returned in x.
-% The final residual vector and Jacobian are returned as r and J. Successive
-% estimates of x and norm(r) are returned as columns of X and elements of
-% res, respectively. Furthermore, a status code (0 - ok, -1 - too many
+% For all optimization methods below, the final estimate is returned
+% in x.  The final weighted and unweighted residual vectors and
+% Jacobians are returned in the struct final. Successive estimates of x and
+% norm(r) are returned as columns of X and elements of res,
+% respectively. Furthermore, a status code (0 - ok, -1 - too many
 % iterations) and the number of required iterations are returned.
 
 % Set up return struct with bundle setup.
