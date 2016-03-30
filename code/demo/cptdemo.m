@@ -6,8 +6,9 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    fName=fullfile(curDir,'data','weighted','sxb','fixed','gcponly-pmexport.txt');
-    cpName=fullfile(curDir,'data','weighted','sxb','fixed','ctrlpts.txt');
+    dataVersion='fixed';
+    fName=fullfile(curDir,'data','weighted','sxb',dataVersion,'gcponly-pmexport.txt');
+    cpName=fullfile(curDir,'data','weighted','sxb',dataVersion,'ctrlpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);

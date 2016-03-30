@@ -32,17 +32,17 @@ end
 if (nargout<2)
     % Only residual vector requested.
     
-    fIO=IO(s.useIOobs)-s.IOobs(s.useIOobs);
-    fEO=EO(s.useEOobs)-s.EOobs(s.useEOobs);
-    fOP=OP(s.useOPobs)-s.OPobs(s.useOPobs);
+    fIO=IO(s.useIOobs)-s.prior.IO(s.useIOobs);
+    fEO=EO(s.useEOobs)-s.prior.EO(s.useEOobs);
+    fOP=OP(s.useOPobs)-s.prior.OP(s.useOPobs);
     
     f=[fIO(:);fEO(:);fOP(:)];
 else
-    fIO=IO(s.useIOobs)-s.IOobs(s.useIOobs);
+    fIO=IO(s.useIOobs)-s.prior.IO(s.useIOobs);
     JIO=sparse(1:length(fIO),ixIO(s.useIOobs),1,length(fIO),length(x));
-    fEO=EO(s.useEOobs)-s.EOobs(s.useEOobs);
+    fEO=EO(s.useEOobs)-s.prior.EO(s.useEOobs);
     JEO=sparse(1:length(fEO),ixEO(s.useEOobs),1,length(fEO),length(x));
-    fOP=OP(s.useOPobs)-s.OPobs(s.useOPobs);
+    fOP=OP(s.useOPobs)-s.prior.OP(s.useOPobs);
     JOP=sparse(1:length(fOP),ixOP(s.useOPobs),1,length(fOP),length(x));
 
     f=[fIO(:);fEO(:);fOP(:)];

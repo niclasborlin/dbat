@@ -251,9 +251,9 @@ if ok
 end
 
 % Sigma0 is sqrt(r'*r/(m-n)).
-s0mm=sqrt(E.final.weighted.r'*E.final.weighted.r/(length(E.final.weighted.r)-length(x)));
-s0px=s0mm*mean(s.IO(end-1:end));
-s0=s0px;
+r=E.final.weighted.r;
+s0=sqrt((r'*r)/(length(r)-length(x)));
+sigmas=s0*s.prior.sigmas;
 
-E.s0mm=s0mm;
-E.s0px=s0px;
+E.s0=s0;
+E.sigmas=sigmas;
