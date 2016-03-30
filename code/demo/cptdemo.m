@@ -80,7 +80,6 @@ if printdemofigures
     end
 end
 
-
 result=cell(size(dampings));
 ok=nan(size(dampings));
 iters=nan(size(dampings));
