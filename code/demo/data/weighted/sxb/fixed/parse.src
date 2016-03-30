@@ -1,5 +1,0 @@
-grep Value gcponly-pmreport.txt | perl -pe 's/^\s*Value:\s*//; s/deg//; s/ou//;' >! pm_values.txt
-grep Value gcponly-pmexport_result_file.txt | perl -pe 's/^\s*Value:\s*//; s/deg//; s/ou//;' >! dbat_values.txt
-grep Deviation: gcponly-pmreport.txt | perl -pe 's/^\s*Deviation.*://; s/deg//; s/ou//;' >! pm_dev.txt
-grep Deviation: gcponly-pmexport_result_file.txt | perl -pe 's/^\s*Deviation.*://; s/deg//; s/ou//;' >! dbat_dev.txt
-    

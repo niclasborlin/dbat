@@ -76,8 +76,8 @@ end
 values={'Last Bundle Run:','%s',e.dateStamp,
         'DBAT version:','%s',e.version,
         'Status:','%s (%d)',{status,e.code},
-        'Sigma0 (pixels):','%g',e.s0px,
-        'Sigma0 (mm):','%g',e.s0mm};
+        'Sigma0:','%g',e.s0,
+        'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1)};
 pretty_print(fid,repmat(p,1,2),values);
     
 fprintf(fid,[p,p,'Processing options:\n']);
