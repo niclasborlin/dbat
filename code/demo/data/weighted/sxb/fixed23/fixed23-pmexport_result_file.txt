@@ -1,0 +1,119 @@
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln 
+   Problems and suggestions:
+      Project Problems: Not evaluated
+      Problems related to the processing: (1)
+         One or more of the camera station parameters has a high correlation (see below).
+   Information from last bundle
+      Last Bundle Run: 01-Apr-2016 00:42:46
+      DBAT version:    0.4.1.git-1-gc4a63c8 (2016-03-27)
+      Status:          OK (0)
+      Sigma0:          0.559959
+      Sigma0 (pixels): 0.559959
+      Processing options:
+         Orientation:             on
+         Global optimization:     on
+         Calibration:             off
+         Constraints:             off
+         Maximum # of iterations: 20
+         Convergence tolerance:   1e-06
+         Singular test:           off
+         Chirality veto:          off
+         Damping:                 gna
+         Camera unit (cu):        mm
+         Object space unit (ou):  m
+         Initial value comment:   Camera calibration from EXIF value
+      Total error:
+         Number of stages:     1
+         Number of iterations: 2
+         First error:          5.51762
+         Last error:           4.54913
+      Precisions / Standard Deviations:
+         Photograph Standard Deviations:
+            Photo 1: 8936.jpg
+               Omega:
+                  Value:     -0.125240 deg
+                  Deviation: 0.0284 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.014537 deg
+                  Deviation: 0.0148 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     92.623364 deg
+                  Deviation: 0.00267 deg
+               Xc:
+                  Value:     281.984724 ou
+                  Deviation: 0.483 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     364.910880 ou
+                  Deviation: 0.887 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1776.468110 ou
+                  Deviation: 0.122 ou
+            Photo 2: 8937.jpg
+               Omega:
+                  Value:     -0.169122 deg
+                  Deviation: 0.0207 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.022822 deg
+                  Deviation: 0.0133 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     94.401677 deg
+                  Deviation: 0.00198 deg
+               Xc:
+                  Value:     296.923307 ou
+                  Deviation: 0.429 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     157.178059 ou
+                  Deviation: 0.649 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1770.575057 ou
+                  Deviation: 0.0611 ou
+   Quality
+      Photographs
+         Total number: 2
+         Numbers used: 2
+      Cameras
+         Total number: 1
+         Camera1:
+            Calibration:                   <not available>
+            Number of photos using camera: 2
+            Photo point coverage:
+               Rectangular: 55%-64% (59% average, 78% union)
+               Convex hull: 30%-39% (35% average, 55% union)
+               Radial:      77%-88% (83% average, 88% union)
+      Photo Coverage
+         References points outside calibrated region:
+            <not available>
+      Point Measurements
+         Ray count: 1-2 (1.8 avg)
+         Number of control pts: 12
+         Number of object pts: 0
+      Point Marking Residuals
+         Overall point RMS: 0.993 pixels
+         Mark point residuals:
+            Maximum: 1.768 pixels (OP 492 on photo 1)
+         Object point residuals (RMS over all images of a point):
+            Minimum: 0.287 pixels (OP 552 over 1 images)
+            Maximum: 1.514 pixels (OP 333 over 2 images)
+         Photo residuals (RMS over all points in an image):
+            Minimum: 0.790 pixels (photo 2 over 12 points)
+            Maximum: 1.211 pixels (photo 1 over 9 points)
+      Point Precision
+         Total standard deviation (RMS of X/Y/Z std):
+            Minimum: NaN (OP 317)
+            Maximum: NaN (OP 317)
+         Maximum X standard deviation: NaN (OP 317)
+         Maximum Y standard deviation: NaN (OP 317)
+         Maximum Z standard deviation: NaN (OP 317)
+      Point Angles
+         Minimum: 0.0 degrees (OP 422)
+         Maximum: 6.7 degrees (OP 333)
+         Average: 4.9 degrees

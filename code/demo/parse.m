@@ -37,7 +37,7 @@ dbatIOcorr=load(fullfile(dataDir,'dbat_IOcorr.txt'));
 if isempty(pmIOcorr) && isempty(dbatIOcorr)
     fprintf('No IO correlations.\n');
 else
-    fprintf('%d IO correlations within %.2f%%-units.\n',...
+    fprintf('%d IO correlations within %.1f%%-units.\n',...
             length(pmIOcorr),max(abs(pmIOcorr-dbatIOcorr)));
 end
 
@@ -107,13 +107,13 @@ else
     if maxCorr>0.1
         minCorr=min(corrDiff);
         i=find(corrDiff==minCorr,1);
-        fprintf('%d EO correlations between %.2f%%-units ((%d) %g vs %g)',...
+        fprintf('%d EO correlations between %.1f%%-units ((%d) %g vs %g)',...
                 length(pmEOcorr),minCorr,i,pmEOcorr(i),dbatEOcorr(i));
         i=find(corrDiff==maxCorr,1);
-        fprintf(' and %.2f%%-units ((%d) %g vs %g).\n',...
+        fprintf(' and %.1f%%-units ((%d) %g vs %g).\n',...
                 maxCorr,i,pmEOcorr(i),dbatEOcorr(i));
     else
-        fprintf('%d EO correlations within %.2f%%-units.\n',...
+        fprintf('%d EO correlations within %.1f%%-units.\n',...
                 length(pmEOcorr),maxCorr);
     end
 end
@@ -133,37 +133,45 @@ pmOPstdCP=pmOPstd(:,s0.isCtrl);
 OPdiff=pow2(abs(log2(pmOPstdOP./dbatOPstdOP)));
 CPdiff=pow2(abs(log2(pmOPstdCP./dbatOPstdCP)));
 
-maxOPdiff=max(OPdiff(:));
-if maxOPdiff>1.01
-    minOPdiff=min(OPdiff(:));
-    [i,j]=find(OPdiff==minOPdiff,1);
-    fprintf('OP position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
-            minOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
-    [i,j]=find(OPdiff==maxOPdiff,1);
-    fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
-            maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
-    fprintf('                                       avg %.4f.\n',mean(OPdiff(:)));
+if isempty(OPdiff)
+    fprintf('No OP.\n');
 else
-    [i,j]=find(OPdiff==maxOPdiff,1);
+    maxOPdiff=max(OPdiff(:));
+    if maxOPdiff>1.01
+        minOPdiff=min(OPdiff(:));
+        [i,j]=find(OPdiff==minOPdiff,1);
+        fprintf('OP position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
+                minOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+        [i,j]=find(OPdiff==maxOPdiff,1);
+        fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
+                maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+        fprintf('                                       avg %.4f.\n',mean(OPdiff(:)));
+    else
+        [i,j]=find(OPdiff==maxOPdiff,1);
 
-    fprintf('OP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
-            maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+        fprintf('OP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
+                maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+    end
 end
 
-maxCPdiff=max(CPdiff(:));
-if maxCPdiff>1.01
-    minCPdiff=min(CPdiff(:));
-    [i,j]=find(CPdiff==minCPdiff,1);
-    fprintf('CP position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
-            minCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
-    [i,j]=find(CPdiff==maxCPdiff,1);
-    fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
-            maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
-    fprintf('                                       avg %.4f.\n',mean(CPdiff(:)));
+if isempty(CPdiff)
+    fprintf('No OP.\n');
 else
-    [i,j]=find(CPdiff==maxCPdiff,1);
-
-    fprintf('CP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
-            maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+    maxCPdiff=max(CPdiff(:));
+    if maxCPdiff>1.01
+        minCPdiff=min(CPdiff(:));
+        [i,j]=find(CPdiff==minCPdiff,1);
+        fprintf('CP position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
+                minCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+        [i,j]=find(CPdiff==maxCPdiff,1);
+        fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
+                maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+        fprintf('                                       avg %.4f.\n',mean(CPdiff(:)));
+    else
+        [i,j]=find(CPdiff==maxCPdiff,1);
+        
+        fprintf('CP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
+                maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+    end
 end
 
