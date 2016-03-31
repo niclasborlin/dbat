@@ -88,7 +88,7 @@ while true
     r=R*s;
     J=R*K;
 
-    rr(end+1)=sqrt(r'*r/(size(J,1)-size(J,2)));
+    rr(end+1)=sqrt(r'*r);
     if trace
         if isempty(alphas)
             fprintf('Gauss-Newton-Armijo: iteration %d, residual norm=%.2g\n', ...

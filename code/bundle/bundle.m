@@ -137,7 +137,7 @@ Cobs=spdiags(varAll,0,nObs,nObs);
 W=inv(Cobs);
 
 % Convergence tolerance.
-convTol=1e-3;
+convTol=1e-6;
 
 % For all optimization methods below, the final estimate is returned
 % in x.  The final weighted and unweighted residual vectors and
@@ -254,9 +254,16 @@ if ok
     s.OP(s.estOP)=x(ixOP);
 end
 
-% Sigma0 is sqrt(r'*r/(m-n)).
+% Sigma0 is sqrt(r'*r/(m-n)), where m is the number of
+% observations, and n is the number of unknowns.
+
+% Extra observations without a specific reisdual (fixed control
+% points that have been measured, fixed camera stations that have
+% been used).
+p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0);
+
 r=E.final.weighted.r;
-s0=sqrt((r'*r)/(length(r)-length(x)));
+s0=sqrt((r'*r)/(length(r)+p-length(x)));
 sigmas=s0*s.prior.sigmas;
 
 E.s0=s0;
