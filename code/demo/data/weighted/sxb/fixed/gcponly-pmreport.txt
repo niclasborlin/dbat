@@ -9,16 +9,18 @@ Status Report Tree
             Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Wed Mar 30 15:45:34 2016
+      Last Processing Attempt: Thu Mar 31 23:40:33 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
-         Orientation: off
+         Orientation: on
+            All photos oriented.
+            Number of photos oriented: 5
          Global Optimization: on
          Calibration: off
          Constraints: on
       Total Error
-         Number of Processing Iterations: 4
+         Number of Processing Iterations: 1
          Number of Processing Stages: 1
          First Error: 0.787
          Last Error: 0.787
@@ -106,11 +108,11 @@ Status Report Tree
                     Value: 96.144911 deg
                     Deviation: Kappa: 0.003 deg
                Xc
-                    Value: 314.105059 
+                    Value: 314.105060 
                     Deviation: X: 0.703 
                     Correlations over  95.0%: Phi:100.0%
                Yc
-                    Value: -60.855863 
+                    Value: -60.855859 
                     Deviation: Y: 2.556 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
