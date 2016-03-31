@@ -4,7 +4,7 @@ Damped Bundle Adjustment Toolbox result file
       Project Problems: Not evaluated
       Problems related to the processing: (0)
    Information from last bundle
-      Last Bundle Run: 30-Mar-2016 21:23:29
+      Last Bundle Run: 31-Mar-2016 12:18:51
       DBAT version:    0.4.1.git-1-gc4a63c8 (2016-03-27)
       Status:          OK (0)
       Sigma0:          1.78262
