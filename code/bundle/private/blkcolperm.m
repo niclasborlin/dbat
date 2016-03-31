@@ -65,5 +65,5 @@ avgCount=blockCount./sum(ix~=0,1);
 % Extract column indices in correct block order.
 p=ix(:,q);
 % Unroll and remove zero indices.
-p(p==0)=[];
+p=reshape(p(p~=0),1,[]);
 
