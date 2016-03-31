@@ -1,0 +1,25 @@
+>> parse
+Doing PM/DBAT comparison for dir /home/niclas/dbat/code/demo/data/weighted/camcal/weighted-bundle-1mm.
+pm_s0 =
+    1.6090
+dbat_s0 =
+    1.6098
+No IO values.
+No IO deviations.
+No IO correlations.
+EO angles    within 0.000478 degrees.
+EO positions within 1.5e-05 project units.
+EO angles   deviations between a factor of 1.1350 ((3,5) 0.08 vs 0.0908)
+                                       and 1.4022 ((1,1) 0.092 vs 0.129)
+                                       avg 1.3195.
+EO position deviations between a factor of 1.0900 ((3,9) 0.003 vs 0.00327)
+                                       and 1.5167 ((1,17) 0.003 vs 0.00455)
+                                       avg 1.3562.
+36 EO correlations between 0.80%-units ((3) 96.8 vs 97.6) and 1.40%-units ((21) -95.5 vs -96.9).
+OP positions within 7.79e-06 project units.
+OP position deviations between a factor of 1.1373 ((2,40) 0.000846 vs 0.000962146)
+                                       and 1.3937 ((3,41) 0.001317 vs 0.00183544)
+                                       avg 1.2229.
+CP position deviations between a factor of 1.1380 ((1,1) 0.001139 vs 0.00129618)
+                                       and 1.3943 ((3,2) 0.001394 vs 0.00194363)
+                                       avg 1.2237.
