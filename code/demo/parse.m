@@ -29,8 +29,8 @@ dbatIOcorr=load(fullfile(dataDir,'dbat_IOcorr.txt'));
 if isempty(pmIOcorr) && isempty(dbatIOcorr)
     fprintf('No IO correlations.\n');
 else
-    fprintf('IO correlations within %.2f%%-units.\n',...
-            max(abs(pmIOcorr-dbatIOcorr)));
+    fprintf('%d IO correlations within %.2f%%-units.\n',...
+            length(pmIOcorr),max(abs(pmIOcorr-dbatIOcorr)));
 end
 
 % EO parameters
@@ -69,8 +69,8 @@ dbatEOcorr=load(fullfile(dataDir,'dbat_EOcorr.txt'));
 if isempty(pmEOcorr) && isempty(dbatEOcorr)
     fprintf('No EO correlations.\n');
 else
-    fprintf('EO correlations within %.2f%%-units.\n',...
-            max(abs(pmEOcorr-dbatEOcorr)));
+    fprintf('%d EO correlations within %.2f%%-units.\n',...
+            length(pmEOcorr),max(abs(pmEOcorr-dbatEOcorr)));
 end
 
 % OP parameters
