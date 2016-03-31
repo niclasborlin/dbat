@@ -12,16 +12,24 @@ dbat_s0=load(fullfile(dataDir,'dbat_s0.txt'))
 pmIO=load(fullfile(dataDir,'pm_IO.txt'));
 dbatIO=load(fullfile(dataDir,'dbat_IO.txt'));
 
-fprintf('IO values within a factor of %.4f.\n',...
-        max(pow2(abs(log2(pmIO./dbatIO)))));
+if isempty(pmIO) && isempty(dbatIO)
+    fprintf('No IO values.\n');
+else
+    fprintf('IO values within a factor of %.4f.\n',...
+            max(pow2(abs(log2(pmIO./dbatIO)))));
+end
 
 pmIOdev=load(fullfile(dataDir,'pm_IOdev.txt'));
 dbatIOdev=load(fullfile(dataDir,'dbat_IOdev.txt'));
 
-ioDev=pow2(abs(log2(pmIOdev./dbatIOdev)));
-i=find(ioDev==max(ioDev));
-fprintf('IO deviations within a factor of %.4f (%d: %g vs %g).\n',...
-        max(ioDev),i,pmIOdev(i),dbatIOdev(i));
+if isempty(pmIOdev) && isempty(dbatIOdev)
+    fprintf('No IO deviations.\n');
+else
+    ioDev=pow2(abs(log2(pmIOdev./dbatIOdev)));
+    i=find(ioDev==max(ioDev),1);
+    fprintf('IO deviations within a factor of %.4f (%d: %g vs %g).\n',...
+            max(ioDev),i,pmIOdev(i),dbatIOdev(i));
+end
 
 pmIOcorr=load(fullfile(dataDir,'pm_IOcorr.txt'));
 dbatIOcorr=load(fullfile(dataDir,'dbat_IOcorr.txt'));
@@ -49,19 +57,43 @@ pmEOadev=pmEOdev(aIx,:);
 dbatEOadev=dbatEOdev(aIx,:);
 aDev=pow2(abs(log2(pmEOadev./dbatEOadev)));
 maxAdev=max(max(aDev));
-[i,j]=find(maxAdev==aDev);
+if maxAdev>1.01
+    minAdev=min(min(aDev));
+    [i,j]=find(minAdev==aDev,1);
+    fprintf('EO angles   deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
+            minAdev,i,j,pmEOadev(i,j),dbatEOadev(i,j));
+    [i,j]=find(maxAdev==aDev,1);
+    fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
+            maxAdev,i,j,pmEOadev(i,j),dbatEOadev(i,j));
 
-fprintf('EO angles   deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
-        maxAdev,i,j,pmEOadev(i,j),dbatEOadev(i,j));
-        
+    fprintf('                                       avg %.4f.\n',mean(aDev(:)));
+
+else
+    [i,j]=find(maxAdev==aDev,1);
+    fprintf('EO angles   deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
+            maxAdev,i,j,pmEOadev(i,j),dbatEOadev(i,j));
+end
+
 pmEOpdev=pmEOdev(pIx,:);
 dbatEOpdev=dbatEOdev(pIx,:);
 pDev=pow2(abs(log2(pmEOpdev./dbatEOpdev)));
 maxPdev=max(max(pDev));
-[i,j]=find(maxPdev==pDev);
+if maxPdev>1.01
+    minPdev=min(min(pDev));
+    [i,j]=find(minPdev==pDev,1);
+    fprintf('EO position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
+            minPdev,i,j,pmEOpdev(i,j),dbatEOpdev(i,j));
+    [i,j]=find(maxPdev==pDev,1);
+    fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
+            maxPdev,i,j,pmEOpdev(i,j),dbatEOpdev(i,j));
 
-fprintf('EO position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
-        maxPdev,i,j,pmEOpdev(i,j),dbatEOpdev(i,j));
+    fprintf('                                       avg %.4f.\n',mean(pDev(:)));
+
+else
+    [i,j]=find(maxPdev==pDev,1);
+    fprintf('EO position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
+            maxPdev,i,j,pmEOpdev(i,j),dbatEOpdev(i,j));
+end
 
 pmEOcorr=load(fullfile(dataDir,'pm_EOcorr.txt'));
 dbatEOcorr=load(fullfile(dataDir,'dbat_EOcorr.txt'));
@@ -69,8 +101,20 @@ dbatEOcorr=load(fullfile(dataDir,'dbat_EOcorr.txt'));
 if isempty(pmEOcorr) && isempty(dbatEOcorr)
     fprintf('No EO correlations.\n');
 else
-    fprintf('%d EO correlations within %.2f%%-units.\n',...
-            length(pmEOcorr),max(abs(pmEOcorr-dbatEOcorr)));
+    corrDiff=abs(pmEOcorr-dbatEOcorr);
+    maxCorr=max(corrDiff);
+    if maxCorr>0.1
+        minCorr=min(corrDiff);
+        i=find(corrDiff==minCorr,1);
+        fprintf('%d EO correlations between %.2f%%-units ((%d) %g vs %g)',...
+                length(pmEOcorr),minCorr,i,pmEOcorr(i),dbatEOcorr(i));
+        i=find(corrDiff==maxCorr,1);
+        fprintf(' and %.2f%%-units ((%d) %g vs %g).\n',...
+                maxCorr,i,pmEOcorr(i),dbatEOcorr(i));
+    else
+        fprintf('%d EO correlations within %.2f%%-units.\n',...
+                length(pmEOcorr),maxCorr);
+    end
 end
 
 % OP parameters
@@ -89,15 +133,36 @@ OPdiff=pow2(abs(log2(pmOPstdOP./dbatOPstdOP)));
 CPdiff=pow2(abs(log2(pmOPstdCP./dbatOPstdCP)));
 
 maxOPdiff=max(OPdiff(:));
-[i,j]=find(OPdiff==maxOPdiff);
+if maxOPdiff>1.01
+    minOPdiff=min(OPdiff(:));
+    [i,j]=find(OPdiff==minOPdiff,1);
+    fprintf('OP position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
+            minOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+    [i,j]=find(OPdiff==maxOPdiff,1);
+    fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
+            maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+    fprintf('                                       avg %.4f.\n',mean(OPdiff(:)));
+else
+    [i,j]=find(OPdiff==maxOPdiff,1);
 
-fprintf('OP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
-        maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+    fprintf('OP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
+            maxOPdiff,i,j,pmOPstdOP(i,j),dbatOPstdOP(i,j));
+end
 
 maxCPdiff=max(CPdiff(:));
-[i,j]=find(CPdiff==maxCPdiff);
-i=i(1);
-j=j(i);
-fprintf('CP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
-        maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+if maxCPdiff>1.01
+    minCPdiff=min(CPdiff(:));
+    [i,j]=find(CPdiff==minCPdiff,1);
+    fprintf('CP position deviations between a factor of %.4f ((%d,%d) %g vs %g)\n',...
+            minCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+    [i,j]=find(CPdiff==maxCPdiff,1);
+    fprintf('                                       and %.4f ((%d,%d) %g vs %g)\n',...
+            maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+    fprintf('                                       avg %.4f.\n',mean(CPdiff(:)));
+else
+    [i,j]=find(CPdiff==maxCPdiff,1);
+
+    fprintf('CP position deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
+            maxCPdiff,i,j,pmOPstdCP(i,j),dbatOPstdCP(i,j));
+end
 

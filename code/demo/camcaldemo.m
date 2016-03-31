@@ -1,4 +1,5 @@
 runAsBundle=true
+weighted=true;
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -10,8 +11,13 @@ dampings=dampings(2);
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
     if runAsBundle
-        d='fixed-as-bundle';
-        f='c4040z-bundle-pmexport.txt';
+        if weighted
+            d='weighted-bundle-1cm';
+            f='c4040z-1cm-pmexport.txt';
+        else
+            d='fixed-as-bundle';
+            f='c4040z-bundle-pmexport.txt';
+        end
     else
         d='fixed';
         f='c4040z-pmexport.txt';
@@ -93,6 +99,9 @@ end
 % Clear EO and OP parameters.
 s0.EO(s0.estEO)=nan;
 s0.OP(s0.estOP)=nan;
+% Insert any prior obs to use.
+s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
+s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
 
 % Use specified sigma as first approximation.
 s0.markStd(:)=s0.prior.sigmas(1);
