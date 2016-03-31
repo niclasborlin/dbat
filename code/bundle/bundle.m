@@ -123,12 +123,12 @@ end
 % residuals are in mm, so scale the variance.
 ptCols=s.colPos(s.vis);
 varMark=(s.markStd(:,ptCols)./s.IO(end-1:end,s.ptCams(ptCols))).^2;
-% Prior IO observations.
-varIO=s.IOstd(s.useIOobs).^2;
+% Variance of prior IO observations.
+varIO=s.prior.IOstd(s.useIOobs).^2;
 % Prior EO observations.
-varEO=s.EOstd(s.useEOobs).^2;
+varEO=s.prior.EOstd(s.useEOobs).^2;
 % Prior OP observations.
-varOP=s.OPstd(s.useOPobs).^2;
+varOP=s.prior.OPstd(s.useOPobs).^2;
 nObs=numel(varMark)+numel(varIO)+numel(varEO)+numel(varOP);
 % Weight matrix.
 varAll=[varMark(:);varIO(:);varEO(:);varOP(:)];
