@@ -1,3 +1,5 @@
+runAsBundle=true
+
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
@@ -7,7 +9,15 @@ dampings=dampings(2);
 
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
-    fName=fullfile(curDir,'data','weighted','camcal','fixed','c4040z-pmexport.txt');
+    if runAsBundle
+        d='fixed-as-bundle';
+        f='c4040z-bundle-pmexport.txt';
+    else
+        d='fixed';
+        f='c4040z-pmexport.txt';
+    end
+    fName=fullfile(curDir,'data','weighted','camcal',d,f);
+    cpName=fullfile(curDir,'data','weighted','camcal',d,'ctrlpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
@@ -20,6 +30,30 @@ if ~exist('prob','var')
     if any(isnan(cat(2,prob.images.imSz)))
         error('Image sizes unknown!');
     end
+    [cpId,CP,CPS,cpNames]=loadcpt(cpName);
+    if runAsBundle
+        % Inject prior control point information into what's alrady loaded.
+        if ~isequal(sort(cpId(:)),sort(prob.ctrlPts(:,1)))
+            error('Control point id mismatch.');
+        end
+        % Replace XYZ positions.
+        [~,ia,ib]=intersect(cpId,prob.ctrlPts(:,1));
+        % Determine offset.
+        offset=mean(CP(:,ia)'-prob.ctrlPts(ib,2:4),1)';
+        prob.ctrlPts(ib,2:4)=CP(:,ia)'-repmat(offset',length(ia),1);
+        % Replace sigmas.
+        prob.ctrlPts(ib,5:7)=CPS(:,ia)';
+        % Keep track of control point names.
+        names=cell(size(cpNames));
+        names(ib)=cpNames(ia);
+        cpNames=names;
+    else
+        % Add standard control points for camera calibration project.
+        if ~isempty(prob.ctrlPts)
+            error('CTRL PTS info exists.');
+        end
+        prob.ctrlPts=[cpId;CP;CPS]';
+    end
     disp('done.')
 else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
@@ -28,44 +62,39 @@ s0=prob2dbatstruct(prob);
 
 ss0=s0;
 
-% Camera calibrator uses circular targets. Assume a measurement
-% sigma of 0.1 pixels.
-s0.prior.sigmas(1)=0.1;
+% Warn for non-uniform mark std.
+uniqueSigmas=unique(s0.markStd(:));
+
+if length(uniqueSigmas)~=1
+    warning('Multiple sigmas, assuming sigma=.1');
+    s0.prior.sigmas(1)=0.1;
+else
+    s0.prior.sigmas=uniqueSigmas;
+end
 
 fprintf(['Using damping %s. To use another damping, modify line 6 ' ...
          'of camcaldemo.m\n'],dampings{1});
 
-% Set CP 1-4 to nominal coordinates. Initial values for the EO and OP
-% parameters are computed based on these points.
-s0.OP(:,ismember(s0.OPid,1001))=[0,1,0]';
-s0.OP(:,ismember(s0.OPid,1002))=[1,1,0]';
-s0.OP(:,ismember(s0.OPid,1003))=[0,0,0]';
-s0.OP(:,ismember(s0.OPid,1004))=[1,0,0]';
+if runAsBundle
+    % Do nothing, estIO is already false.
+else
+    % Estimate px,py,c,K1-K3,P1-P2.
+    s0.estIO([1:5,7:8],:)=true;
+    % No prior observations.
+    s0.useIOobs(:)=false;
 
-cpId=1001:1004;
-s0.isCtrl=ismember(s0.OPid,cpId);
+    % Set initial IO parameters.
+    s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
+    s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
+    s0.IO(3)=7.3;          % c = EXIF value.
+    s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
+end
+   
+% Clear EO and OP parameters.
+s0.EO(s0.estEO)=nan;
+s0.OP(s0.estOP)=nan;
 
-% Treat control points as exact.
-s0.estOP(:,ismember(s0.OPid,cpId))=false;
-s0.OPstd(:)=nan;
-
-% Estimate all EO parameters from mark points only.
-s0.estEO(1:6,:)=true;
-s0.useEOobs(:)=false;
-s0.EO(1:6,:)=nan;
-
-% Estimate px,py,c,K1-K3,P1-P2.
-s0.estIO([1:5,7:8],:)=true;
-% No prior observations.
-s0.useIOobs(:)=false;
-
-% Set initial IO parameters.
-s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
-s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
-s0.IO(3)=7.3;          % c = EXIF value.
-s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
-
-% Use sigma0=1 as first approximation.
+% Use specified sigma as first approximation.
 s0.markStd(:)=s0.prior.sigmas(1);
 
 s1=resect(s0,'all',cpId,1,0,cpId);
