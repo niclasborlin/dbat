@@ -1,4 +1,4 @@
-runAsBundle=true
+runAsBundle=true;
 weighted=true;
 cpSigma=1e-2;
 
@@ -75,9 +75,9 @@ if ~exist('prob','var')
 else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
 end
-s0=prob2dbatstruct(prob);
+ss0=prob2dbatstruct(prob);
 
-ss0=s0;
+s0=ss0;
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));
@@ -88,9 +88,6 @@ if length(uniqueSigmas)~=1
 else
     s0.prior.sigmas=uniqueSigmas;
 end
-
-fprintf(['Using damping %s. To use another damping, modify line 6 ' ...
-         'of camcaldemo.m\n'],dampings{1});
 
 if runAsBundle
     % Do nothing, estIO is already false.
@@ -135,7 +132,6 @@ if printdemofigures
         print(h(i),'-depsc2',fullfile(figDir,files{i}));
     end
 end
-
 
 result=cell(size(dampings));
 ok=nan(size(dampings));

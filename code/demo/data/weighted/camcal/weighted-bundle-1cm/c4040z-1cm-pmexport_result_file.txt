@@ -5,7 +5,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 31-Mar-2016 21:12:49
+      Last Bundle Run: 01-Apr-2016 00:50:58
       DBAT version:    0.4.1.git-1-gc4a63c8 (2016-03-27)
       Status:          OK (0)
       Sigma0:          1.60968
@@ -16,7 +16,7 @@ Damped Bundle Adjustment Toolbox result file
          Calibration:             off
          Constraints:             off
          Maximum # of iterations: 20
-         Convergence tolerance:   0.001
+         Convergence tolerance:   1e-06
          Singular test:           off
          Chirality veto:          off
          Damping:                 gna
@@ -25,9 +25,9 @@ Damped Bundle Adjustment Toolbox result file
          Initial value comment:   Camera calibration from EXIF value
       Total error:
          Number of stages:     1
-         Number of iterations: 2
-         First error:          7.53806
-         Last error:           1.60968
+         Number of iterations: 3
+         First error:          460.624
+         Last error:           98.3617
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
@@ -77,7 +77,7 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -27.244304 deg
                   Deviation: 1 deg
                Phi:
-                  Value:     -28.560217 deg
+                  Value:     -28.560218 deg
                   Deviation: 0.873 deg
                Kappa:
                   Value:     -141.847137 deg
@@ -96,7 +96,7 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -28.558279 deg
                   Deviation: 1.01 deg
                Phi:
-                  Value:     -30.333975 deg
+                  Value:     -30.333976 deg
                   Deviation: 0.868 deg
                Kappa:
                   Value:     -49.782218 deg
@@ -133,7 +133,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.0261 ou
             Photo 6: P8250026.JPG
                Omega:
-                  Value:     2.111038 deg
+                  Value:     2.111039 deg
                   Deviation: 1.02 deg
                   Correlations over 95%: Yc:-95.6%.
                Phi:
@@ -297,7 +297,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 1.02 deg
                   Correlations over 95%: Yc:-96.2%.
                Phi:
-                  Value:     33.636872 deg
+                  Value:     33.636871 deg
                   Deviation: 0.922 deg
                Kappa:
                   Value:     -179.789626 deg
@@ -317,7 +317,7 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -30.775719 deg
                   Deviation: 1 deg
                Phi:
-                  Value:     28.179148 deg
+                  Value:     28.179147 deg
                   Deviation: 0.86 deg
                Kappa:
                   Value:     138.434876 deg
@@ -352,15 +352,15 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.033 ou
             Photo 17: P8250037.JPG
                Omega:
-                  Value:     -8.528683 deg
+                  Value:     -8.528684 deg
                   Deviation: 0.922 deg
                   Correlations over 95%: Yc:-96.3%.
                Phi:
-                  Value:     -0.505796 deg
+                  Value:     -0.505798 deg
                   Deviation: 0.918 deg
                   Correlations over 95%: Xc:96.9%.
                Kappa:
-                  Value:     179.397672 deg
+                  Value:     179.397671 deg
                   Deviation: 0.659 deg
                Xc:
                   Value:     -0.075203 ou
@@ -379,7 +379,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.922 deg
                   Correlations over 95%: Yc:-95.5%.
                Phi:
-                  Value:     0.685122 deg
+                  Value:     0.685123 deg
                   Deviation: 0.921 deg
                   Correlations over 95%: Xc:96.3%.
                Kappa:
@@ -398,7 +398,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.0239 ou
             Photo 19: P8250039.JPG
                Omega:
-                  Value:     -4.406389 deg
+                  Value:     -4.406390 deg
                   Deviation: 0.922 deg
                   Correlations over 95%: Yc:-96.6%.
                Phi:
@@ -425,7 +425,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.922 deg
                   Correlations over 95%: Yc:-95.9%.
                Phi:
-                  Value:     -1.547913 deg
+                  Value:     -1.547914 deg
                   Deviation: 0.919 deg
                   Correlations over 95%: Xc:96.6%.
                Kappa:
@@ -444,11 +444,11 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.024 ou
             Photo 21: P8250041.JPG
                Omega:
-                  Value:     -8.709643 deg
+                  Value:     -8.709640 deg
                   Deviation: 0.922 deg
                   Correlations over 95%: Yc:-95.7%.
                Phi:
-                  Value:     1.065957 deg
+                  Value:     1.065953 deg
                   Deviation: 0.917 deg
                   Correlations over 95%: Xc:96.4%.
                Kappa:
@@ -459,7 +459,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.0321 ou
                   Correlations over 95%: Phi:96.4%.
                Yc:
-                  Value:     0.321514 ou
+                  Value:     0.321513 ou
                   Deviation: 0.032 ou
                   Correlations over 95%: Omega:-95.7%.
                Zc:
