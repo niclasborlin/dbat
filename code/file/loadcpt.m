@@ -25,8 +25,8 @@ while ~feof(fid)
     s=fgets(fid);
     % Remove leading blanks.
     s=fliplr(deblank(fliplr(s)));
-    % Skip if starts with #
-    if ~isempty(s) && s(1)=='#'
+    % Skip blank or line starting with #.
+    if isempty(s) || s(1)=='#'
         continue;
     end
     % Parse id.
