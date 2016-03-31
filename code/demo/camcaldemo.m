@@ -1,5 +1,6 @@
 runAsBundle=true
 weighted=true;
+cpSigma=1e-2;
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -12,8 +13,18 @@ dampings=dampings(2);
 if ~exist('fName','var')
     if runAsBundle
         if weighted
-            d='weighted-bundle-1cm';
-            f='c4040z-1cm-pmexport.txt';
+            switch cpSigma
+              case 1e-6
+                wStr='1micron';
+              case 1e-3
+                wStr='1mm';
+              case 1e-2
+                wStr='1cm';
+              otherwise
+                error('Bad weight')
+            end
+            d=['weighted-bundle-',wStr];
+            f=['c4040z-',wStr,'-pmexport.txt'];
         else
             d='fixed-as-bundle';
             f='c4040z-bundle-pmexport.txt';

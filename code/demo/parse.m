@@ -45,10 +45,8 @@ end
 pmEO=reshape(load(fullfile(dataDir,'pm_EO.txt')),6,[]);
 dbatEO=reshape(load(fullfile(dataDir,'dbat_EO.txt')),6,[]);
 
-fprintf('EO angles    within %.4g degrees.\n',...
+fprintf('EO angles   within %.4g degrees.\n',...
         max(max(abs(rem(pmEO(aIx,:)-dbatEO(aIx,:),360)))));
-fprintf('EO positions within %.4g project units.\n',...
-        max(max(abs(pmEO(pIx,:)-dbatEO(pIx,:)))));
 
 pmEOdev=reshape(load(fullfile(dataDir,'pm_EOdev.txt')),6,[]);
 dbatEOdev=reshape(load(fullfile(dataDir,'dbat_EOdev.txt')),6,[]);
@@ -73,6 +71,9 @@ else
     fprintf('EO angles   deviations within a factor of %.4f ((%d,%d) %g vs %g).\n',...
             maxAdev,i,j,pmEOadev(i,j),dbatEOadev(i,j));
 end
+
+fprintf('EO positions within %.4g project units.\n',...
+        max(max(abs(pmEO(pIx,:)-dbatEO(pIx,:)))));
 
 pmEOpdev=pmEOdev(pIx,:);
 dbatEOpdev=dbatEOdev(pIx,:);
