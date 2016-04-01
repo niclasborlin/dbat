@@ -6,7 +6,7 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    dataVersion='fixed';
+    dataVersion='weighted';
     fName=fullfile(curDir,'data','weighted','sxb',dataVersion,'gcponly-pmexport.txt');
     cpName=fullfile(curDir,'data','weighted','sxb',dataVersion,'ctrlpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
