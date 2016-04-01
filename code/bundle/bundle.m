@@ -260,10 +260,11 @@ end
 % Extra observations without a specific reisdual (fixed control
 % points that have been measured, fixed camera stations that have
 % been used).
-p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0);
+p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0)
 
 r=E.final.weighted.r;
-s0=sqrt((r'*r)/(length(r)+p-length(x)));
+rr=(length(r)+p-length(x))
+s0=sqrt((r'*r)/rr);
 sigmas=s0*s.prior.sigmas;
 
 E.s0=s0;
