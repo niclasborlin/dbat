@@ -1,7 +1,7 @@
 ## Sigma0
 
-perl -ne 'print if s/^\s*Last Error:\s*//i' *-pmreport.txt             > pm_s0.txt
-perl -ne 'print if s/^\s*Sigma0:\s*//i' *-pmexport_result_file.txt > dbat_s0.txt
+perl -ne 'print if s/^\s*Last Error:\s*//i' *-pmreport.txt             >! pm_s0.txt
+perl -ne 'print if s/^\s*Sigma0:\s*//i' *-pmexport_result_file.txt >! dbat_s0.txt
 
 ## Camera parameters
 
