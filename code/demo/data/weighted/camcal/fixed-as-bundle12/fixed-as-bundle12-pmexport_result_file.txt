@@ -5,11 +5,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 02-Apr-2016 16:31:54
+      Last Bundle Run: 02-Apr-2016 20:15:47
       DBAT version:    0.4.1.git-1-gc4a63c8 (2016-03-27)
       Status:          OK (0)
-      Sigma0:          1.56956
-      Sigma0 (pixels): 0.156956
+      Sigma0:          1.66107
+      Sigma0 (pixels): 0.166107
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -33,43 +33,43 @@ Damped Bundle Adjustment Toolbox result file
             Photo 1: P8250021.JPG
                Omega:
                   Value:     -39.410795 deg
-                  Deviation: 0.00989 deg
+                  Deviation: 0.0105 deg
                Phi:
                   Value:     -1.211063 deg
-                  Deviation: 0.0125 deg
+                  Deviation: 0.0132 deg
                   Correlations over 95%: Xc:99.0%.
                Kappa:
                   Value:     -179.844378 deg
-                  Deviation: 0.00582 deg
+                  Deviation: 0.00616 deg
                Xc:
                   Value:     -0.046334 ou
-                  Deviation: 0.000441 ou
+                  Deviation: 0.000467 ou
                   Correlations over 95%: Phi:99.0%.
                Yc:
                   Value:     1.293561 ou
-                  Deviation: 0.000229 ou
+                  Deviation: 0.000243 ou
                Zc:
                   Value:     1.470212 ou
-                  Deviation: 0.000316 ou
+                  Deviation: 0.000335 ou
             Photo 2: P8250023.JPG
                Omega:
                   Value:     -27.248183 deg
-                  Deviation: 0.0129 deg
+                  Deviation: 0.0137 deg
                Phi:
                   Value:     -28.605068 deg
-                  Deviation: 0.0112 deg
+                  Deviation: 0.0119 deg
                Kappa:
                   Value:     -141.851261 deg
-                  Deviation: 0.00638 deg
+                  Deviation: 0.00675 deg
                Xc:
                   Value:     -1.145737 ou
-                  Deviation: 0.000356 ou
+                  Deviation: 0.000377 ou
                Yc:
                   Value:     0.966068 ou
-                  Deviation: 0.00034 ou
+                  Deviation: 0.00036 ou
                Zc:
                   Value:     1.580810 ou
-                  Deviation: 0.000442 ou
+                  Deviation: 0.000467 ou
    Quality
       Photographs
          Total number: 2
@@ -102,11 +102,11 @@ Damped Bundle Adjustment Toolbox result file
             Maximum: 0.123 pixels (photo 2 over 100 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
-            Minimum: 0.00036 (OP 14)
-            Maximum: 0.00074 (OP 88)
-         Maximum X standard deviation: 0.00033 (OP 88)
-         Maximum Y standard deviation: 0.0005 (OP 88)
-         Maximum Z standard deviation: 0.00044 (OP 88)
+            Minimum: 0.00038 (OP 14)
+            Maximum: 0.00079 (OP 88)
+         Maximum X standard deviation: 0.00035 (OP 88)
+         Maximum Y standard deviation: 0.00053 (OP 88)
+         Maximum Z standard deviation: 0.00047 (OP 88)
       Point Angles
          Minimum: 23.5 degrees (OP 88)
          Maximum: 39.5 degrees (OP 8)
