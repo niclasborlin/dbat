@@ -9,11 +9,13 @@ Status Report Tree
             Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Sat Apr 02 12:18:33 2016
+      Last Processing Attempt: Sat Apr 02 12:52:02 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
-         Orientation: off
+         Orientation: on
+            All photos oriented.
+            Number of photos oriented: 5
          Global Optimization: off
          Calibration: off
          Constraints: off
@@ -38,38 +40,38 @@ Status Report Tree
       Photo Coverage
          Referenced points outside of the camera's calibrated coverage region:
       Point Marking Residuals
-         Overall RMS: 0.887 pixels
-         Maximum: 1.869 pixels
-            Point 351 on Photo 5
-         Minimum: 0.234 pixels
+         Overall RMS: 1.066 pixels
+         Maximum: 2.179 pixels
+            Point 410 on Photo 4
+         Minimum: 0.192 pixels
             Point 403 on Photo 1
-         Maximum RMS: 1.426 pixels
+         Maximum RMS: 1.831 pixels
             Point 410
-         Minimum RMS: 0.234 pixels
+         Minimum RMS: 0.192 pixels
             Point 403
       Point Tightness
          Maximum: 0.23 m
             Point 422
-         Minimum: 0.0013 m
+         Minimum: 0.00066 m
             Point 634
       Point Precisions
-         Overall RMS Vector Length: 0.0381 m
-         Maximum Vector Length: 0.0389 m
-            Point 403
-         Minimum Vector Length: 0.0378 m
-            Point 422
-         Maximum X: 0.0159 m
-         Maximum Y: 0.0158 m
-         Maximum Z: 0.0318 m
-         Minimum X: 0.0148 m
-         Minimum Y: 0.0147 m
-         Minimum Z: 0.0314 m
-      Point Angles
-         Maximum: 25.87 degrees
+         Overall RMS Vector Length: 199 m
+         Maximum Vector Length: 820 m
             Point 745
-         Minimum: 6.473 degrees
+         Minimum Vector Length: 0.049 m
+            Point 317
+         Maximum X: 474 m
+         Maximum Y: 474 m
+         Maximum Z: 474 m
+         Minimum X: 0.02 m
+         Minimum Y: 0.02 m
+         Minimum Z: 0.04 m
+      Point Angles
+         Maximum: 25.88 degrees
+            Point 745
+         Minimum: 6.471 degrees
             Point 347
-         Average: 16.35 degrees
+         Average: 16.36 degrees
       Check measurements
          Check point delta
             Max: 1.01e+006 m  (413, OP492)
