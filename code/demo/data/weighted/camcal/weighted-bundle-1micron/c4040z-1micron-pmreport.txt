@@ -7,18 +7,16 @@ Status Report Tree
             Suggestion: In high accuracy projects, strive to get all point residuals under 1.00 pixels. If you have just a few high residual points, study them on each photo to ensure they are marked and referenced correctly. If many of your points have high residuals then make sure the camera stations are solving correctly. Ensure that you are using the best calibrated camera possible. Remove points that have been manually marked unless you need them.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Sat Apr 02 16:52:32 2016
+      Last Processing Attempt: Sat Apr 02 20:49:10 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
-         Orientation: on
-            All photos oriented.
-            Number of photos oriented: 21
+         Orientation: off
          Global Optimization: on
          Calibration: off
          Constraints: on
       Total Error
-         Number of Processing Iterations: 3
+         Number of Processing Iterations: 2
          Number of Processing Stages: 2
          First Error: 1.780
          Last Error: 1.780
@@ -517,10 +515,10 @@ Status Report Tree
             Max X,Y,Z
                X: 0.5 m  (4, OP1004)
                Y: 0.5 m  (3, OP1003)
-               Z: 1.28e-006 m  (3, OP1003)
+               Z: 1.28e-006 m  (4, OP1004)
             Min: 0.707 m  (1, OP1001)
             Min X,Y,Z
                X: 0.5 m  (3, OP1003)
                Y: 0.5 m  (2, OP1002)
-               Z: 1.28e-006 m  (2, OP1002)
+               Z: 1.28e-006 m  (1, OP1001)
             Average: 0.707 m  (from 4 items)
