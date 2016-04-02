@@ -1,5 +1,5 @@
 runAsBundle=false;
-weighted=true;
+weighted=false;
 cpSigma=1e-6;
 
 % Extract name of current directory.
@@ -35,7 +35,7 @@ if ~exist('fName','var')
     end
     fName=fullfile(curDir,'data','weighted','camcal',d,f);
     cpName=fullfile(curDir,'data','weighted','camcal',d,'ctrlpts.txt');
-    ptName=strrep(fName,'-pmexport.txt','3dpts.txt');
+    ptName=strrep(fName,'-pmexport.txt','-3dpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
