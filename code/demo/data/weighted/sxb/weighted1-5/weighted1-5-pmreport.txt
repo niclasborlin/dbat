@@ -9,7 +9,7 @@ Status Report Tree
             Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Fri Apr 01 15:46:14 2016
+      Last Processing Attempt: Sat Apr 02 21:19:08 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
@@ -18,7 +18,7 @@ Status Report Tree
          Calibration: off
          Constraints: on
       Total Error
-         Number of Processing Iterations: 4
+         Number of Processing Iterations: 2
          Number of Processing Stages: 1
          First Error: 0.984
          Last Error: 0.984
@@ -60,7 +60,7 @@ Status Report Tree
                     Value: 92.623615 deg
                     Deviation: Kappa: 0.005 deg
                Xc
-                    Value: 281.961700 
+                    Value: 281.961701 
                     Deviation: X: 0.875 
                     Correlations over  95.0%: Phi:99.9%
                Yc
@@ -95,7 +95,7 @@ Status Report Tree
                     Deviation: Z: 0.111 
             Photo 4: 8938.jpg
                Omega
-                    Value: -0.114122 deg
+                    Value: -0.114123 deg
                     Deviation: Omega: 0.106 deg
                     Correlations over  95.0%: Y:-100.0%
                Phi
@@ -106,15 +106,15 @@ Status Report Tree
                     Value: 96.144964 deg
                     Deviation: Kappa: 0.004 deg
                Xc
-                    Value: 314.156541 
+                    Value: 314.156545 
                     Deviation: X: 0.904 
                     Correlations over  95.0%: Phi:100.0%
                Yc
-                    Value: -60.472999 
+                    Value: -60.472966 
                     Deviation: Y: 3.281 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1767.097443 
+                    Value: 1767.097445 
                     Deviation: Z: 0.241 
             Photo 5: 9111.jpg
                Omega
@@ -129,7 +129,7 @@ Status Report Tree
                     Value: -92.543303 deg
                     Deviation: Kappa: 0.006 deg
                Xc
-                    Value: 704.516145 
+                    Value: 704.516144 
                     Deviation: X: 1.940 
                     Correlations over  95.0%: Phi:100.0%
                Yc
@@ -137,7 +137,7 @@ Status Report Tree
                     Deviation: Y: 1.359 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1797.090047 
+                    Value: 1797.090048 
                     Deviation: Z: 0.420 
    Quality
       Photographs

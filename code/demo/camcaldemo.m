@@ -1,5 +1,5 @@
 runAsBundle=true;
-weighted=false;
+weighted=true;
 cpSigma=1e-2;
 
 % Extract name of current directory.
@@ -45,6 +45,7 @@ end
 if ~exist('prob','var')
     fprintf('Loading data file %s...',fName);
     prob=loadpm(fName);
+    prob0=prob;
     fprintf('done.\n');
     if any(isnan(cat(2,prob.images.imSz)))
         error('Image sizes unknown!');

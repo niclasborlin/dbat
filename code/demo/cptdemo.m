@@ -6,8 +6,8 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    stub='w15-op1';
-    dataDir=stub;
+    stub='weighted1-5';
+    dataDir=stub; %'fixed1-5';
     fName=fullfile(curDir,'data','weighted','sxb',dataDir,...
                    [stub,'-pmexport.txt']);
     cpName=fullfile(curDir,'data','weighted','sxb',dataDir,'ctrlpts.txt');
@@ -21,6 +21,7 @@ end
 if ~exist('prob','var')
     fprintf('Loading data file %s...',fName);
     prob=loadpm(fName);
+    prob0=prob;
     fprintf('done.\n');
     if any(isnan(cat(2,prob.images.imSz)))
         error('Image sizes unknown!');
