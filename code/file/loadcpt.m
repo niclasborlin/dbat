@@ -1,12 +1,18 @@
-function [id,XYZ,sigma,name]=loadcpt(fName)
+function pts=loadcpt(fName)
 %LOADCPT Load control points from text file. 
 %
-%   [ID,XYZ,SIGMA,NAME]=loadcpt(FNAME) loads control point information
-%   from the text file FNAME. The returned information is the
-%   N-vector ID with point ids, the 3-by-N array XYZ with
-%   coordinates, the 3-by-N array SIGMA with coordinate standard
-%   deviations, and the N-cell array NAME with point names.  If no
-%   standard deviations are given, SIGMA is the 3-by-N zero matrix.
+%   PTS=loadcpt(FNAME) loads control point information
+%   from the text file FNAME. The data is returned in a struct PTS
+%   with fields
+%       id   - M-array with id numbers.
+%       name - M-cell array with names.
+%       vis  - M-by-N visibility array
+%       pos  - N-by-3 array of estimated positions
+%       std  - N-by-3 array with posteriori standard deviations
+%
+%   Each line is expected to contain a comma-separated list of an
+%   integer id, a name, X, Y, Z positions, and optionally X, Y, Z standard
+%   devations. Blank lines and lines starting with # are ignored.
 
 % $Id$
 
@@ -15,10 +21,10 @@ if fid<0
     error('Could not open %s for reading: %s.',fName,msg);
 end
 
-id=zeros(0,1);
-XYZ=zeros(3,0);
-sigma=zeros(3,0);
-name=cell(0);
+id=zeros(1,0);
+pos=zeros(3,0);
+std=zeros(3,0);
+name=cell(1,0);
 
 while ~feof(fid)
     % Read one line.
@@ -43,14 +49,16 @@ while ~feof(fid)
     name{end+1}=nn;
     switch n
       case 3
-        XYZ(:,end+1)=a;
-        sigma(:,end+1)=0;
+        pos(:,end+1)=a;
+        std(:,end+1)=0;
       case 6
-        XYZ(:,end+1)=a(1:3);
-        sigma(:,end+1)=a(4:6);
+        pos(:,end+1)=a(1:3);
+        std(:,end+1)=a(4:6);
       otherwise
         error('Bad number of items on CP line.');
     end
 end
 
 fclose(fid);
+
+pts=struct('id',id,'name',{name},'pos',pos,'std',std);
