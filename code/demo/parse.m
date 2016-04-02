@@ -72,7 +72,7 @@ else
             maxAdev,i,j,pmEOadev(i,j),dbatEOadev(i,j));
 end
 
-fprintf('EO positions within %.4g project units.\n',...
+fprintf('EO positions within %.4e project units.\n',...
         max(max(abs(pmEO(pIx,:)-dbatEO(pIx,:)))));
 
 pmEOpdev=pmEOdev(pIx,:);

@@ -5,11 +5,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 02-Apr-2016 21:21:26
+      Last Bundle Run: 02-Apr-2016 21:48:35
       DBAT version:    0.4.1.git-1-gc4a63c8 (2016-03-27)
       Status:          OK (0)
-      Sigma0:          0.984898
-      Sigma0 (pixels): 0.984898
+      Sigma0:          0.984903
+      Sigma0 (pixels): 0.984903
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -26,36 +26,36 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 4
-         First error:          10.447
-         Last error:           7.87919
+         First error:          10.4471
+         Last error:           7.87922
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: 8811.jpg
                Omega:
-                  Value:     0.785790 deg
+                  Value:     0.785788 deg
                   Deviation: 0.0438 deg
                   Correlations over 95%: Yc:-100.0%.
                Phi:
-                  Value:     -0.417816 deg
+                  Value:     -0.417815 deg
                   Deviation: 0.0303 deg
                   Correlations over 95%: Xc:99.9%.
                Kappa:
                   Value:     -89.916336 deg
                   Deviation: 0.00495 deg
                Xc:
-                  Value:     -118.602041 ou
+                  Value:     -118.602019 ou
                   Deviation: 0.967 ou
                   Correlations over 95%: Phi:99.9%.
                Yc:
-                  Value:     109.300599 ou
+                  Value:     109.300667 ou
                   Deviation: 1.38 ou
                   Correlations over 95%: Omega:-100.0%.
                Zc:
-                  Value:     1776.749770 ou
+                  Value:     1776.749783 ou
                   Deviation: 0.174 ou
             Photo 2: 8936.jpg
                Omega:
-                  Value:     -0.128862 deg
+                  Value:     -0.128861 deg
                   Deviation: 0.0514 deg
                   Correlations over 95%: Yc:-100.0%.
                Phi:
@@ -66,61 +66,61 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     92.623615 deg
                   Deviation: 0.00482 deg
                Xc:
-                  Value:     281.961751 ou
+                  Value:     281.961749 ou
                   Deviation: 0.875 ou
                   Correlations over 95%: Phi:99.9%.
                Yc:
-                  Value:     365.024176 ou
+                  Value:     365.024152 ou
                   Deviation: 1.61 ou
                   Correlations over 95%: Omega:-100.0%.
                Zc:
-                  Value:     1776.478313 ou
+                  Value:     1776.478318 ou
                   Deviation: 0.221 ou
             Photo 3: 8937.jpg
                Omega:
-                  Value:     -0.171387 deg
+                  Value:     -0.171385 deg
                   Deviation: 0.0377 deg
                   Correlations over 95%: Yc:-100.0%.
                Phi:
-                  Value:     -0.022798 deg
+                  Value:     -0.022797 deg
                   Deviation: 0.0241 deg
                   Correlations over 95%: Xc:99.9%.
                Kappa:
                   Value:     94.401670 deg
                   Deviation: 0.00357 deg
                Xc:
-                  Value:     296.924250 ou
+                  Value:     296.924272 ou
                   Deviation: 0.776 ou
                   Correlations over 95%: Phi:99.9%.
                Yc:
-                  Value:     157.249384 ou
+                  Value:     157.249331 ou
                   Deviation: 1.18 ou
                   Correlations over 95%: Omega:-100.0%.
                Zc:
-                  Value:     1770.582551 ou
+                  Value:     1770.582557 ou
                   Deviation: 0.111 ou
             Photo 4: 8938.jpg
                Omega:
-                  Value:     -0.114123 deg
+                  Value:     -0.114121 deg
                   Deviation: 0.106 deg
                   Correlations over 95%: Yc:-100.0%.
                Phi:
-                  Value:     0.121113 deg
+                  Value:     0.121114 deg
                   Deviation: 0.0282 deg
                   Correlations over 95%: Xc:100.0%.
                Kappa:
                   Value:     96.144964 deg
                   Deviation: 0.00433 deg
                Xc:
-                  Value:     314.156540 ou
+                  Value:     314.156561 ou
                   Deviation: 0.904 ou
                   Correlations over 95%: Phi:100.0%.
                Yc:
-                  Value:     -60.472952 ou
+                  Value:     -60.473015 ou
                   Deviation: 3.28 ou
                   Correlations over 95%: Omega:-100.0%.
                Zc:
-                  Value:     1767.097451 ou
+                  Value:     1767.097449 ou
                   Deviation: 0.241 ou
             Photo 5: 9111.jpg
                Omega:
@@ -128,22 +128,22 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.0425 deg
                   Correlations over 95%: Yc:-100.0%.
                Phi:
-                  Value:     -0.175007 deg
+                  Value:     -0.175008 deg
                   Deviation: 0.0614 deg
                   Correlations over 95%: Xc:100.0%.
                Kappa:
                   Value:     -92.543303 deg
                   Deviation: 0.00568 deg
                Xc:
-                  Value:     704.516160 ou
+                  Value:     704.516139 ou
                   Deviation: 1.94 ou
                   Correlations over 95%: Phi:100.0%.
                Yc:
-                  Value:     110.230552 ou
+                  Value:     110.230544 ou
                   Deviation: 1.36 ou
                   Correlations over 95%: Omega:-100.0%.
                Zc:
-                  Value:     1797.090037 ou
+                  Value:     1797.090045 ou
                   Deviation: 0.42 ou
    Quality
       Photographs
