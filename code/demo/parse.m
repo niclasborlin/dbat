@@ -45,7 +45,7 @@ end
 pmEO=reshape(load(fullfile(dataDir,'pm_EO.txt')),6,[]);
 dbatEO=reshape(load(fullfile(dataDir,'dbat_EO.txt')),6,[]);
 
-fprintf('EO angles   within %.4g degrees.\n',...
+fprintf('EO angles   within %.4e degrees.\n',...
         max(max(abs(rem(pmEO(aIx,:)-dbatEO(aIx,:),360)))));
 
 pmEOdev=reshape(load(fullfile(dataDir,'pm_EOdev.txt')),6,[]);
@@ -204,7 +204,7 @@ plot(ax,pmPts(3,:),pmPts(4,:),'rx',res(1,:),res(2,:),'bo')
 axis(ax,'equal','square')
 legend(ax,'PM','DBAT')
 
-fprintf('residuals within %.2g pixels.\n',...
+fprintf('residuals within %.2e pixels.\n',...
         max(max(abs(pmPts(3:4,:)-res))));
 
 fprintf('\nrms mark pts res PM: %g, DBAT: %g.\n',...
