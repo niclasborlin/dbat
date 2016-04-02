@@ -1,0 +1,85 @@
+
+Status Report Tree
+   Project Name: w15-op1.pmr
+   Problems and Suggestions (2)
+      Project Problems (2)
+         Problem: The following cameras are not calibrated: 2013.
+            Suggestion: For best results you should use fully calibrated cameras. If you are having accuracy problems, you should calibrate your camera (it is easy and does not take long - See Camera Calibration in the User Manual).
+         Problem: You have one or more points with angle thresholds lower than 30 degrees
+            Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
+      Problems related to most recent processing (0)
+   Information from most recent processing
+      Last Processing Attempt: Sat Apr 02 12:18:33 2016
+      Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
+      Status: successful
+      Processing Options
+         Orientation: off
+         Global Optimization: off
+         Calibration: off
+         Constraints: off
+      Total Error
+         Number of Processing Iterations: N/A
+         Number of Processing Stages: N/A
+         First Error: N/A
+         Last Error: N/A
+      Precisions / Standard Deviations
+   Quality
+      Photographs
+         Total Number: 5
+            Bad Photos: 0
+            Weak Photos: 0
+            OK Photos: 5
+         Number Oriented: 5
+         Number with inverse camera flags set: 0
+      Cameras
+         Camera1: 2013
+            Calibration: no
+            Number of photos using camera: 5
+      Photo Coverage
+         Referenced points outside of the camera's calibrated coverage region:
+      Point Marking Residuals
+         Overall RMS: 0.887 pixels
+         Maximum: 1.869 pixels
+            Point 351 on Photo 5
+         Minimum: 0.234 pixels
+            Point 403 on Photo 1
+         Maximum RMS: 1.426 pixels
+            Point 410
+         Minimum RMS: 0.234 pixels
+            Point 403
+      Point Tightness
+         Maximum: 0.23 m
+            Point 422
+         Minimum: 0.0013 m
+            Point 634
+      Point Precisions
+         Overall RMS Vector Length: 0.0381 m
+         Maximum Vector Length: 0.0389 m
+            Point 403
+         Minimum Vector Length: 0.0378 m
+            Point 422
+         Maximum X: 0.0159 m
+         Maximum Y: 0.0158 m
+         Maximum Z: 0.0318 m
+         Minimum X: 0.0148 m
+         Minimum Y: 0.0147 m
+         Minimum Z: 0.0314 m
+      Point Angles
+         Maximum: 25.87 degrees
+            Point 745
+         Minimum: 6.473 degrees
+            Point 347
+         Average: 16.35 degrees
+      Check measurements
+         Check point delta
+            Max: 1.01e+006 m  (413, OP492)
+            Max X,Y,Z
+               X: 1e+006 m  (413, OP492)
+               Y: 1.12e+005 m  (311, OP410)
+               Z: 140 m  (311, OP410)
+            Min: 1.01e+006 m  (406, OP351)
+            Min X,Y,Z
+               X: 1e+006 m  (406, OP351)
+               Y: 1.12e+005 m  (401, OP333)
+               Z: 140 m  (413, OP492)
+            Average: 1.01e+006 m  (from 16 items)
