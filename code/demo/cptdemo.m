@@ -6,7 +6,7 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    stub='w15-op1';
+    stub='w15-op1-manybundleplusone';
     dataDir=stub;
     fName=fullfile(curDir,'data','weighted','sxb',dataDir,...
                    [stub,'-pmexport.txt']);
@@ -25,39 +25,41 @@ if ~exist('prob','var')
     if any(isnan(cat(2,prob.images.imSz)))
         error('Image sizes unknown!');
     end
-    fprintf('Loading control points %s...',cpName);
+    disp('done.')
     ctrlPts=loadcpt(cpName);
     fprintf('done.\n');
-    if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
-        error('Control point id mismatch.');
-    end
-    fprintf('Loading 3D point table %s...',ptName);
-    pts=loadpm3dtbl(ptName);
-    fprintf('done.\n');
+    if true
+        if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
+            error('Control point id mismatch.');
+        end
+        fprintf('Loading 3D point table %s...',ptName);
+        pts=loadpm3dtbl(ptName);
+        fprintf('done.\n');
     
-    % Determine offset between real positions and positions used in
-    % the bundle.
-    [~,ia,ib]=intersect(prob.ctrlPts(:,1),pts.id);
-    offset=prob.ctrlPts(ia,2:4)'-pts.pos(:,ib);
+        % Determine offset between real positions and positions used in
+        % the bundle.
+        [~,ia,ib]=intersect(prob.ctrlPts(:,1),pts.id);
+        offset=prob.ctrlPts(ia,2:4)'-pts.pos(:,ib);
 
-    % Offset range should be as small as difference between the number of
-    % digits used. Warn if it is larger than 1e-3 object units
-    % (typically 1mm).
-    offsetRange=max(offset,[],2)-min(offset,[],2);
-    if max(offsetRange)>1e-3
-        warning('Large offset range:')
-        offsetRange
+        % Offset range should be as small as difference between the number of
+        % digits used. Warn if it is larger than 1e-3 object units
+        % (typically 1mm).
+        offsetRange=max(offset,[],2)-min(offset,[],2);
+        if max(offsetRange)>1e-3
+            warning('Large offset range:')
+            offsetRange
+        end
+
+        % Adjust a priori control point positions by the offset.
+        ctrlPts.pos=ctrlPts.pos+repmat(offset,1,size(ctrlPts,2));
+    
+        % Replace a posteriori ctrl positions and std by a priori values.
+        [~,ia,ib]=intersect(ctrlPts.id,prob.ctrlPts(:,1));
+        prob.ctrlPts(ib,2:4)=ctrlPts.pos(:,ia)';
+        prob.ctrlPts(ib,5:7)=ctrlPts.std(:,ia)';
+    
+        cpId=prob.ctrlPts(:,1);
     end
-    
-    % Adjust a priori control point positions by the offset.
-    ctrlPts.pos=ctrlPts.pos+repmat(offset,1,size(ctrlPts,2));
-    
-    % Replace a posteriori ctrl positions and std by a priori values.
-    [~,ia,ib]=intersect(ctrlPts.id,prob.ctrlPts(:,1));
-    prob.ctrlPts(ib,2:4)=ctrlPts.pos(:,ia)';
-    prob.ctrlPts(ib,5:7)=ctrlPts.std(:,ia)';
-    
-    cpId=prob.ctrlPts(:,1);
 else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
 end
@@ -119,7 +121,6 @@ for i=1:length(dampings)
     fprintf('Running the bundle with damping %s...\n',dampings{i});
 
     % Run the bundle.
-    s=ss0;
     [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
     
     if ok(i)
