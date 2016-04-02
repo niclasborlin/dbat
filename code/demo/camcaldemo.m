@@ -1,5 +1,5 @@
-runAsBundle=false;
-weighted=true;
+runAsBundle=true;
+weighted=false;
 cpSigma=1e-2;
 
 % Extract name of current directory.
@@ -26,8 +26,8 @@ if ~exist('fName','var')
             d=['weighted-bundle-',wStr];
             f=['c4040z-',wStr,'-pmexport.txt'];
         else
-            d='fixed-as-bundle12';
-            f='fixed-as-bundle12-pmexport.txt';
+            d='fixed-as-bundle';
+            f='c4040z-bundle-pmexport.txt';
         end
     else
         d='fixed';
