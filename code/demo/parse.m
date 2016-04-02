@@ -119,8 +119,19 @@ else
 end
 
 % OP parameters
-fprintf('OP+CP positions within %.4g project units.\n',...
-        max(max(abs(ss0.OP-result{1}.OP))));
+isCtrl=s0.isCtrl;
+if any(~isCtrl)
+    fprintf('OP positions within %.4g project units.\n',...
+            max(max(abs(ss0.OP(:,~isCtrl)-result{1}.OP(:,~isCtrl)))));
+else
+    fprintf('No OP.\n');
+end
+if any(isCtrl)
+    fprintf('CP positions within %.4g project units.\n',...
+            max(max(abs(ss0.OP(:,isCtrl)-result{1}.OP(:,isCtrl)))));
+else
+    fprintf('No CP.\n');
+end
 
 dbatOPstd=reshape(full(sqrt(diag(COP))),3,[]);
 pmOPstd=ss0.OPstd;
