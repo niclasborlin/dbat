@@ -175,3 +175,30 @@ else
     end
 end
 
+pts=load(fullfile(dataDir,'2dpts-cleaned.txt'));
+pmPts=nan(4,size(pts,1));
+for i=1:size(pts,1)
+    id=pts(i,1);
+    imNo=pts(i,2);
+    pos=s.colPos(id==s.OPid,imNo);
+    pmPts(:,pos)=pts(i,3:6)';
+end
+
+r=E{1}.final.weighted.r;
+J=E{1}.final.weighted.J;
+
+fprintf('markpts   within %.2g pixels.\n',...
+        max(max(abs(pmPts(1:2,:)-s.markPts))));
+
+res=reshape(r(1:end-nnz(s.useOPobs)),2,[]);
+
+fprintf('residuals within %.2g pixels.\n',...
+        max(max(abs(pmPts(3:4,:)-res))));
+
+fprintf('\nrms mark pts res PM: %g, DBAT: %g.\n',...
+        sqrt(mean(reshape(pmPts(3:4,:).^2,[],1))),sqrt(mean(res(:).^2)));
+
+fprintf('\nsigma0 based on PM res and red=m-n: %4g.\n',...
+        sqrt(r'*r/(size(J,1)-size(J,2))));
+fprintf('sigma0 based on DBAT res and red=m-n: %4g.\n',...
+        sqrt(r'*r/(size(J,1)-size(J,2))));
