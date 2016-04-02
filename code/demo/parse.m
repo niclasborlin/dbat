@@ -180,6 +180,7 @@ pmPts=nan(4,size(pts,1));
 for i=1:size(pts,1)
     id=pts(i,1);
     imNo=pts(i,2);
+    imNo=min(imNo,size(s.colPos,2));
     pos=s.colPos(id==s.OPid,imNo);
     pmPts(:,pos)=pts(i,3:6)';
 end
