@@ -119,6 +119,7 @@ for i=1:length(dampings)
     fprintf('Running the bundle with damping %s...\n',dampings{i});
 
     % Run the bundle.
+    s=ss0;
     [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
     
     if ok(i)
