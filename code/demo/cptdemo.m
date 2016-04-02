@@ -6,9 +6,12 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    dataVersion='w15-op1';
-    fName=fullfile(curDir,'data','weighted','sxb',dataVersion,'w15-op1-pmexport.txt');
-    cpName=fullfile(curDir,'data','weighted','sxb',dataVersion,'ctrlpts.txt');
+    stub='f15-op1';
+    dataDir=stub;
+    fName=fullfile(curDir,'data','weighted','sxb',dataDir,...
+                   [stub,'-pmexport.txt']);
+    cpName=fullfile(curDir,'data','weighted','sxb',dataDir,'ctrlpts.txt');
+    ptName=fullfile(curDir,'data','weighted','sxb',dataDir,[stub,'-3dpts.txt']);
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
@@ -18,25 +21,43 @@ end
 if ~exist('prob','var')
     fprintf('Loading data file %s...',fName);
     prob=loadpm(fName);
+    fprintf('done.\n');
     if any(isnan(cat(2,prob.images.imSz)))
         error('Image sizes unknown!');
     end
-    [cpId,CP,CPS,cpNames]=loadcpt(cpName);
-    if ~all(ismember(prob.ctrlPts(:,1),cpId))
+    fprintf('Loading control points %s...',cpName);
+    ctrlPts=loadcpt(cpName);
+    fprintf('done.\n');
+    if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
         error('Control point id mismatch.');
     end
-    % Replace XYZ positions.
-    [~,ia,ib]=intersect(cpId,prob.ctrlPts(:,1));
-    % Determine offset.
-    offset=mean(CP(:,ia)'-prob.ctrlPts(ib,2:4),1)';
-    prob.ctrlPts(ib,2:4)=CP(:,ia)'-repmat(offset',length(ia),1);
-    % Replace sigmas.
-    prob.ctrlPts(ib,5:7)=CPS(:,ia)';
-    % Keep track of control point names.
-    names=cell(size(cpNames));
-    names(ib)=cpNames(ia);
-    cpNames=names;
-    disp('done.')
+    fprintf('Loading 3D point table %s...',ptName);
+    pts=loadpm3dtbl(ptName);
+    fprintf('done.\n');
+    
+    % Determine offset between real positions and positions used in
+    % the bundle.
+    [~,ia,ib]=intersect(prob.ctrlPts(:,1),pts.id);
+    offset=prob.ctrlPts(ia,2:4)'-pts.pos(:,ib);
+
+    % Offset range should be as small as difference between the number of
+    % digits used. Warn if it is larger than 1e-3 object units
+    % (typically 1mm).
+    offsetRange=max(offset,[],2)-min(offset,[],2);
+    if max(offsetRange)>1e-3
+        warning('Large offset range:')
+        offsetRange
+    end
+    
+    % Adjust a priori control point positions by the offset.
+    ctrlPts.pos=ctrlPts.pos+repmat(offset,1,size(ctrlPts,2));
+    
+    % Replace a posteriori ctrl positions and std by a priori values.
+    [~,ia,ib]=intersect(ctrlPts.id,prob.ctrlPts(:,1));
+    prob.ctrlPts(ib,2:4)=ctrlPts.pos(:,ia)';
+    prob.ctrlPts(ib,5:7)=ctrlPts.std(:,ia)';
+    
+    cpId=prob.ctrlPts(:,1);
 else
     disp('Using pre-loaded data. Do ''clear prob'' to reload.');
 end

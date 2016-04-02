@@ -31,4 +31,5 @@ perl -ne 'print if /Photograph Standard Deviations/..eof' *-pmexport_result_file
 perl -ne 'print if /Photograph Standard Deviations/..eof' *-pmreport.txt             | grep 'Correlations over' | perl -pe 's/^\s*Correlations over.*:\s*//; s/%//;' >! pm_EOcorr.txt
 perl -ne 'print if /Photograph Standard Deviations/..eof' *-pmexport_result_file.txt | grep 'Correlations over' | perl -pe 's/^\s*Correlations over.*:\s*//; s/%//;' >! dbat_EOcorr.txt
 
-
+# 2d points
+perl -ne 'if (/^\d/) { s/,[a-zA-N].*$//; print; }' *-2dpts.txt >! 2dpts-cleaned.txt
