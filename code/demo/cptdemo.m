@@ -6,7 +6,7 @@ dampings={'none','gna','lm','lmp'};
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    stub='w15-op1-manybundleplusone';
+    stub='w15-op1';
     dataDir=stub;
     fName=fullfile(curDir,'data','weighted','sxb',dataDir,...
                    [stub,'-pmexport.txt']);
