@@ -7,7 +7,7 @@ Status Report Tree
             Suggestion: In high accuracy projects, strive to get all point residuals under 1.00 pixels. If you have just a few high residual points, study them on each photo to ensure they are marked and referenced correctly. If many of your points have high residuals then make sure the camera stations are solving correctly. Ensure that you are using the best calibrated camera possible. Remove points that have been manually marked unless you need them.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Wed Mar 30 19:57:56 2016
+      Last Processing Attempt: Sat Apr 02 14:49:22 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
@@ -16,7 +16,7 @@ Status Report Tree
          Calibration: on (full calibration)
          Constraints: off
       Total Error
-         Number of Processing Iterations: 2
+         Number of Processing Iterations: 1
          Number of Processing Stages: 2
          First Error: 1.782
          Last Error: 1.782
@@ -24,13 +24,13 @@ Status Report Tree
          Camera Calibration Standard Deviations
             Camera1: Olympus C4040Z 2272x1704 inf focus
                Focal Length
-                    Value: 7.469314 mm
+                    Value: 7.469319 mm
                     Deviation: Focal: 0.001 mm  
                Xp - principal point x
-                    Value: 3.617770 mm
+                    Value: 3.617774 mm
                     Deviation: Xp: 9.1e-004 mm  
                Yp - principal point y
-                    Value: 2.608673 mm
+                    Value: 2.608659 mm
                     Deviation: Yp: 0.001 mm  
                Fw - format width
                     Value: 7.253200 mm
@@ -40,102 +40,102 @@ Status Report Tree
                     Value: 4.981e-003
                     Deviation: K1: 1.2e-005     
                K2 - radial distortion 2
-                    Value: -9.814e-005
+                    Value: -9.815e-005
                     Deviation: K2: 6.0e-007     
                K3 - radial distortion 3
                     Value: 0.000e+000
                P1 - decentering distortion 1
-                    Value: -6.587e-005
+                    Value: -6.590e-005
                     Deviation: P1: 3.9e-006     
                P2 - decentering distortion 2
-                    Value: -2.806e-005
+                    Value: -2.814e-005
                     Deviation: P2: 4.3e-006     
          Photograph Standard Deviations
             Photo 1: P8250021.JPG
                Omega
-                    Value: -39.433759 deg
+                    Value: -39.433867 deg
                     Deviation: Omega: 0.009 deg
                Phi
-                    Value: -1.177923 deg
+                    Value: -1.177892 deg
                     Deviation: Phi: 0.008 deg
                Kappa
-                    Value: -179.839441 deg
+                    Value: -179.839443 deg
                     Deviation: Kappa: 0.003 deg
                Xc
                     Value: 0.454884 
                     Deviation: X: 1.7e-004 
                Yc
-                    Value: 1.794190 
+                    Value: 1.794191 
                     Deviation: Y: 2.0e-004 
                Zc
-                    Value: 1.469731 
+                    Value: 1.469732 
                     Deviation: Z: 2.2e-004 
             Photo 2: P8250022.JPG
                Omega
-                    Value: -39.768980 deg
+                    Value: -39.769019 deg
                     Deviation: Omega: 0.009 deg
                Phi
-                    Value: -1.853644 deg
+                    Value: -1.853754 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: -90.121780 deg
+                    Value: -90.121783 deg
                     Deviation: Kappa: 0.003 deg
                Xc
                     Value: 0.470385 
                     Deviation: X: 2.1e-004 
                Yc
-                    Value: 2.027812 
+                    Value: 2.027813 
                     Deviation: Y: 2.3e-004 
                Zc
-                    Value: 1.639208 
+                    Value: 1.639209 
                     Deviation: Z: 2.5e-004 
             Photo 3: P8250023.JPG
                Omega
-                    Value: -27.247809 deg
+                    Value: -27.247937 deg
                     Deviation: Omega: 0.012 deg
                Phi
-                    Value: -28.567442 deg
+                    Value: -28.567486 deg
                     Deviation: Phi: 0.008 deg
                Kappa
-                    Value: -141.850591 deg
+                    Value: -141.850652 deg
                     Deviation: Kappa: 0.006 deg
                Xc
                     Value: -0.644791 
                     Deviation: X: 2.1e-004 
                Yc
-                    Value: 1.466703 
+                    Value: 1.466704 
                     Deviation: Y: 2.0e-004 
                Zc
                     Value: 1.582025 
                     Deviation: Z: 2.6e-004 
             Photo 4: P8250024.JPG
                Omega
-                    Value: -28.561505 deg
+                    Value: -28.561456 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: -30.341308 deg
+                    Value: -30.341412 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: -49.785833 deg
+                    Value: -49.785809 deg
                     Deviation: Kappa: 0.005 deg
                Xc
-                    Value: -0.644078 
+                    Value: -0.644079 
                     Deviation: X: 2.2e-004 
                Yc
-                    Value: 1.491434 
+                    Value: 1.491435 
                     Deviation: Y: 2.2e-004 
                Zc
-                    Value: 1.637451 
+                    Value: 1.637452 
                     Deviation: Z: 2.7e-004 
             Photo 5: P8250025.JPG
                Omega
-                    Value: 4.376902 deg
+                    Value: 4.376864 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: -34.675131 deg
+                    Value: -34.675243 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: -87.139713 deg
+                    Value: -87.139733 deg
                     Deviation: Kappa: 0.006 deg
                Xc
                     Value: -0.671077 
@@ -144,20 +144,20 @@ Status Report Tree
                     Value: 0.417369 
                     Deviation: Y: 1.6e-004 
                Zc
-                    Value: 1.410904 
+                    Value: 1.410905 
                     Deviation: Z: 2.0e-004 
             Photo 6: P8250026.JPG
                Omega
-                    Value: 2.101519 deg
+                    Value: 2.101655 deg
                     Deviation: Omega: 0.011 deg
                Phi
-                    Value: -34.022099 deg
+                    Value: -34.022130 deg
                     Deviation: Phi: 0.009 deg
                Kappa
-                    Value: 1.512649 deg
+                    Value: 1.512726 deg
                     Deviation: Kappa: 0.006 deg
                Xc
-                    Value: -0.713943 
+                    Value: -0.713944 
                     Deviation: X: 1.9e-004 
                Yc
                     Value: 0.476453 
@@ -167,16 +167,16 @@ Status Report Tree
                     Deviation: Z: 2.2e-004 
             Photo 7: P8250027.JPG
                Omega
-                    Value: 27.348988 deg
+                    Value: 27.349053 deg
                     Deviation: Omega: 0.009 deg
                Phi
-                    Value: -28.308239 deg
+                    Value: -28.308343 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: -44.207649 deg
+                    Value: -44.207617 deg
                     Deviation: Kappa: 0.005 deg
                Xc
-                    Value: -0.534980 
+                    Value: -0.534981 
                     Deviation: X: 1.7e-004 
                Yc
                     Value: -0.349742 
@@ -186,29 +186,29 @@ Status Report Tree
                     Deviation: Z: 2.2e-004 
             Photo 8: P8250028.JPG
                Omega
-                    Value: 26.932608 deg
+                    Value: 26.932725 deg
                     Deviation: Omega: 0.011 deg
                Phi
-                    Value: -28.126892 deg
+                    Value: -28.126838 deg
                     Deviation: Phi: 0.008 deg
                Kappa
-                    Value: 44.870877 deg
+                    Value: 44.870932 deg
                     Deviation: Kappa: 0.006 deg
                Xc
                     Value: -0.719335 
                     Deviation: X: 2.3e-004 
                Yc
-                    Value: -0.466825 
+                    Value: -0.466826 
                     Deviation: Y: 2.2e-004 
                Zc
-                    Value: 1.715624 
+                    Value: 1.715625 
                     Deviation: Z: 2.9e-004 
             Photo 9: P8250029.JPG
                Omega
-                    Value: 30.394970 deg
+                    Value: 30.395083 deg
                     Deviation: Omega: 0.009 deg
                Phi
-                    Value: 0.189812 deg
+                    Value: 0.189779 deg
                     Deviation: Phi: 0.009 deg
                Kappa
                     Value: 0.084116 deg
@@ -217,20 +217,20 @@ Status Report Tree
                     Value: 0.524982 
                     Deviation: X: 1.8e-004 
                Yc
-                    Value: -0.543563 
+                    Value: -0.543564 
                     Deviation: Y: 1.8e-004 
                Zc
                     Value: 1.534740 
                     Deviation: Z: 2.2e-004 
             Photo 10: P8250030.JPG
                Omega
-                    Value: 31.013271 deg
+                    Value: 31.013306 deg
                     Deviation: Omega: 0.009 deg
                Phi
-                    Value: 1.735553 deg
+                    Value: 1.735666 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: 89.539919 deg
+                    Value: 89.539917 deg
                     Deviation: Kappa: 0.003 deg
                Xc
                     Value: 0.554116 
@@ -239,131 +239,131 @@ Status Report Tree
                     Value: -0.593650 
                     Deviation: Y: 2.1e-004 
                Zc
-                    Value: 1.617559 
+                    Value: 1.617560 
                     Deviation: Z: 2.4e-004 
             Photo 11: P8250031.JPG
                Omega
-                    Value: 27.642698 deg
+                    Value: 27.642824 deg
                     Deviation: Omega: 0.012 deg
                Phi
-                    Value: 30.754152 deg
+                    Value: 30.754207 deg
                     Deviation: Phi: 0.008 deg
                Kappa
-                    Value: 42.331176 deg
+                    Value: 42.331110 deg
                     Deviation: Kappa: 0.006 deg
                Xc
-                    Value: 1.770480 
+                    Value: 1.770481 
                     Deviation: X: 2.1e-004 
                Yc
-                    Value: -0.425469 
+                    Value: -0.425470 
                     Deviation: Y: 2.0e-004 
                Zc
-                    Value: 1.553076 
+                    Value: 1.553077 
                     Deviation: Z: 2.5e-004 
             Photo 12: P8250032.JPG
                Omega
-                    Value: 24.647548 deg
+                    Value: 24.647487 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: 30.244897 deg
+                    Value: 30.245008 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: 133.206028 deg
+                    Value: 133.206060 deg
                     Deviation: Kappa: 0.005 deg
                Xc
-                    Value: 1.865243 
+                    Value: 1.865244 
                     Deviation: X: 2.2e-004 
                Yc
-                    Value: -0.481253 
+                    Value: -0.481254 
                     Deviation: Y: 2.2e-004 
                Zc
-                    Value: 1.614674 
+                    Value: 1.614675 
                     Deviation: Z: 2.8e-004 
             Photo 13: P8250033.JPG
                Omega
-                    Value: 0.528457 deg
+                    Value: 0.528503 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: 33.155814 deg
+                    Value: 33.155927 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: 88.703265 deg
+                    Value: 88.703240 deg
                     Deviation: Kappa: 0.006 deg
                Xc
-                    Value: 1.630946 
+                    Value: 1.630947 
                     Deviation: X: 1.8e-004 
                Yc
                     Value: 0.497613 
                     Deviation: Y: 1.7e-004 
                Zc
-                    Value: 1.472089 
+                    Value: 1.472090 
                     Deviation: Z: 2.1e-004 
             Photo 14: P8250034.JPG
                Omega
-                    Value: -1.745067 deg
+                    Value: -1.745203 deg
                     Deviation: Omega: 0.011 deg
                Phi
-                    Value: 33.641072 deg
+                    Value: 33.641108 deg
                     Deviation: Phi: 0.009 deg
                Kappa
-                    Value: 180.205761 deg
+                    Value: -179.794163 deg
                     Deviation: Kappa: 0.006 deg
                Xc
                     Value: 1.797234 
                     Deviation: X: 2.1e-004 
                Yc
-                    Value: 0.525296 
+                    Value: 0.525297 
                     Deviation: Y: 1.9e-004 
                Zc
-                    Value: 1.598764 
+                    Value: 1.598765 
                     Deviation: Z: 2.4e-004 
             Photo 15: P8250035.JPG
                Omega
-                    Value: -30.768724 deg
+                    Value: -30.768794 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: 28.179825 deg
+                    Value: 28.179929 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: 138.431348 deg
+                    Value: 138.431383 deg
                     Deviation: Kappa: 0.005 deg
                Xc
-                    Value: 1.671999 
+                    Value: 1.672000 
                     Deviation: X: 1.9e-004 
                Yc
                     Value: 1.554826 
                     Deviation: Y: 2.0e-004 
                Zc
-                    Value: 1.501888 
+                    Value: 1.501889 
                     Deviation: Z: 2.5e-004 
             Photo 16: P8250036.JPG
                Omega
-                    Value: -29.892896 deg
+                    Value: -29.893014 deg
                     Deviation: Omega: 0.011 deg
                Phi
-                    Value: 26.973290 deg
+                    Value: 26.973233 deg
                     Deviation: Phi: 0.008 deg
                Kappa
-                    Value: -134.628822 deg
+                    Value: -134.628768 deg
                     Deviation: Kappa: 0.006 deg
                Xc
-                    Value: 1.694404 
+                    Value: 1.694405 
                     Deviation: X: 2.2e-004 
                Yc
-                    Value: 1.619721 
+                    Value: 1.619722 
                     Deviation: Y: 2.1e-004 
                Zc
-                    Value: 1.590602 
+                    Value: 1.590603 
                     Deviation: Z: 2.8e-004 
             Photo 17: P8250037.JPG
                Omega
-                    Value: -8.527065 deg
+                    Value: -8.527179 deg
                     Deviation: Omega: 0.011 deg
                Phi
-                    Value: -0.515933 deg
+                    Value: -0.515900 deg
                     Deviation: Phi: 0.011 deg
                Kappa
-                    Value: 179.396020 deg
+                    Value: 179.396017 deg
                     Deviation: Kappa: 0.002 deg
                Xc
                     Value: 0.424426 
@@ -372,36 +372,36 @@ Status Report Tree
                     Value: 0.822977 
                     Deviation: Y: 3.0e-004 
                Zc
-                    Value: 1.972828 
+                    Value: 1.972829 
                     Deviation: Z: 2.6e-004 
             Photo 18: P8250038.JPG
                Omega
-                    Value: -4.785081 deg
+                    Value: -4.785067 deg
                     Deviation: Omega: 0.011 deg
                Phi
-                    Value: 0.674176 deg
+                    Value: 0.674283 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: 88.786204 deg
+                    Value: 88.786197 deg
                     Deviation: Kappa: 0.002 deg
                Xc
                     Value: 0.482039 
                     Deviation: X: 2.9e-004 
                Yc
-                    Value: 0.927080 
+                    Value: 0.927081 
                     Deviation: Y: 3.1e-004 
                Zc
-                    Value: 1.885928 
+                    Value: 1.885929 
                     Deviation: Z: 2.5e-004 
             Photo 19: P8250039.JPG
                Omega
-                    Value: -4.407140 deg
+                    Value: -4.407097 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: -0.409911 deg
+                    Value: -0.409800 deg
                     Deviation: Phi: 0.010 deg
                Kappa
-                    Value: 88.244316 deg
+                    Value: 88.244319 deg
                     Deviation: Kappa: 0.002 deg
                Xc
                     Value: 0.461726 
@@ -410,39 +410,39 @@ Status Report Tree
                     Value: 0.578787 
                     Deviation: Y: 3.0e-004 
                Zc
-                    Value: 1.876019 
+                    Value: 1.876020 
                     Deviation: Z: 2.3e-004 
             Photo 20: P8250040.JPG
                Omega
-                    Value: -7.616753 deg
+                    Value: -7.616858 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: -1.552399 deg
+                    Value: -1.552337 deg
                     Deviation: Phi: 0.011 deg
                Kappa
-                    Value: -180.050740 deg
+                    Value: 179.949266 deg
                     Deviation: Kappa: 0.002 deg
                Xc
-                    Value: 0.701794 
+                    Value: 0.701795 
                     Deviation: X: 3.5e-004 
                Yc
                     Value: 0.782602 
                     Deviation: Y: 2.9e-004 
                Zc
-                    Value: 1.926752 
+                    Value: 1.926753 
                     Deviation: Z: 2.6e-004 
             Photo 21: P8250041.JPG
                Omega
-                    Value: -8.712047 deg
+                    Value: -8.712150 deg
                     Deviation: Omega: 0.010 deg
                Phi
-                    Value: 1.054227 deg
+                    Value: 1.054234 deg
                     Deviation: Phi: 0.011 deg
                Kappa
-                    Value: 177.385267 deg
+                    Value: 177.385260 deg
                     Deviation: Kappa: 0.002 deg
                Xc
-                    Value: 0.268786 
+                    Value: 0.268785 
                     Deviation: X: 3.5e-004 
                Yc
                     Value: 0.821585 
@@ -484,7 +484,7 @@ Status Report Tree
          Overall RMS Vector Length: 0.189 m
          Maximum Vector Length: 0.945 m
             Point 1003
-         Minimum Vector Length: 8.98e-005 m
+         Minimum Vector Length: 8.99e-005 m
             Point 49
          Maximum X: 0.546 m
          Maximum Y: 0.546 m
