@@ -119,7 +119,7 @@ else
 end
 
 % OP parameters
-fprintf('OP positions within %.4g project units.\n',...
+fprintf('OP+CP positions within %.4g project units.\n',...
         max(max(abs(ss0.OP-result{1}.OP))));
 
 dbatOPstd=reshape(full(sqrt(diag(COP))),3,[]);
@@ -175,14 +175,14 @@ else
     end
 end
 
-pts=load(fullfile(dataDir,'2dpts-cleaned.txt'));
-pmPts=nan(4,size(pts,1));
-for i=1:size(pts,1)
-    id=pts(i,1);
-    imNo=pts(i,2);
+pmPts2d=load(fullfile(dataDir,'2dpts-cleaned.txt'));
+pmPts=nan(4,size(pmPts2d,1));
+for i=1:size(pmPts2d,1)
+    id=pmPts2d(i,1);
+    imNo=pmPts2d(i,2);
     imNo=min(imNo,size(s.colPos,2));
     pos=s.colPos(id==s.OPid,imNo);
-    pmPts(:,pos)=pts(i,3:6)';
+    pmPts(:,pos)=pmPts2d(i,3:6)';
 end
 
 r=E{1}.final.weighted.r;
