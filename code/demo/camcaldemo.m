@@ -84,8 +84,8 @@ if ~exist('prob','var')
         [~,ia,ib]=intersect(ctrlPts.id,prob.ctrlPts(:,1));
         prob.ctrlPts(ib,2:4)=ctrlPts.pos(:,ia)';
         prob.ctrlPts(ib,5:7)=ctrlPts.std(:,ia)';
-    
-        cpId=prob.ctrlPts(:,1);
+        
+        prob.ctrlPts(:,5:end)=prob0.ctrlPts(:,5:end);
     else
         % Add standard control points for camera calibration project.
         if ~isempty(prob.ctrlPts)
