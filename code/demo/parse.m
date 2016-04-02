@@ -190,7 +190,18 @@ J=E{1}.final.weighted.J;
 fprintf('markpts   within %.2g pixels.\n',...
         max(max(abs(pmPts(1:2,:)-s.markPts))));
 
-res=reshape(r(1:end-nnz(s.useOPobs)),2,[]);
+res=reshape(r(1:end-nnz(s.useOPobs)),2,[]).*result{1}.markStd;
+
+fig=tagfigure('markpts');
+ax=gca(fig);
+plot(ax,pmPts(1,:),pmPts(2,:),'rx',s.markPts(1,:),s.markPts(2,:),'bo')
+axis(ax,'equal')
+
+fig=tagfigure('residuals');
+ax=gca(fig);
+plot(ax,pmPts(3,:),pmPts(4,:),'rx',res(1,:),res(2,:),'bo')
+axis(ax,'equal','square')
+legend(ax,'PM','DBAT')
 
 fprintf('residuals within %.2g pixels.\n',...
         max(max(abs(pmPts(3:4,:)-res))));
@@ -202,3 +213,6 @@ fprintf('\nsigma0 based on PM res and red=m-n: %4g.\n',...
         sqrt(r'*r/(size(J,1)-size(J,2))));
 fprintf('sigma0 based on DBAT res and red=m-n: %4g.\n',...
         sqrt(r'*r/(size(J,1)-size(J,2))));
+p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0);
+fprintf('sigma0 based on DBAT res and red=m-n+3CP: %4g.\n',...
+        sqrt(r'*r/(size(J,1)-size(J,2)+p)));
