@@ -7,7 +7,7 @@ Status Report Tree
             Suggestion: In high accuracy projects, strive to get all point residuals under 1.00 pixels. If you have just a few high residual points, study them on each photo to ensure they are marked and referenced correctly. If many of your points have high residuals then make sure the camera stations are solving correctly. Ensure that you are using the best calibrated camera possible. Remove points that have been manually marked unless you need them.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Sat Apr 02 15:03:09 2016
+      Last Processing Attempt: Sat Apr 02 19:54:29 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options

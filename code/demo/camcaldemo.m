@@ -1,6 +1,6 @@
-runAsBundle=true;
-weighted=false;
-cpSigma=1e-6;
+runAsBundle=false;
+weighted=true;
+cpSigma=1e-2;
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
