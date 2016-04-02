@@ -197,12 +197,19 @@ for i=1:size(pmPts2d,1)
 end
 
 r=E{1}.final.weighted.r;
+ru=E{1}.final.unweighted.r;
 J=E{1}.final.weighted.J;
 
-fprintf('markpts   within %.2g pixels.\n',...
+fprintf('\nmarkpts   within %.2g pixels.\n',...
         max(max(abs(pmPts(1:2,:)-s.markPts))));
 
-res=reshape(r(1:end-nnz(s.useOPobs)),2,[]).*result{1}.markStd;
+% Unweighted residuals.
+res2d=reshape(ru(1:end-nnz(s.useOPobs)),2,[]).*...
+      repmat(result{1}.IO(end-1:end),1,size(s.markPts,2));
+res3d=reshape(ru(end-nnz(s.useOPobs)+1:end),3,[]);
+
+pmRes2d=pmPts(3:4,:);
+pmRes3d=pts.pos(:,s0.isCtrl)+offset-s0.prior.OP(:,s0.isCtrl);
 
 fig=tagfigure('markpts');
 ax=gca(fig);
@@ -211,15 +218,19 @@ axis(ax,'equal')
 
 fig=tagfigure('residuals');
 ax=gca(fig);
-plot(ax,pmPts(3,:),pmPts(4,:),'rx',res(1,:),res(2,:),'bo')
+plot(ax,pmPts(3,:),pmPts(4,:),'rx',res2d(1,:),res2d(2,:),'bo')
 axis(ax,'equal','square')
 legend(ax,'PM','DBAT')
 
-fprintf('residuals within %.2e pixels.\n',...
-        max(max(abs(pmPts(3:4,:)-res))));
+fprintf('2d residuals within %.2e pixels.\n',...
+        max(max(abs(pmRes2d-res2d))));
+fprintf('3d residuals within %.2e object units.\n',...
+        max(max(abs(res3d-pmRes3d))));
 
 fprintf('\nrms mark pts res PM: %g, DBAT: %g.\n',...
-        sqrt(mean(reshape(pmPts(3:4,:).^2,[],1))),sqrt(mean(res(:).^2)));
+        sqrt(mean(pmRes2d(:).^2)),sqrt(mean(res2d(:).^2)));
+fprintf('rms 3d pts res PM: %g, DBAT: %g.\n',...
+        sqrt(mean(pmRes3d(:).^2)),sqrt(mean(res3d(:).^2)));
 
 fprintf('\nsigma0 based on PM res and red=m-n: %4g.\n',...
         sqrt(r'*r/(size(J,1)-size(J,2))));
