@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document version="1.2.0">
+  <chunks next_id="1">
+    <chunk id="0" label="Chunk 1" enabled="true">
+      <sensors next_id="1">
+        <sensor id="0" label="unknown" type="frame">
+          <resolution width="8858" height="12996"/>
+          <property name="pixel_width" value="0.0060000000000000001"/>
+          <property name="pixel_height" value="0.0060000000000000001"/>
+          <property name="focal_length" value="123.9392"/>
+          <property name="fixed" value="true"/>
+          <bands>
+            <band label="Red"/>
+            <band label="Green"/>
+            <band label="Blue"/>
+          </bands>
+          <calibration type="frame" class="initial">
+            <resolution width="8858" height="12996"/>
+            <fx>20656.5</fx>
+            <fy>20656.5</fy>
+            <cx>4430</cx>
+            <cy>6468</cy>
+          </calibration>
+          <covariance>
+            <params>p1 p2</params>
+            <coeffs>2.2243377540248732e-11 5.4171165028645994e-12 5.4171165028647343e-12 1.1839275236051688e-10</coeffs>
+          </covariance>
+        </sensor>
+      </sensors>
+      <cameras next_id="5" next_group_id="0">
+        <camera id="0" label="8811.jpg" sensor_id="0" enabled="true">
+          <orientation>3</orientation>
+        </camera>
+        <camera id="1" label="8936.jpg" sensor_id="0" enabled="true">
+          <orientation>1</orientation>
+        </camera>
+        <camera id="2" label="8937.jpg" sensor_id="0" enabled="true">
+          <orientation>1</orientation>
+        </camera>
+        <camera id="3" label="8938.jpg" sensor_id="0" enabled="true">
+          <orientation>1</orientation>
+        </camera>
+        <camera id="4" label="9111.jpg" sensor_id="0" enabled="true">
+          <orientation>3</orientation>
+        </camera>
+      </cameras>
+      <markers next_id="6000">
+        <marker id="216" label="216">
+          <reference x="999604.57999999996" y="112344.443" z="139.453" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="305" label="305">
+          <reference x="999619.04099999997" y="112370.818" z="138.97" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="309" label="309">
+          <reference x="999170.674" y="112692.548" z="139.63999999999999" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="311" label="311">
+          <reference x="999974.43200000003" y="112476.893" z="139.72" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="313" label="313">
+          <reference x="1000126.748" y="112179.09299999999" z="138.53999999999999" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="314" label="314">
+          <reference x="999971.94799999997" y="112044.53999999999" z="139.55000000000001" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="401" label="401">
+          <reference x="1000134.5" y="112591.16" z="138.00999999999999" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="405" label="405">
+          <reference x="1000460.33" y="112765.82000000001" z="139.44999999999999" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="406" label="406">
+          <reference x="1000551.27" y="112275.28" z="139.86000000000001" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="413" label="413">
+          <reference x="999606.93000000005" y="112342.35000000001" z="139.09999999999999" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="508" label="508">
+          <reference x="1000575.072" y="112258.19500000001" z="139.643" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="511" label="511">
+          <reference x="1000166.79" y="112674.298" z="138.761" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="515" label="515">
+          <reference x="999980.99699999997" y="112051.06200000001" z="139.39500000000001" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="609" label="609">
+          <reference x="1000441.906" y="112677.087" z="139.75700000000001" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="610" label="610">
+          <reference x="1000359.4620000001" y="112429.749" z="139.15600000000001" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="5212" label="5212">
+          <reference x="1000502.4669999999" y="112625.887" z="139.64400000000001" sxyz="0" enabled="true"/>
+        </marker>
+      </markers>
+      <frames next_id="1">
+        <frame id="0">
+          <cameras>
+            <camera camera_id="0">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8811.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:12:02"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:12:02"/>
+                  <property name="System/FileSize" value="25403088"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb0.jpg"/>
+            </camera>
+            <camera camera_id="1">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8936.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:29"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:26:29"/>
+                  <property name="System/FileSize" value="27706597"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb1.jpg"/>
+            </camera>
+            <camera camera_id="2">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8937.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:36"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:26:36"/>
+                  <property name="System/FileSize" value="27374576"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb2.jpg"/>
+            </camera>
+            <camera camera_id="3">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8938.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:43"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:26:43"/>
+                  <property name="System/FileSize" value="27032654"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb3.jpg"/>
+            </camera>
+            <camera camera_id="4">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/9111.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:46:41"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:46:41"/>
+                  <property name="System/FileSize" value="26530258"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb4.jpg"/>
+            </camera>
+          </cameras>
+          <markers>
+            <marker marker_id="216">
+              <location camera_id="0" pinned="true" x="5007.6665" y="7275.6665"/>
+              <location camera_id="1" pinned="true" x="1453.6666" y="1012.3333"/>
+              <location camera_id="2" pinned="true" x="4060" y="912.33331"/>
+              <location camera_id="3" pinned="true" x="6751.9116" y="1015.9611"/>
+            </marker>
+            <marker marker_id="305">
+              <location camera_id="0" pinned="true" x="4700.3506" y="7105.9468"/>
+              <location camera_id="2" pinned="true" x="4354.7974" y="1106.0428"/>
+              <location camera_id="3" pinned="true" x="7042.5" y="1218.8872"/>
+            </marker>
+            <marker marker_id="309">
+              <location camera_id="0" pinned="true" x="955.13824" y="12311.166"/>
+            </marker>
+            <marker marker_id="311">
+              <location camera_id="0" pinned="true" x="3478.1357" y="2979.2803"/>
+              <location camera_id="3" pinned="true" x="7829.6064" y="5477"/>
+              <location camera_id="4" pinned="true" x="3661.4468" y="12430.667"/>
+            </marker>
+            <marker marker_id="313">
+              <location camera_id="0" pinned="true" x="6936.7998" y="1211.3865"/>
+              <location camera_id="2" pinned="true" x="1672" y="6836"/>
+              <location camera_id="3" pinned="true" x="4180.5122" y="6874.6665"/>
+              <location camera_id="4" pinned="true" x="7002.7354" y="10531.333"/>
+            </marker>
+            <marker marker_id="314">
+              <location camera_id="0" pinned="true" x="8503.5996" y="3004.5771"/>
+              <location camera_id="3" pinned="true" x="2811.5" y="4908.7134"/>
+              <location camera_id="4" pinned="true" x="8635.4375" y="12250.739"/>
+            </marker>
+            <marker marker_id="401">
+              <location camera_id="0" pinned="true" x="2158.25" y="1135.5"/>
+              <location camera_id="1" pinned="true" x="4039" y="7293.3335"/>
+              <location camera_id="2" pinned="true" x="6455.6592" y="7294.8081"/>
+            </marker>
+            <marker marker_id="405">
+              <location camera_id="1" pinned="true" x="5892.0518" y="11172.178"/>
+              <location camera_id="2" pinned="true" x="8197.333" y="11243.667"/>
+            </marker>
+            <marker marker_id="406">
+              <location camera_id="1" pinned="true" x="148.66667" y="11965.667"/>
+              <location camera_id="2" pinned="true" x="2409.1555" y="11859.132"/>
+              <location camera_id="3" pinned="true" x="4767" y="11933.774"/>
+              <location camera_id="4" pinned="true" x="5681" y="5699.7754"/>
+            </marker>
+            <marker marker_id="413">
+              <location camera_id="1" pinned="true" x="1431" y="1037"/>
+              <location camera_id="2" pinned="true" x="4034.3333" y="937.33331"/>
+              <location camera_id="3" pinned="true" x="6726.4346" y="1040.1298"/>
+            </marker>
+            <marker marker_id="508">
+              <location camera_id="2" pinned="true" x="2189.3801" y="12119.379"/>
+              <location camera_id="3" pinned="true" x="4537.7295" y="12186.42"/>
+              <location camera_id="4" pinned="true" x="5865.9302" y="5420.7603"/>
+            </marker>
+            <marker marker_id="511">
+              <location camera_id="1" pinned="true" x="4984" y="7714.3335"/>
+              <location camera_id="2" pinned="true" x="7392.6001" y="7745.8755"/>
+              <location camera_id="4" pinned="true" x="1300.7446" y="10316.106"/>
+            </marker>
+            <marker marker_id="515">
+              <location camera_id="3" pinned="true" x="2876.5" y="5020.1089"/>
+              <location camera_id="4" pinned="true" x="8556" y="12150.285"/>
+            </marker>
+            <marker marker_id="609">
+              <location camera_id="1" pinned="true" x="4870.8052" y="10911.341"/>
+              <location camera_id="2" pinned="true" x="7180.1704" y="10949.792"/>
+            </marker>
+            <marker marker_id="610">
+              <location camera_id="1" pinned="true" x="2043.7778" y="9819.707"/>
+              <location camera_id="2" pinned="true" x="4377.0396" y="9766.5068"/>
+              <location camera_id="3" pinned="true" x="6803.085" y="9893.667"/>
+              <location camera_id="4" pinned="true" x="4005.5166" y="7983.6665"/>
+            </marker>
+            <marker marker_id="5212">
+              <location camera_id="1" pinned="true" x="4245.395" y="11587.655"/>
+              <location camera_id="2" pinned="true" x="6530.8989" y="11607.874"/>
+              <location camera_id="4" pinned="true" x="1684" y="6440.813"/>
+            </marker>
+          </markers>
+          <point_cloud>
+            <tracks path="tracks0.ply"/>
+            <projections camera_id="0" path="projections0.ply"/>
+            <projections camera_id="1" path="projections1.ply"/>
+            <projections camera_id="2" path="projections2.ply"/>
+            <projections camera_id="3" path="projections3.ply"/>
+            <projections camera_id="4" path="projections4.ply"/>
+            <meta>
+              <property name="match/duration" value="34.234221"/>
+              <property name="match/match_downscale" value="1"/>
+              <property name="match/match_filter_mask" value="false"/>
+              <property name="match/match_point_limit" value="40000"/>
+              <property name="match/match_select_pairs" value="0"/>
+              <property name="match/match_tiepoint_limit" value="1000"/>
+            </meta>
+          </point_cloud>
+        </frame>
+      </frames>
+      <settings>
+        <property name="accuracy_tiepoints" value="1"/>
+        <property name="accuracy_cameras" value="10"/>
+        <property name="accuracy_cameras_ypr" value="2"/>
+        <property name="accuracy_markers" value="0.0050000000000000001"/>
+        <property name="accuracy_scalebars" value="0.001"/>
+        <property name="accuracy_projections" value="0.10000000000000001"/>
+      </settings>
+      <meta>
+        <property name="align/duration" value="0.282848"/>
+      </meta>
+    </chunk>
+  </chunks>
+</document>
