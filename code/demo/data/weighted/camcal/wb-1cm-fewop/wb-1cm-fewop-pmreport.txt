@@ -5,7 +5,7 @@ Status Report Tree
       Project Problems (0)
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Sun Apr 03 10:54:33 2016
+      Last Processing Attempt: Sun Apr 03 13:08:02 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
