@@ -207,6 +207,9 @@ fprintf('\nmarkpts   within %.2g pixels.\n',...
 res2d=reshape(ru(1:end-nnz(s.useOPobs)),2,[]).*...
       repmat(result{1}.IO(end-1:end),1,size(s.markPts,2));
 res3d=reshape(ru(end-nnz(s.useOPobs)+1:end),3,[]);
+if isempty(res3d)
+    res3d=0;
+end
 
 pmRes2d=pmPts(3:4,:);
 pmRes3d=pts.pos(:,s0.isCtrl)+offset-s0.prior.OP(:,s0.isCtrl);

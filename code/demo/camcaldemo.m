@@ -1,6 +1,6 @@
 runAsBundle=true;
 weighted=true;
-cpSigma=1e-2;
+cpSigma=1e-6;
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -25,6 +25,9 @@ if ~exist('fName','var')
             end
             d=['weighted-bundle-',wStr];
             f=['c4040z-',wStr,'-pmexport.txt'];
+            stub='wb-1cm-fewop';
+            d=stub;
+            f=[stub,'-pmexport.txt'];
         else
             d='fixed-as-bundle';
             f='c4040z-bundle-pmexport.txt';
@@ -88,6 +91,10 @@ if ~exist('prob','var')
         prob.ctrlPts(:,5:end)=prob0.ctrlPts(:,5:end);
     else
         % Add standard control points for camera calibration project.
+        fprintf('Loading 3D point table %s...',ptName);
+        pts=loadpm3dtbl(ptName);
+        fprintf('done.\n');
+        offset=zeros(3,4);
         if ~isempty(prob.ctrlPts)
             error('CTRL PTS info exists.');
         end
