@@ -22,76 +22,81 @@
             <cy>6468</cy>
           </calibration>
           <covariance>
-            <params>p1 p2</params>
-            <coeffs>2.2243377540248732e-11 5.4171165028645994e-12 5.4171165028647343e-12 1.1839275236051688e-10</coeffs>
+            <params>f cx cy</params>
+            <coeffs>1.2284007425575129e+05 -1.7497545301937223e+03 -8.3850460096238817e+02 -1.7497545301937232e+03 2.8602893172529910e+01 1.2185950039802783e+01 -8.3850460096238862e+02 1.2185950039802801e+01 1.6463974880031181e+01</coeffs>
           </covariance>
         </sensor>
       </sensors>
       <cameras next_id="5" next_group_id="0">
         <camera id="0" label="8811.jpg" sensor_id="0" enabled="true">
+          <transform>-9.9888115516762821e-01 4.4424347837204135e-02 1.6214659115249306e-02 -1.1393077796747275e+00 -4.4268147445830040e-02 -9.9897094243221318e-01 9.8685002817096093e-03 -1.9872737869343942e+00 1.6636374986723889e-02 9.1396660406684316e-03 9.9981983253582585e-01 6.5637979522027027e-03 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
           <orientation>3</orientation>
         </camera>
         <camera id="1" label="8936.jpg" sensor_id="0" enabled="true">
+          <transform>9.9999999440139220e-01 -1.0458523025260690e-04 -1.6097987610125765e-05 7.5935219806378147e-03 1.0462357361779114e-04 9.9999711310089101e-01 2.4005923834600081e-03 -7.7734026995956024e-03 1.5846874629692859e-05 -2.4005940542490248e-03 9.9999711844438000e-01 2.8093232550745125e-04 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
           <orientation>1</orientation>
         </camera>
         <camera id="2" label="8937.jpg" sensor_id="0" enabled="true">
+          <transform>9.9952197927166708e-01 3.0907504763969723e-02 -7.3423573490733981e-04 -9.9496608006384057e-01 -3.0905554851658495e-02 9.9951909916491988e-01 2.5331963718079769e-03 1.8099667121800396e-02 8.1217741925900303e-04 -2.5092934886540882e-03 9.9999652190096511e-01 3.1308890382900273e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
           <orientation>1</orientation>
         </camera>
         <camera id="3" label="8938.jpg" sensor_id="0" enabled="true">
+          <transform>9.9812043336415279e-01 6.1279502064003434e-02 -6.5048270043865626e-04 -2.0368296505877113e+00 -6.1279605693951265e-02 9.9812062906452848e-01 -1.4057675446845579e-04 5.4763725958556130e-02 6.4064572864182419e-04 1.8017385448459866e-04 9.9999977855519173e-01 5.0151621702885972e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
           <orientation>1</orientation>
         </camera>
         <camera id="4" label="9111.jpg" sensor_id="0" enabled="true">
+          <transform>-9.9586574886068102e-01 9.0210799228463034e-02 1.0649974118138285e-02 -1.3076726556223850e+00 -9.0137615757872019e-02 -9.9590355649944184e-01 7.1635450196987898e-03 1.9552732589624549e+00 1.1252576222417028e-02 6.1739658506475056e-03 9.9991762744439772e-01 -1.0178336168263147e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
           <orientation>3</orientation>
         </camera>
       </cameras>
       <markers next_id="6000">
         <marker id="216" label="216">
-          <reference x="999604.57999999996" y="112344.443" z="139.453" sxyz="0" enabled="true"/>
+          <reference x="-174.92631" y="83.852000000000004" z="-0.37909999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="305" label="305">
-          <reference x="999619.04099999997" y="112370.818" z="138.97" sxyz="0" enabled="true"/>
+          <reference x="-160.46530999999999" y="110.227" z="-0.86209999999999998" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="309" label="309">
-          <reference x="999170.674" y="112692.548" z="139.63999999999999" sxyz="0" enabled="true"/>
+          <reference x="-608.83231000000001" y="431.95699999999999" z="-0.19209999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="311" label="311">
-          <reference x="999974.43200000003" y="112476.893" z="139.72" sxyz="0" enabled="true"/>
+          <reference x="194.92569" y="216.30199999999999" z="-0.11210000000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="313" label="313">
-          <reference x="1000126.748" y="112179.09299999999" z="138.53999999999999" sxyz="0" enabled="true"/>
+          <reference x="347.24169000000001" y="-81.498000000000005" z="-1.2921" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="314" label="314">
-          <reference x="999971.94799999997" y="112044.53999999999" z="139.55000000000001" sxyz="0" enabled="true"/>
+          <reference x="192.44168999999999" y="-216.05099999999999" z="-0.28210000000000002" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="401" label="401">
-          <reference x="1000134.5" y="112591.16" z="138.00999999999999" sxyz="0" enabled="true"/>
+          <reference x="354.99369000000002" y="330.56900000000002" z="-1.8221000000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="405" label="405">
-          <reference x="1000460.33" y="112765.82000000001" z="139.44999999999999" sxyz="0" enabled="true"/>
+          <reference x="680.82369000000006" y="505.22899999999998" z="-0.3821" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="406" label="406">
-          <reference x="1000551.27" y="112275.28" z="139.86000000000001" sxyz="0" enabled="true"/>
+          <reference x="771.76369" y="14.689" z="0.027900000000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="413" label="413">
-          <reference x="999606.93000000005" y="112342.35000000001" z="139.09999999999999" sxyz="0" enabled="true"/>
+          <reference x="-172.57631000000001" y="81.759" z="-0.73209999999999997" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="508" label="508">
-          <reference x="1000575.072" y="112258.19500000001" z="139.643" sxyz="0" enabled="true"/>
+          <reference x="795.56569000000002" y="-2.3959999999999999" z="-0.18909999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="511" label="511">
-          <reference x="1000166.79" y="112674.298" z="138.761" sxyz="0" enabled="true"/>
+          <reference x="387.28368999999998" y="413.70699999999999" z="-1.0710999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="515" label="515">
-          <reference x="999980.99699999997" y="112051.06200000001" z="139.39500000000001" sxyz="0" enabled="true"/>
+          <reference x="201.49069" y="-209.529" z="-0.43709999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="609" label="609">
-          <reference x="1000441.906" y="112677.087" z="139.75700000000001" sxyz="0" enabled="true"/>
+          <reference x="662.39968999999996" y="416.49599999999998" z="-0.0751" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="610" label="610">
-          <reference x="1000359.4620000001" y="112429.749" z="139.15600000000001" sxyz="0" enabled="true"/>
+          <reference x="579.95569" y="169.15799999999999" z="-0.67610000000000003" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
         <marker id="5212" label="5212">
-          <reference x="1000502.4669999999" y="112625.887" z="139.64400000000001" sxyz="0" enabled="true"/>
+          <reference x="722.96069" y="365.29599999999999" z="-0.18809999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
       </markers>
       <frames next_id="1">
@@ -250,9 +255,16 @@
             </marker>
           </markers>
           <point_cloud>
+            <tracks path="tracks0.ply"/>
+            <points path="points0.ply"/>
+            <projections camera_id="0" path="projections0.ply"/>
+            <projections camera_id="1" path="projections1.ply"/>
+            <projections camera_id="2" path="projections2.ply"/>
+            <projections camera_id="3" path="projections3.ply"/>
+            <projections camera_id="4" path="projections4.ply"/>
             <meta>
-              <property name="match/duration" value="34.234221"/>
-              <property name="match/match_downscale" value="1"/>
+              <property name="match/duration" value="169.720657"/>
+              <property name="match/match_downscale" value="0"/>
               <property name="match/match_filter_mask" value="false"/>
               <property name="match/match_point_limit" value="40000"/>
               <property name="match/match_select_pairs" value="0"/>
@@ -261,6 +273,11 @@
           </point_cloud>
         </frame>
       </frames>
+      <transform>
+        <rotation>-4.5905730372905212e-02 9.9894356023228614e-01 -2.1041362539445658e-03 9.9894253765706276e-01 4.5900116128427523e-02 -2.6430661483404115e-03 -2.5436938097465225e-03 -2.2232430910550803e-03 -9.9999429338969748e-01</rotation>
+        <translation>2.8353048756854571e+02 3.6410103268622663e+02 1.7765929486860582e+03</translation>
+        <scale>2.0775255619029085e+02</scale>
+      </transform>
       <settings>
         <property name="accuracy_tiepoints" value="1"/>
         <property name="accuracy_cameras" value="10"/>
@@ -270,7 +287,7 @@
         <property name="accuracy_projections" value="0.10000000000000001"/>
       </settings>
       <meta>
-        <property name="align/duration" value="0.282848"/>
+        <property name="align/duration" value="0.129594"/>
       </meta>
     </chunk>
   </chunks>
