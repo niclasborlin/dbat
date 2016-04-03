@@ -29,7 +29,7 @@
       </sensors>
       <cameras next_id="5" next_group_id="0">
         <camera id="0" label="8811.jpg" sensor_id="0" enabled="true">
-          <orientation>1</orientation>
+          <orientation>3</orientation>
         </camera>
         <camera id="1" label="8936.jpg" sensor_id="0" enabled="true">
           <orientation>1</orientation>
@@ -41,57 +41,57 @@
           <orientation>1</orientation>
         </camera>
         <camera id="4" label="9111.jpg" sensor_id="0" enabled="true">
-          <orientation>1</orientation>
+          <orientation>3</orientation>
         </camera>
       </cameras>
       <markers next_id="215">
-        <marker id="199" label=" B2.16">
-          <reference x="999604.57999999996" y="112344.443" z="139.453" enabled="true"/>
+        <marker id="199" label="216">
+          <reference x="999604.57999999996" y="112344.443" z="139.453" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="200" label=" B3.05">
-          <reference x="999619.04099999997" y="112370.818" z="138.97" enabled="true"/>
+        <marker id="200" label="305">
+          <reference x="999619.04099999997" y="112370.818" z="138.97" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="201" label=" B3.09">
-          <reference x="999170.674" y="112692.548" z="139.63999999999999" enabled="true"/>
+        <marker id="201" label="309">
+          <reference x="999170.674" y="112692.548" z="139.63999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="202" label=" B3.11">
-          <reference x="999974.43200000003" y="112476.893" z="139.72" enabled="true"/>
+        <marker id="202" label="311">
+          <reference x="999974.43200000003" y="112476.893" z="139.72" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="203" label=" B3.13">
-          <reference x="1000126.748" y="112179.09299999999" z="138.53999999999999" enabled="true"/>
+        <marker id="203" label="313">
+          <reference x="1000126.748" y="112179.09299999999" z="138.53999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="204" label=" B3.14">
-          <reference x="999971.94799999997" y="112044.53999999999" z="139.55000000000001" enabled="true"/>
+        <marker id="204" label="314">
+          <reference x="999971.94799999997" y="112044.53999999999" z="139.55000000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="205" label=" B4.1">
-          <reference x="1000134.5" y="112591.16" z="138.00999999999999" enabled="true"/>
+        <marker id="205" label="401">
+          <reference x="1000134.5" y="112591.16" z="138.00999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="206" label=" B4.13">
-          <reference x="999606.93000000005" y="112342.35000000001" z="139.09999999999999" enabled="true"/>
+        <marker id="207" label="405">
+          <reference x="1000460.33" y="112765.82000000001" z="139.44999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="207" label=" B4.5">
-          <reference x="1000460.33" y="112765.82000000001" z="139.44999999999999" enabled="true"/>
+        <marker id="208" label="406">
+          <reference x="1000551.27" y="112275.28" z="139.86000000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="208" label=" B4.6">
-          <reference x="1000551.27" y="112275.28" z="139.86000000000001" enabled="true"/>
+        <marker id="206" label="413">
+          <reference x="999606.93000000005" y="112342.35000000001" z="139.09999999999999" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="209" label=" B5.11">
-          <reference x="1000166.79" y="112674.298" z="138.761" enabled="true"/>
+        <marker id="212" label="508">
+          <reference x="1000575.072" y="112258.19500000001" z="139.643" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="210" label=" B5.15">
-          <reference x="999980.99699999997" y="112051.06200000001" z="139.39500000000001" enabled="true"/>
+        <marker id="209" label="511">
+          <reference x="1000166.79" y="112674.298" z="138.761" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="211" label=" B5.212">
-          <reference x="1000502.4669999999" y="112625.887" z="139.64400000000001" enabled="true"/>
+        <marker id="210" label="515">
+          <reference x="999980.99699999997" y="112051.06200000001" z="139.39500000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="212" label=" B5.8">
-          <reference x="1000575.072" y="112258.19500000001" z="139.643" enabled="true"/>
+        <marker id="214" label="609">
+          <reference x="1000441.906" y="112677.087" z="139.75700000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="213" label=" B6.10">
-          <reference x="1000359.4620000001" y="112429.749" z="139.15600000000001" enabled="true"/>
+        <marker id="213" label="610">
+          <reference x="1000359.4620000001" y="112429.749" z="139.15600000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
-        <marker id="214" label=" B6.9">
-          <reference x="1000441.906" y="112677.087" z="139.75700000000001" enabled="true"/>
+        <marker id="211" label="5212">
+          <reference x="1000502.4669999999" y="112625.887" z="139.64400000000001" sxy="0.02" sz="0.040000000000000001" enabled="true"/>
         </marker>
       </markers>
       <frames next_id="1">
@@ -176,15 +176,15 @@
             <marker marker_id="203"/>
             <marker marker_id="204"/>
             <marker marker_id="205"/>
-            <marker marker_id="206"/>
             <marker marker_id="207"/>
             <marker marker_id="208"/>
+            <marker marker_id="206"/>
+            <marker marker_id="212"/>
             <marker marker_id="209"/>
             <marker marker_id="210"/>
-            <marker marker_id="211"/>
-            <marker marker_id="212"/>
-            <marker marker_id="213"/>
             <marker marker_id="214"/>
+            <marker marker_id="213"/>
+            <marker marker_id="211"/>
           </markers>
           <point_cloud>
             <tracks path="tracks0.ply"/>
