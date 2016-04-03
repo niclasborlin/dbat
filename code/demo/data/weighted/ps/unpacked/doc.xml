@@ -1,0 +1,655 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document version="1.2.0">
+  <chunks next_id="1">
+    <chunk id="0" label="Chunk 1" enabled="true">
+      <sensors next_id="1">
+        <sensor id="0" label="2013" type="frame">
+          <resolution width="8858" height="12996"/>
+          <property name="pixel_width" value="0.0060000000000000001"/>
+          <property name="pixel_height" value="0.0060000000000000001"/>
+          <property name="focal_length" value="123.93899999999999"/>
+          <property name="fixed" value="true"/>
+          <bands>
+            <band label="Red"/>
+            <band label="Green"/>
+            <band label="Blue"/>
+          </bands>
+          <calibration type="frame" class="initial">
+            <resolution width="8858" height="12996"/>
+            <fx>20656.5</fx>
+            <fy>20656.5</fy>
+            <cx>4430</cx>
+            <cy>6468</cy>
+          </calibration>
+          <covariance>
+            <params>f cx cy</params>
+            <coeffs>1.0802488988750284e+05 -1.5851692161046776e+03 -6.2515207925205004e+02 -1.5851692161046778e+03 3.2433625234473865e+01 9.5156465369068677e+00 -6.2515207925204891e+02 9.5156465369068393e+00 1.2570977045297338e+01</coeffs>
+          </covariance>
+        </sensor>
+      </sensors>
+      <cameras next_id="5" next_group_id="0">
+        <camera id="0" label="8811.jpg" sensor_id="0" enabled="true">
+          <transform>-9.9880575732170307e-01 4.4733319841656738e-02 1.9646608790404280e-02 -1.1433286300515795e+00 -4.4293207049485209e-02 -9.9876981320381375e-01 2.2292869758968523e-02 -2.0671446976326826e+00 2.0619673864796823e-02 2.1396035351507036e-02 9.9955842186484889e-01 9.1980693554844936e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>3</orientation>
+        </camera>
+        <camera id="1" label="8936.jpg" sensor_id="0" enabled="true">
+          <transform>9.9999755480571295e-01 -3.8505672186019878e-04 2.1776395284958837e-03 -1.7052911678065469e-02 3.5225842183428927e-04 9.9988680397913343e-01 1.5041779894623911e-02 -1.4162389241873935e-01 -2.1831849668235426e-03 -1.5040976022686014e-02 9.9988449470110574e-01 5.7750199154531653e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="2" label="8937.jpg" sensor_id="0" enabled="true">
+          <transform>9.9952730331208584e-01 3.0669284470939775e-02 2.1365682086397996e-03 -9.9895541398677046e-01 -3.0698355925630177e-02 9.9941234665811729e-01 1.5250321005755220e-02 -1.1689638964295940e-01 -1.6675962139931768e-03 -1.5308701360854382e-02 9.9988142436266469e-01 9.0147092864177464e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="3" label="8938.jpg" sensor_id="0" enabled="true">
+          <transform>9.9813944562882340e-01 6.0944786777139832e-02 1.8384897264231755e-03 -2.0101789281918823e+00 -6.0963480799754617e-02 9.9805676051111014e-01 1.2890182576146126e-02 -8.3732070683677676e-02 -1.0493276719652431e-03 -1.2978280423746156e-02 9.9991522798119215e-01 1.1145349679077103e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="4" label="9111.jpg" sensor_id="0" enabled="true">
+          <transform>-9.9581255619324516e-01 9.0462980935926876e-02 1.3183398957066366e-02 -1.3012486595908903e+00 -9.0188941123987745e-02 -9.9572222730062254e-01 2.0079864502063848e-02 1.7664591269073611e+00 1.4943487772569024e-02 1.8806784405461307e-02 9.9971145688819540e-01 -6.3661168698738377e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>3</orientation>
+        </camera>
+      </cameras>
+      <markers next_id="104">
+        <marker id="1" label="101">
+          <reference x="999143.58799999999" y="111399.26700000001" z="140.61099999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="2" label="102">
+          <reference x="999205.35400000005" y="111153.68700000001" z="141.24700000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="3" label="104">
+          <reference x="998430.58299999998" y="111197.105" z="139.18600000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="4" label="105">
+          <reference x="998596.55599999998" y="111367.618" z="140.054" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="5" label="106">
+          <reference x="998357.39399999997" y="111848.713" z="140.23099999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="6" label="107">
+          <reference x="998582.17200000002" y="111662.361" z="140.54400000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="7" label="108">
+          <reference x="998734.85699999996" y="111884.117" z="140.43799999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="8" label="109">
+          <reference x="999085.93799999997" y="111744.552" z="139.74299999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="9" label="110">
+          <reference x="999150.47100000002" y="112012.192" z="139.785" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="10" label="111">
+          <reference x="998978.07999999996" y="112198.001" z="142.81700000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="11" label="112">
+          <reference x="998809.66599999997" y="112391.595" z="141.71199999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="12" label="113">
+          <reference x="998579.82499999995" y="112007.429" z="141.209" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="13" label="114">
+          <reference x="998279.98199999996" y="112338.36" z="140.99100000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="14" label="115">
+          <reference x="998583.80500000005" y="112603.942" z="140.43000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="15" label="116">
+          <reference x="998407.56999999995" y="112851.08199999999" z="139.328" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="16" label="118">
+          <reference x="998442.37" y="113251.73299999999" z="138.751" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="17" label="119">
+          <reference x="998729.58799999999" y="113237.908" z="138.863" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="18" label="120">
+          <reference x="998725.65099999995" y="113236.679" z="138.852" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="19" label="122">
+          <reference x="999121.87199999997" y="113096.753" z="139.589" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="20" label="123">
+          <reference x="998938.17500000005" y="112873.576" z="140.023" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="21" label="124">
+          <reference x="999120.696" y="112616.882" z="140.07900000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="22" label="125">
+          <reference x="999263.22400000005" y="112783.508" z="140.78299999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="23" label="201">
+          <reference x="999675.42200000002" y="112936.039" z="140.48699999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="24" label="202">
+          <reference x="999467.14199999999" y="113193.474" z="139.506" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="25" label="204">
+          <reference x="998922.25" y="113190.16899999999" z="139.13300000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="26" label="205">
+          <reference x="998922.13399999996" y="112855.163" z="139.93299999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="27" label="206">
+          <reference x="999263.49199999997" y="112784.11500000001" z="140.749" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="28" label="208">
+          <reference x="998785.40899999999" y="112427.626" z="142.012" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="29" label="209">
+          <reference x="999007.64399999997" y="112164.262" z="142.75299999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="30" label="210">
+          <reference x="999104.96699999995" y="112014.58500000001" z="139.35599999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="31" label="211">
+          <reference x="999019.04200000002" y="111871.129" z="139.45699999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="32" label="212">
+          <reference x="999355.30700000003" y="111786.357" z="140.65000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="33" label="213">
+          <reference x="999143.424" y="111400.015" z="140.626" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="34" label="214">
+          <reference x="999518.41599999997" y="111402.094" z="140.261" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="35" label="216">
+          <reference x="999604.57999999996" y="112344.443" z="139.453" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="36" label="300">
+          <reference x="999130.31900000002" y="111459.799" z="140.16999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="37" label="301">
+          <reference x="999980.81200000003" y="111385.901" z="139.18000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="38" label="302">
+          <reference x="1000067.1360000001" y="113134.38" z="140.31" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="39" label="303">
+          <reference x="999555.39899999998" y="112979.28" z="139.93000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="40" label="304">
+          <reference x="999696.17700000003" y="112564.974" z="140.91999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="41" label="305">
+          <reference x="999619.04099999997" y="112370.818" z="138.97" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="42" label="306">
+          <reference x="999641.929" y="112139.19500000001" z="139.06" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="43" label="307">
+          <reference x="999660.18700000003" y="111910.238" z="139.16999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="44" label="308">
+          <reference x="999641.68000000005" y="111665.181" z="139.66" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="45" label="309">
+          <reference x="999170.674" y="112692.548" z="139.63999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="46" label="311">
+          <reference x="999974.43200000003" y="112476.893" z="139.72" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="47" label="312">
+          <reference x="999188.62199999997" y="112215.49400000001" z="142.33000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="48" label="313">
+          <reference x="1000126.748" y="112179.09299999999" z="138.53999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="49" label="314">
+          <reference x="999971.94799999997" y="112044.53999999999" z="139.55000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="50" label="315">
+          <reference x="1000136.137" y="111644.24800000001" z="139.63" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="51" label="316">
+          <reference x="999109.78700000001" y="111683.41499999999" z="139.93000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="52" label="317">
+          <reference x="999180.80799999996" y="111979.63099999999" z="139.74000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="53" label="318">
+          <reference x="999128.29399999999" y="113128.25900000001" z="139.65000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="54" label="401">
+          <reference x="1000134.5" y="112591.16" z="138.00999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="55" label="402">
+          <reference x="999571.54000000004" y="113015.85000000001" z="139.16" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="56" label="404">
+          <reference x="1000464.0600000001" y="113081.95" z="139.15000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="57" label="405">
+          <reference x="1000460.33" y="112765.82000000001" z="139.44999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="58" label="406">
+          <reference x="1000551.27" y="112275.28" z="139.86000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="59" label="407">
+          <reference x="1000424.47" y="111966.98" z="138.97999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="60" label="408">
+          <reference x="1000508.09" y="111786.42999999999" z="139.78999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="61" label="409">
+          <reference x="1000201.38" y="111832.46000000001" z="139.00999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="62" label="410">
+          <reference x="1000361.99" y="111405.92" z="139.24000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="63" label="411">
+          <reference x="999560.59999999998" y="111388.67999999999" z="139.88999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="64" label="412">
+          <reference x="999633.47999999998" y="112049.36" z="138.75" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="65" label="413">
+          <reference x="999606.93000000005" y="112342.35000000001" z="139.09999999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="66" label="414">
+          <reference x="999782.81999999995" y="111618.85000000001" z="139.53" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="67" label="415">
+          <reference x="1000132.6800000001" y="112336.39999999999" z="161.90000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="68" label="501">
+          <reference x="1000960.823" y="111516.711" z="139.69" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="69" label="502">
+          <reference x="1000378.115" y="111518.537" z="140.13200000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="70" label="503">
+          <reference x="1000096.603" y="111554.49400000001" z="139.66499999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="71" label="505">
+          <reference x="1000596.389" y="113103.69100000001" z="139.35599999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="72" label="507">
+          <reference x="1000830.285" y="112238.645" z="138.86699999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="73" label="508">
+          <reference x="1000575.072" y="112258.19500000001" z="139.643" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="103" label="509"/>
+        <marker id="74" label="510">
+          <reference x="1000886.169" y="112631.628" z="138.61799999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="76" label="511">
+          <reference x="1000166.79" y="112674.298" z="138.761" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="77" label="512">
+          <reference x="1000491.596" y="112672.951" z="139.74299999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="78" label="513">
+          <reference x="1000520.023" y="112008.018" z="138.774" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="79" label="514">
+          <reference x="1001011.054" y="111925.88" z="139.02799999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="80" label="515">
+          <reference x="999980.99699999997" y="112051.06200000001" z="139.39500000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="84" label="601">
+          <reference x="1001324.682" y="113311.24099999999" z="137.94900000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="85" label="602">
+          <reference x="1001118.84" y="113158.304" z="137.35599999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="86" label="603">
+          <reference x="1000406.5919999999" y="113366.13099999999" z="138.75800000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="87" label="604">
+          <reference x="1000552.1899999999" y="113118.552" z="139.23699999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="88" label="605">
+          <reference x="1000810.488" y="112684.92600000001" z="138.89400000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="89" label="606">
+          <reference x="1001261.921" y="112361.038" z="139.48699999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="90" label="607">
+          <reference x="1001190.647" y="112642.09299999999" z="138.38499999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="91" label="608">
+          <reference x="1000644.5919999999" y="112429.83900000001" z="139.25399999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="92" label="609">
+          <reference x="1000441.906" y="112677.087" z="139.75700000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="93" label="610">
+          <reference x="1000359.4620000001" y="112429.749" z="139.15600000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="94" label="611">
+          <reference x="1001130.515" y="112200.23699999999" z="138.571" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="95" label="612">
+          <reference x="1000824.363" y="112128.52099999999" z="138.994" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="96" label="614">
+          <reference x="1001112.177" y="111730.95600000001" z="138.55699999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="97" label="615">
+          <reference x="1000720.7879999999" y="111777.152" z="138.96000000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="98" label="616">
+          <reference x="1000525.449" y="112012.75999999999" z="138.94900000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="99" label="617">
+          <reference x="1000362.585" y="111407.827" z="139.28" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="100" label="618">
+          <reference x="1001137.428" y="111279.629" z="137.76300000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="101" label="619">
+          <reference x="1000411.637" y="111623.50900000001" z="139.22499999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="102" label="620">
+          <reference x="1000335.709" y="111847.723" z="139.35499999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="75" label="5101">
+          <reference x="1000692.65" y="111502.69" z="139.94900000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="81" label="5205">
+          <reference x="1000551.661" y="113121.504" z="139.148" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="82" label="5212">
+          <reference x="1000502.4669999999" y="112625.887" z="139.64400000000001" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+        <marker id="83" label="5213">
+          <reference x="1000538.211" y="111992.084" z="139.00299999999999" sxyz="0.029999999999999999" enabled="true"/>
+        </marker>
+      </markers>
+      <frames next_id="1">
+        <frame id="0">
+          <cameras>
+            <camera camera_id="0">
+              <photo path="8811.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:12:02"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2016:03:04 15:16:54"/>
+                  <property name="System/FileSize" value="25403088"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb0.jpg"/>
+            </camera>
+            <camera camera_id="1">
+              <photo path="8936.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:29"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2016:03:04 15:17:22"/>
+                  <property name="System/FileSize" value="27706597"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb1.jpg"/>
+            </camera>
+            <camera camera_id="2">
+              <photo path="8937.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:36"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2016:03:04 15:17:50"/>
+                  <property name="System/FileSize" value="27374576"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb2.jpg"/>
+            </camera>
+            <camera camera_id="3">
+              <photo path="8938.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:43"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2016:03:04 15:18:10"/>
+                  <property name="System/FileSize" value="27032654"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb3.jpg"/>
+            </camera>
+            <camera camera_id="4">
+              <photo path="9111.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:46:41"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2016:03:04 15:18:30"/>
+                  <property name="System/FileSize" value="26530258"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb4.jpg"/>
+            </camera>
+          </cameras>
+          <markers>
+            <marker marker_id="1"/>
+            <marker marker_id="2"/>
+            <marker marker_id="3"/>
+            <marker marker_id="4"/>
+            <marker marker_id="5"/>
+            <marker marker_id="6"/>
+            <marker marker_id="7"/>
+            <marker marker_id="8"/>
+            <marker marker_id="9"/>
+            <marker marker_id="10"/>
+            <marker marker_id="11"/>
+            <marker marker_id="12"/>
+            <marker marker_id="13"/>
+            <marker marker_id="14"/>
+            <marker marker_id="15"/>
+            <marker marker_id="16"/>
+            <marker marker_id="17"/>
+            <marker marker_id="18"/>
+            <marker marker_id="19"/>
+            <marker marker_id="20"/>
+            <marker marker_id="21"/>
+            <marker marker_id="22"/>
+            <marker marker_id="23"/>
+            <marker marker_id="24"/>
+            <marker marker_id="25"/>
+            <marker marker_id="26"/>
+            <marker marker_id="27"/>
+            <marker marker_id="28"/>
+            <marker marker_id="29"/>
+            <marker marker_id="30"/>
+            <marker marker_id="31"/>
+            <marker marker_id="32"/>
+            <marker marker_id="33"/>
+            <marker marker_id="34"/>
+            <marker marker_id="35">
+              <location camera_id="0" pinned="true" x="5008.0596" y="7273.062"/>
+              <location camera_id="1" pinned="true" x="1455.1493" y="1014.8148"/>
+              <location camera_id="2" pinned="true" x="4060.3267" y="914.51605"/>
+              <location camera_id="3" pinned="true" x="6752.7168" y="1016.2682"/>
+            </marker>
+            <marker marker_id="36"/>
+            <marker marker_id="37"/>
+            <marker marker_id="38"/>
+            <marker marker_id="39"/>
+            <marker marker_id="40"/>
+            <marker marker_id="41">
+              <location camera_id="0" pinned="true" x="4701.1348" y="7105.7554"/>
+              <location camera_id="1" pinned="true" x="1755.6517" y="1198.7673"/>
+              <location camera_id="2" pinned="true" x="4355.4697" y="1108.8871"/>
+              <location camera_id="3" pinned="true" x="7041.7163" y="1219.6786"/>
+            </marker>
+            <marker marker_id="42"/>
+            <marker marker_id="43"/>
+            <marker marker_id="44"/>
+            <marker marker_id="45"/>
+            <marker marker_id="46">
+              <location camera_id="0" pinned="true" x="3477.9651" y="2979.0977"/>
+              <location camera_id="1" pinned="true" x="2794.1467" y="5376.9985"/>
+              <location camera_id="2" pinned="true" x="5268.1445" y="5333.4585"/>
+              <location camera_id="3" pinned="true" x="7830.1484" y="5477.5015"/>
+              <location camera_id="4" pinned="true" x="3661.2903" y="12431.013"/>
+            </marker>
+            <marker marker_id="47"/>
+            <marker marker_id="48">
+              <location camera_id="0" pinned="true" x="6936.2036" y="1210.7416"/>
+              <location camera_id="2" pinned="true" x="1675.0306" y="6837.832"/>
+              <location camera_id="3" pinned="true" x="4181.4214" y="6875.1353"/>
+              <location camera_id="4" pinned="true" x="7003.1689" y="10531.635"/>
+            </marker>
+            <marker marker_id="49">
+              <location camera_id="0" pinned="true" x="8505.9609" y="3005.2959"/>
+              <location camera_id="2" pinned="true" x="247.43571" y="4916.626"/>
+              <location camera_id="3" pinned="true" x="2811.9214" y="4908.7729"/>
+              <location camera_id="4" pinned="true" x="8634.4326" y="12250.663"/>
+            </marker>
+            <marker marker_id="50"/>
+            <marker marker_id="51"/>
+            <marker marker_id="52"/>
+            <marker marker_id="53"/>
+            <marker marker_id="54">
+              <location camera_id="0" pinned="true" x="2158.0342" y="1135.0404"/>
+              <location camera_id="1" pinned="true" x="4039.4143" y="7294.2905"/>
+              <location camera_id="2" pinned="true" x="6456.6841" y="7295.7974"/>
+              <location camera_id="4" pinned="true" x="2267.3201" y="10643.895"/>
+            </marker>
+            <marker marker_id="55"/>
+            <marker marker_id="56"/>
+            <marker marker_id="57">
+              <location camera_id="1" pinned="true" x="5892.5513" y="11172.686"/>
+              <location camera_id="2" pinned="true" x="8198.1133" y="11243.588"/>
+              <location camera_id="4" pinned="true" x="103.30875" y="6996.9946"/>
+            </marker>
+            <marker marker_id="58">
+              <location camera_id="1" pinned="true" x="149.5836" y="11966.475"/>
+              <location camera_id="2" pinned="true" x="2409.2231" y="11860.659"/>
+              <location camera_id="3" pinned="true" x="4766.8008" y="11934.576"/>
+              <location camera_id="4" pinned="true" x="5680.1406" y="5699.9595"/>
+            </marker>
+            <marker marker_id="59"/>
+            <marker marker_id="60"/>
+            <marker marker_id="61"/>
+            <marker marker_id="62"/>
+            <marker marker_id="63"/>
+            <marker marker_id="64"/>
+            <marker marker_id="65">
+              <location camera_id="0" pinned="true" x="5031.4565" y="7248.7656"/>
+              <location camera_id="1" pinned="true" x="1432.0496" y="1039.6471"/>
+              <location camera_id="2" pinned="true" x="4036.3174" y="939.14093"/>
+              <location camera_id="3" pinned="true" x="6726.8501" y="1041.7899"/>
+            </marker>
+            <marker marker_id="66"/>
+            <marker marker_id="67"/>
+            <marker marker_id="68"/>
+            <marker marker_id="69"/>
+            <marker marker_id="70"/>
+            <marker marker_id="71"/>
+            <marker marker_id="72"/>
+            <marker marker_id="73">
+              <location camera_id="3" pinned="true" x="4539.1938" y="12188.169"/>
+              <location camera_id="4" pinned="true" x="5864.978" y="5420.0063"/>
+            </marker>
+            <marker marker_id="103">
+              <location camera_id="0" pinned="true" x="5114.7764" y="1076.306"/>
+              <location camera_id="1" pinned="true" x="1039.5992" y="7147.8652"/>
+              <location camera_id="2" pinned="true" x="3481.6917" y="7053.9214"/>
+              <location camera_id="3" pinned="true" x="6019.3979" y="7148.5801"/>
+              <location camera_id="4" pinned="true" x="5200.9561" y="10590.591"/>
+            </marker>
+            <marker marker_id="74"/>
+            <marker marker_id="76">
+              <location camera_id="0" pinned="true" x="1201.0813" y="761.20001"/>
+              <location camera_id="1" pinned="true" x="4984.582" y="7714.0127"/>
+              <location camera_id="2" pinned="true" x="7392.564" y="7747.1611"/>
+              <location camera_id="4" pinned="true" x="1302.7299" y="10314.665"/>
+            </marker>
+            <marker marker_id="77"/>
+            <marker marker_id="78"/>
+            <marker marker_id="79"/>
+            <marker marker_id="80"/>
+            <marker marker_id="84"/>
+            <marker marker_id="85"/>
+            <marker marker_id="86"/>
+            <marker marker_id="87"/>
+            <marker marker_id="88"/>
+            <marker marker_id="89"/>
+            <marker marker_id="90"/>
+            <marker marker_id="91"/>
+            <marker marker_id="92">
+              <location camera_id="1" pinned="true" x="4871.2812" y="10913.299"/>
+              <location camera_id="2" pinned="true" x="7180.7974" y="10950.382"/>
+              <location camera_id="4" pinned="true" x="1130.1033" y="7161.3799"/>
+            </marker>
+            <marker marker_id="93">
+              <location camera_id="1" pinned="true" x="2045.7155" y="9821.4795"/>
+              <location camera_id="2" pinned="true" x="4377.3164" y="9767.251"/>
+              <location camera_id="3" pinned="true" x="6803.354" y="9894.5176"/>
+              <location camera_id="4" pinned="true" x="4005.5884" y="7982.7192"/>
+            </marker>
+            <marker marker_id="94"/>
+            <marker marker_id="95"/>
+            <marker marker_id="96"/>
+            <marker marker_id="97"/>
+            <marker marker_id="98"/>
+            <marker marker_id="99"/>
+            <marker marker_id="100"/>
+            <marker marker_id="101"/>
+            <marker marker_id="102"/>
+            <marker marker_id="75"/>
+            <marker marker_id="81"/>
+            <marker marker_id="82">
+              <location camera_id="1" pinned="true" x="4246.2275" y="11588.412"/>
+              <location camera_id="2" pinned="true" x="6531.9839" y="11609.202"/>
+              <location camera_id="4" pinned="true" x="1683.7806" y="6441.3198"/>
+            </marker>
+            <marker marker_id="83"/>
+          </markers>
+          <point_cloud>
+            <tracks path="tracks0.ply"/>
+            <points path="points0.ply"/>
+            <projections camera_id="0" path="projections0.ply"/>
+            <projections camera_id="1" path="projections1.ply"/>
+            <projections camera_id="2" path="projections2.ply"/>
+            <projections camera_id="3" path="projections3.ply"/>
+            <projections camera_id="4" path="projections4.ply"/>
+            <meta>
+              <property name="match/duration" value="20.179078"/>
+              <property name="match/match_downscale" value="2"/>
+              <property name="match/match_filter_mask" value="false"/>
+              <property name="match/match_point_limit" value="5000"/>
+              <property name="match/match_select_pairs" value="0"/>
+              <property name="match/match_tiepoint_limit" value="1000"/>
+            </meta>
+          </point_cloud>
+        </frame>
+      </frames>
+      <transform>
+        <rotation>-4.6136148851602603e-02 9.9882680888675190e-01 -1.4712634646815230e-02 9.9892055374463273e-01 4.6050820817894439e-02 -6.0868061012770650e-03 -5.4021362125713564e-03 -1.4977574940758511e-02 -9.9987323655213167e-01</rotation>
+        <translation>1.0000915897078533e+06 1.1263243129264936e+05 1.9283145909377006e+03</translation>
+        <scale>2.1334337312147028e+02</scale>
+      </transform>
+      <region>
+        <center>-1.0812771389710545e+00 1.0854784294291309e-02 8.2597652109040123e+00</center>
+        <size>7.3965745687484743e+00 5.3690176725387575e+00 1.0771035909652715e+00</size>
+        <R>7.9851613095081094e-03 9.9996693617434396e-01 -1.5374514486146728e-03 9.9995042374167653e-01 -7.9941570246795986e-03 -5.9366246560228417e-03 -5.9487189967982763e-03 -1.4899703220121509e-03 -9.9998119618857684e-01</R>
+      </region>
+      <settings>
+        <property name="accuracy_tiepoints" value="1"/>
+        <property name="accuracy_cameras" value="10"/>
+        <property name="accuracy_cameras_ypr" value="2"/>
+        <property name="accuracy_markers" value="0.0050000000000000001"/>
+        <property name="accuracy_scalebars" value="0.001"/>
+        <property name="accuracy_projections" value="0.10000000000000001"/>
+      </settings>
+      <meta>
+        <property name="align/duration" value="0.202858"/>
+        <property name="optimize/duration" value="0.021837"/>
+      </meta>
+    </chunk>
+  </chunks>
+</document>
