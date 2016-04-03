@@ -170,23 +170,84 @@
           </cameras>
           <markers>
             <marker marker_id="216">
-              <location camera_id="0" pinned="true" x="6660.8359" y="6043.7324"/>
+              <location camera_id="0" pinned="true" x="5007.6665" y="7275.6665"/>
+              <location camera_id="1" pinned="true" x="1453.6666" y="1012.3333"/>
+              <location camera_id="2" pinned="true" x="4060" y="912.33331"/>
+              <location camera_id="3" pinned="true" x="6751.9116" y="1015.9611"/>
             </marker>
-            <marker marker_id="305"/>
-            <marker marker_id="309"/>
-            <marker marker_id="311"/>
-            <marker marker_id="313"/>
-            <marker marker_id="314"/>
-            <marker marker_id="401"/>
-            <marker marker_id="405"/>
-            <marker marker_id="406"/>
-            <marker marker_id="413"/>
-            <marker marker_id="508"/>
-            <marker marker_id="511"/>
-            <marker marker_id="515"/>
-            <marker marker_id="609"/>
-            <marker marker_id="610"/>
-            <marker marker_id="5212"/>
+            <marker marker_id="305">
+              <location camera_id="0" pinned="true" x="4700.3506" y="7105.9468"/>
+              <location camera_id="2" pinned="true" x="4354.7974" y="1106.0428"/>
+              <location camera_id="3" pinned="true" x="7042.5" y="1218.8872"/>
+            </marker>
+            <marker marker_id="309">
+              <location camera_id="0" pinned="true" x="955.13824" y="12311.166"/>
+            </marker>
+            <marker marker_id="311">
+              <location camera_id="0" pinned="true" x="3478.1357" y="2979.2803"/>
+              <location camera_id="3" pinned="true" x="7829.6064" y="5477"/>
+              <location camera_id="4" pinned="true" x="3661.4468" y="12430.667"/>
+            </marker>
+            <marker marker_id="313">
+              <location camera_id="0" pinned="true" x="6936.7998" y="1211.3865"/>
+              <location camera_id="2" pinned="true" x="1672" y="6836"/>
+              <location camera_id="3" pinned="true" x="4180.5122" y="6874.6665"/>
+              <location camera_id="4" pinned="true" x="7002.7354" y="10531.333"/>
+            </marker>
+            <marker marker_id="314">
+              <location camera_id="0" pinned="true" x="8503.5996" y="3004.5771"/>
+              <location camera_id="3" pinned="true" x="2811.5" y="4908.7134"/>
+              <location camera_id="4" pinned="true" x="8635.4375" y="12250.739"/>
+            </marker>
+            <marker marker_id="401">
+              <location camera_id="0" pinned="true" x="2158.25" y="1135.5"/>
+              <location camera_id="1" pinned="true" x="4039" y="7293.3335"/>
+              <location camera_id="2" pinned="true" x="6455.6592" y="7294.8081"/>
+            </marker>
+            <marker marker_id="405">
+              <location camera_id="1" pinned="true" x="5892.0518" y="11172.178"/>
+              <location camera_id="2" pinned="true" x="8197.333" y="11243.667"/>
+            </marker>
+            <marker marker_id="406">
+              <location camera_id="1" pinned="true" x="148.66667" y="11965.667"/>
+              <location camera_id="2" pinned="true" x="2409.1555" y="11859.132"/>
+              <location camera_id="3" pinned="true" x="4767" y="11933.774"/>
+              <location camera_id="4" pinned="true" x="5681" y="5699.7754"/>
+            </marker>
+            <marker marker_id="413">
+              <location camera_id="1" pinned="true" x="1431" y="1037"/>
+              <location camera_id="2" pinned="true" x="4034.3333" y="937.33331"/>
+              <location camera_id="3" pinned="true" x="6726.4346" y="1040.1298"/>
+            </marker>
+            <marker marker_id="508">
+              <location camera_id="2" pinned="true" x="2189.3801" y="12119.379"/>
+              <location camera_id="3" pinned="true" x="4537.7295" y="12186.42"/>
+              <location camera_id="4" pinned="true" x="5865.9302" y="5420.7603"/>
+            </marker>
+            <marker marker_id="511">
+              <location camera_id="1" pinned="true" x="4984" y="7714.3335"/>
+              <location camera_id="2" pinned="true" x="7392.6001" y="7745.8755"/>
+              <location camera_id="4" pinned="true" x="1300.7446" y="10316.106"/>
+            </marker>
+            <marker marker_id="515">
+              <location camera_id="3" pinned="true" x="2876.5" y="5020.1089"/>
+              <location camera_id="4" pinned="true" x="8556" y="12150.285"/>
+            </marker>
+            <marker marker_id="609">
+              <location camera_id="1" pinned="true" x="4870.8052" y="10911.341"/>
+              <location camera_id="2" pinned="true" x="7180.1704" y="10949.792"/>
+            </marker>
+            <marker marker_id="610">
+              <location camera_id="1" pinned="true" x="2043.7778" y="9819.707"/>
+              <location camera_id="2" pinned="true" x="4377.0396" y="9766.5068"/>
+              <location camera_id="3" pinned="true" x="6803.085" y="9893.667"/>
+              <location camera_id="4" pinned="true" x="4005.5166" y="7983.6665"/>
+            </marker>
+            <marker marker_id="5212">
+              <location camera_id="1" pinned="true" x="4245.395" y="11587.655"/>
+              <location camera_id="2" pinned="true" x="6530.8989" y="11607.874"/>
+              <location camera_id="4" pinned="true" x="1684" y="6440.813"/>
+            </marker>
           </markers>
           <point_cloud>
             <tracks path="tracks0.ply"/>
