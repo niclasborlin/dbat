@@ -7,8 +7,8 @@ function pts=loadpm3dtbl(fName,isSmartTable)
 %       id   - N-array with id numbers.
 %       name - N-cell array with names.
 %       vis  - N-by-P visibility array.
-%       pos  - N-by-3 array of estimated positions.
-%       std  - N-by-3 array with posteriori standard deviations.
+%       pos  - 3-by-N array of estimated positions.
+%       std  - 3-by-N array with posteriori standard deviations.
 % 
 %       N is the number of loaded points. P is the highest seen
 %       image number.
