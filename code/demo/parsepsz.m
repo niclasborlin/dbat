@@ -36,5 +36,3 @@ disp('RST')
 euclidean(RST*homogeneous(CC))
 disp('RTS')
 euclidean(RTS*homogeneous(CC))
-
-pts3d=ply_read
