@@ -250,12 +250,6 @@
             </marker>
           </markers>
           <point_cloud>
-            <tracks path="tracks0.ply"/>
-            <projections camera_id="0" path="projections0.ply"/>
-            <projections camera_id="1" path="projections1.ply"/>
-            <projections camera_id="2" path="projections2.ply"/>
-            <projections camera_id="3" path="projections3.ply"/>
-            <projections camera_id="4" path="projections4.ply"/>
             <meta>
               <property name="match/duration" value="34.234221"/>
               <property name="match/match_downscale" value="1"/>
