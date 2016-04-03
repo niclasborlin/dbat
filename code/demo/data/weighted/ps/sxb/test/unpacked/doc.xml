@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document version="1.2.0">
+  <chunks next_id="1">
+    <chunk id="0" label="Chunk 1" enabled="true">
+      <sensors next_id="1">
+        <sensor id="0" label="unknown" type="frame">
+          <resolution width="8858" height="12996"/>
+          <property name="fixed" value="false"/>
+          <bands>
+            <band label="Red"/>
+            <band label="Green"/>
+            <band label="Blue"/>
+          </bands>
+          <calibration type="frame" class="adjusted">
+            <resolution width="8858" height="12996"/>
+            <fx>20053.756799950905</fx>
+            <fy>20053.756799950905</fy>
+            <cx>4429</cx>
+            <cy>6498</cy>
+          </calibration>
+          <covariance>
+            <params>f</params>
+            <coeffs>1.6440993029143663e+03</coeffs>
+          </covariance>
+        </sensor>
+      </sensors>
+      <cameras next_id="5" next_group_id="0">
+        <camera id="0" label="8811.jpg" sensor_id="0" enabled="true">
+          <transform>-9.9896526220126391e-01 4.4191713805033971e-02 1.0746969160372558e-02 -1.0605977360894776e+00 -4.4136269891742845e-02 -9.9901123365540856e-01 5.3427249921603253e-03 -1.9629997554552527e+00 1.0972447092752972e-02 4.8628655412822448e-03 9.9992797637806130e-01 2.1794197046716493e-03 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="1" label="8936.jpg" sensor_id="0" enabled="true">
+          <transform>9.9998426595033429e-01 1.1058705760965671e-04 -5.6085312046634849e-03 7.4235950102376727e-02 -1.2493133269240390e-04 9.9999672231045111e-01 -2.5572955473744836e-03 2.8612211497125967e-02 5.6082300178493484e-03 2.5579559920371770e-03 9.9998100212814522e-01 1.0388472516430576e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="2" label="8937.jpg" sensor_id="0" enabled="true">
+          <transform>9.9949648807536462e-01 3.1124532510111682e-02 -6.1671550199081928e-03 -9.2257765644898482e-01 -3.1138871193538174e-02 9.9951255154402996e-01 -2.2427676507326202e-03 5.2870411558977932e-02 6.0943437550581561e-03 2.4336766362717931e-03 9.9997846786429623e-01 3.5566437602850713e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="3" label="8938.jpg" sensor_id="0" enabled="true">
+          <transform>9.9809093199010779e-01 6.1422230872630323e-02 -6.4653718955099589e-03 -1.9536466639171985e+00 -6.1451874307347554e-02 9.9809994586966344e-01 -4.4905677913657368e-03 8.5209934468923970e-02 6.1772666473052691e-03 4.8793042131221242e-03 9.9996901640359037e-01 4.7790499567676586e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="4" label="9111.jpg" sensor_id="0" enabled="true">
+          <transform>-9.9592876583995260e-01 9.0025139841397345e-02 4.6225067923837612e-03 -1.2227309141933707e+00 -9.0017872465898291e-02 -9.9593859979596100e-01 1.7572914311120632e-03 1.9592225703555759e+00 4.7619333491819554e-03 1.3340288592990112e-03 9.9998777210412948e-01 -8.5718830343664981e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+      </cameras>
+      <frames next_id="1">
+        <frame id="0">
+          <cameras>
+            <camera camera_id="0">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8811.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:12:02"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:12:02"/>
+                  <property name="System/FileSize" value="25403088"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb0.jpg"/>
+            </camera>
+            <camera camera_id="1">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8936.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:29"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:26:29"/>
+                  <property name="System/FileSize" value="27706597"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb1.jpg"/>
+            </camera>
+            <camera camera_id="2">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8937.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:36"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:26:36"/>
+                  <property name="System/FileSize" value="27374576"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb2.jpg"/>
+            </camera>
+            <camera camera_id="3">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/8938.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:26:43"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:26:43"/>
+                  <property name="System/FileSize" value="27032654"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb3.jpg"/>
+            </camera>
+            <camera camera_id="4">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/strasbourg-2013/9111.jpg">
+                <meta>
+                  <property name="Exif/DateTime" value="2013:08:22 21:46:41"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="Adobe Photoshop CS4 Windows"/>
+                  <property name="File/ImageHeight" value="12996"/>
+                  <property name="File/ImageWidth" value="8858"/>
+                  <property name="System/FileModifyDate" value="2013:08:22 21:46:41"/>
+                  <property name="System/FileSize" value="26530258"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb4.jpg"/>
+            </camera>
+          </cameras>
+          <point_cloud>
+            <tracks path="tracks0.ply"/>
+            <points path="points0.ply"/>
+            <projections camera_id="0" path="projections0.ply"/>
+            <projections camera_id="1" path="projections1.ply"/>
+            <projections camera_id="2" path="projections2.ply"/>
+            <projections camera_id="3" path="projections3.ply"/>
+            <projections camera_id="4" path="projections4.ply"/>
+            <meta>
+              <property name="match/duration" value="18.851215"/>
+              <property name="match/match_downscale" value="2"/>
+              <property name="match/match_filter_mask" value="false"/>
+              <property name="match/match_point_limit" value="40000"/>
+              <property name="match/match_select_pairs" value="0"/>
+              <property name="match/match_tiepoint_limit" value="1000"/>
+            </meta>
+          </point_cloud>
+        </frame>
+      </frames>
+      <region>
+        <center>-1.0457839439571366e+00 4.5395257058052529e-02 8.2015181611615375e+00</center>
+        <size>7.5846629858016970e+00 5.7152043104171755e+00 1.1294584035873418e+00</size>
+        <R>-9.4336724520484430e-02 9.9553814704136623e-01 2.0928908690014312e-03 9.9553888690504400e-01 9.4332777259601902e-02 1.9109668642718163e-03 1.7050122029404473e-03 2.2638286007819991e-03 -9.9999598399866296e-01</R>
+      </region>
+      <settings>
+        <property name="accuracy_tiepoints" value="1"/>
+        <property name="accuracy_cameras" value="10"/>
+        <property name="accuracy_cameras_ypr" value="2"/>
+        <property name="accuracy_markers" value="0.0050000000000000001"/>
+        <property name="accuracy_scalebars" value="0.001"/>
+        <property name="accuracy_projections" value="0.10000000000000001"/>
+      </settings>
+      <meta>
+        <property name="align/duration" value="0.095571"/>
+      </meta>
+    </chunk>
+  </chunks>
+</document>
