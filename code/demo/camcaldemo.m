@@ -12,26 +12,9 @@ dampings=dampings(2);
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
     if runAsBundle
-        if weighted
-            switch cpSigma
-              case 1e-6
-                wStr='1micron';
-              case 1e-3
-                wStr='1mm';
-              case 1e-2
-                wStr='1cm';
-              otherwise
-                error('Bad weight')
-            end
-            d=['weighted-bundle-',wStr];
-            f=['c4040z-',wStr,'-pmexport.txt'];
-            stub='wb-1cm-fewop';
-            d=stub;
-            f=[stub,'-pmexport.txt'];
-        else
-            d='fixed-as-bundle';
-            f='c4040z-bundle-pmexport.txt';
-        end
+        stub='wb-1cm-fewop';
+        d=stub;
+        f=[stub,'-pmexport.txt'];
     else
         d='fixed';
         f='c4040z-pmexport.txt';
