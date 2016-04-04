@@ -43,8 +43,16 @@ TSR=T0*S0*R0;
 euclidean(TSR*homogeneous(CC))
 
 xy1=euclidean(K*cams(:,:,1)*TSR*homogeneous(CP(:,1)))
+xy2=euclidean(K*cams(:,:,2)*TSR*homogeneous(CP(:,1)))
 
-m1=s.document.chunks.chunk.frames.frame.markers.marker{1}.location.Attributes;
+m1=s.document.chunks.chunk.frames.frame.markers.marker{1}.location{1}.Attributes;
 mark1=[sscanf(m1.x,'%g');sscanf(m1.y,'%g')]
 
-res=xy1-mark1
+m2=s.document.chunks.chunk.frames.frame.markers.marker{1}.location{2}.Attributes;
+mark2=[sscanf(m2.x,'%g');sscanf(m2.y,'%g')]
+
+res1=euclidean(K*cams(:,:,1)*TSR*homogeneous(X))-mark1
+res2=euclidean(K*cams(:,:,2)*TSR*homogeneous(X))-mark2
+res=[res1,res2];
+resVec=sqrt(sum(res.^2,1));
+errorPix=sqrt(mean(resVec.^2))
