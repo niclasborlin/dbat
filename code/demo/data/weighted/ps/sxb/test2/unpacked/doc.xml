@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document version="1.2.0">
+  <chunks next_id="1">
+    <chunk id="0" label="Chunk 1" enabled="true">
+      <sensors next_id="1">
+        <sensor id="0" label="Canon EOS 40D (17 mm)" type="frame">
+          <resolution width="3888" height="2592"/>
+          <property name="pixel_width" value="0.0057179398148148224"/>
+          <property name="pixel_height" value="0.0057179398148148224"/>
+          <property name="focal_length" value="17"/>
+          <property name="fixed" value="false"/>
+          <bands>
+            <band label="Red"/>
+            <band label="Green"/>
+            <band label="Blue"/>
+          </bands>
+          <calibration type="frame" class="adjusted">
+            <resolution width="3888" height="2592"/>
+            <fx>3137</fx>
+            <fy>3137</fy>
+            <cx>1939</cx>
+            <cy>1286</cy>
+          </calibration>
+        </sensor>
+      </sensors>
+      <cameras next_id="18" next_group_id="0">
+        <camera id="0" label="IMG_6684.JPG" sensor_id="0" enabled="true">
+          <transform>1 0 0 0 0 1 0 0 0 0 1 1 0 0 0 1</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="1" label="IMG_6685.JPG" sensor_id="0" enabled="true">
+          <transform>1 0 0 -1 0 1 0 -2 0 0 1 -3 0 0 0 1</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="2" label="IMG_6686.JPG" sensor_id="0" enabled="true">
+          <transform>1 0 0 1.5000000000000000e+00 0 1 0 2 0 0 1 3 0 0 0 1</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="3" label="IMG_6687.JPG" sensor_id="0" enabled="true">
+          <transform>1 0 0 4 0 1 0 3 0 0 1 2 0 0 0 1</transform>
+          <orientation>1</orientation>
+        </camera>
+      </cameras>
+      <markers next_id="4">
+        <marker id="0" label="CP1">
+          <reference x="0" y="0" z="0" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="1" label="CP2">
+          <reference x="0" y="1" z="0" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="2" label="CP3">
+          <reference x="1" y="0" z="0" sxyz="0" enabled="true"/>
+        </marker>
+        <marker id="3" label="CP4">
+          <reference x="1" y="1" z="0" sxyz="0" enabled="true"/>
+        </marker>
+      </markers>
+      <frames next_id="1">
+        <frame id="0">
+          <cameras>
+            <camera camera_id="0">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6684.JPG">
+                <meta>
+                  <property name="Exif/ApertureValue" value="4.625"/>
+                  <property name="Exif/DateTime" value="2010:06:28 15:50:15"/>
+                  <property name="Exif/DateTimeOriginal" value="2010:06:28 15:50:15"/>
+                  <property name="Exif/ExposureTime" value="0.0166666666666667"/>
+                  <property name="Exif/FNumber" value="5"/>
+                  <property name="Exif/FocalLength" value="17"/>
+                  <property name="Exif/FocalPlaneXResolution" value="174.738431668644"/>
+                  <property name="Exif/FocalPlaneYResolution" value="175.038154536"/>
+                  <property name="Exif/ISOSpeedRatings" value="400"/>
+                  <property name="Exif/Make" value="Canon"/>
+                  <property name="Exif/Model" value="Canon EOS 40D"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/ShutterSpeedValue" value="6"/>
+                  <property name="File/ImageHeight" value="2592"/>
+                  <property name="File/ImageWidth" value="3888"/>
+                  <property name="System/FileModifyDate" value="2010:06:29 12:39:42"/>
+                  <property name="System/FileSize" value="3072983"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb0.jpg"/>
+            </camera>
+            <camera camera_id="1">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6685.JPG">
+                <meta>
+                  <property name="Exif/ApertureValue" value="4.625"/>
+                  <property name="Exif/DateTime" value="2010:06:28 15:50:26"/>
+                  <property name="Exif/DateTimeOriginal" value="2010:06:28 15:50:26"/>
+                  <property name="Exif/ExposureTime" value="0.0166666666666667"/>
+                  <property name="Exif/FNumber" value="5"/>
+                  <property name="Exif/FocalLength" value="17"/>
+                  <property name="Exif/FocalPlaneXResolution" value="174.738431668644"/>
+                  <property name="Exif/FocalPlaneYResolution" value="175.038154536"/>
+                  <property name="Exif/ISOSpeedRatings" value="400"/>
+                  <property name="Exif/Make" value="Canon"/>
+                  <property name="Exif/Model" value="Canon EOS 40D"/>
+                  <property name="Exif/Orientation" value="8"/>
+                  <property name="Exif/ShutterSpeedValue" value="6"/>
+                  <property name="File/ImageHeight" value="2592"/>
+                  <property name="File/ImageWidth" value="3888"/>
+                  <property name="System/FileModifyDate" value="2010:06:29 12:39:44"/>
+                  <property name="System/FileSize" value="3169398"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb1.jpg"/>
+            </camera>
+            <camera camera_id="2">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6686.JPG">
+                <meta>
+                  <property name="Exif/ApertureValue" value="4.625"/>
+                  <property name="Exif/DateTime" value="2010:06:28 15:50:42"/>
+                  <property name="Exif/DateTimeOriginal" value="2010:06:28 15:50:42"/>
+                  <property name="Exif/ExposureTime" value="0.0166666666666667"/>
+                  <property name="Exif/FNumber" value="5"/>
+                  <property name="Exif/FocalLength" value="17"/>
+                  <property name="Exif/FocalPlaneXResolution" value="174.738431668644"/>
+                  <property name="Exif/FocalPlaneYResolution" value="175.038154536"/>
+                  <property name="Exif/ISOSpeedRatings" value="400"/>
+                  <property name="Exif/Make" value="Canon"/>
+                  <property name="Exif/Model" value="Canon EOS 40D"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/ShutterSpeedValue" value="6"/>
+                  <property name="File/ImageHeight" value="2592"/>
+                  <property name="File/ImageWidth" value="3888"/>
+                  <property name="System/FileModifyDate" value="2010:06:29 12:39:44"/>
+                  <property name="System/FileSize" value="3078253"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb2.jpg"/>
+            </camera>
+            <camera camera_id="3">
+              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6687.JPG">
+                <meta>
+                  <property name="Exif/ApertureValue" value="4.625"/>
+                  <property name="Exif/DateTime" value="2010:06:28 15:50:55"/>
+                  <property name="Exif/DateTimeOriginal" value="2010:06:28 15:50:55"/>
+                  <property name="Exif/ExposureTime" value="0.0166666666666667"/>
+                  <property name="Exif/FNumber" value="5"/>
+                  <property name="Exif/FocalLength" value="17"/>
+                  <property name="Exif/FocalPlaneXResolution" value="174.738431668644"/>
+                  <property name="Exif/FocalPlaneYResolution" value="175.038154536"/>
+                  <property name="Exif/ISOSpeedRatings" value="400"/>
+                  <property name="Exif/Make" value="Canon"/>
+                  <property name="Exif/Model" value="Canon EOS 40D"/>
+                  <property name="Exif/Orientation" value="8"/>
+                  <property name="Exif/ShutterSpeedValue" value="6"/>
+                  <property name="File/ImageHeight" value="2592"/>
+                  <property name="File/ImageWidth" value="3888"/>
+                  <property name="System/FileModifyDate" value="2010:06:29 12:39:44"/>
+                  <property name="System/FileSize" value="3167510"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb3.jpg"/>
+            </camera>
+          </cameras>
+          <markers>
+            <marker marker_id="0">
+              <location camera_id="0" pinned="true" x="1940" y="1286"/>
+            </marker>
+            <marker marker_id="1"/>
+            <marker marker_id="2"/>
+            <marker marker_id="3"/>
+          </markers>
+        </frame>
+      </frames>
+      <transform>
+        <rotation>1 0 0 0 1 0 0 0 1</rotation>
+        <translation>0 0 0</translation>
+        <scale>1</scale>
+      </transform>
+      <region>
+        <center>0 0 0</center>
+        <size>1 1 1</size>
+        <R>1 0 0 0 1 0 0 0 1</R>
+      </region>
+      <settings>
+        <property name="accuracy_tiepoints" value="1"/>
+        <property name="accuracy_cameras" value="10"/>
+        <property name="accuracy_cameras_ypr" value="2"/>
+        <property name="accuracy_markers" value="0.0050000000000000001"/>
+        <property name="accuracy_scalebars" value="0.001"/>
+        <property name="accuracy_projections" value="0.10000000000000001"/>
+      </settings>
+      <meta>
+        <property name="align/duration" value="19.811924"/>
+        <property name="optimize/duration" value="1.435626"/>
+        <property name="optimize/fit_flags" value="f cx cy k1 k2"/>
+      </meta>
+    </chunk>
+  </chunks>
+</document>
