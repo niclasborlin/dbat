@@ -1,5 +1,6 @@
 clc
-fName=['/home/niclas/dbat/code/demo/data/weighted/ps/sxb/test2/unpacked/doc.xml'];
+fDir='/home/niclas/dbat/code/demo/data/weighted/ps/sxb/test/unpacked';
+fName=fullfile(fDir,'doc.xml');
 s=xml2struct2(fName);
 nCams=length(s.document.chunks.chunk.cameras.camera);
 cams=nan(3,4,nCams);
@@ -56,3 +57,11 @@ res2=euclidean(K*cams(:,:,2)*TSR*homogeneous(X))-mark2
 res=[res1,res2];
 resVec=sqrt(sum(res.^2,1));
 errorPix=sqrt(mean(resVec.^2))
+
+pt3dName=fullfile(fDir,s.document.chunks.chunk.frames.frame.point_cloud.points.Attributes.path);
+
+proj1Name=fullfile(fDir,s.document.chunks.chunk.frames.frame.point_cloud.projections{1}.Attributes.path);
+
+[t,p,d,c]=ply_read(pt3dName,'tri');
+
+[t2,p2,d2,c2]=ply_read(proj1Name,'tri');
