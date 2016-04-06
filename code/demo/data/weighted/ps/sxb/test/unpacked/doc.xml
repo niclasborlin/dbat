@@ -119,7 +119,7 @@
         <frame id="0">
           <cameras>
             <camera camera_id="0">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6684.JPG">
+              <photo path="images/IMG_6684.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:50:15"/>
@@ -143,7 +143,7 @@
               <thumbnail path="thumb0.jpg"/>
             </camera>
             <camera camera_id="1">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6685.JPG">
+              <photo path="images/IMG_6685.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:50:26"/>
@@ -167,7 +167,7 @@
               <thumbnail path="thumb1.jpg"/>
             </camera>
             <camera camera_id="2">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6686.JPG">
+              <photo path="images/IMG_6686.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:50:42"/>
@@ -191,7 +191,7 @@
               <thumbnail path="thumb2.jpg"/>
             </camera>
             <camera camera_id="3">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6687.JPG">
+              <photo path="images/IMG_6687.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:50:55"/>
@@ -215,7 +215,7 @@
               <thumbnail path="thumb3.jpg"/>
             </camera>
             <camera camera_id="4">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6688.JPG">
+              <photo path="images/IMG_6688.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:51:14"/>
@@ -239,7 +239,7 @@
               <thumbnail path="thumb4.jpg"/>
             </camera>
             <camera camera_id="5">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6689.JPG">
+              <photo path="images/IMG_6689.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:51:27"/>
@@ -263,7 +263,7 @@
               <thumbnail path="thumb5.jpg"/>
             </camera>
             <camera camera_id="6">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6690.JPG">
+              <photo path="images/IMG_6690.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:51:42"/>
@@ -287,7 +287,7 @@
               <thumbnail path="thumb6.jpg"/>
             </camera>
             <camera camera_id="7">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6691.JPG">
+              <photo path="images/IMG_6691.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.375"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:51:53"/>
@@ -311,7 +311,7 @@
               <thumbnail path="thumb7.jpg"/>
             </camera>
             <camera camera_id="8">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6692.JPG">
+              <photo path="images/IMG_6692.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:52:16"/>
@@ -335,7 +335,7 @@
               <thumbnail path="thumb8.jpg"/>
             </camera>
             <camera camera_id="9">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6693.JPG">
+              <photo path="images/IMG_6693.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:52:27"/>
@@ -359,7 +359,7 @@
               <thumbnail path="thumb9.jpg"/>
             </camera>
             <camera camera_id="10">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6694.JPG">
+              <photo path="images/IMG_6694.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:52:44"/>
@@ -383,7 +383,7 @@
               <thumbnail path="thumb10.jpg"/>
             </camera>
             <camera camera_id="11">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6695.JPG">
+              <photo path="images/IMG_6695.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.375"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:52:56"/>
@@ -407,7 +407,7 @@
               <thumbnail path="thumb11.jpg"/>
             </camera>
             <camera camera_id="12">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6696.JPG">
+              <photo path="images/IMG_6696.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:53:12"/>
@@ -431,7 +431,7 @@
               <thumbnail path="thumb12.jpg"/>
             </camera>
             <camera camera_id="13">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6697.JPG">
+              <photo path="images/IMG_6697.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:53:22"/>
@@ -455,7 +455,7 @@
               <thumbnail path="thumb13.jpg"/>
             </camera>
             <camera camera_id="14">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6698.JPG">
+              <photo path="images/IMG_6698.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:53:34"/>
@@ -479,7 +479,7 @@
               <thumbnail path="thumb14.jpg"/>
             </camera>
             <camera camera_id="15">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6699.JPG">
+              <photo path="images/IMG_6699.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.375"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:53:44"/>
@@ -503,7 +503,7 @@
               <thumbnail path="thumb15.jpg"/>
             </camera>
             <camera camera_id="16">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6704.JPG">
+              <photo path="images/IMG_6704.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="5"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:58:20"/>
@@ -526,7 +526,7 @@
               </photo>
             </camera>
             <camera camera_id="17">
-              <photo path="../../../../../../../../../../scratch/eddie/data/work/research/photo/camera_calibration/canon_eos_d40_17mm_no1/2010-06-28/images/IMG_6708.JPG">
+              <photo path="images/IMG_6708.JPG">
                 <meta>
                   <property name="Exif/ApertureValue" value="4.625"/>
                   <property name="Exif/DateTime" value="2010:06:28 15:58:43"/>

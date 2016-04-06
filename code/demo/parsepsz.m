@@ -1,5 +1,6 @@
 clc
-fDir='/home/niclas/dbat/code/demo/data/weighted/ps/sxb/test/unpacked';
+fDir=fullfile(getenv('HOME'),'dbat/code/demo/data/weighted/ps/sxb/test',...
+              'unpacked');
 fName=fullfile(fDir,'doc.xml');
 s=xml2struct2(fName);
 nCams=length(s.document.chunks.chunk.cameras.camera);
@@ -60,8 +61,45 @@ errorPix=sqrt(mean(resVec.^2))
 
 pt3dName=fullfile(fDir,s.document.chunks.chunk.frames.frame.point_cloud.points.Attributes.path);
 
-proj1Name=fullfile(fDir,s.document.chunks.chunk.frames.frame.point_cloud.projections{1}.Attributes.path);
+[~,~,d,~]=ply_read(pt3dName,'tri');
 
-[t,p,d,c]=ply_read(pt3dName,'tri');
+pts3d=[d.vertex.id,d.vertex.x,d.vertex.y,d.vertex.z];
 
-[t2,p2,d2,c2]=ply_read(proj1Name,'tri');
+f=s.document.chunks.chunk.frames.frame;
+pts2d=zeros(0,6);
+
+for i=1:length(f.point_cloud.projections)
+    imNo=sscanf(f.point_cloud.projections{i}.Attributes.camera_id,'%d');
+    pName=fullfile(fDir,f.point_cloud.projections{i}.Attributes.path);
+    [~,~,d,~]=ply_read(pName,'tri');
+    p=[repmat(imNo,size(d.vertex.id)),d.vertex.id,d.vertex.x,d.vertex.y....
+       d.vertex.size,d.vertex.size];
+    pts2d=[pts2d;[p,zeros(size(p,1),2)]];
+end
+
+imNames=cellfun(@(x)x.photo.Attributes.path,f.cameras.camera,...
+                'uniformoutput',false)
+
+vis=sparse(pts2d(:,2)+1,pts2d(:,1)+1,1);
+
+imNo=1;
+imshow(fullfile(fDir,'..',imNames{imNo}));
+
+i=pts2d(:,1)==imNo-1;
+imPts=pts2d(i,:);
+id=imPts(:,2)+1;
+xy=imPts(:,3:4);
+sz=imPts(:,5);
+p=PTCircle2D(PTGaussian(xy'),sz',id');
+
+n=sum(vis(id,:),2);
+%
+%
+j=ismember(id,pts3d(:,1)+1);
+line(imPts(j,3),imPts(j,4),'marker','o','linestyle','none','color','b');
+line(imPts(~j,3),imPts(~j,4),'marker','o','linestyle','none','color','y');
+%line(imPts(n>2,3),imPts(n>2,4),'marker','o','linestyle','none','color','b');
+hold on
+plot(p)
+hold off
+
