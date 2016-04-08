@@ -65,6 +65,12 @@ pt3dName=fullfile(fDir,s.document.chunks.chunk.frames.frame.point_cloud.points.A
 
 pts3d=[d.vertex.id,d.vertex.x,d.vertex.y,d.vertex.z];
 
+tracksName=fullfile(fDir,s.document.chunks.chunk.frames.frame.point_cloud.tracks.Attributes.path);
+
+[~,~,d,~]=ply_read(tracksName,'tri');
+
+tracks=[d.vertex.red,d.vertex.green,d.vertex.blue];
+
 f=s.document.chunks.chunk.frames.frame;
 pts2d=zeros(0,6);
 
@@ -102,4 +108,3 @@ line(imPts(~j,3),imPts(~j,4),'marker','o','linestyle','none','color','y');
 hold on
 plot(p)
 hold off
-

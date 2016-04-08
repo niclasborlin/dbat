@@ -8,10 +8,10 @@ dampings=dampings(2);
 if ~exist('fName','var')
     stub='w15-op1';
     dataDir=stub; %'fixed1-5';
-    fName=fullfile(curDir,'data','weighted','sxb',dataDir,...
+    fName=fullfile(curDir,'data','weighted','pm','sxb',dataDir,...
                    [stub,'-pmexport.txt']);
-    cpName=fullfile(curDir,'data','weighted','sxb',dataDir,'ctrlpts.txt');
-    ptName=fullfile(curDir,'data','weighted','sxb',dataDir,[stub,'-3dpts.txt']);
+    cpName=fullfile(curDir,'data','weighted','pm','sxb',dataDir,'ctrlpts.txt');
+    ptName=fullfile(curDir,'data','weighted','pm','sxb',dataDir,[stub,'-3dpts.txt']);
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
           'you wish to use another file.']);
