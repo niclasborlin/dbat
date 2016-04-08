@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document version="1.2.0">
+  <chunks next_id="1">
+    <chunk id="0" label="Chunk 1" enabled="true">
+      <sensors next_id="1">
+        <sensor id="0" label="C4040Z (7.3 mm)" type="frame">
+          <resolution width="2272" height="1704"/>
+          <property name="focal_length" value="7.2999999999999998"/>
+          <property name="fixed" value="false"/>
+          <bands>
+            <band label="Red"/>
+            <band label="Green"/>
+            <band label="Blue"/>
+          </bands>
+          <calibration type="frame" class="adjusted">
+            <resolution width="2272" height="1704"/>
+            <fx>2327.985299724477</fx>
+            <fy>2333.1964495772236</fy>
+            <cx>1135.8897773681388</cx>
+            <cy>845.34796947124289</cy>
+            <k1>-0.24867363200923215</k1>
+            <k2>0.28020837524998121</k2>
+            <p1>0.0022546947659873207</p1>
+            <p2>0.00043020521338233087</p2>
+          </calibration>
+          <covariance>
+            <params>f cx cy</params>
+            <coeffs>2.7051939973340905e-01 3.6298502926273214e-02 -6.7036549012009047e-02 3.6298502926273284e-02 1.0247743844374289e-01 -6.0250922458631537e-03 -6.7036549012009186e-02 -6.0250922458631459e-03 1.1166174583323837e-01</coeffs>
+          </covariance>
+        </sensor>
+      </sensors>
+      <cameras next_id="21" next_group_id="0">
+        <camera id="0" label="P8250021.JPG" sensor_id="0" enabled="true">
+          <transform>5.0732702111719574e-01 -7.7884479018724895e-01 -3.6880901079357076e-01 5.7553204350987663e-01 6.9095884565816357e-01 6.2339323106761246e-01 -3.6600102877699703e-01 3.5722180893036914e-01 5.1497103535159161e-01 -6.9149636710991808e-02 8.5441392807681171e-01 3.6324019839992266e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="1" label="P8250022.JPG" sensor_id="0" enabled="true">
+          <transform>7.8676231853164014e-01 5.0278450138212649e-01 -3.5806814897257261e-01 5.9776769489836490e-01 -6.1438635819596421e-01 6.9374826639633735e-01 -3.7582275840451307e-01 4.2227253228627787e-01 5.9451299408999181e-02 5.1567537079252002e-01 8.5471893330882676e-01 2.3554137338984785e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="2" label="P8250023.JPG" sensor_id="0" enabled="true">
+          <transform>5.9054125329041518e-01 -4.0979010250405068e-01 -6.9522161937896110e-01 9.6434079031621855e-01 -1.8107332075953192e-02 8.5453576883176074e-01 -5.1907681927842098e-01 6.2081664901810707e-01 8.0680428400404303e-01 3.1912488413915796e-01 4.9721841843991682e-01 7.0053081548882334e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="3" label="P8250024.JPG" sensor_id="0" enabled="true">
+          <transform>4.1275015820556199e-01 6.0904036511539628e-01 -6.7727921905325572e-01 9.8517629444890298e-01 -8.2849964124773312e-01 -5.7914403221637670e-02 -5.5698677394697527e-01 6.2289015777813417e-01 -3.7845164995499858e-01 7.9102196907518707e-01 4.8068554491138255e-01 6.7409688654603073e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="4" label="P8250025.JPG" sensor_id="0" enabled="true">
+          <transform>3.2389353215282229e-01 -6.1544525144650586e-03 -9.4607351857232302e-01 1.1080418992421670e+00 -7.2629152666585317e-01 6.3920939381150033e-01 -2.5280816671246664e-01 2.6859910665059761e-01 6.0629497616502870e-01 7.6900811021560833e-01 2.0256586163434792e-01 1.0766018417698042e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="5" label="P8250026.JPG" sensor_id="0" enabled="true">
+          <transform>3.7798220578407760e-03 3.6390137609530698e-01 -9.3142981561744775e-01 1.1301347194020155e+00 -6.4173781913643291e-01 -7.1345478901619441e-01 -2.8134469165042453e-01 2.9775650393436709e-01 -7.6691478303343830e-01 5.9879717142434752e-01 2.3083254332735337e-01 1.0496839955720081e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="6" label="P8250027.JPG" sensor_id="0" enabled="true">
+          <transform>-4.0378157790765867e-02 3.0541817167742513e-02 -9.9871757858641708e-01 1.2165985050732413e+00 -9.8616180299024925e-01 1.5963125453768384e-01 4.4752216679688983e-02 -5.0778925946472916e-02 1.6079335401827005e-01 9.8670414004341600e-01 2.3673557500678788e-02 1.2747029444071223e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="7" label="P8250028.JPG" sensor_id="0" enabled="true">
+          <transform>-2.8482585594401089e-02 -2.6953944927121054e-02 -9.9923081776470579e-01 1.4082500350021629e+00 -1.7226213463475884e-01 -9.8454838033857883e-01 3.1468138549290883e-02 -4.7331412965174326e-02 -9.8463927368805138e-01 1.7302592761071062e-01 2.3399339424848509e-02 1.2526754929360961e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="8" label="P8250029.JPG" sensor_id="0" enabled="true">
+          <transform>-5.1376067044114726e-01 -5.2974411127125809e-02 -8.5629649378798534e-01 1.0318621465169844e+00 -6.9801269618515027e-01 -5.5450918520529457e-01 4.5309804621880434e-01 -4.9979033592424638e-01 -4.9882687324581876e-01 8.3048978036378918e-01 2.4790819921718110e-01 1.0278951125660962e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="9" label="P8250030.JPG" sensor_id="0" enabled="true">
+          <transform>6.2623271753907805e-02 -5.2747999680959989e-01 -8.4725626512914076e-01 1.0682818300568582e+00 5.4038333132791794e-01 -6.9579876892561965e-01 4.7312781400434906e-01 -5.2953830498011700e-01 -8.3908532406292158e-01 -4.8747197470966125e-01 2.4146820249234779e-01 1.0026619018047871e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="10" label="P8250031.JPG" sensor_id="0" enabled="true">
+          <transform>-6.3644057761465977e-01 -6.0041774577318852e-01 -4.8419202980445791e-01 6.9746147388912139e-01 1.0169129188664541e-01 -6.8757649904009122e-01 7.1895579775268281e-01 -8.9474101747303647e-01 -7.6459288011329485e-01 4.0833453016909349e-01 4.9865884044268416e-01 6.7331939045734146e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="11" label="P8250032.JPG" sensor_id="0" enabled="true">
+          <transform>5.7852269621320673e-01 -6.4989029273276733e-01 -4.9290374047872637e-01 7.1076507750425988e-01 7.0963388726123966e-01 1.0307986718418127e-01 6.9698944542352537e-01 -9.5001026989432658e-01 -4.0215822261481077e-01 -7.5300541060008952e-01 5.2081821741399048e-01 6.4338656012111506e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="12" label="P8250033.JPG" sensor_id="0" enabled="true">
+          <transform>-3.9345676441129801e-01 -8.3895506849677304e-01 -3.7596032713913718e-01 5.2364209298281295e-01 6.9156611685601299e-01 -5.3954292578127527e-01 4.8023925001615253e-01 -5.1578308773327886e-01 -6.0574588777447569e-01 -7.1048042076865769e-02 7.9247971277588891e-01 4.5675519496986294e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="13" label="P8250034.JPG" sensor_id="0" enabled="true">
+          <transform>8.4642416092028316e-01 -3.9863037318109201e-01 -3.5307218155484599e-01 5.2956339043105327e-01 5.2896802205783067e-01 7.0574828093001807e-01 4.7128780549102989e-01 -5.6720347190889853e-01 6.1310451397956600e-02 -5.8567327883541664e-01 8.0822511654089979e-01 3.6427774378814753e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="14" label="P8250035.JPG" sensor_id="0" enabled="true">
+          <transform>2.3285740255361023e-02 -9.8332474629645072e-01 -1.8036135290516347e-01 3.2357998881059519e-01 9.9489334398076767e-01 5.0701556532585105e-03 1.0080440280274292e-01 -1.5702330345024362e-01 -9.8209003678510931e-02 -1.8178761465697488e-01 9.7842130738951172e-01 1.2101084958263753e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="15" label="P8250036.JPG" sensor_id="0" enabled="true">
+          <transform>9.8052067693976408e-01 -2.0602470981232517e-02 -1.9533238411245138e-01 3.4486532039071005e-01 4.2038165696703662e-02 9.9345169486480822e-01 1.0623804683396873e-01 -1.4775443530396154e-01 1.9186452178149890e-01 -1.1238001672765277e-01 9.7496601844466824e-01 6.6792970825098399e-02 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="16" label="P8250037.JPG" sensor_id="0" enabled="true">
+          <transform>4.9810067288452947e-01 -4.8921462665390908e-01 -7.1593628818481836e-01 9.6665790398993501e-01 7.0740855297548755e-01 7.0674456054486212e-01 9.2339221014863249e-03 -9.8529479203048921e-04 5.0146670761786938e-01 -5.1105887645957770e-01 6.9810455230056212e-01 5.0503281241026921e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="17" label="P8250038.JPG" sensor_id="0" enabled="true">
+          <transform>-4.5535963274855240e-01 -4.9832878026007027e-01 -7.3777776574495246e-01 9.0012949922776198e-01 6.9593342428480964e-01 -7.1606336748002763e-01 5.4128760528780573e-02 1.8364220009358806e-02 -5.5526955060251826e-01 -4.8879615436056112e-01 6.7287000650646012e-01 4.8666732110648075e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="18" label="P8250039.JPG" sensor_id="0" enabled="true">
+          <transform>-4.5789892020041473e-01 -4.8655308410517378e-01 -7.4403943123132787e-01 9.6128246224596792e-01 6.9037636829075044e-01 -7.2190852870578071e-01 4.7207481266523327e-02 -9.8688794221905976e-02 -5.6009735670235794e-01 -4.9205098570127737e-01 6.6646588696304077e-01 5.9275519061919713e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="19" label="P8250040.JPG" sensor_id="0" enabled="true">
+          <transform>4.9081992282431697e-01 -4.7353858727901915e-01 -7.3133918923883900e-01 8.8496401545107772e-01 7.0104044014591838e-01 7.1306749280042148e-01 8.7779263689157228e-03 -1.1127508780395443e-01 5.1733751520525617e-01 -5.1700672826290350e-01 6.8195743143699195e-01 4.6024530412215153e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+        <camera id="20" label="P8250041.JPG" sensor_id="0" enabled="true">
+          <transform>4.9350522634388655e-01 -5.0506900662982801e-01 -7.0806630347251232e-01 9.9128444965449170e-01 7.3250048236468590e-01 6.8029718455164634e-01 2.5274177070786552e-02 5.6748876674566628e-02 4.6893030922171325e-01 -5.3113184731576935e-01 7.0569350702707090e-01 5.7058054891412513e-01 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
+          <orientation>1</orientation>
+        </camera>
+      </cameras>
+      <frames next_id="1">
+        <frame id="0">
+          <cameras>
+            <camera camera_id="0">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250021.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:49:21"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:49:21"/>
+                  <property name="Exif/ExposureTime" value="0.005"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:49:20"/>
+                  <property name="System/FileSize" value="899424"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb0.jpg"/>
+            </camera>
+            <camera camera_id="1">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250022.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:49:29"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:49:29"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:49:28"/>
+                  <property name="System/FileSize" value="786702"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb1.jpg"/>
+            </camera>
+            <camera camera_id="2">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250023.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:49:41"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:49:41"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:49:40"/>
+                  <property name="System/FileSize" value="802525"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb2.jpg"/>
+            </camera>
+            <camera camera_id="3">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250024.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:49:55"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:49:55"/>
+                  <property name="Exif/ExposureTime" value="0.01"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:49:54"/>
+                  <property name="System/FileSize" value="787223"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb3.jpg"/>
+            </camera>
+            <camera camera_id="4">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250025.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:50:05"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:50:05"/>
+                  <property name="Exif/ExposureTime" value="0.01"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:50:04"/>
+                  <property name="System/FileSize" value="862219"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb4.jpg"/>
+            </camera>
+            <camera camera_id="5">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250026.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:50:17"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:50:17"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:50:16"/>
+                  <property name="System/FileSize" value="877293"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb5.jpg"/>
+            </camera>
+            <camera camera_id="6">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250027.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:50:29"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:50:29"/>
+                  <property name="Exif/ExposureTime" value="0.005"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:50:28"/>
+                  <property name="System/FileSize" value="880565"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb6.jpg"/>
+            </camera>
+            <camera camera_id="7">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250028.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:50:40"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:50:40"/>
+                  <property name="Exif/ExposureTime" value="0.005"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:50:40"/>
+                  <property name="System/FileSize" value="821972"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb7.jpg"/>
+            </camera>
+            <camera camera_id="8">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250029.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:50:51"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:50:51"/>
+                  <property name="Exif/ExposureTime" value="0.004"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:50:50"/>
+                  <property name="System/FileSize" value="874816"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb8.jpg"/>
+            </camera>
+            <camera camera_id="9">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250030.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:00"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:00"/>
+                  <property name="Exif/ExposureTime" value="0.005"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:00"/>
+                  <property name="System/FileSize" value="890527"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb9.jpg"/>
+            </camera>
+            <camera camera_id="10">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250031.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:07"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:07"/>
+                  <property name="Exif/ExposureTime" value="0.00625"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:06"/>
+                  <property name="System/FileSize" value="800576"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb10.jpg"/>
+            </camera>
+            <camera camera_id="11">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250032.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:18"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:18"/>
+                  <property name="Exif/ExposureTime" value="0.00625"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:18"/>
+                  <property name="System/FileSize" value="810386"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb11.jpg"/>
+            </camera>
+            <camera camera_id="12">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250033.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:27"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:27"/>
+                  <property name="Exif/ExposureTime" value="0.004"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:26"/>
+                  <property name="System/FileSize" value="878231"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb12.jpg"/>
+            </camera>
+            <camera camera_id="13">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250034.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:34"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:34"/>
+                  <property name="Exif/ExposureTime" value="0.005"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:34"/>
+                  <property name="System/FileSize" value="924023"/>
+                </meta>
+              </photo>
+              <thumbnail path="thumb13.jpg"/>
+            </camera>
+            <camera camera_id="14">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250035.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:43"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:43"/>
+                  <property name="Exif/ExposureTime" value="0.00625"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:42"/>
+                  <property name="System/FileSize" value="807341"/>
+                </meta>
+              </photo>
+            </camera>
+            <camera camera_id="15">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250036.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:51:49"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:51:49"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:51:48"/>
+                  <property name="System/FileSize" value="827559"/>
+                </meta>
+              </photo>
+            </camera>
+            <camera camera_id="16">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250037.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:52:21"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:52:21"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:52:20"/>
+                  <property name="System/FileSize" value="874307"/>
+                </meta>
+              </photo>
+            </camera>
+            <camera camera_id="17">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250038.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:52:44"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:52:44"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:52:44"/>
+                  <property name="System/FileSize" value="887950"/>
+                </meta>
+              </photo>
+            </camera>
+            <camera camera_id="18">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250039.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:52:52"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:52:52"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:52:52"/>
+                  <property name="System/FileSize" value="891056"/>
+                </meta>
+              </photo>
+            </camera>
+            <camera camera_id="19">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250040.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:53:13"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:53:13"/>
+                  <property name="Exif/ExposureTime" value="0.01"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:53:12"/>
+                  <property name="System/FileSize" value="890584"/>
+                </meta>
+              </photo>
+            </camera>
+            <camera camera_id="20">
+              <photo path="../../../../../../../../../scratch/camcal_images2/P8250041.JPG">
+                <meta>
+                  <property name="Exif/DateTime" value="2007:08:25 16:53:24"/>
+                  <property name="Exif/DateTimeOriginal" value="2007:08:25 16:53:24"/>
+                  <property name="Exif/ExposureTime" value="0.008"/>
+                  <property name="Exif/FNumber" value="1.8"/>
+                  <property name="Exif/FocalLength" value="7.3"/>
+                  <property name="Exif/ISOSpeedRatings" value="100"/>
+                  <property name="Exif/Make" value="OLYMPUS OPTICAL CO.,LTD"/>
+                  <property name="Exif/Model" value="C4040Z"/>
+                  <property name="Exif/Orientation" value="1"/>
+                  <property name="Exif/Software" value="v552p-A79"/>
+                  <property name="File/ImageHeight" value="1704"/>
+                  <property name="File/ImageWidth" value="2272"/>
+                  <property name="System/FileModifyDate" value="2007:08:25 16:53:24"/>
+                  <property name="System/FileSize" value="901270"/>
+                </meta>
+              </photo>
+            </camera>
+          </cameras>
+          <point_cloud>
+            <tracks path="tracks0.ply"/>
+            <points path="points0.ply"/>
+            <projections camera_id="0" path="projections0.ply"/>
+            <projections camera_id="1" path="projections1.ply"/>
+            <projections camera_id="2" path="projections2.ply"/>
+            <projections camera_id="3" path="projections3.ply"/>
+            <projections camera_id="4" path="projections4.ply"/>
+            <projections camera_id="5" path="projections5.ply"/>
+            <projections camera_id="6" path="projections6.ply"/>
+            <projections camera_id="7" path="projections7.ply"/>
+            <projections camera_id="8" path="projections8.ply"/>
+            <projections camera_id="9" path="projections9.ply"/>
+            <projections camera_id="10" path="projections10.ply"/>
+            <projections camera_id="11" path="projections11.ply"/>
+            <projections camera_id="12" path="projections12.ply"/>
+            <projections camera_id="13" path="projections13.ply"/>
+            <projections camera_id="14" path="projections14.ply"/>
+            <projections camera_id="15" path="projections15.ply"/>
+            <projections camera_id="16" path="projections16.ply"/>
+            <projections camera_id="17" path="projections17.ply"/>
+            <projections camera_id="18" path="projections18.ply"/>
+            <projections camera_id="19" path="projections19.ply"/>
+            <projections camera_id="20" path="projections20.ply"/>
+            <meta>
+              <property name="match/duration" value="53.282826"/>
+              <property name="match/match_downscale" value="1"/>
+              <property name="match/match_filter_mask" value="false"/>
+              <property name="match/match_point_limit" value="40000"/>
+              <property name="match/match_select_pairs" value="0"/>
+              <property name="match/match_tiepoint_limit" value="4000"/>
+            </meta>
+          </point_cloud>
+        </frame>
+      </frames>
+      <region>
+        <center>2.2057297957947480e-01 -4.4176217430293492e-02 1.1525257597047285e+00</center>
+        <size>1.6959500491619108e+00 1.6504749238491057e+00 3.2976769804954525e-01</size>
+        <R>-2.2787288469664027e-01 8.8330989301339380e-01 -4.0967985223183556e-01 5.8266911696574519e-01 4.6080384343156050e-01 6.6944493277121819e-01 7.8010938242940686e-01 -8.6159449762454668e-02 -6.1968209645126959e-01</R>
+      </region>
+      <settings>
+        <property name="accuracy_tiepoints" value="1"/>
+        <property name="accuracy_cameras" value="10"/>
+        <property name="accuracy_cameras_ypr" value="2"/>
+        <property name="accuracy_markers" value="0.0050000000000000001"/>
+        <property name="accuracy_scalebars" value="0.001"/>
+        <property name="accuracy_projections" value="0.10000000000000001"/>
+      </settings>
+      <meta>
+        <property name="align/duration" value="18.963152"/>
+        <property name="optimize/duration" value="1.325074"/>
+        <property name="optimize/fit_flags" value="f cx cy"/>
+      </meta>
+    </chunk>
+  </chunks>
+</document>
