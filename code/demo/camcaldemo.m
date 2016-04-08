@@ -1,4 +1,4 @@
-runAsBundle=true;
+runAsBundle=false;
 weighted=true;
 cpSigma=1e-6;
 
@@ -16,11 +16,12 @@ if ~exist('fName','var')
         d=stub;
         f=[stub,'-pmexport.txt'];
     else
-        d='fixed';
-        f='c4040z-pmexport.txt';
+        stub='fixed';
+        d=stub;
+        f=[stub,'-pmexport.txt'];
     end
-    fName=fullfile(curDir,'data','weighted','camcal',d,f);
-    cpName=fullfile(curDir,'data','weighted','camcal',d,'ctrlpts.txt');
+    fName=fullfile(curDir,'data','weighted','pm','camcal',d,f);
+    cpName=fullfile(curDir,'data','weighted','pm','camcal',d,'ctrlpts.txt');
     ptName=strrep(fName,'-pmexport.txt','-3dpts.txt');
     fprintf('No data file specified, using ''%s''.\n',fName);
     disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
@@ -105,7 +106,9 @@ if runAsBundle
     % Do nothing, estIO is already false.
 else
     % Estimate px,py,c,K1-K3,P1-P2.
-    s0.estIO([1:5,7:8],:)=true;
+    %s0.estIO([1:5,7:8],:)=true;
+    % Estimate px,py,c,K1-K3,P1-P2.
+    s0.estIO([1:3],:)=true;
     % No prior observations.
     s0.useIOobs(:)=false;
 
