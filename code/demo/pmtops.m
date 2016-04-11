@@ -1,49 +1,23 @@
-function pmtops(prob,psFile)
+function pmtops(prob,psFile,newImDir)
 %PMTOPS Convert Photomodeler prob structure to Photoscan file structure.
 %
 %   PMTOPS(PROB,PSFILE) converts the structure PROB loaded from a
-%   Photomodeler file to Photoscan. The PSFILE file name should point to
-%   the main doc.xml file. Both structures must exist and have the same
-%   number of images.
+%   Photomodeler file to Photoscan. The PSFILE file name should be
+%   the path to the main doc.xml file.
 
 % $Id$
 
-if 0
-% Load existing doc.xml.
-s=xml2struct2(psFile);
+psDir=fileparts(psFile);
 
-% Sensor info
-s.document.chunks.chunk.sensors.sensor.Attributes.label='Photomodeler camera';
-s.document.chunks.chunk.sensors.sensor.resolution.Attributes.width=...
-    sprintf('%d',prob.job.imSz(1));
-s.document.chunks.chunk.sensors.sensor.resolution.Attributes.height=...
-    sprintf('%d',prob.job.imSz(2));
+psUnpackedDir=fullfile(psDir,'unpacked');
 
-strs={'pixel_width','pixel_height','focal_length'};
-vals=[prob.job.defCam(4:5)./prob.job.imSz(1:2);prob.job.defCam(1)];
-
-psStrs=cellfun(@(x)x.Attributes.name,s.document.chunks.chunk.sensors.sensor.property,'uniformoutput',false);
-
-[~,ia,ib]=intersect(psStrs,strs);
-
-for i=1:length(ia)
-    s.document.chunks.chunk.sensors.sensor.property{ia(i)}.Attributes.value=...
-        sprintf('%.16f',vals(ib(i)));
-end
-
-j=find(ismember('fixed',psStrs));
-s.document.chunks.chunk.sensors.sensor.property{j}.Attributes.value='true';
-
-s.document.chunks.chunk.sensors.sensor.calibration.Attributes.class='initial';
-
-
+if ~exist(psUnpackedDir)
+    mkdir(psUnpackedDir)
 end
 
 noText=char(zeros(1,0));
 
 camName='Photomodeler imported project camera';
-
-%% TODO: Continue backwards in this file.
 
 eye3x3='1 0 0 0 1 0 0 0 1';
 
@@ -68,20 +42,46 @@ pointsFileName='points0.ply';
 points=struct('Text',noText,'Attributes',struct('path',pointsFileName));
 
 projections=cell(1,length(prob.images));
+projFileNames=cell(1,length(prob.images));
 for i=1:length(projections)
     camId=i-1;
+    projFileNames{i}=sprintf('projections%d.ply',camId);
     projections{i}=struct('Text',noText,...
                           'Attributes',...
                           struct('camera_id',sprintf('%d',camId),...
-                                 'path',sprintf('projections%d.ply',camId)));
+                                 'path',projFileNames{i}));
 end
+projFullFileNames=fullfile(psUnpackedDir,projFileNames);
 
 point_cloud=struct('tracks',tracks,'points',points,...
                    'projections',{projections});
 
-%% TODO: Write tracks0.ply file.
-%% TODO: Write points0.ply file.
-%% TODO: Write projectionsXX.ply file.
+% Write all non-ctrl object points to the point0.ply file.
+pointsFullFileName=fullfile(psUnpackedDir,pointsFileName);
+isObj=~ismember(prob.objPts(:,1),prob.ctrlPts(:,1));
+objPts=prob.objPts(isObj,:);
+vertex=struct('id',objPts(:,1),'x',objPts(:,2),'y',objPts(:,3),'z',objPts(:,4));
+d=struct('vertex',vertex);
+ply_write(d,pointsFullFileName,'binary_little_endian');
+
+% Write all mark points except those of control points to
+% projectionsXX.ply files.
+for i=1:length(projections)
+    camId=i-1;
+    j=prob.markPts(:,1)==camId & ~ismember(prob.markPts(:,2),prob.ctrlPts(:,1));
+    markPts=prob.markPts(j,:);
+    vertex=struct('id',markPts(:,2),'x',markPts(:,3),'y',markPts(:,4),...
+                  'size',4*ones(size(markPts,1),1));
+    d=struct('vertex',vertex);
+    ply_write(d,projFullFileNames{i},'binary_little_endian');
+end
+
+% Write dummy tracks0.ply file.
+tracksFullFileName=fullfile(psUnpackedDir,tracksFileName);
+maxId=max(setdiff(prob.markPts(:,2),prob.ctrlPts(:,1)));
+dummy=zeros(maxId+1,'uint8');
+d=struct('vertex',struct('red',dummy,'green',dummy,'blue',dummy));
+ply_write(d,tracksFullFileName,'binary_little_endian');
 
 marker=cell(1,size(prob.ctrlPts,1));
 
@@ -256,5 +256,14 @@ doc=struct('chunks',chunks,'Attributes',docAttr);
 
 s=struct('document',doc);
 
-struct2xml(s,psFile);
+docFileName='doc.xml';
+docFullFile=fullfile(psUnpackedDir,docFileName);
 
+struct2xml(s,docFullFile);
+
+tmpFile=[tempname(psDir),'.zip'];
+
+zip(tmpFile,{docFileName,tracksFileName,pointsFileName, ...
+             projFileNames{:}},psUnpackedDir);
+
+movefile(tmpFile,psFile);
