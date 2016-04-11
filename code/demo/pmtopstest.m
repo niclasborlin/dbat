@@ -20,6 +20,10 @@ if ~exist('prob')
         prob.images(i).imName=strrep(imName,...
                                      fullfile(baseDir,filesep),'images/');
     end
+    
+    % Only keep first 4 images.
+    prob.images=prob.images(1:4);
+    prob.markPts=prob.markPts(prob.markPts(:,1)<4,:);
 end
 
 pmtops(prob,psFile)
