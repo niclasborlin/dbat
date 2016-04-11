@@ -72,8 +72,8 @@ for i=1:length(projections)
     camId=i-1;
     j=prob.markPts(:,1)==camId & ~ismember(prob.markPts(:,2),prob.ctrlPts(:,1));
     markPts=prob.markPts(j,:);
-    vertex=struct('id',markPts(:,2),'x',markPts(:,3),'y',markPts(:,4),...
-                  'size',4*ones(size(markPts,1),1));
+    vertex=struct('x',markPts(:,3),'y',markPts(:,4),...
+                  'size',4*ones(size(markPts,1),1),'id',markPts(:,2));
     d=struct('vertex',vertex);
     ply_write(d,projFullFileNames{i},'binary_little_endian');
 end
