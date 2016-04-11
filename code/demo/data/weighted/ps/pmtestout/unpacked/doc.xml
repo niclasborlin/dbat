@@ -1,495 +1,494 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <document version="1.2.0">
-  <chunks next_id="1">
-    <chunk id="0" label="Chunk 1 (imported)" enabled="true">
-      <sensors next_id="1">
-        <sensor id="0" label="Photomodeler imported project camera" type="frame">
-          <resolution width="2272" height="1704"/>
-          <property name="pixel_width" value="0.0031924295774647892"/>
-          <property name="pixel_height" value="0.0031924295774647892"/>
-          <property name="focal_length" value="7.4692999999999996"/>
-          <property name="fixed" value="true"/>
-          <bands>
-            <band label="Red"/>
-            <band label="Green"/>
-            <band label="Blue"/>
-          </bands>
-          <calibration type="frame" class="initial">
-            <resolution width="2272" height="1704"/>
-            <fx>2339.6913913858712</fx>
-            <fy>2339.6913913858707</fy>
-            <cx>1133.2434787404179</cx>
-            <cy>817.15193293994378</cy>
-          </calibration>
-        </sensor>
-      </sensors>
-      <cameras next_id="21" next_group_id="0">
-        <camera id="0" label="P8250021.JPG" sensor_id="0" enabled="true">
-          <transform>-9.9978710947983651e-01 2.8442887046683327e-03 -2.0436382745433176e-02 -4.5000000000000005e-02 -1.5178908355164172e-02 -7.7228346429570216e-01 6.3509672611073553e-01 1.2940000000000000e+00 -1.3976282019867442e-02 6.3527172201916360e-01 7.7216222566485837e-01 1.4700000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="1" label="P8250022.JPG" sensor_id="0" enabled="true">
-          <transform>-2.0933054451449939e-03 9.9947826558475661e-01 -3.2230648395591477e-02 -2.8999999999999995e-02 -7.6862658247694926e-01 1.9009714540635575e-02 6.3941520740665003e-01 1.5279999999999998e+00 6.3969429791277577e-01 2.6111824462692557e-02 7.6818577039744151e-01 1.6389999999999996e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="2" label="P8250023.JPG" sensor_id="0" enabled="true">
-          <transform>-6.9067019236955240e-01 5.4258703899805749e-01 -4.7809412303805404e-01 -1.1450000000000000e+00 -7.2133742688831226e-01 -5.6392353732929257e-01 4.0207282998999916e-01 9.6700000000000019e-01 -5.1449022754122609e-02 6.2256690335845710e-01 7.8087351658274851e-01 1.5820000000000001e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="3" label="P8250024.JPG" sensor_id="0" enabled="true">
-          <transform>5.5729902774279683e-01 6.5905425350072366e-01 -5.0503988418691992e-01 -1.1439999999999997e+00 -5.1479665405384989e-01 7.5149481739232682e-01 4.1260143529492754e-01 9.9099999999999977e-01 6.5146158647451680e-01 3.0050463808024591e-02 7.5808625562862475e-01 1.6379999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="4" label="P8250025.JPG" sensor_id="0" enabled="true">
-          <transform>4.1107993377595950e-02 8.2141401263958391e-01 -5.6884897180165950e-01 -1.1710000000000000e+00 -9.9799876822492517e-01 6.3779406106822256e-03 -6.2910893294397030e-02 -8.3000000000000032e-02 -4.8047804341092792e-02 5.7029671374899604e-01 8.2003235715738465e-01 1.4110000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="5" label="P8250026.JPG" sensor_id="0" enabled="true">
-          <transform>8.2859087289080813e-01 -2.1943433968643237e-02 -5.5942439262845212e-01 -1.2140000000000000e+00 5.8560935296030174e-03 9.9951662514864470e-01 -3.0532314357680612e-02 -2.4000000000000000e-02 5.5982396476983842e-01 2.2022755439033551e-02 8.2831885570247121e-01 1.4650000000000001e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="6" label="P8250027.JPG" sensor_id="0" enabled="true">
-          <transform>6.3114510592996431e-01 6.1384753335277908e-01 -4.7418040982031617e-01 -1.0349999999999997e+00 -7.7544408750203808e-01 4.8475321025937368e-01 -4.0459954560202238e-01 -8.4999999999999998e-01 -1.8501957160953153e-02 6.2306141827266126e-01 7.8195405660516548e-01 1.4039999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="7" label="P8250028.JPG" sensor_id="0" enabled="true">
-          <transform>6.2498822334135440e-01 -6.2224540890836955e-01 -4.7138134432439460e-01 -1.2189999999999999e+00 4.7761987716920501e-01 7.8243564112332598e-01 -3.9959194240225060e-01 -9.6699999999999997e-01 6.1746981595661099e-01 2.4599158367431373e-02 7.8620983699653813e-01 1.7149999999999996e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="8" label="P8250029.JPG" sensor_id="0" enabled="true">
-          <transform>9.9999377286868940e-01 -1.5009749371034603e-03 3.1939471007236269e-03 2.5000000000000005e-02 2.9108960805450754e-03 8.6250143950254654e-01 -5.0604623656346182e-01 -1.0439999999999996e+00 -1.9952212539718277e-03 5.0605238259519447e-01 8.6250043777488861e-01 1.5349999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="9" label="P8250030.JPG" sensor_id="0" enabled="true">
-          <transform>7.9898877357904574e-03 -9.9951330891548196e-01 3.0154717620856641e-02 5.3999999999999999e-02 8.5708430477333963e-01 -8.6890039260498625e-03 -5.1510289818828825e-01 -1.0940000000000005e+00 5.1511421665992718e-01 2.9960749516613094e-02 8.5659774531762101e-01 1.6170000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="10" label="P8250031.JPG" sensor_id="0" enabled="true">
-          <transform>6.3530696560467659e-01 -5.7877437546142918e-01 5.1127808652768492e-01 1.2699999999999998e+00 7.7193486372107234e-01 4.9513493180360196e-01 -3.9869532914215577e-01 -9.2500000000000004e-01 -2.2397000381921273e-02 6.4796729980537981e-01 7.6133878973609193e-01 1.5529999999999999e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="11" label="P8250032.JPG" sensor_id="0" enabled="true">
-          <transform>-5.9149519220904734e-01 -6.2968016354950229e-01 5.0362320163576080e-01 1.3650000000000000e+00 5.1868373754290975e-01 -7.7536185081996634e-01 -3.6025155197660730e-01 -9.8099999999999976e-01 6.1733347390377269e-01 4.8134103557751995e-02 7.8522766766880514e-01 1.6149999999999995e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="12" label="P8250033.JPG" sensor_id="0" enabled="true">
-          <transform>1.8877483252432034e-02 -8.3700989588541708e-01 5.4686202539208850e-01 1.1309999999999998e+00 9.9981644338357256e-01 1.7594527245218608e-02 -7.5836766044096171e-03 -2.0000000000000018e-03 -3.2741664400510739e-03 5.4690480597714652e-01 8.3718839757441821e-01 1.4720000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="13" label="P8250034.JPG" sensor_id="0" enabled="true">
-          <transform>-8.3255805683743334e-01 3.0660293938829103e-03 5.5392931088617525e-01 1.2970000000000002e+00 1.3273805169399168e-02 -9.9958711713722903e-01 2.5483354363357948e-02 2.6000000000000006e-02 5.5377873568005664e-01 2.8569121740779656e-02 8.3217361000668544e-01 1.5990000000000002e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="14" label="P8250035.JPG" sensor_id="0" enabled="true">
-          <transform>-6.5952388910540460e-01 -5.8483264403786295e-01 4.7222771855002788e-01 1.1719999999999999e+00 7.5082485592994697e-01 -4.8252255630445440e-01 4.5103660425201536e-01 1.0549999999999999e+00 -3.5920403909985549e-02 6.5202972411163662e-01 7.5734203861785365e-01 1.5020000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="15" label="P8250036.JPG" sensor_id="0" enabled="true">
-          <transform>-6.2604992367401135e-01 6.3429900591701682e-01 4.5357057241453486e-01 1.1940000000000002e+00 -4.5814980780343917e-01 -7.6988159511631515e-01 4.4427590876709699e-01 1.1200000000000003e+00 6.3099940307217106e-01 7.0335628196828065e-02 7.7258828151138892e-01 1.5900000000000003e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="16" label="P8250037.JPG" sensor_id="0" enabled="true">
-          <transform>-9.9990580911516369e-01 -1.0506279059387552e-02 -8.8312512180362141e-03 -7.4999999999999997e-02 9.0808041272146794e-03 -9.8890009853093541e-01 1.4830419455264696e-01 3.2300000000000006e-01 -1.0291350453315267e-02 1.4821003078682790e-01 9.8890235861788434e-01 1.9730000000000001e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="17" label="P8250038.JPG" sensor_id="0" enabled="true">
-          <transform>2.1167749496961635e-02 -9.9970445586801215e-01 1.1955220569945448e-02 -1.7999999999999992e-02 9.9626446522841916e-01 2.2093234695717431e-02 8.3480562431096306e-02 4.2699999999999999e-01 -8.3720019734625589e-02 1.0143465794397594e-02 9.9643768916942932e-01 1.8859999999999999e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="18" label="P8250039.JPG" sensor_id="0" enabled="true">
-          <transform>3.0607525296586047e-02 -9.9950636232022927e-01 -7.0859774626641225e-03 -3.8000000000000006e-02 9.9659421606456455e-01 2.9973723348602089e-02 7.6821510108026514e-02 7.9000000000000015e-02 -7.6571194987899979e-02 -9.4131604684082881e-03 9.9701968110369865e-01 1.8759999999999999e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="19" label="P8250040.JPG" sensor_id="0" enabled="true">
-          <transform>-9.9963467867047140e-01 -8.5489911470881710e-04 -2.7014409985912501e-02 2.0200000000000001e-01 -2.7368611862689249e-03 -9.9116044121502145e-01 1.3264045145162590e-01 2.8299999999999997e-01 -2.6889008725321087e-02 1.3266592975571273e-01 9.9079600942465562e-01 1.9269999999999998e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-        <camera id="20" label="P8250041.JPG" sensor_id="0" enabled="true">
-          <transform>-9.9878768378278437e-01 -4.5581770700515264e-02 1.8586686192711640e-02 -2.3100000000000007e-01 4.7875599807521804e-02 -9.8731139560483916e-01 1.5140718296003897e-01 3.2200000000000006e-01 1.1449439588499864e-02 1.5211347832664385e-01 9.8829671660108165e-01 1.9059999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</transform>
-          <orientation>1</orientation>
-        </camera>
-      </cameras>
-      <markers next_id="1005">
-        <marker id="1001" label="CP1001">
-          <reference x="-0.49990000000000001" y="0.50016000000000005" z="-0.00066" sxy="0.011383000000000001" sz="0.013941" enabled="true"/>
-        </marker>
-        <marker id="1002" label="CP1002">
-          <reference x="0.49986000000000003" y="0.50016000000000005" z="0.00066" sxy="0.011382" sz="0.013941" enabled="true"/>
-        </marker>
-        <marker id="1003" label="CP1003">
-          <reference x="-0.49976999999999999" y="-0.50012000000000001" z="0.00066" sxy="0.011382" sz="0.013939999999999999" enabled="true"/>
-        </marker>
-        <marker id="1004" label="CP1004">
-          <reference x="0.49981999999999999" y="-0.50019999999999998" z="-0.00066" sxy="0.011382" sz="0.013939999999999999" enabled="true"/>
-        </marker>
-      </markers>
-      <frames next_id="1">
-        <frame id="0">
-          <cameras>
-            <camera camera_id="0">
-              <photo path="images/P8250021.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb0.jpg"/>
+   <chunks next_id="1">
+      <chunk enabled="true" id="0" label="Chunk 1 (imported)">
+         <sensors next_id="1">
+            <sensor id="0" label="Photomodeler imported project camera" type="frame">
+               <resolution height="1704" width="2272"/>
+               <property name="pixel_width" value="0.003192429577464789"/>
+               <property name="pixel_height" value="0.003192429577464789"/>
+               <property name="focal_length" value="7.4693"/>
+               <property name="fixed" value="true"/>
+               <bands>
+                  <band label="Red"/>
+                  <band label="Green"/>
+                  <band label="Blue"/>
+               </bands>
+               <calibration class="initial" type="frame">
+                  <resolution height="1704" width="2272"/>
+                  <fx>2339.6913913858711567</fx>
+                  <fy>2339.6913913858707019</fy>
+                  <cx>1133.2434787404179133</cx>
+                  <cy>817.1519329399437765</cy>
+               </calibration>
+            </sensor>
+         </sensors>
+         <cameras next_group_id="0" next_id="21">
+            <camera enable="true" id="0" label="P8250021.JPG" sensor_id="0">
+               <transform>-9.9978710947983718e-01 2.8442887046534263e-03 -2.0436382745404900e-02 -4.5000000000000005e-02 -1.5178908355134682e-02 -7.7228346429570283e-01 6.3509672611073509e-01 1.2940000000000000e+00 -1.3976282019855086e-02 6.3527172201916260e-01 7.7216222566485926e-01 1.4700000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="1">
-              <photo path="images/P8250022.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb1.jpg"/>
+            <camera enable="true" id="1" label="P8250022.JPG" sensor_id="0">
+               <transform>-2.0933054451451466e-03 9.9947826558475639e-01 -3.2230648395591387e-02 -2.8999999999999995e-02 -7.6862658247694926e-01 1.9009714540635374e-02 6.3941520740664992e-01 1.5279999999999998e+00 6.3969429791277543e-01 2.6111824462692515e-02 7.6818577039744140e-01 1.6389999999999996e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="2">
-              <photo path="images/P8250023.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb2.jpg"/>
+            <camera enable="true" id="2" label="P8250023.JPG" sensor_id="0">
+               <transform>-6.9067019236955240e-01 5.4258703899805760e-01 -4.7809412303805388e-01 -1.1450000000000000e+00 -7.2133742688831237e-01 -5.6392353732929257e-01 4.0207282998999905e-01 9.6700000000000019e-01 -5.1449022754122331e-02 6.2256690335845699e-01 7.8087351658274828e-01 1.5820000000000001e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="3">
-              <photo path="images/P8250024.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb3.jpg"/>
+            <camera enable="true" id="3" label="P8250024.JPG" sensor_id="0">
+               <transform>5.5729902774279694e-01 6.5905425350072377e-01 -5.0503988418691959e-01 -1.1439999999999997e+00 -5.1479665405384978e-01 7.5149481739232660e-01 4.1260143529492738e-01 9.9099999999999977e-01 6.5146158647451669e-01 3.0050463808024563e-02 7.5808625562862464e-01 1.6379999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="4">
-              <photo path="images/P8250025.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb4.jpg"/>
+            <camera enable="true" id="4" label="P8250025.JPG" sensor_id="0">
+               <transform>4.1107993377595957e-02 8.2141401263958391e-01 -5.6884897180165939e-01 -1.1710000000000000e+00 -9.9799876822492495e-01 6.3779406106822326e-03 -6.2910893294397086e-02 -8.3000000000000032e-02 -4.8047804341092758e-02 5.7029671374899582e-01 8.2003235715738421e-01 1.4110000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="5">
-              <photo path="images/P8250026.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb5.jpg"/>
+            <camera enable="true" id="5" label="P8250026.JPG" sensor_id="0">
+               <transform>8.2859087289080802e-01 -2.1943433968643282e-02 -5.5942439262845223e-01 -1.2140000000000000e+00 5.8560935296030313e-03 9.9951662514864470e-01 -3.0532314357680671e-02 -2.4000000000000000e-02 5.5982396476983853e-01 2.2022755439033596e-02 8.2831885570247121e-01 1.4650000000000001e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="6">
-              <photo path="images/P8250027.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb6.jpg"/>
+            <camera enable="true" id="6" label="P8250027.JPG" sensor_id="0">
+               <transform>6.3114510592996442e-01 6.1384753335277908e-01 -4.7418040982031606e-01 -1.0349999999999997e+00 -7.7544408750203808e-01 4.8475321025937362e-01 -4.0459954560202244e-01 -8.4999999999999998e-01 -1.8501957160952931e-02 6.2306141827266126e-01 7.8195405660516515e-01 1.4039999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="7">
-              <photo path="images/P8250028.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb7.jpg"/>
+            <camera enable="true" id="7" label="P8250028.JPG" sensor_id="0">
+               <transform>6.2498822334135473e-01 -6.2224540890836932e-01 -4.7138134432439432e-01 -1.2189999999999999e+00 4.7761987716920484e-01 7.8243564112332598e-01 -3.9959194240225038e-01 -9.6699999999999997e-01 6.1746981595661066e-01 2.4599158367431442e-02 7.8620983699653835e-01 1.7149999999999996e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="8">
-              <photo path="images/P8250029.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb8.jpg"/>
+            <camera enable="true" id="8" label="P8250029.JPG" sensor_id="0">
+               <transform>9.9999377286868940e-01 -1.5009749371034608e-03 3.1939471007236216e-03 2.5000000000000005e-02 2.9108960805450702e-03 8.6250143950254710e-01 -5.0604623656346071e-01 -1.0439999999999996e+00 -1.9952212539718264e-03 5.0605238259519347e-01 8.6250043777488905e-01 1.5349999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="9">
-              <photo path="images/P8250030.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb9.jpg"/>
+            <camera enable="true" id="9" label="P8250030.JPG" sensor_id="0">
+               <transform>7.9898877357904071e-03 -9.9951330891548207e-01 3.0154717620856746e-02 5.3999999999999999e-02 8.5708430477333963e-01 -8.6890039260499614e-03 -5.1510289818828847e-01 -1.0940000000000005e+00 5.1511421665992740e-01 2.9960749516613081e-02 8.5659774531762123e-01 1.6170000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="10">
-              <photo path="images/P8250031.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb10.jpg"/>
+            <camera enable="true" id="10" label="P8250031.JPG" sensor_id="0">
+               <transform>6.3530696560467681e-01 -5.7877437546142918e-01 5.1127808652768481e-01 1.2699999999999998e+00 7.7193486372107223e-01 4.9513493180360202e-01 -3.9869532914215577e-01 -9.2500000000000004e-01 -2.2397000381921273e-02 6.4796729980537981e-01 7.6133878973609181e-01 1.5529999999999999e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="11">
-              <photo path="images/P8250032.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb11.jpg"/>
+            <camera enable="true" id="11" label="P8250032.JPG" sensor_id="0">
+               <transform>-5.9149519220904723e-01 -6.2968016354950251e-01 5.0362320163576080e-01 1.3650000000000000e+00 5.1868373754290986e-01 -7.7536185081996600e-01 -3.6025155197660758e-01 -9.8099999999999976e-01 6.1733347390377280e-01 4.8134103557751828e-02 7.8522766766880492e-01 1.6149999999999995e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="12">
-              <photo path="images/P8250033.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb12.jpg"/>
+            <camera enable="true" id="12" label="P8250033.JPG" sensor_id="0">
+               <transform>1.8877483252432218e-02 -8.3700989588541708e-01 5.4686202539208850e-01 1.1309999999999998e+00 9.9981644338357267e-01 1.7594527245218719e-02 -7.5836766044096969e-03 -2.0000000000000018e-03 -3.2741664400509590e-03 5.4690480597714664e-01 8.3718839757441821e-01 1.4720000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="13">
-              <photo path="images/P8250034.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
-              <thumbnail path="thumb13.jpg"/>
+            <camera enable="true" id="13" label="P8250034.JPG" sensor_id="0">
+               <transform>-8.3255805683743422e-01 3.0660293939066829e-03 5.5392931088617348e-01 1.2970000000000002e+00 1.3273805169366278e-02 -9.9958711713722970e-01 2.5483354363351515e-02 2.6000000000000006e-02 5.5377873568005576e-01 2.8569121740756088e-02 8.3217361000668666e-01 1.5990000000000002e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="14">
-              <photo path="images/P8250035.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="14" label="P8250035.JPG" sensor_id="0">
+               <transform>-6.5952388910540483e-01 -5.8483264403786284e-01 4.7222771855002771e-01 1.1719999999999999e+00 7.5082485592994685e-01 -4.8252255630445451e-01 4.5103660425201558e-01 1.0549999999999999e+00 -3.5920403909985632e-02 6.5202972411163673e-01 7.5734203861785354e-01 1.5020000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="15">
-              <photo path="images/P8250036.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="15" label="P8250036.JPG" sensor_id="0">
+               <transform>-6.2604992367401135e-01 6.3429900591701704e-01 4.5357057241453458e-01 1.1940000000000002e+00 -4.5814980780343967e-01 -7.6988159511631504e-01 4.4427590876709705e-01 1.1200000000000003e+00 6.3099940307217073e-01 7.0335628196827926e-02 7.7258828151138925e-01 1.5900000000000003e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="16">
-              <photo path="images/P8250037.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="16" label="P8250037.JPG" sensor_id="0">
+               <transform>-9.9990580911516369e-01 -1.0506279059387825e-02 -8.8312512180462252e-03 -7.4999999999999997e-02 9.0808041272134616e-03 -9.8890009853093552e-01 1.4830419455264729e-01 3.2300000000000006e-01 -1.0291350453325212e-02 1.4821003078682815e-01 9.8890235861788423e-01 1.9730000000000001e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="17">
-              <photo path="images/P8250038.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="17" label="P8250038.JPG" sensor_id="0">
+               <transform>2.1167749496961277e-02 -9.9970445586801182e-01 1.1955220569945560e-02 -1.7999999999999992e-02 9.9626446522841916e-01 2.2093234695717088e-02 8.3480562431096347e-02 4.2699999999999999e-01 -8.3720019734625631e-02 1.0143465794397724e-02 9.9643768916942910e-01 1.8859999999999999e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="18">
-              <photo path="images/P8250039.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="18" label="P8250039.JPG" sensor_id="0">
+               <transform>3.0607525296585811e-02 -9.9950636232022938e-01 -7.0859774626642145e-03 -3.8000000000000006e-02 9.9659421606456455e-01 2.9973723348601853e-02 7.6821510108026347e-02 7.9000000000000015e-02 -7.6571194987899827e-02 -9.4131604684083540e-03 9.9701968110369865e-01 1.8759999999999999e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="19">
-              <photo path="images/P8250040.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="19" label="P8250040.JPG" sensor_id="0">
+               <transform>-9.9963467867046574e-01 -8.5489911495672437e-04 -2.7014409986116723e-02 2.0200000000000001e-01 -2.7368611860501641e-03 -9.9116044121502234e-01 1.3264045145162340e-01 2.8299999999999997e-01 -2.6889008725556402e-02 1.3266592975570410e-01 9.9079600942465018e-01 1.9269999999999998e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-            <camera camera_id="20">
-              <photo path="images/P8250041.JPG">
-                <meta>
-                  <property name="Exif/FocalLength" value="7.4693"/>
-                  <property name="Exif/Model" value="Photomodeler imported project camera"/>
-                  <property name="File/ImageHeight" value="1704"/>
-                  <property name="File/ImageWidth" value="2272"/>
-                </meta>
-              </photo>
+            <camera enable="true" id="20" label="P8250041.JPG" sensor_id="0">
+               <transform>-9.9878768378278449e-01 -4.5581770700512489e-02 1.8586686192711175e-02 -2.3100000000000007e-01 4.7875599807518994e-02 -9.8731139560483938e-01 1.5140718296003899e-01 3.2200000000000006e-01 1.1449439588499827e-02 1.5211347832664379e-01 9.8829671660108176e-01 1.9059999999999997e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 </transform>
+               <orientation>1</orientation>
             </camera>
-          </cameras>
-          <markers>
-            <marker marker_id="1001">
-              <location camera_id="0" pinned="true" x="1813.4283" y="1266.2367"/>
-              <location camera_id="1" pinned="true" x="823.18542" y="1457.4089"/>
-              <location camera_id="2" pinned="true" x="1096.8101" y="1314.4172"/>
-              <location camera_id="3" pinned="true" x="541.17432" y="809.349"/>
-              <location camera_id="4" pinned="true" x="430.77771" y="1178.3915"/>
-              <location camera_id="5" pinned="true" x="816.13879" y="150.50841"/>
-              <location camera_id="6" pinned="true" x="316.11349" y="688.21948"/>
-              <location camera_id="7" pinned="true" x="1224.4847" y="153.5849"/>
-              <location camera_id="8" pinned="true" x="575.94391" y="217.9456"/>
-              <location camera_id="9" pinned="true" x="1675.7448" y="312.50659"/>
-              <location camera_id="10" pinned="true" x="1142.4479" y="191.2971"/>
-              <location camera_id="11" pinned="true" x="1862.2567" y="860.38409"/>
-              <location camera_id="12" pinned="true" x="1642.6206" y="209.20461"/>
-              <location camera_id="13" pinned="true" x="1739.8291" y="1334.2502"/>
-              <location camera_id="14" pinned="true" x="1905.8616" y="539.22028"/>
-              <location camera_id="15" pinned="true" x="1474.557" y="1527.9703"/>
-              <location camera_id="16" pinned="true" x="1663.2393" y="1366.7108"/>
-              <location camera_id="17" pinned="true" x="1402.9517" y="249.03799"/>
-              <location camera_id="18" pinned="true" x="1810.6897" y="211.10429"/>
-              <location camera_id="19" pinned="true" x="2039.1282" y="1382.8729"/>
-              <location camera_id="20" pinned="true" x="1447.9677" y="1376.8127"/>
+         </cameras>
+         <markers next_id="1005">
+            <marker id="1001" label="CP1001">
+               <reference enabled="true" sx="0.011383" sy="0.011383" sz="0.013941" x="-0.4999" y="0.50016" z="-0.00066"/>
             </marker>
-            <marker marker_id="1002">
-              <location camera_id="0" pinned="true" x="428.5563" y="1255.3326"/>
-              <location camera_id="1" pinned="true" x="825.07568" y="262.58691"/>
-              <location camera_id="2" pinned="true" x="392.38708" y="640.79242"/>
-              <location camera_id="3" pinned="true" x="1236.4396" y="146.8528"/>
-              <location camera_id="4" pinned="true" x="659.96881" y="208.9749"/>
-              <location camera_id="5" pinned="true" x="1761.1663" y="344.38681"/>
-              <location camera_id="6" pinned="true" x="1082.9941" y="120.158"/>
-              <location camera_id="7" pinned="true" x="1733.9701" y="786.80847"/>
-              <location camera_id="8" pinned="true" x="1655.739" y="216.71519"/>
-              <location camera_id="9" pinned="true" x="1691.5436" y="1345.6228"/>
-              <location camera_id="10" pinned="true" x="1822.1971" y="661.35278"/>
-              <location camera_id="11" pinned="true" x="1422.4836" y="1512.1451"/>
-              <location camera_id="12" pinned="true" x="1845.7885" y="1202.2654"/>
-              <location camera_id="13" pinned="true" x="854.26868" y="1495.0255"/>
-              <location camera_id="14" pinned="true" x="1242.8472" y="1249.4706"/>
-              <location camera_id="15" pinned="true" x="770.27979" y="913.08612"/>
-              <location camera_id="16" pinned="true" x="483.38101" y="1373.7281"/>
-              <location camera_id="17" pinned="true" x="1428.8187" y="1472.1725"/>
-              <location camera_id="18" pinned="true" x="1844.0717" y="1438.7994"/>
-              <location camera_id="19" pinned="true" x="833.50818" y="1390.0558"/>
-              <location camera_id="20" pinned="true" x="231.94859" y="1423.3511"/>
+            <marker id="1002" label="CP1002">
+               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.013941" x="0.49986" y="0.50016" z="0.00066"/>
             </marker>
-            <marker marker_id="1003">
-              <location camera_id="0" pinned="true" x="1641.6407" y="360.47571"/>
-              <location camera_id="1" pinned="true" x="1594.8842" y="1314.6595"/>
-              <location camera_id="2" pinned="true" x="1875.1542" y="611.32141"/>
-              <location camera_id="3" pinned="true" x="1196.184" y="1595.2397"/>
-              <location camera_id="4" pinned="true" x="1901.0891" y="1200.4238"/>
-              <location camera_id="5" pinned="true" x="804.80481" y="1561.8844"/>
-              <location camera_id="6" pinned="true" x="1275.9064" y="1397.5568"/>
-              <location camera_id="7" pinned="true" x="657.15521" y="970.6377"/>
-              <location camera_id="8" pinned="true" x="396.42831" y="1251.7526"/>
-              <location camera_id="9" pinned="true" x="695.39282" y="151.019"/>
-              <location camera_id="10" pinned="true" x="365.9942" y="585.8728"/>
-              <location camera_id="11" pinned="true" x="1474.384" y="123.8509"/>
-              <location camera_id="12" pinned="true" x="571.97778" y="225.8154"/>
-              <location camera_id="13" pinned="true" x="1722.817" y="353.96991"/>
-              <location camera_id="14" pinned="true" x="1123.6158" y="162.90581"/>
-              <location camera_id="15" pinned="true" x="1808.248" y="765.70862"/>
-              <location camera_id="16" pinned="true" x="1615.8923" y="236.66"/>
-              <location camera_id="17" pinned="true" x="245.31821" y="310.78549"/>
-              <location camera_id="18" pinned="true" x="599.76508" y="266.48209"/>
-              <location camera_id="19" pinned="true" x="1984.3383" y="230.2113"/>
-              <location camera_id="20" pinned="true" x="1370.0125" y="208.778"/>
+            <marker id="1004" label="CP1004">
+               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="0.49982" y="-0.5002" z="-0.00066"/>
             </marker>
-            <marker marker_id="1004">
-              <location camera_id="0" pinned="true" x="635.60571" y="362.55161"/>
-              <location camera_id="1" pinned="true" x="1588.2811" y="417.02509"/>
-              <location camera_id="2" pinned="true" x="1136.7921" y="172.0244"/>
-              <location camera_id="3" pinned="true" x="1663.0096" y="891.9939"/>
-              <location camera_id="4" pinned="true" x="1735.8" y="202.0153"/>
-              <location camera_id="5" pinned="true" x="1760.1241" y="1391.3993"/>
-              <location camera_id="6" pinned="true" x="1966.1254" y="544.7616"/>
-              <location camera_id="7" pinned="true" x="1364.2148" y="1542.7185"/>
-              <location camera_id="8" pinned="true" x="1816.2915" y="1256.5446"/>
-              <location camera_id="9" pinned="true" x="698.27051" y="1493.4614"/>
-              <location camera_id="10" pinned="true" x="965.92407" y="1281.0873"/>
-              <location camera_id="11" pinned="true" x="841.0387" y="700.48907"/>
-              <location camera_id="12" pinned="true" x="405.0596" y="1229.6451"/>
-              <location camera_id="13" pinned="true" x="839.4986" y="204.7554"/>
-              <location camera_id="14" pinned="true" x="423.36581" y="643.34253"/>
-              <location camera_id="15" pinned="true" x="1307.8754" y="115.3652"/>
-              <location camera_id="16" pinned="true" x="519.46149" y="253.93649"/>
-              <location camera_id="17" pinned="true" x="267.7973" y="1455.9775"/>
-              <location camera_id="18" pinned="true" x="639.57458" y="1453.9531"/>
-              <location camera_id="19" pinned="true" x="856.68799" y="226.72141"/>
-              <location camera_id="20" pinned="true" x="244.90421" y="268.91461"/>
+            <marker id="1003" label="CP1003">
+               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="-0.49977" y="-0.50012" z="0.00066"/>
             </marker>
-          </markers>
-          <point_cloud>
-            <tracks path="tracks0.ply"/>
-            <points path="points0.ply"/>
-            <projections camera_id="0" path="projections0.ply"/>
-            <projections camera_id="1" path="projections1.ply"/>
-            <projections camera_id="2" path="projections2.ply"/>
-            <projections camera_id="3" path="projections3.ply"/>
-            <projections camera_id="4" path="projections4.ply"/>
-            <projections camera_id="5" path="projections5.ply"/>
-            <projections camera_id="6" path="projections6.ply"/>
-            <projections camera_id="7" path="projections7.ply"/>
-            <projections camera_id="8" path="projections8.ply"/>
-            <projections camera_id="9" path="projections9.ply"/>
-            <projections camera_id="10" path="projections10.ply"/>
-            <projections camera_id="11" path="projections11.ply"/>
-            <projections camera_id="12" path="projections12.ply"/>
-            <projections camera_id="13" path="projections13.ply"/>
-            <projections camera_id="14" path="projections14.ply"/>
-            <projections camera_id="15" path="projections15.ply"/>
-            <projections camera_id="16" path="projections16.ply"/>
-            <projections camera_id="17" path="projections17.ply"/>
-            <projections camera_id="18" path="projections18.ply"/>
-            <projections camera_id="19" path="projections19.ply"/>
-            <projections camera_id="20" path="projections20.ply"/>
-          </point_cloud>
-        </frame>
-      </frames>
-      <transform>
-        <rotation>1.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</rotation>
-        <translation>0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00</translation>
-        <scale>1.0000000000000000e+00</scale>
-      </transform>
-      <region>
-        <center>-1.0000000000010001e-05 7.9999999999968985e-05 6.3500000000000015e-04</center>
-        <size>1.2852800000000002e+00 1.2862600000000000e+00 6.7700000000000000e-03</size>
-        <R>1.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 0.0000000000000000e+00 1.0000000000000000e+00</R>
-      </region>
-      <settings>
-        <property name="accuracy_tiepoints" value="1"/>
-        <property name="accuracy_cameras" value="10"/>
-        <property name="accuracy_cameras_ypr" value="2"/>
-        <property name="accuracy_markers" value="0.0050000000000000001"/>
-        <property name="accuracy_scalebars" value="0.001"/>
-        <property name="accuracy_projections" value="0.10000000000000001"/>
-      </settings>
-    </chunk>
-  </chunks>
+         </markers>
+         <frames next_id="1">
+            <frame id="0">
+               <cameras>
+                  <camera camera_id="0">
+                     <photo path="images/P8250021.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb0.jpg"/>
+                  </camera>
+                  <camera camera_id="1">
+                     <photo path="images/P8250022.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb1.jpg"/>
+                  </camera>
+                  <camera camera_id="2">
+                     <photo path="images/P8250023.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb2.jpg"/>
+                  </camera>
+                  <camera camera_id="3">
+                     <photo path="images/P8250024.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb3.jpg"/>
+                  </camera>
+                  <camera camera_id="4">
+                     <photo path="images/P8250025.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb4.jpg"/>
+                  </camera>
+                  <camera camera_id="5">
+                     <photo path="images/P8250026.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb5.jpg"/>
+                  </camera>
+                  <camera camera_id="6">
+                     <photo path="images/P8250027.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb6.jpg"/>
+                  </camera>
+                  <camera camera_id="7">
+                     <photo path="images/P8250028.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb7.jpg"/>
+                  </camera>
+                  <camera camera_id="8">
+                     <photo path="images/P8250029.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb8.jpg"/>
+                  </camera>
+                  <camera camera_id="9">
+                     <photo path="images/P8250030.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb9.jpg"/>
+                  </camera>
+                  <camera camera_id="10">
+                     <photo path="images/P8250031.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb10.jpg"/>
+                  </camera>
+                  <camera camera_id="11">
+                     <photo path="images/P8250032.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb11.jpg"/>
+                  </camera>
+                  <camera camera_id="12">
+                     <photo path="images/P8250033.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb12.jpg"/>
+                  </camera>
+                  <camera camera_id="13">
+                     <photo path="images/P8250034.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb13.jpg"/>
+                  </camera>
+                  <camera camera_id="14">
+                     <photo path="images/P8250035.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb14.jpg"/>
+                  </camera>
+                  <camera camera_id="15">
+                     <photo path="images/P8250036.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb15.jpg"/>
+                  </camera>
+                  <camera camera_id="16">
+                     <photo path="images/P8250037.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb16.jpg"/>
+                  </camera>
+                  <camera camera_id="17">
+                     <photo path="images/P8250038.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb17.jpg"/>
+                  </camera>
+                  <camera camera_id="18">
+                     <photo path="images/P8250039.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb18.jpg"/>
+                  </camera>
+                  <camera camera_id="19">
+                     <photo path="images/P8250040.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb19.jpg"/>
+                  </camera>
+                  <camera camera_id="20">
+                     <photo path="images/P8250041.JPG">
+                        <meta>
+                           <property name="Exif/FocalLength" value="7.4693"/>
+                           <property name="Exif/Model" value="Photomodeler imported project camera"/>
+                           <property name="File/ImageHeight" value="1704"/>
+                           <property name="File/ImageWidth" value="2272"/>
+                        </meta>
+                     </photo>
+                     <thumbnail path="thumb20.jpg"/>
+                  </camera>
+               </cameras>
+               <markers>
+                  <marker marker_id="1001">
+                     <location camera_id="0" pinned="true" x="1813.4284" y="1266.2367"/>
+                     <location camera_id="1" pinned="true" x="823.1854" y="1457.4089"/>
+                     <location camera_id="2" pinned="true" x="1096.8101" y="1314.4172"/>
+                     <location camera_id="3" pinned="true" x="541.1743" y="809.349"/>
+                     <location camera_id="4" pinned="true" x="430.7777" y="1178.3915"/>
+                     <location camera_id="5" pinned="true" x="816.1388" y="150.5084"/>
+                     <location camera_id="6" pinned="true" x="316.1135" y="688.2195"/>
+                     <location camera_id="7" pinned="true" x="1224.4848" y="153.5849"/>
+                     <location camera_id="8" pinned="true" x="575.9439" y="217.9456"/>
+                     <location camera_id="9" pinned="true" x="1675.7447" y="312.5066"/>
+                     <location camera_id="10" pinned="true" x="1142.4479" y="191.2971"/>
+                     <location camera_id="11" pinned="true" x="1862.2567" y="860.3841"/>
+                     <location camera_id="12" pinned="true" x="1642.6206" y="209.2046"/>
+                     <location camera_id="13" pinned="true" x="1739.8291" y="1334.2502"/>
+                     <location camera_id="14" pinned="true" x="1905.8616" y="539.2203"/>
+                     <location camera_id="15" pinned="true" x="1474.557" y="1527.9703"/>
+                     <location camera_id="16" pinned="true" x="1663.2392" y="1366.7108"/>
+                     <location camera_id="17" pinned="true" x="1402.9517" y="249.038"/>
+                     <location camera_id="18" pinned="true" x="1810.6897" y="211.1043"/>
+                     <location camera_id="19" pinned="true" x="2039.1282" y="1382.8729"/>
+                     <location camera_id="20" pinned="true" x="1447.9676" y="1376.8127"/>
+                  </marker>
+                  <marker marker_id="1002">
+                     <location camera_id="0" pinned="true" x="428.5563" y="1255.3326"/>
+                     <location camera_id="1" pinned="true" x="825.0757" y="262.5869"/>
+                     <location camera_id="2" pinned="true" x="392.3871" y="640.7924"/>
+                     <location camera_id="3" pinned="true" x="1236.4396" y="146.8528"/>
+                     <location camera_id="4" pinned="true" x="659.9688" y="208.9749"/>
+                     <location camera_id="5" pinned="true" x="1761.1662" y="344.3868"/>
+                     <location camera_id="6" pinned="true" x="1082.9941" y="120.158"/>
+                     <location camera_id="7" pinned="true" x="1733.9701" y="786.8085"/>
+                     <location camera_id="8" pinned="true" x="1655.739" y="216.7152"/>
+                     <location camera_id="9" pinned="true" x="1691.5436" y="1345.6228"/>
+                     <location camera_id="10" pinned="true" x="1822.1972" y="661.3528"/>
+                     <location camera_id="11" pinned="true" x="1422.4837" y="1512.1451"/>
+                     <location camera_id="12" pinned="true" x="1845.7885" y="1202.2654"/>
+                     <location camera_id="13" pinned="true" x="854.2687" y="1495.0255"/>
+                     <location camera_id="14" pinned="true" x="1242.8472" y="1249.4706"/>
+                     <location camera_id="15" pinned="true" x="770.2798" y="913.0861"/>
+                     <location camera_id="16" pinned="true" x="483.381" y="1373.7282"/>
+                     <location camera_id="17" pinned="true" x="1428.8187" y="1472.1725"/>
+                     <location camera_id="18" pinned="true" x="1844.0716" y="1438.7994"/>
+                     <location camera_id="19" pinned="true" x="833.5082" y="1390.0558"/>
+                     <location camera_id="20" pinned="true" x="231.9486" y="1423.3511"/>
+                  </marker>
+                  <marker marker_id="1004">
+                     <location camera_id="0" pinned="true" x="635.6057" y="362.5516"/>
+                     <location camera_id="1" pinned="true" x="1588.2811" y="417.0251"/>
+                     <location camera_id="2" pinned="true" x="1136.7921" y="172.0244"/>
+                     <location camera_id="3" pinned="true" x="1663.0097" y="891.9939"/>
+                     <location camera_id="4" pinned="true" x="1735.8" y="202.0153"/>
+                     <location camera_id="5" pinned="true" x="1760.1241" y="1391.3993"/>
+                     <location camera_id="6" pinned="true" x="1966.1254" y="544.7616"/>
+                     <location camera_id="7" pinned="true" x="1364.2148" y="1542.7185"/>
+                     <location camera_id="8" pinned="true" x="1816.2915" y="1256.5446"/>
+                     <location camera_id="9" pinned="true" x="698.2705" y="1493.4614"/>
+                     <location camera_id="10" pinned="true" x="965.9241" y="1281.0873"/>
+                     <location camera_id="11" pinned="true" x="841.0387" y="700.4891"/>
+                     <location camera_id="12" pinned="true" x="405.0596" y="1229.6451"/>
+                     <location camera_id="13" pinned="true" x="839.4986" y="204.7554"/>
+                     <location camera_id="14" pinned="true" x="423.3658" y="643.3425"/>
+                     <location camera_id="15" pinned="true" x="1307.8754" y="115.3652"/>
+                     <location camera_id="16" pinned="true" x="519.4615" y="253.9365"/>
+                     <location camera_id="17" pinned="true" x="267.7973" y="1455.9775"/>
+                     <location camera_id="18" pinned="true" x="639.5746" y="1453.9531"/>
+                     <location camera_id="19" pinned="true" x="856.688" y="226.7214"/>
+                     <location camera_id="20" pinned="true" x="244.9042" y="268.9146"/>
+                  </marker>
+                  <marker marker_id="1003">
+                     <location camera_id="0" pinned="true" x="1641.6407" y="360.4757"/>
+                     <location camera_id="1" pinned="true" x="1594.8842" y="1314.6596"/>
+                     <location camera_id="2" pinned="true" x="1875.1542" y="611.3214"/>
+                     <location camera_id="3" pinned="true" x="1196.184" y="1595.2398"/>
+                     <location camera_id="4" pinned="true" x="1901.0891" y="1200.4238"/>
+                     <location camera_id="5" pinned="true" x="804.8048" y="1561.8844"/>
+                     <location camera_id="6" pinned="true" x="1275.9064" y="1397.5568"/>
+                     <location camera_id="7" pinned="true" x="657.1552" y="970.6377"/>
+                     <location camera_id="8" pinned="true" x="396.4283" y="1251.7526"/>
+                     <location camera_id="9" pinned="true" x="695.3928" y="151.019"/>
+                     <location camera_id="10" pinned="true" x="365.9942" y="585.8728"/>
+                     <location camera_id="11" pinned="true" x="1474.384" y="123.8509"/>
+                     <location camera_id="12" pinned="true" x="571.9778" y="225.8154"/>
+                     <location camera_id="13" pinned="true" x="1722.817" y="353.9699"/>
+                     <location camera_id="14" pinned="true" x="1123.6158" y="162.9058"/>
+                     <location camera_id="15" pinned="true" x="1808.248" y="765.7086"/>
+                     <location camera_id="16" pinned="true" x="1615.8923" y="236.66"/>
+                     <location camera_id="17" pinned="true" x="245.3182" y="310.7855"/>
+                     <location camera_id="18" pinned="true" x="599.7651" y="266.4821"/>
+                     <location camera_id="19" pinned="true" x="1984.3382" y="230.2113"/>
+                     <location camera_id="20" pinned="true" x="1370.0125" y="208.778"/>
+                  </marker>
+               </markers>
+               <point_cloud>
+                  <tracks path="tracks0.ply"/>
+                  <points path="points0.ply"/>
+                  <projections camera_id="0" path="projections0.ply"/>
+                  <projections camera_id="1" path="projections1.ply"/>
+                  <projections camera_id="2" path="projections2.ply"/>
+                  <projections camera_id="3" path="projections3.ply"/>
+                  <projections camera_id="4" path="projections4.ply"/>
+                  <projections camera_id="5" path="projections5.ply"/>
+                  <projections camera_id="6" path="projections6.ply"/>
+                  <projections camera_id="7" path="projections7.ply"/>
+                  <projections camera_id="8" path="projections8.ply"/>
+                  <projections camera_id="9" path="projections9.ply"/>
+                  <projections camera_id="10" path="projections10.ply"/>
+                  <projections camera_id="11" path="projections11.ply"/>
+                  <projections camera_id="12" path="projections12.ply"/>
+                  <projections camera_id="13" path="projections13.ply"/>
+                  <projections camera_id="14" path="projections14.ply"/>
+                  <projections camera_id="15" path="projections15.ply"/>
+                  <projections camera_id="16" path="projections16.ply"/>
+                  <projections camera_id="17" path="projections17.ply"/>
+                  <projections camera_id="18" path="projections18.ply"/>
+                  <projections camera_id="19" path="projections19.ply"/>
+                  <projections camera_id="20" path="projections20.ply"/>
+               </point_cloud>
+            </frame>
+         </frames>
+         <transform>
+            <rotation>1 0 0 0 1 0 0 0 1</rotation>
+            <translation>0 0 0</translation>
+            <scale>1</scale>
+         </transform>
+         <region>
+            <center>-1.0000000000010001e-05 7.9999999999968985e-05 6.3500000000000015e-04 </center>
+            <size>1.2852800000000002e+00 1.2862600000000000e+00 6.7700000000000000e-03 </size>
+            <R>1 0 0 0 1 0 0 0 1</R>
+         </region>
+      </chunk>
+   </chunks>
 </document>
