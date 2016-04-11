@@ -1,4 +1,4 @@
-psStub='pmtest';
+psStub='pmtestin';
 psDir=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub);
 psFile=fullfile(psDir,[psStub,'.psz']);
 
@@ -8,12 +8,28 @@ pmFile=fullfile(fileparts(mfilename('fullpath')),'data','weighted','pm',...
 
 if ~exist('prob')
     prob=loadpm(pmFile);
+    if any(isnan(prob.job.imSz))
+        error('No image size');
+    end
     baseDir=unique(cellfun(@(x)fileparts(strrep(x,'\',filesep)), ...
-                           {prob.images.imName},'uniformoutput',false));
+                           {prob.images.imName},'uniformoutput', ...
+                           false));
+    baseDir=baseDir{1};
     for i=1:length(prob.images)
-        prob.images(i).imName=strrep(prob.images(i).imName,...
+        imName=strrep(prob.images(i).imName,'\',filesep);
+        prob.images(i).imName=strrep(imName,...
                                      fullfile(baseDir,filesep),'images/');
     end
 end
 
 pmtops(prob,psFile)
+
+plytoascii(fullfile(psDir,'unpacked'));
+
+psStub='pmtestout';
+psDir=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub);
+psFile=fullfile(psDir,[psStub,'.psz']);
+
+pmtops(prob,psFile)
+
+plytoascii(fullfile(psDir,'unpacked'));
