@@ -15,6 +15,8 @@ if ~exist(psUnpackedDir)
     mkdir(psUnpackedDir)
 end
 
+delete(fullfile(psUnpackedDir,'*.ply'));
+
 noText=char(zeros(1,0));
 
 camName='Photomodeler imported project camera';
