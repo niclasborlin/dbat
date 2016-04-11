@@ -1,12 +1,0 @@
-ply
-format binary_little_endian 1.0
-element vertex 96
-property char id
-property float x
-property float y
-property char size
-end_header
-4#àDâ²ÊD0r¥D³œÊD<İ1uDnšÊDFsCKDëfÊD'V+»D	>ÊDP§]"D÷ÉDX1õCSuÉDOÒĞDˆ„ÉDátæDšÜÈDÎüD.4ÈD?osDÿ
-¶D5ğ7DáùµDHœIDÉıµD.1¥D€¹µDYÕéïCXµD&sâºD˜,µDÏ¿ĞD4´D
-üDD÷²DJ“1GD¾¡DR0ÈD4ş DBÇÃqD§õ D[n#ëC¯à D9D¾ D,ıˆ¤D Z D#º™ºD_ÍŸDT›ĞDLŸDˆnæD²YD	@üDJ„D]aÒæC¤ŒDV1™Dnõ‹DLmVEDs»‹DD}#pD
-r‹D:$àDÉ‹D/÷ÿ£D-ŠD%Å8ºD%ŠD†ZĞD:O‰Dı:æDãƒˆD'æûDÄ¸‡D`-3ãCpÿmDW¼ÍD9mDOĞ¤CD/ElDEi‡nDrQkD;-Df<jD1Èf£DIiD$¹¹DO¾gD'êÏDSfDÎßåD»èdD˜ûDa{cDaLàC¡ªCDUá†DW;BDNBBDÆÈ@DC½;mD“N?D8”ŠŒDÇß=D+›À¢D•y<D"Å¹D‘;D:AÏD´Á9D¶;åD»x8DeóúD>7D_k"ŞCÀKDTÓdDğEDMÎ	ADQNDAùıkD[nD7Àİ‹Dá§D)²¢DD!rI¸Dì˜DzuÎD%QD/iäD)DõúD’D^UyÜC¼vŞCSÚ‹DÙ^ÙCK»@DÇsÔC@pÛjDÑâÏC6C0‹D¦ËC(E¡DtÈC 'o·DÒÅCo†ÍDˆ„ÂC#pãD€`ÀC’+ùDÕp¾C\‚ZÛCì7‹CI‘f?Dú=C>XŞiDÏtC30‘ŠDakC-çw D½ƒbCÂ¶D‰\C]~ÌD÷FWCNøDN!OCZÇ»ÚCËäBQvD}ğÉBGÈÏ>DZ•±B=*öhDE8šB2Ññ‰Dıç…B*§ŸDš·bB‡µDÍÌKBé`ËD&S3B1áDMÄBÆíöDYB
