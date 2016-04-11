@@ -96,7 +96,7 @@ imPts=pts2d(i,:);
 id=imPts(:,2)+1;
 xy=imPts(:,3:4);
 sz=imPts(:,5);
-p=PTCircle2D(PTGaussian(xy'),sz',id');
+%p=PTCircle2D(PTGaussian(xy'),sz',id');
 
 n=sum(vis(id,:),2);
 %
@@ -105,6 +105,6 @@ j=ismember(id,pts3d(:,1)+1);
 line(imPts(j,3),imPts(j,4),'marker','o','linestyle','none','color','b');
 line(imPts(~j,3),imPts(~j,4),'marker','o','linestyle','none','color','y');
 %line(imPts(n>2,3),imPts(n>2,4),'marker','o','linestyle','none','color','b');
-hold on
-plot(p)
-hold off
+%hold on
+%plot(p)
+%hold off
