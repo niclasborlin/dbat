@@ -48,11 +48,11 @@
             <marker id="1002" label="CP1002">
                <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.013941" x="0.49986" y="0.50016" z="0.00066"/>
             </marker>
-            <marker id="1004" label="CP1004">
-               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="0.49982" y="-0.5002" z="-0.00066"/>
-            </marker>
             <marker id="1003" label="CP1003">
                <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="-0.49977" y="-0.50012" z="0.00066"/>
+            </marker>
+            <marker id="1004" label="CP1004">
+               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="0.49982" y="-0.5002" z="-0.00066"/>
             </marker>
          </markers>
          <frames next_id="1">
@@ -116,17 +116,17 @@
                      <location camera_id="2" pinned="true" x="392.3871" y="640.7924"/>
                      <location camera_id="3" pinned="true" x="1236.4396" y="146.8528"/>
                   </marker>
-                  <marker marker_id="1004">
-                     <location camera_id="0" pinned="true" x="635.6057" y="362.5516"/>
-                     <location camera_id="1" pinned="true" x="1588.2811" y="417.0251"/>
-                     <location camera_id="2" pinned="true" x="1136.7921" y="172.0244"/>
-                     <location camera_id="3" pinned="true" x="1663.0097" y="891.9939"/>
-                  </marker>
                   <marker marker_id="1003">
                      <location camera_id="0" pinned="true" x="1641.6407" y="360.4757"/>
                      <location camera_id="1" pinned="true" x="1594.8842" y="1314.6596"/>
                      <location camera_id="2" pinned="true" x="1875.1542" y="611.3214"/>
                      <location camera_id="3" pinned="true" x="1196.184" y="1595.2398"/>
+                  </marker>
+                  <marker marker_id="1004">
+                     <location camera_id="0" pinned="true" x="635.6057" y="362.5516"/>
+                     <location camera_id="1" pinned="true" x="1588.2811" y="417.0251"/>
+                     <location camera_id="2" pinned="true" x="1136.7921" y="172.0244"/>
+                     <location camera_id="3" pinned="true" x="1663.0097" y="891.9939"/>
                   </marker>
                </markers>
                <point_cloud>
