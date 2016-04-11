@@ -263,7 +263,13 @@ struct2xml(s,docFullFile);
 
 tmpFile=[tempname(psDir),'.zip'];
 
-zip(tmpFile,{docFileName,tracksFileName,pointsFileName, ...
-             projFileNames{:}},psUnpackedDir);
+filesToZip={docFileName,tracksFileName,pointsFileName,projFileNames{:}};
+
+for i=1:length(filesToZip)
+    [~,~]=system(sprintf(['touch --date="1979-12-31 00:00:00 +0100" "%s"'],...
+                         fullfile(psUnpackedDir,filesToZip{i})));
+end
+
+zip(tmpFile,filesToZip,psUnpackedDir);
 
 movefile(tmpFile,psFile);
