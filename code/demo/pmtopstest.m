@@ -1,6 +1,6 @@
-psStub='pmtestin';
-psDir=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub);
-psFile=fullfile(psDir,[psStub,'.psz']);
+psStub1='pmtestin';
+psDir1=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub1);
+psFile1=fullfile(psDir1,[psStub1,'.psz']);
 
 pmStub='weighted-bundle-1cm';
 pmFile=fullfile(fileparts(mfilename('fullpath')),'data','weighted','pm',...
@@ -26,14 +26,14 @@ if ~exist('prob')
     prob.markPts=prob.markPts(prob.markPts(:,1)<4,:);
 end
 
-pmtops(prob,psFile)
+pmtops(prob,psFile1)
 
-plytoascii(fullfile(psDir,'unpacked'));
+plytoascii(fullfile(psDir1,'unpacked'));
 
-psStub='pmtestout';
-psDir=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub);
-psFile=fullfile(psDir,[psStub,'.psz']);
+psStub2='pmtestout';
+psDir2=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub2);
+psFile2=fullfile(psDir2,[psStub2,'.psz']);
 
-pmtops(prob,psFile)
+pmtops(prob,psFile2)
 
-plytoascii(fullfile(psDir,'unpacked'));
+plytoascii(fullfile(psDir2,'unpacked'));
