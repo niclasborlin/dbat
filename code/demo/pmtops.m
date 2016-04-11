@@ -85,10 +85,14 @@ dummy=zeros(maxId+1,'uint8');
 d=struct('vertex',struct('red',dummy,'green',dummy,'blue',dummy));
 ply_write(d,tracksFullFileName,'binary_little_endian');
 
-marker=cell(1,size(prob.ctrlPts,1));
+ctrlPts=prob.ctrlPts;
+[~,i]=sort(ctrlPts(:,1));
+ctrlPts=ctrlPts(i,:);
+
+marker=cell(1,size(ctrlPts,1));
 
 for i=1:length(marker)
-    id=prob.ctrlPts(i,1);
+    id=ctrlPts(i,1);
     measured=find(prob.markPts(:,2)==id);
     location=cell(1,length(measured));
     for j=1:length(location)
@@ -142,25 +146,29 @@ frame=struct('cameras',cameras,'markers',markers,'point_cloud',point_cloud,...
 framesAttr=struct('next_id','1');
 frames=struct('frame',frame,'Attributes',framesAttr);
 
-marker=cell(1,size(prob.ctrlPts,1));
+ctrlPts=prob.ctrlPts;
+[~,i]=sort(ctrlPts(:,1));
+ctrlPts=ctrlPts(i,:);
 
-for i=1:size(prob.ctrlPts,1)
-    cpAttrib=struct('id',sprintf('%d',prob.ctrlPts(i,1)),...
-                    'label',sprintf('CP%d',prob.ctrlPts(i,1)));
+marker=cell(1,size(ctrlPts,1));
+
+for i=1:size(ctrlPts,1)
+    cpAttrib=struct('id',sprintf('%d',ctrlPts(i,1)),...
+                    'label',sprintf('CP%d',ctrlPts(i,1)));
     refText=char(zeros(1,0));
     refAttr=struct('enabled','true',...
-                   'x',sprintf('%.16g',prob.ctrlPts(i,2)),...
-                   'y',sprintf('%.16g',prob.ctrlPts(i,3)),...
-                   'z',sprintf('%.16g',prob.ctrlPts(i,4)),...
-                   'sx',sprintf('%.16g',max(prob.ctrlPts(i,5),0)),...
-                   'sy',sprintf('%.16g',max(prob.ctrlPts(i,6),0)),...
-                   'sz',sprintf('%.16g',max(prob.ctrlPts(i,7),0)));
+                   'x',sprintf('%.16g',ctrlPts(i,2)),...
+                   'y',sprintf('%.16g',ctrlPts(i,3)),...
+                   'z',sprintf('%.16g',ctrlPts(i,4)),...
+                   'sx',sprintf('%.16g',max(ctrlPts(i,5),0)),...
+                   'sy',sprintf('%.16g',max(ctrlPts(i,6),0)),...
+                   'sz',sprintf('%.16g',max(ctrlPts(i,7),0)));
     m=struct('reference',struct('Text',refText,'Attributes',refAttr),...
              'Attributes',cpAttrib);
     marker{i}=m;
 end
 
-markersAttr=struct('next_id',sprintf('%d',max(prob.ctrlPts(:,1))+1));
+markersAttr=struct('next_id',sprintf('%d',max(ctrlPts(:,1))+1));
 markers=struct('marker',{marker},'Attributes',markersAttr);
 
 camera=cell(1,length(prob.images));
