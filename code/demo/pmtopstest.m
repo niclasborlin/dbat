@@ -2,7 +2,7 @@ psStub1='pmtestin';
 psDir1=fullfile(fileparts(mfilename('fullpath')),'data','weighted','ps',psStub1);
 psFile1=fullfile(psDir1,[psStub1,'.psz']);
 
-pmStub='weighted-bundle-1cm';
+pmStub='weighted-bundle-1mm';
 pmFile=fullfile(fileparts(mfilename('fullpath')),'data','weighted','pm',...
                 'camcal',pmStub,[pmStub,'-pmexport.txt']);
 

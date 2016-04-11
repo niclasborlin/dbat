@@ -43,16 +43,16 @@
          </cameras>
          <markers next_id="1005">
             <marker id="1001" label="CP1001">
-               <reference enabled="true" sx="0.011383" sy="0.011383" sz="0.013941" x="-0.4999" y="0.50016" z="-0.00066"/>
+               <reference enabled="true" sx="0.001139" sy="0.001138" sz="0.001394" x="-0.4999" y="0.50016" z="-0.00066"/>
             </marker>
             <marker id="1002" label="CP1002">
-               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.013941" x="0.49986" y="0.50016" z="0.00066"/>
+               <reference enabled="true" sx="0.001138" sy="0.001138" sz="0.001394" x="0.49986" y="0.50016" z="0.00066"/>
             </marker>
             <marker id="1003" label="CP1003">
-               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="-0.49977" y="-0.50012" z="0.00066"/>
+               <reference enabled="true" sx="0.001138" sy="0.001138" sz="0.001394" x="-0.49977" y="-0.50012" z="0.00066"/>
             </marker>
             <marker id="1004" label="CP1004">
-               <reference enabled="true" sx="0.011382" sy="0.011382" sz="0.01394" x="0.49982" y="-0.5002" z="-0.00066"/>
+               <reference enabled="true" sx="0.001138" sy="0.001138" sz="0.001394" x="0.49982" y="-0.5002" z="-0.00066"/>
             </marker>
          </markers>
          <frames next_id="1">
