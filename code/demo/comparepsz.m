@@ -35,6 +35,8 @@ if isequalwithequalnans(s1,s2)
     return
 end
 
+numericStrings={'Text','value','x','y','z','sx','sy','sz','sxy','sxyz'};
+
 if isstruct(s1) && isstruct(s2)
     fld1=fields(s1);
     fld2=fields(s2);
@@ -46,6 +48,29 @@ if isstruct(s1) && isstruct(s2)
                 fprintf('Field %s.%s missing in s2.\n',level,flds{i});
             else
                 fprintf('Field %s.%s missing in s1.\n',level,flds{i});
+            end
+        elseif strcmp(flds{i},'Text')
+            % Special treatment of .Text fields.
+            v1=sscanf(getfield(s1,flds{i}),'%g ');
+            v2=sscanf(getfield(s2,flds{i}),'%g ');
+            if length(v1)~=length(v2)
+                fprintf('%s.Text: length difference (%d vs. %d).\n',level,...
+                        length(v1),length(v2));
+                eq=false;
+            elseif isempty(getfield(s1,flds{i}))
+                % Silent return.
+                eq=true;
+            else
+                df=max(abs(v1-v2));
+                if df==0
+                    eq=true;
+                    if verb
+                        fprintf('%s.Text: equal.\n',level);
+                    end
+                else
+                    fprintf('%s.Text: maxdiff %g.\n',level,df);
+                    eq=false;
+                end
             end
         else
             % Field present in both structures.
