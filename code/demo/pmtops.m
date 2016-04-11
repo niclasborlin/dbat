@@ -167,7 +167,7 @@ camera=cell(1,length(prob.images));
 
 for i=1:length(prob.images)
     [~,n,e]=fileparts(strrep(prob.images(i).imName,'\','/'));
-    attrib=struct('enable','true','id',sprintf('%d',i-1),...
+    attrib=struct('enabled','true','id',sprintf('%d',i-1),...
                   'label',[n,e],'sensor_id','0');
 
     orient=struct('Text','1');
