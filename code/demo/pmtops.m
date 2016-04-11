@@ -62,7 +62,7 @@ point_cloud=struct('tracks',tracks,'points',points,...
 pointsFullFileName=fullfile(psUnpackedDir,pointsFileName);
 isObj=~ismember(prob.objPts(:,1),prob.ctrlPts(:,1));
 objPts=prob.objPts(isObj,:);
-vertex=struct('id',objPts(:,1),'x',objPts(:,2),'y',objPts(:,3),'z',objPts(:,4));
+vertex=struct('x',objPts(:,2),'y',objPts(:,3),'z',objPts(:,4),'id',objPts(:,1));
 d=struct('vertex',vertex);
 ply_write(d,pointsFullFileName,'binary_little_endian');
 
