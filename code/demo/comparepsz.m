@@ -48,8 +48,13 @@ if isstruct(s1) && isstruct(s2)
             end
         elseif ismember(flds{i},numericStrings)
             % Special treatment of numeric string fields.
-            v1=sscanf(getfield(s1,flds{i}),'%g ');
-            v2=sscanf(getfield(s2,flds{i}),'%g ');
+            if isnumeric(getfield(s1,flds{i}))
+                v1=getfield(s1,flds{i});
+                v2=getfield(s2,flds{i});
+            else
+                v1=sscanf(getfield(s1,flds{i}),'%g ');
+                v2=sscanf(getfield(s2,flds{i}),'%g ');
+            end
             if length(v1)~=length(v2)
                 fprintf('%s.%s: length difference (%d vs. %d).\n',level,...
                         flds{i},length(v1),length(v2));
@@ -107,6 +112,23 @@ elseif ischar(s1)
     else
         fprintf('%s: ''%s'' vs. ''%s''.\n',level,s1,s2);
     end
+elseif isnumeric(s1) && isnumeric(s2)
+    if length(s1)~=length(s2)
+        fprintf('%s: length difference (%d vs. %d).\n',level,...
+                length(s1),length(s2));
+        eq=false;
+    else
+        df=max(abs(s1-s2));
+        if df==0
+            eq=true;
+            if verb
+                fprintf('%s: equal.\n',level);
+            end
+        else
+            fprintf('%s: maxdiff %g.\n',level,df);
+            eq=false;
+        end
+    end    
 else
     eq=false;
     fprintf('%s: ''%s'' vs. ''%s''.\n',level,s1,s2);
@@ -132,6 +154,8 @@ if isstruct(s1) && isstruct(s2)
                 if verb
                     fprintf('%s.path (%s) equal.\n',level,f1);
                 end
+            else
+                eq=Compare(d1,d2,sprintf('(%s)',f1),verb);
             end
         else
             % Field present in both structures.
