@@ -62,9 +62,11 @@ point_cloud=struct('tracks',tracks,'points',points,...
 pointsFullFileName=fullfile(psUnpackedDir,pointsFileName);
 isObj=~ismember(prob.objPts(:,1),prob.ctrlPts(:,1));
 objPts=prob.objPts(isObj,:);
-vertex=struct('x',objPts(:,2),'y',objPts(:,3),'z',objPts(:,4),'id',objPts(:,1));
-d=struct('vertex',vertex);
-ply_write(d,pointsFullFileName,'binary_little_endian');
+if ~isempty(objPts)
+    vertex=struct('x',objPts(:,2),'y',objPts(:,3),'z',objPts(:,4),'id',objPts(:,1));
+    d=struct('vertex',vertex);
+    ply_write(d,pointsFullFileName,'binary_little_endian');
+end
 
 % Write all mark points except those of control points to
 % projectionsXX.ply files.
@@ -72,18 +74,22 @@ for i=1:length(projections)
     camId=i-1;
     j=prob.markPts(:,1)==camId & ~ismember(prob.markPts(:,2),prob.ctrlPts(:,1));
     markPts=prob.markPts(j,:);
-    vertex=struct('x',markPts(:,3),'y',markPts(:,4),...
-                  'size',4*ones(size(markPts,1),1),'id',markPts(:,2));
-    d=struct('vertex',vertex);
-    ply_write(d,projFullFileNames{i},'binary_little_endian');
+    if ~isempty(markPts)
+        vertex=struct('x',markPts(:,3),'y',markPts(:,4),...
+                      'size',4*ones(size(markPts,1),1),'id',markPts(:,2));
+        d=struct('vertex',vertex);
+        ply_write(d,projFullFileNames{i},'binary_little_endian');
+    end
 end
 
 % Write dummy tracks0.ply file.
 tracksFullFileName=fullfile(psUnpackedDir,tracksFileName);
 maxId=max(setdiff(prob.markPts(:,2),prob.ctrlPts(:,1)));
-dummy=zeros(maxId+1,'uint8');
-d=struct('vertex',struct('red',dummy,'green',dummy,'blue',dummy));
-ply_write(d,tracksFullFileName,'binary_little_endian');
+if ~isempty(maxId)
+    dummy=zeros(maxId+1,'uint8');
+    d=struct('vertex',struct('red',dummy,'green',dummy,'blue',dummy));
+    ply_write(d,tracksFullFileName,'binary_little_endian');
+end
 
 ctrlPts=prob.ctrlPts;
 [~,i]=sort(ctrlPts(:,1));
