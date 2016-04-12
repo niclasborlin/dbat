@@ -1,5 +1,5 @@
 clc
-fDir=fullfile(getenv('HOME'),'dbat/code/demo/data/weighted/ps/sxb/test',...
+fDir=fullfile(getenv('HOME'),'dbat/code/demo/data/weighted/ps/pmtestout',...
               'unpacked');
 fName=fullfile(fDir,'doc.xml');
 s=xml2struct2(fName);
