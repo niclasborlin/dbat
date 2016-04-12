@@ -1,11 +1,11 @@
 psFile=fullfile(getenv('HOME'),...
-                'dbat/code/demo/data/weighted/ps/sxb/test/test.psz');
+                'dbat/code/demo/data/weighted/ps/camcal7dout/camcal7dout.psz');
 unpackpsz(psFile);
 psUnpackedDir=fullfile(fileparts(psFile),'unpacked');
 fName=fullfile(psUnpackedDir,'doc.xml');
 s=xml2struct2(fName);
 camera=s.document.chunks.chunk.cameras.camera;
-nCams=length(cams);
+nCams=length(camera);
 cams=nan(3,4,nCams);
 CC=nan(3,nCams);
 PP=nan(4,4,nCams);
@@ -53,12 +53,14 @@ imNo=nCams;
 mNo=1;
 
 measuredMarkers=s.document.chunks.chunk.frames.frame.markers.marker;
-markerId=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d')+1,measuredMarkers);
+markerId=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d'),measuredMarkers);
 
 xy=zeros(2,size(CP,2));
 
+sortedMarkerId=sort(markerId);
+
 for mNo=1:4
-    mIx=find(markerId==mNo);
+    mIx=find(markerId==sortedMarkerId(mNo));
     camId=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,measuredMarkers{mIx}.location);
     lIx=find(camId==imNo);
 

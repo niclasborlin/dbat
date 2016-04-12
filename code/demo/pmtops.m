@@ -26,7 +26,7 @@ eye3x3='1 0 0 0 1 0 0 0 1';
 minPos=min(prob.objPts(:,2:4));
 maxPos=max(prob.objPts(:,2:4));
 center=struct('Text',sprintf('%.16e ',(minPos+maxPos)/2));
-sz=struct('Text',sprintf('%.16e ',maxPos-minPos));
+sz=struct('Text',sprintf('%.16e ',max(maxPos-minPos,0.01)));
 R=struct('Text',eye3x3);
 region=struct('center',center,'size',sz,'R',R);
 
@@ -62,6 +62,8 @@ point_cloud=struct('tracks',tracks,'points',points,...
 pointsFullFileName=fullfile(psUnpackedDir,pointsFileName);
 isObj=~ismember(prob.objPts(:,1),prob.ctrlPts(:,1));
 objPts=prob.objPts(isObj,:);
+[~,i]=sort(objPts(:,1));
+objPts=objPts(i,:);
 if ~isempty(objPts)
     vertex=struct('x',objPts(:,2),'y',objPts(:,3),'z',objPts(:,4),'id',objPts(:,1));
     d=struct('vertex',vertex);
@@ -74,6 +76,8 @@ for i=1:length(projections)
     camId=i-1;
     j=prob.markPts(:,1)==camId & ~ismember(prob.markPts(:,2),prob.ctrlPts(:,1));
     markPts=prob.markPts(j,:);
+    [~,k]=sort(markPts(:,2));
+    markPts=markPts(k,:);
     if ~isempty(markPts)
         vertex=struct('x',markPts(:,3),'y',markPts(:,4),...
                       'size',4*ones(size(markPts,1),1),'id',markPts(:,2));
@@ -111,7 +115,7 @@ for i=1:length(marker)
                                   'x',sprintf('%.8g',prob.markPts(r,3)),...
                                   'y',sprintf('%.8g',prob.markPts(r,4))));
     end
-    mAttr=struct('marker_id',sprintf('%d',id));
+    mAttr=struct('marker_id',sprintf('%d',id-min(ctrlPts(:,1))));
     marker{i}=struct('location',{location},'Attributes',mAttr);
 end
 
@@ -159,7 +163,7 @@ ctrlPts=ctrlPts(i,:);
 marker=cell(1,size(ctrlPts,1));
 
 for i=1:size(ctrlPts,1)
-    cpAttrib=struct('id',sprintf('%d',ctrlPts(i,1)),...
+    cpAttrib=struct('id',sprintf('%d',ctrlPts(i,1)-min(ctrlPts(:,1))),...
                     'label',sprintf('CP%d',ctrlPts(i,1)));
     refText=char(zeros(1,0));
     refAttr=struct('enabled','true',...
