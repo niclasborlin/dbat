@@ -19,8 +19,11 @@ if ~exist(psUnpackedDir)
 end
 
 if ~keepOld
+    asciiDir=fullfile(psUnpackedDir,'ascii');
+    if exist(asciiDir)
+        rmdir(asciiDir,'s')
+    end
     delete(fullfile(psUnpackedDir,'*'))
-    delete(fullfile(psUnpackedDir,'ascii','*'))
 end
 
 unzip(psFile,psUnpackedDir);
