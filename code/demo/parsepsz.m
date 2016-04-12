@@ -1,15 +1,19 @@
-clc
-fDir=fullfile(getenv('HOME'),'dbat/code/demo/data/weighted/ps/pmtestout',...
-              'unpacked');
-fName=fullfile(fDir,'doc.xml');
+psFile=fullfile(getenv('HOME'),...
+                'dbat/code/demo/data/weighted/ps/sxb/test/test.psz');
+unpackpsz(psFile);
+psUnpackedDir=fullfile(fileparts(psFile),'unpacked');
+fName=fullfile(psUnpackedDir,'doc.xml');
 s=xml2struct2(fName);
-nCams=length(s.document.chunks.chunk.cameras.camera);
+camera=s.document.chunks.chunk.cameras.camera;
+nCams=length(cams);
 cams=nan(3,4,nCams);
 CC=nan(3,nCams);
+PP=nan(4,4,nCams);
 for i=1:nCams
-    t=s.document.chunks.chunk.cameras.camera{i}.transform.Text;
-    P=inv(reshape(sscanf(t,'%g '),4,[])');
-    cams(:,:,i)=P(1:3,:);
+    t=camera{i}.transform.Text;
+    P=reshape(sscanf(t,'%g '),4,[])';
+    PP(:,:,i)=P;
+    cams(:,:,i)=eye(3,4)*inv(P);
     CC(:,i)=euclidean(null(cams(:,:,i)));
 end
 tv=sscanf(s.document.chunks.chunk.transform.translation.Text,'%g ');
@@ -34,20 +38,61 @@ K=[fx,0,cx;0,fy,cy;0,0,1];
 CP=nan(3,length(s.document.chunks.chunk.markers.marker));
 for i=1:size(CP,2);
     m=s.document.chunks.chunk.markers.marker{i};
+    id=sscanf(m.Attributes.id,'%d');
     x=sscanf(m.reference.Attributes.x,'%g');
     y=sscanf(m.reference.Attributes.y,'%g');
     z=sscanf(m.reference.Attributes.z,'%g');
-    CP(:,i)=[x,y,z]';
+    CP(:,id+1)=[x,y,z]';
 end
 
 TSR=T0*S0*R0;
 
-euclidean(TSR*homogeneous(CC))
+CCglobal=euclidean(TSR*homogeneous(CC))
 
+imNo=nCams;
+mNo=1;
+
+measuredMarkers=s.document.chunks.chunk.frames.frame.markers.marker;
+markerId=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d')+1,measuredMarkers);
+
+xy=zeros(2,size(CP,2));
+
+for mNo=1:4
+    mIx=find(markerId==mNo);
+    camId=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,measuredMarkers{mIx}.location);
+    lIx=find(camId==imNo);
+
+    loc=measuredMarkers{mIx}.location{lIx};
+    xy(:,mIx)=[sscanf(loc.Attributes.x,'%g');
+               sscanf(loc.Attributes.y,'%g')];
+end
+
+T=P(:,:,end);
+proj1=euclidean(K*eye(3,4)*inv(T)*inv(TSR)*homogeneous(CP))
+
+xy
+
+s=loadpsz2(psFile);
+
+fig=tagfigure('image');
+figure(fig);
+imshow(s.imNames{imNo},'parent',gca(fig))
+line(proj1(1,:),proj1(2,:),'color','r','marker','o','linestyle','none');
+line(xy(1,:),xy(2,:),'color','g','marker','x','linestyle','none');
+
+fig=tagfigure('3d');
+figure(fig)
+XYZ=euclidean(TSR*homogeneous(s.objPts(:,2:4)'));
+plot3(XYZ(1,:),XYZ(2,:),XYZ(3,:),'x')
+line(CCglobal(1,:),CCglobal(2,:),CCglobal(3,:),'marker','o','linestyle','none','color','r')
+line(CP(1,:),CP(2,:),CP(3,:),'marker','^','linestyle','none','color','y')
+axis equal
+
+asfds
 xy1=euclidean(K*cams(:,:,1)*TSR*homogeneous(CP(:,1)))
 xy2=euclidean(K*cams(:,:,2)*TSR*homogeneous(CP(:,1)))
 
-m1=s.document.chunks.chunk.frames.frame.markers.marker{1}.location{1}.Attributes;
+m1=measuredMarkers{1}.location{end}.Attributes;
 mark1=[sscanf(m1.x,'%g');sscanf(m1.y,'%g')]
 
 m2=s.document.chunks.chunk.frames.frame.markers.marker{1}.location{2}.Attributes;
