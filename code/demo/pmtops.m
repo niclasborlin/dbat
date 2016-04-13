@@ -201,7 +201,7 @@ for i=1:length(prob.images)
     RR=pm_eulerrotmat(EO(4:6));
     CC=EO(1:3);
     P=RR*[eye(3),-CC];
-    invP=inv([P;0,0,0,1]);
+    invP=inv([P;0,0,0,1])*diag([1,-1,-1,1]);
     xForm=struct('Text',sprintf('%.16e ',invP'));
     
     c=struct('transform',xForm,'orientation',orient,'Attributes',attrib);
