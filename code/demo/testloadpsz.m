@@ -1,4 +1,54 @@
+psStub1='camcal7dout2';
+psFile1=fullfile(fileparts(mfilename('fullpath')),'data', ...
+                 'weighted','ps',psStub1,[psStub1,'.psz']);
+
+s1=loadpsz2(psFile1);
+
+imNo=length(s1.imNames);
+
+imshow(s1.imNames{imNo})
+
+xo=euclidean(s1.K*s1.global.P(:,:,end)*homogeneous(s1.global.objPts(:,2:4)'));
+
+line(xo(1,:),xo(2,:),'marker','x','linestyle','none','color','g')
+
+xc=euclidean(s1.K*s1.global.P(:,:,end)*homogeneous(s1.global.ctrlPts(:,2:4)'));
+
+line(xc(1,:),xc(2,:),'marker','o','linestyle','none','color','g')
+
+ixc=s1.markPts.ctrl(:,1)==imNo-1;
+
+line(s1.markPts.ctrl(ixc,3),s1.markPts.ctrl(ixc,4),'marker','o','color','r',...
+     'linestyle','none');
+
+ixo=s1.markPts.obj(:,1)==imNo-1;
+
+line(s1.markPts.obj(ixo,3),s1.markPts.obj(ixo,4),'marker','x','color','r',...
+     'linestyle','none');
+
+% Project control points into each image.
+proj=nan(size(s1.markPts.ctrl,1),2);
+for i=1:size(proj,1)
+    % For each measured marker.
+    imNo=find(s1.markPts.ctrl(i,1)+1==s1.cameraIds);
+    ctrlId=s1.markPts.ctrl(i,2);
+    cIx=find(s1.global.ctrlPts(:,1)==ctrlId);
+    proj(i,:)=euclidean(s1.K*s1.global.P(:,:,imNo)*homogeneous(s1.global.ctrlPts(cIx,2:4)'))';
+end
+
+% Compute residuals.
+res=proj-s1.markPts.ctrl(:,3:4);
+
+rr=cell(1,size(s1.global.ctrlPts,1));
+% Group residuals per point.
+for i=1:size(s1.global.ctrlPts,1)
+    rr{i}=res(s1.markPts.ctrl(:,2)==s1.global.ctrlPts(i,1),:);
+end
+
+asdf
 fName='/Home/staff/niclas/photoscan/cptest2.psz';
+
+
 [p,doc,pts]=loadpsz(fName);
 
 TT=zeros(4,4,length(doc.document.chunks.chunk.cameras.camera));
