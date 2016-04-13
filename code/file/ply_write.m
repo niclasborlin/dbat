@@ -149,7 +149,7 @@ function ply_write ( Elements, Path, Format, Str )
 %
       if ( Type{i}(j) <= 8 )
         if any(strcmp({'single','double'},MatlabTypeNames{Type{i}(j)}))
-          if ~any(floor(Data{i}{j}) ~= Data{i}{j})  % data is integer
+          if ~isempty(Data{i}{j}) && ~any(floor(Data{i}{j}) ~= Data{i}{j})  % data is integer
             MinValue = min(min(Data{i}{j}));
             MaxValue = max(max(Data{i}{j}));
 
