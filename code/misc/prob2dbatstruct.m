@@ -290,13 +290,22 @@ for i=1:nImages
     ii=ii+nnz(valid);
 end
 
+priorSigmas=unique(markStd(:));
+if isscalar(priorSigmas)
+    priorSigma=priorSigmas;
+else
+    warning('Multiple prior sigmas detected. Using prior sigma==1.');
+    priorSigmas
+    priorSigma=1;
+end
+    
 % Pre-calculate which camera corresponds to each point.
 [i,j]=find(vis);
 ptCams=cams(j);
 
 prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
              'EO',EO,'EOstd',EOstd,'EOcov',EOcov,...
-             'OP',CP,'OPstd',CPstd,'OPcov',CPcov,'sigmas',1);
+             'OP',CP,'OPstd',CPstd,'OPcov',CPcov,'sigmas',priorSigma);
 
 % Treat IO as fixed.
 estIO=false(size(IO));
