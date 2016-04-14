@@ -1,0 +1,203 @@
+
+Status Report Tree
+   Project Name: Strasbourg2013-JPG-GCPandSMARTPOINTS.pmr
+   Problems and Suggestions (2)
+      Project Problems (2)
+         Problem: The following cameras are not calibrated: 2013.
+            Suggestion: For best results you should use fully calibrated cameras. If you are having accuracy problems, you should calibrate your camera (it is easy and does not take long - See Camera Calibration in the User Manual).
+         Problem: You have one or more points with angle thresholds lower than 30 degrees
+            Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
+      Problems related to most recent processing (0)
+   Information from most recent processing
+      Last Processing Attempt: Thu Apr 14 17:24:57 2016
+      Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
+      Status: successful
+      Processing Options
+         Orientation: on
+            All photos oriented.
+            Number of photos oriented: 5
+         Global Optimization: on
+         Calibration: off
+         Constraints: off
+      Total Error
+         Number of Processing Iterations: 3
+         Number of Processing Stages: 2
+         First Error: 1.072
+         Last Error: 1.068
+      Precisions / Standard Deviations
+         Photograph Standard Deviations
+            Photo 1: 8811.jpg
+               Omega
+                    Value: 0.836699 deg
+                    Deviation: Omega: 0.027 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: -0.431183 deg
+                    Deviation: Phi: 0.020 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: -89.910423 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: -119.031789 
+                    Deviation: X: 0.624 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 107.551834 
+                    Deviation: Y: 0.846 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1776.716222 
+                    Deviation: Z: 0.136 
+            Photo 2: 8936.jpg
+               Omega
+                    Value: -0.109506 deg
+                    Deviation: Omega: 0.027 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: 0.011602 deg
+                    Deviation: Phi: 0.015 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: 92.618866 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: 282.817662 
+                    Deviation: X: 0.469 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 364.506327 
+                    Deviation: Y: 0.847 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1776.687040 
+                    Deviation: Z: 0.121 
+            Photo 3: 8937.jpg
+               Omega
+                    Value: -0.138715 deg
+                    Deviation: Omega: 0.023 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: 0.009144 deg
+                    Deviation: Phi: 0.014 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: 94.398983 deg
+                    Deviation: Kappa: 0.002 deg
+               Xc
+                    Value: 297.948602 
+                    Deviation: X: 0.433 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 156.323767 
+                    Deviation: Y: 0.706 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1770.523823 
+                    Deviation: Z: 0.074 
+            Photo 4: 8938.jpg
+               Omega
+                    Value: -0.161918 deg
+                    Deviation: Omega: 0.031 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: 0.129708 deg
+                    Deviation: Phi: 0.015 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: 96.144351 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: 314.446464 
+                    Deviation: X: 0.468 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: -58.871286 
+                    Deviation: Y: 0.947 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1766.997755 
+                    Deviation: Z: 0.121 
+            Photo 5: 9111.jpg
+               Omega
+                    Value: 0.512441 deg
+                    Deviation: Omega: 0.025 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: -0.228417 deg
+                    Deviation: Phi: 0.027 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: -92.545243 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: 702.802212 
+                    Deviation: X: 0.862 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 110.139467 
+                    Deviation: Y: 0.802 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1797.305002 
+                    Deviation: Z: 0.178 
+   Quality
+      Photographs
+         Total Number: 5
+            Bad Photos: 0
+            Weak Photos: 0
+            OK Photos: 5
+         Number Oriented: 5
+         Number with inverse camera flags set: 0
+      Cameras
+         Camera1: 2013
+            Calibration: no
+            Number of photos using camera: 5
+      Photo Coverage
+         Referenced points outside of the camera's calibrated coverage region:
+      Point Marking Residuals
+         Overall RMS: 1.097 pixels
+         Maximum: 3.106 pixels
+            Point 509 on Photo 5
+         Minimum: 0.221 pixels
+            Point 67445 on Photo 3
+         Maximum RMS: 2.338 pixels
+            Point 590
+         Minimum RMS: 0.183 pixels
+            Point 67407
+      Point Tightness
+         Maximum: 0.42 m
+            Point 509
+         Minimum: 0.0086 m
+            Point 634
+      Point Precisions
+         Overall RMS Vector Length: 0.459 m
+         Maximum Vector Length: 1.11 m
+            Point 66569
+         Minimum Vector Length: 0.0506 m
+            Point 422
+         Maximum X: 0.244 m
+         Maximum Y: 0.124 m
+         Maximum Z: 1.07 m
+         Minimum X: 0.0197 m
+         Minimum Y: 0.0196 m
+         Minimum Z: 0.042 m
+      Point Angles
+         Maximum: 26.19 degrees
+            Point 509
+         Minimum: 6.495 degrees
+            Point 347
+         Average: 15.46 degrees
+      Check measurements
+         Check point delta
+            Max: 1.01e+006 m  (413, OP492)
+            Max X,Y,Z
+               X: 1e+006 m  (413, OP492)
+               Y: 1.12e+005 m  (311, OP410)
+               Z: 140 m  (311, OP410)
+            Min: 1.01e+006 m  (305, OP375)
+            Min X,Y,Z
+               X: 1e+006 m  (311, OP410)
+               Y: 1.12e+005 m  (413, OP492)
+               Z: 140 m  (413, OP492)
+            Average: 1.01e+006 m  (from 16 items)
