@@ -32,7 +32,7 @@ ctrlPts=s.global.ctrlPts;
 
 objPts=[ctrlPts;[s.global.objPts,nan(size(s.global.objPts,1),3)]];
 
-markPts=[s.markPts.all,0.1*ones(size(s.markPts.all,1),2)];
+markPts=[s.markPts.all,1*ones(size(s.markPts.all,1),2)];
 
 prob2=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
              'markPts',markPts);
