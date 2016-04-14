@@ -1,7 +1,7 @@
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
-stub='fixed-shifted';
+stub='weighted';
 fName=fullfile(curDir,'data','weighted','ps','sxb',stub,[stub,'.psz']);
     
 s=loadpsz2(fName);

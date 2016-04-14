@@ -71,7 +71,7 @@ for i=1:size(ctrlPts,1);
         ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
     end
 end
-ctrlPts(any(isnan(ctrlPts(:,1:4)),2),:)=[];
+%ctrlPts(any(isnan(ctrlPts(:,1:4)),2),:)=[];
 s.raw.ctrlPts=ctrlPts;
 
 % Make local/global ctrl pt ids 1-based.
