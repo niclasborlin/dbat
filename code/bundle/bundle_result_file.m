@@ -312,14 +312,28 @@ else
 end
 
 fprintf(fid,[p,p,'Point Measurements\n']);
-rays=full(sum(s.vis,2));
-mn=min(rays);
-mx=max(rays);
-avg=mean(rays);
-fprintf(fid,[p,p,p,'Ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
-
 fprintf(fid,[p,p,p,'Number of control pts: %d\n'],nnz(s.isCtrl));
 fprintf(fid,[p,p,p,'Number of object pts: %d\n'],nnz(~s.isCtrl));
+
+if any(s.isCtrl)
+    CPrays=full(sum(s.vis(s.isCtrl,:),2));
+    mn=min(CPrays);
+    mx=max(CPrays);
+    avg=mean(CPrays);
+    fprintf(fid,[p,p,p,'CP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+else
+    fprintf(fid,[p,p,p,'CP ray count: -\n']);
+end
+
+if any(~s.isCtrl)
+    OPrays=full(sum(s.vis(~s.isCtrl,:),2));
+    mn=min(OPrays);
+    mx=max(OPrays);
+    avg=mean(OPrays);
+    fprintf(fid,[p,p,p,'OP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+else
+    fprintf(fid,[p,p,p,'OP ray count: -\n']);
+end
 
 % Get all residuals.
 [rms,res]=bundle_residuals(s,e);
@@ -394,11 +408,35 @@ fprintf(fid,[p,p,'Point Angles\n']);
 % Maximum angle between rays.
 a=angles(s,'Computing angles')*180/pi;
 
-[mn,mni]=min(a);
-[mx,mxi]=max(a);
-fprintf(fid,[p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,s.OPid(mni));
-fprintf(fid,[p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,s.OPid(mxi));
-fprintf(fid,[p,p,p,'Average: %.1f degrees\n'],mean(a));
+fprintf(fid,[p,p,p,'CP\n']);
+if any(s.isCtrl)
+    aCP=a(s.isCtrl);
+    idCP=s.OPid(s.isCtrl);
+    [mn,mni]=min(aCP);
+    [mx,mxi]=max(aCP);
+    fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (CP %d)\n'],mn,idCP(mni));
+    fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (CP %d)\n'],mx,idCP(mxi));
+    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(aCP));
+else
+    fprintf(fid,[p,p,p,p,'Minimum: -\n']);
+    fprintf(fid,[p,p,p,p,'Maximum: -\n']);
+    fprintf(fid,[p,p,p,p,'Average: -\n']);
+end
+
+fprintf(fid,[p,p,p,'OP\n']);
+if any(~s.isCtrl)
+    aOP=a(~s.isCtrl);
+    idOP=s.OPid(~s.isCtrl);
+    [mn,mni]=min(aOP);
+    [mx,mxi]=max(aOP);
+    fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,idOP(mni));
+    fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,idOP(mxi));
+    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(aOP));
+else
+    fprintf(fid,[p,p,p,p,'Minimum: -\n']);
+    fprintf(fid,[p,p,p,p,'Maximum: -\n']);
+    fprintf(fid,[p,p,p,p,'Average: -\n']);
+end
 
 fclose(fid);
 
