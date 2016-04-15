@@ -1,5 +1,5 @@
 runAsBundle=true;
-weighted=false;
+weighted=true;
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
