@@ -1,6 +1,5 @@
-runAsBundle=false;
-weighted=true;
-cpSigma=1e-6;
+runAsBundle=true;
+weighted=false;
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -12,7 +11,11 @@ dampings=dampings(2);
 % Defult to Olympus Camedia C4040Z dataset if no data file is specified.
 if ~exist('fName','var')
     if runAsBundle
-        stub='wb-1cm-fewop';
+        if weighted
+            stub='weighted-bundle-1mm';
+        else
+            stub='fixed-as-bundle';
+        end
         d=stub;
         f=[stub,'-pmexport.txt'];
     else
