@@ -5,7 +5,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 15-Apr-2016 14:30:23
+      Last Bundle Run: 15-Apr-2016 23:00:05
       DBAT version:    0.4.1.git-1-gc4a63c8 (2016-03-27)
       Status:          OK (0)
       Sigma0:          1.60968
@@ -482,9 +482,10 @@ Damped Bundle Adjustment Toolbox result file
          References points outside calibrated region:
             <not available>
       Point Measurements
-         Ray count: 16-21 (20.7 avg)
          Number of control pts: 4
          Number of object pts: 96
+         CP ray count: 21-21 (21.0 avg)
+         OP ray count: 16-21 (20.7 avg)
       Point Marking Residuals
          Overall point RMS: 0.216 pixels
          Mark point residuals:
@@ -503,6 +504,11 @@ Damped Bundle Adjustment Toolbox result file
          Maximum Y standard deviation: 2.3 (OP 8)
          Maximum Z standard deviation: 3 (OP 11)
       Point Angles
-         Minimum: 79.6 degrees (OP 90)
-         Maximum: 90.0 degrees (OP 47)
-         Average: 86.4 degrees
+         CP
+            Minimum: 83.5 degrees (CP 1003)
+            Maximum: 85.9 degrees (CP 1002)
+            Average: 84.7 degrees
+         OP
+            Minimum: 79.6 degrees (OP 90)
+            Maximum: 90.0 degrees (OP 47)
+            Average: 86.5 degrees
