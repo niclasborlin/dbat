@@ -6,22 +6,7 @@ function [v,date]=dbatversion
 %
 %   [V,D]=DBATVERSION also returns a UTC date string D.
 
-% $Id$
+% Should always be x.y.z or x.y.z.w.
+v='0.5.0';
 
-% Should always be x.y.z.
-toolboxVersion='0.4.1';
-
-% This strings is updated by subversion on commit.
-idStr='$Id$';
-
-% Parse string to get revision and UTC date.
-z=regexp(idStr,['\$Id:\s*\S+\s+(\d+)\s+([\d-]+\s[\d:]+)Z'],'tokens','once');
-
-if 0
-rev=z{1};
-date=z{2};
-else
-    rev='git-1-gc4a63c8';
-    date='2016-03-27';
-end
-v=[toolboxVersion,'.',rev];
+date='2016-05-13';
