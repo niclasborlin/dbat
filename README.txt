@@ -1,5 +1,17 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.4.1 for Matlab (R), below called the Toolbox.
+# v0.5.0 for Matlab (R), below called the Toolbox.
+#
+# Internal release for Ari and Pierre.
+#
+# Usage:
+#
+# 1) Start Matlab.
+# 2) cd to the DBAT directory.
+# 3) run 'dbatSetup'
+# 4) cd demo
+# 5) psdemo_sxb
+#
+# ===== STUFF FOR LATER PUBLIC RELEASE BELOW ====
 #
 # == LEGAL STUFF ==
 #
