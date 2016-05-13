@@ -15,7 +15,7 @@ function A=mkblkdiag(C,varargin)
 
 % $Id$
 
-error(nargchk(1,inf,length(varargin)));
+narginchk(2,inf);
 
 useSparse=issparse(C);
 if (~isempty(varargin))
