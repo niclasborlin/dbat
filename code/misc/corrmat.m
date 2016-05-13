@@ -19,7 +19,7 @@ function [R,s]=corrmat(C,nodiag)
 
 % $Id$
 
-error(nargchk(1,2,nargin));
+narginchk(1,2);
 
 if nargin<2, nodiag=false; end
 

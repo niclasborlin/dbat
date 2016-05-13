@@ -12,7 +12,7 @@ function hh=tagfigure(tag,name)
 
 % $Id$
 
-error(nargchk(1,2,nargin));
+narginchk(1,2,nargin);
 
 if (nargin<2), name=false; end
 
