@@ -17,17 +17,22 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %   (Gauss-Newton with Armijo linesearch, default), 'LM' (original
 %   Levenberg-Marquardt) , 'LMP' (Levenberg-Marquardt with Powell dogleg).
 %
-%   ...=BUNDLE(S,...,TRACE), where TRACE is a string='trace' specifies
-%   that the bundle should print an trace during the iterations.
+%   ...=BUNDLE(S,...,'trace') specifies that the bundle should
+%   print an trace during the iterations.
 %
-%   ...=BUNDLE(S,...,SINGULARTEST), where SINGULARTEST is the
-%   string='singulartest' specifies that the bundle should stop
-%   immediately if a 'Matrix is singular' or 'Matrix is almost singular'
-%   warning is issued on the normal matrix.
+%   ...=BUNDLE(S,...,'singulartest') specifies that the bundle should
+%   stop immediately if a 'Matrix is singular' or 'Matrix is almost
+%   singular' warning is issued on the normal matrix.
 %
 %   ...=BUNDLE(S,...,CHI), where CHI is a logical scalar, specifies if
 %   chirality veto damping should be used (default: false). Chirality
 %   veto damping is ignored for the undamped bundle.
+%
+%   ...=BUNDLE(S,...,'pmdof') uses Photomodeler degrees-of-freedom
+%   computation.
+%
+%   ...=BUNDLE(S,...,'dofverb') outputs how the degrees of freedom
+%   are calculated.
 %
 %   [S,OK,N,S0]=... returns the sigma0 (in pixel units) for the last iteration.
 %
@@ -56,6 +61,8 @@ damping='gna';
 veto=false;
 singularTest=false;
 trace=false;
+dofVerb=false;
+pmDof=false;
 
 while ~isempty(varargin)
     if isnumeric(varargin{1}) && isscalar(varargin{1})
@@ -74,6 +81,12 @@ while ~isempty(varargin)
             varargin(1)=[];
           case 'singulartest'
             singularTest=true;
+            varargin(1)=[];
+          case 'pmdof'
+            pmDof=true;
+            varargin(1)=[];
+          case 'dofverb'
+            dofVerb=true;
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -257,15 +270,23 @@ end
 % Sigma0 is sqrt(r'*r/(m-n)), where m is the number of
 % observations, and n is the number of unknowns.
 
-% Extra observations without a specific reisdual (fixed control
-% points that have been measured, fixed camera stations that have
-% been used).
-p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0)
-%p=0
+% Extra observations without a specific reisdual (fixed control points
+% that have been measured, fixed camera stations that have been
+% used).
+if pmDof
+    p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0);
+else
+    p=0;
+end
 
 r=E.final.weighted.r;
-rr=(length(r)+p-length(x))
-s0=sqrt((r'*r)/rr);
+lenR=length(r);
+lenX=length(x);
+dof=(lenR+p-lenX);
+if dofVerb
+    fprintf('%s: dof=%d+%d-%d=%d.\n',mfilename,lenR,p,lenX,dof);
+end
+s0=sqrt((r'*r)/dof);
 sigmas=s0*s.prior.sigmas;
 
 E.s0=s0;
