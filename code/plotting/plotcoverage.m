@@ -191,9 +191,9 @@ all=findobj(fig,'type','line');
 sel=findobj(all,'flat','userdata',num);
 
 % Clear any previous highlights.
-set(all,'linewidth',0.5);
+set(all,'selected','off','linewidth',0.5);
 % Select and set thick lines.
-set(sel,'linewidth',2);
+set(sel,'selected','on','linewidth',2);
 
 % Move selected object to the front.
 
