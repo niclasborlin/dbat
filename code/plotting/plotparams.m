@@ -431,13 +431,17 @@ set(sel,'selected','on','linewidth',2);
 % Move selected object to the front.
 
 % Get all axes that are parents to selected objects.
-ax=unique(cell2mat(get(sel,'parent')));
-for i=1:length(ax)
-    if strcmp(get(ax(i),'type'),'axes')
-        ch=get(ax(i),'children');
+axesWorkList=get(sel,'parent');
+while ~isempty(axesWorkList)
+    ax=axesWorkList{1};
+    if strcmp(get(ax,'type'),'axes')
+        ch=get(ax,'children');
         % Find out which of the selected objects are in this axes.
         j=ismember(ch,sel);
-        [dummy,k]=sort(j);
-        set(ax(i),'children',ch(k));
+        [~,k]=sort(j,'descend');
+        set(ax,'children',ch(k));
     end
+    % Remove all references to this axes.
+    eq=cellfun(@(x)isequaln(x,axesWorkList{1}),axesWorkList);
+    axesWorkList=axesWorkList(~eq);
 end
