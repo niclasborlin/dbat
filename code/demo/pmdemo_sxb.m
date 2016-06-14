@@ -1,13 +1,25 @@
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
+problem=2
 
 dampings={'none','gna','lm','lmp'};
 
 dampings=dampings(2);
 
 if ~exist('fName','var')
-    stub='wsmart-no-orient';
-    dataDir=stub; %'fixed1-5';
+    switch problem
+      case 1
+        stub='fixed1-5';
+      case 2
+        stub='weighted1-5';
+      case 3
+        stub='w15-op1';
+      case 4
+        stub='wsmart-no-orient';
+      otherwise
+        error('bad problem number');
+    end
+    dataDir=stub;
     fName=fullfile(curDir,'data','weighted','pm','sxb',dataDir,...
                    [stub,'-pmexport.txt']);
     cpName=fullfile(curDir,'data','weighted','pm','sxb',dataDir,'ctrlpts.txt');
@@ -122,7 +134,7 @@ for i=1:length(dampings)
     fprintf('Running the bundle with damping %s...\n',dampings{i});
 
     % Run the bundle.
-    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
+    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace','dofverb');
     
     if ok(i)
         fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n', ...
@@ -137,6 +149,11 @@ end
 resFile=strrep(fName,'.txt','_result_file.txt');
 
 COP=bundle_result_file(result{1},E{1},resFile);
+OPstd=full(reshape(sqrt(diag(COP)),3,[]));
+CEO=bundle_cov(result{1},E{1},'CEO');
+EOstd=reshape(full(sqrt(diag(CEO))),6,[]);
+EOposStd=EOstd(1:3,:);
+EOangStd=EOstd(4:6,:)*180/pi;
 
 fprintf('\nBundle result file %s generated.\n',resFile);
 
