@@ -48,15 +48,15 @@ function s=loadpmreport(fileName)
 %           rms             - 2D rms value, float
 %           id              - id of mark point with max/min RMS
 %           imNo            - image number where the max/min point was measured
-%       objMax2DRMS,
-%       objMin2DRMS     - max/min 2D per-obj-pt RMS, struct with fields
+%       objMax2dRMS,
+%       objMin2dRMS     - max/min 2D per-obj-pt RMS, struct with fields
 %           rms             - 2D rms value, float
 %           id              - id of object point with max/min RMS
 %   tightness       - max/min tightness, struct with fields
-%       maxTightness    - maximum tightness value, float   
-%       maxTightnessId  - id of point with maximum tightness, integer
-%       minTightness    - minimum tightness value, float
-%       minTightnessId  - id of point with minimum tightness, integer
+%       max             - maximum tightness value, float   
+%       maxId           - id of point with maximum tightness, integer
+%       min             - minimum tightness value, float
+%       minId           - id of point with minimum tightness, integer
 %   ptPrecision     - point precision statistics, struct with fields
 %       overall3DRMS    - overall RMS vector length, float
 %       max3Dvector     - maximum 3D vector length, float
@@ -89,16 +89,19 @@ totError=ReadTotalError(fid);
 imageCount=ReadPhotoCount(fid,l);
 [cameras,l]=ReadCameras(fid);
 [ptsUncalibrated,l]=ReadUncalibratedPts(fid,l);
-markPtResiduals=[];
-%markPtResiduals=ReadMarkPtResiduals(fid,l);
-    
+markPtResiduals=ReadMarkPtResiduals(fid,l);
+tightness=ReadTightness(fid);
+ptPrecision=[];
+ptAngles=ReadAngles(fid);
+
 fclose(fid);
 
 s=struct('projName',projName,'runDate',runDate,'pmVersion',pmVersion,...
          'status',status,'procOpts',procOpts,'totError',totError,...
          'imNames',{imNames},'EO',EO,'EOstd',EOstd,'EOcorr',EOcorr,...
          'imageCount',imageCount,'cameras',cameras,...
-         'ptsUncalibrated',ptsUncalibrated,'markPtResiduals',markPtResiduals);
+         'ptsUncalibrated',ptsUncalibrated,'markPtResiduals',markPtResiduals,...
+         'tightness',tightness,'ptPrecision',ptPrecision,'ptAngles',ptAngles);
 
 
 % Read lines from the opened text file fid until eof(fid) or the line
@@ -459,14 +462,75 @@ function markPtResiduals=ReadMarkPtResiduals(fid,l);
 ReadUntilMatch(fid,'^\s*Point Marking Residuals\s*$',l);
 
 overallRMS=str2double(...
-    ReadUntilMatch(fid,'^\s*Overall RMS\s*:\s*(\S+)\s*pixels\s*$'))
-markMax2dRMSval=str2double(...
-    ReadUntilMatch(fid,'^\s*Maximum\s*:\s*(\S+)\s*pixels\s*$'))
+    ReadUntilMatch(fid,'^\s*Overall RMS\s*:\s*(\S+)\s*pixels\s*$'));
+
+max=str2double(ReadUntilMatch(fid,'^\s*Maximum\s*:\s*(\S+)\s*pixels\s*$'));
 l=fgetl(fid);
 pat='^\s*Point\s*(\d+)\s*on Photo\s*(\d+)\s*$';
 t=regexpi(l,pat,'tokens');
 if length(t)==1 && iscell(t) && length(t{1})==2
-    maxMark2dRMSid=0;
-t{1}
-aasdf
+    maxId=str2double(t{1}{1});
+    maxImNum=str2double(t{1}{2});
+else
+    maxId=nan;
+    maxImNum=nan;
 end
+markMax2dRMS=struct('rms',max,'id',maxId,'imNo',maxImNum);
+
+min=str2double(ReadUntilMatch(fid,'^\s*Minimum\s*:\s*(\S+)\s*pixels\s*$'));
+l=fgetl(fid);
+pat='^\s*Point\s*(\d+)\s*on Photo\s*(\d+)\s*$';
+t=regexpi(l,pat,'tokens');
+if length(t)==1 && iscell(t) && length(t{1})==2
+    minId=str2double(t{1}{1});
+    minImNum=str2double(t{1}{2});
+else
+    minId=nan;
+    minImNum=nan;
+end
+markMin2dRMS=struct('rms',min,'id',minId,'imNo',minImNum);
+
+max=str2double(ReadUntilMatch(fid,'^\s*Maximum RMS\s*:\s*(\S+)\s*pixels\s*$'));
+maxId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+objMax2dRMS=struct('rms',max,'id',maxId);
+
+min=str2double(ReadUntilMatch(fid,'^\s*Minimum RMS\s*:\s*(\S+)\s*pixels\s*$'));
+minId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+objMin2dRMS=struct('rms',min,'id',minId);
+
+markPtResiduals=struct('overallRMS',overallRMS,'markMax2dRMS',markMax2dRMS,...
+                       'markMin2dRMS',markMin2dRMS,...
+                       'objMax2dRMS',objMax2dRMS,...
+                       'objMin2dRMS',objMin2dRMS);
+
+
+% Parse tightness.
+function tightness=ReadTightness(fid);
+
+% Skip until 'Point Tightness'
+ReadUntilMatch(fid,'^\s*Point Tightness\s*$');
+
+max=str2double(ReadUntilMatch(fid,'^\s*Maximum\s*:\s*(\S+)\s*\S+\s*$'));
+maxId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+
+min=str2double(ReadUntilMatch(fid,'^\s*Minimum\s*:\s*(\S+)\s*\S+\s*$'));
+minId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+
+tightness=struct('max',max,'maxId',maxId,'min',min,'minId',minId);
+
+
+% Parse point angles.
+function ptAngles=ReadAngles(fid);
+
+% Skip until 'Point Angles'
+ReadUntilMatch(fid,'^\s*Point Angles\s*$');
+
+max=str2double(ReadUntilMatch(fid,'^\s*Maximum\s*:\s*(\S+)\s*\S+\s*$'));
+maxId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+
+min=str2double(ReadUntilMatch(fid,'^\s*Minimum\s*:\s*(\S+)\s*\S+\s*$'));
+minId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+
+avg=str2double(ReadUntilMatch(fid,'^\s*Average\s*:\s*(\S+)\s*\S+\s*$'));
+
+ptAngles=struct('avg',avg,'max',max,'maxId',maxId,'min',min,'minId',minId);
