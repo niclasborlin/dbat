@@ -289,5 +289,8 @@ end
 s0=sqrt((r'*r)/dof);
 sigmas=s0*s.prior.sigmas;
 
+E.numObs=lenR;
+E.numParams=lenX;
+E.redundancy=dof;
 E.s0=s0;
 E.sigmas=sigmas;
