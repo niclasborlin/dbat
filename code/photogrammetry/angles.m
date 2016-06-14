@@ -6,7 +6,9 @@ function a=angles(s,msg)
 %   between rays for each object point. The maximum angle is the angle
 %   closest to being orthogonal between pairs of rays for each object point.
 %
-%   A=ANGLES(S,MSG), uses MSG as the message for a delayed waitbar.
+%   A=ANGLES(S,MSG), uses MSG as the message for a delayed
+%   waitbar. The waitbar is presented if the angle computation takes
+%   more than one second.
 
 % $Id$
 
