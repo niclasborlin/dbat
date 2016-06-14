@@ -1,130 +1,124 @@
-runAsBundle=true;
-weighted=true;
+function prague2016_cam(l,doPause)
+%PRAGUE2016_CAM
+%
+%   PRAGUE2016_CAM(LABEL), where LABEL is 'C1' or 'C2' runs the
+%   respective experiments of [1].
+%
+%   References:
+%       [1] Börlin and Grussenmeyer, "External Verification of the
+%           Bundle Adjustment in Photogrammetric Software using the
+%           Damped Bundle Adjustment Toolbox", presented at the
+%           2016 ISPRS Congress in Prague, Czech Republic, 12-17
+%           July 2016.
+
+if nargin<2, doPause='off'; end
+
+switch lower(l)
+  case 'c1'
+    weighted=false;
+  case 'c2'
+    weighted=true;
+  otherwise
+    error('Bad experiment label.')
+end
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
-dampings={'none','gna','lm','lmp'};
-
-dampings=dampings(2);
-
-% Defult to Olympus Camedia C4040Z dataset if no data file is specified.
-if ~exist('fName','var')
-    if runAsBundle
-        if weighted
-            stub='weighted-bundle-1mm';
-        else
-            stub='fixed-as-bundle';
-        end
-        d=stub;
-        f=[stub,'-pmexport.txt'];
-    else
-        stub='fixed';
-        d=stub;
-        f=[stub,'-pmexport.txt'];
-    end
-    fName=fullfile(curDir,'data','weighted','pm','camcal',d,f);
-    cpName=fullfile(curDir,'data','weighted','pm','camcal',d,'ctrlpts.txt');
-    ptName=strrep(fName,'-pmexport.txt','-3dpts.txt');
-    fprintf('No data file specified, using ''%s''.\n',fName);
-    disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
-          'you wish to use another file.']);
-    disp(' ')
-end
-
-if ~exist('prob','var')
-    fprintf('Loading data file %s...',fName);
-    prob=loadpm(fName);
-    prob0=prob;
-    fprintf('done.\n');
-    if any(isnan(cat(2,prob.images.imSz)))
-        error('Image sizes unknown!');
-    end
-    disp('done.')
-    ctrlPts=loadcpt(cpName);
-    fprintf('done.\n');
-    if runAsBundle
-        % Inject prior control point information into what's alrady loaded.
-        if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
-            error('Control point id mismatch.');
-        end
-        fprintf('Loading 3D point table %s...',ptName);
-        pts=loadpm3dtbl(ptName);
-        fprintf('done.\n');
-
-    
-        % Determine offset between real positions and positions used in
-        % the bundle.
-        [~,ia,ib]=intersect(prob.ctrlPts(:,1),pts.id);
-        offset=prob.ctrlPts(ia,2:4)'-pts.pos(:,ib);
-
-        % Offset range should be as small as difference between the number of
-        % digits used. Warn if it is larger than 1e-3 object units
-        % (typically 1mm).
-        offsetRange=max(offset,[],2)-min(offset,[],2);
-        if max(offsetRange)>1e-3
-            warning('Large offset range:')
-            offsetRange
-        end
-
-        % Adjust a priori control point positions by the offset.
-        ctrlPts.pos=ctrlPts.pos+repmat(offset,1,size(ctrlPts,2));
-    
-        % Replace a posteriori ctrl positions and std by a priori values.
-        [~,ia,ib]=intersect(ctrlPts.id,prob.ctrlPts(:,1));
-        prob.ctrlPts(ib,2:4)=ctrlPts.pos(:,ia)';
-        prob.ctrlPts(ib,5:7)=ctrlPts.std(:,ia)';
-        
-        prob.ctrlPts(:,5:end)=prob0.ctrlPts(:,5:end);
-    else
-        % Add standard control points for camera calibration project.
-        fprintf('Loading 3D point table %s...',ptName);
-        pts=loadpm3dtbl(ptName);
-        fprintf('done.\n');
-        offset=zeros(3,4);
-        if ~isempty(prob.ctrlPts)
-            error('CTRL PTS info exists.');
-        end
-        prob.ctrlPts=[ctrlPts.id;ctrlPts.pos;ctrlPts.std]';
-    end
-    cpId=prob.ctrlPts(:,1);
+if weighted
+    stub='weighted-1mm';
 else
-    disp('Using pre-loaded data. Do ''clear prob'' to reload.');
+    stub='fixed';
 end
-ss0=prob2dbatstruct(prob);
 
-s0=ss0;
+% Base dir with input files for these projects.
+inputDir=fullfile(curDir,'data','prague2016','cam');
+
+% PhotoModeler text export file.
+inputFile=fullfile(inputDir,'pmexports',[stub,'-pmexport.txt']);
+% PhotoModeler dump files for 3D and 2D points.
+input3dFile=fullfile(inputDir,'pmexports',[stub,'-3dpts.txt']);
+input2dFile=fullfile(inputDir,'pmexports',[stub,'-2dpts.txt']);
+
+% Control point file.
+cpName=fullfile(inputDir,['ctrlpts-',stub,'.txt']);
+
+fprintf('Loading data file %s...',inputFile);
+prob=loadpm(inputFile);
+probRaw=prob;
+if any(isnan(cat(2,prob.images.imSz)))
+    error('Image sizes unknown!');
+end
+disp('done.')
+fprintf('Loading control point file %s...',cpName);
+ctrlPts=loadcpt(cpName);
+fprintf('done.\n');
+
+% Verify all CPs used by PM are given in CP file.
+if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
+    pmCtrlPtsId=prob.ctrlPts(:,1)'
+    cpFileId=ctrlPts.id
+    error('Control point id mismatch.');
+end
+
+% Estimate the offset between the world coordinate system and the PM
+% bundle coordinate system. The offset range for fixed control points
+% should be as small as the difference between the number of digits
+% used, typically 1e-3 object units. For weighted control points we
+% can also expect a deviation between the a posteriori CP positions
+% from the PM export file and the a priori CP positions in the CP
+% file.
+
+% Compute the actual offset between CP coordinates from PM and the
+% CP file.
+[~,ia,ib]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
+offset=prob.ctrlPts(ia,2:4)'-ctrlPts.pos(:,ib);
+meanOffset=mean(offset,2);
+offsetRange=max(offset,[],2)-min(offset,[],2);
+
+% Compute average a priori and a posteriori CP stdev.
+avgPreCPStd=mean(ctrlPts.std(:,ib),2);
+avgPostCPStd=mean(max(0,prob.ctrlPts(ia,5:7))',2);
+avgCPStd=(avgPostCPStd+avgPreCPStd)/2;
+
+% Warn if offset range is above 1e-3 + 2*average CP std.
+if max(offsetRange)>1e-3 + 2*(avgPostCPStd+avgPreCPStd)/2
+    warning('Large offset range:')
+    offsetRange
+end
+
+% Adjust a priori control point positions by the offset.
+ctrlPts.pos=ctrlPts.pos+repmat(meanOffset,1,size(ctrlPts.pos,2));
+
+% Replace a posteriori ctrl positions and std by a priori values.
+prob.ctrlPts(ia,2:4)=ctrlPts.pos(:,ib)';
+prob.ctrlPts(ia,5:7)=ctrlPts.std(:,ib)';
+
+fprintf('Loading 3D point table %s...',input3dFile);
+pts3d=loadpm3dtbl(input3dFile);
+fprintf('done.\n');
+
+fprintf('Loading 2D point table %s...',input2dFile);
+pts2d=loadpm2dtbl(input2dFile);
+fprintf('done.\n');
+
+% Convert loaded PhotoModeler data to DBAT struct.
+s0=prob2dbatstruct(prob);
+% Store raw version of the struct.
+s0raw=s0;
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));
 
 if length(uniqueSigmas)~=1
-    warning('Multiple sigmas, assuming sigma=.1');
-    s0.prior.sigmas(1)=0.1;
-else
-    s0.prior.sigmas=uniqueSigmas;
+    uniqueSigmas
+    error('Multiple mark point sigmas')
 end
 
-if runAsBundle
-    % Do nothing, estIO is already false.
-else
-    % Estimate px,py,c,K1-K3,P1-P2.
-    %s0.estIO([1:5,7:8],:)=true;
-    % Estimate px,py,c,K1-K3,P1-P2.
-    s0.estIO([1:3],:)=true;
-    % No prior observations.
-    s0.useIOobs(:)=false;
-
-    % Set initial IO parameters.
-    s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
-    s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
-    s0.IO(3)=7.3;          % c = EXIF value.
-    s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
-end
-   
 % Clear EO and OP parameters.
 s0.EO(s0.estEO)=nan;
 s0.OP(s0.estOP)=nan;
+
 % Insert any prior obs to use.
 s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
 s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
@@ -132,110 +126,104 @@ s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
 % Use specified sigma as first approximation.
 s0.markStd(:)=s0.prior.sigmas(1);
 
+% Compute EO parameters by spatial resection.
+cpId=s0.OPid(s0.isCtrl);
 s1=resect(s0,'all',cpId,1,0,cpId);
+% Compute OP parameters by forward intersection.
 s2=forwintersect(s1,'all',true);
 
-s2.x0desc='Camera calibration from EXIF value';
-
 s=s2;
-h=plotnetwork(s,'title','Initial network',...
-              'axes',tagfigure(sprintf('network%d',i)),...
-              'camsize',0.1);
+h=plotnetwork(s,'title','Initial network (EO, OP computed from CP, IO, MP)',...
+              'axes',tagfigure(mfilename),'camsize',0.1);
 
-if printdemofigures
-    h=get(h,'parent');
-    figDir=fullfile('..','docsrc','manual','ill');
-    files={'ccamx0.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
-end
+% Set up to run the bundle.
+damping='gna';
 
-result=cell(size(dampings));
-ok=nan(size(dampings));
-iters=nan(size(dampings));
-sigma0=nan(size(dampings));
-E=cell(size(dampings));
+fprintf('Running the bundle with damping %s...\n',damping);
 
-for i=1:length(dampings)
-    fprintf('Running the bundle with damping %s...\n',dampings{i});
-
-    % Run the bundle.
-    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
+% Run the bundle.
+[result,ok,iters,sigma0,E]=bundle(s,damping,'trace','dofverb');
     
-    if ok(i)
-        fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n', ...
-                iters(i),sigma0(i),sigma0(i)*s.prior.sigmas(1));
+if ok
+    fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
+            iters,sigma0,sigma0*s.prior.sigmas(1));
+else
+    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,sigma0,sigma0*s.prior.sigmas(1));
+end
+
+% Write report file and store computed OP covariances.
+reportFile=fullfile(inputDir,'dbatexports',[stub,'-dbatreport.txt']);
+
+COP=bundle_result_file(result,E,reportFile);
+
+OPstd=full(reshape(sqrt(diag(COP)),3,[]));
+CEO=bundle_cov(result,E,'CEO');
+EOstd=reshape(full(sqrt(diag(CEO))),6,[]);
+EOposStd=EOstd(1:3,:);
+EOangStd=EOstd(4:6,:)*180/pi;
+
+fprintf('\nBundle report file %s generated.\n',reportFile);
+
+% Input statistics. Number of images, CP, OP, a priori CP sigma,
+% number of observations, number of parameters, redundacy, ray
+% count and angle min+max+avg.
+nImages=length(s.EO);
+nCP=nnz(s.isCtrl);
+nOP=nnz(~s.isCtrl);
+sigmaCP=unique(s.prior.OPstd(:,s.isCtrl)','rows')';
+if all(sigmaCP==0)
+    sigmaCPstr='fixed';
+else
+    % Determine unit of sigmaCP.
+    ls=min(floor(log10(sigmaCP)));
+    switch ls
+      case -3
+        unit='mm';
+        base=1e-3;
+      case -2
+        unit='cm';
+        base=1e-2;
+      otherwise
+        unit='m';
+        base=1;
+    end
+    % Isotropic or not?
+    if isscalar(unique(sigmaCP))
+        sigmaCPstr=sprintf('%g %s',sigmaCP(1)/base,unit);
     else
-        fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-                 '(%.2f pixels)\n'],iters(i),sigma0(i),...
-                sigma0(i)*s.prior.sigmas(1));
+        sigmaCPstr=sprintf('(%g,%g,%g) %s',sigmaCP/base,unit);
     end
 end
+    
+m=E.numObs;
+n=E.numParams;
+r=E.redundancy;
+rayMin=min(full(sum(s.vis,2)));
+rayMax=max(full(sum(s.vis,2)));
+rayAvg=mean(full(sum(s.vis,2)));
+rayAng=angles(result,'Computing ray angles')*180/pi;
+rayAngMin=min(rayAng);
+rayAngMax=max(rayAng);
+rayAngAvg=mean(rayAng);
 
-resFile=strrep(fName,'.txt','_result_file.txt');
+fprintf(['Experiment %s: %d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
+         'n=%d, r=%d, ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
+         '(%.1f avg) deg\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r,...
+        rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,rayAngAvg);
 
-COP=bundle_result_file(result{1},E{1},resFile);
+h=plotparams(result,E);
 
-fprintf('\nBundle result file %s generated.\n',resFile);
+h=plotcoverage(result,true);
 
-h=plotparams(result{1},E{1});
+h=plotimagestats(result,E);
 
-if printdemofigures
-    figDir=fullfile('..','docsrc','manual','ill');
-    files={'ccamiotrace.eps','ccameotrace.eps','ccamoptrace.eps', ...
-           'ccamgnatrace.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
-end
+h=plotopstats(result,E,COP);
 
-h=plotcoverage(result{1},true);
+fig=tagfigure('networkplayback');
 
-if printdemofigures
-    figDir=fullfile('..','docsrc','manual','ill');
-    files={'ccamcoverage.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
-end
-
-h=plotimagestats(result{1},E{1});
-
-if printdemofigures
-    figDir=fullfile('..','docsrc','manual','ill');
-    files={'ccamimstats.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
-end
-
-h=plotopstats(result{1},E{1},COP);
-
-if printdemofigures
-    figDir=fullfile('..','docsrc','manual','ill');
-    files={'ccamopstats.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
-end
-
-if printdemofigures, doPause=0; else doPause='on'; end
-
-for i=1:length(E)
-    h=plotparams(result{i},E{i},'noio','noeo','noop');
-    fig=tagfigure(sprintf('network%d',i));
-    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,double(fig));
-    h=plotnetwork(result{i},E{i},'title',...
-                  ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                  'axes',fig,'pause',doPause,'camsize',0.1); 
-end
-
-if printdemofigures
-    h=get(h,'parent');
-    figDir=fullfile('..','docsrc','manual','ill');
-    files={'ccamxfinal.eps'};
-    for i=1:length(h)
-        print(h(i),'-depsc2',fullfile(figDir,files{i}));
-    end
-end
+fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
+        E.damping.name,double(fig));
+h=plotnetwork(result,E,...
+              'title',['Damping: ',E.damping.name,'. Iteration %d of %d'], ...
+              'axes',fig,'pause',doPause,'camsize',0.1); 

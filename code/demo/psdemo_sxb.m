@@ -87,6 +87,11 @@ end
 resFile=fullfile(p,[n,'_result_file.txt']);
 
 COP=bundle_result_file(result{1},E{1},resFile);
+OPstd=full(reshape(sqrt(diag(COP)),3,[]));
+CEO=bundle_cov(result{1},E{1},'CEO');
+EOstd=reshape(full(sqrt(diag(CEO))),6,[]);
+EOposStd=EOstd(1:3,:);
+EOangStd=EOstd(4:6,:)*180/pi;
 
 fprintf('\nBundle result file %s generated.\n',resFile);
 
