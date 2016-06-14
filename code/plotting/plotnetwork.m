@@ -334,7 +334,7 @@ for iter=iters
 
     % Pause if requested unless after showing last iteration.
     if ~isempty(pauseMode) && iter<nIters
-        if ischar(pauseMode)
+        if ischar(pauseMode) && strcmp(lower(pauseMode),'on')
             pause
         else
             pause(pauseMode);
