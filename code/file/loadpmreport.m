@@ -91,7 +91,7 @@ imageCount=ReadPhotoCount(fid,l);
 [ptsUncalibrated,l]=ReadUncalibratedPts(fid,l);
 markPtResiduals=ReadMarkPtResiduals(fid,l);
 tightness=ReadTightness(fid);
-ptPrecision=[];
+ptPrecision=ReadPrecision(fid);
 ptAngles=ReadAngles(fid);
 
 fclose(fid);
@@ -518,6 +518,33 @@ minId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
 
 tightness=struct('max',max,'maxId',maxId,'min',min,'minId',minId);
 
+
+% Parse point precisions.
+function ptPrecision=ReadPrecision(fid);
+
+% Skip until 'Point Precisions'
+ReadUntilMatch(fid,'^\s*Point Precisions\s*$');
+
+overall3DRMS=str2double(ReadUntilMatch(fid,['^\s*Overall RMS Vector ' ...
+                    'Length\s*:\s*(\S+)\s*\S+\s*$']));
+
+max3Dvector=str2double(ReadUntilMatch(fid,'^\s*Maximum Vector Length\s*:\s*(\S+)\s*\S+\s*$'));
+max3DvectorId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+
+min3Dvector=str2double(ReadUntilMatch(fid,'^\s*Minimum Vector Length\s*:\s*(\S+)\s*\S+\s*$'));
+min3DvectorId=str2double(ReadUntilMatch(fid,'^\s*Point\s*(\d+)\s*$'));
+
+maxX=str2double(ReadUntilMatch(fid,'^\s*Maximum X\s*:\s*(\S+)\s*\S+\s*$'));
+maxY=str2double(ReadUntilMatch(fid,'^\s*Maximum Y\s*:\s*(\S+)\s*\S+\s*$'));
+maxZ=str2double(ReadUntilMatch(fid,'^\s*Maximum Z\s*:\s*(\S+)\s*\S+\s*$'));
+minX=str2double(ReadUntilMatch(fid,'^\s*Minimum X\s*:\s*(\S+)\s*\S+\s*$'));
+minY=str2double(ReadUntilMatch(fid,'^\s*Minimum Y\s*:\s*(\S+)\s*\S+\s*$'));
+minZ=str2double(ReadUntilMatch(fid,'^\s*Minimum Z\s*:\s*(\S+)\s*\S+\s*$'));
+
+ptPrecision=struct('overall3DRMS',overall3DRMS,'max3Dvector',max3Dvector,...
+                   'max3DvectorId',max3DvectorId,'min3Dvector',min3Dvector,...
+                   'min3DvectorId',min3DvectorId,'max',[maxX;maxY;maxZ],...
+                   'min',[minX;minY;minZ]);
 
 % Parse point angles.
 function ptAngles=ReadAngles(fid);
