@@ -22,7 +22,9 @@ function s=loadpmreport(fileName)
 %       firstErr      - first error, float,
 %       lastErr       - last error, float.
 %   imNames       - image file names, N-cell string array
-%   EO            - estimated EO values [Xc;Yc;Zc;Omega;Phi;Kappa], 6-by-N array
+%   EO            - estimated EO values [Xc;Yc;Zc;Omega;Phi;Kappa],
+%                   6-by-N array. Returned positions are in project units,
+%                   angles in radians.
 %   EOstd         - estimated EO standard deviations, 6-by-N array
 %   EOcorr        - estimated high EO correlations, 6N-by-6N sparse array
 %   imageCount    - struct with integer fields
@@ -262,8 +264,8 @@ if length(t)==1 && iscell(t) && length(t{1})==1
 end
 
 
-% Parse one EO element. l is first unprocessed line before/after
-% the call.
+% Parse one EO element. l is first unprocessed line before/after the
+% call.
 function [val,dev,corrVal,corrName,l]=ReadOneEOVal(fid,l,name,unit)
 
 val=[];
@@ -305,7 +307,7 @@ if ~isempty(corrVal)
 end
 
 % Read image number, image name + values, std, and correlation for
-% one image.
+% one image. Convert angles to radians.
 function [EO,EOstd,EOcorrIJV,l]=ReadOneEO(fid)
 
 fileOrderNames={'Omega','Phi','Kappa','Xc','Yc','Zc'};
@@ -329,6 +331,10 @@ for i=1:length(fileOrderNames)
                    dataOrderNum(i),find(strcmp(corrName,dataOrderName)),corrVal];
     end
 end
+
+% Convert angles to radians.
+EO(4:6)=EO(4:6)*pi/180;
+EOstd(4:6)=EOstd(4:6)*pi/180;
 
 
 % Parse the PM report file for EO pos, std, corr, image names. Also
