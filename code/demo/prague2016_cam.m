@@ -1,4 +1,4 @@
-function prague2016_cam(l,doPause)
+%function prague2016_cam(l,doPause)
 %PRAGUE2016_CAM
 %
 %   PRAGUE2016_CAM(LABEL), where LABEL is 'C1' or 'C2' runs the
@@ -11,7 +11,9 @@ function prague2016_cam(l,doPause)
 %           2016 ISPRS Congress in Prague, Czech Republic, 12-17
 %           July 2016.
 
-if nargin<2, doPause='off'; end
+% $Id$
+
+%if nargin<2, doPause='off'; end
 
 switch lower(l)
   case 'c1'
@@ -34,8 +36,9 @@ end
 % Base dir with input files for these projects.
 inputDir=fullfile(curDir,'data','prague2016','cam');
 
-% PhotoModeler text export file.
+% PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports',[stub,'-pmexport.txt']);
+reportFile=fullfile(inputDir,'pmexports',[stub,'-pmreport.txt']);
 % PhotoModeler dump files for 3D and 2D points.
 input3dFile=fullfile(inputDir,'pmexports',[stub,'-3dpts.txt']);
 input2dFile=fullfile(inputDir,'pmexports',[stub,'-2dpts.txt']);
@@ -100,6 +103,10 @@ fprintf('done.\n');
 
 fprintf('Loading 2D point table %s...',input2dFile);
 pts2d=loadpm2dtbl(input2dFile);
+fprintf('done.\n');
+
+fprintf('Loading PM report file %s...',reportFile);
+pmReport=loadpmreport(reportFile);
 fprintf('done.\n');
 
 % Convert loaded PhotoModeler data to DBAT struct.
@@ -207,10 +214,51 @@ rayAngMin=min(rayAng);
 rayAngMax=max(rayAng);
 rayAngAvg=mean(rayAng);
 
-fprintf(['Experiment %s: %d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
+% Compute EO max abs differences.
+EOdiff=result.EO(1:6,:)-pmReport.EO(1:6,:);
+EOstdDiff=result.EOstd(1:6,:)-pmReport.EOstd(1:6,:);
+maxEOposDiff=max(max(abs(EOdiff(1:3,:))));
+maxEOangDiff=max(max(abs(EOdiff(4:6,:))))*180/pi;
+maxEOposStdDiff=max(max(abs(EOstdDiff(1:3,:))));
+maxEOangStdDiff=max(max(abs(EOstdDiff(4:6,:))));
+
+% Compute OP/CP max abs differences.
+[~,i,j]=intersect(pts3d.id,result.OPid);
+if length(i)~=length(pts3d.id)
+    warning('OP mismatch, disagreeing OP id:');
+    disp(setxor(pts3d.id,result.OPid));
+end
+
+OPisCP=result.isCtrl(j);
+
+pmOP=pts3d.pos(:,i);
+pmOPstd=pts3d.std(:,i);
+dbatOP=result.OP(:,j)-repmat(meanOffset,1,size(pmOP,2));
+dbatOPstd=OPstd(:,j);
+OPdiff=abs(dbatOP-pmOP);
+OPstdDiff=abs(dbatOPstd-pmOPstd);
+maxOPdiff=max(max(OPdiff(:,~OPisCP)));
+maxCPdiff=max(max(OPdiff(:,OPisCP)));
+maxOPstdDiff=max(max(OPstdDiff(:,~OPisCP)));
+maxCPstdDiff=max(max(OPstdDiff(:,OPisCP)));
+
+fprintf(['\nExperiment %s:\n%d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
          'n=%d, r=%d, ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
          '(%.1f avg) deg\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r,...
         rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,rayAngAvg);
+
+fprintf(['\nResults (project units/degrees/pixels):\n  sigma0 (PM/DBAT)  ' ...
+         ': %g/%g.=%g\n'], pmReport.totError.lastErr,E.s0,pmReport.totError.lastErr/E.s0);
+
+fprintf('  EO max pos diff   : %g.\n',maxEOposDiff);
+fprintf('  EO max angle diff : %g.\n',maxEOangDiff);
+fprintf('  EO max pos std df : %g.\n',maxEOposStdDiff);
+fprintf('  EO max ang std df : %g.\n',maxEOangStdDiff);
+fprintf('  OP max diff       : %g.\n',maxOPdiff);
+fprintf('  CP max diff       : %g.\n',maxCPdiff);
+fprintf('  OP max std diff   : %g.\n',maxOPstdDiff);
+fprintf('  CP max std diff   : %g.\n',maxCPstdDiff);
+
 
 h=plotparams(result,E);
 
