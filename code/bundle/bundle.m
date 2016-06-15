@@ -112,7 +112,7 @@ if any(s.useOPobs(~s.estOP))
     error('DBAT:bundle:badInput','OP estimate/use prior obs mismatch');
 end
 
-% Create indices into the vector of unknowns. n is the number of unknowns.
+% Create indices into the vector of unknowns. n is the total number of unknowns.
 [ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 % Set up vector of initial values.
@@ -142,7 +142,12 @@ varIO=s.prior.IOstd(s.useIOobs).^2;
 varEO=s.prior.EOstd(s.useEOobs).^2;
 % Prior OP observations.
 varOP=s.prior.OPstd(s.useOPobs).^2;
-nObs=numel(varMark)+numel(varIO)+numel(varEO)+numel(varOP);
+
+% Create indices into the residual vector. nObs is the total number
+% of observations.
+[resIxMarkPt,resIxIO,resIxEO,resIxOP,nObs]=indvec(...
+    [numel(varMark),numel(varIO),numel(varEO),numel(varOP)]);
+
 % Weight matrix.
 varAll=[varMark(:);varIO(:);varEO(:);varOP(:)];
 Cobs=spdiags(varAll,0,nObs,nObs);
@@ -266,6 +271,15 @@ if ok
     s.EO(s.estEO)=x(ixEO);
     s.OP(s.estOP)=x(ixOP);
 end
+
+% Always update the residuals.
+s.residuals.markPt(:)=final.unweighted.r(resIxMarkPt);
+% Mark pt residuals are in mm, scale to pixels.
+s.residuals.markPt=s.residuals.markPt.*s.IO(end-1:end,s.ptCams(ptCols));
+
+s.residuals.IO(s.useIOobs)=final.unweighted.r(resIxIO);
+s.residuals.EO(s.useEOobs)=final.unweighted.r(resIxEO);
+s.residuals.OP(s.useOPobs)=final.unweighted.r(resIxOP);
 
 % Sigma0 is sqrt(r'*r/(m-n)), where m is the number of
 % observations, and n is the number of unknowns.
