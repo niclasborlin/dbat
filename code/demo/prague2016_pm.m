@@ -1,8 +1,8 @@
-%function prague2016_cam(l,doPause)
-%PRAGUE2016_CAM
+%function prague2016_pm(l,doPause)
+%PRAGUE2016_PM
 %
-%   PRAGUE2016_CAM(LABEL), where LABEL is 'C1' or 'C2' runs the
-%   respective experiments of [1].
+%   PRAGUE2016_PM(LABEL), where LABEL is 'C1', 'C2', 'S1', 'S2',
+%   'S3',' or 'S4', runs the respective experiments of [1].
 %
 %   References:
 %       [1] Börlin and Grussenmeyer, "External Verification of the
