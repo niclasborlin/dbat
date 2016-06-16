@@ -1,0 +1,201 @@
+
+Status Report Tree
+   Project Name: wsmart.pmr
+   Problems and Suggestions (2)
+      Project Problems (2)
+         Problem: The following cameras are not calibrated: 2013.
+            Suggestion: For best results you should use fully calibrated cameras. If you are having accuracy problems, you should calibrate your camera (it is easy and does not take long - See Camera Calibration in the User Manual).
+         Problem: You have one or more points with angle thresholds lower than 30 degrees
+            Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
+      Problems related to most recent processing (0)
+   Information from most recent processing
+      Last Processing Attempt: Fri Apr 15 23:20:32 2016
+      Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
+      Status: successful
+      Processing Options
+         Orientation: off
+         Global Optimization: on
+         Calibration: off
+         Constraints: off
+      Total Error
+         Number of Processing Iterations: 3
+         Number of Processing Stages: 2
+         First Error: 1.074
+         Last Error: 1.068
+      Precisions / Standard Deviations
+         Photograph Standard Deviations
+            Photo 1: 8811.jpg
+               Omega
+                    Value: 0.836223 deg
+                    Deviation: Omega: 0.027 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: -0.432186 deg
+                    Deviation: Phi: 0.020 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: -89.910716 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: -119.063358 
+                    Deviation: X: 0.624 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 107.567631 
+                    Deviation: Y: 0.849 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1776.719138 
+                    Deviation: Z: 0.136 
+            Photo 2: 8936.jpg
+               Omega
+                    Value: -0.111948 deg
+                    Deviation: Omega: 0.027 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: 0.009207 deg
+                    Deviation: Phi: 0.015 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: 92.618942 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: 282.740077 
+                    Deviation: X: 0.470 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 364.581210 
+                    Deviation: Y: 0.848 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1776.675477 
+                    Deviation: Z: 0.121 
+            Photo 3: 8937.jpg
+               Omega
+                    Value: -0.143156 deg
+                    Deviation: Omega: 0.023 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: 0.008098 deg
+                    Deviation: Phi: 0.014 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: 94.398968 deg
+                    Deviation: Kappa: 0.002 deg
+               Xc
+                    Value: 297.914236 
+                    Deviation: X: 0.433 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 156.462410 
+                    Deviation: Y: 0.707 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1770.527286 
+                    Deviation: Z: 0.074 
+            Photo 4: 8938.jpg
+               Omega
+                    Value: -0.168814 deg
+                    Deviation: Omega: 0.031 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: 0.129498 deg
+                    Deviation: Phi: 0.015 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: 96.144459 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: 314.440379 
+                    Deviation: X: 0.470 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: -58.657291 
+                    Deviation: Y: 0.956 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1767.022977 
+                    Deviation: Z: 0.121 
+            Photo 5: 9111.jpg
+               Omega
+                    Value: 0.519749 deg
+                    Deviation: Omega: 0.025 deg
+                    Correlations over  95.0%: Y:-100.0%
+               Phi
+                    Value: -0.222735 deg
+                    Deviation: Phi: 0.027 deg
+                    Correlations over  95.0%: X:99.9%
+               Kappa
+                    Value: -92.545037 deg
+                    Deviation: Kappa: 0.003 deg
+               Xc
+                    Value: 702.982060 
+                    Deviation: X: 0.863 
+                    Correlations over  95.0%: Phi:99.9%
+               Yc
+                    Value: 109.907769 
+                    Deviation: Y: 0.804 
+                    Correlations over  95.0%: Omega:-100.0%
+               Zc
+                    Value: 1797.280867 
+                    Deviation: Z: 0.178 
+   Quality
+      Photographs
+         Total Number: 5
+            Bad Photos: 0
+            Weak Photos: 0
+            OK Photos: 5
+         Number Oriented: 5
+         Number with inverse camera flags set: 0
+      Cameras
+         Camera1: 2013
+            Calibration: no
+            Number of photos using camera: 5
+      Photo Coverage
+         Referenced points outside of the camera's calibrated coverage region:
+      Point Marking Residuals
+         Overall RMS: 1.097 pixels
+         Maximum: 3.124 pixels
+            Point 410 on Photo 5
+         Minimum: 0.247 pixels
+            Point 67407 on Photo 3
+         Maximum RMS: 2.559 pixels
+            Point 410
+         Minimum RMS: 0.189 pixels
+            Point 67407
+      Point Tightness
+         Maximum: 0.36 m
+            Point 552
+         Minimum: 0.0071 m
+            Point 347
+      Point Precisions
+         Overall RMS Vector Length: 0.454 m
+         Maximum Vector Length: 0.596 m
+            Point 65265
+         Minimum Vector Length: 0.0506 m
+            Point 422
+         Maximum X: 0.165 m
+         Maximum Y: 0.0881 m
+         Maximum Z: 0.57 m
+         Minimum X: 0.0197 m
+         Minimum Y: 0.0196 m
+         Minimum Z: 0.042 m
+      Point Angles
+         Maximum: 26.19 degrees
+            Point 66544
+         Minimum: 6.493 degrees
+            Point 347
+         Average: 15.48 degrees
+      Check measurements
+         Check point delta
+            Max: 1.01e+006 m  (413, OP492)
+            Max X,Y,Z
+               X: 1e+006 m  (413, OP492)
+               Y: 1.12e+005 m  (311, OP410)
+               Z: 140 m  (311, OP410)
+            Min: 1.01e+006 m  (305, OP375)
+            Min X,Y,Z
+               X: 1e+006 m  (311, OP410)
+               Y: 1.12e+005 m  (413, OP492)
+               Z: 140 m  (413, OP492)
+            Average: 1.01e+006 m  (from 16 items)
