@@ -28,7 +28,7 @@ end
 curDir=fileparts(mfilename('fullpath'));
 
 if weighted
-    stub='weighted-1mm';
+    stub='weighted';
 else
     stub='fixed';
 end
