@@ -1,4 +1,0 @@
-Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln PhotoModeler Calibration Project
-   Problems and suggestions:
-      Project Problems: Not evaluated
