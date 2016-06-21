@@ -1,42 +1,72 @@
+function romabundledemo
+%ROMABUNDLEDEMO Bundle demo for DBAT.
+%
+%   ROMABUNDLEDEMO runs the bundle on the PhotoModeler export file
+%   of the ROMA data set. The PhotoModeler EO values are used as
+%   initial values, except that the EO position are disturbed by
+%   random noise with sigma=0.1 m. The OP initial values are
+%   computed by forward intersection.
+
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
-% Defult to Roma dataset if no data file is specified.
-if ~exist('fName','var')
-    fName=fullfile(curDir,'data','roma.txt');
-    fprintf('No data file specified, using ''%s''.\n',fName);
-    disp(['Set variable ''fName'' to name of Photomodeler Export file if ' ...
-          'you wish to use another file.']);
-    disp(' ')
-end
+% Base dir with input files.
+inputDir=fullfile(curDir,'data','phor2013');
 
-if ~exist('prob','var')
-    fprintf('Loading data file %s...',fName);
-    prob=loadpm(fName);
-    disp('done.')
-else
-    disp('Using pre-loaded data. Do ''clear prob'' to reload.');
+% PhotoModeler text export file and report file.
+inputFile=fullfile(inputDir,'pmexports','roma-pmexport.txt');
+% Report file name.
+reportFile=fullfile(inputDir,'dbatexports','roma-dbatreport.txt');;
+
+fprintf('Loading data file %s...',inputFile);
+prob=loadpm(inputFile);
+probRaw=prob;
+if any(isnan(cat(2,prob.images.imSz)))
+    error('Image sizes unknown!');
 end
+disp('done.')
+
+% Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
+ss0=s0;
 
-% Don't estimate IO data (treat it as exact).
-s0.IO=s0.IOobs; % No really necessary...
+% Don't estimate IO data, i.e. treat it as exact.  This block is not
+% really necessary, but may serve as a starting point if IO
+% parameters are to be estimated.
+s0.IO=s0.prior.IO;
 s0.estIO=false(size(s0.IO));
 s0.useIOobs=false(size(s0.IO));
 
-% Use supplied EO data as initial values. Treat EO data as free.
-s0.EO=s0.EOobs; % No really necessary...
-s0.estEO(1:6,:)=true;
-s0.useEOobs=false(size(s0.EO));
+% Noise sigma [m].
+noiseLevel=0.1;
 
-% Use supplied OP data as initial values. Treat control points as
-% exact.
-s0.OP=s0.OPobs; % No really necessary...
+% Use supplied EO data as initial values. Again, this block is not
+% really necessary but may serve as a starting point for modifications.
+s0.EO=s0.prior.EO;
+s0.estEO(1:6,:)=true; % 7th element is just the axis convention.
+s0.useEOobs=false(size(s0.EO));
+s0.EO(1:3,:)=s0.EO(1:3,:)+randn(3,size(s0.EO,2))*noiseLevel;
+
+% Copy CP values and treat them as fixed.
+s0.OP(:,s0.isCtrl)=s0.prior.OP(:,s0.isCtrl);
 s0.estOP=repmat(~s0.isCtrl(:)',3,1);
 s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
+% Compute initial OP values by forward intersection.
+correctedPt=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,3,2,...
+                                      s0.ptCams,size(s0.IO,2)),2,[]);
+s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,s0.cams,s0.colPos,correctedPt,find(~s0.isCtrl));
 
-% Use sigma0=1 as first approximation.
-s0.markStd(:)=1;
+% Warn for non-uniform mark std.
+uniqueSigmas=unique(s0.markStd(:));
+
+if length(uniqueSigmas)~=1
+    uniqueSigmas
+    error('Multiple mark point sigmas')
+end
+
+if all(uniqueSigmas==0)
+    s0.markStd(:)=1;
+end
 
 % Fix the datum by fixing camera 1...
 s0.estEO(:,1)=false;
@@ -70,9 +100,7 @@ for i=1:length(dampings)
     end
 end
 
-resFile=strrep(fName,'.txt','_result_file.txt');
-
-COP=bundle_result_file(result{1},E{1},resFile);
+COP=bundle_result_file(result{1},E{1},reportFile);
 
 fprintf('\nBundle result file %s generated.\n',resFile);
 
