@@ -328,7 +328,7 @@ for iter=iters
         case 1
             title(ax,sprintf(titleStr,iter),'interpreter','none');
         otherwise
-            title(ax,sprintf(titleStr,iter,nIters)),'interpreter','none';
+            title(ax,sprintf(titleStr,iter,nIters),'interpreter','none');
         end
     end
 
