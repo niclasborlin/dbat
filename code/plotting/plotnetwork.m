@@ -324,11 +324,11 @@ for iter=iters
     if ~isempty(titleStr)
         switch titleStrNums
         case 0
-            title(ax,titleStr);
+            title(ax,titleStr,'interpreter','none');
         case 1
-            title(ax,sprintf(titleStr,iter));
+            title(ax,sprintf(titleStr,iter),'interpreter','none');
         otherwise
-            title(ax,sprintf(titleStr,iter,nIters));
+            title(ax,sprintf(titleStr,iter,nIters)),'interpreter','none';
         end
     end
 
