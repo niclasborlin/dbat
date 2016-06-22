@@ -264,6 +264,20 @@ if length(t)==1 && iscell(t) && length(t{1})==1
 end
 
 
+% Parse coverage information from line l. Return percentage
+% value in double val if a match, otherwise return empty array.
+function val=AveragePhotoPointCoverage(l)
+    
+val=[];
+
+pat='^\s*Average Photo Point Coverage:\s*(\d+)%\s*$';
+t=regexpi(l,pat,'tokens');
+if length(t)==1 && iscell(t) && length(t{1})==1
+    % Correlation string to parse.
+    val=str2double(t{1}{1});
+end
+
+
 % Parse one EO element. l is first unprocessed line before/after the
 % call.
 function [val,dev,corrVal,corrName,l]=ReadOneEOVal(fid,l,name,unit)
@@ -426,9 +440,15 @@ while isscalar(camNum)
         ReadUntilMatch(fid,'^\s*Calibration:\s*(\S*)\s*$'),'yes');
     usedInImages(camNum)=str2double(...
         ReadUntilMatch(fid,'^\s*Number of photos using camera:\s*(\d+)\s*$'));
-    coverage(camNum)=str2double(...
-        ReadUntilMatch(fid,'^\s*Average Photo Point Coverage:\s*(\d+)%\s*$'));
+    % Get next lnie.
     l=fgetl(fid);
+    % Parse coverage if it is there.
+    val=AveragePhotoPointCoverage(l);
+    if ~isempty(val)
+        % Detected. Store value and read next line.
+        coverage(camNum)=val;
+        l=fgetl(fid);
+    end
     [camNum,camName]=CameraNumName(l);
 end
 

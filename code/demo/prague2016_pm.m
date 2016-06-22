@@ -16,42 +16,62 @@
 
 %if nargin<2, doPause='off'; end
 
+% Extract name of current directory.
+curDir=fileparts(mfilename('fullpath'));
+
+switch lower(l(1))
+  case 'c'
+    % Base dir with input files for these projects.
+    inputDir=fullfile(curDir,'data','prague2016','cam');
+  case 's'
+    % Base dir with input files for these projects.
+    inputDir=fullfile(curDir,'data','prague2016','sxb');
+  otherwise
+    error('Bad experiment label');
+end
+
 switch lower(l)
   case 'c1'
-    weighted=false;
+    cpWeighted=false;
+    stub='fixed';
   case 'c2'
-    weighted=true;
+    cpWeighted=true;
+    stub='weighted';
+  case 's1'
+    cpWeighted=false;
+    stub='f-op0';
+  case 's2'
+    cpWeighted=true;
+    stub='w-op0';
+  case 's3'
+    cpWeighted=true;
+    stub='w-op1';
+  case 's4'
+    cpWeighted=true;
+    stub='wsmart';
   otherwise
     error('Bad experiment label.')
 end
 
-% Extract name of current directory.
-curDir=fileparts(mfilename('fullpath'));
-
-if weighted
-    stub='weighted';
-else
-    stub='fixed';
-end
-
 if orient
-    orient='-with-orient';
+    orientStr='-with-orient';
 else
-    orient='-no-orient';
+    orientStr='-no-orient';
 end
-
-% Base dir with input files for these projects.
-inputDir=fullfile(curDir,'data','prague2016','cam');
 
 % PhotoModeler text export file and report file.
-inputFile=fullfile(inputDir,'pmexports',[stub,orient,'-pmexport.txt']);
-reportFile=fullfile(inputDir,'pmexports',[stub,orient,'-pmreport.txt']);
+inputFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-pmexport.txt']);
+reportFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-pmreport.txt']);
 % PhotoModeler dump files for 3D and 2D points.
-input3dFile=fullfile(inputDir,'pmexports',[stub,orient,'-3dpts.txt']);
-input2dFile=fullfile(inputDir,'pmexports',[stub,orient,'-2dpts.txt']);
+input3dFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-3dpts.txt']);
+input2dFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-2dpts.txt']);
 
 % Control point file.
-cpName=fullfile(inputDir,['ctrlpts-',stub,'.txt']);
+if cpWeighted
+    cpName=fullfile(inputDir,'ctrlpts-weighted.txt');
+else
+    cpName=fullfile(inputDir,'ctrlpts-fixed.txt');
+end
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
@@ -142,7 +162,7 @@ s0.markStd(:)=s0.prior.sigmas(1);
 
 % Compute EO parameters by spatial resection.
 cpId=s0.OPid(s0.isCtrl);
-s1=resect(s0,'all',cpId,inf,0,cpId);
+s1=resect(s0,'all',cpId,1,0,cpId);
 % Compute OP parameters by forward intersection.
 s2=forwintersect(s1,'all',true);
 
@@ -213,13 +233,19 @@ end
 m=E.numObs;
 n=E.numParams;
 r=E.redundancy;
-rayMin=min(full(sum(s.vis,2)));
-rayMax=max(full(sum(s.vis,2)));
-rayAvg=mean(full(sum(s.vis,2)));
+
+rayCount=full(sum(s.vis,2));
 rayAng=angles(result,'Computing ray angles')*180/pi;
-rayAngMin=min(rayAng);
-rayAngMax=max(rayAng);
-rayAngAvg=mean(rayAng);
+
+OPrayCount=rayCount(~s.isCtrl);
+OPrayAng=rayAng(~s.isCtrl);
+if isempty(OPrayCount), OPrayCount=0; end
+if isempty(OPrayAng), OPrayAng=0; end
+
+CPrayCount=rayCount(s.isCtrl);
+CPrayAng=rayAng(s.isCtrl);
+if isempty(CPrayCount), CPrayCount=0; end
+if isempty(CPrayAng), CPrayAng=0; end
 
 % Compute EO max abs differences.
 EOdiff=result.EO(1:6,:)-pmReport.EO(1:6,:);
@@ -250,12 +276,26 @@ maxOPstdDiff=max(max(OPstdDiff(:,~OPisCP)));
 maxCPstdDiff=max(max(OPstdDiff(:,OPisCP)));
 
 fprintf(['\nExperiment %s:\n%d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
-         'n=%d, r=%d, ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
-         '(%.1f avg) deg\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r,...
-        rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,rayAngAvg);
+         'n=%d, r=%d.\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r);
+fprintf(['  OP  ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
+         '(%.1f avg) deg\n'],min(OPrayCount),max(OPrayCount),mean(OPrayCount),...
+        min(OPrayAng),max(OPrayAng),mean(OPrayAng));       
+fprintf(['  CP  ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
+         '(%.1f avg) deg\n'],rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,...
+        rayAngAvg);
+fprintf(['  All ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
+         '(%.1f avg) deg\n'],rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,...
+        rayAngAvg);
 
-fprintf(['\nResults (project units/degrees/pixels):\n  sigma0 (PM/DBAT)  ' ...
-         ': %g/%g.=%g\n'], pmReport.totError.lastErr,E.s0,pmReport.totError.lastErr/E.s0);
+fprintf('\nResults (project units/degrees/pixels):\n');
+noYes={'no','yes'};
+
+fprintf('  PM orient         : %s\n',noYes{pmReport.procOpts.orient+1});
+fprintf('  PM stages/iters   : %d/%d\n',pmReport.totError.numStages,...
+        pmReport.totError.numIters);,
+
+fprintf(['  sigma0 (PM/DBAT)  ' ...
+         ': %g/%g=%g\n'], pmReport.totError.lastErr,E.s0,pmReport.totError.lastErr/E.s0);
 
 fprintf('  EO max pos diff   : %g.\n',maxEOposDiff);
 fprintf('  EO max angle diff : %g.\n',maxEOangDiff);
