@@ -9,14 +9,14 @@ Status Report Tree
             Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Fri Apr 15 23:20:32 2016
+      Last Processing Attempt: Wed Jun 22 23:28:27 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
          Orientation: off
          Global Optimization: on
          Calibration: off
-         Constraints: off
+         Constraints: on
       Total Error
          Number of Processing Iterations: 3
          Number of Processing Stages: 2
@@ -26,7 +26,7 @@ Status Report Tree
          Photograph Standard Deviations
             Photo 1: 8811.jpg
                Omega
-                    Value: 0.836223 deg
+                    Value: 0.836224 deg
                     Deviation: Omega: 0.027 deg
                     Correlations over  95.0%: Y:-100.0%
                Phi
@@ -37,15 +37,15 @@ Status Report Tree
                     Value: -89.910716 deg
                     Deviation: Kappa: 0.003 deg
                Xc
-                    Value: -119.063358 
+                    Value: -119.063360 
                     Deviation: X: 0.624 
                     Correlations over  95.0%: Phi:99.9%
                Yc
-                    Value: 107.567631 
+                    Value: 107.567627 
                     Deviation: Y: 0.849 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1776.719138 
+                    Value: 1776.719137 
                     Deviation: Z: 0.136 
             Photo 2: 8936.jpg
                Omega
@@ -64,15 +64,15 @@ Status Report Tree
                     Deviation: X: 0.470 
                     Correlations over  95.0%: Phi:99.9%
                Yc
-                    Value: 364.581210 
+                    Value: 364.581203 
                     Deviation: Y: 0.848 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1776.675477 
+                    Value: 1776.675476 
                     Deviation: Z: 0.121 
             Photo 3: 8937.jpg
                Omega
-                    Value: -0.143156 deg
+                    Value: -0.143155 deg
                     Deviation: Omega: 0.023 deg
                     Correlations over  95.0%: Y:-100.0%
                Phi
@@ -83,15 +83,15 @@ Status Report Tree
                     Value: 94.398968 deg
                     Deviation: Kappa: 0.002 deg
                Xc
-                    Value: 297.914236 
+                    Value: 297.914237 
                     Deviation: X: 0.433 
                     Correlations over  95.0%: Phi:99.9%
                Yc
-                    Value: 156.462410 
+                    Value: 156.462402 
                     Deviation: Y: 0.707 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1770.527286 
+                    Value: 1770.527284 
                     Deviation: Z: 0.074 
             Photo 4: 8938.jpg
                Omega
@@ -106,19 +106,19 @@ Status Report Tree
                     Value: 96.144459 deg
                     Deviation: Kappa: 0.003 deg
                Xc
-                    Value: 314.440379 
+                    Value: 314.440382 
                     Deviation: X: 0.470 
                     Correlations over  95.0%: Phi:99.9%
                Yc
-                    Value: -58.657291 
+                    Value: -58.657303 
                     Deviation: Y: 0.956 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1767.022977 
+                    Value: 1767.022974 
                     Deviation: Z: 0.121 
             Photo 5: 9111.jpg
                Omega
-                    Value: 0.519749 deg
+                    Value: 0.519750 deg
                     Deviation: Omega: 0.025 deg
                     Correlations over  95.0%: Y:-100.0%
                Phi
@@ -129,15 +129,15 @@ Status Report Tree
                     Value: -92.545037 deg
                     Deviation: Kappa: 0.003 deg
                Xc
-                    Value: 702.982060 
+                    Value: 702.982063 
                     Deviation: X: 0.863 
                     Correlations over  95.0%: Phi:99.9%
                Yc
-                    Value: 109.907769 
+                    Value: 109.907764 
                     Deviation: Y: 0.804 
                     Correlations over  95.0%: Omega:-100.0%
                Zc
-                    Value: 1797.280867 
+                    Value: 1797.280865 
                     Deviation: Z: 0.178 
    Quality
       Photographs
