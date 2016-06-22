@@ -35,8 +35,6 @@ function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
 %
 %See also: PM_RESECT_3PT.
 
-% $Id$
-
 % Handle defaults.
 if nargin<4, n=1; end
 if nargin<5, v=0; end
@@ -82,7 +80,7 @@ for i=1:length(cams)
         tryId=[];
     end
 
-    % Ensure that each index/ID triplet is stored  row-wise.
+    % Ensure that each index/ID triplet is stored row-wise.
     if isvector(tryId)
         tryId=reshape(tryId,1,[]);
     end
