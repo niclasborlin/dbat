@@ -1,22 +1,24 @@
 
 Status Report Tree
-   Project Name: c4040z.pmr
+   Project Name: fixed.pmr
    Problems and Suggestions (1)
       Project Problems (1)
          Problem: A large percentage of your points are sub-pixel marked so it is assumed you are striving for a high accuracy result. The largest residual (Point11 - 1.05) is greater than 1.00 pixels. 
             Suggestion: In high accuracy projects, strive to get all point residuals under 1.00 pixels. If you have just a few high residual points, study them on each photo to ensure they are marked and referenced correctly. If many of your points have high residuals then make sure the camera stations are solving correctly. Ensure that you are using the best calibrated camera possible. Remove points that have been manually marked unless you need them.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Sat Apr 02 20:11:02 2016
+      Last Processing Attempt: Wed Jun 22 09:36:32 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
-         Orientation: off
+         Orientation: on
+            All photos oriented.
+            Number of photos oriented: 21
          Global Optimization: on
          Calibration: off
          Constraints: on
       Total Error
-         Number of Processing Iterations: 2
+         Number of Processing Iterations: 3
          Number of Processing Stages: 2
          First Error: 1.778
          Last Error: 1.778
