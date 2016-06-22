@@ -1,17 +1,18 @@
-%function prague2016_pm(l,doPause)
+%function prague2016_pm(l,orient,doPause)
 %PRAGUE2016_PM
 %
-%   PRAGUE2016_PM(LABEL), where LABEL is 'C1', 'C2', 'S1', 'S2',
-%   'S3',' or 'S4', runs the respective experiments of [1].
+%   PRAGUE2016_PM(LABEL,ORIENT), where LABEL is 'C1', 'C2', 'S1',
+%   'S2', 'S3',' or 'S4' and ORIENT is logical, runs the respective
+%   experiments of [1].
 %
 %   References:
-%       [1] Börlin and Grussenmeyer, "External Verification of the
-%           Bundle Adjustment in Photogrammetric Software using the
-%           Damped Bundle Adjustment Toolbox", presented at the
-%           2016 ISPRS Congress in Prague, Czech Republic, 12-17
-%           July 2016.
-
-% $Id$
+%       [1] Börlin and Grussenmeyer (2016), "External Verification
+%           of the Bundle Adjustment in Photogrammetric Software
+%           using the Damped Bundle Adjustment Toolbox",
+%           International Archives of the Photogrammetry, Remote
+%           Sensing and Spatial Information Sciences, XLI-B5,
+%           p. 7-14. Paper presented at the 2016 ISPRS Congress in
+%           Prague, Czech Republic, 12-17 July 2016.
 
 %if nargin<2, doPause='off'; end
 
@@ -33,15 +34,21 @@ else
     stub='fixed';
 end
 
+if orient
+    orient='-with-orient';
+else
+    orient='-no-orient';
+end
+
 % Base dir with input files for these projects.
 inputDir=fullfile(curDir,'data','prague2016','cam');
 
 % PhotoModeler text export file and report file.
-inputFile=fullfile(inputDir,'pmexports',[stub,'-pmexport.txt']);
-reportFile=fullfile(inputDir,'pmexports',[stub,'-pmreport.txt']);
+inputFile=fullfile(inputDir,'pmexports',[stub,orient,'-pmexport.txt']);
+reportFile=fullfile(inputDir,'pmexports',[stub,orient,'-pmreport.txt']);
 % PhotoModeler dump files for 3D and 2D points.
-input3dFile=fullfile(inputDir,'pmexports',[stub,'-3dpts.txt']);
-input2dFile=fullfile(inputDir,'pmexports',[stub,'-2dpts.txt']);
+input3dFile=fullfile(inputDir,'pmexports',[stub,orient,'-3dpts.txt']);
+input2dFile=fullfile(inputDir,'pmexports',[stub,orient,'-2dpts.txt']);
 
 % Control point file.
 cpName=fullfile(inputDir,['ctrlpts-',stub,'.txt']);
@@ -135,7 +142,7 @@ s0.markStd(:)=s0.prior.sigmas(1);
 
 % Compute EO parameters by spatial resection.
 cpId=s0.OPid(s0.isCtrl);
-s1=resect(s0,'all',cpId,1,0,cpId);
+s1=resect(s0,'all',cpId,inf,0,cpId);
 % Compute OP parameters by forward intersection.
 s2=forwintersect(s1,'all',true);
 
