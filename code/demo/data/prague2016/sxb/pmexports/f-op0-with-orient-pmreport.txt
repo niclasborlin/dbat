@@ -1,6 +1,6 @@
 
 Status Report Tree
-   Project Name: Strasbourg2013-JPG-GCP-ONLY.pmr
+   Project Name: f-op0.pmr
    Problems and Suggestions (2)
       Project Problems (2)
          Problem: The following cameras are not calibrated: 2013.
@@ -9,7 +9,7 @@ Status Report Tree
             Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Sat Apr 02 21:14:50 2016
+      Last Processing Attempt: Wed Jun 22 21:02:16 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
