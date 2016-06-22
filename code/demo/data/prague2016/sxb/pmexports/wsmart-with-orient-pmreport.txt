@@ -9,7 +9,7 @@ Status Report Tree
             Suggestion: Points with low angle separation will not solve with good accuracy. If possible add a photo with greater angle separation.
       Problems related to most recent processing (0)
    Information from most recent processing
-      Last Processing Attempt: Fri Apr 15 23:18:00 2016
+      Last Processing Attempt: Wed Jun 22 23:30:19 2016
       Version: PhotoModeler Scanner 2016.0.5.1718 (64-bit)
       Status: successful
       Processing Options
@@ -18,7 +18,7 @@ Status Report Tree
             Number of photos oriented: 5
          Global Optimization: on
          Calibration: off
-         Constraints: off
+         Constraints: on
       Total Error
          Number of Processing Iterations: 3
          Number of Processing Stages: 2
