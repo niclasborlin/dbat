@@ -136,12 +136,13 @@ pts2dNormal=loadpm2dtbl(input2dFile);
 fprintf('done.\n');
 
 pts3d=pts3dNormal;
-pts2d=pts3dNormal;
+pts2d=pts2dNormal;
 
 if exist(input3dSmartFile,'file')
     fprintf('Loading 3D smart point table %s...',input3dSmartFile);
     pts3dSmart=loadpm3dtbl(input3dSmartFile,true);
     fprintf('done.\n');
+    % Merge normal and smart tables.
     pts3d.id=cat(2,pts3dNormal.id,pts3dSmart.id);
     pts3d.name=cat(2,pts3dNormal.name,pts3dSmart.name);
     pts3d.pos=cat(2,pts3dNormal.pos,pts3dSmart.pos);
@@ -160,6 +161,11 @@ if exist(input2dSmartFile,'file')
     fprintf('Loading 2D smart point table %s...',input2dSmartFile);
     pts2dSmart=loadpm2dtbl(input2dSmartFile);
     fprintf('done.\n');
+    % Merge normal and smart tables.
+    pts2d.id=cat(2,pts2dNormal.id,pts2dSmart.id);
+    pts2d.imNo=cat(2,pts2dNormal.imNo,pts2dSmart.imNo);
+    pts2d.pos=cat(2,pts2dNormal.pos,pts2dSmart.pos);
+    pts2d.res=cat(2,pts2dNormal.res,pts2dSmart.res);
 end
 
 fprintf('Loading PM report file %s...',reportFile);
@@ -306,6 +312,16 @@ maxCPdiff=max(max(OPdiff(:,OPisCP)));
 maxOPstdDiff=max(max(OPstdDiff(:,~OPisCP)));
 maxCPstdDiff=max(max(OPstdDiff(:,OPisCP)));
 
+% Compare 2d residuals.
+
+% Find mapping from pts2d.id to OPid.
+[~,j]=ismember(pts2d.id,result.OPid);
+% Find columns in markPts that correspond to pts2d id, imNo.
+cols=result.colPos(sub2ind(size(result.colPos),j,pts2d.imNo));
+res2d=nan(size(result.residuals.markPt));
+res2d(:,cols)=pts2d.res;
+maxRes2d=max(max(abs(res2d-result.residuals.markPt)));
+
 fprintf(['\nExperiment %s:\n%d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
          'n=%d, r=%d.\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r);
 fprintf(['  OP  ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
@@ -336,6 +352,7 @@ fprintf('  OP max diff       : %g.\n',maxOPdiff);
 fprintf('  CP max diff       : %g.\n',maxCPdiff);
 fprintf('  OP max std diff   : %g.\n',maxOPstdDiff);
 fprintf('  CP max std diff   : %g.\n',maxCPstdDiff);
+fprintf('  2D res max diff   : %g.\n',maxRes2d);
 
 
 h=plotparams(result,E);
