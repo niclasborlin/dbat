@@ -1,0 +1,194 @@
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln 
+   Problems and suggestions:
+      Project Problems: Not evaluated
+      Problems related to the processing: (1)
+         One or more of the camera station parameters has a high correlation (see below).
+   Information from last bundle
+      Last Bundle Run: 22-Jun-2016 23:24:47
+      DBAT version:    0.5.0 (2016-05-13)
+      Status:          OK (0)
+      Sigma0:          0.965375
+      Sigma0 (pixels): 0.965375
+      Processing options:
+         Orientation:             on
+         Global optimization:     on
+         Calibration:             off
+         Constraints:             off
+         Maximum # of iterations: 20
+         Convergence tolerance:   1e-06
+         Singular test:           off
+         Chirality veto:          off
+         Damping:                 gna
+         Camera unit (cu):        mm
+         Object space unit (ou):  m
+         Initial value comment:   
+      Total error:
+         Number of stages:     1
+         Number of iterations: 4
+         First error:          10.6748
+         Last error:           8.01901
+      Precisions / Standard Deviations:
+         Photograph Standard Deviations:
+            Photo 1: 8811.jpg
+               Omega:
+                  Value:     0.791225 deg
+                  Deviation: 0.0422 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.419415 deg
+                  Deviation: 0.0289 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     -89.916408 deg
+                  Deviation: 0.00477 deg
+               Xc:
+                  Value:     -118.648973 ou
+                  Deviation: 0.922 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     109.132137 ou
+                  Deviation: 1.32 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1776.752966 ou
+                  Deviation: 0.169 ou
+            Photo 2: 8936.jpg
+               Omega:
+                  Value:     -0.113704 deg
+                  Deviation: 0.0469 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.021714 deg
+                  Deviation: 0.0238 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     92.624889 deg
+                  Deviation: 0.00446 deg
+               Xc:
+                  Value:     281.740363 ou
+                  Deviation: 0.77 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     364.542533 ou
+                  Deviation: 1.46 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1776.529663 ou
+                  Deviation: 0.205 ou
+            Photo 3: 8937.jpg
+               Omega:
+                  Value:     -0.166690 deg
+                  Deviation: 0.0366 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.030073 deg
+                  Deviation: 0.0223 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     94.402032 deg
+                  Deviation: 0.00348 deg
+               Xc:
+                  Value:     296.684311 ou
+                  Deviation: 0.718 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     157.097921 ou
+                  Deviation: 1.14 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1770.581247 ou
+                  Deviation: 0.108 ou
+            Photo 4: 8938.jpg
+               Omega:
+                  Value:     -0.113952 deg
+                  Deviation: 0.104 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     0.120829 deg
+                  Deviation: 0.0276 deg
+                  Correlations over 95%: Xc:100.0%.
+               Kappa:
+                  Value:     96.144942 deg
+                  Deviation: 0.00425 deg
+               Xc:
+                  Value:     314.147386 ou
+                  Deviation: 0.886 ou
+                  Correlations over 95%: Phi:100.0%.
+               Yc:
+                  Value:     -60.478299 ou
+                  Deviation: 3.22 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1767.096107 ou
+                  Deviation: 0.237 ou
+            Photo 5: 9111.jpg
+               Omega:
+                  Value:     0.507169 deg
+                  Deviation: 0.0391 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.173671 deg
+                  Deviation: 0.0583 deg
+                  Correlations over 95%: Xc:100.0%.
+               Kappa:
+                  Value:     -92.544656 deg
+                  Deviation: 0.00536 deg
+               Xc:
+                  Value:     704.566644 ou
+                  Deviation: 1.84 ou
+                  Correlations over 95%: Phi:100.0%.
+               Yc:
+                  Value:     110.518724 ou
+                  Deviation: 1.25 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1797.073265 ou
+                  Deviation: 0.409 ou
+   Quality
+      Photographs
+         Total number: 5
+         Numbers used: 5
+      Cameras
+         Total number: 1
+         Camera1:
+            Calibration:                   <not available>
+            Number of photos using camera: 5
+            Photo point coverage:
+               Rectangular: 45%-73% (57% average, 85% union)
+               Convex hull: 29%-41% (35% average, 75% union)
+               Radial:      75%-91% (83% average, 91% union)
+      Photo Coverage
+         References points outside calibrated region:
+            <not available>
+      Point Measurements
+         Number of control pts: 16
+         Number of object pts: 1
+         CP ray count: 1-4 (2.9 avg)
+         OP ray count: 4-4 (4.0 avg)
+      Point Marking Residuals
+         Overall point RMS: 1.066 pixels
+         Mark point residuals:
+            Maximum: 2.179 pixels (OP 410 on photo 4)
+         Object point residuals (RMS over all images of a point):
+            Minimum: 0.192 pixels (OP 403 over 1 images)
+            Maximum: 1.831 pixels (OP 410 over 3 images)
+         Photo residuals (RMS over all points in an image):
+            Minimum: 0.695 pixels (photo 3 over 13 points)
+            Maximum: 1.324 pixels (photo 4 over 10 points)
+      Point Precision
+         Total standard deviation (RMS of X/Y/Z std):
+            Minimum: 0.046 (OP 422)
+            Maximum: 0.31 (OP 745)
+         Maximum X standard deviation: 0.052 (OP 745)
+         Maximum Y standard deviation: 0.057 (OP 745)
+         Maximum Z standard deviation: 0.3 (OP 745)
+      Point Angles
+         CP
+            Minimum: 0.0 degrees (CP 403)
+            Maximum: 25.8 degrees (CP 410)
+            Average: 14.7 degrees
+         OP
+            Minimum: 25.9 degrees (OP 745)
+            Maximum: 25.9 degrees (OP 745)
+            Average: 25.9 degrees
