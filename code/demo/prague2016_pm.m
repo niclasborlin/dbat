@@ -1,4 +1,4 @@
-%function prague2016_pm(l,orient,doPause)
+function [result,s0,prob]=prague2016_pm(l,orient,doPause)
 %PRAGUE2016_PM
 %
 %   PRAGUE2016_PM(LABEL,ORIENT), where LABEL is 'C1', 'C2', 'S1',
@@ -14,7 +14,7 @@
 %           p. 7-14. Paper presented at the 2016 ISPRS Congress in
 %           Prague, Czech Republic, 12-17 July 2016.
 
-%if nargin<2, doPause='off'; end
+if nargin<3, doPause='off'; end
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -48,7 +48,7 @@ switch lower(l)
     stub='w-op1';
   case 's4'
     cpWeighted=true;
-    stub='wsmart';
+    stub='wsmart2';
   otherwise
     error('Bad experiment label.')
 end
@@ -146,7 +146,8 @@ uniqueSigmas=unique(s0.markStd(:));
 
 if length(uniqueSigmas)~=1
     uniqueSigmas
-    error('Multiple mark point sigmas')
+    warning('Multiple mark point sigmas')
+    s0.markStd(s0.markStd==0)=1;
 end
 
 % Clear EO and OP parameters.
@@ -187,7 +188,7 @@ else
 end
 
 % Write report file and store computed OP covariances.
-reportFile=fullfile(inputDir,'dbatexports',[stub,'-dbatreport.txt']);
+reportFile=fullfile(inputDir,'dbatexports',[stub,orientStr,'-dbatreport.txt']);
 
 COP=bundle_result_file(result,E,reportFile);
 
@@ -202,7 +203,7 @@ fprintf('\nBundle report file %s generated.\n',reportFile);
 % Input statistics. Number of images, CP, OP, a priori CP sigma,
 % number of observations, number of parameters, redundacy, ray
 % count and angle min+max+avg.
-nImages=length(s.EO);
+nImages=size(s.EO,2);
 nCP=nnz(s.isCtrl);
 nOP=nnz(~s.isCtrl);
 sigmaCP=unique(s.prior.OPstd(:,s.isCtrl)','rows')';
@@ -278,14 +279,14 @@ maxCPstdDiff=max(max(OPstdDiff(:,OPisCP)));
 fprintf(['\nExperiment %s:\n%d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
          'n=%d, r=%d.\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r);
 fprintf(['  OP  ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
-         '(%.1f avg) deg\n'],min(OPrayCount),max(OPrayCount),mean(OPrayCount),...
-        min(OPrayAng),max(OPrayAng),mean(OPrayAng));       
+         '(%.1f avg) deg\n'],min(OPrayCount),max(OPrayCount),...
+        mean(OPrayCount),min(OPrayAng),max(OPrayAng),mean(OPrayAng));       
 fprintf(['  CP  ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
-         '(%.1f avg) deg\n'],rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,...
-        rayAngAvg);
+         '(%.1f avg) deg\n'],min(CPrayCount),max(CPrayCount),...
+        mean(CPrayCount),min(CPrayAng),max(CPrayAng),mean(CPrayAng));       
 fprintf(['  All ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
-         '(%.1f avg) deg\n'],rayMin,rayMax,rayAvg,rayAngMin,rayAngMax,...
-        rayAngAvg);
+         '(%.1f avg) deg\n'],min(rayCount),max(rayCount),...
+        mean(rayCount),min(rayAng),max(rayAng),mean(rayAng));       
 
 fprintf('\nResults (project units/degrees/pixels):\n');
 noYes={'no','yes'};
