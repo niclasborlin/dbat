@@ -48,7 +48,7 @@ switch lower(l)
     stub='w-op1';
   case 's4'
     cpWeighted=true;
-    stub='wsmart2';
+    stub='wsmart';
   otherwise
     error('Bad experiment label.')
 end
@@ -65,6 +65,9 @@ reportFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-pmreport.txt']);
 % PhotoModeler dump files for 3D and 2D points.
 input3dFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-3dpts.txt']);
 input2dFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-2dpts.txt']);
+% PhotoModeler dump files for 3D and 2D smartpoints.
+input3dSmartFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-3dsmartpts.txt']);
+input2dSmartFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-2dsmartpts.txt']);
 
 % Control point file.
 if cpWeighted
@@ -125,12 +128,39 @@ prob.ctrlPts(ia,2:4)=ctrlPts.pos(:,ib)';
 prob.ctrlPts(ia,5:7)=ctrlPts.std(:,ib)';
 
 fprintf('Loading 3D point table %s...',input3dFile);
-pts3d=loadpm3dtbl(input3dFile);
+pts3dNormal=loadpm3dtbl(input3dFile);
 fprintf('done.\n');
 
 fprintf('Loading 2D point table %s...',input2dFile);
-pts2d=loadpm2dtbl(input2dFile);
+pts2dNormal=loadpm2dtbl(input2dFile);
 fprintf('done.\n');
+
+pts3d=pts3dNormal;
+pts2d=pts3dNormal;
+
+if exist(input3dSmartFile,'file')
+    fprintf('Loading 3D smart point table %s...',input3dSmartFile);
+    pts3dSmart=loadpm3dtbl(input3dSmartFile,true);
+    fprintf('done.\n');
+    pts3d.id=cat(2,pts3dNormal.id,pts3dSmart.id);
+    pts3d.name=cat(2,pts3dNormal.name,pts3dSmart.name);
+    pts3d.pos=cat(2,pts3dNormal.pos,pts3dSmart.pos);
+    pts3d.std=cat(2,pts3dNormal.std,pts3dSmart.std);
+    n1=size(pts3dNormal.vis,2);
+    n2=size(pts3dSmart.vis,2);
+    if n1<n2
+        pts3dNormal.vis(1,n2)=0;
+    elseif n1>n2
+        pts3dSmart.vis(1,n1)=0;
+    end
+    pts3d.vis=cat(1,pts3dNormal.vis,pts3dSmart.vis);
+end
+
+if exist(input2dSmartFile,'file')
+    fprintf('Loading 2D smart point table %s...',input2dSmartFile);
+    pts2dSmart=loadpm2dtbl(input2dSmartFile);
+    fprintf('done.\n');
+end
 
 fprintf('Loading PM report file %s...',reportFile);
 pmReport=loadpmreport(reportFile);
