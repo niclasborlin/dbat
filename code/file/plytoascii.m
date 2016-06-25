@@ -1,4 +1,8 @@
 function plytoascii(plyDir)
+%PLYTOASCII Unpack .PLY files to ascii.
+%
+%   PLYTOASCII(PLYDIR) converts each *.PLY file in PLYDIR into its
+%   ASCII version in the subdirectory 'ascii'.
 
 asciiDir=fullfile(plyDir,'ascii');
 if ~exist(asciiDir)
