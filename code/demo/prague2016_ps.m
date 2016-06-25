@@ -1,12 +1,11 @@
-function [rr,s0,prob]=prague2016_pm(l,orient,doPause)
-%PRAGUE2016_PM Run PhotoModeler demos in Prague'16 paper.
+function [rr,s0,prob]=prague2016_ps(l,doPause)
+%PRAGUE2016_PS Run PhotScan demo in Prague'16 paper.
 %
-%   PRAGUE2016_PM(LABEL,ORIENT), where LABEL is 'C1', 'C2', 'S1',
-%   'S2', 'S3',' or 'S4' and ORIENT is logical, runs the respective
-%   experiments of [1].
+%   PRAGUE2016_PS(LABEL), where LABEL is 'S5', runs the PhotScan
+%   experiment of [1].
 %
-%   PRAGUE2016_PM(LABEL,ORIENT,PAUSE) runs the demos with pause
-%   mode PAUSE. See PLOTNETWORK for pause modes.
+%   PRAGUE2016_PM(LABEL,PAUSE) runs the demo with pause mode
+%   PAUSE. See PLOTNETWORK for pause modes.
 %
 %   References:
 %       [1] Börlin and Grussenmeyer (2016), "External Verification
@@ -19,7 +18,7 @@ function [rr,s0,prob]=prague2016_pm(l,orient,doPause)
 %
 %See also: PLOTNETWORK.
 
-if nargin<3, doPause='off'; end
+if nargin<2, doPause='off'; end
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -36,151 +35,26 @@ switch lower(l(1))
 end
 
 switch lower(l)
-  case 'c1'
-    cpWeighted=false;
-    stub='fixed';
-  case 'c2'
+  case 's5'
     cpWeighted=true;
-    stub='weighted';
-  case 's1'
-    cpWeighted=false;
-    stub='f-op0';
-  case 's2'
-    cpWeighted=true;
-    stub='w-op0';
-  case 's3'
-    cpWeighted=true;
-    stub='w-op1';
-  case 's4'
-    cpWeighted=true;
-    stub='wsmart';
+    stub='weighted-shifted';
   otherwise
     error('Bad experiment label.')
 end
 
-if orient
-    orientStr='-with-orient';
-else
-    orientStr='-no-orient';
-end
-
 % PhotoModeler text export file and report file.
-inputFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-pmexport.txt']);
-reportFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-pmreport.txt']);
-% PhotoModeler dump files for 3D and 2D points.
-input3dFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-3dpts.txt']);
-input2dFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-2dpts.txt']);
-% PhotoModeler dump files for 3D and 2D smartpoints.
-input3dSmartFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-3dsmartpts.txt']);
-input2dSmartFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-2dsmartpts.txt']);
+inputFile=fullfile(inputDir,'psprojects',[stub,'.psz']);
 
-% Control point file.
-if cpWeighted
-    cpName=fullfile(inputDir,'ctrlpts-weighted.txt');
-else
-    cpName=fullfile(inputDir,'ctrlpts-fixed.txt');
-end
-
-fprintf('Loading data file %s...',inputFile);
-prob=loadpm(inputFile);
-probRaw=prob;
-if any(isnan(cat(2,prob.images.imSz)))
-    error('Image sizes unknown!');
-end
-disp('done.')
-fprintf('Loading control point file %s...',cpName);
-ctrlPts=loadcpt(cpName);
+fprintf('Loading PhotoScan project file %s...',inputFile);
+s=loadpsz(inputFile);
 fprintf('done.\n');
 
-% Verify all CPs used by PM are given in CP file.
-if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
-    pmCtrlPtsId=prob.ctrlPts(:,1)'
-    cpFileId=ctrlPts.id
-    error('Control point id mismatch.');
-end
+[prob,pmReport,pts3d,pts2d]=ps2pmstruct(s);
 
-% Estimate the offset between the world coordinate system and the PM
-% bundle coordinate system. The offset range for fixed control points
-% should be as small as the difference between the number of digits
-% used, typically 1e-3 object units. For weighted control points we
-% can also expect a deviation between the a posteriori CP positions
-% from the PM export file and the a priori CP positions in the CP
-% file.
-
-% Compute the actual offset between CP coordinates from PM and the
-% CP file.
-[~,ia,ib]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
-offset=prob.ctrlPts(ia,2:4)'-ctrlPts.pos(:,ib);
-meanOffset=mean(offset,2);
-offsetRange=max(offset,[],2)-min(offset,[],2);
-
-% Compute average a priori and a posteriori CP stdev.
-avgPreCPStd=mean(ctrlPts.std(:,ib),2);
-avgPostCPStd=mean(max(0,prob.ctrlPts(ia,5:7))',2);
-avgCPStd=(avgPostCPStd+avgPreCPStd)/2;
-
-% Warn if offset range is above 1e-3 + 2*average CP std.
-if max(offsetRange)>1e-3 + 2*(avgPostCPStd+avgPreCPStd)/2
-    warning('Large offset range:')
-    offsetRange
-end
-
-% Adjust a priori control point positions by the offset.
-ctrlPts.pos=ctrlPts.pos+repmat(meanOffset,1,size(ctrlPts.pos,2));
-
-% Replace a posteriori ctrl positions and std by a priori values.
-prob.ctrlPts(ia,2:4)=ctrlPts.pos(:,ib)';
-prob.ctrlPts(ia,5:7)=ctrlPts.std(:,ib)';
-
-fprintf('Loading 3D point table %s...',input3dFile);
-pts3dNormal=loadpm3dtbl(input3dFile);
-fprintf('done.\n');
-
-fprintf('Loading 2D point table %s...',input2dFile);
-pts2dNormal=loadpm2dtbl(input2dFile);
-fprintf('done.\n');
-
-pts3d=pts3dNormal;
-pts2d=pts2dNormal;
-
-if exist(input3dSmartFile,'file')
-    fprintf('Loading 3D smart point table %s...',input3dSmartFile);
-    pts3dSmart=loadpm3dtbl(input3dSmartFile,true);
-    fprintf('done.\n');
-    % Merge normal and smart tables.
-    pts3d.id=cat(2,pts3dNormal.id,pts3dSmart.id);
-    pts3d.name=cat(2,pts3dNormal.name,pts3dSmart.name);
-    pts3d.pos=cat(2,pts3dNormal.pos,pts3dSmart.pos);
-    pts3d.std=cat(2,pts3dNormal.std,pts3dSmart.std);
-    n1=size(pts3dNormal.vis,2);
-    n2=size(pts3dSmart.vis,2);
-    if n1<n2
-        pts3dNormal.vis(1,n2)=0;
-    elseif n1>n2
-        pts3dSmart.vis(1,n1)=0;
-    end
-    pts3d.vis=cat(1,pts3dNormal.vis,pts3dSmart.vis);
-end
-
-if exist(input2dSmartFile,'file')
-    fprintf('Loading 2D smart point table %s...',input2dSmartFile);
-    pts2dSmart=loadpm2dtbl(input2dSmartFile);
-    fprintf('done.\n');
-    % Merge normal and smart tables.
-    pts2d.id=cat(2,pts2dNormal.id,pts2dSmart.id);
-    pts2d.imNo=cat(2,pts2dNormal.imNo,pts2dSmart.imNo);
-    pts2d.pos=cat(2,pts2dNormal.pos,pts2dSmart.pos);
-    pts2d.res=cat(2,pts2dNormal.res,pts2dSmart.res);
-end
-
-fprintf('Loading PM report file %s...',reportFile);
-pmReport=loadpmreport(reportFile);
-fprintf('done.\n');
-
-% Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
-% Store raw version of the struct.
-s0raw=s0;
+
+%TODO: Offset estimation.
+meanOffset=zeros(3,1);
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));
@@ -199,8 +73,7 @@ s0.OP(s0.estOP)=nan;
 s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
 s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
 
-% Use specified sigma as first approximation.
-s0.markStd(:)=s0.prior.sigmas(1);
+%s0.markStd(:)=s0.prior.sigmas(1);
 
 % Compute EO parameters by spatial resection.
 cpId=s0.OPid(s0.isCtrl);
@@ -211,6 +84,7 @@ s2=forwintersect(s1,'all',true);
 s=s2;
 h=plotnetwork(s,'title','Initial network (EO, OP computed from CP, IO, MP)',...
               'axes',tagfigure(mfilename),'camsize',0.1);
+
 
 % Set up to run the bundle.
 damping='gna';
@@ -228,8 +102,9 @@ else
              '(%.2f pixels)\n'],iters,sigma0,sigma0*s.prior.sigmas(1));
 end
 
+
 % Write report file and store computed OP covariances.
-reportFile=fullfile(inputDir,'dbatexports',[stub,orientStr,'-dbatreport.txt']);
+reportFile=fullfile(inputDir,'dbatexports',[stub,'-dbatreport.txt']);
 
 COP=bundle_result_file(result,E,reportFile);
 
@@ -342,12 +217,19 @@ fprintf(['  All ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
 fprintf('\nResults (project units/degrees/pixels):\n');
 noYes={'no','yes'};
 
-fprintf('  PM orient         : %s\n',noYes{pmReport.procOpts.orient+1});
-fprintf('  PM stages/iters   : %d/%d\n',pmReport.totError.numStages,...
-        pmReport.totError.numIters);,
+if isfield(pmReport,'procOpts')
+    fprintf('  PM orient         : %s\n',noYes{pmReport.procOpts.orient+1});
+    fprintf('  PM stages/iters   : %d/%d\n',pmReport.totError.numStages,...
+            pmReport.totError.numIters);,
+end
 
-fprintf(['  sigma0 (PM/DBAT)  ' ...
-         ': %g/%g=%g\n'], pmReport.totError.lastErr,E.s0,pmReport.totError.lastErr/E.s0);
+if isfield(pmReport,'totError') && isfield(pmReport.totError,'lastErr')
+    sigma0=pmReport.totError.lastErr;
+else
+    sigma0=nan;
+end
+
+fprintf(['  sigma0 (PM/DBAT)  : %g/%g=%g\n'], sigma0,E.s0,sigma0/E.s0);
 
 fprintf('  EO max pos diff   : %g.\n',maxEOposDiff);
 fprintf('  EO max angle diff : %g.\n',maxEOangDiff);

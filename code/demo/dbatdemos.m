@@ -15,7 +15,8 @@
 % Prague 2016:
 %    Call:
 %        PRAGUE2016_PM(L,ORIENT), where L is 'C1'-'C2' or
-%        'S1'-'S4', and ORIENT is TRUE or FALSE.
+%            'S1'-'S4', and ORIENT is TRUE or FALSE, or
+%        PRAGUE2016_PS(L), where L is 'S5'
 %    Data files:
 %        DBATHOME/code/demos/data/prague2016/cam (C1-C2)
-%        DBATHOME/code/demos/data/prague2016/sxb (S1-S4)
+%        DBATHOME/code/demos/data/prague2016/sxb (S1-S5)
