@@ -1,4 +1,4 @@
-function s=loadpsz(psFile)
+function s=loadpsz(psFile,unpackLocal,asciiToo)
 %LOADPSZ Load Photoscan .PSZ file.
 %
 %   S=LOADPSZ(FILE) loads the PhotoScan .PSZ file in FILE into a
@@ -6,14 +6,13 @@ function s=loadpsz(psFile)
 %   document  - recursive struct that correspond to the XML
 %               structure in FILE.
 %   transform - struct with fields
-%               R0, 
-%               T0,
-%               S0  - 4x4 matrices with the individual rotation, translation,
-%                     and scaling transformations, respectively,
-%               L2G - 4x4 matrix with the composite local-to-global
-%                     transformation,
-%               G2L - 4x4 matrix with the composite global-to-local
-%                     transformation.
+%               R, T, S - 4x4 matrices with the individual rotation,
+%                         translation, and scaling transformations,
+%                         respectively, 
+%               L2G     - 4x4 matrix with the composite local-to-global
+%                         transformation,
+%               G2L     - 4x4 matrix with the composite global-to-local
+%                         transformation.
 %   raw       - struct with all 3D information in raw coordinates,
 %   global,
 %   local     - struct with 3D info in global/local coordinates with fields
@@ -35,12 +34,33 @@ function s=loadpsz(psFile)
 %               pixelSz      - 2-vector with pixel size [pw,ph] in mm,
 %               focal        - scalar with focal length in mm,
 %               pp           - 2-vector with principal point in mm.
+%
+%   By default, LOADPSZ unpacks the .PSZ file (a .ZIP archive) into a
+%   directory in TEMPDIR and deletes the unpacked files after loading.
+%   LOADPSZ(FILE,TRUE) instead unpacks the files into a FILE-local
+%   subdir called 'unpacked' and does not delete the unpacked files.
+%   Additionally, LOADPSZ(FILE,TRUE,TRUE) creates ascii versions of
+%   each .PLY file in a further 'ascii' subdir.
+%
+%See also: TEMPDIR, TEMPNAME, UNPACKPSZ.
+
+if nargin<2, unpackLocal=false; end
+if nargin<3, asciiToo=false; end
 
 psDir=fileparts(psFile);
-unpackpsz(psFile);
-psUnpackedDir=fullfile(psDir,'unpacked');
-fName=fullfile(psUnpackedDir,'doc.xml');
-s=xml2struct2(fName);
+if unpackLocal
+    % Unpack to 'unpacked' subdir.
+    unpackDir=fullfile(psDir,'unpacked');
+else
+    % Unpack to temporary dir.
+    unpackDir=tempname;
+end
+
+% Unpack the .psz file.
+dirs=unpackpsz(psFile,unpackDir,asciiToo);
+% Load project data from the main xml file.
+fName=fullfile(unpackDir,'doc.xml');
+s=xml2struct(fName);
 
 % Extract local-to-global transformation.
 xform=s.document.chunks.chunk.transform;
@@ -52,16 +72,16 @@ S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
 L2G=T*S*R;
 G2L=R'*inv(S)*inv(T);
 
-s.transform.R0=R;
-s.transform.T0=T;
-s.transform.S0=S;
+s.transform.R=R;
+s.transform.T=T;
+s.transform.S=S;
 s.transform.L2G=L2G;
 s.transform.G2L=G2L;
 
 ptCloud=s.document.chunks.chunk.frames.frame.point_cloud;
 
 % Object points are in local coordinates.
-[~,~,points,~]=ply_read(fullfile(psUnpackedDir,ptCloud.points.Attributes.path),'tri');
+[~,~,points,~]=ply_read(fullfile(unpackDir,ptCloud.points.Attributes.path),'tri');
 s.raw.points=points;
 s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
 
@@ -106,7 +126,6 @@ for i=1:size(ctrlPts,1);
         ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
     end
 end
-%ctrlPts(any(isnan(ctrlPts(:,1:4)),2),:)=[];
 s.raw.ctrlPts=ctrlPts;
 
 % Make local/global ctrl pt ids 1-based.
@@ -131,7 +150,7 @@ s.local.objPts=s.raw.objPts;
 s.local.objPts(:,1)=s.local.objPts(:,1)+objIdShift;
 s.global.objPts=XformPtsi(s.local.objPts,L2G);
 
-[~,~,tracks,~]=ply_read(fullfile(psUnpackedDir,ptCloud.tracks.Attributes.path),'tri');
+[~,~,tracks,~]=ply_read(fullfile(unpackDir,ptCloud.tracks.Attributes.path),'tri');
 s.raw.tracks=tracks;
 
 % Image coordinates.
@@ -143,7 +162,7 @@ cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1, ...
 s.cameraIds=cameraIds;
 
 for i=1:length(projections)
-    [~,~,proj,~]=ply_read(fullfile(psUnpackedDir, ...
+    [~,~,proj,~]=ply_read(fullfile(unpackDir, ...
                                    ptCloud.projections{i}.Attributes.path),...
                           'tri');
     projections{i}=proj;
@@ -251,6 +270,15 @@ s.camera.pixelSz=[pixelWidth,pixelHeight];
 s.camera.sensorFormat=s.camera.imSz.*s.camera.pixelSz;
 s.camera.focal=fx*s.camera.pixelSz(1);
 s.camera.pp=[cx,cy].*s.camera.pixelSz;
+
+% Delete unpacked files unless they should be kept.
+if ~unpackLocal
+    for i=length(dirs):-1:1
+        delete(fullfile(dirs{i},'*'));
+        rmdir(dirs{i});
+    end
+end
+
 
 function q=XformPts(p,M,forceHomogeneous)
 %Apply 4-by-4 point transformation matrix M to 3D euclidean or

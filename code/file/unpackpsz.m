@@ -1,29 +1,44 @@
-function unpackpsz(psFile)
+function d=unpackpsz(psFile,unpackDir,unpackAscii)
 %UNPACKPSZ Unpack .PSZ file.
 %
-%   UNPACKPSZ(PSFILE) unpacks the .PSZ file PSFILE into a
-%   subdirectory called 'unpacked'.
+%   UNPACKPSZ(PSFILE,UNPACKDIR) unpacks the .PSZ file PSFILE into
+%   the directory UNPACKDIR. UNPACKDIR will be created if it does
+%   not exist.
+%
+%   UNPACKPSZ(PSFILE,UNPACKDIR,TRUE) will furthermore convert each
+%   .PLY file into its ascii equivalent in the directory
+%   FULLFILE(UNPACKDIR,'ascii').
+%
+%   DIRS=... returns what directories were created or unpacked
+%   into. The returned dirs are sorted such that the last directory
+%   should be removed first.
 
-psDir=fileparts(psFile);
-
-psUnpackedDir=fullfile(psDir,'unpacked');
+%See also: UNZIP, PLYTOASCII.
 
 % Create unpacked dir if necessary.
-if ~exist(psUnpackedDir)
-    mkdir(psUnpackedDir)
+if ~exist(unpackDir)
+    mkdir(unpackDir)
 end
 
-% Delete any old files, including ascii versions of .ply files.
-asciiDir=fullfile(psUnpackedDir,'ascii');
+d={unpackDir};
 
-if exist(fullfile(psUnpackedDir,'ascii'),'dir')
-    delete(fullfile(asciiDir,'*'));
-    rmdir(asciiDir);
+if unpackAscii
+    % Delete any old files, including ascii versions of .ply files.
+    asciiDir=fullfile(unpackDir,'ascii');
+
+    d{end+1}=asciiDir;
+    if exist(asciiDir)
+        delete(fullfile(asciiDir,'*'));
+        rmdir(asciiDir);
+    end
 end
-delete(fullfile(psUnpackedDir,'*'));
+
+delete(fullfile(unpackDir,'*'));
 
 % Unzip the .PSZ file.
-unzip(psFile,psUnpackedDir)
+unzip(psFile,unpackDir)
 
-% Unpack any binary .PLY files.
-plytoascii(psUnpackedDir)
+if unpackAscii
+    % Unpack any binary .PLY files.
+    plytoascii(unpackDir)
+end
