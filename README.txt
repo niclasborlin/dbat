@@ -1,17 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.5.0 for Matlab (R), below called the Toolbox.
-#
-# Internal release for Ari and Pierre.
-#
-# Usage:
-#
-# 1) Start Matlab.
-# 2) cd to the DBAT directory.
-# 3) run 'dbatSetup'
-# 4) cd demo
-# 5) psdemo_sxb
-#
-# ===== STUFF FOR LATER PUBLIC RELEASE BELOW ====
+# v0.5.1 for Matlab (R), below called the Toolbox.
 #
 # == LEGAL STUFF ==
 #
@@ -32,6 +20,9 @@
 #     Bundle Adjustment Toolbox", ISPRS Annals of the Photogrammetry,
 #     Remote Sensing, and Spatial Information Sciences, vol
 #     II-5:89-96.
+# Börlin and Grussenmeyer (2016). "External Verification of the Bundle
+#     Adjustment in Photogrammetric Software using the Damped Bundle
+#     Adjustment Toolbox", ISPRS Archives XLI-B5, p. 7-14.
 #
 # == INSTALLATION ==
 #
@@ -49,7 +40,7 @@
 #
 # == LICENSE ==
 #
-# Copyright (C) 2013-14, Niclas Börlin, niclas.borlin@cs.umu.se,
+# Copyright (C) 2013-16, Niclas Börlin, niclas.borlin@cs.umu.se,
 # Department of Computing Science, Umeå University, Sweden. All right
 # reserved.
 #
@@ -87,5 +78,3 @@
 #
 # Matlab is a registered trademark by The Mathworks, Inc., Natick MA,
 # USA.
-
-# $Id$

@@ -1,7 +1,15 @@
 Summary changelog file for release.
 
+Release 0.5.1, Jun 26, 2016.
+- Cleaned up demos for Prague 2016.
+- Added functions for loading PhotoModeler 2D/3D point export tables.
+
+Release 0.5.0, May 13, 2016.
+- Added support for fixed & weighted control points.
+- Added support for reading PhotoScan native files.
+
 Release 0.4.1, Sep 3, 2014.
-- Added hadling of id collisions in Photomodeler export files between 
+- Added handling of id collisions in Photomodeler export files between 
   smartpoints and normal points.
 
 Release 0.4.0, Jun 25, 2014.
