@@ -46,10 +46,10 @@ end
 inputFile=fullfile(inputDir,'psprojects',[stub,'.psz']);
 
 fprintf('Loading PhotoScan project file %s...',inputFile);
-s=loadpsz(inputFile);
+psz=loadpsz(inputFile);
 fprintf('done.\n');
 
-[prob,pmReport,pts3d,pts2d]=ps2pmstruct(s);
+[prob,pmReport,pts3d,pts2d]=ps2pmstruct(psz);
 
 s0=prob2dbatstruct(prob);
 
