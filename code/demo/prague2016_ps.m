@@ -37,7 +37,7 @@ end
 switch lower(l)
   case 's5'
     cpWeighted=true;
-    stub='weighted-shifted';
+    stub='sxb';
   otherwise
     error('Bad experiment label.')
 end

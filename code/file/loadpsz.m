@@ -143,7 +143,7 @@ s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
 if isempty(s.raw.objPts) || isempty(s.raw.ctrlPts);
     objIdShift=0;
 else
-    objIdShift=max(s.local.ctrlPts(:,1))+1-min(s.raw.objPts(:,1));
+    objIdShift=max(s.local.ctrlPts(:,1))+1;
 end
 
 s.local.objPts=s.raw.objPts;
