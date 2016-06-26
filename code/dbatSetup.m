@@ -12,6 +12,7 @@ addpath(fullfile(baseDir,'bundle','cammodel'),'-end')
 addpath(fullfile(baseDir,'bundle','lsa'),'-end')
 addpath(fullfile(baseDir,'photogrammetry'),'-end')
 addpath(fullfile(baseDir,'demo'),'-end')
+addpath(fullfile(baseDir,'xchg'),'-end')
 addpath(baseDir,'-end')
 
 fprintf('You can now access DBAT v%s from everywhere.\n',dbatversion)
