@@ -9,4 +9,4 @@ function [v,date]=dbatversion
 % Should always be x.y.z or x.y.z.w.
 v='0.5.1';
 
-date='2016-06-27';
+date='2016-06-26';
