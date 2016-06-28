@@ -376,5 +376,5 @@ h=plotnetwork(result,E,...
               'axes',fig,'pause',doPause,'camsize',0.1); 
 
 if nargout>0
-    result=rr;
+    rr=result;
 end

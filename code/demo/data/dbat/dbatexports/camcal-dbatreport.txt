@@ -5,7 +5,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 29-Jun-2016 01:13:08
+      Last Bundle Run: 29-Jun-2016 01:38:08
       DBAT version:    0.5.1.1 (2016-06-28)
       Status:          OK (0)
       Sigma0:          1.68901
