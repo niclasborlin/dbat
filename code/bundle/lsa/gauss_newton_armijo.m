@@ -44,8 +44,6 @@ function [x,code,n,final,T,rr,alphas]=gauss_newton_armijo(...
 %See also: BUNDLE, GAUSS_MARKOV, LEVENBERG_MARQUARDT,
 %   LEVENBERG_MARQUARDT_POWELL.
 
-% $Id$
-
 % Initialize current estimate and iteration trace.
 x=x0;
 

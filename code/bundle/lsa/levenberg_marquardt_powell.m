@@ -1,4 +1,4 @@
-function [x,code,n,r,J,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
+function [x,code,n,final,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
     resFun,vetoFun,x0,W,maxIter,convTol,doTrace,delta0,mu,eta)
 %LEVENBERG_MARQUARDT_POWELL Levenberg-Marquardt algorithm with Powell dogleg.
 %
@@ -16,10 +16,13 @@ function [x,code,n,r,J,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
 %   - too many iterations) are also returned. If TRACE is true, output
 %   sigma0 estimates at each iteration.
 %
-%   [X,CODE,I,F,J]=... also returns the final estimates of the residual
-%   vector F and Jacobian matrix J.
+%   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
+%   estimates of the weighted and unweighted residual vector and
+%   Jacobian matrix. The weighted estimates are returned as fields
+%   weighted.r and weighted.J, respectively, the unweighted as
+%   unweighted.r and unweighted.J, respectively.
 %
-%   [X,CODE,I,F,J,T,RR,DELTAS,RHOS,STEPS]=... returns the iteration trace as
+%   [X,CODE,I,FINAL,T,RR,DELTAS,RHOS,STEPS]=... returns the iteration trace as
 %   successive columns in T, the successive estimates of sigma0 in RR, the
 %   used damping values in DELTAS, the computed gain ratios in RHOS, and the
 %   step types in STEPS. The step types are:
@@ -52,12 +55,10 @@ function [x,code,n,r,J,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
 %
 %See also: BUNDLE, GAUSS_MARKOV, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT.
 
-% $Id$
-
 % Initialize current estimate and iteration trace.
 x=x0;
 
-if nargout>5
+if nargout>4
     % Pre-allocate fixed block if trace is asked for.
     blockSize=50;
     T=nan(length(x),min(blockSize,maxIter+1));
@@ -174,7 +175,7 @@ while true
         end
     end
     
-    if nargout>5
+    if nargout>4
         % Store iteration trace.
         if n+1>size(T,2)
             % Expand by blocksize if needed.
@@ -192,13 +193,18 @@ while true
     end
 end
 
-if nargout>5
+if nargout>4
     % Store final point.
     T(:,n+1)=x;
 end
 
+if nargout>3
+    final=struct('unweighted',struct('r',s,'J',K),...
+                 'weighted',struct('r',r,'J',J));
+end
+
 % Trim unused trace columns.
-if nargout>5
+if nargout>4
     T=T(:,1:n);
 end
 
