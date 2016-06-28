@@ -6,11 +6,11 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run: 21-Jun-2016 14:29:38
-      DBAT version:    0.5.0 (2016-05-13)
+      Last Bundle Run: 29-Jun-2016 01:07:46
+      DBAT version:    0.5.1.1 (2016-06-28)
       Status:          OK (0)
       Sigma0:          0.610237
-      Sigma0 (pixels): 0
+      Sigma0 (pixels): 0.610237
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -26,8 +26,8 @@ Damped Bundle Adjustment Toolbox result file
          Initial value comment:   
       Total error:
          Number of stages:     1
-         Number of iterations: 5
-         First error:          8388.1
+         Number of iterations: 4
+         First error:          6954.31
          Last error:           194.709
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
@@ -39,11 +39,11 @@ Damped Bundle Adjustment Toolbox result file
                Kappa:
                   Value:     99.591000 deg
                Xc:
-                  Value:     1.809574 ou
+                  Value:     1.849126 ou
                Yc:
-                  Value:     -19.492057 ou
+                  Value:     -19.397950 ou
                Zc:
-                  Value:     -6.261619 ou
+                  Value:     -6.457303 ou
             Photo 2: img_0088.jpg
                Omega:
                   Value:     40.863803 deg
@@ -56,15 +56,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     9.604867 deg
                   Deviation: 0.00134 deg
                Xc:
-                  Value:     1.838056 ou
-                  Deviation: 0.00144 ou
+                  Value:     1.877457 ou
+                  Deviation: 0.00143 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -19.531859 ou
-                  Deviation: 0.0015 ou
+                  Value:     -19.437541 ou
+                  Deviation: 0.00149 ou
                Zc:
-                  Value:     -6.303578 ou
-                  Deviation: 0.0011 ou
+                  Value:     -6.499039 ou
+                  Deviation: 0.00109 ou
             Photo 3: img_0089.jpg
                Omega:
                   Value:     42.472543 deg
@@ -77,14 +77,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     8.537503 deg
                   Deviation: 0.00152 deg
                Xc:
-                  Value:     1.559629 ou
-                  Deviation: 0.00164 ou
+                  Value:     1.600511 ou
+                  Deviation: 0.00163 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -18.210190 ou
-                  Deviation: 0.00178 ou
+                  Value:     -18.122906 ou
+                  Deviation: 0.00177 ou
                Zc:
-                  Value:     -5.350068 ou
+                  Value:     -5.550603 ou
                   Deviation: 0.00124 ou
             Photo 4: img_0090.jpg
                Omega:
@@ -98,15 +98,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     8.627965 deg
                   Deviation: 0.00178 deg
                Xc:
-                  Value:     0.905877 ou
-                  Deviation: 0.00202 ou
+                  Value:     0.950239 ou
+                  Deviation: 0.002 ou
                   Correlations over 95%: Phi:99.2%.
                Yc:
-                  Value:     -16.874851 ou
-                  Deviation: 0.00225 ou
+                  Value:     -16.794674 ou
+                  Deviation: 0.00224 ou
                Zc:
-                  Value:     -2.905697 ou
-                  Deviation: 0.00141 ou
+                  Value:     -3.119241 ou
+                  Deviation: 0.0014 ou
             Photo 5: img_0091.jpg
                Omega:
                   Value:     40.811270 deg
@@ -119,15 +119,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     10.346908 deg
                   Deviation: 0.00221 deg
                Xc:
-                  Value:     0.324590 ou
-                  Deviation: 0.00248 ou
+                  Value:     0.372045 ou
+                  Deviation: 0.00246 ou
                   Correlations over 95%: Phi:99.1%.
                Yc:
-                  Value:     -14.662769 ou
-                  Deviation: 0.0027 ou
+                  Value:     -14.594364 ou
+                  Deviation: 0.00269 ou
                Zc:
-                  Value:     -0.747358 ou
-                  Deviation: 0.00168 ou
+                  Value:     -0.972389 ou
+                  Deviation: 0.00167 ou
             Photo 6: img_0092.jpg
                Omega:
                   Value:     32.795671 deg
@@ -140,56 +140,56 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     8.379553 deg
                   Deviation: 0.00259 deg
                Xc:
-                  Value:     -0.130942 ou
-                  Deviation: 0.00264 ou
+                  Value:     -0.081063 ou
+                  Deviation: 0.00262 ou
                   Correlations over 95%: Phi:99.1%.
                Yc:
-                  Value:     -12.522419 ou
-                  Deviation: 0.00306 ou
+                  Value:     -12.465405 ou
+                  Deviation: 0.00304 ou
                Zc:
-                  Value:     1.119798 ou
-                  Deviation: 0.00173 ou
+                  Value:     0.884830 ou
+                  Deviation: 0.00172 ou
             Photo 7: img_0093.jpg
                Omega:
-                  Value:     23.796325 deg
+                  Value:     23.796326 deg
                   Deviation: 0.00771 deg
                Phi:
-                  Value:     -2.117585 deg
+                  Value:     -2.117584 deg
                   Deviation: 0.00677 deg
                   Correlations over 95%: Xc:98.6%.
                Kappa:
-                  Value:     5.383088 deg
+                  Value:     5.383087 deg
                   Deviation: 0.00332 deg
                Xc:
-                  Value:     -0.285789 ou
-                  Deviation: 0.00236 ou
+                  Value:     -0.235085 ou
+                  Deviation: 0.00235 ou
                   Correlations over 95%: Phi:98.6%.
                Yc:
-                  Value:     -8.631799 ou
-                  Deviation: 0.00326 ou
+                  Value:     -8.595491 ou
+                  Deviation: 0.00324 ou
                Zc:
-                  Value:     2.021634 ou
-                  Deviation: 0.0017 ou
+                  Value:     1.781867 ou
+                  Deviation: 0.00169 ou
             Photo 8: img_0094.jpg
                Omega:
-                  Value:     15.956505 deg
+                  Value:     15.956506 deg
                   Deviation: 0.00834 deg
                Phi:
                   Value:     -2.258734 deg
                   Deviation: 0.00665 deg
                   Correlations over 95%: Xc:98.2%.
                Kappa:
-                  Value:     3.151264 deg
+                  Value:     3.151263 deg
                   Deviation: 0.00417 deg
                Xc:
-                  Value:     -0.288822 ou
-                  Deviation: 0.00223 ou
+                  Value:     -0.238103 ou
+                  Deviation: 0.00221 ou
                   Correlations over 95%: Phi:98.2%.
                Yc:
-                  Value:     -5.798850 ou
-                  Deviation: 0.00341 ou
+                  Value:     -5.777619 ou
+                  Deviation: 0.00339 ou
                Zc:
-                  Value:     2.206679 ou
+                  Value:     1.965927 ou
                   Deviation: 0.00174 ou
             Photo 9: img_0095.jpg
                Omega:
@@ -203,18 +203,18 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     0.781406 deg
                   Deviation: 0.00517 deg
                Xc:
-                  Value:     -0.132426 ou
-                  Deviation: 0.00189 ou
+                  Value:     -0.082539 ou
+                  Deviation: 0.00188 ou
                   Correlations over 95%: Phi:96.9%.
                Yc:
-                  Value:     -2.135766 ou
-                  Deviation: 0.00341 ou
+                  Value:     -2.134029 ou
+                  Deviation: 0.00339 ou
                Zc:
-                  Value:     1.762023 ou
-                  Deviation: 0.00179 ou
+                  Value:     1.523637 ou
+                  Deviation: 0.00178 ou
             Photo 10: img_0096.jpg
                Omega:
-                  Value:     3.003597 deg
+                  Value:     3.003598 deg
                   Deviation: 0.00906 deg
                Phi:
                   Value:     -1.391859 deg
@@ -224,18 +224,18 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -0.585666 deg
                   Deviation: 0.00557 deg
                Xc:
-                  Value:     -0.182799 ou
-                  Deviation: 0.0019 ou
+                  Value:     -0.132643 ou
+                  Deviation: 0.00189 ou
                   Correlations over 95%: Phi:96.6%.
                Yc:
-                  Value:     -0.880264 ou
-                  Deviation: 0.00347 ou
+                  Value:     -0.885209 ou
+                  Deviation: 0.00345 ou
                Zc:
-                  Value:     2.007167 ou
-                  Deviation: 0.00188 ou
+                  Value:     1.767477 ou
+                  Deviation: 0.00187 ou
             Photo 11: img_0097.jpg
                Omega:
-                  Value:     -6.111090 deg
+                  Value:     -6.111089 deg
                   Deviation: 0.00986 deg
                Phi:
                   Value:     -1.024400 deg
@@ -245,18 +245,18 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -4.351756 deg
                   Deviation: 0.00637 deg
                Xc:
-                  Value:     -0.065385 ou
-                  Deviation: 0.00179 ou
+                  Value:     -0.015855 ou
+                  Deviation: 0.00178 ou
                   Correlations over 95%: Phi:95.3%.
                Yc:
-                  Value:     2.321526 ou
-                  Deviation: 0.00352 ou
+                  Value:     2.299541 ou
+                  Deviation: 0.0035 ou
                Zc:
-                  Value:     1.570968 ou
-                  Deviation: 0.00208 ou
+                  Value:     1.333599 ou
+                  Deviation: 0.00207 ou
             Photo 12: img_0098.jpg
                Omega:
-                  Value:     -17.277342 deg
+                  Value:     -17.277341 deg
                   Deviation: 0.0107 deg
                Phi:
                   Value:     -0.751848 deg
@@ -265,17 +265,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -6.793423 deg
                   Deviation: 0.007 deg
                Xc:
-                  Value:     0.132351 ou
-                  Deviation: 0.00176 ou
+                  Value:     0.180829 ou
+                  Deviation: 0.00175 ou
                Yc:
-                  Value:     5.614812 ou
-                  Deviation: 0.00345 ou
+                  Value:     5.575300 ou
+                  Deviation: 0.00344 ou
                Zc:
-                  Value:     0.771524 ou
-                  Deviation: 0.00244 ou
+                  Value:     0.538410 ou
+                  Deviation: 0.00242 ou
             Photo 13: img_0099.jpg
                Omega:
-                  Value:     -21.365216 deg
+                  Value:     -21.365215 deg
                   Deviation: 0.0115 deg
                Phi:
                   Value:     -0.590777 deg
@@ -284,14 +284,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -8.254109 deg
                   Deviation: 0.00718 deg
                Xc:
-                  Value:     0.397995 ou
+                  Value:     0.445059 ou
                   Deviation: 0.00175 ou
                Yc:
-                  Value:     8.072206 ou
-                  Deviation: 0.00342 ou
+                  Value:     8.019615 ou
+                  Deviation: 0.00341 ou
                Zc:
-                  Value:     -0.242749 ou
-                  Deviation: 0.00276 ou
+                  Value:     -0.470465 ou
+                  Deviation: 0.00275 ou
             Photo 14: img_0100.jpg
                Omega:
                   Value:     -30.566427 deg
@@ -303,17 +303,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -10.447941 deg
                   Deviation: 0.00748 deg
                Xc:
-                  Value:     0.668659 ou
-                  Deviation: 0.00208 ou
+                  Value:     0.714282 ou
+                  Deviation: 0.00207 ou
                Yc:
-                  Value:     10.438977 ou
-                  Deviation: 0.00353 ou
+                  Value:     10.373791 ou
+                  Deviation: 0.00351 ou
                Zc:
-                  Value:     -1.209341 ou
-                  Deviation: 0.00327 ou
+                  Value:     -1.431913 ou
+                  Deviation: 0.00326 ou
             Photo 15: img_0101.jpg
                Omega:
-                  Value:     -36.176269 deg
+                  Value:     -36.176268 deg
                   Deviation: 0.0138 deg
                Phi:
                   Value:     1.827228 deg
@@ -322,17 +322,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -12.468495 deg
                   Deviation: 0.00764 deg
                Xc:
-                  Value:     1.033802 ou
-                  Deviation: 0.00234 ou
+                  Value:     1.077482 ou
+                  Deviation: 0.00233 ou
                Yc:
-                  Value:     13.151419 ou
-                  Deviation: 0.00345 ou
+                  Value:     13.071798 ou
+                  Deviation: 0.00343 ou
                Zc:
-                  Value:     -2.831138 ou
-                  Deviation: 0.00392 ou
+                  Value:     -3.045078 ou
+                  Deviation: 0.0039 ou
             Photo 16: img_0102.jpg
                Omega:
-                  Value:     -45.918306 deg
+                  Value:     -45.918305 deg
                   Deviation: 0.0141 deg
                Phi:
                   Value:     2.105206 deg
@@ -342,18 +342,18 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -12.625645 deg
                   Deviation: 0.00765 deg
                Xc:
-                  Value:     1.463660 ou
-                  Deviation: 0.00255 ou
+                  Value:     1.505053 ou
+                  Deviation: 0.00253 ou
                   Correlations over 95%: Phi:95.4%.
                Yc:
-                  Value:     15.005606 ou
-                  Deviation: 0.00311 ou
+                  Value:     14.916116 ou
+                  Deviation: 0.00309 ou
                Zc:
-                  Value:     -4.477696 ou
-                  Deviation: 0.00435 ou
+                  Value:     -4.682873 ou
+                  Deviation: 0.00433 ou
             Photo 17: img_0103.jpg
                Omega:
-                  Value:     -54.842990 deg
+                  Value:     -54.842989 deg
                   Deviation: 0.0139 deg
                Phi:
                   Value:     2.700663 deg
@@ -363,18 +363,18 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -13.810791 deg
                   Deviation: 0.00756 deg
                Xc:
-                  Value:     1.947089 ou
-                  Deviation: 0.00281 ou
+                  Value:     1.985910 ou
+                  Deviation: 0.0028 ou
                   Correlations over 95%: Phi:96.1%.
                Yc:
-                  Value:     17.375106 ou
-                  Deviation: 0.0026 ou
+                  Value:     17.273006 ou
+                  Deviation: 0.00258 ou
                Zc:
-                  Value:     -6.262364 ou
-                  Deviation: 0.00477 ou
+                  Value:     -6.458044 ou
+                  Deviation: 0.00475 ou
             Photo 18: img_0104.jpg
                Omega:
-                  Value:     -61.443091 deg
+                  Value:     -61.443090 deg
                   Deviation: 0.0114 deg
                Phi:
                   Value:     4.122742 deg
@@ -383,14 +383,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -14.696199 deg
                   Deviation: 0.00747 deg
                Xc:
-                  Value:     2.707391 ou
-                  Deviation: 0.0027 ou
+                  Value:     2.742165 ou
+                  Deviation: 0.00269 ou
                Yc:
-                  Value:     18.760354 ou
-                  Deviation: 0.0015 ou
+                  Value:     18.650882 ou
+                  Deviation: 0.00149 ou
                Zc:
-                  Value:     -8.980844 ou
-                  Deviation: 0.00438 ou
+                  Value:     -9.162056 ou
+                  Deviation: 0.00436 ou
             Photo 19: img_0105.jpg
                Omega:
                   Value:     -64.089338 deg
@@ -399,16 +399,16 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     9.776842 deg
                   Deviation: 0.00665 deg
                Kappa:
-                  Value:     -15.590035 deg
+                  Value:     -15.590036 deg
                   Deviation: 0.00761 deg
                Xc:
-                  Value:     3.513909 ou
-                  Deviation: 0.00281 ou
+                  Value:     3.544391 ou
+                  Deviation: 0.00279 ou
                Yc:
-                  Value:     19.888475 ou
+                  Value:     19.772999 ou
                Zc:
-                  Value:     -11.666681 ou
-                  Deviation: 0.0043 ou
+                  Value:     -11.833600 ou
+                  Deviation: 0.00428 ou
             Photo 20: img_0106.jpg
                Omega:
                   Value:     -69.216557 deg
@@ -420,14 +420,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -17.249770 deg
                   Deviation: 0.00758 deg
                Xc:
-                  Value:     4.473244 ou
-                  Deviation: 0.0028 ou
+                  Value:     4.498620 ou
+                  Deviation: 0.00278 ou
                Yc:
-                  Value:     19.675423 ou
-                  Deviation: 0.00129 ou
+                  Value:     19.561081 ou
+                  Deviation: 0.00128 ou
                Zc:
-                  Value:     -14.751020 ou
-                  Deviation: 0.0041 ou
+                  Value:     -14.901524 ou
+                  Deviation: 0.00408 ou
             Photo 21: img_0107.jpg
                Omega:
                   Value:     -75.247886 deg
@@ -439,14 +439,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -18.777231 deg
                   Deviation: 0.0075 deg
                Xc:
-                  Value:     5.243713 ou
-                  Deviation: 0.00277 ou
+                  Value:     5.264989 ou
+                  Deviation: 0.00276 ou
                Yc:
-                  Value:     18.565188 ou
-                  Deviation: 0.00163 ou
+                  Value:     18.456755 ou
+                  Deviation: 0.00162 ou
                Zc:
-                  Value:     -17.222897 ou
-                  Deviation: 0.00389 ou
+                  Value:     -17.360245 ou
+                  Deviation: 0.00386 ou
             Photo 22: img_0109.jpg
                Omega:
                   Value:     -82.998068 deg
@@ -458,17 +458,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -17.957868 deg
                   Deviation: 0.00739 deg
                Xc:
-                  Value:     5.857915 ou
-                  Deviation: 0.00279 ou
+                  Value:     5.875922 ou
+                  Deviation: 0.00278 ou
                Yc:
-                  Value:     17.517056 ou
-                  Deviation: 0.00204 ou
+                  Value:     17.414201 ou
+                  Deviation: 0.00203 ou
                Zc:
-                  Value:     -19.451593 ou
-                  Deviation: 0.0037 ou
+                  Value:     -19.577080 ou
+                  Deviation: 0.00368 ou
             Photo 23: img_0110.jpg
                Omega:
-                  Value:     -83.390802 deg
+                  Value:     -83.390801 deg
                   Deviation: 0.0108 deg
                Phi:
                   Value:     24.293487 deg
@@ -477,14 +477,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -21.826786 deg
                   Deviation: 0.00779 deg
                Xc:
-                  Value:     6.109590 ou
-                  Deviation: 0.00254 ou
+                  Value:     6.126257 ou
+                  Deviation: 0.00253 ou
                Yc:
-                  Value:     14.784833 ou
-                  Deviation: 0.00213 ou
+                  Value:     14.696518 ou
+                  Deviation: 0.00212 ou
                Zc:
-                  Value:     -20.242094 ou
-                  Deviation: 0.00321 ou
+                  Value:     -20.363374 ou
+                  Deviation: 0.00319 ou
             Photo 24: img_0111.jpg
                Omega:
                   Value:     -85.105221 deg
@@ -496,14 +496,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -23.767301 deg
                   Deviation: 0.00809 deg
                Xc:
-                  Value:     6.322757 ou
-                  Deviation: 0.00245 ou
+                  Value:     6.338290 ou
+                  Deviation: 0.00244 ou
                Yc:
-                  Value:     13.437579 ou
-                  Deviation: 0.00223 ou
+                  Value:     13.356434 ou
+                  Deviation: 0.00222 ou
                Zc:
-                  Value:     -21.028040 ou
-                  Deviation: 0.00297 ou
+                  Value:     -21.145138 ou
+                  Deviation: 0.00295 ou
             Photo 25: img_0112.jpg
                Omega:
                   Value:     -99.948851 deg
@@ -515,14 +515,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -23.229819 deg
                   Deviation: 0.00747 deg
                Xc:
-                  Value:     6.713389 ou
-                  Deviation: 0.00245 ou
+                  Value:     6.726844 ou
+                  Deviation: 0.00244 ou
                Yc:
-                  Value:     12.361250 ou
-                  Deviation: 0.00246 ou
+                  Value:     12.285834 ou
+                  Deviation: 0.00245 ou
                Zc:
-                  Value:     -22.745880 ou
-                  Deviation: 0.00276 ou
+                  Value:     -22.853835 ou
+                  Deviation: 0.00274 ou
             Photo 26: img_0113.jpg
                Omega:
                   Value:     -106.006782 deg
@@ -534,14 +534,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -23.528274 deg
                   Deviation: 0.00713 deg
                Xc:
-                  Value:     7.161274 ou
-                  Deviation: 0.00239 ou
+                  Value:     7.172345 ou
+                  Deviation: 0.00238 ou
                Yc:
-                  Value:     10.681281 ou
-                  Deviation: 0.00264 ou
+                  Value:     10.614806 ou
+                  Deviation: 0.00263 ou
                Zc:
-                  Value:     -24.212880 ou
-                  Deviation: 0.00249 ou
+                  Value:     -24.313028 ou
+                  Deviation: 0.00248 ou
             Photo 27: img_0114.jpg
                Omega:
                   Value:     -117.894371 deg
@@ -553,14 +553,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -20.450931 deg
                   Deviation: 0.00677 deg
                Xc:
-                  Value:     7.546319 ou
-                  Deviation: 0.00235 ou
+                  Value:     7.555340 ou
+                  Deviation: 0.00234 ou
                Yc:
-                  Value:     9.293408 ou
-                  Deviation: 0.00281 ou
+                  Value:     9.234318 ou
+                  Deviation: 0.00279 ou
                Zc:
-                  Value:     -25.502586 ou
-                  Deviation: 0.00231 ou
+                  Value:     -25.595870 ou
+                  Deviation: 0.0023 ou
             Photo 28: img_0115.jpg
                Omega:
                   Value:     -124.120592 deg
@@ -572,14 +572,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -18.528943 deg
                   Deviation: 0.00655 deg
                Xc:
-                  Value:     7.874041 ou
-                  Deviation: 0.00232 ou
+                  Value:     7.881318 ou
+                  Deviation: 0.00231 ou
                Yc:
-                  Value:     8.100345 ou
-                  Deviation: 0.00294 ou
+                  Value:     8.047606 ou
+                  Deviation: 0.00293 ou
                Zc:
-                  Value:     -26.540844 ou
-                  Deviation: 0.0022 ou
+                  Value:     -26.628602 ou
+                  Deviation: 0.00219 ou
             Photo 29: img_0116.jpg
                Omega:
                   Value:     -129.511850 deg
@@ -591,17 +591,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -15.330460 deg
                   Deviation: 0.00671 deg
                Xc:
-                  Value:     8.263304 ou
-                  Deviation: 0.00228 ou
+                  Value:     8.268509 ou
+                  Deviation: 0.00227 ou
                Yc:
-                  Value:     6.585967 ou
-                  Deviation: 0.00314 ou
+                  Value:     6.541287 ou
+                  Deviation: 0.00312 ou
                Zc:
-                  Value:     -27.928209 ou
-                  Deviation: 0.00211 ou
+                  Value:     -28.008584 ou
+                  Deviation: 0.0021 ou
             Photo 30: img_0117.jpg
                Omega:
-                  Value:     -128.216487 deg
+                  Value:     -128.216486 deg
                   Deviation: 0.0123 deg
                Phi:
                   Value:     39.446469 deg
@@ -610,14 +610,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -15.191654 deg
                   Deviation: 0.0069 deg
                Xc:
-                  Value:     8.688903 ou
-                  Deviation: 0.00225 ou
+                  Value:     8.691843 ou
+                  Deviation: 0.00224 ou
                Yc:
-                  Value:     5.003890 ou
-                  Deviation: 0.00337 ou
+                  Value:     4.967629 ou
+                  Deviation: 0.00335 ou
                Zc:
-                  Value:     -29.370762 ou
-                  Deviation: 0.00207 ou
+                  Value:     -29.443459 ou
+                  Deviation: 0.00206 ou
             Photo 31: img_0118.jpg
                Omega:
                   Value:     -127.617695 deg
@@ -629,17 +629,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -15.698335 deg
                   Deviation: 0.00719 deg
                Xc:
-                  Value:     9.003681 ou
-                  Deviation: 0.00223 ou
+                  Value:     9.004946 ou
+                  Deviation: 0.00222 ou
                Yc:
-                  Value:     3.959676 ou
-                  Deviation: 0.00354 ou
+                  Value:     3.928973 ou
+                  Deviation: 0.00352 ou
                Zc:
-                  Value:     -30.372599 ou
-                  Deviation: 0.00207 ou
+                  Value:     -30.439965 ou
+                  Deviation: 0.00206 ou
             Photo 32: img_0119.jpg
                Omega:
-                  Value:     -128.689501 deg
+                  Value:     -128.689500 deg
                   Deviation: 0.0124 deg
                Phi:
                   Value:     39.010136 deg
@@ -648,14 +648,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -14.867262 deg
                   Deviation: 0.00712 deg
                Xc:
-                  Value:     9.338023 ou
-                  Deviation: 0.00221 ou
+                  Value:     9.337509 ou
+                  Deviation: 0.0022 ou
                Yc:
-                  Value:     2.546300 ou
-                  Deviation: 0.00374 ou
+                  Value:     2.523119 ou
+                  Deviation: 0.00372 ou
                Zc:
-                  Value:     -31.590725 ou
-                  Deviation: 0.00211 ou
+                  Value:     -31.651608 ou
+                  Deviation: 0.0021 ou
             Photo 33: img_0120.jpg
                Omega:
                   Value:     -127.653030 deg
@@ -667,14 +667,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -15.473206 deg
                   Deviation: 0.0072 deg
                Xc:
-                  Value:     9.619346 ou
-                  Deviation: 0.0022 ou
-               Yc:
-                  Value:     1.386553 ou
-                  Deviation: 0.0039 ou
-               Zc:
-                  Value:     -32.599503 ou
+                  Value:     9.617334 ou
                   Deviation: 0.00219 ou
+               Yc:
+                  Value:     1.369544 ou
+                  Deviation: 0.00388 ou
+               Zc:
+                  Value:     -32.655018 ou
+                  Deviation: 0.00217 ou
             Photo 34: img_0121.jpg
                Omega:
                   Value:     -128.431731 deg
@@ -686,17 +686,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -13.648174 deg
                   Deviation: 0.00719 deg
                Xc:
-                  Value:     9.802078 ou
-                  Deviation: 0.0022 ou
+                  Value:     9.799094 ou
+                  Deviation: 0.00219 ou
                Yc:
-                  Value:     0.586285 ou
-                  Deviation: 0.004 ou
+                  Value:     0.573535 ou
+                  Deviation: 0.00398 ou
                Zc:
-                  Value:     -33.305804 ou
-                  Deviation: 0.00225 ou
+                  Value:     -33.357560 ou
+                  Deviation: 0.00224 ou
             Photo 35: img_0123.jpg
                Omega:
-                  Value:     -145.099386 deg
+                  Value:     -145.099385 deg
                   Deviation: 0.0128 deg
                Phi:
                   Value:     43.029671 deg
@@ -705,17 +705,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -9.117766 deg
                   Deviation: 0.00775 deg
                Xc:
-                  Value:     10.859709 ou
-                  Deviation: 0.00228 ou
+                  Value:     10.851096 ou
+                  Deviation: 0.00227 ou
                Yc:
-                  Value:     -3.447619 ou
-                  Deviation: 0.0042 ou
+                  Value:     -3.438901 ou
+                  Deviation: 0.00418 ou
                Zc:
-                  Value:     -36.701454 ou
-                  Deviation: 0.00295 ou
+                  Value:     -36.735138 ou
+                  Deviation: 0.00294 ou
             Photo 36: img_0124.jpg
                Omega:
-                  Value:     -146.262018 deg
+                  Value:     -146.262017 deg
                   Deviation: 0.0129 deg
                Phi:
                   Value:     43.357697 deg
@@ -724,17 +724,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -8.032456 deg
                   Deviation: 0.0079 deg
                Xc:
-                  Value:     11.132749 ou
-                  Deviation: 0.00234 ou
+                  Value:     11.122684 ou
+                  Deviation: 0.00232 ou
                Yc:
-                  Value:     -4.568243 ou
-                  Deviation: 0.00432 ou
+                  Value:     -4.553560 ou
+                  Deviation: 0.0043 ou
                Zc:
-                  Value:     -38.156563 ou
-                  Deviation: 0.00327 ou
+                  Value:     -38.182503 ou
+                  Deviation: 0.00325 ou
             Photo 37: img_0125.jpg
                Omega:
-                  Value:     -156.511126 deg
+                  Value:     -156.511125 deg
                   Deviation: 0.0131 deg
                Phi:
                   Value:     43.324332 deg
@@ -743,14 +743,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -5.415147 deg
                   Deviation: 0.00851 deg
                Xc:
-                  Value:     11.492434 ou
-                  Deviation: 0.00239 ou
+                  Value:     11.480454 ou
+                  Deviation: 0.00238 ou
                Yc:
-                  Value:     -6.224775 ou
-                  Deviation: 0.00439 ou
+                  Value:     -6.201276 ou
+                  Deviation: 0.00436 ou
                Zc:
-                  Value:     -39.573515 ou
-                  Deviation: 0.00365 ou
+                  Value:     -39.591914 ou
+                  Deviation: 0.00363 ou
             Photo 38: img_0126.jpg
                Omega:
                   Value:     -170.780145 deg
@@ -762,17 +762,17 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -1.102015 deg
                   Deviation: 0.00926 deg
                Xc:
-                  Value:     12.052959 ou
-                  Deviation: 0.00247 ou
+                  Value:     12.037996 ou
+                  Deviation: 0.00246 ou
                Yc:
-                  Value:     -8.481243 ou
-                  Deviation: 0.00451 ou
+                  Value:     -8.445736 ou
+                  Deviation: 0.00448 ou
                Zc:
-                  Value:     -41.630054 ou
-                  Deviation: 0.00423 ou
+                  Value:     -41.637508 ou
+                  Deviation: 0.00421 ou
             Photo 39: img_0127.jpg
                Omega:
-                  Value:     169.652643 deg
+                  Value:     169.652644 deg
                   Deviation: 0.0143 deg
                   Correlations over 95%: Yc:95.4%.
                Phi:
@@ -782,18 +782,18 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     112.586784 deg
                   Deviation: 0.0113 deg
                Xc:
-                  Value:     12.548667 ou
-                  Deviation: 0.00251 ou
+                  Value:     12.531066 ou
+                  Deviation: 0.00249 ou
                Yc:
-                  Value:     -10.347144 ou
-                  Deviation: 0.0045 ou
+                  Value:     -10.301707 ou
+                  Deviation: 0.00447 ou
                   Correlations over 95%: Omega:95.4%.
                Zc:
-                  Value:     -42.979125 ou
-                  Deviation: 0.00471 ou
+                  Value:     -42.979399 ou
+                  Deviation: 0.00468 ou
             Photo 40: img_0128.jpg
                Omega:
-                  Value:     -172.986898 deg
+                  Value:     -172.986897 deg
                   Deviation: 0.0129 deg
                   Correlations over 95%: Yc:95.5%.
                Phi:
@@ -803,15 +803,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -1.705317 deg
                   Deviation: 0.00907 deg
                Xc:
-                  Value:     12.544023 ou
-                  Deviation: 0.00251 ou
+                  Value:     12.526447 ou
+                  Deviation: 0.00249 ou
                Yc:
-                  Value:     -10.445907 ou
-                  Deviation: 0.00449 ou
+                  Value:     -10.399944 ou
+                  Deviation: 0.00447 ou
                   Correlations over 95%: Omega:95.5%.
                Zc:
-                  Value:     -43.020556 ou
-                  Deviation: 0.00473 ou
+                  Value:     -43.020610 ou
+                  Deviation: 0.00471 ou
             Photo 41: img_0129.jpg
                Omega:
                   Value:     176.779132 deg
@@ -824,15 +824,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     0.409062 deg
                   Deviation: 0.00936 deg
                Xc:
-                  Value:     12.439465 ou
-                  Deviation: 0.00236 ou
+                  Value:     12.422445 ou
+                  Deviation: 0.00235 ou
                Yc:
-                  Value:     -12.880869 ou
-                  Deviation: 0.00406 ou
+                  Value:     -12.821948 ou
+                  Deviation: 0.00404 ou
                   Correlations over 95%: Omega:95.6%.
                Zc:
-                  Value:     -42.745638 ou
-                  Deviation: 0.005 ou
+                  Value:     -42.747155 ou
+                  Deviation: 0.00497 ou
             Photo 42: img_0130.jpg
                Omega:
                   Value:     160.781322 deg
@@ -844,14 +844,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     3.358296 deg
                   Deviation: 0.00993 deg
                Xc:
-                  Value:     12.151709 ou
-                  Deviation: 0.00218 ou
+                  Value:     12.136220 ou
+                  Deviation: 0.00217 ou
                Yc:
-                  Value:     -15.546842 ou
-                  Deviation: 0.00354 ou
+                  Value:     -15.473732 ou
+                  Deviation: 0.00352 ou
                Zc:
-                  Value:     -41.930512 ou
-                  Deviation: 0.00516 ou
+                  Value:     -41.936367 ou
+                  Deviation: 0.00514 ou
             Photo 43: img_0131.jpg
                Omega:
                   Value:     150.241169 deg
@@ -863,14 +863,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     6.053377 deg
                   Deviation: 0.00973 deg
                Xc:
-                  Value:     11.792931 ou
-                  Deviation: 0.002 ou
+                  Value:     11.779352 ou
+                  Deviation: 0.00199 ou
                Yc:
-                  Value:     -17.913039 ou
-                  Deviation: 0.00313 ou
+                  Value:     -17.827336 ou
+                  Deviation: 0.00311 ou
                Zc:
-                  Value:     -40.813076 ou
-                  Deviation: 0.00527 ou
+                  Value:     -40.824878 ou
+                  Deviation: 0.00524 ou
             Photo 44: img_0132.jpg
                Omega:
                   Value:     139.244507 deg
@@ -882,14 +882,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     11.234066 deg
                   Deviation: 0.00943 deg
                Xc:
-                  Value:     11.393085 ou
-                  Deviation: 0.00184 ou
+                  Value:     11.381634 ou
+                  Deviation: 0.00183 ou
                Yc:
-                  Value:     -20.366922 ou
-                  Deviation: 0.00275 ou
+                  Value:     -20.268160 ou
+                  Deviation: 0.00274 ou
                Zc:
-                  Value:     -39.459232 ou
-                  Deviation: 0.00539 ou
+                  Value:     -39.478239 ou
+                  Deviation: 0.00536 ou
             Photo 45: img_0133.jpg
                Omega:
                   Value:     131.518469 deg
@@ -901,14 +901,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     11.703043 deg
                   Deviation: 0.00909 deg
                Xc:
-                  Value:     10.980365 ou
-                  Deviation: 0.00173 ou
+                  Value:     10.971110 ou
+                  Deviation: 0.00172 ou
                Yc:
-                  Value:     -21.748446 ou
-                  Deviation: 0.00248 ou
+                  Value:     -21.642331 ou
+                  Deviation: 0.00247 ou
                Zc:
-                  Value:     -38.128748 ou
-                  Deviation: 0.00536 ou
+                  Value:     -38.154836 ou
+                  Deviation: 0.00533 ou
             Photo 46: img_0134.jpg
                Omega:
                   Value:     122.559315 deg
@@ -920,14 +920,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     14.938193 deg
                   Deviation: 0.00867 deg
                Xc:
-                  Value:     10.500753 ou
+                  Value:     10.494051 ou
                   Deviation: 0.00161 ou
                Yc:
-                  Value:     -23.258142 ou
-                  Deviation: 0.00224 ou
+                  Value:     -23.143993 ou
+                  Deviation: 0.00222 ou
                Zc:
-                  Value:     -36.564093 ou
-                  Deviation: 0.00531 ou
+                  Value:     -36.598508 ou
+                  Deviation: 0.00528 ou
             Photo 47: img_0135.jpg
                Omega:
                   Value:     111.654927 deg
@@ -939,14 +939,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     18.097947 deg
                   Deviation: 0.00803 deg
                Xc:
-                  Value:     9.977034 ou
-                  Deviation: 0.00153 ou
+                  Value:     9.973119 ou
+                  Deviation: 0.00152 ou
                Yc:
-                  Value:     -24.836608 ou
-                  Deviation: 0.00208 ou
+                  Value:     -24.714058 ou
+                  Deviation: 0.00207 ou
                Zc:
-                  Value:     -34.672920 ou
-                  Deviation: 0.00522 ou
+                  Value:     -34.717400 ou
+                  Deviation: 0.00519 ou
             Photo 48: img_0136.jpg
                Omega:
                   Value:     97.644433 deg
@@ -958,14 +958,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     18.408018 deg
                   Deviation: 0.00714 deg
                Xc:
-                  Value:     9.298393 ou
-                  Deviation: 0.00145 ou
+                  Value:     9.298090 ou
+                  Deviation: 0.00144 ou
                Yc:
-                  Value:     -26.145022 ou
-                  Deviation: 0.00198 ou
+                  Value:     -26.015509 ou
+                  Deviation: 0.00197 ou
                Zc:
-                  Value:     -32.383206 ou
-                  Deviation: 0.00502 ou
+                  Value:     -32.439872 ou
+                  Deviation: 0.00499 ou
             Photo 49: img_0137.jpg
                Omega:
                   Value:     94.874895 deg
@@ -977,14 +977,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     18.883741 deg
                   Deviation: 0.0068 deg
                Xc:
-                  Value:     8.698708 ou
-                  Deviation: 0.00141 ou
+                  Value:     8.701596 ou
+                  Deviation: 0.0014 ou
                Yc:
-                  Value:     -27.971503 ou
-                  Deviation: 0.00203 ou
+                  Value:     -27.832269 ou
+                  Deviation: 0.00202 ou
                Zc:
-                  Value:     -30.189902 ou
-                  Deviation: 0.0049 ou
+                  Value:     -30.258240 ou
+                  Deviation: 0.00488 ou
             Photo 50: img_0138.jpg
                Omega:
                   Value:     90.316303 deg
@@ -996,14 +996,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     17.047564 deg
                   Deviation: 0.00645 deg
                Xc:
-                  Value:     8.070941 ou
-                  Deviation: 0.00137 ou
+                  Value:     8.077170 ou
+                  Deviation: 0.00136 ou
                Yc:
-                  Value:     -28.786601 ou
-                  Deviation: 0.00213 ou
+                  Value:     -28.643030 ou
+                  Deviation: 0.00212 ou
                Zc:
-                  Value:     -28.123801 ou
-                  Deviation: 0.00465 ou
+                  Value:     -28.203135 ou
+                  Deviation: 0.00463 ou
             Photo 51: img_0139.jpg
                Omega:
                   Value:     86.230398 deg
@@ -1015,14 +1015,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     16.274739 deg
                   Deviation: 0.0058 deg
                Xc:
-                  Value:     7.483203 ou
-                  Deviation: 0.00132 ou
+                  Value:     7.492560 ou
+                  Deviation: 0.00131 ou
                Yc:
-                  Value:     -28.831422 ou
-                  Deviation: 0.00218 ou
+                  Value:     -28.687612 ou
+                  Deviation: 0.00217 ou
                Zc:
-                  Value:     -26.078774 ou
-                  Deviation: 0.00431 ou
+                  Value:     -26.168992 ou
+                  Deviation: 0.00428 ou
             Photo 52: img_0140.jpg
                Omega:
                   Value:     75.052823 deg
@@ -1034,14 +1034,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     15.221094 deg
                   Deviation: 0.0046 deg
                Xc:
-                  Value:     6.669828 ou
-                  Deviation: 0.00129 ou
+                  Value:     6.683514 ou
+                  Deviation: 0.00128 ou
                Yc:
-                  Value:     -28.491795 ou
-                  Deviation: 0.00224 ou
+                  Value:     -28.349793 ou
+                  Deviation: 0.00222 ou
                Zc:
-                  Value:     -23.327543 ou
-                  Deviation: 0.0038 ou
+                  Value:     -23.432402 ou
+                  Deviation: 0.00378 ou
             Photo 53: img_0141.jpg
                Omega:
                   Value:     65.968338 deg
@@ -1053,14 +1053,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     12.570995 deg
                   Deviation: 0.00358 deg
                Xc:
-                  Value:     5.805450 ou
-                  Deviation: 0.00135 ou
+                  Value:     5.823736 ou
+                  Deviation: 0.00134 ou
                Yc:
-                  Value:     -27.998328 ou
-                  Deviation: 0.0023 ou
+                  Value:     -27.858952 ou
+                  Deviation: 0.00229 ou
                Zc:
-                  Value:     -20.349415 ou
-                  Deviation: 0.00331 ou
+                  Value:     -20.470124 ou
+                  Deviation: 0.0033 ou
             Photo 54: img_0142.jpg
                Omega:
                   Value:     62.817285 deg
@@ -1072,14 +1072,14 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     10.977362 deg
                   Deviation: 0.00327 deg
                Xc:
-                  Value:     5.206868 ou
-                  Deviation: 0.00144 ou
+                  Value:     5.228339 ou
+                  Deviation: 0.00143 ou
                Yc:
-                  Value:     -27.079016 ou
-                  Deviation: 0.00224 ou
+                  Value:     -26.944532 ou
+                  Deviation: 0.00223 ou
                Zc:
-                  Value:     -18.352709 ou
-                  Deviation: 0.00298 ou
+                  Value:     -18.484045 ou
+                  Deviation: 0.00296 ou
             Photo 55: img_0143.jpg
                Omega:
                   Value:     55.022921 deg
@@ -1092,36 +1092,36 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     10.583605 deg
                   Deviation: 0.00255 deg
                Xc:
-                  Value:     4.482567 ou
-                  Deviation: 0.00151 ou
+                  Value:     4.507894 ou
+                  Deviation: 0.0015 ou
                   Correlations over 95%: Phi:95.7%.
                Yc:
-                  Value:     -25.924927 ou
-                  Deviation: 0.00214 ou
+                  Value:     -25.796586 ou
+                  Deviation: 0.00213 ou
                Zc:
-                  Value:     -15.839956 ou
-                  Deviation: 0.00259 ou
+                  Value:     -15.984664 ou
+                  Deviation: 0.00257 ou
             Photo 56: img_0144.jpg
                Omega:
                   Value:     48.973161 deg
                   Deviation: 0.00575 deg
                Phi:
-                  Value:     3.759604 deg
+                  Value:     3.759603 deg
                   Deviation: 0.0053 deg
                   Correlations over 95%: Xc:96.9%.
                Kappa:
                   Value:     10.631849 deg
                   Deviation: 0.00214 deg
                Xc:
-                  Value:     3.963626 ou
-                  Deviation: 0.00152 ou
+                  Value:     3.991714 ou
+                  Deviation: 0.00151 ou
                   Correlations over 95%: Phi:96.9%.
                Yc:
-                  Value:     -24.591678 ou
-                  Deviation: 0.00197 ou
+                  Value:     -24.470432 ou
+                  Deviation: 0.00196 ou
                Zc:
-                  Value:     -13.967844 ou
-                  Deviation: 0.00227 ou
+                  Value:     -14.122516 ou
+                  Deviation: 0.00226 ou
             Photo 57: img_0145.jpg
                Omega:
                   Value:     45.196056 deg
@@ -1134,15 +1134,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     8.833735 deg
                   Deviation: 0.00187 deg
                Xc:
-                  Value:     3.453655 ou
-                  Deviation: 0.00153 ou
+                  Value:     3.484457 ou
+                  Deviation: 0.00152 ou
                   Correlations over 95%: Phi:97.8%.
                Yc:
-                  Value:     -23.392535 ou
+                  Value:     -23.277671 ou
                   Deviation: 0.00182 ou
                Zc:
-                  Value:     -12.268920 ou
-                  Deviation: 0.00196 ou
+                  Value:     -12.432633 ou
+                  Deviation: 0.00195 ou
             Photo 58: img_0146.jpg
                Omega:
                   Value:     49.846908 deg
@@ -1155,15 +1155,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     10.319229 deg
                   Deviation: 0.00187 deg
                Xc:
-                  Value:     3.297495 ou
-                  Deviation: 0.00141 ou
+                  Value:     3.329128 ou
+                  Deviation: 0.0014 ou
                   Correlations over 95%: Phi:97.9%.
                Yc:
-                  Value:     -21.751311 ou
+                  Value:     -21.645181 ou
                   Deviation: 0.00156 ou
                Zc:
-                  Value:     -11.644462 ou
-                  Deviation: 0.00167 ou
+                  Value:     -11.811498 ou
+                  Deviation: 0.00166 ou
             Photo 59: img_0147.jpg
                Omega:
                   Value:     46.884323 deg
@@ -1176,15 +1176,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     9.973247 deg
                   Deviation: 0.00162 deg
                Xc:
-                  Value:     2.804371 ou
+                  Value:     2.838629 ou
                   Deviation: 0.00141 ou
                   Correlations over 95%: Phi:98.6%.
                Yc:
-                  Value:     -20.767244 ou
-                  Deviation: 0.00151 ou
+                  Value:     -20.666351 ou
+                  Deviation: 0.0015 ou
                Zc:
-                  Value:     -9.958803 ou
-                  Deviation: 0.00144 ou
+                  Value:     -10.134810 ou
+                  Deviation: 0.00143 ou
             Photo 60: img_0148.jpg
                Omega:
                   Value:     47.084500 deg
@@ -1197,15 +1197,15 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     100.136715 deg
                   Deviation: 0.00169 deg
                Xc:
-                  Value:     2.425724 ou
-                  Deviation: 0.00195 ou
+                  Value:     2.461996 ou
+                  Deviation: 0.00194 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -24.469812 ou
-                  Deviation: 0.00195 ou
-               Zc:
-                  Value:     -8.777781 ou
+                  Value:     -24.349214 ou
                   Deviation: 0.00194 ou
+               Zc:
+                  Value:     -8.960073 ou
+                  Deviation: 0.00193 ou
    Quality
       Photographs
          Total number: 60
@@ -1241,7 +1241,7 @@ Damped Bundle Adjustment Toolbox result file
          Total standard deviation (RMS of X/Y/Z std):
             Minimum: 0.0027 (OP 29934)
             Maximum: 0.27 (OP 11799)
-         Maximum X standard deviation: 0.099 (OP 11778)
+         Maximum X standard deviation: 0.098 (OP 11778)
          Maximum Y standard deviation: 0.23 (OP 11806)
          Maximum Z standard deviation: 0.15 (OP 5016)
       Point Angles
