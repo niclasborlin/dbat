@@ -1,5 +1,8 @@
 Summary changelog file for release.
 
+Release 0.5.1.1, Jun 28, 2016.
+- Removed 2-ray object points from SXB project.
+
 Release 0.5.1, Jun 26, 2016.
 - Cleaned up demos for Prague 2016.
 - Added functions for loading PhotoModeler 2D/3D point export tables.
