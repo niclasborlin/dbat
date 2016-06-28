@@ -1,4 +1,4 @@
-function [x,code,n,r,J,T,rr]=gauss_markov(resFun,x0,W,maxIter,convTol,trace,sTest)
+function [x,code,n,final,T,rr]=gauss_markov(resFun,x0,W,maxIter,convTol,trace,sTest)
 %GAUSS_MARKOV Gauss-Markov least squares adjustment algorithm.
 %
 %   [X,CODE,I]=GAUSS_MARKOV(RES,X0,W,N,TOL,TRACE,STEST) runs the
@@ -12,10 +12,13 @@ function [x,code,n,r,J,T,rr]=gauss_markov(resFun,x0,W,maxIter,convTol,trace,sTes
 %   -2 - matrix is singular) are also returned. If TRACE is true, the
 %   sigma0 estimates are printed at each iteration.
 %
-%   [X,CODE,I,R,J]=... also returns the final estimates of the residual
-%   vector R and Jacobian matrix J.
+%   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
+%   estimates of the weighted and unweighted residual vector and
+%   Jacobian matrix. The weighted estimates are returned as fields
+%   weighted.r and weighted.J, respectively, the unweighted as
+%   unweighted.r and unweighted.J, respectively.
 %
-%   [X,CODE,I,R,J,T,RR]=... also returns the iteration trace as successive
+%   [X,CODE,I,FINAL,T,RR]=... also returns the iteration trace as successive
 %   columns in T and successive values of the residual norm in RR.
 %
 %   The function RES is assumed to return the residual function and its
@@ -31,8 +34,6 @@ function [x,code,n,r,J,T,rr]=gauss_markov(resFun,x0,W,maxIter,convTol,trace,sTes
 %
 %See also: BUNDLE, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
 %   LEVENBERG_MARQUARDT_POWELL.
-
-% $Id$
 
 % Initialize current estimate and iteration trace.
 x=x0;
@@ -101,7 +102,7 @@ while true
     % Update estimate.
     x=x+p;
 
-    if nargout>5
+    if nargout>4
         % Store iteration trace.
         if n+1>size(T,2)
             % Expand by blocksize if needed.
@@ -117,7 +118,12 @@ while true
     end
 end
 
+if nargout>3
+    final=struct('unweighted',struct('r',s,'J',K),...
+                 'weighted',struct('r',r,'J',J));
+end
+
 % Trim unused trace columns.
-if nargout>5
+if nargout>4
     T=T(:,1:n+1);
 end
