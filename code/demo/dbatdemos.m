@@ -4,13 +4,20 @@
 %    Call:
 %        LOADPLOTDEMO('ROMA') or LOADPLOTDEMO('CAM')
 %    Data files:
-%        DBATHOME/code/demos/data/phor2013
+%        DBATHOME/code/demos/data/dbat
 %
 % romabundledemo - Run bundle on Roma data set.
 %    Call:
 %        ROMABUNDLEDEMO
 %    Data files:
-%        DBATHOME/code/demos/data/phor2013
+%        DBATHOME/code/demos/data/dbat
+%
+%
+% camcaldemo - Camera calibration example.
+%    Call:
+%        CAMCALDEMO
+%    Data files:
+%        DBATHOME/code/demos/data/dbat
 %
 % Prague 2016:
 %    Call:

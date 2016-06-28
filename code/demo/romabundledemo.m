@@ -5,13 +5,16 @@ function romabundledemo
 %   of the ROMA data set. The PhotoModeler EO values are used as
 %   initial values, except that the EO position are disturbed by
 %   random noise with sigma=0.1 m. The OP initial values are
-%   computed by forward intersection.
+%   computed by forward intersection. The datum is defined by
+%   fixing the EO parameters of the first camera and the X
+%   coordinate of another camera. The other camera is chosen to
+%   maximize the baseline.
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
 % Base dir with input files.
-inputDir=fullfile(curDir,'data','phor2013');
+inputDir=fullfile(curDir,'data','dbat');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','roma-pmexport.txt');
@@ -65,6 +68,8 @@ if length(uniqueSigmas)~=1
 end
 
 if all(uniqueSigmas==0)
+    warning('All mark point sigmas==0. Using sigma==1 instead.');
+    s0.prior.sigmas=1;
     s0.markStd(:)=1;
 end
 
@@ -92,17 +97,17 @@ for i=1:length(dampings)
     [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s0,dampings{i},'trace');
     
     if ok(i)
-        fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
-                iters(i),sigma0(i));
+        fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
+                iters(i),sigma0(i),sigma0(i)*s0.prior.sigmas(1));
     else
         fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-                 'pixels\n'],iters(i),sigma0(i));
+                 '(%.2f pixels)\n'],iters(i),sigma0(i),sigma0(i)*s0.prior.sigmas(1));
     end
 end
 
 COP=bundle_result_file(result{1},E{1},reportFile);
 
-fprintf('\nBundle result file %s generated.\n',resFile);
+fprintf('\nBundle result file %s generated.\n',reportFile);
 
 plotparams(result{1},E{1},'noop');
 

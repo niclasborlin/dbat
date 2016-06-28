@@ -31,12 +31,12 @@ defAlignCam=0;
 
 switch lower(fName)
   case 'roma'
-    fName=fullfile(curDir,'data','phor2013','pmexports','roma-pmexport.txt');
+    fName=fullfile(curDir,'data','dbat','pmexports','roma-pmexport.txt');
     titleStr='Roma data (computed by PhotoModeler)';
     msg='Plotting the Roma camera network.';
     defAlignCam=1;
   case 'cam'
-    fName=fullfile(curDir,'data','phor2013','pmexports','C4040Z-2272x1704-pmexport.txt');
+    fName=fullfile(curDir,'data','dbat','pmexports','camcal-pmexport.txt');
     titleStr='Camera calibration data set (computed by Photomodeler)';
     msg='Plotting the camera calibration network.';
     defCamSize=0.15;
