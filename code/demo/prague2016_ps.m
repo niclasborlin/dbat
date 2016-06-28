@@ -59,7 +59,9 @@ meanOffset=zeros(3,1);
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));
 
-if length(uniqueSigmas)~=1
+% Don't warn for multiple sigmas for PhotoScan projects only if
+% some sigma is zero.
+if length(uniqueSigmas)~=1 && any(s0.markStd(:)==0)
     uniqueSigmas
     warning('Multiple mark point sigmas')
     s0.markStd(s0.markStd==0)=1;
@@ -72,8 +74,6 @@ s0.OP(s0.estOP)=nan;
 % Insert any prior obs to use.
 s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
 s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
-
-%s0.markStd(:)=s0.prior.sigmas(1);
 
 % Compute EO parameters by spatial resection.
 cpId=s0.OPid(s0.isCtrl);

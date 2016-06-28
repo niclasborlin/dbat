@@ -80,6 +80,12 @@ s.transform.G2L=G2L;
 
 ptCloud=s.document.chunks.chunk.frames.frame.point_cloud;
 
+if unpackLocal
+    s.raw.paths.points=fullfile(unpackDir,ptCloud.points.Attributes.path);
+else
+    s.raw.paths.points='';
+end
+
 % Object points are in local coordinates.
 [~,~,points,~]=ply_read(fullfile(unpackDir,ptCloud.points.Attributes.path),'tri');
 s.raw.points=points;
@@ -150,11 +156,18 @@ s.local.objPts=s.raw.objPts;
 s.local.objPts(:,1)=s.local.objPts(:,1)+objIdShift;
 s.global.objPts=XformPtsi(s.local.objPts,L2G);
 
+if unpackLocal
+    s.raw.paths.tracks=fullfile(unpackDir,ptCloud.tracks.Attributes.path);
+else
+    s.raw.paths.tracks='';
+end
+
 [~,~,tracks,~]=ply_read(fullfile(unpackDir,ptCloud.tracks.Attributes.path),'tri');
 s.raw.tracks=tracks;
 
 % Image coordinates.
 projections=cell(size(ptCloud.projections));
+s.raw.paths.projections=cell(size(ptCloud.projections));
 
 cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1, ...
                   ptCloud.projections);
@@ -162,6 +175,12 @@ cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1, ...
 s.cameraIds=cameraIds;
 
 for i=1:length(projections)
+    if unpackLocal
+        s.raw.paths.projections{i}=...
+            fullfile(unpackDir,ptCloud.projections{i}.Attributes.path);
+    else
+        s.raw.paths.points='';
+    end
     [~,~,proj,~]=ply_read(fullfile(unpackDir, ...
                                    ptCloud.projections{i}.Attributes.path),...
                           'tri');
