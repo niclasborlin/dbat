@@ -1,4 +1,4 @@
-function [rr,s0,prob]=camcaldemo(doPause)
+function [rr,s0,prob]=camcaldemo(damping,doPause)
 %CAMCALDEMO Camera calibration demo for DBAT.
 %
 %   CAMCALDEMO runs a camera calibration bundle on a PhotoModeler
@@ -6,8 +6,32 @@ function [rr,s0,prob]=camcaldemo(doPause)
 %   Photomodeler calibration sheet. The Camera is a Olympus Camedia
 %   C4040Z with a 7.25-by-5.44 mm sensor size. As a starting
 %   approximation, the EXIF focal length value of 7.3mm is used.
+%
+%   CAMCALDEMO uses the Gauss-Newton-Armijo damping scheme of [1]
+%   by default. Use CAMCALDEMO(DAMPING), where DAMPING is one of
+%   - 'none' or 'gm' for classical Gauss-Markov iterations,
+%   - 'gna'          Gauss-Newton with Armijo linesearch,
+%   - 'lm'           Levenberg-Marquardt, or
+%   - 'lmp'          Levenberg-Marquardt with Powell dogleg.
+%
+%   Use CAMCALDEMO(DAMPING,'off') to visualize the iteration
+%   sequence without waiting for a keypress.
+%
+%   References:
+%       [1] Börlin and Grussenmeyer (2013). "Bundle adjustment with
+%       and without damping", Photogrammetric Record,
+%       vol. 28(144):396-415.
 
-if nargin<1, doPause='on'; end
+if nargin<1, damping='gna'; end
+
+if nargin<2, doPause='on'; end
+
+switch damping
+  case {'none','gm','gna','lm','lmp'}
+    % Do nothing.
+  otherwise
+    error('Bad damping');
+end
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -78,46 +102,38 @@ s=s2;
 h=plotnetwork(s,'title','Initial network',...
               'axes',tagfigure('camcal'),'camsize',0.1);
 
-dampings={'none','gna','lm','lmp'};
+fprintf('Running the bundle with damping %s...\n',damping);
 
-dampings=dampings(2);
-
-result=cell(size(dampings));
-ok=nan(size(dampings));
-iters=nan(size(dampings));
-sigma0=nan(size(dampings));
-E=cell(size(dampings));
-
-for i=1:length(dampings)
-    fprintf('Running the bundle with damping %s...\n',dampings{i});
-
-    % Run the bundle.
-    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s,dampings{i},'trace');
+% Run the bundle.
+[result,ok,iters,sigma0,E]=bundle(s,damping,'trace');
     
-    if ok(i)
-        fprintf('Bundle ok after %d iterations with sigma0=%.2f pixels\n', ...
-                iters(i),sigma0(i));
-    else
-        fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-                 'pixels\n'],iters(i),sigma0(i));
-    end
+if ok
+    fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
+            iters,sigma0,sigma0*s0.prior.sigmas(1));
+else
+    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,sigma0,sigma0*s0.prior.sigmas(1));
 end
 
-COP=bundle_result_file(result{1},E{1},reportFile);
+COP=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
-h=plotparams(result{1},E{1});
+h=plotparams(result,E);
 
-h=plotcoverage(result{1},true);
+h=plotcoverage(result,true);
 
-h=plotimagestats(result{1},E{1});
+h=plotimagestats(result,E);
 
-h=plotopstats(result{1},E{1},COP);
+h=plotopstats(result,E,COP);
 
-for i=1:length(E)
-    h=plotnetwork(result{i},E{i},'title',...
-                  ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                  'axes',tagfigure(sprintf('network%d',i)),...
-                  'pause',doPause,'camsize',0.1); 
+fig=tagfigure(sprintf('damping=%s',damping));
+fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
+        E.damping.name,double(fig));
+h=plotnetwork(result,E,'title',...
+              ['Damping: ',damping,'. Iteration %d of %d'], ...
+              'axes',fig,'pause',doPause,'camsize',0.1); 
+
+if nargout>0
+    rr=result;
 end

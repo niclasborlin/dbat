@@ -1,4 +1,4 @@
-function romabundledemo
+function [rr,s0,prob]=romabundledemo(damping,doPause)
 %ROMABUNDLEDEMO Bundle demo for DBAT.
 %
 %   ROMABUNDLEDEMO runs the bundle on the PhotoModeler export file
@@ -9,6 +9,32 @@ function romabundledemo
 %   fixing the EO parameters of the first camera and the X
 %   coordinate of another camera. The other camera is chosen to
 %   maximize the baseline.
+%
+%   ROMABUNDLEDEMO uses the Gauss-Newton-Armijo damping scheme of [1]
+%   by default. Use CAMCALDEMO(DAMPING), where DAMPING is one of
+%   - 'none' or 'gm' for classical Gauss-Markov iterations,
+%   - 'gna'          Gauss-Newton with Armijo linesearch,
+%   - 'lm'           Levenberg-Marquardt, or
+%   - 'lmp'          Levenberg-Marquardt with Powell dogleg.
+%
+%   Use ROMABUNDLEDEMO(DAMPING,'off') to visualize the iteration
+%   sequence without waiting for a keypress.
+%
+%   References:
+%       [1] Börlin and Grussenmeyer (2013). "Bundle adjustment with
+%       and without damping", Photogrammetric Record,
+%       vol. 28(144):396-415.
+
+if nargin<1, damping='gna'; end
+
+if nargin<2, doPause='on'; end
+
+switch damping
+  case {'none','gm','gna','lm','lmp'}
+    % Do nothing.
+  otherwise
+    error('Bad damping');
+end
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -42,6 +68,9 @@ s0.useIOobs=false(size(s0.IO));
 
 % Noise sigma [m].
 noiseLevel=0.1;
+
+% Reset random number generator.
+rng('default');
 
 % Use supplied EO data as initial values. Again, this block is not
 % really necessary but may serve as a starting point for modifications.
@@ -80,47 +109,39 @@ camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
 [i,j]=find(camDiff==max(camDiff(:)));
 s0.estEO(i,j)=false;
 
-dampings={'none','gna','lm','lmp'};
+fprintf('Running the bundle with damping %s...\n',damping);
 
-dampings=dampings(2);
-
-result=cell(size(dampings));
-ok=nan(size(dampings));
-iters=nan(size(dampings));
-sigma0=nan(size(dampings));
-E=cell(size(dampings));
-
-for i=1:length(dampings)
-    fprintf('Running the bundle with damping %s...\n',dampings{i});
-
-    % Run the bundle.
-    [result{i},ok(i),iters(i),sigma0(i),E{i}]=bundle(s0,dampings{i},'trace');
+% Run the bundle.
+[result,ok,iters,sigma0,E]=bundle(s0,damping,'trace');
     
-    if ok(i)
-        fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
-                iters(i),sigma0(i),sigma0(i)*s0.prior.sigmas(1));
-    else
-        fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-                 '(%.2f pixels)\n'],iters(i),sigma0(i),sigma0(i)*s0.prior.sigmas(1));
-    end
+if ok
+    fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
+            iters,sigma0,sigma0*s0.prior.sigmas(1));
+else
+    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,sigma0,sigma0*s0.prior.sigmas(1));
 end
 
-COP=bundle_result_file(result{1},E{1},reportFile);
+COP=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
-plotparams(result{1},E{1},'noop');
+% Don't plot iteration history for the 26000+ object points.
+h=plotparams(result,E,'noop');
 
-plotcoverage(result{1},true);
+h=plotcoverage(result,true);
 
-plotimagestats(result{1},E{1});
+h=plotimagestats(result,E);
 
-plotopstats(result{1},E{1},COP);
+h=plotopstats(result,E,COP);
 
-for i=1:length(E)
-    fig=tagfigure(sprintf('network%d',i));
-    fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',E{i}.damping.name,double(fig));
-    plotnetwork(result{i},E{i},'trans','up','align',1,'title',...
-                ['Damping: ',dampings{i},'. Iteration %d of %d'], ...
-                'axes',fig,'pause','on');
+fig=tagfigure(sprintf('damping=%s',damping));
+fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
+        E.damping.name,double(fig));
+plotnetwork(result,E,'trans','up','align',1,'title',...
+            ['Damping: ',damping,'. Iteration %d of %d'], ...
+            'axes',fig,'pause',doPause);
+
+if nargout>0
+    rr=result;
 end
