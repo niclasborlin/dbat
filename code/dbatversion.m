@@ -7,6 +7,6 @@ function [v,date]=dbatversion
 %   [V,D]=DBATVERSION also returns a UTC date string D.
 
 % Should always be x.y.z or x.y.z.w.
-v='0.5.1.1';
+v='0.5.1.2';
 
-date='2016-06-28';
+date='2016-06-29';

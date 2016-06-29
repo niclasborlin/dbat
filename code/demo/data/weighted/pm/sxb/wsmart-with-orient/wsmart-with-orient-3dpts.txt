@@ -1,1 +1,0 @@
-../wsmart/wsmart-with-orient-3dpts.txt
