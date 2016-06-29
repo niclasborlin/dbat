@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -25,6 +25,13 @@ N.~B{\"o}rlin and P.~Grussenmeyer.
 \newblock Camera calibration using the damped bundle adjustment toolbox.
 \newblock \emph{ISPRS Annals of the Photogrammetry, Remote Sensing, and Spatial
   Information Sciences}, II\penalty0 (5):\penalty0 89--96, June 2014.
+
+\bibitem[B{\"o}rlin and Grussenmeyer(2016)]{Borlin2016:External}
+N.~B{\"o}rlin and P.~Grussenmeyer.
+\newblock External verification of the bundle adjustment in photogrammetric
+  software using the damped bundle adjustment toolbox.
+\newblock \emph{International Archives of Photogrammetry, Remote Sensing, and
+  Spatial Information Sciences}, XLI-B5:\penalty0 7--14, July 2016.
 
 \bibitem[Brown(1971)]{Brown1971:Close-range}
 D.~C. Brown.

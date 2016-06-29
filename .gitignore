@@ -2,3 +2,8 @@
 *~
 .#*
 **/Project\ Backups
+*.aux
+*.log
+*.toc
+*.out
+*.blg

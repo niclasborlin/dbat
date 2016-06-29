@@ -1,1 +1,0 @@
-../wsmart/wsmart-with-orient-pmexport.txt

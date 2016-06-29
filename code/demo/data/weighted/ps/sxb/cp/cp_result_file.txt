@@ -1,4 +1,0 @@
-Damped Bundle Adjustment Toolbox result file
-   Project Name: Photoscan import
-   Problems and suggestions:
-      Project Problems: Not evaluated
