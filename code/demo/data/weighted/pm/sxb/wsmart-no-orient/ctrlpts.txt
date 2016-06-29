@@ -1,1 +1,0 @@
-../wsmart/ctrlpts.txt

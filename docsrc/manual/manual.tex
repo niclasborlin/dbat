@@ -1,7 +1,6 @@
 \documentclass{article}
 
 \usepackage[T1]{fontenc}
-\usepackage{svninfo}
 \usepackage{graphicx}
 \usepackage[round]{natbib}
 \usepackage{verbatim}
@@ -15,9 +14,7 @@
 
 \bibliographystyle{abbrvnat}
 
-\svnInfo $Id$
-
-\newcommand{\dbatversion}{0.4.1}
+\newcommand{\dbatversion}{0.5.1.2}
 
 \title{The Damped Bundle Adjustment Toolbox\\v\dbatversion{} for Matlab}
 
@@ -44,8 +41,8 @@ This purpose of the Damped Bundle Adjustment toolbox is to be a
 high-level toolbox for photogrammetry in general and bundle adjustment
 in particular. It is the hope of the authors that the high-level
 nature of the code will inspire algorithm development. The code is
-written in Matlab and is verified to work with Matlab version 8
-(release R2012B). The intention is that at least the computation
+written in Matlab and is verified to work with Matlab version 8.6
+(release R2015b). The intention is that at least the computation
 routines will be Octave-compatible. This has however not been tested
 yet.
 
@@ -55,7 +52,10 @@ The toolbox currently includes routines for (function names in parentheses):
 \begin{itemize}
 \item File handling:
   \begin{itemize}
-  \item Reading Photomodeler-style text export files (\texttt{loadpm}).
+  \item Reading PhotoModeler-style text export files (\texttt{loadpm}), 
+    and 2D/3D point table exports files (\texttt{loadpm2dtbl} and
+    \texttt{loadpm3dtbl}, respectively).
+  \item Reading PhotoScan native (.psz) files (\texttt{loadpsz}).
   \item Writing Photomodeler-style text result files
     (\texttt{bundle\_result\_file}).
   \end{itemize}
@@ -71,7 +71,7 @@ The toolbox currently includes routines for (function names in parentheses):
   \item Bundle adjustment proper (\texttt{bundle}) using either
     Classical, Gauss-Newton-Armijo, Levenberg-Marquardt, or
     Levenberg-Marquardt-Powell damping schemes
-    \citep{Borlin2013:Bundle,Borlin2014:Camera}.
+    \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
   \item Covariance calculations (\texttt{bundle\_cov}) from the bundle
     result.
   \end{itemize}
@@ -87,22 +87,14 @@ The toolbox currently includes routines for (function names in parentheses):
     (\texttt{plotimagestats, plotopstats}).
   \end{itemize}
 \item Demo functions using the above functions. The demo functions are
-  detailed in Section~\ref{sec:demos}.
+  detailed in Section~\ref{sec:demos}. The available demos are listed
+  by executing the command \texttt{help dbatdemos}.
 \end{itemize}
 
 This manual does not contain detailed information about how to use
 each function. More information may be found by typing \texttt{help
   <function name>} at the Matlab prompt, studying the source code of
 the demo functions, and reading the source code of each file directly.
-
-Things to be added in the near future:
-\begin{itemize}
-\item Testing of all dampings for return parameter consistency.
-\item Chirality damping.
-\item Weights on the observations.
-\item Test octave compatibility.
-\item Azimuth-tilt-swing camera model.
-\end{itemize}
 
 \subsection{Legal}
 
@@ -114,7 +106,7 @@ included in the distribution. In summary:
   long as you give due credit. Specifically, if you use the code, or
   derivatives thereof, for scientific publications, you should refer
   to on or more of the papers
-  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera}
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External}
   that the code is based on.
 \item You may modify and redistribute the code as long as the
   licensing details are also redistributed.
@@ -125,7 +117,7 @@ included in the distribution. In summary:
 
 \begin{enumerate}
 \item Download the package file {\tt
-  \verb+dbat_+\dbatversion\verb+.zip+}.
+  \verb+dbat_+\dbatversion\verb+.zip+}\footnote{Soon to appear on \url{https://github.com/niclasborlin/dbat}.}.
 \item Unpack the package into a directory \emph{dbat}.
 \item \label{step:dbatInit}
 Inside Matlab, do the following initialization:\\
@@ -140,19 +132,25 @@ Inside Matlab, do the following initialization:\\
 \subsection{Demos}
 \label{sec:demos}
 
-{\bf Hint: You may wish to use the commands {\tt clear} and {\tt close
-    all} between the demos to close all windows and clear all variables.}
+\textbf{Hint: You may wish to use the command \texttt{close all}
+  between the demos to close all windows.}
 
-\subsubsection{loadplotdemo}
+\subsubsection{Plotting}
 \label{sec:loadplotdemo}
 \label{sec:loadroma}
 
-The \verb+loadplotdemo+ demo loads a modified Photomodeler text export
+The \verb+loadplotdemo+ function load and plots the content of a
+PhotoModelere text export file. Two examples are included in the
+toolbox: {\sc Roma} and {\sc Cam}.
+
+\paragraph{\sc Roma}
+\verb+loadplotdemo('roma')+ loads a modified Photomodeler text export
 file of the 60-camera, 26000-point project used
 in~\citet{Borlin2013:Bundle}. The camera network, as computed by
 Photomodeler, is plotted with camera 1 aligned to the cardinal axes.
-The result should look like Figure~\ref{fig:roma}. The figure is a standard Matlab 3D figure and
-may e.g.\ be rotated or zoomed using the camera toolbar.
+The result should look like Figure~\ref{fig:roma}. The figure is a
+standard Matlab 3D figure and may e.g.\ be rotated or zoomed using the
+camera toolbar.
 
 \begin{figure*}
   \centering
@@ -161,10 +159,9 @@ may e.g.\ be rotated or zoomed using the camera toolbar.
   \label{fig:roma}
 \end{figure*}
 
-\subsubsection{loadplotdemo2}
+\paragraph{\sc Cam}
 \label{sec:camcaldata}
-
-The \verb+loadplotdemo2+ demo loads a modified Photomodeler text
+\verb+loadplotdemo('cam')+ demo loads a modified Photomodeler text
 export file of a 21-camera, 100-point camera calibration project. The
 camera network, as computed by Photomodeler, is plotted and should
 look like Figure~\ref{fig:camcalib}. The figure is a standard Matlab
@@ -177,7 +174,7 @@ look like Figure~\ref{fig:camcalib}. The figure is a standard Matlab
   \label{fig:camcalib}
 \end{figure*}
 
-\subsubsection{camcaldemo}
+\subsubsection{Camera calibration}
 
 The \verb+camcaldemo+ demo loads the camera calibration export file
 from Section~\ref{sec:camcaldata} and runs a camera calibration. The
@@ -190,15 +187,16 @@ the control points defined for the Photomodeler calibration sheet. The
 initial OP coordinates are subsequently computed by forward
 intersection.
 
-The bundle adjustment is run with Gauss-Newton-Armijo damping. The
-result is given in a number of plot windows and a Photomodeler-style
-result text file. The result plots are of two kinds: Plots that show
-the evolution of the iterations and plots that show the quality of the
-input or output data. The former plots may be useful to understand how
-the bundle adjustment works but also to ``debug'' a difficult network
-that has convergence difficulties. The latter plots give information
-about the quality of the result and may also provide clues on how to
-improve a network when the bundle did converge.
+The bundle adjustment is run with Gauss-Newton-Armijo damping
+\citep{Borlin2013:Bundle}. The result is given in a number of plot
+windows and a Photo\-modeler-style result text file. The result plots
+are of two kinds: Plots that show the evolution of the iterations and
+plots that show the quality of the input or output data. The former
+plots may be useful to understand how the bundle adjustment works but
+also to ``debug'' a difficult network that has convergence
+difficulties. The latter plots give information about the quality of
+the result and may also provide clues on how to improve a network when
+the bundle did converge.
 
 \paragraph{Evolution plots}
 
@@ -334,8 +332,9 @@ window.
 The result file is modelled after the Photomodeler result file.
 The result file is listed in Appendix~\ref{sec:resultFile}.
 
-\subsubsection{romabundledemo}
+\subsubsection{Bundle adjustment}
 
+\paragraph{\sc Roma}
 The \texttt{romabundledemo} function loads the project from
 Section~\ref{sec:loadroma} and present essentially the same plots and
 the \texttt{camcaldemo}. This demo uses the Photomodeler file as input
@@ -347,10 +346,12 @@ computation will take a bit longer. Computation time was around one
 minute running on a HP compaq dc7800 with an Intel Core2 Quad CPU
 Q9300 @ 2.50GHz under 64-bit Ubuntu 12.04 (kernel 3.5.0-45).
 
-\subsubsection{Camera calibration demos}
-
-The camera calibration demos from \citet{Borlin2014:Camera} will be
-added to the next version of the toolbox.
+\paragraph{\sc Prague'16}
+The \texttt{prague2016\_pm} function displays six projects that
+compare the result of the bundle adjustment procedure in DBAT and the
+results of PhotoModeler \citep{Borlin2016:External}. Similarily, the
+\texttt{prague2016\_ps} function displays the results of a comparison
+between DBAT and PhotoScan.
 
 \subsection{Using your own data}
 
@@ -404,12 +405,17 @@ steps are valid in Photomodeler Scanner 2012:
 \begin{enumerate}
 \item In matlab, run step~\ref{step:dbatInit} from
   Section~\ref{sec:install} if not already done.
-\item \sloppy Set the variable \texttt{fName} to the text export file name \texttt{fName='c:/path/to/exported/file.txt';}, or
-  select it using \texttt{[f,p]=uigetfile('*.txt'); fName=[f,p];}
-\item Run the \texttt{loadplotdemo} script. A figure with your camera
-  network, aligned with the first camera and rotated to have +Z 'up',
-  should now have been generated.
+\item Call \texttt{loadplotdemo} with the name of your text export
+  file as first parameter. A figure with your camera network, aligned
+  with the first camera and rotated to have +Z 'up', should now have
+  been generated.
 \end{enumerate}
+
+\subsubsection{Using the bundle adjustment of DBAT}
+
+Modify either of the demo functions to match what you want to do. If
+you run into any problems, send us an email. The interesting results
+may either be in the plots or in the result file.
 
 \bibliography{ref}
 
@@ -443,6 +449,6 @@ the \citet{Brown1971:Close-range} lens distortion model.
 \label{sec:resultFile}
 
 \scriptsize
-\verbatiminput{ill/C4040Z-2272x1704_result_file.txt}
+\verbatiminput{ill/camcal-dbatreport.txt}
 
 \end{document}
