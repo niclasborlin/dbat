@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.5.1.2, Jun 29, 2016.
+- Re-added camera calibration demo.
+- Updated manual.
+
 Release 0.5.1.1, Jun 28, 2016.
 - Removed 2-ray object points from SXB project.
 
