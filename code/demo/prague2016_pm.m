@@ -19,6 +19,8 @@ function [rr,s0,prob]=prague2016_pm(l,orient,doPause)
 %
 %See also: PLOTNETWORK.
 
+if nargin==0, help(mfilename), return, end
+
 if nargin<3, doPause='off'; end
 
 % Extract name of current directory.
