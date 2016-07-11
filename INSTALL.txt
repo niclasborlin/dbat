@@ -1,0 +1,14 @@
+# == INSTALLATION ==
+#
+# 1) Download the package file dbat-x.y.z.zip or dbat-x.y.z.tar.gz
+#    from https://github.com/niclasborlin/dbat/
+#
+# 2) Unpack the file into a directory, e.g. c:\dbat or ~/dbat.
+# 
+# 3) Start Matlab. Inside Matlab, do the following initialization:
+# 3.1) cd c:\dbat % (change to where you unpacked the files)
+# 3.2) dbatSetup  % will set the necessary paths, etc.
+#
+# 4) To test the demos, do 'help dbatdemos' or consult the manual.
+#
+#
