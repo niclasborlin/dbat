@@ -25,6 +25,14 @@
 # 4) To test the demos, do 'help dbatdemos' or consult the manual.
 #
 #
+# ==== Download high-resolution images ====
+#
+# To reduce the size of the repository and hence download times, only
+# low-resolution images are included in the repository. High-resolution images
+# can be downloaded from http://www.cs.umu.se/~niclas/dbat_images/. For further
+# details, consult the README.txt files in the respective image directories.
+#
+#
 # == NEWS ==
 # 
 # For a list of recent changes, consult the ChangeLog.txt file.
