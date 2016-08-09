@@ -149,9 +149,12 @@ if exist(s.imDir,'dir')
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
+else
+    warning('Image directory %s does not exist.',s0.imDir);
 end
 
 if exist(imName,'file')
+    fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     h=[h;imshow(imName,'parent',gca(imFig))];
     pts=s.markPts(:,s.colPos(s.vis(:,imNo),imNo));

@@ -75,7 +75,7 @@ if alignCam==0
 else
     fprintf('Aligning with camera %d.\n',alignCam);
 end
-h=plotnetwork(s,'title',titleStr,alignCmd{:},'camsize',camSize,...
+hh=plotnetwork(s,'title',titleStr,alignCmd{:},'camsize',camSize,...
               'axes',tagfigure(fName));
 
 imName='';
@@ -89,11 +89,14 @@ if exist(s.imDir,'dir')
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
+else
+    warning('Image directory %s does not exist.',s.imDir);
 end
 
 if exist(imName,'file')
+    fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
-    h=[h;imshow(imName,'parent',gca(imFig))];
+    hh=[hh;imshow(imName,'parent',gca(imFig))];
     pts=s.markPts(:,s.colPos(s.vis(:,imNo),imNo));
     ptsId=s.OPid(s.vis(:,imNo));
     isCtrl=s.isCtrl(s.vis(:,imNo));
@@ -114,3 +117,5 @@ if exist(imName,'file')
              'vertical','bottom','color','b','parent',gca(imFig));
     end
 end
+
+if nargout>0, h=hh; end
