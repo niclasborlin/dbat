@@ -1,4 +1,4 @@
-function [rr,s0,prob]=prague2016_ps(l,doPause)
+function [rr,s0,prob,psz]=prague2016_ps(l,doPause)
 %PRAGUE2016_PS Run PhotScan demo in Prague'16 paper.
 %
 %   PRAGUE2016_PS(LABEL), where LABEL is 'S5', runs the PhotScan
@@ -18,15 +18,14 @@ function [rr,s0,prob]=prague2016_ps(l,doPause)
 %
 %See also: PLOTNETWORK.
 
+if nargin==0, help(mfilename), return, end
+
 if nargin<2, doPause='off'; end
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
 
 switch lower(l(1))
-  case 'c'
-    % Base dir with input files for these projects.
-    inputDir=fullfile(curDir,'data','prague2016','cam');
   case 's'
     % Base dir with input files for these projects.
     inputDir=fullfile(curDir,'data','prague2016','sxb');
@@ -258,5 +257,45 @@ h=plotnetwork(result,E,...
               'axes',fig,'pause',doPause,'camsize',0.1); 
 
 if nargout>0
-    result=rr;
+    rr=result;
+end
+
+imName='';
+imNo=1;
+% Check if image files exist.
+if exist(s0.imDir,'dir')
+    % Handle both original-case and lower-case file names.
+    imNames={s0.imNames{imNo},lower(s0.imNames{imNo}),upper(s0.imNames{imNo})};    
+    imNames=fullfile(s0.imDir,imNames);
+    imExist=cellfun(@(x)exist(x,'file')==2,imNames);
+    if any(imExist)
+        imName=imNames{find(imExist,1,'first')};
+    end
+else
+    warning('Image directory %s does not exist.',s0.imDir);
+end
+
+if exist(imName,'file')
+    fprintf('Plotting measurements on image %d.\n',imNo);
+    imFig=tagfigure('image');
+    h=[h;imshow(imName,'parent',gca(imFig))];
+    pts=s0.markPts(:,s0.colPos(s0.vis(:,imNo),imNo));
+    ptsId=s0.OPid(s0.vis(:,imNo));
+    isCtrl=s0.isCtrl(s0.vis(:,imNo));
+    % Plot non-control points as red crosses.
+    if any(~isCtrl)
+        line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...
+             'linestyle','none','parent',gca(imFig));
+    end
+    % Plot control points as black-yellow triangles.
+    if any(isCtrl)
+        line(pts(1,isCtrl),pts(2,isCtrl),'marker','^','color','k',...
+             'markersize',2,'linestyle','none','parent',gca(imFig));
+        line(pts(1,isCtrl),pts(2,isCtrl),'marker','^','color','y',...
+             'markersize',6,'linestyle','none','parent',gca(imFig));
+    end
+    for i=1:length(ptsId)
+        text(pts(1,i),pts(2,i),int2str(ptsId(i)),'horizontal','center',...
+             'vertical','bottom','color','b','parent',gca(imFig));
+    end
 end
