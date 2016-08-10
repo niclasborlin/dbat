@@ -1,4 +1,4 @@
-function h=loadplotdemo(fName,alignCam,camSize)
+function [h,s,prob]=loadplotdemo(fName,alignCam,camSize)
 %LOADPLOTDEMO Load and plot PhotoModeler export file demo.
 %
 %   LOADPLOTDEMO(N), where N is the name of the PhotoModeler text
@@ -75,5 +75,47 @@ if alignCam==0
 else
     fprintf('Aligning with camera %d.\n',alignCam);
 end
-plotnetwork(s,'title',titleStr,alignCmd{:},'camsize',camSize,...
-            'axes',tagfigure(fName));
+hh=plotnetwork(s,'title',titleStr,alignCmd{:},'camsize',camSize,...
+              'axes',tagfigure(fName));
+
+imName='';
+imNo=1;
+% Check if image files exist.
+if exist(s.imDir,'dir')
+    % Handle both original-case and lower-case file names.
+    imNames={s.imNames{imNo},lower(s.imNames{imNo}),upper(s.imNames{imNo})};    
+    imNames=fullfile(s.imDir,imNames);
+    imExist=cellfun(@(x)exist(x,'file')==2,imNames);
+    if any(imExist)
+        imName=imNames{find(imExist,1,'first')};
+    end
+else
+    warning('Image directory %s does not exist.',s.imDir);
+end
+
+if exist(imName,'file')
+    fprintf('Plotting measurements on image %d.\n',imNo);
+    imFig=tagfigure('image');
+    hh=[hh;imshow(imName,'parent',gca(imFig))];
+    pts=s.markPts(:,s.colPos(s.vis(:,imNo),imNo));
+    ptsId=s.OPid(s.vis(:,imNo));
+    isCtrl=s.isCtrl(s.vis(:,imNo));
+    % Plot non-control points as red crosses.
+    if any(~isCtrl)
+        line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...
+             'linestyle','none','parent',gca(imFig));
+    end
+    % Plot control points as black-yellow triangles.
+    if any(isCtrl)
+        line(pts(1,isCtrl),pts(2,isCtrl),'marker','^','color','k',...
+             'markersize',2,'linestyle','none','parent',gca(imFig));
+        line(pts(1,isCtrl),pts(2,isCtrl),'marker','^','color','y',...
+             'markersize',6,'linestyle','none','parent',gca(imFig));
+    end
+    for i=1:length(ptsId)
+        text(pts(1,i),pts(2,i),int2str(ptsId(i)),'horizontal','center',...
+             'vertical','bottom','color','b','parent',gca(imFig));
+    end
+end
+
+if nargout>0, h=hh; end
