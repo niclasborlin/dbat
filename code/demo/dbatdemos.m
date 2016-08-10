@@ -29,3 +29,6 @@
 %    Data files:
 %        DBATHOME/code/demos/data/prague2016/cam (C1-C2)
 %        DBATHOME/code/demos/data/prague2016/sxb (S1-S5)
+
+% Run help if function is called.
+help(mfilename)
