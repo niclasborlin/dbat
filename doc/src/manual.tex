@@ -14,7 +14,8 @@
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.5.1}
+\newcommand{\dbatversion}{0.5.1.5}
+\newcommand{\dbatdate}{August 11, 2016}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -23,7 +24,7 @@
 \affil[1]{Department of Computing Science, Ume{\aa} University,
   Sweden, \texttt{niclas.borlin@cs.umu.se}}
 \affil[2]{ICube Laboratory UMR 7357, Photogrammetry and Geomatics Group, INSA Strasbourg, France, \texttt{pierre.grussenmeyer@insa-strasbourg.fr}}
-\date{\today}
+\date{\dbatdate}
 
 \maketitle
 
@@ -46,8 +47,9 @@ written in Matlab and is verified to work with Matlab version 8.6
 routines will be Octave-compatible. This has however not been tested
 yet.
 
-\subsection{Capabilities}
+\subsection{Contents}
 
+\subsubsection{Code}
 The toolbox currently includes routines for (Matlab function names within parentheses):
 \begin{itemize}
 \item File handling:
@@ -96,6 +98,22 @@ each function. More information may be found by typing \texttt{help
   <function name>} at the Matlab prompt, studying the source code of
 the demo functions, and reading the source code of each file directly.
 
+\subsubsection{Data}
+
+The toolbox contains several datasets, including datasets for the
+\citet{Borlin2016:External} paper.
+\begin{itemize}
+\item PhotoModeler export files or Photoscan projects.
+\item Images. To reduce the size of the distribution package, only low
+  resolution images are included in the package. The corresponding
+  high resolution images can be downloaded from
+  \url{http://www.cs.umu.se/~niclas/dbat_images}. Further instructions
+  are found in \texttt{README.txt} files in the respective image
+  directories.
+\end{itemize}
+The simplest way to access the data sets is through the demos,
+described in Section~\ref{sec:demos}.
+
 \subsection{Legal}
 
 The licence detail are described in the \texttt{LICENSE.txt} file
@@ -116,7 +134,9 @@ included in the distribution. In summary:
 \label{sec:install}
 \label{step:dbatInit}
 
+{\scriptsize
 \verbatiminput{../../INSTALL.txt}
+}
 
 \newpage
 
@@ -133,7 +153,7 @@ included in the distribution. In summary:
 \label{sec:loadroma}
 
 The \verb+loadplotdemo+ function load and plots the content of a
-PhotoModelere text export file. Two examples are included in the
+PhotoModeler text export file. Two examples are included in the
 toolbox: {\sc Roma} and {\sc Cam}.
 
 \paragraph{\sc Roma}
@@ -225,24 +245,22 @@ values than the rest.
 \begin{figure*}
   \centering
   \includegraphics[width=0.7\textwidth]{ill/ccamiotrace}
-  \caption{Evolution of network parameters during the iteration
-    sequence: IO parameters.}
+  \caption{Evolution of IO parameters during the iteration sequence.}
   \label{fig:IOtrace}
 \end{figure*}
 
 \begin{figure*}
   \centering
   \includegraphics[width=0.7\textwidth]{ill/ccameotrace}
-  \caption{Evolution of network parameters during the iteration
-    sequence: EO parameters.}
+  \caption{Evolution of EO parameters during the iteration sequence.}
   \label{fig:EOtrace}
 \end{figure*}
 
 \begin{figure*}
   \centering
   \includegraphics[width=0.7\textwidth]{ill/ccamoptrace}
-    \caption{Evolution of network parameters during the iteration
-    sequence: OP coordinates.}
+    \caption{Evolution of OP coordinates during the iteration
+      sequence.}
     \label{fig:OPtrace}
 \end{figure*}
 
