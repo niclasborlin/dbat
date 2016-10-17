@@ -1,8 +1,10 @@
 function s=loadpsz(psFile,unpackLocal,asciiToo)
 %LOADPSZ Load Photoscan .PSZ file.
 %
-%   S=LOADPSZ(FILE) loads the PhotoScan .PSZ file in FILE into a
-%   struct S. The struct S has fields
+%   S=LOADPSZ(FILE) loads the PhotoScan .PSZ file in FILE into a struct S.
+%   If the .PSZ file has multiple chunks, the first one is loaded.
+%
+%   The struct S has fields
 %   document  - recursive struct that correspond to the XML
 %               structure in FILE.
 %   transform - struct with fields
@@ -62,8 +64,14 @@ dirs=unpackpsz(psFile,unpackDir,asciiToo);
 fName=fullfile(unpackDir,'doc.xml');
 s=dbatxml2struct(fName);
 
+% Chunks can be rearranged in PS so just get the first one.
+if iscell(s.document.chunks.chunk)
+    chnk = s.document.chunks.chunk{1};
+else
+    chnk = s.document.chunks.chunk
+end
 % Extract local-to-global transformation.
-xform=s.document.chunks.chunk.transform;
+xform=chnk.transform;
 R=blkdiag(reshape(sscanf(xform.rotation.Text,'%g '),3,3)',1);
 T=[eye(3),sscanf(xform.translation.Text,'%g ');0,0,0,1];
 S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
@@ -78,7 +86,7 @@ s.transform.S=S;
 s.transform.L2G=L2G;
 s.transform.G2L=G2L;
 
-ptCloud=s.document.chunks.chunk.frames.frame.point_cloud;
+ptCloud=chnk.frames.frame.point_cloud;
 
 if unpackLocal
     s.raw.paths.points=fullfile(unpackDir,ptCloud.points.Attributes.path);
@@ -92,9 +100,9 @@ s.raw.points=points;
 s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
 
 % Ctrl points are in global coordinates.
-ctrlPts=nan(length(s.document.chunks.chunk.markers.marker),7);
+ctrlPts=nan(length(chnk.markers.marker),7);
 for i=1:size(ctrlPts,1);
-    m=s.document.chunks.chunk.markers.marker{i};
+    m=chnk.markers.marker{i};
     id=sscanf(m.Attributes.id,'%d');
     x=nan;
     y=nan;
@@ -200,7 +208,7 @@ s.raw.objMarkPts=objMarkPts;
 s.markPts.obj=objMarkPts;
 s.markPts.obj(:,2)=s.markPts.obj(:,2)+objIdShift;
 
-marker=s.document.chunks.chunk.frames.frame.markers.marker;
+marker=chnk.frames.frame.markers.marker;
 
 ids=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d'),marker);
 
@@ -225,7 +233,7 @@ s.markPts.ctrl(:,2)=s.markPts.ctrl(:,2)+ctrlIdShift;
 s.markPts.all=msort([s.markPts.ctrl;s.markPts.obj]);
 
 % Transformations are from "image" coordinate system to local.
-camera=s.document.chunks.chunk.cameras.camera;
+camera=chnk.cameras.camera;
 cameraIds=cellfun(@(x)sscanf(x.Attributes.id,'%d')+1,camera);
 xforms=nan(4,4,length(cameraIds));
 % Camera matrices from local coordinates.
@@ -258,7 +266,7 @@ for i=1:size(s.global.R,3)
     s.global.R(:,:,i)=R/det(R)^(1/3);
 end
 
-camera=s.document.chunks.chunk.frames.frame.cameras.camera;
+camera=chnk.frames.frame.cameras.camera;
 cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,camera);
 
 imNames=cell(1,length(camera));
@@ -267,7 +275,7 @@ for i=1:length(camera)
 end
 s.imNames=imNames;
 
-cal=s.document.chunks.chunk.sensors.sensor.calibration;
+cal=chnk.sensors.sensor.calibration;
 fx=sscanf(cal.fx.Text,'%g');
 fy=sscanf(cal.fy.Text,'%g');
 cx=sscanf(cal.cx.Text,'%g');
@@ -276,7 +284,7 @@ K=[fx,0,cx;0,fy,cy;0,0,1];
 
 s.K=K;
 
-sensor=s.document.chunks.chunk.sensors.sensor;
+sensor=chnk.sensors.sensor;
 imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
       sscanf(sensor.resolution.Attributes.height,'%d')];
 
