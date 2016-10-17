@@ -1,7 +1,7 @@
 function pts=loadpm2dtbl(fName)
 %LOADPM2DTBL Load 2D point table exported from Photomodeler.
 %
-%   PTS=LOADPM3DTBL(FNAME) loads 3D point data from the exported 3D
+%   PTS=LOADPM2DTBL(FNAME) loads 2D point data from the exported 2D
 %   point table in the file FNAME. The data is returned in a struct
 %   PTS with fields
 %       id   - N-array with id numbers.
@@ -11,9 +11,9 @@ function pts=loadpm2dtbl(fName)
 % 
 %       N is the number of loaded points.
 %
-%   The function assumes the file is a save of a Photomodeler point
-%   table or a SMART point table. Only lines starting with a
-%   numeric ID are processed.
+%   The function assumes the file is a save of a 2D Point table or a
+%   2D SmartPoint table. Only lines starting with a numeric ID are
+%   processed.
 
 % $Id$
 
@@ -30,7 +30,13 @@ pos=zeros(2,0);
 res=zeros(2,0);
 while ~feof(fid)
     % Read one line.
-    s=strtrim(fgetl(fid));
+    sRaw=fgetl(fid);
+    if ~ischar(sRaw)
+        % End of file.
+        break;
+    end
+    % Remove whitespace.
+    s=strtrim(sRaw);
     
     % Skip unless first non-white-space is a digit.
     if isempty(s) || ~any(s(1)==digits)

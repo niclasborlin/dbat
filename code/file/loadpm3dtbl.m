@@ -37,7 +37,13 @@ pos=zeros(3,0);
 std=zeros(3,0);
 while ~feof(fid)
     % Read one line.
-    s=strtrim(fgetl(fid));
+    sRaw=fgetl(fid);
+    if ~ischar(sRaw)
+        % End of file.
+        break;
+    end
+    % Remove whitespace.
+    s=strtrim(sRaw);
     
     % Skip unless first non-white-space is a digit.
     if isempty(s) || ~any(s(1)==digits)
