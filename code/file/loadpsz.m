@@ -38,6 +38,13 @@ function s=loadpsz(psFile,varargin)
 %               pixelSz      - 2-vector with pixel size [pw,ph] in mm,
 %               focal        - scalar with focal length in mm,
 %               pp           - 2-vector with principal point in mm.
+%   defStd    - struct with default standard deviations
+%               tiePoints   - std for automatically detected tie points [pix]
+%               projections - std for manually measured markers [pix]
+%               markers     - std for marker positions [m]
+%               camPos      - std for camera position [m]
+%               camAng      - std for camera angles [deg]
+%               scaleBars   - std for scale bar lengths [m]
 %
 %   By default, LOADPSZ unpacks the .PSZ file (a .ZIP archive) into a
 %   directory in TEMPDIR and deletes the unpacked files after loading.
@@ -96,6 +103,10 @@ else
         error('LOADPSZ: Chunk number out of bounds.');
     end        
 end
+
+% Extract default standard deviations.
+s.defStd=getdefstd(chnk);
+
 % Extract local-to-global transformation.
 if ~isfield(chnk,'transform')
     warning('No local-to-global transform. Using defaults.');
@@ -145,18 +156,6 @@ end
 
 ctrlPts=nan(length(markers),7);
 
-% Get default marker std.
-settingsProps=chnk.settings.property;
-if ~iscell(settingsProps), settingsProps={settingsProps}; end
-settingsPropNames=cellfun(@(x)x.Attributes.name,settingsProps,...
-                          'uniformoutput',false);
-accMarkersIx=find(strcmp(settingsPropNames,'accuracy_markers'));
-if length(accMarkersIx)==1
-    accMarkers=sscanf(settingsProps{accMarkersIx}.Attributes.value,'%g');
-else
-    accMarkers=nan;
-end
-
 for i=1:size(ctrlPts,1);
     m=markers{i};
     id=sscanf(m.Attributes.id,'%d');
@@ -164,9 +163,9 @@ for i=1:size(ctrlPts,1);
     y=nan;
     z=nan;
     % Use default marker std setting.
-    sx=accMarkers;
-    sy=accMarkers;
-    sz=accMarkers;
+    sx=s.defStd.markers;
+    sy=s.defStd.markers;
+    sz=s.defStd.markers;
     if isfield(m,'reference')
         if isfield(m.reference.Attributes,'x')
             x=sscanf(m.reference.Attributes.x,'%g');
@@ -231,24 +230,23 @@ end
 s.raw.tracks=tracks;
 
 % Image coordinates.
-projections=cell(size(ptCloud.projections));
-s.raw.paths.projections=cell(size(ptCloud.projections));
+projs=ptCloud.projections;
+is ~iscell(projs), projs={projs}; end
 
-cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1, ...
-                  ptCloud.projections);
+projections=cell(size(projs));
+s.raw.paths.projections=cell(size(projs));
+
+cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,projs);
 
 s.cameraIds=cameraIds;
 
 for i=1:length(projections)
     if unpackLocal
-        s.raw.paths.projections{i}=...
-            fullfile(unpackDir,ptCloud.projections{i}.Attributes.path);
+        s.raw.paths.projections{i}=fullfile(unpackDir,projs{i}.Attributes.path);
     else
         s.raw.paths.points='';
     end
-    [~,~,proj,~]=ply_read(fullfile(unpackDir, ...
-                                   ptCloud.projections{i}.Attributes.path),...
-                          'tri');
+    [~,~,proj,~]=ply_read(fullfile(unpackDir,projs{i}.Attributes.path),'tri');
     projections{i}=proj;
 end
 s.raw.projections=projections;
@@ -419,4 +417,42 @@ function Q=XformCams(P,M)
 Q=nan(size(P));
 for i=1:size(P,3)
     Q(:,:,i)=P(:,:,i)*inv(M);
+end
+
+
+function defStd=getdefstd(chnk)
+% Get default standard deviations from chunk settings.
+
+tiePoints=nan;   % std for automatically detected tie points [pix]
+projections=nan; % std for manually measured markers [pix]
+markers=nan;     % std for marker positions [m]
+camPos=nan;      % std for camera position [m]
+camAng=nan;      % std for camera angles [deg]
+scaleBars=nan;    % std for scale bar lengths [m]
+
+defStd=struct('tiePoints',tiePoints,'projections',projections,...
+              'markers',markers,'camPos',camPos,'camAng',camAng,...
+              'scaleBars',scaleBars);
+
+% Collect attribute names.
+settingsProps=chnk.settings.property;
+if ~iscell(settingsProps), settingsProps={settingsProps}; end
+settingsPropNames=cellfun(@(x)x.Attributes.name,settingsProps,...
+                          'uniformoutput',false);
+
+% Field conversion table.
+tbl={'tiepoints','tiePoints'
+     'cameras','camPos'
+     'cameras_ypr','camAng'
+     'markers','markers'
+     'scalebars','scaleBars',
+     'projections','projections'};
+
+for i=1:size(tbl,1)
+    fld=['accuracy_',tbl{i,1}];
+    ix=find(strcmp(settingsPropNames,fld));
+    if length(ix)==1
+        val=sscanf(settingsProps{ix}.Attributes.value,'%g');
+    end
+    defStd=setfield(defStd,tbl{i,2},val);
 end
