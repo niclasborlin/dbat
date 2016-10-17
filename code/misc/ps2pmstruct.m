@@ -48,8 +48,14 @@ ctrlPts=s.global.ctrlPts;
 % Copy global object points. Set posterior uncertainty to unknown.
 objPts=[ctrlPts;[s.global.objPts,nan(size(s.global.objPts,1),3)]];
 
-% Copy mark points. Set uncertainty to 1 pixel.
-markPts=[s.markPts.all,[0.1*ones(size(s.markPts.ctrl,1),2);1*ones(size(s.markPts.obj,1),2)]];
+% Copy mark points and set std.
+ctrlStd=s.defStd.projections;
+objStd=s.defStd.tiePoints;
+markPts=[s.markPts.ctrl,repmat(ctrlStd,size(s.markPts.ctrl,1),2);
+         s.markPts.obj,repmat(objStd,size(s.markPts.obj,1),2)];
+
+% Sort by image, then id.
+markPts=msort(markPts);
 
 % Convert ids to one-based.
 if ~isempty(ctrlPts)
