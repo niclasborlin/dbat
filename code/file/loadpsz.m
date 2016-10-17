@@ -231,7 +231,7 @@ s.raw.tracks=tracks;
 
 % Image coordinates.
 projs=ptCloud.projections;
-is ~iscell(projs), projs={projs}; end
+if ~iscell(projs), projs={projs}; end
 
 projections=cell(size(projs));
 s.raw.paths.projections=cell(size(projs));
