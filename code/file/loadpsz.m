@@ -60,7 +60,7 @@ end
 dirs=unpackpsz(psFile,unpackDir,asciiToo);
 % Load project data from the main xml file.
 fName=fullfile(unpackDir,'doc.xml');
-s=xml2struct(fName);
+s=dbatxml2struct(fName);
 
 % Extract local-to-global transformation.
 xform=s.document.chunks.chunk.transform;
