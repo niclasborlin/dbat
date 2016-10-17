@@ -1,8 +1,10 @@
-function s=loadpsz(psFile,unpackLocal,asciiToo)
+function s=loadpsz(psFile,varargin)
 %LOADPSZ Load Photoscan .PSZ file.
 %
 %   S=LOADPSZ(FILE) loads the PhotoScan .PSZ file in FILE into a struct S.
-%   If the .PSZ file has multiple chunks, the first one is loaded.
+%   If the .PSZ file has multiple chunks, chunk #1 is processed.
+%
+%   S=LOADPSZ(FILE,N) loads chunk N instead of chunk #1.
 %
 %   The struct S has fields
 %   document  - recursive struct that correspond to the XML
@@ -39,15 +41,31 @@ function s=loadpsz(psFile,unpackLocal,asciiToo)
 %
 %   By default, LOADPSZ unpacks the .PSZ file (a .ZIP archive) into a
 %   directory in TEMPDIR and deletes the unpacked files after loading.
-%   LOADPSZ(FILE,TRUE) instead unpacks the files into a FILE-local
+%   LOADPSZ(FILE,...,TRUE) instead unpacks the files into a FILE-local
 %   subdir called 'unpacked' and does not delete the unpacked files.
 %   Additionally, LOADPSZ(FILE,TRUE,TRUE) creates ascii versions of
 %   each .PLY file in a further 'ascii' subdir.
 %
 %See also: TEMPDIR, TEMPNAME, UNPACKPSZ.
 
-if nargin<2, unpackLocal=false; end
-if nargin<3, asciiToo=false; end
+% Default values.
+chunkNo=1;
+unpackLocal=false;
+asciiToo=false;
+
+% Deal with numeric chunk number.
+if ~isempty(varargin) && isnumeric(varargin{1})
+    chunkNo=varargin{1};
+    varargin(1)=[];
+end
+
+if length(varargin)>=1
+    unpackLocal=varargin{1};
+end
+
+if length(varargin)>=2
+    asciiToo=varargin{2};
+end
 
 psDir=fileparts(psFile);
 if unpackLocal
@@ -66,15 +84,31 @@ s=dbatxml2struct(fName);
 
 % Chunks can be rearranged in PS so just get the first one.
 if iscell(s.document.chunks.chunk)
-    chnk = s.document.chunks.chunk{1};
+    if length(s.document.chunks.chunk)>=chunkNo
+        chnk = s.document.chunks.chunk{chunkNo};
+    else
+        error('LOADPSZ: Chunk number out of bounds.');
+    end
 else
-    chnk = s.document.chunks.chunk
+    if chunkNo==1
+        chnk = s.document.chunks.chunk
+    else
+        error('LOADPSZ: Chunk number out of bounds.');
+    end        
 end
 % Extract local-to-global transformation.
-xform=chnk.transform;
-R=blkdiag(reshape(sscanf(xform.rotation.Text,'%g '),3,3)',1);
-T=[eye(3),sscanf(xform.translation.Text,'%g ');0,0,0,1];
-S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
+if ~isfield(chnk,'transform')
+    warning('No local-to-global transform. Using defaults.');
+    R=eye(4);
+    T=eye(4);
+    S=eye(4);
+else
+    % Use actual transform.
+    xform=chnk.transform;
+    R=blkdiag(reshape(sscanf(xform.rotation.Text,'%g '),3,3)',1);
+    T=[eye(3),sscanf(xform.translation.Text,'%g ');0,0,0,1];
+    S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
+end
 
 % Transformations between Local and global coordinate systems.
 L2G=T*S*R;
@@ -100,7 +134,12 @@ s.raw.points=points;
 s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
 
 % Ctrl points are in global coordinates.
-ctrlPts=nan(length(chnk.markers.marker),7);
+if isfield(chnk,'markers')
+    ctrlPts=nan(length(chnk.markers.marker),7);
+else
+    ctrlPts=nan(0,7);
+end
+
 for i=1:size(ctrlPts,1);
     m=chnk.markers.marker{i};
     id=sscanf(m.Attributes.id,'%d');
@@ -208,7 +247,11 @@ s.raw.objMarkPts=objMarkPts;
 s.markPts.obj=objMarkPts;
 s.markPts.obj(:,2)=s.markPts.obj(:,2)+objIdShift;
 
-marker=chnk.frames.frame.markers.marker;
+if isfield(chnk.frames.frame,'markers')
+    marker=chnk.frames.frame.markers.marker;
+else
+    marker=cell(1,0);
+end
 
 ids=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d'),marker);
 
@@ -228,7 +271,9 @@ for i=1:length(marker)
 end
 s.raw.ctrlMarkPts=msort(ctrlMarkPts);
 s.markPts.ctrl=s.raw.ctrlMarkPts;
-s.markPts.ctrl(:,2)=s.markPts.ctrl(:,2)+ctrlIdShift;
+if ~isempty(s.markPts.ctrl)
+    s.markPts.ctrl(:,2)=s.markPts.ctrl(:,2)+ctrlIdShift;
+end
 
 s.markPts.all=msort([s.markPts.ctrl;s.markPts.obj]);
 
@@ -288,9 +333,20 @@ sensor=chnk.sensors.sensor;
 imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
       sscanf(sensor.resolution.Attributes.height,'%d')];
 
-sensorProps=cellfun(@(x)x.Attributes.name,sensor.property,'uniformoutput',false);
-pixelWidth=sscanf(sensor.property{strcmp(sensorProps,'pixel_width')}.Attributes.value,'%g');
-pixelHeight=sscanf(sensor.property{strcmp(sensorProps,'pixel_height')}.Attributes.value,'%g');
+sProps=sensor.property;
+if ~iscell(sProps), sProps={sProps}; end
+
+sensorProps=cellfun(@(x)x.Attributes.name,sProps,'uniformoutput',false);
+pwProp=sProps(strcmp(sensorProps,'pixel_width'));
+phProp=sProps(strcmp(sensorProps,'pixel_height'));
+if isempty(pwProp) || isempty(phProp)
+    warning('No pixel size specified, using unity.');
+    pixelWidth=1;
+    pixelHeight=1;
+else
+    pixelWidth=sscanf(pwProp{1}.Attributes.value,'%g');
+    pixelHeight=sscanf(phProp{1}.Attributes.value,'%g');
+end
 
 s.camera.imSz=imSz;
 s.camera.pixelSz=[pixelWidth,pixelHeight];
