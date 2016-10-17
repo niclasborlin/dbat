@@ -135,20 +135,38 @@ s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
 
 % Ctrl points are in global coordinates.
 if isfield(chnk,'markers')
-    ctrlPts=nan(length(chnk.markers.marker),7);
+    markers=chnk.markers.marker;
+    if ~iscell(markers)
+        markers={markers};
+    end
 else
-    ctrlPts=nan(0,7);
+    markers=cell(0);
+end
+
+ctrlPts=nan(length(markers),7);
+
+% Get default marker std.
+settingsProps=chnk.settings.property;
+if ~iscell(settingsProps), settingsProps={settingsProps}; end
+settingsPropNames=cellfun(@(x)x.Attributes.name,settingsProps,...
+                          'uniformoutput',false);
+accMarkersIx=find(strcmp(settingsPropNames,'accuracy_markers'));
+if length(accMarkersIx)==1
+    accMarkers=sscanf(settingsProps{accMarkersIx}.Attributes.value,'%g');
+else
+    accMarkers=nan;
 end
 
 for i=1:size(ctrlPts,1);
-    m=chnk.markers.marker{i};
+    m=markers{i};
     id=sscanf(m.Attributes.id,'%d');
     x=nan;
     y=nan;
     z=nan;
-    sx=nan;
-    sy=nan;
-    sz=nan;
+    % Use default marker std setting.
+    sx=accMarkers;
+    sy=accMarkers;
+    sz=accMarkers;
     if isfield(m,'reference')
         if isfield(m.reference.Attributes,'x')
             x=sscanf(m.reference.Attributes.x,'%g');
@@ -249,6 +267,9 @@ s.markPts.obj(:,2)=s.markPts.obj(:,2)+objIdShift;
 
 if isfield(chnk.frames.frame,'markers')
     marker=chnk.frames.frame.markers.marker;
+    if ~iscell(marker)
+        marker={marker};
+    end
 else
     marker=cell(1,0);
 end
@@ -279,6 +300,9 @@ s.markPts.all=msort([s.markPts.ctrl;s.markPts.obj]);
 
 % Transformations are from "image" coordinate system to local.
 camera=chnk.cameras.camera;
+if ~iscell(camera)
+    camera={camera};
+end
 cameraIds=cellfun(@(x)sscanf(x.Attributes.id,'%d')+1,camera);
 xforms=nan(4,4,length(cameraIds));
 % Camera matrices from local coordinates.
@@ -312,6 +336,9 @@ for i=1:size(s.global.R,3)
 end
 
 camera=chnk.frames.frame.cameras.camera;
+if ~iscell(camera)
+    camera={camera};
+end
 cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,camera);
 
 imNames=cell(1,length(camera));
