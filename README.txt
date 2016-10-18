@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.5.1.5 for Matlab (R), below called the Toolbox.
+# v0.5.1.6 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -28,9 +28,10 @@
 # ==== Download high-resolution images ====
 #
 # To reduce the size of the repository and hence download times, only
-# low-resolution images are included in the repository. High-resolution images
-# can be downloaded from http://www.cs.umu.se/~niclas/dbat_images/. For further
-# details, consult the README.txt files in the respective image directories.
+# low-resolution images are included in the repository. High-resolution 
+# images can be downloaded from http://www.cs.umu.se/~niclas/dbat_images/.
+# For further details, consult the README.txt files in the respective
+# image directories.
 #
 #
 # == NEWS ==
@@ -46,7 +47,7 @@
 #
 # == LICENSE ==
 #
-# Copyright (C) 2013-16, Niclas Börlin, niclas.borlin@cs.umu.se (*),
+# Copyright (C) 2013-2016, Niclas Börlin, niclas.borlin@cs.umu.se (*),
 # and Pierre Grussenmeyer, pierre.grussenmeyer@insa-strasbourg.fr (**).
 # All rights reserved.
 #
@@ -100,6 +101,16 @@
 # Börlin and Grussenmeyer (2016). "External Verification of the Bundle
 #     Adjustment in Photogrammetric Software using the Damped Bundle
 #     Adjustment Toolbox", ISPRS Archives XLI-B5, p. 7-14.
+#
+#
+# == CONTRIBUTIONS ==
+#
+# The toolbox includes contributions from the MathWorks File Exchange
+# and the following people:
+# * Arnaud Durand (user arnauddurand on github.com).
+# * Jan Hieronymus, TU Berlin.
+# * Jean-Francois Hullo, EDF.
+# * Kostas Naskou, University of Nottingham.
 #
 #
 # == TRADEMARKS ==

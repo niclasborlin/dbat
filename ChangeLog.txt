@@ -1,5 +1,21 @@
 Summary changelog file for release.
 
+Release 0.5.1.6, Oct 18, 2016.
+- Various bugfixes.
+- Fixed code issues in xchg dir due to Windows handling of links.
+- Fixed PhotoModeler table loading bug due to end-of-file issue in Windows.
+- Fixed several PhotoScan loading issues.
+  - Can now load any chunk of multi-chunk file.
+  - Improved loading tolerance (i.e. does not crash) towards single/multiple 
+    instances of projections, sensors, etc.
+  - Now uses PhotoScan default values for control point std and mark
+    point std.
+  - Now handles object/mark point #0 by shifting all IDs with 1.
+- Fixed a weighting issue for PhotoScan projects. Previously, the high
+  weights (low std) that should be associated with the control point
+  image measurements in all images were given to the first points in
+  the first image.
+
 Release 0.5.1.5, Aug 11, 2016.
 - Added lo-res images for the ROMA, CAM, SXB data sets to the repo with 
   instructions on how to download  hi-res images.

@@ -14,8 +14,8 @@
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.5.1.5}
-\newcommand{\dbatdate}{August 11, 2016}
+\newcommand{\dbatversion}{0.5.1.6}
+\newcommand{\dbatdate}{October 18, 2016}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -28,6 +28,14 @@
 
 \maketitle
 
+\vfill
+With contributions from
+\begin{itemize}
+\item Arnaud Durand (user \texttt{arnauddurand} on \texttt{github.com}).
+\item Jan Hieronymus, TU Berlin.
+\item Jean-Fran{\c{c}}ois Hullo, EDF.
+\item Kostas Naskou, University of Nottingham.
+\end{itemize}
 \newpage
 
 \tableofcontents
@@ -363,6 +371,11 @@ compare the result of the bundle adjustment procedure in DBAT and the
 results of PhotoModeler \citep{Borlin2016:External}. Similarily, the
 \texttt{prague2016\_ps} function displays the results of a comparison
 between DBAT and PhotoScan.
+
+The v0.5.1.6 release includes a fix to a bug the distributed the image
+observation weights incorrectly. The result is slightly different
+estimation results than in \citet{Borlin2016:External}. However, the
+conclusions remain valid.
 
 \subsection{Using your own data}
 
