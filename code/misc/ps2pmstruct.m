@@ -78,44 +78,47 @@ EOstd=nan(size(EO));
     
 pmReport=struct('EO',EO,'EOstd',EOstd);
 
+% Create tables of 3D and 2D info.
 id3d=zeros(1,0);
-if ~isempty(ctrlPts)
-    id3d=[id3d,ctrlPts(:,1)'];
+if ~isempty(s.global.ctrlPts)
+    id3d=[id3d,s.global.ctrlPts(:,1)'];
 end
-if ~isempty(objPts)
-    id3d=[id3d,objPts(:,1)'];
+if ~isempty(s.global.objPts)
+    id3d=[id3d,s.global.objPts(:,1)'];
 end
 name=repmat({''},size(id3d));
 pos3d=zeros(3,0);
-if size(ctrlPts,2)>=4
-    pos3d=[pos3d,ctrlPts(:,2:4)'];
+if size(s.global.ctrlPts,2)>=4
+    pos3d=[pos3d,s.global.ctrlPts(:,2:4)'];
 end
-if size(objPts,2)>=4
-    pos3d=[pos3d,objPts(:,2:4)'];
+if size(s.global.objPts,2)>=4
+    pos3d=[pos3d,s.global.objPts(:,2:4)'];
 end
 std3d=zeros(3,0);
-if size(ctrlPts,2)>=7
-    std3d=[std3d,ctrlPts(:,5:7)'];
+if size(s.global.ctrlPts,2)>=7
+    std3d=[std3d,s.global.ctrlPts(:,5:7)'];
 else
-    std3d=[std3d,nan(size(ctrlPts,1),3)'];
+    std3d=[std3d,nan(size(s.global.ctrlPts,1),3)'];
 end
-if size(objPts,2)>=7
-    std3d=[std3d,objPts(:,5:7)'];
+if size(s.global.objPts,2)>=7
+    std3d=[std3d,s.global.objPts(:,5:7)'];
 else
-    std3d=[std3d,nan(size(objPts,1),3)'];
+    std3d=[std3d,nan(size(s.global.objPts,1),3)'];
 end
+% Convert to one-based.
+id3d=id3d+1;
 % Create a 'raw' visibility map, i.e. for all object points.
-rawVis=sparse(markPts(:,2),markPts(:,1)+1,1);
+rawVis=sparse(s.markPts.all(:,2)+1,s.markPts.all(:,1)+1,1);
 % Keep only the object points that were actually computed.
 vis=rawVis(id3d,:);
 pts3d=struct('id',id3d,'name',{name},'vis',vis,'pos',pos3d,'std',std3d);
 
 % Only keep measurements that correspond to 3D points.
-keep=ismember(markPts(:,2),pts3d.id);
+keep=ismember(s.markPts.all(:,2)+1,pts3d.id);
 
-id2d=markPts(keep,2)';
-imNo=markPts(keep,1)'+1;
-pos2d=markPts(keep,3:4)';
+id2d=s.markPts.all(keep,2)'+1;
+imNo=s.markPts.all(keep,1)'+1;
+pos2d=s.markPts.all(keep,3:4)';
 res2d=nan(size(pos2d));
 
 pts2d=struct('id',id2d,'imNo',imNo,'pos',pos2d,'res',res2d);
