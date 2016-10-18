@@ -98,7 +98,7 @@ if iscell(s.document.chunks.chunk)
     end
 else
     if chunkNo==1
-        chnk = s.document.chunks.chunk
+        chnk = s.document.chunks.chunk;
     else
         error('LOADPSZ: Chunk number out of bounds.');
     end        
