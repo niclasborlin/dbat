@@ -107,7 +107,7 @@
 #
 # The toolbox includes contributions from the MathWorks File Exchange
 # and the following people:
-# * Arnaud Durand (user arnauddurand on github.com).
+# * Arnaud Durand, ICube, INSA Strasbourg.
 # * Jan Hieronymus, TU Berlin.
 # * Jean-Francois Hullo, EDF.
 # * Kostas Naskou, University of Nottingham.
