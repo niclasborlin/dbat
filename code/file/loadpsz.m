@@ -131,18 +131,31 @@ s.transform.S=S;
 s.transform.L2G=L2G;
 s.transform.G2L=G2L;
 
-ptCloud=chnk.frames.frame.point_cloud;
+if isfield(chnk.frames.frame,'point_cloud')
+    ptCloud=chnk.frames.frame.point_cloud;
+else
+    ptCloud=[];
+end
 
-if unpackLocal
+if unpackLocal && ~isempty(ptCloud)
     s.raw.paths.points=fullfile(unpackDir,ptCloud.points.Attributes.path);
 else
     s.raw.paths.points='';
 end
 
 % Object points are in local coordinates.
-[~,~,points,~]=ply_read(fullfile(unpackDir,ptCloud.points.Attributes.path),'tri');
+if ~isempty(ptCloud) && ~isempty(ptCloud.points.Attributes.path)
+    [~,~,points,~]=ply_read(fullfile(unpackDir,ptCloud.points.Attributes.path),'tri');
+else
+    points=[];
+end
+   
 s.raw.points=points;
-s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
+if ~isempty(points)
+    s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
+else
+    s.raw.objPts=zeros(0,4);
+end
 
 % Ctrl points are in global coordinates.
 if isfield(chnk,'markers')
@@ -220,17 +233,25 @@ s.local.objPts=s.raw.objPts;
 s.local.objPts(:,1)=s.local.objPts(:,1)+objIdShift;
 s.global.objPts=XformPtsi(s.local.objPts,L2G);
 
-if unpackLocal
+if unpackLocal && ~isempty(ptCloud) && ~isempty(ptCloud.tracks.Attributes.path)
     s.raw.paths.tracks=fullfile(unpackDir,ptCloud.tracks.Attributes.path);
 else
     s.raw.paths.tracks='';
 end
 
-[~,~,tracks,~]=ply_read(fullfile(unpackDir,ptCloud.tracks.Attributes.path),'tri');
+if ~isempty(ptCloud) && ~isempty(ptCloud.tracks.Attributes.path)
+    [~,~,tracks,~]=ply_read(fullfile(unpackDir,ptCloud.tracks.Attributes.path),'tri');
+else
+    tracks=[];
+end
 s.raw.tracks=tracks;
 
 % Image coordinates.
-projs=ptCloud.projections;
+if ~isempty(ptCloud)
+    projs=ptCloud.projections;
+else
+    projs={};
+end
 if ~iscell(projs), projs={projs}; end
 
 projections=cell(size(projs));
@@ -251,7 +272,7 @@ for i=1:length(projections)
 end
 s.raw.projections=projections;
 
-objMarkPts=[];
+objMarkPts=zeros(0,4);
 
 for i=1:length(projections)
     ni=length(projections{i}.vertex.id);
