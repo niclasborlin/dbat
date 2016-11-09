@@ -206,8 +206,8 @@ for i=1:size(ctrlPts,1);
         if isfield(m.reference.Attributes,'sz')
             sz=sscanf(m.reference.Attributes.sz,'%g');
         end    
-        ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
     end
+    ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
 end
 s.raw.ctrlPts=ctrlPts;
 
