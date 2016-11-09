@@ -111,9 +111,21 @@ id3d=id3d+1;
 rawVis=sparse(s.markPts.all(:,2)+1,s.markPts.all(:,1)+1,1);
 % Keep only the object points that were actually computed.
 vis=rawVis(id3d,:);
-pts3d=struct('id',id3d,'name',{name},'vis',vis,'pos',pos3d,'std',std3d);
 
-% Only keep measurements that correspond to 3D points.
+% Sort 3d pts by id.
+[~,i]=sort(id3d);
+id3d=id3d(i);
+name=name(i);
+vis=vis(i,:);
+pos3d=pos3d(:,i);
+std3d=std3d(:,i);
+pts3d=struct('id',id3d,'name',{name},'vis',logical(vis),'pos',pos3d,'std',std3d);
+
+% Sort 2d pts by image first, then id.
+[~,i]=sortrows(s.markPts.all,[1,2]);
+s.markPts.all=s.markPts.all(i,:);
+
+% Only keep 2d measurements that corresponds to 3D points.
 keep=ismember(s.markPts.all(:,2)+1,pts3d.id);
 
 id2d=s.markPts.all(keep,2)'+1;
