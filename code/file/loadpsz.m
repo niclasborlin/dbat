@@ -295,7 +295,7 @@ end
 
 ids=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d'),marker);
 
-ctrlMarkPts=[];
+ctrlMarkPts=zeros(0,4);
 
 for i=1:length(marker)
     if isfield(marker{i},'location')
