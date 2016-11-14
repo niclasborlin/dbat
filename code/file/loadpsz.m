@@ -89,7 +89,7 @@ dirs=unpackpsz(psFile,unpackDir,asciiToo);
 fName=fullfile(unpackDir,'doc.xml');
 s=dbatxml2struct(fName);
 
-% Chunks can be rearranged in PS so just get the first one.
+% Get the requested chunk.
 if iscell(s.document.chunks.chunk)
     if length(s.document.chunks.chunk)>=chunkNo
         chnk = s.document.chunks.chunk{chunkNo};
@@ -331,7 +331,12 @@ CC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
     T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
     xforms(:,:,i)=T;
-    P(:,:,i)=eye(3,4)*inv(T*diag([1,-1,-1,1]));
+    if 0
+        % TODO: Check this "mirroring"...
+        P(:,:,i)=eye(3,4)*inv(T*diag([1,-1,-1,1]));
+    else
+        P(:,:,i)=eye(3,4)*inv(T);
+    end
     CC(:,i)=euclidean(null(P(:,:,i)));
 end
 s.raw.transforms=xforms;
@@ -351,6 +356,10 @@ s.global.CC=XformPts(s.local.CC,L2G);
 s.global.R=nan(3,3,size(s.global.P,3));
 for i=1:size(s.global.R,3)
     R=s.global.P(:,1:3,i);
+    if det(R)<0
+        warning('Loaded rotation matrix has det(R)')
+        disp(det(R))
+    end
     s.global.R(:,:,i)=R/det(R)^(1/3);
 end
 
