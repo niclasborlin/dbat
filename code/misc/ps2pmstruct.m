@@ -133,4 +133,4 @@ imNo=s.markPts.all(keep,1)'+1;
 pos2d=s.markPts.all(keep,3:4)';
 res2d=nan(size(pos2d));
 
-pts2d=struct('id',id2d,'imNo',imNo,'pos',pos2d,'res',res2d);
+pts2d=struct('id',id2d,'imNo',imNo,'pos',pos2d,'res',res2d,'kept',keep);
