@@ -82,7 +82,7 @@ s2=forwintersect(s1,'all',true);
 
 s=s2;
 h=plotnetwork(s,'title','Initial network (EO, OP computed from CP, IO, MP)',...
-              'axes',tagfigure(mfilename),'camsize',0.1);
+              'axes',tagfigure(mfilename),'camsize',100);
 
 
 % Set up to run the bundle.
@@ -254,7 +254,7 @@ fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         E.damping.name,double(fig));
 h=plotnetwork(result,E,...
               'title',['Damping: ',E.damping.name,'. Iteration %d of %d'], ...
-              'axes',fig,'pause',doPause,'camsize',0.1); 
+              'axes',fig,'pause',doPause,'camsize',100); 
 
 if nargout>0
     rr=result;
