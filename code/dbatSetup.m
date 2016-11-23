@@ -1,4 +1,7 @@
-% $Id$
+function dbatSetup(dev)
+%DBATSETUP Setup paths, etc., for the Damped Bundle Adjustment Toolbox.
+
+if nargin<1, dev=false; end
 
 % Get dir of executing (i.e. this!) file.
 baseDir=fileparts(mfilename('fullpath'));
@@ -18,6 +21,4 @@ addpath(fullfile(baseDir,'xchg','struct2xml'),'-end')
 addpath(fullfile(baseDir,'xchg','xml2struct'),'-end')
 addpath(baseDir,'-end')
 
-fprintf('You can now access DBAT v%s from everywhere.\n',dbatversion)
-
-clear baseDir
+fprintf('You can now access DBAT v%s from everywhere.\n',dbatversion(dev))
