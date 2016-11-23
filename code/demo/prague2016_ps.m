@@ -1,5 +1,5 @@
 function [rr,s0,prob,psz]=prague2016_ps(l,doPause)
-%PRAGUE2016_PS Run PhotScan demo in Prague'16 paper.
+%PRAGUE2016_PS Run PhotoScan demo in Prague'16 paper.
 %
 %   PRAGUE2016_PS(LABEL), where LABEL is 'S5', runs the PhotScan
 %   experiment of [1].
