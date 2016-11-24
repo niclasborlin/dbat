@@ -129,7 +129,8 @@ end
 
 % Transformations between Local and global coordinate systems.
 L2G=T*S*R;
-G2L=R'*inv(S)*inv(T);
+% Avoid explicit inverse for numerical reasons.
+G2L=(R'/S)/T; % = R'*inv(S)*inv(T)
 
 s.transform.R=R;
 s.transform.T=T;
@@ -285,14 +286,20 @@ for i=1:length(projections)
 end
 s.raw.projections=projections;
 
-objMarkPts=zeros(0,4);
+% Collect all measured 2d points.
+nPts=cellfun(@(x)length(x.vertex.id),projections);
+ptIx=cumsum([0,nPts]);
+objMarkPts=nan(sum(nPts),4);
 
 for i=1:length(projections)
-    ni=length(projections{i}.vertex.id);
-    objMarkPts=[objMarkPts;repmat(i-1,ni,1),projections{i}.vertex.id,...
-             projections{i}.vertex.x,projections{i}.vertex.y];
+    % Index for where to put the points.
+    ni=nPts(i);
+    ix=ptIx(i)+1:ptIx(i+1);
+    objMarkPts(ix,:)=[repmat(i-1,ni,1),projections{i}.vertex.id,...
+                      projections{i}.vertex.x,projections{i}.vertex.y];
 end
 objMarkPts=msort(objMarkPts);
+
 s.raw.objMarkPts=objMarkPts;
 s.markPts.obj=objMarkPts;
 s.markPts.obj(:,2)=s.markPts.obj(:,2)+objIdShift;
@@ -319,7 +326,7 @@ for i=1:length(marker)
         camIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),location);
         x=cellfun(@(m)sscanf(m.Attributes.x,'%g'),location);
         y=cellfun(@(m)sscanf(m.Attributes.y,'%g'),location);
-        ctrlMarkPts=[ctrlMarkPts;[camIds;repmat(ids(i),size(camIds));x;y]'];
+        ctrlMarkPts=[ctrlMarkPts;[camIds;repmat(ids(i),size(camIds));x;y]']; %#ok<AGROW>
     end
 end
 s.raw.ctrlMarkPts=msort(ctrlMarkPts);
@@ -348,9 +355,9 @@ for i=1:length(cameraIds)
     xforms(:,:,i)=T;
     if 1
         % TODO: Check this "mirroring"...
-        P(:,:,i)=eye(3,4)*inv(T*diag([1,-1,-1,1]));
+        P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
     else
-        P(:,:,i)=eye(3,4)*inv(T);
+        P(:,:,i)=eye(3,4)/T; % *inv(T)
     end
     CC(:,i)=euclidean(null(P(:,:,i)));
 end
@@ -382,6 +389,7 @@ camera=chnk.frames.frame.cameras.camera;
 if ~iscell(camera)
     camera={camera};
 end
+% TODO: Fix to account for camera Ids.
 cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,camera);
 
 imNames=cell(1,length(camera));
@@ -390,11 +398,34 @@ for i=1:length(camera)
 end
 s.imNames=imNames;
 
+% Collect calibrated camera parameters.
 cal=chnk.sensors.sensor.calibration;
+isAdjusted=strcmp(cal.Attributes.class,'adjusted');
 fx=sscanf(cal.fx.Text,'%g');
 fy=sscanf(cal.fy.Text,'%g');
 cx=sscanf(cal.cx.Text,'%g');
 cy=sscanf(cal.cy.Text,'%g');
+% Dynamic for lens distortion parameters.
+fn=fieldnames(cal);
+% Get all 'kN' fields.
+kFields=regexp(fn,'^k(\d+)$','tokens');
+i=find(~cellfun(@isempty,kFields));
+k=zeros(1,0);
+for j=1:length(i)
+    % Get index.
+    n=sscanf(kFields{i(j)}{1}{1},'%d');
+    k(n)=sscanf(cal.(fn{i(j)}).Text,'%g');
+end
+% Get all 'pN' fields.
+pFields=regexp(fn,'^p(\d+)$','tokens');
+i=find(~cellfun(@isempty,pFields));
+p=zeros(1,0);
+for j=1:length(i)
+    % Get index.
+    n=sscanf(pFields{i(j)}{1}{1},'%d');
+    p(n)=sscanf(cal.(fn{i(j)}).Text,'%g');
+end
+
 K=[fx,0,cx;0,fy,cy;0,0,1];
 
 s.K=K;
@@ -406,6 +437,7 @@ imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
 sProps=sensor.property;
 if ~iscell(sProps), sProps={sProps}; end
 
+% Specified sensor pixel height/width.
 sensorProps=cellfun(@(x)x.Attributes.name,sProps,'uniformoutput',false);
 pwProp=sProps(strcmp(sensorProps,'pixel_width'));
 phProp=sProps(strcmp(sensorProps,'pixel_height'));
@@ -417,12 +449,29 @@ else
     pixelWidth=sscanf(pwProp{1}.Attributes.value,'%g');
     pixelHeight=sscanf(phProp{1}.Attributes.value,'%g');
 end
+% Specified sensor focal length.
+fProp=sProps(strcmp(sensorProps,'focal_length'));
+nominalFocal=NaN;
+if ~isempty(fProp)
+    nominalFocal=sscanf(fProp{1}.Attributes.value,'%g');
+end
+% Is the sensor fixed?
+fProp=sProps(strcmp(sensorProps,'fixed'));
+sensorFixed=true;
+if ~isempty(fProp)
+    sensorFixed=strcmp(fProp{1}.Attributes.value,'true');
+end
 
 s.camera.imSz=imSz;
 s.camera.pixelSz=[pixelWidth,pixelHeight];
 s.camera.sensorFormat=s.camera.imSz.*s.camera.pixelSz;
 s.camera.focal=fx*s.camera.pixelSz(1);
 s.camera.pp=[cx,cy].*s.camera.pixelSz;
+s.camera.k=k; % TODO: Fix conversion to mm.
+s.camera.p=p; % TODO: Fix conversion to mm.
+s.camera.isFixed=sensorFixed;
+s.camera.isAdjusted=isAdjusted;
+s.camera.nominalFocal=nominalFocal;
 
 % Delete unpacked files unless they should be kept.
 if ~unpackLocal
@@ -462,7 +511,7 @@ function Q=XformCams(P,M)
 
 Q=nan(size(P));
 for i=1:size(P,3)
-    Q(:,:,i)=P(:,:,i)*inv(M);
+    Q(:,:,i)=P(:,:,i)/M; % =*inv(M)
 end
 
 
@@ -491,7 +540,7 @@ tbl={'tiepoints','tiePoints'
      'cameras','camPos'
      'cameras_ypr','camAng'
      'markers','markers'
-     'scalebars','scaleBars',
+     'scalebars','scaleBars'
      'projections','projections'};
 
 for i=1:size(tbl,1)
@@ -500,7 +549,7 @@ for i=1:size(tbl,1)
     if length(ix)==1
         val=sscanf(settingsProps{ix}.Attributes.value,'%g');
     end
-    defStd=setfield(defStd,tbl{i,2},val);
+    defStd.(tbl{i,2})=val;
 end
 
 
@@ -521,7 +570,7 @@ if ischar(varargin{1})
         DELAY=1;
         UPDATESTEP=1;
         MSG='';
-        if length(varargin)>0
+        if length(varargin)>0 %#ok<ISMT>
             DELAY=varargin{1};
         end
         if length(varargin)>1
