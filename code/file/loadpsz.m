@@ -74,6 +74,9 @@ if length(varargin)>=2
     asciiToo=varargin{2};
 end
 
+% Initialize waitbar to delay for 1s and update every 1s.
+DelayedWaitBar('init',1,1,'Load Photoscan project file...');
+
 psDir=fileparts(psFile);
 if unpackLocal
     % Unpack to 'unpacked' subdir.
@@ -85,9 +88,12 @@ end
 
 % Unpack the .psz file.
 dirs=unpackpsz(psFile,unpackDir,asciiToo);
+DelayedWaitBar(0.25);
+
 % Load project data from the main xml file.
 fName=fullfile(unpackDir,'doc.xml');
 s=dbatxml2struct(fName);
+DelayedWaitBar(0.3);
 
 % Get the requested chunk.
 if iscell(s.document.chunks.chunk)
@@ -150,6 +156,8 @@ else
     points=[];
 end
    
+DelayedWaitBar(0.35);
+
 s.raw.points=points;
 if ~isempty(points)
     s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
@@ -211,6 +219,8 @@ for i=1:size(ctrlPts,1);
 end
 s.raw.ctrlPts=ctrlPts;
 
+DelayedWaitBar(0.4);
+
 % Make local/global ctrl pt ids 1-based.
 if isempty(ctrlPts)
     ctrlIdShift=0;
@@ -246,6 +256,8 @@ else
 end
 s.raw.tracks=tracks;
 
+DelayedWaitBar(0.45);
+
 % Image coordinates.
 if ~isempty(ptCloud)
     projs=ptCloud.projections;
@@ -269,6 +281,7 @@ for i=1:length(projections)
     end
     [~,~,proj,~]=ply_read(fullfile(unpackDir,projs{i}.Attributes.path),'tri');
     projections{i}=proj;
+    DelayedWaitBar(0.45+i/length(projections)*0.5);
 end
 s.raw.projections=projections;
 
@@ -317,6 +330,8 @@ end
 
 s.markPts.all=msort([s.markPts.ctrl;s.markPts.obj]);
 
+DelayedWaitBar(1);
+
 % Transformations are from "image" coordinate system to local.
 camera=chnk.cameras.camera;
 if ~iscell(camera)
@@ -331,7 +346,7 @@ CC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
     T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
     xforms(:,:,i)=T;
-    if 0
+    if 1
         % TODO: Check this "mirroring"...
         P(:,:,i)=eye(3,4)*inv(T*diag([1,-1,-1,1]));
     else
@@ -417,6 +432,7 @@ if ~unpackLocal
     end
 end
 
+DelayedWaitBar('close');
 
 function q=XformPts(p,M,forceHomogeneous)
 %Apply 4-by-4 point transformation matrix M to 3D euclidean or
@@ -485,4 +501,60 @@ for i=1:size(tbl,1)
         val=sscanf(settingsProps{ix}.Attributes.value,'%g');
     end
     defStd=setfield(defStd,tbl{i,2},val);
+end
+
+
+function DelayedWaitBar(varargin)
+% Use:
+% DELAYEDWAITBAR('init',delay,update,msg)
+% Loop:
+%    DELAYEDWAITBAR(val)
+% DELAYEDWAITBAR('close')
+
+persistent START LAPTIME H DELAY UPDATESTEP MSG
+
+if ischar(varargin{1})
+    switch varargin{1}
+      case 'init'
+        varargin(1)=[];
+        % Defaults.
+        DELAY=1;
+        UPDATESTEP=1;
+        MSG='';
+        if length(varargin)>0
+            DELAY=varargin{1};
+        end
+        if length(varargin)>1
+            UPDATESTEP=varargin{2};
+        end
+        if length(varargin)>2
+            MSG=varargin{3};
+        end
+        START=clock;
+        LAPTIME=START;
+        H=[];
+      case 'close'
+        % Guard against user close.
+        if ishandle(H)
+            close(H)
+        end
+      otherwise
+        error('Bad action');
+    end
+else
+    % Numeric action, update or initialize bar.
+    val=varargin{1};
+    
+    % Initialize if execution has taken more than DELAY seconds and
+    % this is not the last update.
+    if isempty(H) && etime(clock,START)>DELAY && val<1
+        H=waitbar(val,MSG);
+        LAPTIME=clock;
+    elseif etime(clock,LAPTIME)>UPDATESTEP
+        % Update dialog every UPDATESTEP s.
+        if ishandle(H) % Guard against window close.
+            waitbar(val,H);
+        end
+        LAPTIME=clock;
+    end
 end
