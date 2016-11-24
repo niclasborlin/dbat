@@ -106,12 +106,15 @@ if plotIO && any(s.estIO(:))
         ixp=ixPos(4:6,ci);
         K(s.estIO(4:6,ci),:)=e.trace(ixp(s.estIO(4:6,ci)),:);
         % Scale K values.
-        v=diag(100.^(0:size(K,1)-1))*K;
+        avgScale=floor(median(log10(abs(K)),2));
+        % Use scaling of 1 for all-zero values.
+        avgScale(avgScale==-inf)=0;
+        v=repmat(10.^(-avgScale),1,size(K,2)).*K;
         for i=1:size(v,1)
-            if i==1
+            if avgScale(i)==0
                 prefix='';
             else
-                prefix=sprintf('10^%d',(i-1)*2);
+                prefix=sprintf('10^{%d}',-avgScale(i));
             end
             if size(s.IO,2)==1
                 color=cc(i,:);
@@ -140,16 +143,25 @@ if plotIO && any(s.estIO(:))
         % Update with estimated values.
         ixp=ixPos(7:8,ci);
         P(s.estIO(7:8,ci),:)=e.trace(ixp(s.estIO(7:8,ci)),:);
+        avgScale=floor(median(log10(abs(P)),2));
+        % Use scaling of 1 for all-zero values.
+        avgScale(avgScale==-inf)=0;
+        v=repmat(10.^(-avgScale),1,size(P,2)).*P;
         for i=1:size(P,1)
+            if avgScale(i)==0
+                prefix='';
+            else
+                prefix=sprintf('10^{%d}',-avgScale(i));
+            end
             if size(s.IO,2)==1
                 color=cc(i,:);
-                lgs{end+1}=sprintf('P%d',i);
+                lgs{end+1}=sprintf('%sP%d',prefix,i);
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('P%d-%d',i,ci);
+                lgs{end+1}=sprintf('%sP%d-%d',prefix,i,ci);
             end
 
-            line(0:size(e.trace,2)-1,P(i,:),'parent',ax,'linestyle',ls{i},...
+            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
                  'marker','x','color',color);
         end
         legend(lgs,'location','NorthEastOutside');
