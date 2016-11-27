@@ -13,13 +13,18 @@ function s=loadpsz(psFile,varargin)
 %               R, T, S - 4x4 matrices with the individual rotation,
 %                         translation, and scaling transformations,
 %                         respectively, 
-%               L2G     - 4x4 matrix with the composite local-to-global
-%                         transformation,
 %               G2L     - 4x4 matrix with the composite global-to-local
 %                         transformation.
+%               L2G     - 4x4 matrix with the composite local-to-global
+%                         transformation,
+%               G2SL    - 4x4 matrix with the composite global-to-semilocal
+%                         (no rotation) transformation.
+%               SL2G    - 4x4 matrix with the composite semilocal-to-global
+%                         transformation,
 %   raw       - struct with all 3D information in raw coordinates,
 %   global,
-%   local     - struct with 3D info in global/local coordinates with fields
+%   local,
+%   semilocal - structs with 3D info in global/local coordinates with fields
 %               ctrlPts - MC-by-7 array with [id,x,y,z,sx,sy,sz] for ctrl pts,
 %               objPts  - MO-by-4 array with [id,x,y,z] for object pts,
 %               P       - 3-by-4-by-N array with camera matrices,
@@ -127,16 +132,24 @@ else
     S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
 end
 
-% Transformations between Local and global coordinate systems.
+% Transformations between local/semilocal and global coordinate systems.
 L2G=T*S*R;
+SL2G=T*S;
 % Avoid explicit inverse for numerical reasons.
 G2L=(R'/S)/T; % = R'*inv(S)*inv(T)
+G2SL=inv(S)/T;
+L2SL=R;
+SL2L=R';
 
 s.transform.R=R;
 s.transform.T=T;
 s.transform.S=S;
-s.transform.L2G=L2G;
 s.transform.G2L=G2L;
+s.transform.L2G=L2G;
+s.transform.G2SL=G2SL;
+s.transform.SL2G=SL2G;
+s.transform.L2SL=L2SL;
+s.transform.SL2L=SL2L;
 
 if isfield(chnk.frames.frame,'point_cloud')
     ptCloud=chnk.frames.frame.point_cloud;
@@ -232,6 +245,7 @@ end
 s.global.ctrlPts=s.raw.ctrlPts;
 s.global.ctrlPts(:,1)=s.global.ctrlPts(:,1)+ctrlIdShift;
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
+s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
 
 % Shift object point ids to above control point ids.
 if isempty(s.raw.objPts) || isempty(s.raw.ctrlPts);
@@ -243,6 +257,7 @@ end
 s.local.objPts=s.raw.objPts;
 s.local.objPts(:,1)=s.local.objPts(:,1)+objIdShift;
 s.global.objPts=XformPtsi(s.local.objPts,L2G);
+s.semilocal.objPts=XformPtsi(s.global.objPts,G2SL);
 
 if unpackLocal && ~isempty(ptCloud) && ~isempty(ptCloud.tracks.Attributes.path)
     s.raw.paths.tracks=fullfile(unpackDir,ptCloud.tracks.Attributes.path);
@@ -385,6 +400,18 @@ for i=1:size(s.global.R,3)
     s.global.R(:,:,i)=R/det(R)^(1/3);
 end
 
+s.semilocal.P=XformCams(s.local.P,L2SL);
+s.semilocal.CC=XformPts(s.local.CC,L2SL);
+s.semilocal.R=nan(3,3,size(s.semilocal.P,3));
+for i=1:size(s.semilocal.R,3)
+    R=s.semilocal.P(:,1:3,i);
+    if det(R)<0
+        warning('Loaded rotation matrix has det(R)')
+        disp(det(R))
+    end
+    s.semilocal.R(:,:,i)=R/det(R)^(1/3);
+end
+
 camera=chnk.frames.frame.cameras.camera;
 if ~iscell(camera)
     camera={camera};
@@ -499,11 +526,17 @@ else
     q=M*p;
 end
 
-function q=XformPtsi(p,M)
+function q=XformPtsi(p,M,stdToo)
 %Apply 4-by-4 point transformation matrix M to points with ids p=[id,x,y,z].
+%If stdToo is true, also transform stdx,stdy,stdz.
+
+if nargin<3,stdToo=false; end
 
 q=[p(:,1),XformPts(p(:,2:4)',M)'];
-
+if stdToo
+    std=M(1:3,1:3)*p(:,5:7)';
+    q=[q,std'];
+end
 
 function Q=XformCams(P,M)
 %Apply 4-by-4 point transformation matrix M to 3-by-4-by-K array P

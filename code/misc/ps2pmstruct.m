@@ -1,8 +1,11 @@
-function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s)
+function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useLocal)
 %PS2PMSTRUCT Convert PhotoScan structure to PhotoModeler structure.
 %
 %   PROB=PS2PMSTRUCT(S) converts the PhotoScan struct S, as returned
-%   by LOADPSZ, to a PhotoModeler struct PROB, as loaded by LOADPM.
+%   by LOADPSZ, to a PhotoModeler struct PROB, as loaded by
+%   LOADPM. All EO, OP parameters are global. Use PS2PMSTRUCT(S,TRUE)  
+%   to use semilocal parameters instead (translation and scaling
+%   from global, but no rotation).
 %
 %   [PROB,PTS3D,PTS2D]=PS2PMSTRUCT(S) furthermore returns 3D and 2D
 %   points.
@@ -16,21 +19,29 @@ function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s)
 %
 %See also: LOADPSZ, LOADPM.
 
+if nargin<2, useLocal=false; end
+
 % Create a fake job header with default camera.
 imSz=s.camera.imSz(:);
 defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);zeros(5,1)];
 
 job=struct('title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
 
+if useLocal
+    pos=s.semilocal;
+else
+    pos=s.global;
+end
+
 % Create EO parameters.
 
-% Copy global camera positions.
-CC=s.global.CC;
+% Copy camera positions.
+CC=pos.CC;
 
 % Convert rotation matrices to omega-phi-kappa.
 ang=nan(size(CC));
 for i=1:size(ang,2)
-    RR=s.global.R(:,:,i);
+    RR=pos.R(:,:,i);
     ang(:,i)=derotmat3d(RR)';
 end
 angPM=ang([3,2,1],:)*180/pi;
@@ -43,10 +54,10 @@ for i=1:length(images)
 end
 
 % Copy global control points.
-ctrlPts=s.global.ctrlPts;
+ctrlPts=pos.ctrlPts;
 
 % Copy global object points. Set posterior uncertainty to unknown.
-objPts=[ctrlPts;[s.global.objPts,nan(size(s.global.objPts,1),3)]];
+objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
 
 % Copy mark points and set std.
 ctrlStd=s.defStd.projections;
@@ -80,30 +91,30 @@ pmReport=struct('EO',EO,'EOstd',EOstd);
 
 % Create tables of 3D and 2D info.
 id3d=zeros(1,0);
-if ~isempty(s.global.ctrlPts)
-    id3d=[id3d,s.global.ctrlPts(:,1)'];
+if ~isempty(pos.ctrlPts)
+    id3d=[id3d,pos.ctrlPts(:,1)'];
 end
-if ~isempty(s.global.objPts)
-    id3d=[id3d,s.global.objPts(:,1)'];
+if ~isempty(pos.objPts)
+    id3d=[id3d,pos.objPts(:,1)'];
 end
 name=repmat({''},size(id3d));
 pos3d=zeros(3,0);
-if size(s.global.ctrlPts,2)>=4
-    pos3d=[pos3d,s.global.ctrlPts(:,2:4)'];
+if size(pos.ctrlPts,2)>=4
+    pos3d=[pos3d,pos.ctrlPts(:,2:4)'];
 end
-if size(s.global.objPts,2)>=4
-    pos3d=[pos3d,s.global.objPts(:,2:4)'];
+if size(pos.objPts,2)>=4
+    pos3d=[pos3d,pos.objPts(:,2:4)'];
 end
 std3d=zeros(3,0);
-if size(s.global.ctrlPts,2)>=7
-    std3d=[std3d,s.global.ctrlPts(:,5:7)'];
+if size(pos.ctrlPts,2)>=7
+    std3d=[std3d,pos.ctrlPts(:,5:7)'];
 else
-    std3d=[std3d,nan(size(s.global.ctrlPts,1),3)'];
+    std3d=[std3d,nan(size(pos.ctrlPts,1),3)'];
 end
-if size(s.global.objPts,2)>=7
-    std3d=[std3d,s.global.objPts(:,5:7)'];
+if size(pos.objPts,2)>=7
+    std3d=[std3d,pos.objPts(:,5:7)'];
 else
-    std3d=[std3d,nan(size(s.global.objPts,1),3)'];
+    std3d=[std3d,nan(size(pos.objPts,1),3)'];
 end
 % Convert to one-based.
 id3d=id3d+1;
