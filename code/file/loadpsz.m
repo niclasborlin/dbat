@@ -38,11 +38,25 @@ function s=loadpsz(psFile,varargin)
 %               all  - concatenation of obj and ctrl.
 %   K         - 3-by-3 camera calibration matrix,
 %   camera    - struct with camera information with fields
-%               imSz         - 2-vector with image size [w,h] in pixels,
-%               sensorFormat - 2-vector with sensor size [w,h] in mm,
-%               pixelSz      - 2-vector with pixel size [pw,ph] in mm,
-%               focal        - scalar with focal length in mm,
-%               pp           - 2-vector with principal point in mm.
+%               imSz           - 2-vector with image size [w,h] in pixels,
+%               sensorFormat   - 2-vector with sensor size [w,h] in mm,
+%               pixelSz        - 2-vector with pixel size [pw,ph] in mm,
+%               focal          - scalar with focal length in mm,
+%               pp             - 2-vector with principal point in mm.
+%               nominalFocal   - nominal focal length in mm.
+%               k              - radial lens distortion coefficients in px.
+%               p              - tangential lens distortion coefficients in px.
+%               isFixed        - true if the camera is fixed.
+%               isAdjusted     - true if the camera parameters have been  
+%                                adjusted by Photoscan.
+%               adjustedParams - struct with fields indicating which
+%                                parameters have been adjusted by Photoscan:
+%                                aspect - scalar
+%                                cxcy   - 2-vector
+%                                f      - scalar
+%                                k      - 4-vector
+%                                p      - 4-vector
+%                                skew   - scalar
 %   defStd    - struct with default standard deviations
 %               tiePoints   - std for automatically detected tie points [pix]
 %               projections - std for manually measured markers [pix]
@@ -499,6 +513,40 @@ s.camera.p=p; % TODO: Fix conversion to mm.
 s.camera.isFixed=sensorFixed;
 s.camera.isAdjusted=isAdjusted;
 s.camera.nominalFocal=nominalFocal;
+
+% See what camera parameters have been estimated.
+adjustedParams=struct('aspect',false,'cxcy',false(1,2),'f',false,...
+                      'k',false(1,4),'p',false(1,4),'skew',false);
+if isfield(chnk,'meta') && isfield(chnk.meta,'property')
+    p=chnk.meta.property;
+    if ~iscell(p)
+        p={p};
+    end
+    % Extract property names.
+    names=cellfun(@(x)x.Attributes.name,p,'uniformoutput',false);
+    
+    % Names to look for.
+    fields={'cxcy','f','aspect','skew',{'k1k2k3',1:3},{'k4',4},{'p1p2',1:2},...
+            {'p3',3},{'p4',4}};
+    for i=1:length(fields)
+        name=fields{i};
+        if ischar(name)
+            j=find(strcmp(['optimize/fit_',name],names));
+            if ~isempty(j)
+                adjustedParams.(name)(:)=strcmp(p{j}.Attributes.value,'1');
+            end
+        else
+            ix=name{2};
+            name=name{1};
+            j=find(strcmp(['optimize/fit_',name],names));
+            if ~isempty(j)
+                adjustedParams.(name(1))(ix)=strcmp(p{j}.Attributes.value,'1');
+            end
+        end
+    end
+end
+
+s.camera.adjustedParams=adjustedParams;
 
 % Delete unpacked files unless they should be kept.
 if ~unpackLocal
