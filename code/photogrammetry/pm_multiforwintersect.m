@@ -12,7 +12,6 @@ function [OP,R]=pm_multiforwintersect(IO,EO,ei,colPos,pts,i)
 %   [OP,R]=... also returns the squared residual in R, normalized by the
 %   number of rays.
 
-% $Id$
 
 if isscalar(ei)
     ei=repmat(ei,1,size(EO,2));

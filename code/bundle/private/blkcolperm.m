@@ -13,7 +13,6 @@ function p=blkcolperm(M,bixIO,bixEO,bixOP)
 %
 %See also: COLPERM.
 
-% $Id$
 
 [m,n]=size(M);
 

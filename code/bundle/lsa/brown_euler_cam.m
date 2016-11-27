@@ -18,7 +18,6 @@ function [f,J,JJ]=brown_euler_cam(x,s)
 %   See also PROB2DBATSTRUCT, BUNDLE, GAUSS_NEWTON_ARMIJO,
 %       LEVENBERG_MARQUARDT, LEVENBERG_MARQUARDT_POWELL.
 
-% $Id$
 
 % Create index vectors for unknown parameters.
 [ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);

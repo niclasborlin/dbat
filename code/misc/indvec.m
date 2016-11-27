@@ -21,7 +21,6 @@ function varargout=indvec(n,base)
 %       [i1,i2,i3,l]=indvec([5,4,6]);
 %       i4=indvec(7,l);
 
-% $Id$
 
 if nargin<2, base=0; end
 

@@ -16,7 +16,6 @@ function hh=plotcoverage(s,varargin)
 %
 %See also: PROB2DBATSTRUCT.
 
-% $Id$
 
 ix='all';
 plotEach=false;

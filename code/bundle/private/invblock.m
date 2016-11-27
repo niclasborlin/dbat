@@ -5,7 +5,6 @@ function x=invblock(L,p,ix,method)
 %   normal matrix N. L should have been computed as chol(N(p,p))', where p
 %   is a permutation vector.
 
-% $Id$
 
 if isempty(ix)
     x=[];

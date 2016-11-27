@@ -1,7 +1,6 @@
 function [pp,f,K,P,a,u]=UnpackIO(IO,nK,nP)
 %Unpack inner orientation vector.
 
-% $Id$
 
 pp=IO(1:2);
 f=IO(3);

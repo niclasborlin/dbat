@@ -19,7 +19,6 @@ function [hh,COP]=plotopstats(s,e,varargin)
 %
 %See also: BUNDLE, COVERAGE, PLOTIMAGESTATS.
 
-% $Id$
 
 id='all';
 COP=[];

@@ -12,7 +12,6 @@ function [tri,area,T,A]=largesttriangle(pts,cHull)
 %
 %Uses NCHOOSEK, so large point sets might produce memory problems.
 
-% $Id$
 
 if (nargin<2), cHull=true; end
 

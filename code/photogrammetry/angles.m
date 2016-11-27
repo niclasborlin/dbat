@@ -10,7 +10,6 @@ function a=angles(s,msg)
 %   waitbar. The waitbar is presented if the angle computation takes
 %   more than one second.
 
-% $Id$
 
 if nargin<2, msg=''; end
 

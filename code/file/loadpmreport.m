@@ -74,7 +74,6 @@ function s=loadpmreport(fileName)
 %       min             - minimum angle (degrees), float,
 %       minId           - id of point with minimum angle, integer,
 
-% $Id$
 
 [fid,msg]=fopen(fileName,'rt');
 if fid<0

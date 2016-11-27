@@ -15,7 +15,6 @@ function pts=loadpm2dtbl(fName)
 %   2D SmartPoint table. Only lines starting with a numeric ID are
 %   processed.
 
-% $Id$
 
 [fid,msg]=fopen(fName,'rt');
 if fid<0

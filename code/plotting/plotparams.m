@@ -14,7 +14,6 @@ function hh=plotparams(s,e,varargin)
 %
 %See also: BUNDLE, PROB2DBATSTRUCT.
 
-% $Id$
 
 plotIO=true;
 plotEO=true;

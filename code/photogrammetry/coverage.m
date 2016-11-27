@@ -28,7 +28,6 @@ function [c,cr,crr,cc,cl,ch,crp]=coverage(s,varargin)
 %
 %See also: PROB2DBATSTRUCT, CONVHULL.
 
-% $Id$
 
 ix=1:length(s.imNames);
 union=false;

@@ -13,7 +13,6 @@ function COP=bundle_result_file(s,e,f,COP)
 %
 %See also: BUNDLE, BUNDLE_COV. 
 
-% $Id$
 
 fid=fopen(f,'wt');
 if fid<0
