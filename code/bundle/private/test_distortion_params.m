@@ -11,7 +11,6 @@ function [K,P]=test_distortion_params(s,e)
 %
 %See also: CUMCHI2, HIGH_IO_CORRELATIONS.
 
-% $Id$
 
 % Estimated IO values and their covariances.
 x=s.IO;

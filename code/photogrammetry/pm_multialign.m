@@ -11,7 +11,6 @@ function [EO,OP]=pm_multialign(EO,OP,i,ra)
 %
 %   After alignment, the i:th column will correspond to the origin.
 
-% $Id$
 
 if nargin<4, ra=0; end
 

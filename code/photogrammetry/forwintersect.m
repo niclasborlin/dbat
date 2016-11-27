@@ -16,7 +16,6 @@ function [s,id,res]=forwintersect(s0,ids,skipPrior)
 %
 %See also: PM_MULTIFORWINTERSECT.
 
-% $Id$
 
 if strcmp(ids,'all'), ids=s0.OPid; end
    

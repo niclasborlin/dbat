@@ -7,7 +7,6 @@ function [ok,msg]=writepsmarkertbl(psTbl,fName)
 %    archive. If the file name is omitted, the text is written to
 %    stdout instead. On failure a return status and message is returned.
 
-% $Id$
 
 msg='';
 

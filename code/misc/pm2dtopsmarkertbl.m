@@ -14,7 +14,6 @@ function psTbl=pm2dtopsmarkertbl(pmTbl,varargin)
 %   ...=PM2DTOPSMARKERTBL(...,B) uses the bool scalar or vector B
 %   to set the pinned status.
 
-% $Id$
 
 map=[]
 b=true;

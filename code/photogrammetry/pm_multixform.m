@@ -6,7 +6,6 @@ function [EO,OP,fail]=pm_multixform(EO,OP,T)
 %   OP - 3-by-N array with object point coordinates.
 %   T  - 4x4 homogeneous array with point transformation.
 
-% $Id$
 
 fail=false;
 

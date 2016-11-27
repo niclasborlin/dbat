@@ -8,7 +8,6 @@ function [rms,res]=bundle_residuals(s,e)
 %
 %See also: BUNDLE, BUNDLE_RESULT_FILE.
 
-% $Id$
 
 nPts=nnz(s.vis);
 

@@ -10,7 +10,6 @@ function hh=tagfigure(tag,name)
 %
 %   H=TAGFIGURE(...) returns a handle to the figure.
 
-% $Id$
 
 narginchk(1,2);
 

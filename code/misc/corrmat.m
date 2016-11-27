@@ -17,7 +17,6 @@ function [R,s]=corrmat(C,nodiag)
 %
 %See also COV, CORRCOEF, VAR, STD.
 
-% $Id$
 
 narginchk(1,2);
 

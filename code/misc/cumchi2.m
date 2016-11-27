@@ -6,7 +6,6 @@ function y=cumchi2(x,n)
 %
 %   Naive implementation that computes the cdf value via integration.
 
-% $Id$
 
 if ~isscalar(n)
     error('DBAT:CUMCHI2:invalidArgument','N must be scalar');

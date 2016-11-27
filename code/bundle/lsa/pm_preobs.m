@@ -11,7 +11,6 @@ function [f,J,JJ]=pm_preobs(x,s)
 %
 %   [F,J,JJ]=... furthermore returns the numerical Jacobian J.
 
-% $Id$
 
 % Create index vectors for unknown parameters.
 [ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);

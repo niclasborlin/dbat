@@ -12,7 +12,6 @@ function J=jacapprox(fun,x,h,params)
 %   J=JACAPPROX(F,X,H,P), where P is a cell array, sends P{:} as extra
 %   parameters to the function F.
 
-% $Id$
 
 if nargin<3, h=1e-6; end
 if nargin<4, params={}; end

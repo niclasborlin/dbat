@@ -54,7 +54,6 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM, BUNDLE_COV,
 %   PROB2DBATSTRUCT, BUNDLE_RESULT_FILE
 
-% $Id$
 
 maxIter=20;
 damping='gna';

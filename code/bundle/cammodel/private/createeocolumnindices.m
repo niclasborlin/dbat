@@ -3,7 +3,6 @@ function [ixC,ixAng]=createeocolumnindices(cEO);
 % A zero element means that the partial derivative should not be
 % calculated/stored.
 
-% $Id$
 
 if (size(cEO,1)>6)
 	cEO=cEO(1:6,:);

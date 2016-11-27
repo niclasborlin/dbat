@@ -12,7 +12,6 @@ function [OP,OPc]=pm_forwintersect1(P,xy,method)
 %OPc    - 3xn or 4xn matrix with closest point on each line (method=euclidean).
 %A      - homogeneous matrix A such that A*OP approx 0 (method=homogeneous).
 
-% $Id$
 
 if nargin<3
     method='euclidean';

@@ -7,7 +7,6 @@ function Y=euclidean(X)
 %
 %See also: HOMOGENEOUS.
 
-% $Id$
 
 % Divide by element in last row.
 Y=X(1:end-1,:,:)./X(repmat(end,1,size(X,1)-1),:,:);

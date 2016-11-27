@@ -26,7 +26,6 @@ function [i,j,k,v,COP]=high_op_correlations(s,e,thres,varargin)
 %
 %See also: BUNDLE, BUNDLE_COV, HIGH_IO_CORRELATIONS, HIGH_OP_CORRELATIONS.
 
-% $Id$
 
 cross=false;
 COP=[];

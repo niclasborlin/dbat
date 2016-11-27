@@ -3,7 +3,6 @@ function [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP);
 % A zero element means that the partial derivative should not be
 % calculated/stored.
 
-% $Id$
 
 % How many cameras do we have?
 nCams=size(cIO,2);
