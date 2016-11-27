@@ -6,7 +6,6 @@ function d=ptdepth(P,X)
 %X - 3xn (Euclidean) or 4xn (homogeneous) matrix with object coordinates.
 %d - n-vector with depth of each point.
 
-% $Id$
 
 if size(X,1)<4, X=homogeneous(X); end
 

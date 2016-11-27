@@ -6,7 +6,6 @@ function y=applyhomoxform(A,x)
 %A - homogeneous transformation matrix.
 %y - points after transformation. y will be of same homogenity and size as x.
 
-% $Id$
 
 % Determine if x is homogeneous or not.
 [m,n]=size(A);

@@ -13,7 +13,6 @@ function A=mkblkdiag(C,varargin)
 %
 %See also: blkdiag, mkblkdiag.
 
-% $Id$
 
 narginchk(2,inf);
 

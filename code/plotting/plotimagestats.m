@@ -17,7 +17,6 @@ function hh=plotimagestats(s,e,ix)
 %
 %See also: BUNDLE, COVERAGE, PLOTOPSTATS.
 
-% $Id$
 
 if nargin<3, ix='all'; end
 

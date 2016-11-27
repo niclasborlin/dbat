@@ -28,7 +28,6 @@ function varargout=bundle_cov(s,e,varargin)
 %
 %See also: BUNDLE.
 
-% $Id$
 
 if isempty(varargin)
     if nargout>0

@@ -40,7 +40,6 @@ function hh=plotimages(s,ims,varargin)
 %
 %See also: PLOTNETWORK, PROB2DBATSTRUCT.
 
-% $Id$
 
 % Iteration trace info.
 E=[];

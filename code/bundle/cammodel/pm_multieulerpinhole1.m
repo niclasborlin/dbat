@@ -30,7 +30,6 @@ function [xy,dIO,dEO,dOP]=pm_multieulerpinhole1(IO,nK,nP,EO,cams,OP,vis,cIO,cEO,
 %dEO    - jacobian w.r.t. external orientation.
 %dOP    - jacobian w.r.t. object points.
 
-% $Id$
 
 if (nargin<8), cIO=(nargout>1); end
 if (nargin<9), cEO=(nargout>2); end

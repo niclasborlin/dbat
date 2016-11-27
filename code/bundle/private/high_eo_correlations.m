@@ -21,7 +21,6 @@ function [i,j,k,v,CEO]=high_eo_correlations(s,e,thres,cross)
 %
 %See also: BUNDLE, BUNDLE_COV, HIGH_OP_CORRELATIONS, HIGH_OP_CORRELATIONS.
 
-% $Id$
 
 if nargin<4, cross=false; end
 

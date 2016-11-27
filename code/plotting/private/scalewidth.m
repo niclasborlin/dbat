@@ -1,7 +1,6 @@
 function scalewidth(ax)
 % Downscales axes to have same width.
 
-% $Id$
 
 % Scale by c<1 to avoid auto-resize if legend is moved interactively.
 c=0.9;

@@ -134,7 +134,6 @@ function s=prob2dbatstruct(prob,individualCameras)
 %
 %See also: LOADPM.
 
-% $Id$
 
 if nargin<2, individualCameras=false; end
 

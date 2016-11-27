@@ -59,7 +59,6 @@ function hh=plotnetwork(s,varargin)
 %
 %See also: PLOTIMAGES, PROB2DBATSTRUCT, CAMERAICON, PM_MULTIALIGN.
 
-% $Id$
 
 % Defaults.
 

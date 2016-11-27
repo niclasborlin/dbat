@@ -3,7 +3,6 @@ function ixOP=createopcolumnindices(cOP);
 % A zero element means that the partial derivative should not be
 % calculated/stored.
 
-% $Id$
 
 % How many points do we have?
 nObjs=size(cOP,2);

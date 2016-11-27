@@ -5,7 +5,6 @@ function Evec=essmat5(Q1,Q2)
 %Q1,Q2 - 3xn matrices of normalized homogeneous coordinates.
 %EE    - 9xk matrix with essential matrices unrolled as columns.
 
-% $Id$
 
 Q1 = Q1';
 Q2 = Q2';

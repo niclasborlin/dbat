@@ -19,7 +19,6 @@ function pts=loadpm3dtbl(fName,isSmartTable)
 %   table or a SMART point table. Only lines starting with a
 %   numeric ID are processed.
 
-% $Id$
 
 if nargin<2, isSmartTable=false; end
 

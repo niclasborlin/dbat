@@ -14,7 +14,6 @@ function pts=loadcpt(fName)
 %   integer id, a name, X, Y, Z positions, and optionally X, Y, Z standard
 %   devations. Blank lines and lines starting with # are ignored.
 
-% $Id$
 
 [fid,msg]=fopen(fName,'rt');
 if fid<0

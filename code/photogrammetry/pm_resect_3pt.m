@@ -22,7 +22,6 @@ function [P,PP,res]=pm_resect_3pt(X,x,use,behind,relax)
 %       5th ed., Chapter 11.1.3.4, pp. 786-788. American Society of
 %       Photogrammetry and Remote Sensing.
 
-% $Id$
 
 if nargin<4, behind=false; end
 if nargin<5, relax=false; end

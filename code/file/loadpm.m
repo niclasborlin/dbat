@@ -53,7 +53,6 @@ function [prob,err]=loadpm(name,varargin)
 %   not verify that a reconstructed object point has measured points in at
 %   least two images.
 
-% $Id$
 
 skipFeatures=true;
 globalImSz=nan(1,2);

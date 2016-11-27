@@ -9,7 +9,6 @@ function b=isblkdiag(C,m,n)
 %
 %See also: blkdiag, mkblkdiag.
 
-% $Id$
 
 narginchk(2,3);
 
