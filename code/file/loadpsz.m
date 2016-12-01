@@ -51,12 +51,13 @@ function s=loadpsz(psFile,varargin)
 %                                adjusted by Photoscan.
 %               adjustedParams - struct with fields indicating which
 %                                parameters have been adjusted by Photoscan:
-%                                aspect - scalar
-%                                cxcy   - 2-vector
 %                                f      - scalar
+%                                cxcy   - 2-vector
+%                                aspect - scalar
+%                                skew   - scalar
+%                                b      - 2-vector
 %                                k      - 4-vector
 %                                p      - 4-vector
-%                                skew   - scalar
 %   defStd    - struct with default standard deviations
 %               tiePoints   - std for automatically detected tie points [pix]
 %               projections - std for manually measured markers [pix]
@@ -516,37 +517,92 @@ s.camera.nominalFocal=nominalFocal;
 
 % See what camera parameters have been estimated.
 adjustedParams=struct('aspect',false,'cxcy',false(1,2),'f',false,...
-                      'k',false(1,4),'p',false(1,4),'skew',false);
+                      'k',false(1,4),'p',false(1,4),'skew',false,...
+                      'b',false(1,2));
+% Parameters to warn about.
+warnNotSupported={};
+warnUsePhotoModeler={};
 if isfield(chnk,'meta') && isfield(chnk.meta,'property')
     p=chnk.meta.property;
     if ~iscell(p)
         p={p};
     end
     % Extract property names.
-    names=cellfun(@(x)x.Attributes.name,p,'uniformoutput',false);
+    flds=cellfun(@(x)x.Attributes.name,p,'uniformoutput',false);
     
-    % Names to look for.
-    fields={'cxcy','f','aspect','skew',{'k1k2k3',1:3},{'k4',4},{'p1p2',1:2},...
-            {'p3',3},{'p4',4}};
-    for i=1:length(fields)
-        name=fields{i};
-        if ischar(name)
-            j=find(strcmp(['optimize/fit_',name],names));
-            if ~isempty(j)
-                adjustedParams.(name)(:)=strcmp(p{j}.Attributes.value,'1');
+    % We should deal with all optimize/fit_XXX flds.
+    stub='optimize/fit_';
+    i=strncmp(stub,flds,length(stub));
+    flds=flds(i);
+    p=p(i);
+    for i=1:length(flds)
+        value=p{i}.Attributes.value;
+        fullName=flds{i};
+        param=fullName(14:end);
+        switch param
+          case 'flags'
+            % Photoscan 1.2.4+ lists all estimated parameters in
+            % optimize/fit_flags.
+            
+            % Split on whitespace
+            j=[0,find(isspace(value)),length(value)+1];
+            params=arrayfun(@(i)value(j(i)+1:j(i+1)-1),1:length(j)-1,...
+                            'uniformoutput',false);
+            % Value is true for each listed parameter.
+            value='1';
+          case 'cxcy'
+            params={'cx','cy'};
+          case 'k1k2k3'
+            params={'k1','k2','k3'};
+          case 'p1p2'
+            params={'p1','p2'};
+          otherwise
+            % Photoscan pre-1.2.4 has multiple optimize/fit_PARAM fields.
+            params={param};
+        end
+        for j=1:length(params)
+            param=params{j};
+            switch param
+              case {'f','aspect','skew'}
+                adjustedParams.(param)(:)=strcmp(value,'1');
+              case 'cx'
+                adjustedParams.cxcy(1)=strcmp(value,'1');
+              case 'cy'
+                adjustedParams.cxcy(2)=strcmp(value,'1');
+              otherwise
+                % Generic [bkp][1234]
+                if length(param)==2 && ...
+                        (param(1)=='b' && ismember(param(2),'12') || ...
+                         ismember(param(1),'kp') && ismember(param(2),'1234'))
+                    ix=sscanf(param(2),'%d');
+                    adjustedParams.(param(1))(ix)=strcmp(value,'1');
+                else
+                    warning('Unknown camera calibration parameter: %s.',param);
+                end
             end
-        else
-            ix=name{2};
-            name=name{1};
-            j=find(strcmp(['optimize/fit_',name],names));
-            if ~isempty(j)
-                adjustedParams.(name(1))(ix)=strcmp(p{j}.Attributes.value,'1');
+            % Should we warn that a parameter not supported?
+            switch param
+              case {'aspect','skew','b1','b2','k4','p3','p4'}
+                warnNotSupported{end+1}=param;
+              case {'k1','k2','k3','p1','p2'}
+                warnUsePhotoModeler{end+1}=param;
             end
         end
     end
 end
 
 s.camera.adjustedParams=adjustedParams;
+
+if ~isempty(warnNotSupported)
+    warning(['The following camera calibration parameters are not ' ...
+             'supported yet:',sprintf(' %s',warnNotSupported{:})]);
+end
+
+if ~isempty(warnUsePhotoModeler)
+    warning(['The following camera calibration parameters are supported, ' ...
+             'but currently the Photomodeler lens distortion model ' ...
+             'will be used:',sprintf(' %s',warnUsePhotoModeler{:})]);
+end
 
 % Delete unpacked files unless they should be kept.
 if ~unpackLocal
