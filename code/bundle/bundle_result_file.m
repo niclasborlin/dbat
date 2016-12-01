@@ -212,7 +212,7 @@ fprintf(fid,[p,p,p,'Photograph Standard Deviations:\n']);
 % Get camera station covariances.
 % CEO=bundle_cov(s,e,'CEOF');
 % Compute corresponding correlations and standard deviations.
-[CEOC,eoSigma]=corrmat(CEO,true);
+[~,eoSigma]=corrmat(CEO,true);
 eoSigma=reshape(eoSigma,6,[]);
 
 % Headers and values to print.
@@ -320,6 +320,14 @@ if any(s.isCtrl)
     mx=max(CPrays);
     avg=mean(CPrays);
     fprintf(fid,[p,p,p,'CP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+
+    % Ray count histogram.
+    cpRayHist=ihist(sum(s.vis(s.isCtrl,:),2)+1);
+    i=find(cpRayHist);
+    for j=1:length(i)
+        fprintf(fid,[p,p,p,p,'%d points with %d rays.\n'],...
+                full(cpRayHist(i(j))),i(j)-1);
+    end
 else
     fprintf(fid,[p,p,p,'CP ray count: -\n']);
 end
@@ -330,6 +338,13 @@ if any(~s.isCtrl)
     mx=max(OPrays);
     avg=mean(OPrays);
     fprintf(fid,[p,p,p,'OP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+    % Ray count histogram.
+    opRayHist=ihist(sum(s.vis(~s.isCtrl,:),2)+1);
+    i=find(opRayHist);
+    for j=1:length(i)
+        fprintf(fid,[p,p,p,p,'%d points with %d rays.\n'],...
+                full(opRayHist(i(j))),i(j)-1);
+    end
 else
     fprintf(fid,[p,p,p,'OP ray count: -\n']);
 end
@@ -400,6 +415,29 @@ fprintf(fid,'%.2g (OP %d)\n',mx,s.OPid(mxi));
 for i=1:3
     fprintf(fid,[p,p,p,'Maximum %c standard deviation: %.2g (OP %d)\n'],...
                  abs('X')+i-1,mx(i),s.OPid(mxi(i)));
+end
+
+% Points with highest correlations.
+fprintf(fid,[p,p,p,'Points with high correlations\n']);
+opCorr95=abs(vop)>0.95;
+opCorr99=abs(vop)>0.99;
+fprintf(fid,[p,p,p,p,'Points with correlation above 95%%: %d\n'],nnz(opCorr95));
+fprintf(fid,[p,p,p,p,'Points with correlation above 99%%: %d\n'],nnz(opCorr99));
+if nnz(opCorr95)
+    fprintf(fid,[p,p,p,p,'Points with highest correlations:\n']);
+    [~,i]=sort(abs(vop),'descend');
+    printed=[];
+    j=1;
+    while length(printed)<5 && j<=length(i)
+        % Same OP may appear multiple times due to e.g. high X-Z,
+        % Y-Z corr. Only print each OP once.
+        if ~ismember(kop(i(j)),printed)
+            printed(end+1)=kop(i(j));
+            fprintf(fid,[p,p,p,p,p,'Points %d: %.2f\n'], kop(i(j)),...
+                    100*vop(i(j)));
+        end
+        j=j+1;
+    end
 end
 
 fprintf(fid,[p,p,'Point Angles\n']);
