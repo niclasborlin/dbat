@@ -1,20 +1,23 @@
-function [rr,E,s0,prob,psz]=ps_postproc(fileName,nRays,minAngle,pauseMode)
+function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,nRays,minAngle,pauseMode)
 %PS_POSTPROC Post-process a PhotoScan project.
 %
-%   PS_POSTPROC(FILENAME), loads the PhotoScan .psz file in
-%   FILENAME and runs the bundle adjustment using the PhotoScan
-%   results as initial values.
+%   PS_POSTPROC(FILENAME), loads the PhotoScan .psz file in FILENAME
+%   and runs the bundle adjustment using the PhotoScan results as
+%   initial values. The processing is performed in global
+%   coordinates. For processing in semi-local coordinates (translation
+%   and scaling user by Photoscan, but no rotation), use
+%   PS_POSTPROC(FILENAME,SLOCAL) with SLOCAL==TRUE.
 %
-%   PS_POSTPROC(FILENAME,NRAYS), removes all measurements of object
-%   points with NRAYS rays or less before processing.
+%   PS_POSTPROC(FILENAME,SLOCAL,NRAYS), removes all measurements of
+%   object points with NRAYS rays or less before processing.
 %
-%   PS_POSTPROC(FILENAME,NRAYS,ANGLE), removes all measurements of
-%   object points with an intersection angle below ANGLE degrees
+%   PS_POSTPROC(FILENAME,SLOCAL,NRAYS,ANGLE), removes all measurements
+%   of object points with an intersection angle below ANGLE degrees
 %   before processing. The intersection angle is computed from
 %   Photoscan EO/OP values.
 %
-%   PS_POSTPROC(FILENAME,NRAYS,ANGLE,PMODE) runs the demo in pause
-%   mode PMODE. See PLOTNETWORK for pause modes.
+%   PS_POSTPROC(FILENAME,SLOCAL,NRAYS,ANGLE,PMODE) runs the demo in
+%   pause mode PMODE. See PLOTNETWORK for pause modes.
 %
 %   References:
 %       [1] Börlin and Grussenmeyer (2016), "External Verification
@@ -29,19 +32,20 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,nRays,minAngle,pauseMode)
 
 if nargin==0, help(mfilename), return, end
 
-if nargin<4, pauseMode='off'; end
-if nargin<3, minAngle=0; end
-if nargin<2, nRays=0; end
+if nargin<2, sLocal=false; end
+if nargin<3, nRays=0; end
+if nargin<4, minAngle=0; end
+if nargin<5, pauseMode='off'; end
 
 % Extract dir of input file.
-[inputDir,inputName,inputExt]=fileparts(fileName);
+[inputDir,inputName,~]=fileparts(fileName);
 
 fprintf('Loading PhotoScan project file %s...',fileName);
 psz=loadpsz(fileName);
 fprintf('done.\n');
 
 % Conver to Photomodeler structure.
-prob=ps2pmstruct(psz);
+prob=ps2pmstruct(psz,sLocal);
 
 % Convert to DBAT structure.
 s0=prob2dbatstruct(prob);
@@ -84,7 +88,7 @@ if psz.camera.isAdjusted
 end
 
 %TODO: Offset estimation.
-meanOffset=zeros(3,1);
+%meanOffset=zeros(3,1);
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));
@@ -92,14 +96,14 @@ uniqueSigmas=unique(s0.markStd(:));
 % Warn for multiple sigmas for PhotoScan projects only if
 % some sigma is zero.
 if length(uniqueSigmas)~=1 && any(s0.markStd(:)==0)
-    uniqueSigmas
+    uniqueSigmas %#ok<NOPRT>
     warning('Multiple mark point sigmas')
     s0.markStd(s0.markStd==0)=1;
 end
 
 s=s0;
 h=plotnetwork(s,'title','Initial network from PhotoScan',...
-              'axes',tagfigure(mfilename),'camsize',1);
+              'axes',tagfigure(mfilename),'camsize',1); %#ok<NASGU>
 
 % Set up to run the bundle.
 damping='gna';
@@ -123,11 +127,11 @@ reportFile=fullfile(inputDir,[inputName,'-dbatreport.txt']);
 
 COP=bundle_result_file(result,E,reportFile);
 
-OPstd=full(reshape(sqrt(diag(COP)),3,[]));
+OPstd=full(reshape(sqrt(diag(COP)),3,[])); %#ok<NASGU>
 CEO=bundle_cov(result,E,'CEO');
 EOstd=reshape(full(sqrt(diag(CEO))),6,[]);
-EOposStd=EOstd(1:3,:);
-EOangStd=EOstd(4:6,:)*180/pi;
+EOposStd=EOstd(1:3,:); %#ok<NASGU>
+EOangStd=EOstd(4:6,:)*180/pi; %#ok<NASGU>
 
 fprintf('\nBundle report file %s generated.\n',reportFile);
 
@@ -193,15 +197,14 @@ fprintf(['  All ray count=%.0f-%.0f (%.1f avg), ray angle=%.0f-%.0f ' ...
         mean(rayCount),min(rayAng),max(rayAng),mean(rayAng));       
 
 fprintf('\nResults (project units/degrees/pixels):\n');
-noYes={'no','yes'};
 
-fprintf(['  sigma0 (DBAT)    : %g\n'], E.s0);
+fprintf('  sigma0 (DBAT)    : %g\n', E.s0);
 
-h=plotparams(result,E,'noop','noeo');
+h=plotparams(result,E,'noop','noeo'); %#ok<NASGU>
 
-h=plotcoverage(result,true);
+h=plotcoverage(result,true); %#ok<NASGU>
 
-h=plotimagestats(result,E);
+h=plotimagestats(result,E); %#ok<NASGU>
 
 %h=plotopstats(result,E,COP);
 
@@ -235,7 +238,7 @@ end
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
-    h=[h;imshow(imName,'parent',gca(imFig))];
+    h=[h;imshow(imName,'parent',gca(imFig))]; %#ok<NASGU>
     pts=s0.markPts(:,s0.colPos(s0.vis(:,imNo),imNo));
     ptsId=s0.OPid(s0.vis(:,imNo));
     isCtrl=s0.isCtrl(s0.vis(:,imNo));
