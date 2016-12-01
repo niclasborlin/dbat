@@ -1,6 +1,6 @@
 Summary changelog file for release.
 
-Release 0.5.2.0, Dec 1, 2016.
+Release 0.6.0.0, Dec 1, 2016.
 - Added support for post-processing of Photoscan .psz projects. This includes:
   - Post-processing in fixed camera mode without lens distortion.
   - Post-processing in auto-calibration mode with lens distortion using the
