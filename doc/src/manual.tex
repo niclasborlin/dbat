@@ -14,8 +14,8 @@
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.5.1.6}
-\newcommand{\dbatdate}{October 18, 2016}
+\newcommand{\dbatversion}{0.5.2.0}
+\newcommand{\dbatdate}{December 1, 2016}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -66,8 +66,14 @@ The toolbox currently includes routines for (Matlab function names within parent
     and 2D/3D point table exports files (\texttt{loadpm2dtbl} and
     \texttt{loadpm3dtbl}, respectively).
   \item Reading PhotoScan native (.psz) files (\texttt{loadpsz}).
-  \item Writing Photomodeler-style text result files
+  \item Writing PhotoModeler-style text result files
     (\texttt{bundle\_result\_file}).
+  \end{itemize}
+\item Post-processing:
+  \begin{itemize}
+  \item Post-processing of PhotoScan projects
+    (\texttt{ps\_postproc}). Includes object point filtering on low
+    ray count and low intersection angles.
   \end{itemize}
 \item Photogrammetric calculations, including:
   \begin{itemize}
@@ -111,7 +117,7 @@ the demo functions, and reading the source code of each file directly.
 The toolbox contains several datasets, including datasets for the
 \citet{Borlin2016:External} paper.
 \begin{itemize}
-\item PhotoModeler export files or Photoscan projects.
+\item PhotoModeler export files or PhotoScan projects.
 \item Images. To reduce the size of the distribution package, only low
   resolution images are included in the package. The corresponding
   high resolution images can be downloaded from
@@ -137,6 +143,8 @@ included in the distribution. In summary:
 \item You may modify and redistribute the code as long as the
   licensing details are also redistributed.
 \end{itemize}
+
+\newpage
 
 \section{Installation}
 \label{sec:install}
@@ -165,10 +173,10 @@ PhotoModeler text export file. Two examples are included in the
 toolbox: {\sc Roma} and {\sc Cam}.
 
 \paragraph{\sc Roma}
-\verb+loadplotdemo('roma')+ loads a modified Photomodeler text export
+\verb+loadplotdemo('roma')+ loads a modified PhotoModeler text export
 file of the 60-camera, 26000-point project used
 in~\citet{Borlin2013:Bundle}. The camera network, as computed by
-Photomodeler, is plotted with camera 1 aligned to the cardinal axes.
+PhotoModeler, is plotted with camera 1 aligned to the cardinal axes.
 The result should look like Figure~\ref{fig:roma}. The figure is a
 standard Matlab 3D figure and may e.g.\ be rotated or zoomed using the
 camera toolbar.
@@ -182,9 +190,9 @@ camera toolbar.
 
 \paragraph{\sc Cam}
 \label{sec:camcaldata}
-\verb+loadplotdemo('cam')+ demo loads a modified Photomodeler text
+\verb+loadplotdemo('cam')+ demo loads a modified PhotoModeler text
 export file of a 21-camera, 100-point camera calibration project. The
-camera network, as computed by Photomodeler, is plotted and should
+camera network, as computed by PhotoModeler, is plotted and should
 look like Figure~\ref{fig:camcalib}. The figure is a standard Matlab
 3D figure and may e.g.\ be rotated or zoomed using the camera toolbar.
 
@@ -204,7 +212,7 @@ set to ``default'' values, e.g.\ the principal point at the center of
 the sensor and all lens distortion parameters equal to zero. The
 initial value for the EO parameters are computed by spatial
 resection~\citep[Chap.~11.1.3.4]{Haralick1994:Review,McGlone2004:Manual} using
-the control points defined for the Photomodeler calibration sheet. The
+the control points defined for the PhotoModeler calibration sheet. The
 initial OP coordinates are subsequently computed by forward
 intersection.
 
@@ -348,7 +356,7 @@ window.
 
 \paragraph{Result file}
 
-The result file is modelled after the Photomodeler result file.
+The result file is modelled after the PhotoModeler result file.
 The result file is listed in Appendix~\ref{sec:resultFile}.
 
 \subsubsection{Bundle adjustment}
@@ -356,7 +364,7 @@ The result file is listed in Appendix~\ref{sec:resultFile}.
 \paragraph{\sc Roma}
 The \texttt{romabundledemo} function loads the project from
 Section~\ref{sec:loadroma} and present essentially the same plots and
-the \texttt{camcaldemo}. This demo uses the Photomodeler file as input
+the \texttt{camcaldemo}. This demo uses the PhotoModeler file as input
 to the bundle adjustment that runs a few iterations until convergence.
 The same result file and result plots as \texttt{camcaldemo} are
 essentially generated. Since the project is larger (60 cams/26~000
@@ -379,17 +387,17 @@ conclusions remain valid.
 
 \subsection{Using your own data}
 
-This section describes how to import you own data using Photomodeler
+This section describes how to import you own data using PhotoModeler
 text export files. If you have another type of input file, you may be
 able to write your own loader. Otherwise, if you have a text file you
 wish to import, feel free to mail the file to the the toolbox authors
 and request an import function. Althought we cannot guarantee
 anything, we may adhere to the request, time permitting.
 
-\subsubsection{Export from Photomodeler}
+\subsubsection{Export from PhotoModeler}
 
-To import a Photomodeler project into the toolbox, the following
-steps are valid in Photomodeler Scanner 2012:
+To import a PhotoModeler project into the toolbox, the following
+steps are valid in PhotoModeler Scanner 2012:
 
 \begin{enumerate}
 \item Export the project using the \emph{Export Text File} menu
@@ -447,12 +455,12 @@ may either be in the plots or in the result file.
 
 \section{Appendices}
 
-\subsection{Enabling text export from Photomodeler}
+\subsection{Enabling text export from PhotoModeler}
 \label{sec:enableTextExport}.
 
-Some versions of Photomodeler do not have the text file export option
+Some versions of PhotoModeler do not have the text file export option
 enabled by default. In that case, the following steps worked in
-Photomodeler Scanner 2012:
+PhotoModeler Scanner 2012:
 \begin{enumerate}
 \item Right-click on the main window toolbar, select \emph{Customize toolbar...}.
 \item In the \emph{Commands} tab, select the \emph{File} category.

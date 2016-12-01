@@ -1,5 +1,17 @@
 Summary changelog file for release.
 
+Release 0.5.2.0, Dec 1, 2016.
+- Added support for post-processing of Photoscan .psz projects. This includes:
+  - Post-processing in fixed camera mode without lens distortion.
+  - Post-processing in auto-calibration mode with lens distortion using the
+    Photomodeler lens distortion model.
+- Added progressbar to loadpsz for long load times.
+- Added logarithmic autoscaling to lens distortion parameter plotting.
+- Expanded OP ray count and OP high correlation info in report file.
+- Enabled processing in semilocal coordinate system (translate, scale, but
+  not rotate).
+- Various bugfixes related to Photoscan project loading.
+
 Release 0.5.1.6, Oct 18, 2016.
 - Various bugfixes.
 - Fixed code issues in xchg dir due to Windows handling of links.
