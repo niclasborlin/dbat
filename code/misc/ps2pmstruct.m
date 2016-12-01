@@ -1,4 +1,4 @@
-function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useLocal)
+function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useSemiLocal)
 %PS2PMSTRUCT Convert PhotoScan structure to PhotoModeler structure.
 %
 %   PROB=PS2PMSTRUCT(S) converts the PhotoScan struct S, as returned
@@ -19,7 +19,7 @@ function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useLocal)
 %
 %See also: LOADPSZ, LOADPM.
 
-if nargin<2, useLocal=false; end
+if nargin<2, useSemiLocal=false; end
 
 % Create a fake job header with default camera.
 imSz=s.camera.imSz(:);
@@ -27,7 +27,7 @@ defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);zeros(5,1)];
 
 job=struct('title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
 
-if useLocal
+if useSemiLocal
     pos=s.semilocal;
 else
     pos=s.global;
