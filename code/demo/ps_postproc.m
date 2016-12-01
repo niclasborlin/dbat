@@ -1,11 +1,20 @@
-function [rr,E,s0,prob,psz]=ps_postproc(fileName,doPause)
+function [rr,E,s0,prob,psz]=ps_postproc(fileName,nRays,minAngle,pauseMode)
 %PS_POSTPROC Post-process a PhotoScan project.
 %
 %   PS_POSTPROC(FILENAME), loads the PhotoScan .psz file in
-%   FILENAME and runs the bundle adjustment.
+%   FILENAME and runs the bundle adjustment using the PhotoScan
+%   results as initial values.
 %
-%   PS_POSTPROC(FILENAME,TRUE) runs the demo in pause mode. See
-%   PLOTNETWORK for pause modes.
+%   PS_POSTPROC(FILENAME,NRAYS), removes all measurements of object
+%   points with NRAYS rays or less before processing.
+%
+%   PS_POSTPROC(FILENAME,NRAYS,ANGLE), removes all measurements of
+%   object points with an intersection angle below ANGLE degrees
+%   before processing. The intersection angle is computed from
+%   Photoscan EO/OP values.
+%
+%   PS_POSTPROC(FILENAME,NRAYS,ANGLE,PMODE) runs the demo in pause
+%   mode PMODE. See PLOTNETWORK for pause modes.
 %
 %   References:
 %       [1] Börlin and Grussenmeyer (2016), "External Verification
@@ -20,7 +29,9 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,doPause)
 
 if nargin==0, help(mfilename), return, end
 
-if nargin<2, doPause='off'; end
+if nargin<4, pauseMode='off'; end
+if nargin<3, minAngle=0; end
+if nargin<2, nRays=0; end
 
 % Extract dir of input file.
 [inputDir,inputName,inputExt]=fileparts(fileName);
@@ -29,31 +40,47 @@ fprintf('Loading PhotoScan project file %s...',fileName);
 psz=loadpsz(fileName);
 fprintf('done.\n');
 
+% Conver to Photomodeler structure.
 prob=ps2pmstruct(psz);
 
+% Convert to DBAT structure.
 s0=prob2dbatstruct(prob);
 
-rayAng=angles(s0,'Computing ray angles')*180/pi;
+if nRays>0 || minAngle>0
+    if nRays>0
+        tooFewRayPts=sum(s0.vis,2)<=nRays & ~s0.isCtrl;
+    else
+        tooFewRayPts=false;
+    end
+    
+    if minAngle>0
+        rayAng=angles(s0,'Computing ray angles')*180/pi;
 
-% Remove 2-ray object points and points with <5 deg angle
-prob2=prob;
-tooFewRayPts=sum(s0.vis,2)<=2 & ~s0.isCtrl;
-tooNarrowAnglePts=rayAng<5 & ~s0.isCtrl;
-badPts=tooFewRayPts | tooNarrowAnglePts;
-ids2remove=s0.OPid(badPts);
-prob2.objPts(ismember(prob2.objPts(:,1),ids2remove),:)=[];
-prob2.markPts(ismember(prob2.markPts(:,2),ids2remove),:)=[];
+        tooNarrowAnglePts=rayAng<minAngle & ~s0.isCtrl;
+    else
+        tooNarrowAnglePts=false;
+    end
 
-s1=prob2dbatstruct(prob2);
+    % Remove bad points.
+    badPts=tooFewRayPts | tooNarrowAnglePts;
+    ids2remove=s0.OPid(badPts);
+    prob.objPts(ismember(prob.objPts(:,1),ids2remove),:)=[];
+    prob.markPts(ismember(prob.markPts(:,2),ids2remove),:)=[];
 
-s0=s1;
+    % Re-convert to DBAT structure.
+    s0=prob2dbatstruct(prob);
+end
 
 if psz.camera.isAdjusted
     % Auto-calibration
-    s0.estIO(3)=true; % f
-    s0.estIO(1:2)=true; % cx,cy
-    s0.estIO(4:5)=true; % K1,K2,K3
-    s0.estIO(7:8)=true; % P1,P2
+    s0.estIO(3)=psz.camera.adjustedParams.f; % f
+    s0.estIO(1:2)=psz.camera.adjustedParams.cxcy; % cx,cy
+    s0.estIO(4:6)=psz.camera.adjustedParams.k(1:3); % K1,K2,K3
+    s0.estIO(7:8)=psz.camera.adjustedParams.p(1:2); % P1,P2
+    if any(s0.estIO(4:8))
+        warning(['Ki/Pi values estimated by Photoscan used as initial ' ...
+                 'values for Photomodeler lens distortion model.']);
+    end
 end
 
 %TODO: Offset estimation.
@@ -184,7 +211,7 @@ fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         E.damping.name,double(fig));
 h=plotnetwork(result,E,...
               'title',['Damping: ',E.damping.name,'. Iteration %d of %d'], ...
-              'axes',fig,'pause',doPause,'camsize',1); 
+              'axes',fig,'pause',pauseMode,'camsize',1); 
 
 if nargout>0
     rr=result;
