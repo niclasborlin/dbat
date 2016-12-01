@@ -5,6 +5,9 @@ Release 0.6.0.0, Dec 1, 2016.
   - Post-processing in fixed camera mode without lens distortion.
   - Post-processing in auto-calibration mode with lens distortion using the
     Photomodeler lens distortion model.
+  - Post-processing may be performed in global coordinates or semi-local
+    coordinates (same translation and scaling used by Photoscan, but no
+    rotation). The latter reduces the condition number of the design matrix.
 - Added progressbar to loadpsz for long load times.
 - Added logarithmic autoscaling to lens distortion parameter plotting.
 - Expanded OP ray count and OP high correlation info in report file.
