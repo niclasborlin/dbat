@@ -73,6 +73,9 @@ function s=loadpsz(psFile,varargin)
 %   Additionally, LOADPSZ(FILE,TRUE,TRUE) creates ascii versions of
 %   each .PLY file in a further 'ascii' subdir.
 %
+%   If both an initial and an adjusted camera is available in the .psz
+%   file, the adjusted camera is loaded.
+%
 %See also: TEMPDIR, TEMPNAME, UNPACKPSZ.
 
 % Default values.
@@ -442,6 +445,16 @@ s.imNames=imNames;
 
 % Collect calibrated camera parameters.
 cal=chnk.sensors.sensor.calibration;
+if iscell(cal)
+    % If we have multiple cameras, prefer the adjusted.
+    camTypes=cellfun(@(x)x.Attributes.class,cal,'uniformoutput',false);
+    adjustedCam=find(strcmp(camTypes,'adjusted'));
+    if any(adjustedCam)
+        cal=cal{adjustedCam};
+    else
+        error(['Unknown camera types: ',sprintf(' %s',camTypes{:})]);
+    end
+end
 isAdjusted=strcmp(cal.Attributes.class,'adjusted');
 fx=sscanf(cal.fx.Text,'%g');
 fy=sscanf(cal.fy.Text,'%g');
