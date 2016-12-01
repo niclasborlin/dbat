@@ -294,7 +294,7 @@ for i=1:nImages
     markStd(:,ii+(1:nnz(valid)))=measured(valid,5:6)';
     % Update visibility column and pointers.
     vis(:,i)=ismember(OPid,measured(:,2));
-    colPos(vis(:,i),i)=ii+(1:nnz(valid));
+    colPos(vis(:,i),i)=ii+(1:nnz(valid)); % Consider replacing indexing for speed
     ii=ii+nnz(valid);
 end
 
@@ -303,12 +303,12 @@ if isscalar(priorSigmas)
     priorSigma=priorSigmas;
 else
     warning('Multiple prior sigmas detected. Using prior sigma==1.');
-    priorSigmas
+    priorSigmas %#ok<NOPRT>
     priorSigma=1;
 end
     
 % Pre-calculate which camera corresponds to each point.
-[i,j]=find(vis);
+[i,j]=find(vis); %#ok<ASGLU>
 ptCams=cams(j);
 
 prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
