@@ -30,12 +30,20 @@ function s=loadpsz(psFile,varargin)
 %               P       - 3-by-4-by-N array with camera matrices,
 %               CC      - 3-by-N array with camera centers,
 %               R       - 3-by-3-by-N array with camera rotation matrices.
-%   cameraIds - N vector with camera ids,
+%   cameraIds - N-vector with camera ids,
+%   cameraLabels - N-cell vector with camera labels,
+%   cameraEnabled - logical N-vector indicating which cameras are enabled,
 %   imNames   - N-vector with image file names,
 %   markPts   - struct with fields
 %               obj  - MMO-by-4 array with [imNo,id,x,y] for object points,
 %               ctrl - MMC-by-4 array with [imNo,id,x,y] for ctrl points,
 %               all  - concatenation of obj and ctrl.
+%   DBATCamId - function handle to convert from PS to DBAT camera id.
+%   PSCamId - function handle to convert from DBAT to PS camera id.
+%   DBATCPid  - function handle to convert from PS to DBAT ctrl pt id.
+%   PSCPid    - function handle to convert from DBAT to PS ctrl pt id.
+%   DBATOPid  - function handle to convert from PS to DBAT object pt id.
+%   PSOPid    - function handle to convert from DBAT to PS object pt id.
 %   K         - 3-by-3 camera calibration matrix,
 %   camera    - struct with camera information with fields
 %               imSz           - 2-vector with image size [w,h] in pixels,
@@ -98,7 +106,7 @@ if length(varargin)>=2
 end
 
 % Initialize waitbar to delay for 1s and update every 1s.
-DelayedWaitBar('init',1,1,'Load Photoscan project file...');
+DelayedWaitBar('init',1,1,'Loading Photoscan project file...');
 
 psDir=fileparts(psFile);
 if unpackLocal
@@ -169,6 +177,88 @@ s.transform.SL2G=SL2G;
 s.transform.L2SL=L2SL;
 s.transform.SL2L=SL2L;
 
+% Determine what cameras we have.
+camera=chnk.cameras.camera;
+if ~iscell(camera)
+    camera={camera};
+end
+cameraIds=cellfun(@(x)sscanf(x.Attributes.id,'%d'),camera);
+cameraLabels=cellfun(@(x)x.Attributes.label,camera,'uniformoutput',false);
+sensorIds=cellfun(@(x)sscanf(x.Attributes.sensor_id,'%d'),camera);
+cameraEnabled=cellfun(@(x)strcmp(x.Attributes.enabled,'true'),camera);
+if length(unique(sensorIds(cameraEnabled)))>1
+    error('Handling of cameras for multiple sensor ids not implemented yet');
+end
+
+s.cameraIds=cameraIds;
+s.cameraLabels=cameraLabels;
+s.cameraEnabled=cameraEnabled;
+
+invCameraIds=nan(max(cameraIds)+1,1);
+invCameraIds(cameraIds+1)=1:length(cameraIds);
+
+% Functions to convert between Photoscan camera id and DBAT camera number.
+PSCamId=@(id)cameraIds(id);
+DBATCamId=@(id)invCameraIds(id+1);
+s.PSCamId=PSCamId;
+s.DBATCamId=DBATCamId;
+
+% Extract transformation.
+% Transformations are from "image" coordinate system to local.
+xforms=nan(4,4,length(cameraIds));
+% Camera matrices from local coordinates.
+P=nan(3,4,length(cameraIds));
+% Camera centers in local coordinates.
+CC=nan(3,length(cameraIds));
+for i=1:length(cameraIds)
+    T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
+    xforms(:,:,i)=T;
+    if 1
+        % TODO: Check this "mirroring"...
+        P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
+    else
+        P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+    end
+    CC(:,i)=euclidean(null(P(:,:,i)));
+end
+s.raw.transforms=xforms;
+s.raw.P=P;
+s.raw.CC=CC;
+
+s.local.P=s.raw.P;
+s.local.CC=s.raw.CC;
+s.local.R=nan(3,3,size(s.local.P,3));
+for i=1:size(s.local.R,3)
+    R=s.local.P(:,1:3,i);
+    s.local.R(:,:,i)=R/det(R)^(1/3);
+end
+
+s.global.P=XformCams(s.local.P,L2G);
+s.global.CC=XformPts(s.local.CC,L2G);
+s.global.R=nan(3,3,size(s.global.P,3));
+for i=1:size(s.global.R,3)
+    R=s.global.P(:,1:3,i);
+    if det(R)<0
+        warning('Loaded rotation matrix has det(R)!=1')
+        disp(det(R))
+    end
+    s.global.R(:,:,i)=R/det(R)^(1/3);
+end
+
+s.semilocal.P=XformCams(s.local.P,L2SL);
+s.semilocal.CC=XformPts(s.local.CC,L2SL);
+s.semilocal.R=nan(3,3,size(s.semilocal.P,3));
+for i=1:size(s.semilocal.R,3)
+    R=s.semilocal.P(:,1:3,i);
+    if det(R)<0
+        warning('Loaded rotation matrix has det(R)!=1')
+        disp(det(R))
+    end
+    s.semilocal.R(:,:,i)=R/det(R)^(1/3);
+end
+
+
+% Process the point cloud.
 if isfield(chnk.frames.frame,'point_cloud')
     ptCloud=chnk.frames.frame.point_cloud;
 else
@@ -187,17 +277,17 @@ if ~isempty(ptCloud) && ~isempty(ptCloud.points.Attributes.path)
 else
     points=[];
 end
+s.raw.points=points;
    
 DelayedWaitBar(0.35);
 
-s.raw.points=points;
 if ~isempty(points)
     s.raw.objPts=[points.vertex.id,points.vertex.x,points.vertex.y,points.vertex.z];
 else
     s.raw.objPts=zeros(0,4);
 end
 
-% Ctrl points are in global coordinates.
+% Process the markers - ctrl points.
 if isfield(chnk,'markers')
     markers=chnk.markers.marker;
     if ~iscell(markers)
@@ -207,14 +297,21 @@ else
     markers=cell(0);
 end
 
+% Pre-allocate.
 ctrlPts=nan(length(markers),7);
+ctrlPtsEnabled=false(length(markers),1);
+ctrlPtsLabels=cell(1,length(markers));
 
 for i=1:size(ctrlPts,1);
     m=markers{i};
     id=sscanf(m.Attributes.id,'%d');
+    if isfield(m.Attributes,'label')
+        ctrlPtsLabels{i}=m.Attributes.label;
+    end
     x=nan;
     y=nan;
     z=nan;
+    enabled=false;
     % Use default marker std setting.
     sx=s.defStd.markers;
     sy=s.defStd.markers;
@@ -245,35 +342,55 @@ for i=1:size(ctrlPts,1);
         end    
         if isfield(m.reference.Attributes,'sz')
             sz=sscanf(m.reference.Attributes.sz,'%g');
-        end    
+        end
+        if isfield(m.reference.Attributes,'enabled')
+            ctrlPtsEnabled(i)=strcmp(m.reference.Attributes.enabled,'true');
+        end
     end
     ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
 end
 s.raw.ctrlPts=ctrlPts;
+s.raw.ctrlPtsLabels=ctrlPtsLabels;
+s.raw.ctrlPtsEnabled=ctrlPtsEnabled;
 
 DelayedWaitBar(0.4);
 
 % Make local/global ctrl pt ids 1-based.
-if isempty(ctrlPts)
-    ctrlIdShift=0;
-else
-    ctrlIdShift=1-min(ctrlPts(:,1));
-end
+rawCPids=ctrlPts(:,1);
+minCPid=min(rawCPids);
+maxCPid=max(rawCPids);
+% Will convert a zero-based id to a one-based id. Generate NaN's for
+% out-of-bounds CP ids.
+DBATCPid=@(id)id+1+0./(id>=minCPid & id<=maxCPid);
+PSCPid=@(id)id-1+0./(id-1>=minCPid & id-1<=maxCPid);
 
+s.DBATCPid=DBATCPid;
+s.PSCPid=PSCPid;
+
+% Copy raw ctrl pts and adjust id.
 s.global.ctrlPts=s.raw.ctrlPts;
-s.global.ctrlPts(:,1)=s.global.ctrlPts(:,1)+ctrlIdShift;
+s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
+% Transform ctrl pts from global to local and semilocal coordinate systems.
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
 s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
 
-% Shift object point ids to above control point ids.
-if isempty(s.raw.objPts) || isempty(s.raw.ctrlPts);
-    objIdShift=0;
-else
-    objIdShift=max(s.local.ctrlPts(:,1))+1;
+% Highest DBAT CP id.
+maxDBATCPid=DBATCPid(maxCPid);
+if isempty(maxDBATCPid)
+    maxDBATCPid=0;
 end
 
+% Map object point ids to above control point ids. Generate NaN's for
+% out-of-bounds OP ids.
+DBATOPid=@(id)id+1+maxDBATCPid+0./(id>=0);
+PSOPid=@(id)id-1-maxDBATCPid+0./(id>=1+maxDBATCPid);
+s.DBATOPid=DBATOPid;
+s.PSOPid=PSOPid;
+
+% Copy raw object points and adjust id.
 s.local.objPts=s.raw.objPts;
-s.local.objPts(:,1)=s.local.objPts(:,1)+objIdShift;
+s.local.objPts(:,1)=DBATOPid(s.local.objPts(:,1));
+% Transform obj pts from local to global and semilocal coordinate systems.
 s.global.objPts=XformPtsi(s.local.objPts,L2G);
 s.semilocal.objPts=XformPtsi(s.global.objPts,G2SL);
 
@@ -292,7 +409,7 @@ s.raw.tracks=tracks;
 
 DelayedWaitBar(0.45);
 
-% Image coordinates.
+% Load all measured image coordinates.
 if ~isempty(ptCloud)
     projs=ptCloud.projections;
 else
@@ -300,26 +417,24 @@ else
 end
 if ~iscell(projs), projs={projs}; end
 
+% Projections will be sorted to match s.cameraId.
 projections=cell(size(projs));
 s.raw.paths.projections=cell(size(projs));
-
-cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,projs);
-
-s.cameraIds=cameraIds;
+projCameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),projs);
 
 for i=1:length(projections)
+    % Where to store these measured points.
+    j=DBATCamId(projCameraIds(i));
     if unpackLocal
-        s.raw.paths.projections{i}=fullfile(unpackDir,projs{i}.Attributes.path);
-    else
-        s.raw.paths.points='';
+        s.raw.paths.projections{j}=fullfile(unpackDir,projs{i}.Attributes.path);
     end
     [~,~,proj,~]=ply_read(fullfile(unpackDir,projs{i}.Attributes.path),'tri');
-    projections{i}=proj;
+    projections{j}=proj;
     DelayedWaitBar(0.45+i/length(projections)*0.5);
 end
 s.raw.projections=projections;
 
-% Collect all measured 2d points.
+% Process all measured image coordinates.
 nPts=cellfun(@(x)length(x.vertex.id),projections);
 ptIx=cumsum([0,nPts]);
 objMarkPts=nan(sum(nPts),4);
@@ -328,15 +443,24 @@ for i=1:length(projections)
     % Index for where to put the points.
     ni=nPts(i);
     ix=ptIx(i)+1:ptIx(i+1);
-    objMarkPts(ix,:)=[repmat(i-1,ni,1),projections{i}.vertex.id,...
+    % Store object points with PS ids.
+    objMarkPts(ix,:)=[repmat(s.cameraIds(i),ni,1),projections{i}.vertex.id,...
                       projections{i}.vertex.x,projections{i}.vertex.y];
 end
+% Ensure that the mark points are sorted by image, then id.
 objMarkPts=msort(objMarkPts);
 
 s.raw.objMarkPts=objMarkPts;
+% Create copy with DBAT ids.
 s.markPts.obj=objMarkPts;
-s.markPts.obj(:,2)=s.markPts.obj(:,2)+objIdShift;
+if ~isempty(s.markPts.obj)
+    s.markPts.obj(:,1)=DBATCamId(s.markPts.obj(:,1));
+    s.markPts.obj(:,2)=DBATOPid(s.markPts.obj(:,2));
+end
+% Ensure that the mark points are sorted by image, then id.
+s.markPts.obj=msort(s.markPts.obj);
 
+% Process measurements of 'markers' - control points.
 if isfield(chnk.frames.frame,'markers')
     marker=chnk.frames.frame.markers.marker;
     if ~iscell(marker)
@@ -346,100 +470,59 @@ else
     marker=cell(1,0);
 end
 
-ids=cellfun(@(x)sscanf(x.Attributes.marker_id,'%d'),marker);
-
 ctrlMarkPts=zeros(0,4);
 
 for i=1:length(marker)
+    % Extract marker id and convert to marker number.
+    markerId=sscanf(marker{i}.Attributes.marker_id,'%d');
     if isfield(marker{i},'location')
         location=marker{i}.location;
         if ~iscell(location)
             location={location};
         end
+        % Extract camera ids for each measured point.
         camIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),location);
         x=cellfun(@(m)sscanf(m.Attributes.x,'%g'),location);
         y=cellfun(@(m)sscanf(m.Attributes.y,'%g'),location);
-        ctrlMarkPts=[ctrlMarkPts;[camIds;repmat(ids(i),size(camIds));x;y]']; %#ok<AGROW>
+        pinned=cellfun(@(m)isfield(m.Attributes,'pinned') && ...
+                       strcmp(m.Attributes.pinned,'true'),location);
+        % What does 'pinned' mean? For now, just warn if a marker measurement
+        % is not pinned.
+        if ~all(pinned)
+            warning('Warning: Unpinned marker measurements!');
+        end
+        ctrlMarkPts=[ctrlMarkPts;[camIds;repmat(markerId,size(camIds));x;y]']; %#ok<AGROW>
     end
 end
-s.raw.ctrlMarkPts=msort(ctrlMarkPts);
+% Sort ctrlMarkPts by marker id, then camera id, to match order in xml file.
+[~,i]=msort(ctrlMarkPts(:,[2,1,3:end]));
+s.raw.ctrlMarkPts=ctrlMarkPts(i,:);
+% Create copy with DBAT ids.
 s.markPts.ctrl=s.raw.ctrlMarkPts;
 if ~isempty(s.markPts.ctrl)
-    s.markPts.ctrl(:,2)=s.markPts.ctrl(:,2)+ctrlIdShift;
+    s.markPts.ctrl(:,1)=DBATCamId(s.markPts.ctrl(:,1));
+    s.markPts.ctrl(:,2)=DBATOPid(s.markPts.ctrl(:,2));
 end
+% Ensure that the mark points are sorted by image, then id.
+s.markPts.ctrl=msort(s.markPts.ctrl);
 
 s.markPts.all=msort([s.markPts.ctrl;s.markPts.obj]);
 
 DelayedWaitBar(1);
 
-% Transformations are from "image" coordinate system to local.
-camera=chnk.cameras.camera;
-if ~iscell(camera)
-    camera={camera};
-end
-cameraIds=cellfun(@(x)sscanf(x.Attributes.id,'%d')+1,camera);
-xforms=nan(4,4,length(cameraIds));
-% Camera matrices from local coordinates.
-P=nan(3,4,length(cameraIds));
-% Camera centers in local coordinates.
-CC=nan(3,length(cameraIds));
-for i=1:length(cameraIds)
-    T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
-    xforms(:,:,i)=T;
-    if 1
-        % TODO: Check this "mirroring"...
-        P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
-    else
-        P(:,:,i)=eye(3,4)/T; % *inv(T)
-    end
-    CC(:,i)=euclidean(null(P(:,:,i)));
-end
-s.raw.transforms=xforms;
-s.raw.P=P;
-s.raw.CC=CC;
-
-s.local.P=s.raw.P;
-s.local.CC=s.raw.CC;
-s.local.R=nan(3,3,size(s.local.P,3));
-for i=1:size(s.local.R,3)
-    R=s.local.P(:,1:3,i);
-    s.local.R(:,:,i)=R/det(R)^(1/3);
-end
-
-s.global.P=XformCams(s.local.P,L2G);
-s.global.CC=XformPts(s.local.CC,L2G);
-s.global.R=nan(3,3,size(s.global.P,3));
-for i=1:size(s.global.R,3)
-    R=s.global.P(:,1:3,i);
-    if det(R)<0
-        warning('Loaded rotation matrix has det(R)')
-        disp(det(R))
-    end
-    s.global.R(:,:,i)=R/det(R)^(1/3);
-end
-
-s.semilocal.P=XformCams(s.local.P,L2SL);
-s.semilocal.CC=XformPts(s.local.CC,L2SL);
-s.semilocal.R=nan(3,3,size(s.semilocal.P,3));
-for i=1:size(s.semilocal.R,3)
-    R=s.semilocal.P(:,1:3,i);
-    if det(R)<0
-        warning('Loaded rotation matrix has det(R)')
-        disp(det(R))
-    end
-    s.semilocal.R(:,:,i)=R/det(R)^(1/3);
-end
-
+% Process image files names. File names will be sorted as s.cameraId.
 camera=chnk.frames.frame.cameras.camera;
 if ~iscell(camera)
     camera={camera};
 end
-% TODO: Fix to account for camera Ids.
-cameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d')+1,camera);
 
 imNames=cell(1,length(camera));
 for i=1:length(camera)
-    imNames{i}=fullfile(psDir,camera{i}.photo.Attributes.path);
+    % Extract camera id.
+    camId=sscanf(camera{i}.Attributes.camera_id,'%d');
+    % Convert to DBAT camera number.
+    j=DBATCamId(camId);
+    imNames{j}=fullfile(psDir,camera{i}.photo.Attributes.path);
 end
 s.imNames=imNames;
 
@@ -596,9 +679,9 @@ if isfield(chnk,'meta') && isfield(chnk.meta,'property')
             % Should we warn that a parameter not supported?
             switch param
               case {'aspect','skew','b1','b2','k4','p3','p4'}
-                warnNotSupported{end+1}=param;
+                warnNotSupported{end+1}=param; %#ok<AGROW>
               case {'k1','k2','k3','p1','p2'}
-                warnUsePhotoModeler{end+1}=param;
+                warnUsePhotoModeler{end+1}=param; %#ok<AGROW>
             end
         end
     end
