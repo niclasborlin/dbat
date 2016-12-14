@@ -68,16 +68,9 @@ markPts=[s.markPts.ctrl,repmat(ctrlStd,size(s.markPts.ctrl,1),2);
 % Sort by image, then id.
 markPts=msort(markPts);
 
-% Convert ids to one-based.
-if ~isempty(ctrlPts)
-    ctrlPts(:,1)=ctrlPts(:,1)+1;
-end
-if ~isempty(objPts)
-    objPts(:,1)=objPts(:,1)+1;
-end
 if ~isempty(markPts)
-    % Leave image indices zero-based for PhotoModeler compatibility.
-    markPts(:,2)=markPts(:,2)+1;
+    % Convert image indices to zero-based for PhotoModeler compatibility.
+    markPts(:,1)=markPts(:,1)-1;
 end
 
 % Construct PM structure.
@@ -98,6 +91,7 @@ if ~isempty(pos.objPts)
     id3d=[id3d,pos.objPts(:,1)'];
 end
 name=repmat({''},size(id3d));
+name(s.DBATCPid(s.raw.ctrlPts(:,1)))=s.raw.ctrlPtsLabels;
 pos3d=zeros(3,0);
 if size(pos.ctrlPts,2)>=4
     pos3d=[pos3d,pos.ctrlPts(:,2:4)'];
@@ -116,10 +110,8 @@ if size(pos.objPts,2)>=7
 else
     std3d=[std3d,nan(size(pos.objPts,1),3)'];
 end
-% Convert to one-based.
-id3d=id3d+1;
 % Create a 'raw' visibility map, i.e. for all object points.
-rawVis=sparse(s.markPts.all(:,2)+1,s.markPts.all(:,1)+1,1);
+rawVis=sparse(s.markPts.all(:,2),s.markPts.all(:,1),1);
 % Keep only the object points that were actually computed.
 vis=rawVis(id3d,:);
 
@@ -130,17 +122,17 @@ name=name(i);
 vis=vis(i,:);
 pos3d=pos3d(:,i);
 std3d=std3d(:,i);
-pts3d=struct('id',id3d,'name',{name},'vis',logical(vis),'pos',pos3d,'std',std3d);
+pts3d=struct('id',id3d,'name',{name},'vis',logical(vis),'pos',pos3d,...
+             'std',std3d);
 
 % Sort 2d pts by image first, then id.
-[~,i]=sortrows(s.markPts.all,[1,2]);
-s.markPts.all=s.markPts.all(i,:);
+s.markPts.all=sortrows(s.markPts.all,[1,2]);
 
 % Only keep 2d measurements that corresponds to 3D points.
-keep=ismember(s.markPts.all(:,2)+1,pts3d.id);
+keep=ismember(s.markPts.all(:,2),pts3d.id);
 
-id2d=s.markPts.all(keep,2)'+1;
-imNo=s.markPts.all(keep,1)'+1;
+id2d=s.markPts.all(keep,2)';
+imNo=s.markPts.all(keep,1)';
 pos2d=s.markPts.all(keep,3:4)';
 res2d=nan(size(pos2d));
 

@@ -39,7 +39,7 @@ function s=loadpsz(psFile,varargin)
 %               ctrl - MMC-by-4 array with [imNo,id,x,y] for ctrl points,
 %               all  - concatenation of obj and ctrl.
 %   DBATCamId - function handle to convert from PS to DBAT camera id.
-%   PSCamId - function handle to convert from DBAT to PS camera id.
+%   PSCamId   - function handle to convert from DBAT to PS camera id.
 %   DBATCPid  - function handle to convert from PS to DBAT ctrl pt id.
 %   PSCPid    - function handle to convert from DBAT to PS ctrl pt id.
 %   DBATOPid  - function handle to convert from PS to DBAT object pt id.
@@ -357,12 +357,14 @@ DelayedWaitBar(0.4);
 
 % Make local/global ctrl pt ids 1-based.
 rawCPids=ctrlPts(:,1);
-minCPid=min(rawCPids);
-maxCPid=max(rawCPids);
+
+invCPids=nan(max(rawCPids)+1,1);
+invCPids(rawCPids+1)=1:length(rawCPids);
+
 % Will convert a zero-based id to a one-based id. Generate NaN's for
 % out-of-bounds CP ids.
-DBATCPid=@(id)id+1+0./(id>=minCPid & id<=maxCPid);
-PSCPid=@(id)id-1+0./(id-1>=minCPid & id-1<=maxCPid);
+PSCPid=@(id)rawCPids(id);
+DBATCPid=@(id)invCPids(id+1);
 
 s.DBATCPid=DBATCPid;
 s.PSCPid=PSCPid;
@@ -375,10 +377,7 @@ s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
 s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
 
 % Highest DBAT CP id.
-maxDBATCPid=DBATCPid(maxCPid);
-if isempty(maxDBATCPid)
-    maxDBATCPid=0;
-end
+maxDBATCPid=length(rawCPids);
 
 % Map object point ids to above control point ids. Generate NaN's for
 % out-of-bounds OP ids.
@@ -448,7 +447,7 @@ for i=1:length(projections)
                       projections{i}.vertex.x,projections{i}.vertex.y];
 end
 % Ensure that the mark points are sorted by image, then id.
-objMarkPts=msort(objMarkPts);
+objMarkPts=sortrows(objMarkPts,[1,2]);
 
 s.raw.objMarkPts=objMarkPts;
 % Create copy with DBAT ids.
@@ -458,7 +457,7 @@ if ~isempty(s.markPts.obj)
     s.markPts.obj(:,2)=DBATOPid(s.markPts.obj(:,2));
 end
 % Ensure that the mark points are sorted by image, then id.
-s.markPts.obj=msort(s.markPts.obj);
+s.markPts.obj=sortrows(s.markPts.obj,[1,2]);
 
 % Process measurements of 'markers' - control points.
 if isfield(chnk.frames.frame,'markers')
@@ -495,18 +494,17 @@ for i=1:length(marker)
     end
 end
 % Sort ctrlMarkPts by marker id, then camera id, to match order in xml file.
-[~,i]=msort(ctrlMarkPts(:,[2,1,3:end]));
-s.raw.ctrlMarkPts=ctrlMarkPts(i,:);
+s.raw.ctrlMarkPts=sortrows(ctrlMarkPts,[2,1]);
 % Create copy with DBAT ids.
 s.markPts.ctrl=s.raw.ctrlMarkPts;
 if ~isempty(s.markPts.ctrl)
     s.markPts.ctrl(:,1)=DBATCamId(s.markPts.ctrl(:,1));
-    s.markPts.ctrl(:,2)=DBATOPid(s.markPts.ctrl(:,2));
+    s.markPts.ctrl(:,2)=DBATCPid(s.markPts.ctrl(:,2));
 end
 % Ensure that the mark points are sorted by image, then id.
-s.markPts.ctrl=msort(s.markPts.ctrl);
+s.markPts.ctrl=sortrows(s.markPts.ctrl,[1,2]);
 
-s.markPts.all=msort([s.markPts.ctrl;s.markPts.obj]);
+s.markPts.all=sortrows([s.markPts.ctrl;s.markPts.obj],[1,2]);
 
 DelayedWaitBar(1);
 
