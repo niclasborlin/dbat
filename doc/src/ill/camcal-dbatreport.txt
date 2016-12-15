@@ -5,8 +5,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 29-Jun-2016 02:26:07
-      DBAT version:    0.5.1.2 (2016-06-29)
+      Last Bundle Run: 15-Dec-2016 10:22:00
+      DBAT version:    0.6.1.0 (2016-12-15)
       Status:          OK (0)
       Sigma0:          1.68901
       Sigma0 (pixels): 0.168901
@@ -500,7 +500,14 @@ Damped Bundle Adjustment Toolbox result file
          Number of control pts: 4
          Number of object pts: 96
          CP ray count: 21-21 (21.0 avg)
+            4 points with 21 rays.
          OP ray count: 16-21 (20.7 avg)
+            1 points with 16 rays.
+            1 points with 17 rays.
+            2 points with 18 rays.
+            3 points with 19 rays.
+            5 points with 20 rays.
+            84 points with 21 rays.
       Point Marking Residuals
          Overall point RMS: 0.226 pixels
          Mark point residuals:
@@ -518,6 +525,9 @@ Damped Bundle Adjustment Toolbox result file
          Maximum X standard deviation: 5.2e-05 (OP 90)
          Maximum Y standard deviation: 5.5e-05 (OP 90)
          Maximum Z standard deviation: 8.9e-05 (OP 90)
+         Points with high correlations
+            Points with correlation above 95%: 0
+            Points with correlation above 99%: 0
       Point Angles
          CP
             Minimum: 83.4 degrees (CP 1003)

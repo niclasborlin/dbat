@@ -1,5 +1,10 @@
 Summary changelog file for release.
 
+Release 0.6.0.1, Dec 15, 2016.
+- Cleaned up the id handling in the Photoscan loader. Now, the images 
+  (cameras) in the .psz projects can have any ids. Previously, the camera ids
+  were assumed to be 0, 1, ...
+
 Release 0.6.0.0, Dec 1, 2016.
 - Added support for post-processing of Photoscan .psz projects. This includes:
   - Post-processing in fixed camera mode without lens distortion.
