@@ -53,8 +53,8 @@ for i=1:length(images)
     images(i).outer=[CC(:,i);angPM(:,i)]';
 end
 
-% Copy global control points.
-ctrlPts=pos.ctrlPts;
+% Copy enabled control points.
+ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
 
 % Copy global object points. Set posterior uncertainty to unknown.
 objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];

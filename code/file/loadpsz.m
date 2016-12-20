@@ -144,18 +144,26 @@ end
 % Extract default standard deviations.
 s.defStd=getdefstd(chnk);
 
+% Default transformation matrices.
+R=eye(4);
+T=eye(4);
+S=eye(4);
+
 % Extract local-to-global transformation.
 if ~isfield(chnk,'transform')
     warning('No local-to-global transform. Using defaults.');
-    R=eye(4);
-    T=eye(4);
-    S=eye(4);
 else
     % Use actual transform.
     xform=chnk.transform;
-    R=blkdiag(reshape(sscanf(xform.rotation.Text,'%g '),3,3)',1);
-    T=[eye(3),sscanf(xform.translation.Text,'%g ');0,0,0,1];
-    S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
+    if isfield(xform,'rotation')
+        R=blkdiag(reshape(sscanf(xform.rotation.Text,'%g '),3,3)',1);
+    end
+    if isfield(xform,'translation')
+        T=[eye(3),sscanf(xform.translation.Text,'%g ');0,0,0,1];
+    end
+    if isfield(xform,'scale')
+        S=diag([repmat(sscanf(xform.scale.Text,'%g '),1,3),1]);
+    end
 end
 
 % Transformations between local/semilocal and global coordinate systems.
@@ -311,7 +319,6 @@ for i=1:size(ctrlPts,1);
     x=nan;
     y=nan;
     z=nan;
-    enabled=false;
     % Use default marker std setting.
     sx=s.defStd.markers;
     sy=s.defStd.markers;
@@ -370,11 +377,16 @@ s.DBATCPid=DBATCPid;
 s.PSCPid=PSCPid;
 
 % Copy raw ctrl pts and adjust id.
+s.global.ctrlPtsLabels=s.raw.ctrlPtsLabels;
+s.global.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 s.global.ctrlPts=s.raw.ctrlPts;
 s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
 % Transform ctrl pts from global to local and semilocal coordinate systems.
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
 s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
+
+s.semilocal.ctrlPtsLabels=s.raw.ctrlPtsLabels;
+s.semilocal.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 
 % Highest DBAT CP id.
 maxDBATCPid=length(rawCPids);
@@ -387,6 +399,8 @@ s.DBATOPid=DBATOPid;
 s.PSOPid=PSOPid;
 
 % Copy raw object points and adjust id.
+s.local.ctrlPtsLabels=s.raw.ctrlPtsLabels;
+s.local.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 s.local.objPts=s.raw.objPts;
 s.local.objPts(:,1)=DBATOPid(s.local.objPts(:,1));
 % Transform obj pts from local to global and semilocal coordinate systems.
@@ -469,7 +483,9 @@ else
     marker=cell(1,0);
 end
 
+% [camId, markerId, x, y]
 ctrlMarkPts=zeros(0,4);
+ctrlMarkPtsPinned=false(0,1);
 
 for i=1:length(marker)
     % Extract marker id and convert to marker number.
@@ -491,10 +507,13 @@ for i=1:length(marker)
             warning('Warning: Unpinned marker measurements!');
         end
         ctrlMarkPts=[ctrlMarkPts;[camIds;repmat(markerId,size(camIds));x;y]']; %#ok<AGROW>
+        ctrlMarkPtsPinned=[ctrlMarkPtsPinned;pinned']; %#ok<AGROW>
     end
 end
 % Sort ctrlMarkPts by marker id, then camera id, to match order in xml file.
-s.raw.ctrlMarkPts=sortrows(ctrlMarkPts,[2,1]);
+[s.raw.ctrlMarkPts,i]=sortrows(ctrlMarkPts,[2,1]);
+s.raw.ctrlMarkPtsPinned=ctrlMarkPtsPinned(i);
+
 % Create copy with DBAT ids.
 s.markPts.ctrl=s.raw.ctrlMarkPts;
 if ~isempty(s.markPts.ctrl)
@@ -502,8 +521,14 @@ if ~isempty(s.markPts.ctrl)
     s.markPts.ctrl(:,2)=DBATCPid(s.markPts.ctrl(:,2));
 end
 % Ensure that the mark points are sorted by image, then id.
-s.markPts.ctrl=sortrows(s.markPts.ctrl,[1,2]);
+[s.markPts.ctrl,i]=sortrows(s.markPts.ctrl,[1,2]);
+s.markPts.ctrlPinned=s.raw.ctrlMarkPtsPinned(i);
 
+% Returns true for every [imNo, markerId] that are pinned ctrl pt
+% measurements.
+s.markPts.IsPinned=@(x)ismember(x(:,1:2),s.markPts.ctrl(s.markPts.ctrlPinned,1:2),'rows');
+
+% Pack all measured points together.
 s.markPts.all=sortrows([s.markPts.ctrl;s.markPts.obj],[1,2]);
 
 DelayedWaitBar(1);
