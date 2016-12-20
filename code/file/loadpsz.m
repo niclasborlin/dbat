@@ -531,6 +531,9 @@ s.markPts.IsPinned=@(x)ismember(x(:,1:2),s.markPts.ctrl(s.markPts.ctrlPinned,1:2
 % Pack all measured points together.
 s.markPts.all=sortrows([s.markPts.ctrl;s.markPts.obj],[1,2]);
 
+% Create visibility matrix.
+vis=sparse(ss.markPts.all(:,2),ss.markPts.all(:,1),1);
+
 DelayedWaitBar(1);
 
 % Process image files names. File names will be sorted as s.cameraId.
