@@ -36,7 +36,11 @@ function s=loadpsz(psFile,varargin)
 %   imNames   - N-vector with image file names,
 %   markPts   - struct with fields
 %               obj  - MMO-by-4 array with [imNo,id,x,y] for object points,
+%               sz   - MO-by-1 array with key point size
 %               ctrl - MMC-by-4 array with [imNo,id,x,y] for ctrl points,
+%               ctrlPinned - MMC-by-1 logical vector with pinned status,
+%               IsPinned - function handle to test if a control
+%                          point is pinned.
 %               all  - concatenation of obj and ctrl.
 %   DBATCamId - function handle to convert from PS to DBAT camera id.
 %   PSCamId   - function handle to convert from DBAT to PS camera id.
@@ -45,6 +49,7 @@ function s=loadpsz(psFile,varargin)
 %   DBATOPid  - function handle to convert from PS to DBAT object pt id.
 %   PSOPid    - function handle to convert from DBAT to PS object pt id.
 %   K         - 3-by-3 camera calibration matrix,
+%   vis       - nOP-by-nImages sparse logical visibility matrix,
 %   camera    - struct with camera information with fields
 %               imSz           - 2-vector with image size [w,h] in pixels,
 %               sensorFormat   - 2-vector with sensor size [w,h] in mm,
@@ -221,7 +226,7 @@ CC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
     T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
     xforms(:,:,i)=T;
-    if 1
+    if 0
         % TODO: Check this "mirroring"...
         P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
     else
@@ -451,6 +456,7 @@ s.raw.projections=projections;
 nPts=cellfun(@(x)length(x.vertex.id),projections);
 ptIx=cumsum([0,nPts]);
 objMarkPts=nan(sum(nPts),4);
+objKeyPtSize=nan(sum(nPts));
 
 for i=1:length(projections)
     % Index for where to put the points.
@@ -459,11 +465,15 @@ for i=1:length(projections)
     % Store object points with PS ids.
     objMarkPts(ix,:)=[repmat(s.cameraIds(i),ni,1),projections{i}.vertex.id,...
                       projections{i}.vertex.x,projections{i}.vertex.y];
+    objKeyPtSize(ix)=projections{i}.vertex.size;
 end
 % Ensure that the mark points are sorted by image, then id.
-objMarkPts=sortrows(objMarkPts,[1,2]);
+[objMarkPts,i]=sortrows(objMarkPts,[1,2]);
+objKeyPtSize=objKeyPtSize(i);
 
 s.raw.objMarkPts=objMarkPts;
+s.raw.objKeyPtSize=objKeyPtSize;
+
 % Create copy with DBAT ids.
 s.markPts.obj=objMarkPts;
 if ~isempty(s.markPts.obj)
@@ -471,7 +481,8 @@ if ~isempty(s.markPts.obj)
     s.markPts.obj(:,2)=DBATOPid(s.markPts.obj(:,2));
 end
 % Ensure that the mark points are sorted by image, then id.
-s.markPts.obj=sortrows(s.markPts.obj,[1,2]);
+[s.markPts.obj,i]=sortrows(s.markPts.obj,[1,2]);
+s.markPts.sz=s.raw.objKeyPtSize(i);
 
 % Process measurements of 'markers' - control points.
 if isfield(chnk.frames.frame,'markers')
@@ -532,7 +543,9 @@ s.markPts.IsPinned=@(x)ismember(x(:,1:2),s.markPts.ctrl(s.markPts.ctrlPinned,1:2
 s.markPts.all=sortrows([s.markPts.ctrl;s.markPts.obj],[1,2]);
 
 % Create visibility matrix.
-vis=sparse(ss.markPts.all(:,2),ss.markPts.all(:,1),1);
+vis=sparse(s.markPts.all(:,2),s.markPts.all(:,1),true);
+
+s.vis=vis;
 
 DelayedWaitBar(1);
 
