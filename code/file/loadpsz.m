@@ -611,6 +611,9 @@ sensor=chnk.sensors.sensor;
 imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
       sscanf(sensor.resolution.Attributes.height,'%d')];
 
+camName=sensor.Attributes.label;
+camType=sensor.Attributes.type;
+
 sProps=sensor.property;
 if ~iscell(sProps), sProps={sProps}; end
 
@@ -639,6 +642,8 @@ if ~isempty(fProp)
     sensorFixed=strcmp(fProp{1}.Attributes.value,'true');
 end
 
+s.camera.name=camName;
+s.camera.type=camType;
 s.camera.imSz=imSz;
 s.camera.pixelSz=[pixelWidth,pixelHeight];
 s.camera.sensorFormat=s.camera.imSz.*s.camera.pixelSz;
