@@ -226,10 +226,11 @@ CC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
     T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
     xforms(:,:,i)=T;
-    if 0
+    if 1
         % TODO: Check this "mirroring"...
         P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
     else
+        warning('Untested non-mirroring');
         P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
     end
     CC(:,i)=euclidean(null(P(:,:,i)));
@@ -456,7 +457,7 @@ s.raw.projections=projections;
 nPts=cellfun(@(x)length(x.vertex.id),projections);
 ptIx=cumsum([0,nPts]);
 objMarkPts=nan(sum(nPts),4);
-objKeyPtSize=nan(sum(nPts));
+objKeyPtSize=nan(sum(nPts),1);
 
 for i=1:length(projections)
     % Index for where to put the points.
