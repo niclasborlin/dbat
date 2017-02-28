@@ -1,4 +1,4 @@
-function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,nRays,minAngle,pauseMode)
+function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,minRays,minAngle,pauseMode)
 %PS_POSTPROC Post-process a PhotoScan project.
 %
 %   PS_POSTPROC(FILENAME), loads the PhotoScan .psz file in FILENAME
@@ -8,15 +8,15 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,nRays,minAngle,pauseMode
 %   and scaling user by Photoscan, but no rotation), use
 %   PS_POSTPROC(FILENAME,SLOCAL) with SLOCAL==TRUE.
 %
-%   PS_POSTPROC(FILENAME,SLOCAL,NRAYS), removes all measurements of
-%   object points with NRAYS rays or less before processing.
+%   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS), removes all measurements of
+%   object points with MINRAYS rays or less before processing.
 %
-%   PS_POSTPROC(FILENAME,SLOCAL,NRAYS,ANGLE), removes all measurements
+%   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS,ANGLE), removes all measurements
 %   of object points with an intersection angle below ANGLE degrees
 %   before processing. The intersection angle is computed from
 %   Photoscan EO/OP values.
 %
-%   PS_POSTPROC(FILENAME,SLOCAL,NRAYS,ANGLE,PMODE) runs the demo in
+%   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS,ANGLE,PMODE) runs the demo in
 %   pause mode PMODE. See PLOTNETWORK for pause modes.
 %
 %   References:
@@ -33,7 +33,7 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,nRays,minAngle,pauseMode
 if nargin==0, help(mfilename), return, end
 
 if nargin<2, sLocal=false; end
-if nargin<3, nRays=0; end
+if nargin<3, minRays=0; end
 if nargin<4, minAngle=0; end
 if nargin<5, pauseMode='off'; end
 
@@ -44,15 +44,20 @@ fprintf('Loading PhotoScan project file %s...',fileName);
 psz=loadpsz(fileName);
 fprintf('done.\n');
 
-% Conver to Photomodeler structure.
+% Convert to Photomodeler structure.
 prob=ps2pmstruct(psz,sLocal);
 
 % Convert to DBAT structure.
 s0=prob2dbatstruct(prob);
 
-if nRays>0 || minAngle>0
-    if nRays>0
-        tooFewRayPts=sum(s0.vis,2)<=nRays & ~s0.isCtrl;
+h=plotnetwork(s0,'title','Initial network from PhotoScan',...
+              'axes',tagfigure('pszinput'),'camsize',1); %#ok<NASGU>
+h=plotimagestats(tagfigure('initimstat'),s0);
+pause(0.1);
+
+if minRays>0 || minAngle>0
+    if minRays>0
+        tooFewRayPts=sum(s0.vis,2)<=minRays & ~s0.isCtrl;
     else
         tooFewRayPts=false;
     end
@@ -73,6 +78,11 @@ if nRays>0 || minAngle>0
 
     % Re-convert to DBAT structure.
     s0=prob2dbatstruct(prob);
+
+    h=plotnetwork(s0,'title','Filtered initial network from PhotoScan',...
+                  'axes',tagfigure('pszinput_filtered'),'camsize',1); %#ok<NASGU>
+    h=plotimagestats(tagfigure('initfilterimstat'),s0);
+    pause(0.1);
 end
 
 if psz.camera.isAdjusted
@@ -86,6 +96,9 @@ if psz.camera.isAdjusted
                  'values for Photomodeler lens distortion model.']);
     end
 end
+
+s0.estIO(1:4)=true;
+s0.IO(4:8)=0;
 
 %TODO: Offset estimation.
 %meanOffset=zeros(3,1);
@@ -105,6 +118,7 @@ s=s0;
 h=plotnetwork(s,'title','Initial network from PhotoScan',...
               'axes',tagfigure(mfilename),'camsize',1); %#ok<NASGU>
 
+pause(0.1)
 % Set up to run the bundle.
 damping='gna';
 

@@ -1,10 +1,10 @@
-function a=angles(s,msg)
-%ANGLES Object point ray angles for a project.
+function a=camangles(s,msg)
+%CAMANGLES Camera ray angles for a project.
 %
-%   A=ANGLES(S), where S is a struct returned by PROB2DBATSTRUCT with N
-%   object points, returns an N-vector A with the maximum angle in radians
-%   between rays for each object point. The maximum angle is the angle
-%   closest to being orthogonal between pairs of rays for each object point.
+%   A=ANGLES(S), where S is a struct returned by PROB2DBATSTRUCT with
+%   N cameras, returns an N-vector A with the maximum angle in radians
+%   between rays for each camera. The maximum angle is the angle
+%   closest to being orthogonal between pairs of rays for each camera.
 %
 %   A=ANGLES(S,MSG), uses MSG as the message for a delayed
 %   waitbar. The waitbar is presented if the angle computation takes
@@ -12,22 +12,22 @@ function a=angles(s,msg)
 
 if nargin<2, msg=''; end
 
-a=nan(size(s.OPid));
+a=nan(size(s.cams));
 
 % Delayed progress dialog.
 start=clock;
 lapTime=start;
 h=[];
 
-for i=1:length(s.OPid)
-    % Point
-    p=s.OP(:,i);
-    % Camera centers.
-    cc=s.EO(1:3,s.vis(i,:));
-    if ~isempty(cc)
+for i=1:length(s.cams)
+    % Camera center.
+    c=s.EO(1:3,i);
+    % Object points.
+    pp=s.OP(:,s.vis(:,i));
+    if ~isempty(pp)
         % Was the point visible anywhere?
         % Direction vectors.
-        d=repmat(p,1,size(cc,2))-cc;
+        d=repmat(c,1,size(pp,2))-pp;
         % Normalize
         dn=d./repmat(sqrt(sum(d.^2,1)),3,1);
         % Compute all inner products. Guard for round-off errors.
