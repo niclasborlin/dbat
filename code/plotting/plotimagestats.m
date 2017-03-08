@@ -63,7 +63,7 @@ ax=subplot(numPlots,1,1,'parent',h);
 axH(end+1)=ax;
 [c,cr,crr]=coverage(s,ix);
 bar(ax,ix,[cr;c;crr]'*100,'grouped');
-legend(ax,'Rectangular','Convex','Radial','Location','NorthEastOutside')
+legend(ax,'Rectangular','Convex','Radial','Location','Best')
 title(ax,'Image coverage (percent)')
 set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,100]);
 set(ax,'xticklabel','')
