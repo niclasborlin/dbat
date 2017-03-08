@@ -4,7 +4,11 @@ function a=angles(s,msg)
 %   A=ANGLES(S), where S is a struct returned by PROB2DBATSTRUCT with N
 %   object points, returns an N-vector A with the maximum angle in radians
 %   between rays for each object point. The maximum angle is the angle
-%   closest to being orthogonal between pairs of rays for each object point.
+%   closest to being orthogonal between pairs of rays for each
+%   object point.
+%
+%   A zero angle is returned for single-ray points. NaN's are
+%   returned for points without rays.
 %
 %   A=ANGLES(S,MSG), uses MSG as the message for a delayed
 %   waitbar. The waitbar is presented if the angle computation takes
@@ -24,8 +28,13 @@ for i=1:length(s.OPid)
     p=s.OP(:,i);
     % Camera centers.
     cc=s.EO(1:3,s.vis(i,:));
-    if ~isempty(cc)
-        % Was the point visible anywhere?
+    % How many rays?
+    switch size(cc,2)
+      case 0
+        % Do nothing.
+      case 1
+        a(i)=0;
+      otherwise
         % Direction vectors.
         d=repmat(p,1,size(cc,2))-cc;
         % Normalize
@@ -47,6 +56,7 @@ for i=1:length(s.OPid)
             % Update dialog every 1 s.
             if ishandle(h) % Guard against window close.
                 waitbar(i/length(s.OPid),h);
+                pause(0.01);
             end
             lapTime=clock;
         end
