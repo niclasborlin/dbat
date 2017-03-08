@@ -7,6 +7,7 @@ function s=loadpsz(psFile,varargin)
 %   S=LOADPSZ(FILE,N) loads chunk N instead of chunk #1.
 %
 %   The struct S has fields
+%   fileName  - string with file name.
 %   document  - recursive struct that correspond to the XML
 %               structure in FILE.
 %   transform - struct with fields
@@ -130,6 +131,8 @@ DelayedWaitBar(0.25);
 fName=fullfile(unpackDir,'doc.xml');
 s=dbatxml2struct(fName);
 DelayedWaitBar(0.3);
+
+s.fileName=psFile;
 
 % Get the requested chunk.
 if iscell(s.document.chunks.chunk)

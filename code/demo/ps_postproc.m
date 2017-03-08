@@ -19,6 +19,9 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,minRays,minAngle,pauseMo
 %   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS,ANGLE,PMODE) runs the demo in
 %   pause mode PMODE. See PLOTNETWORK for pause modes.
 %
+%   Use PS_POSTPROC(PSZ,...) if the Photoscan project has already
+%   been loaded by loadpsz.
+
 %   References:
 %       [1] Börlin and Grussenmeyer (2016), "External Verification
 %           of the Bundle Adjustment in Photogrammetric Software
@@ -37,53 +40,19 @@ if nargin<3, minRays=0; end
 if nargin<4, minAngle=0; end
 if nargin<5, pauseMode='off'; end
 
+if isstruct(fileName)
+    psz=fileName;
+    fileName=psz.fileName;
+else
+    fprintf('Loading PhotoScan project file %s...',fileName);
+    psz=loadpsz(fileName);
+    fprintf('done.\n');
+end
+
 % Extract dir of input file.
 [inputDir,inputName,~]=fileparts(fileName);
 
-fprintf('Loading PhotoScan project file %s...',fileName);
-psz=loadpsz(fileName);
-fprintf('done.\n');
-
-% Convert to Photomodeler structure.
-prob=ps2pmstruct(psz,sLocal);
-
-% Convert to DBAT structure.
-s0=prob2dbatstruct(prob);
-
-h=plotnetwork(s0,'title','Initial network from PhotoScan',...
-              'axes',tagfigure('pszinput'),'camsize',1); %#ok<NASGU>
-h=plotimagestats(tagfigure('initimstat'),s0);
-pause(0.1);
-
-if minRays>0 || minAngle>0
-    if minRays>0
-        tooFewRayPts=sum(s0.vis,2)<=minRays & ~s0.isCtrl;
-    else
-        tooFewRayPts=false;
-    end
-    
-    if minAngle>0
-        rayAng=angles(s0,'Computing ray angles')*180/pi;
-
-        tooNarrowAnglePts=rayAng<minAngle & ~s0.isCtrl;
-    else
-        tooNarrowAnglePts=false;
-    end
-
-    % Remove bad points.
-    badPts=tooFewRayPts | tooNarrowAnglePts;
-    ids2remove=s0.OPid(badPts);
-    prob.objPts(ismember(prob.objPts(:,1),ids2remove),:)=[];
-    prob.markPts(ismember(prob.markPts(:,2),ids2remove),:)=[];
-
-    % Re-convert to DBAT structure.
-    s0=prob2dbatstruct(prob);
-
-    h=plotnetwork(s0,'title','Filtered initial network from PhotoScan',...
-                  'axes',tagfigure('pszinput_filtered'),'camsize',1); %#ok<NASGU>
-    h=plotimagestats(tagfigure('initfilterimstat'),s0);
-    pause(0.1);
-end
+[psz,prob,s0,rayAng,camRayAng]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
 
 if psz.camera.isAdjusted
     % Auto-calibration
