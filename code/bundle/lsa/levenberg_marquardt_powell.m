@@ -17,10 +17,11 @@ function [x,code,n,final,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
 %   sigma0 estimates at each iteration.
 %
 %   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
-%   estimates of the weighted and unweighted residual vector and
-%   Jacobian matrix. The weighted estimates are returned as fields
-%   weighted.r and weighted.J, respectively, the unweighted as
-%   unweighted.r and unweighted.J, respectively.
+%   step and the estimates of the weighted and unweighted residual
+%   vector and Jacobian matrix. The final step are returned in the
+%   field p. The weighted estimates are returned as fields weighted.r
+%   and weighted.J, respectively, the unweighted as unweighted.r and
+%   unweighted.J, respectively.
 %
 %   [X,CODE,I,FINAL,T,RR,DELTAS,RHOS,STEPS]=... returns the iteration trace as
 %   successive columns in T, the successive estimates of sigma0 in RR, the
@@ -200,7 +201,8 @@ end
 
 if nargout>3
     final=struct('unweighted',struct('r',s,'J',K),...
-                 'weighted',struct('r',r,'J',J));
+                 'weighted',struct('r',r,'J',J),...
+                 'p',p);
 end
 
 % Trim unused trace columns.
@@ -221,10 +223,41 @@ function [p,pGN,step]=dogleg(r,J,delta)
 %                   1 - Interpolated step.
 %                   2 - Cauchy (Steepest descent) step,
 
-% Calculate Gauss-Newton direction.
-H=J'*J; % This could be optimized by supplying a Cholesky factor of H instead.
-g=J'*r;
-pGN=H\(-g);
+% Calculate the Gauss-Newton direction.
+
+% Do column scaling of the Jacobian to reduce the condition number.
+%
+% Original equation system:
+%
+%   J'*Jp=-J'*r.
+%
+% Apply scaling matrix D to the left of LHS, and RHS. Insert D*inv(D)
+% in the middle:
+%
+%   D*J'*J*D*inv(D)*p=-D*J'*r;
+%
+% Substitute q=inv(D)*p and solve for q in:
+% 
+%   D*J'*J*D*q=-D*J'*r;
+%
+% Finally, solve for p in
+%
+%   inv(D)*p=q, => p=D*q;
+
+% Column norms.
+Jn2=sum(J.^2,1);
+Jn=sqrt(Jn2);
+% Construct sparse diagonal scaling matrix.
+D=sparse(1:length(Jn),1:length(Jn),1./Jn,length(Jn),length(Jn));
+% Scale.
+Js=J*D;
+% Compute scaled Hessian (may be used later) and gradient.
+Hs=Js'*Js;
+gs=Js'*r;
+% Solve scaled normal equations.
+q=Hs\(-gs);
+% Unscale solution.
+pGN=D*q;
 
 if norm(pGN)<=delta
     % Gauss-Newton direction is within region of trust. Accept it.
@@ -234,8 +267,28 @@ if norm(pGN)<=delta
 end
 
 % Calculate the Cauchy Point.
-Hg=H*g;
-lambdaStar=g'*g/(g'*Hg);
+%
+%               g'*g
+% lambdaStar = ------
+%              g'*J'*J*g
+%
+% CP = -lambdaStar * g.
+%
+% Using scaled J and g: g=inv(D)*gs, J=Js*inv(D).
+%
+% g'*g = gs'*inv(D^2)*gs
+%
+% g'*J'*J*g = gs'*inv(D^2)*Js'*Js*inv(D^2)*gs=gs'*inv(D^2)*Hs*inv(D^2)*gs.
+%
+% CP = -lambdaStar * inv(D)*gs.
+
+invD=sparse(1:length(Jn),1:length(Jn),Jn,length(Jn),length(Jn));
+invD2=sparse(1:length(Jn),1:length(Jn),Jn2,length(Jn),length(Jn));
+invD2gs=invD2*gs;
+g=invD*gs;
+
+lambdaStar=g'*g/(invD2gs'*Hs*invD2gs);
+
 CP=-lambdaStar*g;
 
 if norm(CP)>delta

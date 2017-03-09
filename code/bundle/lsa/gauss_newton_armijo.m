@@ -19,10 +19,11 @@ function [x,code,n,final,T,rr,alphas]=gauss_newton_armijo(...
 %   iteration.
 %
 %   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
-%   estimates of the weighted and unweighted residual vector and
-%   Jacobian matrix. The weighted estimates are returned as fields
-%   weighted.r and weighted.J, respectively, the unweighted as
-%   unweighted.r and unweighted.J, respectively.
+%   step and the estimates of the weighted and unweighted residual
+%   vector and Jacobian matrix. The final step are returned in the
+%   field p. The weighted estimates are returned as fields weighted.r
+%   and weighted.J, respectively, the unweighted as unweighted.r and
+%   unweighted.J, respectively.
 %
 %   [X,CODE,I,FINAL,T,RR,ALPHAS]=... returns the iteration trace as successive
 %   columns in T, the successive estimates of sigma0 in RR, and the used
@@ -99,7 +100,36 @@ while true
     end
     
     % Solve normal equations. Corresponds to p=(K'*W*K)\-(K'*W*s).
-    p=(J'*J)\-(J'*r);
+    
+    % Do column scaling of the Jacobian to reduce the condition number.
+    %
+    % Original equation system:
+    %
+    %   J'*Jp=-J'*r.
+    %
+    % Apply scaling matrix D to the left of LHS, and RHS. Insert D*inv(D)
+    % in the middle:
+    %
+    %   D*J'*J*D*inv(D)*p=-D*J'*r;
+    %
+    % Substitute q=inv(D)*p and solve for q in:
+    % 
+    %   D*J'*J*D*q=-D*J'*r;
+    %
+    % Finally, solve for p in
+    %
+    %   inv(D)*p=q, => p=D*q;
+
+    % Column norms.
+    Jn=sqrt(sum(J.^2,1));
+    % Construct sparse diagonal scaling matrix.
+    D=sparse(1:length(Jn),1:length(Jn),1./Jn,length(Jn),length(Jn));
+    % Scale.
+    Js=J*D;
+    % Solve scaled normal equations.
+    q=(Js'*Js)\-(Js'*r);
+    % Unscale solution.
+    p=D*q;
 
     if sTest
         % Check if we got the 'Matrix is singular to working precision' warning.
@@ -164,7 +194,8 @@ end
 
 if nargout>3
     final=struct('unweighted',struct('r',s,'J',K),...
-                 'weighted',struct('r',r,'J',J));
+                 'weighted',struct('r',r,'J',J),...
+                 'p',p);
 end
 
 % Trim unused trace columns.

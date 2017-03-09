@@ -21,10 +21,11 @@ function [x,code,n,final,T,rr,lambdas]=levenberg_marquardt(...
 %   applies for MINL.
 %
 %   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
-%   estimates of the weighted and unweighted residual vector and
-%   Jacobian matrix. The weighted estimates are returned as fields
-%   weighted.r and weighted.J, respectively, the unweighted as
-%   unweighted.r and unweighted.J, respectively.
+%   step and the estimates of the weighted and unweighted residual
+%   vector and Jacobian matrix. The final step are returned in the
+%   field p. The weighted estimates are returned as fields weighted.r
+%   and weighted.J, respectively, the unweighted as unweighted.r and
+%   unweighted.J, respectively.
 %
 %   [X,CODE,I,FINAL,T,RR,LAMBDAS]=... returns the iteration trace as
 %   successive columns in T, the successive estimates of sigma0 in RR and
@@ -211,7 +212,8 @@ end
 
 if nargout>3
     final=struct('unweighted',struct('r',s,'J',K),...
-                 'weighted',struct('r',r,'J',J));
+                 'weighted',struct('r',r,'J',J),...
+                 'p',p);
 end
 
 if nargout>4
