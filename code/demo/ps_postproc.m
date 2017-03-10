@@ -8,6 +8,8 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,minRays,minAngle,pauseMo
 %   and scaling user by Photoscan, but no rotation), use
 %   PS_POSTPROC(FILENAME,SLOCAL) with SLOCAL==TRUE.
 %
+%   If FILENAME is blank, the SXB project from [1] is used.
+%
 %   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS), removes all measurements of
 %   object points with MINRAYS rays or less before processing.
 %
@@ -21,7 +23,10 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,minRays,minAngle,pauseMo
 %
 %   Use PS_POSTPROC(PSZ,...) if the Photoscan project has already
 %   been loaded by loadpsz.
-
+%
+%   To run a self-calibration post-processing, please modify the
+%   code block near line 82.
+%
 %   References:
 %       [1] Börlin and Grussenmeyer (2016), "External Verification
 %           of the Bundle Adjustment in Photogrammetric Software
@@ -43,6 +48,13 @@ if nargin<5, pauseMode='off'; end
 if isstruct(fileName)
     psz=fileName;
     fileName=psz.fileName;
+elseif isempty(fileName)
+    curDir=fileparts(mfilename('fullpath'));
+    inputDir=fullfile(curDir,'data','prague2016','sxb');
+    fileName=fullfile(inputDir,'psprojects','sxb.psz');
+    fprintf('Loading PhotoScan project file %s...',fileName);
+    psz=loadpsz(fileName);
+    fprintf('done.\n');
 else
     fprintf('Loading PhotoScan project file %s...',fileName);
     psz=loadpsz(fileName);
@@ -66,8 +78,17 @@ if psz.camera.isAdjusted
     end
 end
 
-s0.estIO(1:4)=true;
-s0.IO(4:8)=0;
+if false
+    % SELF-CALIBRATION: For self-calibration, set the corresponding values
+    % of s0.estIO to true. The ordering of the parameters is:
+    % [cx,cy,f,K1,K2,K3,P1,P2]
+    
+    % Here: Estimate cx,cy,f,K1
+    s0.estIO(1:4)=true; 
+    % Set default values for lens distortion (usually better than
+    % to start with Photoscan values).
+    s0.IO(4:8)=0;
+end
 
 %TODO: Offset estimation.
 %meanOffset=zeros(3,1);
