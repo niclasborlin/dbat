@@ -14,8 +14,8 @@
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.6.1.0}
-\newcommand{\dbatdate}{December 15, 2016}
+\newcommand{\dbatversion}{0.6.2.0}
+\newcommand{\dbatdate}{March 10, 2017}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -73,7 +73,9 @@ The toolbox currently includes routines for (Matlab function names within parent
   \begin{itemize}
   \item Post-processing of PhotoScan projects
     (\texttt{ps\_postproc}). Includes object point filtering on low
-    ray count and low intersection angles.
+    ray count and low intersection angles. \textbf{For
+      self-calibration post-processing, see the help text for
+      \texttt{ps\_postproc}.}
   \end{itemize}
 \item Photogrammetric calculations, including:
   \begin{itemize}
@@ -84,8 +86,9 @@ The toolbox currently includes routines for (Matlab function names within parent
   \end{itemize}
 \item Bundle adjustment
   \begin{itemize}
-  \item Bundle adjustment proper (\texttt{bundle}) using either
-    Classical, Gauss-Newton-Armijo, Levenberg-Marquardt, or
+  \item Bundle adjustment proper (\texttt{bundle}), with or without
+    self-calibration, using either Classical Gauss-Markov,
+    Gauss-Newton-Armijo, Levenberg-Marquardt, or
     Levenberg-Marquardt-Powell damping schemes
     \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
   \item Covariance calculations (\texttt{bundle\_cov}) from the bundle
@@ -97,6 +100,7 @@ The toolbox currently includes routines for (Matlab function names within parent
     (\texttt{plotcoverage}).
   \item Plot camera network (\texttt{plotnetwork}), either static
     (as-loaded) or as an illustration of the bundle iterations.
+  \item Plot .psz project (\texttt{loadplotpsz}).
   \item Plot of the iteration trace of parameters estimated by bundle
     (\texttt{plotparams}).
   \item Plots of quality statistics from the bundle result

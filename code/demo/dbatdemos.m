@@ -29,6 +29,15 @@
 %    Data files:
 %        DBATHOME/code/demos/data/prague2016/cam (C1-C2)
 %        DBATHOME/code/demos/data/prague2016/sxb (S1-S5)
+%
+% Photoscan post-processing:
+%    Call:
+%        PS_POSTPROC(PSZNAME,SLOCAL) to post-process a .psz
+%        project. Use SLOCAL=TRUE (recommended) to process in
+%        semi-local coordinates (translation, scaling, no
+%        rotation). Use PSZNAME='' to use the Prague 2016 SXB data set.
+%    Data files:
+%        DBATHOME/code/demos/data/prague2016/sxb/psprojects
 
 % Run help if function is called.
 help(mfilename)

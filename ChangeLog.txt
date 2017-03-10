@@ -1,5 +1,14 @@
 Summary changelog file for release.
 
+Release 0.6.2.0, Mar 10, 2017.
+- Added functions to analyze and plot a .psz project.
+- Added automatic column scaling of the Jacobian to reduce numeric warnings.
+- Improved performance for posterior OP variance computation.
+- Can now work with .psz projects with a mix of enabled/disabled control points.
+- Can now load .psz project without any transform.
+- Added explanation of how to run self-calibration postprocessing of Photoscan
+  project (see ps_postproc.m).
+
 Release 0.6.1.0, Dec 15, 2016.
 - Cleaned up the id handling in the Photoscan loader. Now, the images 
   (cameras) in the .psz projects can have any ids. Previously, the camera ids

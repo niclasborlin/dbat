@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.6.1.0 for Matlab (R), below called the Toolbox.
+# v0.6.2.0 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -47,7 +47,7 @@
 #
 # == LICENSE ==
 #
-# Copyright (C) 2013-2016, Niclas Börlin, niclas.borlin@cs.umu.se (*),
+# Copyright (C) 2013-2017, Niclas Börlin, niclas.borlin@cs.umu.se (*),
 # and Pierre Grussenmeyer, pierre.grussenmeyer@insa-strasbourg.fr (**).
 # All rights reserved.
 #
