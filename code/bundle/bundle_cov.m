@@ -170,6 +170,11 @@ ixInt=reshape(1:numel(calc),size(calc));
 bsCols=floor(bsElems/size(L,1)/max(sum(ix~=0,1)));
 bsCols=min(max(bsCols,1),size(ix,2));
 
+% This function is not memory-limited. A block column size of 30
+% seems to give reasonably good results.
+% TODO: Refine bsCols value.
+bsCols=30;
+
 % Create inverse permutation.
 invP=zeros(size(p));
 invP(p)=1:length(p);
