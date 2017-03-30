@@ -469,7 +469,9 @@ for i=1:length(projections)
     % Store object points with PS ids.
     objMarkPts(ix,:)=[repmat(s.cameraIds(i),ni,1),projections{i}.vertex.id,...
                       projections{i}.vertex.x,projections{i}.vertex.y];
-    objKeyPtSize(ix)=projections{i}.vertex.size;
+    if isfield(projections{i}.vertex,'size')
+        objKeyPtSize(ix)=projections{i}.vertex.size;
+    end
 end
 % Ensure that the mark points are sorted by image, then id.
 [objMarkPts,i]=sortrows(objMarkPts,[1,2]);
