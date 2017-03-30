@@ -1,5 +1,10 @@
 Summary changelog file for release.
 
+Release 0.6.2.1, Mar 30, 2017.
+- Bugfix to handle Photoscan .ply files with no size info.
+- Autocalibration now defaults to f, cx, cy, K1-K3, P1-P2 if the camera was
+  optimized in Photoscan.
+
 Release 0.6.2.0, Mar 10, 2017.
 - Added functions to analyze and plot a .psz project.
 - Added automatic column scaling of the Jacobian to reduce numeric warnings.
