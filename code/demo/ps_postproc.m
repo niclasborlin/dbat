@@ -78,13 +78,13 @@ if psz.camera.isAdjusted
     end
 end
 
-if false
+if psz.camera.isAdjusted
     % SELF-CALIBRATION: For self-calibration, set the corresponding values
     % of s0.estIO to true. The ordering of the parameters is:
     % [cx,cy,f,K1,K2,K3,P1,P2]
     
-    % Here: Estimate cx,cy,f,K1
-    s0.estIO(1:4)=true; 
+    % Here: Estimate cx,cy,f,K1-K3,P1-P2
+    s0.estIO(1:8)=true; 
     % Set default values for lens distortion (usually better than
     % to start with Photoscan values).
     s0.IO(4:8)=0;
