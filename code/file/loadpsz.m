@@ -226,6 +226,8 @@ xforms=nan(4,4,length(cameraIds));
 P=nan(3,4,length(cameraIds));
 % Camera centers in local coordinates.
 CC=nan(3,length(cameraIds));
+% Prior observations of camera centers
+priorCC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
     T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
     xforms(:,:,i)=T;
@@ -237,13 +239,31 @@ for i=1:length(cameraIds)
         P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
     end
     CC(:,i)=euclidean(null(P(:,:,i)));
+    
+    % Check if we have reference EO coordinates.
+    if isfield(camera{i},'reference')
+        attr=camera{i}.reference.Attributes;
+        if strcmp(attr.enabled,'true')
+            if isfield(attr,'x')
+                priorCC(1,i)=sscanf(attr.x,'%g');
+            end
+            if isfield(attr,'y')
+                priorCC(2,i)=sscanf(attr.y,'%g');
+            end
+            if isfield(attr,'z')
+                priorCC(3,i)=sscanf(attr.z,'%g');
+            end
+        end
+    end
 end
 s.raw.transforms=xforms;
 s.raw.P=P;
 s.raw.CC=CC;
+s.raw.priorCC=priorCC;
 
 s.local.P=s.raw.P;
 s.local.CC=s.raw.CC;
+s.local.priorCC=XformPts(s.raw.priorCC,G2L);
 s.local.R=nan(3,3,size(s.local.P,3));
 for i=1:size(s.local.R,3)
     R=s.local.P(:,1:3,i);
@@ -252,6 +272,7 @@ end
 
 s.global.P=XformCams(s.local.P,L2G);
 s.global.CC=XformPts(s.local.CC,L2G);
+s.global.priorCC=s.raw.priorCC;
 s.global.R=nan(3,3,size(s.global.P,3));
 for i=1:size(s.global.R,3)
     R=s.global.P(:,1:3,i);
@@ -264,6 +285,7 @@ end
 
 s.semilocal.P=XformCams(s.local.P,L2SL);
 s.semilocal.CC=XformPts(s.local.CC,L2SL);
+s.semilocal.priorCC=XformPts(s.global.CC,G2SL);
 s.semilocal.R=nan(3,3,size(s.semilocal.P,3));
 for i=1:size(s.semilocal.R,3)
     R=s.semilocal.P(:,1:3,i);
