@@ -1,5 +1,12 @@
 Summary changelog file for release.
 
+Release 0.6.2.2, May 5, 2017.
+- Bugfix to handle mark points with no size info.
+- ps_postproc now runs self-calibration on all parameters that were either 
+  part of an "adjusted" camera or marked as optimized.
+- Camera reference coordinates, e.g. from geotagged images, are loaded (but
+  not processed).
+
 Release 0.6.2.1, Mar 30, 2017.
 - Bugfix to handle Photoscan .ply files with no size info.
 - Autocalibration now defaults to f, cx, cy, K1-K3, P1-P2 if the camera was
