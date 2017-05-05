@@ -76,8 +76,7 @@ if psz.camera.isAdjusted
     s0.estIO(7:8)=psz.camera.givenParams.p(1:2) | ...
         psz.camera.optimizedParams.p(1:2);
     if any(s0.estIO(4:8))
-        warning(['Ki/Pi values estimated by Photoscan used as initial ' ...
-                 'values for Photomodeler lens distortion model.']);
+        warning(['Ki/Pi values will be estimated using the Photomodeler lens distortion model.']);
     end
 end
 
