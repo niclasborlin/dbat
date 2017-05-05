@@ -145,21 +145,21 @@ for i=1:length(n)
 end
 
 rayAng=angles(s0,'Computing OP ray angles')*180/pi;
-fprintf(fid,'\nSmallest OP ray angles (angle, ID, cameras)\n');
+fprintf(fid,'\nSmallest OP ray angles (ID, angle [deg], vis in cameras)\n');
 [ang,i]=sort(rayAng);
 for j=1:nnz(ang<ang(min(3,end))*1.1+0.1)
     camVis=find(s0.vis(i(j),:));
     s=sprintf('%4d ',camVis);
-    fprintf(fid,'%5.2f: %6d (%s)\n',ang(j),s0.OPid(i(j)),s(1:end-1));
+    fprintf(fid,'%6d: %5.2f (%s)\n',s0.OPid(i(j)),ang(j),s(1:end-1));
 end
 
-fprintf(fid,'\nCamera lowest ray count (count, camNo):\n');
+fprintf(fid,'\nCamera with lowest ray count (camNo, count):\n');
 [camCount,i]=sort(full(sum(s0.vis,1)));
 for j=1:nnz(camCount<max(10,camCount(min(3,end))*1.25+1))
-    fprintf(fid,'%3d: %4d\n',camCount(j),i(j));
+    fprintf(fid,'%4d: %3d\n',i(j),camCount(j));
 end
 
-fprintf(fid,'\nCamera ray count histogram (nPts, nCams):\n');
+fprintf(fid,'\nCamera ray count histogram (nRays, nCams):\n');
 [n,edges]=histcounts(sum(s0.vis,1),10);
 edges(end)=edges(end)+1;
 for i=1:length(n)
@@ -167,11 +167,11 @@ for i=1:length(n)
 end
 
 camRayAng=camangles(s0,'Computing camera ray angles')*180/pi;
-fprintf(fid,'\nSmallest camera ray angles (angle, cam ID, nPts)\n');
+fprintf(fid,'\nSmallest camera ray angles (cam ID, angle [deg], nRays)\n');
 [ang,i]=sort(camRayAng);
 for j=1:nnz(ang<ang(min(5,end))*1.1+0.1)
     nPts=nnz(s0.vis(:,i(j)));
-    fprintf(fid,'%5.2f: %6d (%d)\n',ang(j),i(j),nPts);
+    fprintf(fid,'%6d: %5.2f (%d)\n',i(j),ang(j),nPts);
 end
 
 if fid>2, fclose(fid); end
