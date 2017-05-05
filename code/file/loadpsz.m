@@ -61,10 +61,10 @@ function s=loadpsz(psFile,varargin)
 %               k              - radial lens distortion coefficients in px.
 %               p              - tangential lens distortion coefficients in px.
 %               isFixed        - true if the camera is fixed.
-%               isAdjusted     - true if the camera parameters have been  
-%                                adjusted by Photoscan.
-%               adjustedParams - struct with fields indicating which
-%                                parameters have been adjusted by Photoscan:
+%               isAdjusted     - true if the camera parameters are
+%                                marked as adjusted by Photoscan.
+%               givenParams    - struct with fields indicating what
+%                                parameters were given in the psz file:
 %                                f      - scalar
 %                                cxcy   - 2-vector
 %                                aspect - scalar
@@ -72,6 +72,9 @@ function s=loadpsz(psFile,varargin)
 %                                b      - 2-vector
 %                                k      - 4-vector
 %                                p      - 4-vector
+%               optimizedParams - struct with same fields as givenParams,  
+%                                indicating which parameters have
+%                                been optimized by Photoscan. 
 %   defStd    - struct with default standard deviations
 %               tiePoints   - std for automatically detected tie points [pix]
 %               projections - std for manually measured markers [pix]
@@ -593,6 +596,13 @@ for i=1:length(camera)
 end
 s.imNames=imNames;
 
+% What camera parameters are given?
+givenParams=struct('aspect',false,'cxcy',false(1,2),'f',false,...
+                   'k',false(1,4),'p',false(1,4),'skew',false,...
+                   'b',false(1,2));
+% What camera parameters are listed as optimized?
+optimizedParams=givenParams;
+
 % Collect calibrated camera parameters.
 cal=chnk.sensors.sensor.calibration;
 if iscell(cal)
@@ -631,7 +641,23 @@ for j=1:length(i)
     p(n)=sscanf(cal.(fn{i(j)}).Text,'%g');
 end
 
-K=[fx,0,cx;0,fy,cy;0,0,1];
+% f and cxcy are required.
+givenParams.f=true;
+givenParams.cxcy(:)=true;
+% Mark supplied K and P as given.
+givenParams.k(1:length(k))=true;
+givenParams.p(1:length(p))=true;
+
+% is skew given?
+if isfield(cal,'skew')
+    skew=sscanf(cal.skew.Text,'%g');
+    givenParams.skew=true;
+else
+    skew=0;
+end
+
+% Construct camera calibration matrix.
+K=[fx,skew,cx;0,fy,cy;0,0,1];
 
 s.K=K;
 
@@ -670,6 +696,12 @@ if ~isempty(fProp)
     sensorFixed=strcmp(fProp{1}.Attributes.value,'true');
 end
 
+if (fx*pixelWidth~=fy*pixelHeight)
+    % We always have fx, fy. Assume that if fx==fy, aspect is
+    % locked at unity. Otherwise assume it has been estimated.
+    givenParams.aspect=true;
+end
+    
 s.camera.name=camName;
 s.camera.type=camType;
 s.camera.imSz=imSz;
@@ -683,13 +715,19 @@ s.camera.isFixed=sensorFixed;
 s.camera.isAdjusted=isAdjusted;
 s.camera.nominalFocal=nominalFocal;
 
-% See what camera parameters have been estimated.
-adjustedParams=struct('aspect',false,'cxcy',false(1,2),'f',false,...
-                      'k',false(1,4),'p',false(1,4),'skew',false,...
-                      'b',false(1,2));
+if fx*s.camera.pixelSz(1)~=fy*s.camera.pixelSz(2)
+    warning('Non-square pixel size not currently supported')
+end
+
+s.camera.givenParams=givenParams;
+
 % Parameters to warn about.
 warnNotSupported={};
 warnUsePhotoModeler={};
+
+% Have we found any optimize/fit_XXX fields?
+optFitTagsFound=false;
+
 if isfield(chnk,'meta') && isfield(chnk.meta,'property')
     p=chnk.meta.property;
     if ~iscell(p)
@@ -703,6 +741,7 @@ if isfield(chnk,'meta') && isfield(chnk.meta,'property')
     i=strncmp(stub,flds,length(stub));
     flds=flds(i);
     p=p(i);
+    optFitTagsFound=~isempty(flds);
     for i=1:length(flds)
         value=p{i}.Attributes.value;
         fullName=flds{i};
@@ -732,18 +771,18 @@ if isfield(chnk,'meta') && isfield(chnk.meta,'property')
             param=params{j};
             switch param
               case {'f','aspect','skew'}
-                adjustedParams.(param)(:)=strcmp(value,'1');
+                optimizedParams.(param)(:)=strcmp(value,'1');
               case 'cx'
-                adjustedParams.cxcy(1)=strcmp(value,'1');
+                optimizedParams.cxcy(1)=strcmp(value,'1');
               case 'cy'
-                adjustedParams.cxcy(2)=strcmp(value,'1');
+                optimizedParams.cxcy(2)=strcmp(value,'1');
               otherwise
                 % Generic [bkp][1234]
                 if length(param)==2 && ...
                         (param(1)=='b' && ismember(param(2),'12') || ...
                          ismember(param(1),'kp') && ismember(param(2),'1234'))
                     ix=sscanf(param(2),'%d');
-                    adjustedParams.(param(1))(ix)=strcmp(value,'1');
+                    optimizedParams.(param(1))(ix)=strcmp(value,'1');
                 else
                     warning('Unknown camera calibration parameter: %s.',param);
                 end
@@ -759,7 +798,8 @@ if isfield(chnk,'meta') && isfield(chnk.meta,'property')
     end
 end
 
-s.camera.adjustedParams=adjustedParams;
+s.camera.optimizedParamsFound=optFitTagsFound;
+s.camera.optimizedParams=optimizedParams;
 
 if ~isempty(warnNotSupported)
     warning(['The following camera calibration parameters are not ' ...
