@@ -1,7 +1,6 @@
 Summary changelog file for release.
 
 Release 0.6.2.2, May 5, 2017.
-- Bugfix to handle mark points with no size info.
 - ps_postproc now runs self-calibration on all parameters that were either 
   part of an "adjusted" camera or marked as optimized.
 - Camera reference coordinates, e.g. from geotagged images, are loaded (but
