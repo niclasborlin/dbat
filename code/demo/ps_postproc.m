@@ -66,28 +66,18 @@ end
 
 [psz,prob,s0,rayAng,camRayAng]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
 
+% Should the camera be self-calibrated?
 if psz.camera.isAdjusted
     % Auto-calibration
-    s0.estIO(3)=psz.camera.adjustedParams.f; % f
-    s0.estIO(1:2)=psz.camera.adjustedParams.cxcy; % cx,cy
-    s0.estIO(4:6)=psz.camera.adjustedParams.k(1:3); % K1,K2,K3
-    s0.estIO(7:8)=psz.camera.adjustedParams.p(1:2); % P1,P2
+    s0.estIO(3)=psz.camera.givenParams.f | psz.camera.optimizedParams.f;
+    s0.estIO(1:2)=psz.camera.givenParams.cxcy | psz.camera.optimizedParams.cxcy;
+    s0.estIO(4:6)=psz.camera.givenParams.k(1:3) | ...
+        psz.camera.optimizedParams.k(1:3);
+    s0.estIO(7:8)=psz.camera.givenParams.p(1:2) | ...
+        psz.camera.optimizedParams.p(1:2);
     if any(s0.estIO(4:8))
-        warning(['Ki/Pi values estimated by Photoscan used as initial ' ...
-                 'values for Photomodeler lens distortion model.']);
+        warning(['Ki/Pi values will be estimated using the Photomodeler lens distortion model.']);
     end
-end
-
-if psz.camera.isAdjusted
-    % SELF-CALIBRATION: For self-calibration, set the corresponding values
-    % of s0.estIO to true. The ordering of the parameters is:
-    % [cx,cy,f,K1,K2,K3,P1,P2]
-    
-    % Here: Estimate cx,cy,f,K1-K3,P1-P2
-    s0.estIO(1:8)=true; 
-    % Set default values for lens distortion (usually better than
-    % to start with Photoscan values).
-    s0.IO(4:8)=0;
 end
 
 %TODO: Offset estimation.
