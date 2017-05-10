@@ -21,6 +21,13 @@ imageFileNames = {'/externdisk/data/work/research/photo/camera_calibration/matla
     '/externdisk/data/work/research/photo/camera_calibration/matlab_cv/IMG_4203.JPG',...
     };
 
+if ~exist(imageFileNames{1})
+    newNames=strrep(imageFileNames,'/externdisk/','/scratch/eddie/');
+    if exist(newNames{1})
+        imageFileNames=newNames;
+    end
+end
+
 % Detect checkerboards in images
 [imagePoints, boardSize, imagesUsed] = detectCheckerboardPoints(imageFileNames);
 imageFileNames = imageFileNames(imagesUsed);
