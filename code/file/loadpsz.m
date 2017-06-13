@@ -85,8 +85,9 @@ function s=loadpsz(psFile,varargin)
 %
 %   By default, LOADPSZ unpacks the .PSZ file (a .ZIP archive) into a
 %   directory in TEMPDIR and deletes the unpacked files after loading.
-%   LOADPSZ(FILE,...,TRUE) instead unpacks the files into a FILE-local
-%   subdir called 'unpacked' and does not delete the unpacked files.
+%   LOADPSZ(FILE,...,TRUE) instead unpacks the files into a local
+%   subdir and does not delete the unpacked files. If FILE is
+%   called PROJECT.PSZ, the subdir is called PROJECT_unpacked.
 %   Additionally, LOADPSZ(FILE,TRUE,TRUE) creates ascii versions of
 %   each .PLY file in a further 'ascii' subdir.
 %
@@ -117,10 +118,10 @@ end
 % Initialize waitbar to delay for 1s and update every 1s.
 DelayedWaitBar('init',1,1,'Loading Photoscan project file...');
 
-psDir=fileparts(psFile);
+[psDir,psName,~]=fileparts(psFile);
 if unpackLocal
     % Unpack to 'unpacked' subdir.
-    unpackDir=fullfile(psDir,'unpacked');
+    unpackDir=fullfile(psDir,[psName,'_unpacked']);
 else
     % Unpack to temporary dir.
     unpackDir=tempname;
