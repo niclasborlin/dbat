@@ -129,6 +129,9 @@ end
 
 % Unpack the .psz file.
 dirs=unpackpsz(psFile,unpackDir,asciiToo);
+if unpackLocal
+    fprintf('psz files unpacked to directory %s.\n',unpackDir);
+end
 DelayedWaitBar(0.25);
 
 % Load project data from the main xml file.
