@@ -47,10 +47,12 @@ end
 angPM=ang([3,2,1],:)*180/pi;
 
 images=repmat(struct('imName','','outer',nan(1,6),'outerStd',zeros(1,6),...
-                     'imSz',imSz),size(CC,2),1);
+                     'imSz',imSz,'id',nan,'label',''),size(CC,2),1);
 for i=1:length(images)
     images(i).imName=s.imNames{i};
     images(i).outer=[CC(:,i);angPM(:,i)]';
+    images(i).id=s.cameraIds(i);
+    images(i).label=s.cameraLabels(i);
 end
 
 % Copy enabled control points.
