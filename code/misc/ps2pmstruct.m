@@ -52,7 +52,7 @@ for i=1:length(images)
     images(i).imName=s.imNames{i};
     images(i).outer=[CC(:,i);angPM(:,i)]';
     images(i).id=s.cameraIds(i);
-    images(i).label=s.cameraLabels(i);
+    images(i).label=s.cameraLabels{i};
 end
 
 % Copy enabled control points.
