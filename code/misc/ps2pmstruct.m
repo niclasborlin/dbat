@@ -25,7 +25,7 @@ if nargin<2, useSemiLocal=false; end
 imSz=s.camera.imSz(:);
 defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);zeros(5,1)];
 
-job=struct('title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
+job=struct('fileName',s.fileName,'title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
 
 if useSemiLocal
     pos=s.semilocal;

@@ -9,7 +9,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
-%   The struct S has fields:
+%   The struct S has the following fields:
 %       IO       - 16-by-nCams array with estimates of the internal
 %                  orientation for each camera.
 %       EO       - 7-by-nImages array with the external orientation for
@@ -103,6 +103,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       title    - title string.
 %       imNames  - nEO-cell array with image names.
 %       imDir    - string with the image directory.
+%       fileName - name of the original project file.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -340,7 +341,7 @@ useOPobs=~isnan(prior.OP) & ~(prior.OPstd==0);
 camUnit='mm';
 objUnit='m';
 
-s=struct('title',prob.job.title,'imDir',imDir,'imNames',{imNames}, ...
+s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,'imNames',{imNames}, ...
          'IO',IO,'IOstd',IOstd, ...
          'EO',EO,'EOstd',EOstd, ...
          'cams',cams,...

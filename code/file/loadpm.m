@@ -16,6 +16,7 @@ function [prob,err]=loadpm(name,varargin)
 %
 %   The struct S has the following fields:
 %       job      - struct with fields
+%                  fileName  - name of the loaded file, i.e. NAME.
 %                  title     - job title.
 %                  tol       - required solution tolerance.
 %                  maxIter   - maximum number of iterations.
@@ -113,7 +114,7 @@ if length(tol)>2 && any(isnan(globalImSz))
 end
 
 % Package global information.
-job=struct('title',title,'tol',tol(1),'maxIter',tol(2),...
+job=struct('fileName',name,'title',title,'tol',tol(1),'maxIter',tol(2),...
 		   'defStd',defStd,'defCam',defCam,'defCamStd',defCamStd,...
            'imSz',globalImSz);
 
