@@ -3,9 +3,9 @@ function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useSemiLocal)
 %
 %   PROB=PS2PMSTRUCT(S) converts the PhotoScan struct S, as returned
 %   by LOADPSZ, to a PhotoModeler struct PROB, as loaded by
-%   LOADPM. All EO, OP parameters are global. Use PS2PMSTRUCT(S,TRUE)  
-%   to use semilocal parameters instead (translation and scaling
-%   from global, but no rotation).
+%   LOADPM. All EO, OP parameters are in global coordinates. Use
+%   PS2PMSTRUCT(S,TRUE) to use semilocal parameters instead
+%   (translation and scaling from global, but no rotation).
 %
 %   [PROB,PTS3D,PTS2D]=PS2PMSTRUCT(S) furthermore returns 3D and 2D
 %   points.
@@ -14,8 +14,8 @@ function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useSemiLocal)
 %   ids in PROB.
 %
 %   Camera positions, object and control points are set to global
-%   coordinates. Object point uncertainties are set to
-%   unknown. Mark points are given 1 pixel standard deviation.
+%   coordinates. Object point uncertainties are set to unknown. Mark
+%   points are given a 1 pixel standard deviation.
 %
 %See also: LOADPSZ, LOADPM.
 
@@ -59,6 +59,13 @@ ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
 % Copy global object points. Set posterior uncertainty to unknown.
 objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
 
+% Record original object point IDs.
+rawOPids=[s.PSCPid(ctrlPts(:,1));s.PSOPid(objPts(:,1))];
+
+% Record original CP labels.
+OPlabels=cell(size(rawOPids));
+OPlabels(s.DBATCPid(s.raw.ctrlPts(:,1)))=s.raw.ctrlPtsLabels;
+
 % Copy mark points and set std.
 ctrlStd=s.defStd.projections;
 objStd=s.defStd.tiePoints;
@@ -75,7 +82,7 @@ end
 
 % Construct PM structure.
 prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-             'markPts',markPts);
+             'rawOPids',rawOPids,'OPlabels',{OPlabels},'markPts',markPts);
 
 EO=[CC;ang;zeros(1,size(CC,2))];
 EOstd=nan(size(EO));

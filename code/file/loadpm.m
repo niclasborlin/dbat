@@ -265,6 +265,8 @@ waitbar(ftell(fid)/sz,h);
 % Trim unused memory.
 objPts=objPts(1:nObjPts,:);
 
+isCtrl=ismember(objPts(:,1),ctrlPts(:,1));
+
 % Next block is mark points.
 
 markPts=zeros(0,6);
@@ -338,6 +340,13 @@ if ~skipFeatures
     end
 end
 
+% Record raw OP ids.
+rawOPids=objPts(:,1);
+
+% Create labels from CP ids.
+OPlabels=cell(size(rawOPids));
+OPlabels(isCtrl)=arrayfun(@int2str,rawOPids(isCtrl),'uniformoutput',false);
+
 % Check for overlapping ids for smartpoints and others.
 if ~isempty(objPts)
     % Are all object point ids increasing?
@@ -357,7 +366,8 @@ if ~isempty(objPts)
 end
 
 prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-			'markPts',markPts,'features',{features},'featVis',featVis);
+			'rawOPids',rawOPids,'OPlabels',{OPlabels},...
+            'markPts',markPts,'features',{features},'featVis',featVis);
 
 fclose(fid);
 close(h);
