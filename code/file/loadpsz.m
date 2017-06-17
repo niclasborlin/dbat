@@ -596,7 +596,27 @@ for i=1:length(camera)
     camId=sscanf(camera{i}.Attributes.camera_id,'%d');
     % Convert to DBAT camera number.
     j=DBATCamId(camId);
-    imNames{j}=fullfile(psDir,camera{i}.photo.Attributes.path);
+    % Guess  if image path is absolute or relative.
+    p=camera{i}.photo.Attributes.path;
+    if isempty(p)
+        % Empty paths (should never happen) are defined to be absolute.
+        pathIsAbsolute=true;
+    elseif ismember(p(1),'/\')
+        % Path starting with / or \ are absolute.
+        pathIsAbsolute=true;
+    else
+        % Path did not start with / or \. Determine if its Z:/
+        if length(p)>1 && p(2)==':'
+            pathIsAbsolute=true;
+        else
+            pathIsAbsolute=false;
+        end
+    end
+    if pathIsAbsolute
+        imNames{j}=camera{i}.photo.Attributes.path;
+    else
+        imNames{j}=fullfile(psDir,camera{i}.photo.Attributes.path);
+    end
 end
 s.imNames=imNames;
 

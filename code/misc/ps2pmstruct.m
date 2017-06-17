@@ -3,9 +3,9 @@ function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useSemiLocal)
 %
 %   PROB=PS2PMSTRUCT(S) converts the PhotoScan struct S, as returned
 %   by LOADPSZ, to a PhotoModeler struct PROB, as loaded by
-%   LOADPM. All EO, OP parameters are global. Use PS2PMSTRUCT(S,TRUE)  
-%   to use semilocal parameters instead (translation and scaling
-%   from global, but no rotation).
+%   LOADPM. All EO, OP parameters are in global coordinates. Use
+%   PS2PMSTRUCT(S,TRUE) to use semilocal parameters instead
+%   (translation and scaling from global, but no rotation).
 %
 %   [PROB,PTS3D,PTS2D]=PS2PMSTRUCT(S) furthermore returns 3D and 2D
 %   points.
@@ -14,8 +14,8 @@ function [prob,pmReport,pts3d,pts2d]=ps2pmstruct(s,useSemiLocal)
 %   ids in PROB.
 %
 %   Camera positions, object and control points are set to global
-%   coordinates. Object point uncertainties are set to
-%   unknown. Mark points are given 1 pixel standard deviation.
+%   coordinates. Object point uncertainties are set to unknown. Mark
+%   points are given a 1 pixel standard deviation.
 %
 %See also: LOADPSZ, LOADPM.
 
@@ -25,7 +25,7 @@ if nargin<2, useSemiLocal=false; end
 imSz=s.camera.imSz(:);
 defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);zeros(5,1)];
 
-job=struct('title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
+job=struct('fileName',s.fileName,'title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
 
 if useSemiLocal
     pos=s.semilocal;
@@ -47,17 +47,27 @@ end
 angPM=ang([3,2,1],:)*180/pi;
 
 images=repmat(struct('imName','','outer',nan(1,6),'outerStd',zeros(1,6),...
-                     'imSz',imSz),size(CC,2),1);
+                     'imSz',imSz,'id',nan,'label',''),size(CC,2),1);
 for i=1:length(images)
     images(i).imName=s.imNames{i};
     images(i).outer=[CC(:,i);angPM(:,i)]';
+    images(i).id=s.cameraIds(i);
+    images(i).label=s.cameraLabels{i};
 end
 
 % Copy enabled control points.
 ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
 
+% Track original ids and labels.
+rawCPids=s.PSCPid(ctrlPts(:,1));
+CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
+
 % Copy global object points. Set posterior uncertainty to unknown.
 objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
+
+% Track original object point IDs.
+rawOPids=[rawCPids;s.PSOPid(pos.objPts(:,1))];
+OPlabels=[CPlabels,repmat({''},1,size(pos.objPts,1))];
 
 % Copy mark points and set std.
 ctrlStd=s.defStd.projections;
@@ -75,7 +85,7 @@ end
 
 % Construct PM structure.
 prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-             'markPts',markPts);
+             'rawOPids',rawOPids,'OPlabels',{OPlabels},'markPts',markPts);
 
 EO=[CC;ang;zeros(1,size(CC,2))];
 EOstd=nan(size(EO));

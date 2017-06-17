@@ -9,7 +9,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
-%   The struct S has fields:
+%   The struct S has the following fields:
 %       IO       - 16-by-nCams array with estimates of the internal
 %                  orientation for each camera.
 %       EO       - 7-by-nImages array with the external orientation for
@@ -18,6 +18,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  correspond to which image. 
 %       OP       - 3-by-nOP array with object and control points.
 %       OPid     - 1-by-nOP array with object points ids.
+%       OPrawId  - 1-by-nOP array with original object point ids.
+%       OPlabels - 1-by-nOP cell array with labels of the original ctrl pts.
 %       isCtrl   - 1-by-nOP logical vector indicating which OP are control
 %                  points.
 %       markPts  - 2-by-nMarkPts array with measured image coordinates in
@@ -101,6 +103,9 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       title    - title string.
 %       imNames  - nEO-cell array with image names.
 %       imDir    - string with the image directory.
+%       fileName - name of the original project file.
+%       imLabels - nEO-cell array with image labels.
+%       camId    - nEO-vector with camera ids.
 %
 %   Each IO column stores the parameters below. Currently, only the first
 %   8 may be estimated by the bundle.
@@ -221,6 +226,11 @@ end
 imNames=cellfun(@(x)strrep(x,'\','/'),{prob.images.imName},...
                 'uniformoutput',false);
 
+imLabels=cellfun(@(x)strrep(x,'\','/'),{prob.images.label},...
+                 'uniformoutput',false);
+
+camIds=cell2mat({prob.images.id});
+
 % Find shortest common dir prefix.
 imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
 
@@ -254,7 +264,10 @@ OPstd=nan(3,nOP);
 CP=nan(3,nOP);
 CPstd=nan(3,nOP);
 CPcov=[];
-OPid=unique([prob.ctrlPts(:,1);prob.objPts(:,1)]);
+[OPid,i]=sort(prob.objPts(:,1),'ascend');
+OPrawId=prob.rawOPids(i);
+OPlabels=prob.OPlabels(i);
+
 isCtrl=ismember(OPid,prob.ctrlPts(:,1));
 
 % Copy object point coordinates...
@@ -335,11 +348,12 @@ useOPobs=~isnan(prior.OP) & ~(prior.OPstd==0);
 camUnit='mm';
 objUnit='m';
 
-s=struct('title',prob.job.title,'imDir',imDir,'imNames',{imNames}, ...
+s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds, ...
          'IO',IO,'IOstd',IOstd, ...
          'EO',EO,'EOstd',EOstd, ...
          'cams',cams,...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
+         'OPrawId',OPrawId,'OPlabels',{OPlabels},...
          'isCtrl',isCtrl,...
          'markPts',markPts,'markStd',markStd,'ptCams',ptCams,...
          'vis',vis,'colPos',colPos,...

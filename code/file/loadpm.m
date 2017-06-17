@@ -16,6 +16,7 @@ function [prob,err]=loadpm(name,varargin)
 %
 %   The struct S has the following fields:
 %       job      - struct with fields
+%                  fileName  - name of the loaded file, i.e. NAME.
 %                  title     - job title.
 %                  tol       - required solution tolerance.
 %                  maxIter   - maximum number of iterations.
@@ -41,6 +42,8 @@ function [prob,err]=loadpm(name,varargin)
 %                              lens distortion K1,K2,K3,P1,P2].
 %                  innerStd - standard deviation of inner parameters.
 %                  imSz     - [width, height] in pixels, or [NaN, NaN].
+%                  id       - same as image number.
+%                  label    - image name stripped of longest common path.
 %       ctrlPts  - array of control points [id,pos x,y,z (m),stdev x,y,z (m)].
 %       objPts   - array of object points [id,pos x,y,z (m),stdev x,y,z (m)].
 %       markPts  - array of marked points [photo#,id,pos x,y(px),std x,y(mm)].
@@ -113,7 +116,7 @@ if length(tol)>2 && any(isnan(globalImSz))
 end
 
 % Package global information.
-job=struct('title',title,'tol',tol(1),'maxIter',tol(2),...
+job=struct('fileName',name,'title',title,'tol',tol(1),'maxIter',tol(2),...
 		   'defStd',defStd,'defCam',defCam,'defCamStd',defCamStd,...
            'imSz',globalImSz);
 
@@ -126,22 +129,23 @@ images=struct('imName',cell(0,1),... % Image file names.
               'inner',zeros(0,10),... % Inner orientation parameter values...
                                 ...  % [c,xp,yp,xs,ys,K1,K2,K3,P1,P2]
               'innerStd',zeros(0,10),...  % ...and standard deviations.
-              'imSz',zeros(0,2));    % Image size [w,h].
-
+              'imSz',zeros(0,2),...    % Image size [w,h].
+              'id',nan, ... % image id
+              'label',cell(0,1)); % Image label
 % Scan the file line by line.
 while ~feof(fid)
-	s=fgetl(fid);
+    s=fgetl(fid);
     
-	if ~ishandle(h)
-		% Waitbar closed, abort.
-		fclose(fid);
-		err='Aborted by user';
-		if nargout<2, error(err); else return; end
-	elseif rem(length(images)+1,10)==0
+    if ~ishandle(h)
+        % Waitbar closed, abort.
+        fclose(fid);
+        err='Aborted by user';
+        if nargout<2, error(err); else return; end
+    elseif rem(length(images)+1,10)==0
         % Update progressbar every 10 input lines.
-		waitbar(ftell(fid)/sz,h);
-	end
-
+        waitbar(ftell(fid)/sz,h);
+    end
+    
     % Here we expect sequence of photo blocks, each on the format
     % (N=zero-based image number)
 
@@ -151,13 +155,13 @@ while ~feof(fid)
     % N C    XP    YP XS YS K1 K2 K3 P1 P2
     % N STDC STDYP etc.
 
-	% Get photo name.
-	[photo,count,err,next]=sscanf(s,'%d'); %#ok<ASGLU>
-	if isempty(photo)
+    % Get photo name.
+    [photo,count,err,next]=sscanf(s,'%d'); %#ok<ASGLU>
+    if isempty(photo)
         % Photo block sequence terminated by blank line.
-		break;
-	end
-	imName=s(next:end);
+        break;
+    end
+    imName=s(next:end);
 
     % Determine image size.
     imSz=globalImSz;
@@ -166,41 +170,64 @@ while ~feof(fid)
         imSz=[info.Width, info.Height];
     end
     
-	% Get outer parameters.
-	s=fgetl(fid);
-	outer=sscanf(s,'%g')';
-	outer(1)=[];
+    % Get outer parameters.
+    s=fgetl(fid);
+    outer=sscanf(s,'%g')';
+    outer(1)=[];
     
-	% Get outer stdevs.
-	s=fgetl(fid);
-	outerStd=sscanf(s,'%g')';
-	outerStd(1)=[];
+    % Get outer stdevs.
+    s=fgetl(fid);
+    outerStd=sscanf(s,'%g')';
+    outerStd(1)=[];
     
-	% Get outer covariances (is this really used?).
-	s=fgetl(fid);
-	outerCov=sscanf(s,'%g')';
-	if isempty(outerCov)
-		outerCov=nan(1,3);
-	else
-		outerCov(1)=[];
-	end
+    % Get outer covariances (is this really used?).
+    s=fgetl(fid);
+    outerCov=sscanf(s,'%g')';
+    if isempty(outerCov)
+        outerCov=nan(1,3);
+    else
+        outerCov(1)=[];
+    end
     
-	% Get inner parameters.
-	s=fgetl(fid);
-	inner=sscanf(s,'%g')';
-	inner(1)=[];
+    % Get inner parameters.
+    s=fgetl(fid);
+    inner=sscanf(s,'%g')';
+    inner(1)=[];
     
-	% Get inner stdevs.
-	s=fgetl(fid);
-	innerStd=sscanf(s,'%g')';
-	innerStd(1)=[];
+    % Get inner stdevs.
+    s=fgetl(fid);
+    innerStd=sscanf(s,'%g')';
+    innerStd(1)=[];
     
+    id=length(images)+1;
     images(end+1)=struct('imName',imName,'outer',outer,...
                          'outerStd',outerStd,'outerCov',outerCov,...
                          'inner',inner,'innerStd',innerStd,...
-                         'imSz',imSz); %#ok<AGROW>
+                         'imSz',imSz,'label',imName,'id',id); %#ok<AGROW>
 end
 waitbar(ftell(fid)/sz,h);
+
+% Find longest common path of image names.
+imPaths={images.imName};
+while true
+    % Strip last part of path name.
+    imDirs=cellfun(@fileparts,imPaths,'uniformoutput',false);
+    commonDir=unique(imDirs);
+    % Stop when we have a unique common path
+    if length(commonDir)<2
+        break
+    end
+    % Otherwise, strip another level.
+    imPaths=imDirs;
+end
+
+% Use image names sans common path as image labels.
+if ~isempty(commonDir) && ~isempty(commonDir{1})
+    c=commonDir{1};
+    for i=1:length(images)
+        images(i).label(1:length(c)+1)='';
+    end
+end
 
 % Next expected block is control points.
 
@@ -264,6 +291,8 @@ end
 waitbar(ftell(fid)/sz,h);
 % Trim unused memory.
 objPts=objPts(1:nObjPts,:);
+
+isCtrl=ismember(objPts(:,1),ctrlPts(:,1));
 
 % Next block is mark points.
 
@@ -338,6 +367,13 @@ if ~skipFeatures
     end
 end
 
+% Record raw OP ids.
+rawOPids=objPts(:,1);
+
+% Create labels from CP ids.
+OPlabels=cell(size(rawOPids));
+OPlabels(isCtrl)=arrayfun(@int2str,rawOPids(isCtrl),'uniformoutput',false);
+
 % Check for overlapping ids for smartpoints and others.
 if ~isempty(objPts)
     % Are all object point ids increasing?
@@ -357,7 +393,8 @@ if ~isempty(objPts)
 end
 
 prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-			'markPts',markPts,'features',{features},'featVis',featVis);
+			'rawOPids',rawOPids,'OPlabels',{OPlabels},...
+            'markPts',markPts,'features',{features},'featVis',featVis);
 
 fclose(fid);
 close(h);
