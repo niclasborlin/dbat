@@ -62,9 +62,22 @@ else
 end
 
 % Extract dir of input file.
-[inputDir,inputName,~]=fileparts(fileName);
+[inputDir,inputName]=fileparts(fileName);
 
-[psz,prob,s0,rayAng,camRayAng]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
+[psz,prob,s0,s0PreFilt]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
+
+resultFile1=fullfile(inputDir,[inputName,'-psstats-prefilt.txt']);
+fprintf('Writing report file %s...',resultFile1);
+desc1='Initial, unfiltered statitistics';
+writestats(s0PreFilt,resultFile1,desc1);
+fprintf('done.\n');
+
+resultFile2=fullfile(inputDir,[inputName,'-psstats-postfilt.txt']);
+fprintf('Writing report file %s...',resultFile2);
+desc2=sprintf('Filtered statitistics with minRays=%d, minAngle=%g',...
+              minRays,minAngle);
+s0=writestats(s0,resultFile2,desc2);
+fprintf('done.\n');
 
 % Should the camera be self-calibrated?
 if psz.camera.isAdjusted
@@ -95,7 +108,7 @@ if length(uniqueSigmas)~=1 && any(s0.markStd(:)==0)
 end
 
 s=s0;
-h=plotnetwork(s,'title','Initial network from PhotoScan',...
+h=plotnetwork(s,'title','Pre-bundle network from PhotoScan',...
               'axes',tagfigure(mfilename),'camsize',1); %#ok<NASGU>
 
 pause(0.1)
