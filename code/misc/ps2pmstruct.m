@@ -58,15 +58,16 @@ end
 % Copy enabled control points.
 ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
 
+% Track original ids and labels.
+rawCPids=s.PSCPid(ctrlPts(:,1));
+CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
+
 % Copy global object points. Set posterior uncertainty to unknown.
 objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
 
-% Record original object point IDs.
-rawOPids=[s.PSCPid(ctrlPts(:,1));s.PSOPid(objPts(:,1))];
-
-% Record original CP labels.
-OPlabels=cell(size(rawOPids));
-OPlabels(s.DBATCPid(s.raw.ctrlPts(:,1)))=s.raw.ctrlPtsLabels;
+% Track original object point IDs.
+rawOPids=[rawCPids;s.PSOPid(pos.objPts(:,1))];
+OPlabels=[CPlabels,repmat({''},1,size(pos.objPts,1))];
 
 % Copy mark points and set std.
 ctrlStd=s.defStd.projections;
