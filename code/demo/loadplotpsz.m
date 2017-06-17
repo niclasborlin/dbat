@@ -10,7 +10,7 @@ function [ppsz,prob,s0,s0PreFilt]=loadplotpsz(fName,sLocal,minVals,plotVals)
 %   LOADPLOTPSZ(F,SLOCAL) with SLOCAL==TRUE.
 %
 %   To filter the OP, use LOADPLOTPSZ(F,SLOCAL,MINVALS), where
-%   MINVALS=[minRays,minAngle] indicate lower ray count and angle (in
+%   MINVALS=[minRays,minAngle] indicate the lower ray count and angle (in
 %   degrees) limits for the OP.
 %
 %   LOADPLOTPSZ(F,SLOCAL,MINVALS,SZ) sets the width of the
@@ -81,7 +81,7 @@ s0PreFilt=s0;
 if minRays>0 || minAngle>0
     fprintf('Filtering OP...');
     if minRays>0
-        tooFewRayPts=sum(s0.vis,2)<=minRays & ~s0.isCtrl;
+        tooFewRayPts=sum(s0.vis,2)<minRays & ~s0.isCtrl;
     else
         tooFewRayPts=false;
     end

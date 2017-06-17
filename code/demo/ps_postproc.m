@@ -11,7 +11,7 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,minRays,minAngle,pauseMo
 %   If FILENAME is blank, the SXB project from [1] is used.
 %
 %   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS), removes all measurements of
-%   object points with MINRAYS rays or less before processing.
+%   object points with less than MINRAYS rays before processing.
 %
 %   PS_POSTPROC(FILENAME,SLOCAL,MINRAYS,ANGLE), removes all measurements
 %   of object points with an intersection angle below ANGLE degrees
