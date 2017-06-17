@@ -39,23 +39,59 @@ fprintf(fid,'%s\n',desc);
 
 fprintf(fid,'\nProject file: %s\n',s.fileName);
 
-fprintf(fid,'\nTime stamp: %04d-%02d-%02d %02d:%02d:%02d\n', ...
+fprintf(fid,'\nExecution time stamp: %04d-%02d-%02d %02d:%02d:%02d\n', ...
         floor(clock));
 
 nCp=nnz(s.isCtrl);
-fprintf(fid,'\nTotal # OP         : %d\n',size(s.vis,1)-nCp);
-fprintf(fid,'Total # CP         : %d\n',nCp);
-fprintf(fid,'Total # cams       : %d\n',size(s.vis,2));
-fprintf(fid,'Total # image marks: %d\n',nnz(s.vis));
-fprintf(fid,'Project units      : %s\n',s.objUnit);
+fprintf(fid,'\nTotal # OP          : %d\n',size(s.vis,1)-nCp);
+fprintf(fid,'Total # CP          : %d\n',nCp);
+fprintf(fid,'Total # cams        : %d\n',size(s.vis,2));
+fprintf(fid,'Total # image marks : %d\n',nnz(s.vis));
+fprintf(fid,'Project units       : %s\n',s.objUnit);
 
-fprintf(fid,'\nProject images: no (id), label, name:\n');
+fprintf(fid,'\nProject images: no (id), shortened label, name:\n');
 camNoDigits=Digits(size(s.vis,2));
 camIdDigits=Digits(max(s.camIds));
-labelLen=max(cellfun(@length,s.imLabels));
+imLabels=s.imLabels;
+labelLen=max(cellfun(@length,imLabels));
+
+% Generate shorter labels if necessary.
+if labelLen>8
+    % Find longest common prefix.
+    
+    % Find shortest path.
+    shortestPath=min(cellfun(@length,imLabels));
+    % Convert to array of char.
+    labelMat=char(imLabels);
+    % Find first position where strings differ.
+    eq=min(labelMat,[],1)==max(labelMat,[],1);
+    neqPos=find(~eq,1,'first');
+    % How many chars to cut?
+    if shortestPath<neqPos
+        % Leave 3 chars in shortest path.
+        cut=shortestPath-3-1;
+    else
+        % Leave 3 equal chars...
+        cut=neqPos-3-1;
+        if cut>0
+            %  ...unless one of the last equal chars are non-alphanumeric
+            nonAlnum=find(~isstrprop(imLabels{1}(cut+(1:3)),'alphanum'),1,'last');
+            if nonAlnum
+                cut=cut+nonAlnum;
+            end
+        end
+    end
+    if cut>4
+        % Remove prefix.
+        imLabels=cellfun(@(x)x(cut+1:end),imLabels,'uniformoutput',false);
+        % Recompute length of longest prefix.
+        labelLen=max(cellfun(@length,imLabels));
+    end
+end
+
 fmt=sprintf('  %s (%s), %s, %%s\n',DfmtL(camNoDigits),DfmtL(camIdDigits),SfmtL(labelLen));
 for i=1:length(s.imNames)
-    fprintf(fid,fmt,i,s.camIds(i),s.imLabels{i},fullfile(s.imDir,s.imNames{i}));
+    fprintf(fid,fmt,i,s.camIds(i),imLabels{i},fullfile(s.imDir,s.imNames{i}));
 end
 
 fprintf(fid,'\n\nIMAGE STATISTICS\n');
@@ -77,8 +113,8 @@ countDigits=Digits(max(edges));
 fprintf(fid,'\nImage with lowest ray count: cam no (id), label, count\n');
 [count,i]=sort(camRayCount);
 fmt=sprintf('  %s (%s), %s, %s\n',DfmtR(camNoDigits),DfmtR(camIdDigits),SfmtL(labelLen),DfmtR(countDigits));
-for j=1:nnz(count<count(min(5,end))*1.1+0.1)
-    fprintf(fid,fmt,i(j),s.camIds(i(j)),s.imLabels{i(j)},count(j));
+for j=1:nnz(count<count(min(3,end))*1.1+0.1)
+    fprintf(fid,fmt,i(j),s.camIds(i(j)),imLabels{i(j)},count(j));
 end
 
 fprintf(fid,'\nImage ray count histogram: nRays, nCams\n');
@@ -105,8 +141,8 @@ fprintf(fid,'\nSmallest image ray angles: cam no (id), label, nRays, angle\n');
 fmt=sprintf('  %s (%s), %s, %s, %%4.1f\n',DfmtR(camNoDigits),...
             DfmtR(camIdDigits),SfmtL(labelLen),DfmtR(countDigits));
 [ang,i]=sort(camRayAng);
-for j=1:nnz(ang<ang(min(5,end))*1.1+0.1)
-    fprintf(fid,fmt,i(j),s.camIds(i(j)),s.imLabels{i(j)},camRayCount(i(j)),...
+for j=1:nnz(ang<ang(min(3,end))*1.1+0.1)
+    fprintf(fid,fmt,i(j),s.camIds(i(j)),imLabels{i(j)},camRayCount(i(j)),...
             ang(j));
 end
 
@@ -180,7 +216,7 @@ for ii=1:length(ixx)
                  '(images with rays)\n'],strs{ii},strs{ii},sTitle);
     for j=1:cut
         imNo=find(s.vis(ix(i(j)),:));
-        imStr=strjoin(s.imLabels(imNo),', ');
+        imStr=strjoin(imLabels(imNo),', ');
         if labelLen==0
             fprintf(fid,fmt,ix(i(j)),s.OPrawId(ix(i(j))),rays(j),imStr);
         else
@@ -195,7 +231,7 @@ for ii=1:length(ixx)
     fprintf(fid,'  mean: %4.1f\n',mean(rayAng(ix)));
 
     [ang,i]=sort(rayAng(ix));
-    cut=nnz(ang<ang(min(5,end))*1.1+0.1);
+    cut=nnz(ang<ang(min(3,end))*1.1+0.1);
     labelLen=max(cellfun(@length,s.OPlabels(ix(i(1:cut)))));
     if labelLen==0
         sTitle='';
@@ -214,7 +250,7 @@ for ii=1:length(ixx)
                  'angle, (images with rays)\n'],strs{ii},strs{ii},sTitle);
     for j=1:cut
         imNo=find(s.vis(ix(i(j)),:));
-        imStr=strjoin(s.imLabels(imNo),', ');
+        imStr=strjoin(imLabels(imNo),', ');
         if labelLen==0
             fprintf(fid,fmt,ix(i(j)),s.OPrawId(ix(i(j))),...
                     nRays(ix(i(j))),ang(j),imStr);
