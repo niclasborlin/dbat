@@ -613,9 +613,9 @@ for i=1:length(camera)
         end
     end
     if pathIsAbsolute
-        imNames{j}=camera{i}.photo.Attributes.path;
+        imNames{j}=p;
     else
-        imNames{j}=fullfile(psDir,camera{i}.photo.Attributes.path);
+        imNames{j}=fullfile(psDir,p);
     end
 end
 s.imNames=imNames;
