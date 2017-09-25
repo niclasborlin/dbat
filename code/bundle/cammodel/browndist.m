@@ -1,4 +1,4 @@
-function [d,dw,dK,dP]=browndist(w,K,P,cw,cK,cP)
+function [d,dw,dK,dP,dw2,dK2,dP2]=browndist(w,K,P,cw,cK,cP)
 %BROWNDIST Compute the lens distortion according to the Brown'71 model.
 %
 %   D=BROWNDIST(W,K,P) returns a 2-by-N array D with the lens
@@ -32,34 +32,37 @@ function [d,dw,dK,dP]=browndist(w,K,P,cw,cK,cP)
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
 
-if nargin<4, cp=(nargout>1); end
+%   Undocumented: [D,dW,dK,dP,dW2,dK2,dP2]=... will also approximate
+%   the numerical Jacobians dW2, dK2, dP2.
+
+if nargin<4, cw=(nargout>1); end
 if nargin<5, cK=(nargout>2); end
 if nargin<6, cP=(nargout>3); end
-
-% Quick return for 'no distortion'.
-if isempty(K) && isempty(P)
-    % Create sparse zero matrices of the correct sizes.
-    d=sparse(size(w,1),size(w,2));
-    dp=sparse(numel(p),numel(p));
-    dK=sparse(numel(p),0);
-    dP=sparse(numel(p),0);
-    return;
-end
 
 dw=[];
 dK=[];
 dP=[];
+dw2=[];
+dK2=[];
+dP2=[];
+drdw=0;
+dtdw=0;
 
 % Number of points.
 n=size(w,2);
 
+% Split w into components.
+x=w(1,:);
+x2=x.^2;
+y=w(2,:);
+y2=y.^2;
+xy=x.*y;
 % Radial distance squared.
-r2=sum(w.^2,1);
-
-% Create r2.^[1..nK], where nK is the number of K coefficients.
+r2=x2+y2;
 
 if isempty(K)
     dr=0;
+    dK=zeros(2*n,0);
 else
     % Create r2 exponent matrix.
     nK=length(K);
@@ -73,21 +76,44 @@ else
 
     % Compute radial distortion
     dr=w.*repmat(Kr,2,1);
+
+    if cK
+        % Analytical Jacobian w.r.t. K.
+    
+        % Each 2-by-nK block row is w(:,i)*r2k(i,:).
+        r2kr=reshape(repmat(r2k(:)',2,1),size(r2k,1)*2,[]);
+        wr=repmat(w(:),1,nK);
+        dK=r2kr.*wr;
+    end
+    
+    if cw
+        % Analytical Jacobian of dr w.r.t. w.
+        
+        r2km1=repmat(r2',1,nK).^(r2e-1).*r2e;
+        Kdr=(r2km1*K)';
+        
+        drdw=zeros(2,2*n);
+        drdw(1,:)=reshape([Kr+2*Kdr.*x2;2*Kdr.*xy],[],1)';
+        drdw(2,:)=reshape([2*Kdr.*xy;Kr+2*Kdr.*y2;],[],1)';
+    end
 end
 
-if isempty(P)
+nP=length(P);
+
+if nP==0
     dt=0;
+    dP=zeros(2*n,0);
 else
-    % Split w into components.
-    x=w(1,:);
-    y=w(2,:);
-    xy=x.*y;
-    % Compute basic distortion.
-    dtx=(P(1)*(r2+2*x.^2)+2*P(2)*xy);
-    dty=(P(2)*(r2+2*y.^2)+2*P(1)*xy);
-    dt=[dtx;dty];
+
+    % Construct 2-by-2 block rows of w'*w*eye(2)+2*w*w'.
+    Aw=zeros(2*n,2);
+    Aw(:,1)=reshape([r2+2*x.^2;2*xy],[],1);
+    Aw(:,2)=reshape([2*xy;r2+2*y.^2],[],1);
+    AwQ=Aw*P(1:2);
+    dt=reshape(AwQ,2,[]);
+
     % Do we have a scaled tangential distortion?
-    if length(P)>2
+    if nP>2
         S=P(3:end);
         nS=length(S);
 
@@ -102,8 +128,55 @@ else
         % Scale the tangential distortion.
         dt=dt.*repmat(1+Sr,2,1);
     end
+
+    if cP
+        % Analytical Jacobian w.r.t. P.
+
+        switch nP
+          case 0
+            dP=zeros(2*n,0);
+          case 2
+            dP=Aw.*repmat(reshape(repmat(1+Sr,2,1),[],1),1,2);
+          otherwise
+            dP=zeros(2*n,nP);
+            % Compute w.r.t. P1, P2.
+            dP(:,1:2)=Aw.*repmat(reshape(repmat(1+Sr,2,1),[],1),1,2);
+            dP(:,3:end)=repmat(AwQ,1,nS).*kron(r2s,ones(2,1));
+        end
+    end
 end
 
 d=dr+dt;
 
-% TODO Jacobians
+if nargout>4
+    % Numerical approximation of dw.
+    vec=@(x)x(:);
+    f=@(w)vec(browndist(reshape(w,2,[]),K,P));
+    dw2=jacapprox(f,w(:));
+end
+
+if nargout>5
+    % Numerical approximation of dK.
+    vec=@(x)x(:);
+    f=@(K)vec(browndist(w,K,P));
+    dK2=jacapprox(f,K);
+end
+
+if nargout>6
+    % Numerical approximation of dP.
+    vec=@(x)x(:);
+    f=@(P)vec(browndist(w,K,P));
+    dP2=jacapprox(f,P);
+end
+
+if cw
+    % Analytical Jacobian w.r.t. w.
+    
+    % Add radial and tangential parts.
+    dgdw=drdw+dtdw;
+    
+    % Convert to 2-by-2 block diagonal.
+    dw=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
+end
+
+% TODO dtdw
