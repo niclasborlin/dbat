@@ -21,6 +21,8 @@ imageFileNames = {'/externdisk/data/work/research/photo/camera_calibration/matla
     '/externdisk/data/work/research/photo/camera_calibration/matlab_cv/IMG_4203.JPG',...
     };
 
+imageFilesName=imageFileNames(1:3);
+
 if ~exist(imageFileNames{1})
     newNames=strrep(imageFileNames,'/externdisk/','/scratch/eddie/');
     if exist(newNames{1})
@@ -28,8 +30,16 @@ if ~exist(imageFileNames{1})
     end
 end
 
-% Detect checkerboards in images
-[imagePoints, boardSize, imagesUsed] = detectCheckerboardPoints(imageFileNames);
+if exist('matcamcal.mat')
+    Z=load('matcamcal.mat');
+    imagePoints=Z.imagePoints;
+    boardSize=Z.boardSize;
+    imagesUsed=Z.imagesUsed;
+else
+    % Detect checkerboards in images
+    [imagePoints, boardSize, imagesUsed] = detectCheckerboardPoints(imageFileNames);
+end
+
 imageFileNames = imageFileNames(imagesUsed);
 
 % Generate world coordinates of the corners of the squares
