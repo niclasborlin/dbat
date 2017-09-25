@@ -35,32 +35,66 @@ if (nargout>2)
     JJ=jacapprox(mfilename,x,1e-6,{s});
 end
 
-if (nargout<2)
-    % Only residual vector requested.
+if true % backward/photogrammetric
+    if (nargout<2)
+        % Only residual vector requested.
     
-    % Project into pinhole camera.
-    xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
+        % Project into pinhole camera.
+        xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
 
-    % Remove lens distortion from measured points.
-    ptCorr=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP,s.ptCams, ...
-                             size(IO,2));
+        % Remove lens distortion from measured points.
+        ptCorr=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP,s.ptCams, ...
+                                 size(IO,2));
 
-    fPre=pm_preobs(x,s);
+        fPre=pm_preobs(x,s);
     
-    f=[xy(:)-ptCorr(:);fPre];
-else
-    % Project into pinhole camera.
-    [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                            s.vis,s.estIO,s.estEO,s.estOP);
+        f=[xy(:)-ptCorr(:);fPre];
+    else
+        % Project into pinhole camera.
+        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                                s.vis,s.estIO,s.estEO,s.estOP);
 	
-    % Remove lens distortion from measured points.
-    [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-                                    s.ptCams,size(IO,2),s.estIO);
+        % Remove lens distortion from measured points.
+        [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
+                                        s.ptCams,size(IO,2),s.estIO);
 
-    [fPre,Jpre]=pm_preobs(x,s);
+        [fPre,Jpre]=pm_preobs(x,s);
 
-    f=[xy(:)-ptCorr(:);fPre];
+        f=[xy(:)-ptCorr(:);fPre];
 	
-    J=[dIO1-dIO2,dEO,dOP;Jpre];
+        J=[dIO1-dIO2,dEO,dOP;Jpre];
+    end
+else % forward/computer vision
+    if (nargout<2)
+        % Only residual vector requested.
+    
+        % Project into pinhole camera.
+        xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
+
+        u=diag(IO(3+s.nK+s.nP+6+(1:2)));
+        
+        xyPx=u*reshape(xy,2,[]);
+        
+        % Add lens distortion to ideal points.
+        ptCorr=pm_multilenscorr1(xyPx,IO,s.nK,s.nP,s.ptCams,size(IO,2));
+        xyWithLens=xy+ptCorr;
+        
+        fPre=pm_preobs(x,s);
+    
+        f=[xy(:)-ptCorr(:);fPre];
+    else
+        % Project into pinhole camera.
+        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                                s.vis,s.estIO,s.estEO,s.estOP);
+	
+        % Remove lens distortion from measured points.
+        [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
+                                        s.ptCams,size(IO,2),s.estIO);
+
+        [fPre,Jpre]=pm_preobs(x,s);
+
+        f=[xy(:)-ptCorr(:);fPre];
+	
+        J=[dIO1-dIO2,dEO,dOP;Jpre];
+    end
 end
-
