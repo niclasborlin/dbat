@@ -469,6 +469,14 @@ if any(~s.isCtrl)
     fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,idOP(mni));
     fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (OP %d)\n'],mx,idOP(mxi));
     fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(aOP));
+    fprintf(fid,[p,p,p,p,'Smallest angles (ID, angle [deg], vis in ' ...
+                 'cameras)\n']);
+    [ang,i]=sort(aOP);
+    for j=1:nnz(ang<ang(min(3,end))*1.1+0.1)
+        camVis=find(s.vis(i(j),:));
+        str=sprintf('%4d ',camVis);
+        fprintf(fid,'%6d: %5.2f (%s)\n',idOP(i(j)),ang(j),str(1:end-1));
+    end
 else
     fprintf(fid,[p,p,p,p,'Minimum: -\n']);
     fprintf(fid,[p,p,p,p,'Maximum: -\n']);
