@@ -136,12 +136,31 @@ else
           case 0
             dP=zeros(2*n,0);
           case 2
-            dP=Aw.*repmat(reshape(repmat(1+Sr,2,1),[],1),1,2);
+            dP=Aw;
           otherwise
             dP=zeros(2*n,nP);
             % Compute w.r.t. P1, P2.
             dP(:,1:2)=Aw.*repmat(reshape(repmat(1+Sr,2,1),[],1),1,2);
             dP(:,3:end)=repmat(AwQ,1,nS).*kron(r2s,ones(2,1));
+        end
+    end
+    
+    if cw
+        % Analytical Jacobian of dr w.r.t. w.
+
+        if nP==0
+            dtdw=0;
+        else
+            dtdw=reshape(P(1)*[6*x;2*y;2*y;2*x]+P(2)*[2*y;2*x;2*x;6*y],2,[]);
+            if nP>2
+                dtdw=dtdw.*reshape(repmat(1+Sr,4,1),2,[]);
+                
+                r2sm1=repmat(r2',1,nS).^(r2e-1).*r2e;
+                Sdr=(r2sm1*S)';
+                
+                dtdw=dtdw+reshape(repmat(reshape(AwQ,2,[]),2,1),2,[]).* ...
+                     repmat(reshape(w.*repmat(2*Sdr,2,1),[],1)',2,1);
+            end
         end
     end
 end
@@ -175,8 +194,8 @@ if cw
     % Add radial and tangential parts.
     dgdw=drdw+dtdw;
     
+    [i,j,v]=find(dgdw);
+    
     % Convert to 2-by-2 block diagonal.
     dw=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
 end
-
-% TODO dtdw
