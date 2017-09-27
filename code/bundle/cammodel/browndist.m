@@ -35,6 +35,8 @@ function [d,dw,dK,dP,dw2,dK2,dP2]=browndist(w,K,P,cw,cK,cP)
 %   Undocumented: [D,dW,dK,dP,dW2,dK2,dP2]=... will also approximate
 %   the numerical Jacobians dW2, dK2, dP2.
 
+%if ischar(w), selftest, return; end
+
 if nargin<4, cw=(nargout>1); end
 if nargin<5, cK=(nargout>2); end
 if nargin<6, cP=(nargout>3); end
@@ -61,7 +63,8 @@ xy=x.*y;
 r2=x2+y2;
 
 if isempty(K)
-    dr=0;
+    % No radial distortion.
+    dr=sparse(2,n);
     dK=zeros(2*n,0);
 else
     % Create r2 exponent matrix.
@@ -101,10 +104,10 @@ end
 nP=length(P);
 
 if nP==0
-    dt=0;
+    % No tangential distortion.
+    dt=sparse(2,n);
     dP=zeros(2*n,0);
 else
-
     % Construct 2-by-2 block rows of w'*w*eye(2)+2*w*w'.
     Aw=zeros(2*n,2);
     Aw(:,1)=reshape([r2+2*x.^2;2*xy],[],1);
@@ -199,3 +202,21 @@ if cw
     % Convert to 2-by-2 block diagonal.
     dw=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
 end
+
+
+function selftest
+
+w=rand(2,8);
+K=rand(5,1);
+P=rand(5,1);
+mx=-inf;
+for kLen=0:length(K)
+    for pLen=[0,2:length(P)]
+        [d,dw,dK,dP,dw2,dK2,dP2]=browndist(w,K(1:kLen),P(1:pLen));
+        mx=max(mx,max(max(abs(dw-dw2))));
+        mx=max(mx,max(max(abs(dK-dK2))));
+        mx=max(max(max(abs(dP-dP2))));
+    end
+end
+disp('Maximum error')
+mx
