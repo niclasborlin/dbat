@@ -40,7 +40,7 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         % Only residual vector requested.
     
         % Project into pinhole camera.
-        xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
+        xy=reshape(pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis),2,[]);
 
         % Convert measured points from pixels to mm and flip y coordinate.
         m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,size(IO,2));
@@ -50,30 +50,45 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         
         % Remove lens distortion from measured points.
         ptCorr=m-ld;
+        
+        % Compute residual for image observations.
+        fObs=xy-ptCorr;
 
         % Compute residual for prior observations.
         fPre=pm_preobs(x,s);
-    
-        f=[xy(:)-ptCorr(:);fPre];
+
+        % Combine residuals.
+        f=[fObs(:);fPre(:)];
     else
         % Numerical Jacobian for the time being.
         f=feval(mfilename,x,s);
-        J=jacapprox(mfilename,x,1e-6,{s});
-        return;
+        JJ=jacapprox(mfilename,x,1e-6,{s});
+
+        TODO CHECK THIS
+        % Project into pinhole camera.
+        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                                s.vis,s.estIO,s.estEO,s.estOP);
+        xy=reshape(xy,2,[]);
+	
+        % Convert measured points from pixels to mm and flip y coordinate.
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,...
+                                     size(IO,2));
+
+        % Compute lens distortion for all measured point.
+        [ld,dIO2]=pm_multilens1(m,IO,s.nK,s.nP,s.ptCams,size(IO,2));
+
+        % Remove lens distortion from measured points.
+        ptCorr=m-ld;
         
-        % % Project into pinhole camera.
-        % [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-        %                                         s.vis,s.estIO,s.estEO,s.estOP);
-	
-        % % Remove lens distortion from measured points.
-        % [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-        %                                 s.ptCams,size(IO,2),s.estIO);
+        % Compute residual for image observations.
+        fObs=xy-ptCorr;
 
-        % [fPre,Jpre]=pm_preobs(x,s);
+        % Compute residual for prior observations.
+        [fPre,Jpre]=pm_preobs(x,s);
 
-        % f=[xy(:)-ptCorr(:);fPre];
+        f=[fObs(:);fPre(:)];
 	
-        % J=[dIO1-dIO2,dEO,dOP;Jpre];
+        J=[dIO1-dIO2,dEO,dOP;Jpre];
     end
 elseif all(s.IOdistModel==-1) % forward/computer vision
     if (nargout<2)

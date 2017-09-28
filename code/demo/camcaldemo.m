@@ -62,7 +62,7 @@ prob.ctrlPts=[1001,0,1,0,0,0,0
 s0=prob2dbatstruct(prob);
 
 % Switch to Forward/Computer Vision lens distortion model for all cameras.
-s0.IOdistModel(:)=-1;
+%s0.IOdistModel(:)=-1;
 
 ss0=s0;
 
