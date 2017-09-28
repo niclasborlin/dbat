@@ -60,6 +60,10 @@ prob.ctrlPts=[1001,0,1,0,0,0,0
               
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
+
+% Switch to Forward/Computer Vision lens distortion model for all cameras.
+s0.IOdistModel(:)=-1;
+
 ss0=s0;
 
 % Set initial IO values. Copy image size, sensor size, etc. from

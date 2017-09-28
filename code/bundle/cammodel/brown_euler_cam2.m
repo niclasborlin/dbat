@@ -35,15 +35,15 @@ if (nargout>2)
     JJ=jacapprox(mfilename,x,1e-6,{s});
 end
 
-if true % backward/photogrammetric
+if all(s.IOdistModel==1) % backward/photogrammetric
     if (nargout<2)
         % Only residual vector requested.
     
         % Project into pinhole camera.
         xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
 
-        % Convert from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,nK,nP,s.ptCams,size(IO,2));
+        % Convert measured points from pixels to mm and flip y coordinate.
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,size(IO,2));
         
         % Compute lens distortion for all measured point.
         ld=pm_multilens1(m,IO,s.nK,s.nP,s.ptCams,size(IO,2));
@@ -56,51 +56,64 @@ if true % backward/photogrammetric
     
         f=[xy(:)-ptCorr(:);fPre];
     else
-        % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                                s.vis,s.estIO,s.estEO,s.estOP);
+        % Numerical Jacobian for the time being.
+        f=feval(mfilename,x,s);
+        J=jacapprox(mfilename,x,1e-6,{s});
+        return;
+        
+        % % Project into pinhole camera.
+        % [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
+        %                                         s.vis,s.estIO,s.estEO,s.estOP);
 	
-        % Remove lens distortion from measured points.
-        [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-                                        s.ptCams,size(IO,2),s.estIO);
+        % % Remove lens distortion from measured points.
+        % [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
+        %                                 s.ptCams,size(IO,2),s.estIO);
 
-        [fPre,Jpre]=pm_preobs(x,s);
+        % [fPre,Jpre]=pm_preobs(x,s);
 
-        f=[xy(:)-ptCorr(:);fPre];
+        % f=[xy(:)-ptCorr(:);fPre];
 	
-        J=[dIO1-dIO2,dEO,dOP;Jpre];
+        % J=[dIO1-dIO2,dEO,dOP;Jpre];
     end
-else % forward/computer vision
+elseif all(s.IOdistModel==-1) % forward/computer vision
     if (nargout<2)
         % Only residual vector requested.
     
         % Project into pinhole camera.
-        xy=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
+        xy=reshape(pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis),2,[]);
 
-        u=diag(IO(3+s.nK+s.nP+6+(1:2)));
+        % Convert measured points from pixels to mm and flip y coordinate.
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,size(IO,2));
         
-        xyPx=u*reshape(xy,2,[]);
-        
-        % Add lens distortion to ideal points.
-        ptCorr=pm_multilenscorr1(xyPx,IO,s.nK,s.nP,s.ptCams,size(IO,2));
-        xyWithLens=xy+ptCorr;
+        % Compute lens distortion for projected points.
+        ld=pm_multilens1(reshape(xy,2,[]),IO,s.nK,s.nP,s.ptCams,size(IO,2));
+
+        % Add lens distortion to projected points.
+        ptDist=xy+ld;
         
         fPre=pm_preobs(x,s);
     
-        f=[xy(:)-ptCorr(:);fPre];
+        f=[ptDist(:)-m(:);fPre];
     else
-        % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                                s.vis,s.estIO,s.estEO,s.estOP);
-	
-        % Remove lens distortion from measured points.
-        [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-                                        s.ptCams,size(IO,2),s.estIO);
+        % Numerical Jacobian for the time being.
+        f=feval(mfilename,x,s);
+        J=jacapprox(mfilename,x,1e-6,{s});
+        return;
 
-        [fPre,Jpre]=pm_preobs(x,s);
-
-        f=[xy(:)-ptCorr(:);fPre];
+        % % Project into pinhole camera.
+        % [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
+        %                                         s.vis,s.estIO,s.estEO,s.estOP);
 	
-        J=[dIO1-dIO2,dEO,dOP;Jpre];
+        % % Remove lens distortion from measured points.
+        % [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
+        %                                 s.ptCams,size(IO,2),s.estIO);
+
+        % [fPre,Jpre]=pm_preobs(x,s);
+
+        % f=[xy(:)-ptCorr(:);fPre];
+	
+        % J=[dIO1-dIO2,dEO,dOP;Jpre];
     end
+else
+    error('Mixed lens distortion models not implemented.');
 end

@@ -109,6 +109,15 @@ values={
 
 pretty_print(fid,repmat(p,1,3),values);
 
+fprintf(fid,[p,p,'Lens distortion models:\n']);
+if all(s.IOdistModel==1)
+    fprintf(fid,[p,p,p,'Backward (Photogrammetry)\n']);
+elseif all(s.IOdistModel==-1)
+    fprintf(fid,[p,p,p,'Forward (Computer Vision)\n']);
+else
+    fprintf(fid,[p,p,p,'Mixed Forward/Backward\n']);
+end
+    
 fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
 
 corrStr=sprintf('Correlations over %g%%:',corrThreshold*100);
@@ -161,6 +170,15 @@ if any(s.estIO(:))
         vals=S*full(sIO(rows,i));
         sigma=full(ioSigma(rows,i));
         fprintf(fid,[p,p,p,p,'Camera%d (camera unit cu=%s)\n'],i,s.camUnit);
+        fprintf(fid,[p,p,p,p,p,'Lens distortion model:\n']);
+        switch s.IOdistModel(i)
+          case 1
+            fprintf(fid,[p,p,p,p,p,p,'Backward (Photogrammetry)\n']);
+          case -1
+            fprintf(fid,[p,p,p,p,p,p,'Forward (Computer Vision)\n']);
+          otherwise
+            fprintf(fid,[p,p,p,p,p,p,'Unknown'\n]);
+        end
         for j=1:length(head)
             fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
             values={'Value:','%g %s',{vals(j),unit{j}}};

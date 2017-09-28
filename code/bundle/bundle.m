@@ -121,7 +121,7 @@ x0(ixEO)=s.EO(s.estEO);
 x0(ixOP)=s.OP(s.estOP);
 
 % Residual function.
-resFun=@(x)brown_euler_cam(x,s);
+resFun=@(x)brown_euler_cam2(x,s);
 
 if veto
     vetoFun=@chirality;
@@ -172,6 +172,17 @@ convTol=1e-6;
 % 3) x* found at maxIter
 % 4) x* not found at maxIter
 
+if all(s.IOdistModel==1)
+    disp(['Using Backward Brown (Photogrammetry) lens distortion ' ...
+          'model for all cameras']);
+elseif all(s.IOdistModel==-1)
+    disp(['Using Forward Brown (Computer Vision) lens distortion ' ...
+          'model for all cameras']);
+else
+    disp(['Using mix of Forward/Backward Brown lens distortion ' ...
+          'model']);
+end
+    
 % Version string.
 [v,d]=dbatversion;
 E=struct('maxIter',maxIter,'convTol',convTol,'singularTest',singularTest,...

@@ -44,7 +44,7 @@ if all(~cIO(:)) && ~(any(cp))
     
     for i=1:nCams
         % Get inner orientation.
-        [pp,f,K,P,a,u]=unpackio(IO(:,i),nK,nP); %#ok<ASGLU>
+        [pp,~,K,P]=unpackio(IO(:,i),nK,nP); %#ok<ASGLU>
 	
         % Get points taken with this camera.
         ix=cams==i;
