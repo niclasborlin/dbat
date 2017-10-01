@@ -64,7 +64,6 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         f=feval(mfilename,x,s);
         JJ=jacapprox(mfilename,x,1e-6,{s});
 
-        TODO CHECK THIS
         % Project into pinhole camera.
         [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
                                                 s.vis,s.estIO,s.estEO,s.estOP);

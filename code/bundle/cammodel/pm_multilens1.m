@@ -44,7 +44,7 @@ if all(~cIO(:)) && ~(any(cp))
     
     for i=1:nCams
         % Get inner orientation.
-        [pp,~,K,P]=unpackio(IO(:,i),nK,nP); %#ok<ASGLU>
+        [pp,~,K,P]=unpackio(IO(:,i),nK,nP);
 	
         % Get points taken with this camera.
         ix=cams==i;
@@ -72,9 +72,8 @@ else
     
     % Number of wanted internal parameters
     ioCols=nnz(cIO);
-    % Max number of non-zero elements.
-    ioMaxNnz=nPts*2*max(sum(cIO));
-    dIO=sparse([],[],[],nPts*2,ioCols,ioMaxNnz);
+    % Pre-allocate jacobian.
+    dIO=zeros(2*nPts,ioCols);
     
     % Create arrays of columns indices for IO derivatives.
     [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP); %#ok<ASGLU>
@@ -95,18 +94,16 @@ else
         [pp,f,K,P,a,u]=unpackio(IO(:,i),nK,nP); %#ok<ASGLU>
 	
         % Which inner orientation parameters are interesting?
-        [cpp,cf,cK,cP,ca,cu]=unpackio(cIO(:,i),nK,nP);
+        [cpp,~,cK,cP]=unpackio(cIO(:,i),nK,nP);
         
         % Get points taken with this camera.
         ix=find(cams==i);
         
-        % Extract points.
-        q=p(:,ix);
+        % Extract points and subtract principal point.
+        q=p(:,ix)-repmat(pp,1,nnz(ix));
         
         % Lens distortion.
-        calcID=any(cp(:));
-        [lens,dldq,dldpp,dldK,dldP]=pm_lens1(q,pp,K,P,calcID,...
-                                             any(cpp),any(cK),any(cP));
+        [lens,dldq,dldK,dldP]=browndist(q,K,P);
         
         % Correct for lens distortion.
         ld(:,ix)=lens;
@@ -117,24 +114,21 @@ else
         
         % IO jacobians.
         if any(cpp)
-            dIO(ixRow,ixpp(cpp,i))=-dldpp(:,cpp); %#ok<SPRIX>
+            dIO(ixRow,ixpp(cpp,i))=-dldpp(:,cpp);
         end
         if cf
             % Focal length does not take part in equation.
             % dIO(ixRow,ixf(i))=0;
         end
         if any(cK)
-            dIO(ixRow,ixK(cK,i))=-dldK(:,cK); %#ok<SPRIX>
+            dIO(ixRow,ixK(cK,i))=-dldK(:,cK);
         end
         if any(cP)
-            dIO(ixRow,ixP(cP,i))=-dldP(:,cP); %#ok<SPRIX>
+            dIO(ixRow,ixP(cP,i))=-dldP(:,cP);
         end
         if any(ca)
-            % Not implemented yet.
+            % affinity and skew does not take part in equation.
             % dIO(ixRow,ixa(ca,i))=0
-        end
-        if any(cu)
-            dIO(ixRow,ixu(cu,i))=dqdu(:,cu)-dldq*dqdu(:,cu); %#ok<SPRIX>
         end
         if any(cp(ix))
             colix=ixCol(:,ix);

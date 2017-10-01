@@ -117,8 +117,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       K3      - radial distortion parameters of Brown (1971).
 %       P1,
 %       P2      - tangential distortion parameters of Brown (1971).
-%       a1,
-%       a2      - skew parameters (not used).
+%       fa      - affine parameter,    .
+%       fs      - skew parameters.
 %       sw,
 %       sh      - sensor width and height in camera units.
 %       iw,
