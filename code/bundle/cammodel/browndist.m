@@ -1,13 +1,12 @@
-function [d,dw,dK,dP,dw2,dK2,dP2]=browndist(w,K,P,cw,cK,cP)
+function [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K,P,cs,cpp,cK,cP)
 %BROWNDIST Compute the lens distortion according to the Brown'71 model.
 %
-%   D=BROWNDIST(W,K,P) returns a 2-by-N array D with the lens
-%   distortion of the 2-by-N image point array W according to the
-%   Brown (1971) lens distortion model. The vectors K and P contain
-%   the radial and tangential coefficients, respectively. The
-%   coordinates in the point array W is relative to the principal
-%   point. The K vector may be of any length. The P vector may be of
-%   any length except one.
+%   D=BROWNDIST(S,PP,K,P) returns a 2-by-N array D with the lens
+%   distortion of the 2-by-N image point array S according to the
+%   Brown (1971) lens distortion model. The 2-vector PP contain the
+%   principal point. The vectors K and P contain the radial and
+%   tangential coefficients, respectively. The K vector may be of any
+%   length. The P vector may be of any length except one.
 %
 %   The Brown (1971) lens distortion model splits the distortion into
 %   a radial and tangential part
@@ -18,41 +17,57 @@ function [d,dw,dK,dP,dw2,dK2,dP2]=browndist(w,K,P,cw,cK,cP)
 %
 %       Dr = w * ( K(1)r^2 + K(2)r^4 + ... ),
 %
-%   where r=norm(w). The tangential part is given by
+%   where
+%
+%       w = s - pp
+%
+%   and r=norm(w). The tangential part is given by
 %
 %       Dt = [ P(1) ( r^2 + 2x^2 ) + 2P(2)xy;
 %              2P(1)xy + P(2) ( r^2 + 2y^2 )  ] (1 + P(3)r^2 + ...).
 %
-%   [D,dW,dK,dP]=BROWNDIST(W,K,P) also computes the Jacobians of D
-%   with respect to the variables in W, K, and P, respectively. If a
-%   subset of the Jacobians are wanted, use BROWNDIST(W,K,P,cW,cK,cP),
-%   where the logical parameters cW, cK, and cP control whether the
-%   corresponding Jacobian is computed.
+%   [D,dS,dPP,dK,dP]=BROWNDIST(S,PP,K,P) also computes the Jacobians
+%   of D with respect to the variables in S, PP, K, and P,
+%   respectively. If a subset of the Jacobians are wanted, use
+%   BROWNDIST(W,K,P,cS,cPP,cK,cP), where the logical parameters cS,
+%   cPP, cK, and cP control whether the corresponding Jacobian is
+%   computed.
 %
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
 
-%   Undocumented: [D,dW,dK,dP,dW2,dK2,dP2]=... will also approximate
-%   the numerical Jacobians dW2, dK2, dP2.
+%   Undocumented: [D,dS,dPP,dK,dP,dS2,dSPP2,dK2,dP2]=... will also
+%   compute the numerical Jacobians dS2, dK2, dP2.
 
-%if ischar(w), selftest, return; end
+if ischar(s), selftest, return; end
 
-if nargin<4, cw=(nargout>1); end
-if nargin<5, cK=(nargout>2); end
-if nargin<6, cP=(nargout>3); end
+if nargin<5, cs=(nargout>1); end
+if nargin<6, cpp=(nargout>2); end
+if nargin<7, cK=(nargout>3); end
+if nargin<8, cP=(nargout>4); end
 
-dw=[];
+ds=[];
+dpp=[];
 dK=[];
 dP=[];
-dw2=[];
+ds2=[];
+dpp2=[];
 dK2=[];
 dP2=[];
 drdw=0;
 dtdw=0;
 
-% Number of points.
-n=size(w,2);
+cw=cs | cpp;
 
+% Number of points.
+n=size(s,2);
+
+if nnz(pp)==0
+    w=s;
+else
+    w=s-repmat(pp,1,n);
+end
+    
 % Split w into components.
 x=w(1,:);
 x2=x.^2;
@@ -170,24 +185,31 @@ end
 
 d=dr+dt;
 
-if nargout>4
+if nargout>5
     % Numerical approximation of dw.
     vec=@(x)x(:);
-    f=@(w)vec(browndist(reshape(w,2,[]),K,P));
-    dw2=jacapprox(f,w(:));
-end
-
-if nargout>5
-    % Numerical approximation of dK.
-    vec=@(x)x(:);
-    f=@(K)vec(browndist(w,K,P));
-    dK2=jacapprox(f,K);
+    f=@(s)vec(browndist(reshape(s,2,[]),pp,K,P));
+    ds2=jacapprox(f,s(:));
 end
 
 if nargout>6
+    % Numerical approximation of dw.
+    vec=@(x)x(:);
+    f=@(pp)vec(browndist(s,pp,K,P));
+    dpp2=jacapprox(f,pp);
+end
+
+if nargout>7
+    % Numerical approximation of dK.
+    vec=@(x)x(:);
+    f=@(K)vec(browndist(s,pp,K,P));
+    dK2=jacapprox(f,K);
+end
+
+if nargout>8
     % Numerical approximation of dP.
     vec=@(x)x(:);
-    f=@(P)vec(browndist(w,K,P));
+    f=@(P)vec(browndist(s,pp,K,P));
     dP2=jacapprox(f,P);
 end
 
@@ -197,23 +219,31 @@ if cw
     % Add radial and tangential parts.
     dgdw=drdw+dtdw;
     
-    [i,j,v]=find(dgdw);
+    if cpp
+        dpp=-dgdw';
+    end
     
-    % Convert to 2-by-2 block diagonal.
-    dw=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
+    if cs
+        [i,j,v]=find(dgdw);
+    
+        % Convert to 2-by-2 block diagonal.
+        ds=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
+    end
 end
 
 
 function selftest
 
-w=rand(2,8);
+s=rand(2,8);
+pp=rand(2,1);
 K=rand(5,1);
 P=rand(5,1);
 mx=-inf;
 for kLen=0:length(K)
     for pLen=[0,2:length(P)]
-        [d,dw,dK,dP,dw2,dK2,dP2]=browndist(w,K(1:kLen),P(1:pLen));
-        mx=max(mx,max(max(abs(dw-dw2))));
+        [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K(1:kLen),P(1:pLen));
+        mx=max(mx,max(max(abs(ds-ds2))));
+        mx=max(mx,max(max(abs(dpp-dpp2))));
         mx=max(mx,max(max(abs(dK-dK2))));
         mx=max(max(max(abs(dP-dP2))));
     end
