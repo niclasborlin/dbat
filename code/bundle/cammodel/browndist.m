@@ -39,7 +39,7 @@ function [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K,P,cs,cpp,cK,cP)
 %   Undocumented: [D,dS,dPP,dK,dP,dS2,dSPP2,dK2,dP2]=... will also
 %   compute the numerical Jacobians dS2, dK2, dP2.
 
-if ischar(s), selftest, return; end
+if nargin==1 && ischar(s), selftest, return; end
 
 if nargin<5, cs=(nargout>1); end
 if nargin<6, cpp=(nargout>2); end
@@ -57,7 +57,7 @@ dP2=[];
 drdw=0;
 dtdw=0;
 
-cw=cs | cpp;
+cw=any(cs(:)) || any(cpp(:));
 
 % Number of points.
 n=size(s,2);
@@ -233,6 +233,8 @@ end
 
 
 function selftest
+% Compare the analytical and numerical Jacobians and report the
+% maximum deviation. Should be below 1e-9.
 
 s=rand(2,8);
 pp=rand(2,1);
@@ -248,5 +250,11 @@ for kLen=0:length(K)
         mx=max(max(max(abs(dP-dP2))));
     end
 end
-disp('Maximum error')
-mx
+thres=1e-9;
+if mx<thres
+    fprintf('%s selftest: Maximum diff = %g, max expected=%g, OK.\n',mfilename,mx,...
+            thres);
+else
+    warning('%s selftest: Maximum diff = %g, max expected=%g.\n',mfilename,mx,...
+            thres);
+end
