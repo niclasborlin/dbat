@@ -19,7 +19,7 @@ function [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K,P,cs,cpp,cK,cP)
 %
 %   where
 %
-%       w = s - pp
+%       w = s - pp,
 %
 %   and r=norm(w). The tangential part is given by
 %
@@ -29,7 +29,7 @@ function [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K,P,cs,cpp,cK,cP)
 %   [D,dS,dPP,dK,dP]=BROWNDIST(S,PP,K,P) also computes the Jacobians
 %   of D with respect to the variables in S, PP, K, and P,
 %   respectively. If a subset of the Jacobians are wanted, use
-%   BROWNDIST(W,K,P,cS,cPP,cK,cP), where the logical parameters cS,
+%   BROWNDIST(S,PP,K,P,cS,cPP,cK,cP), where the logical parameters cS,
 %   cPP, cK, and cP control whether the corresponding Jacobian is
 %   computed.
 %
@@ -62,11 +62,8 @@ cw=any(cs(:)) || any(cpp(:));
 % Number of points.
 n=size(s,2);
 
-if nnz(pp)==0
-    w=s;
-else
-    w=s-repmat(pp,1,n);
-end
+% Subtract principal point.
+w=s-repmat(pp,1,n);
     
 % Split w into components.
 x=w(1,:);

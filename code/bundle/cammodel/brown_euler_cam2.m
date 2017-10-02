@@ -60,10 +60,6 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         % Combine residuals.
         f=[fObs(:);fPre(:)];
     else
-        % Numerical Jacobian for the time being.
-        f=feval(mfilename,x,s);
-        JJ=jacapprox(mfilename,x,1e-6,{s});
-
         % Project into pinhole camera.
         [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
                                                 s.vis,s.estIO,s.estEO,s.estOP);
@@ -74,7 +70,7 @@ if all(s.IOdistModel==1) % backward/photogrammetric
                                      size(IO,2));
 
         % Compute lens distortion for all measured point.
-        [ld,dIO2]=pm_multilens1(m,IO,s.nK,s.nP,s.ptCams,size(IO,2));
+        [ld,dIO2]=pm_multilens1(m,IO,s.nK,s.nP,s.ptCams,size(IO,2),s.estIO);
 
         % Remove lens distortion from measured points.
         ptCorr=m-ld;

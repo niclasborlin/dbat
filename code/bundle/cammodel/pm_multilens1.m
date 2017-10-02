@@ -48,12 +48,10 @@ if all(~cIO(:)) && ~(any(cp))
 	
         % Get points taken with this camera.
         ix=cams==i;
-        
-        % Extract points and subtract principal point.
-        q=p(:,ix)-repmat(pp,1,nnz(ix));
+        q=p(:,ix);
         
         % Compute lens distortion for these points.
-        lens=browndist(q,K,P);
+        lens=browndist(q,pp,K,P);
         
         % Store.
         ld(:,ix)=lens;
@@ -91,19 +89,17 @@ else
     
     for i=1:nCams
         % Get inner orientation.
-        [pp,f,K,P,a,u]=unpackio(IO(:,i),nK,nP); %#ok<ASGLU>
+        [pp,~,K,P]=unpackio(IO(:,i),nK,nP);
 	
         % Which inner orientation parameters are interesting?
         [cpp,~,cK,cP]=unpackio(cIO(:,i),nK,nP);
         
         % Get points taken with this camera.
         ix=find(cams==i);
-        
-        % Extract points and subtract principal point.
-        q=p(:,ix)-repmat(pp,1,nnz(ix));
+        q=p(:,ix);
         
         % Lens distortion.
-        [lens,dldq,dldK,dldP]=browndist(q,K,P);
+        [lens,dldq,dldpp,dldK,dldP]=browndist(q,pp,K,P,cp,cpp,cK,cP);
         
         % Correct for lens distortion.
         ld(:,ix)=lens;
@@ -116,28 +112,17 @@ else
         if any(cpp)
             dIO(ixRow,ixpp(cpp,i))=-dldpp(:,cpp);
         end
-        if cf
-            % Focal length does not take part in equation.
-            % dIO(ixRow,ixf(i))=0;
-        end
         if any(cK)
             dIO(ixRow,ixK(cK,i))=-dldK(:,cK);
         end
         if any(cP)
             dIO(ixRow,ixP(cP,i))=-dldP(:,cP);
         end
-        if any(ca)
-            % affinity and skew does not take part in equation.
-            % dIO(ixRow,ixa(ca,i))=0
-        end
         if any(cp(ix))
+            warning('Not verified'); % TODO: Verify this.
             colix=ixCol(:,ix);
             dqdp=dqdp(:,colix~=0);
-            dp(ixRow,colix(colix~=0))=dqdp-dldq*dqdp; %#ok<SPRIX>
+            dp(ixRow,colix(colix~=0))=dqdp-dldq*dqdp;
         end
     end
-    
-    % Verify
-    %disp([nnz(dIO),ioMaxNnz]);
-    %disp([nnz(dp),ptMaxNnz]);
 end
