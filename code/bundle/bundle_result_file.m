@@ -74,6 +74,8 @@ end
 % Values are {name,format string,value}
 values={'Last Bundle Run:','%s',e.dateStamp,
         'DBAT version:','%s',e.version,
+        'MATLAB version:','%s',version,
+        'Host system:','%s',computer,
         'Status:','%s (%d)',{status,e.code},
         'Sigma0:','%g',e.s0,
         'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1)};
@@ -104,7 +106,8 @@ values={
     'Number of stages:','%d',1,
     'Number of iterations:','%d',e.usedIters,
     'First error:','%g',e.res(1),
-    'Last error:','%g',e.res(end)
+    'Last error:','%g',e.res(end),
+    'Execution time (s):','%g',e.time
     };
 
 pretty_print(fid,repmat(p,1,3),values);
