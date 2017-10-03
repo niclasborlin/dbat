@@ -51,22 +51,22 @@ if nargin<8, cP=(nargout>4); end
 
 if ~isscalar(cs), error('%s: cs parameter must be scalar',mfilename); end
 
-ds=[];
-dpp=[];
-dK=[];
-dP=[];
-ds2=[];
-dpp2=[];
-dK2=[];
-dP2=[];
-drdw=0;
-dtdw=0;
-
 % We need Jacobian w.r.t. w in two cases.
 cw=cs || cpp;
 
 % Number of points.
 n=size(s,2);
+
+ds=sparse(2*n,2*n);
+dpp=sparse(2*n,2);
+dK=sparse(2*n,length(K));
+dP=sparse(2*n,length(P));
+ds2=sparse(2*n,2*n);
+dpp2=sparse(2*n,2);
+dK2=sparse(2*n,length(K));
+dP2=sparse(2*n,length(P));
+drdw=0;
+dtdw=0;
 
 % Subtract principal point.
 w=s-repmat(pp,1,n);
@@ -79,6 +79,12 @@ y2=y.^2;
 xy=x.*y;
 % Radial distance squared.
 r2=x2+y2;
+
+if isempty(s)
+    % No points.
+    d=zeros(size(s));
+    return;
+end
 
 if isempty(K)
     % No radial distortion.
