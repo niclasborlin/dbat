@@ -52,6 +52,8 @@ end
 
 if ~(any(cIO(:)) || cp)
     % No partial derivatives.
+    dIO=zeros(2*n,0);
+    dp=sparse(2*n,2*n);
     
     % Preallocate correction matrix for speed.
     ld=nan(size(p));

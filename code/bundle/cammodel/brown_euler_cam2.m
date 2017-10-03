@@ -43,10 +43,10 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         xy=reshape(pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis),2,[]);
 
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,size(IO,2));
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
         
         % Compute lens distortion for all measured point.
-        ld=pm_multilens1(m,IO,s.nK,s.nP,s.ptCams,size(IO,2));
+        ld=multilensdist(m,IO,s.nK,s.nP,s.ptCams);
         
         % Remove lens distortion from measured points.
         ptCorr=m-ld;
@@ -66,11 +66,10 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         xy=reshape(xy,2,[]);
 	
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,...
-                                     size(IO,2));
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
 
         % Compute lens distortion for all measured point.
-        [ld,dIO2]=pm_multilens1(m,IO,s.nK,s.nP,s.ptCams,size(IO,2),s.estIO);
+        [ld,dIO2]=multilensdist(m,IO,s.nK,s.nP,s.ptCams,s.estIO);
 
         % Remove lens distortion from measured points.
         ptCorr=m-ld;
@@ -83,7 +82,7 @@ if all(s.IOdistModel==1) % backward/photogrammetric
 
         f=[fObs(:);fPre(:)];
 	
-        J=[dIO1-dIO2,dEO,dOP;Jpre];
+        J=[dIO1+dIO2,dEO,dOP;Jpre];
     end
 elseif all(s.IOdistModel==-1) % forward/computer vision
     if (nargout<2)
@@ -93,10 +92,10 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         xy=reshape(pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis),2,[]);
 
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams,size(IO,2));
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
         
         % Compute lens distortion for projected points.
-        ld=pm_multilens1(reshape(xy,2,[]),IO,s.nK,s.nP,s.ptCams,size(IO,2));
+        ld=multilensdist(reshape(xy,2,[]),IO,s.nK,s.nP,s.ptCams);
 
         % Add lens distortion to projected points.
         ptDist=xy+ld;
@@ -127,3 +126,4 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
 else
     error('Mixed lens distortion models not implemented.');
 end
+

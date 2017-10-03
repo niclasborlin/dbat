@@ -52,7 +52,7 @@ if nargin<8, cP=(nargout>4); end
 if ~isscalar(cs), error('%s: cs parameter must be scalar',mfilename); end
 
 % We need Jacobian w.r.t. w in two cases.
-cw=cs || cpp;
+cw=cs || any(cpp);
 
 % Number of points.
 n=size(s,2);
@@ -228,8 +228,10 @@ if cw
     % Add radial and tangential parts.
     dgdw=drdw+dtdw;
     
-    if cpp
+    if all(cpp)
         dpp=-dgdw';
+    elseif any(cpp)
+        dpp=-dgdw(cpp,:)';
     end
     
     if cs
