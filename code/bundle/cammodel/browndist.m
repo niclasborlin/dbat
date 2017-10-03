@@ -31,7 +31,10 @@ function [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K,P,cs,cpp,cK,cP)
 %   respectively. If a subset of the Jacobians are wanted, use
 %   BROWNDIST(S,PP,K,P,cS,cPP,cK,cP), where the logical parameters cS,
 %   cPP, cK, and cP control whether the corresponding Jacobian is
-%   computed.
+%   computed. cS must be scalar, whereas the others may be scalar or
+%   of the same size as their respective parameter. As a special
+%   case, if cS is negative, dS is returned as a 2-by-2-by-N dense
+%   array with the 2-by-2 diagonal blocks of dS.
 %
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
@@ -46,6 +49,8 @@ if nargin<6, cpp=(nargout>2); end
 if nargin<7, cK=(nargout>3); end
 if nargin<8, cP=(nargout>4); end
 
+if ~isscalar(cs), error('%s: cs parameter must be scalar',mfilename); end
+
 ds=[];
 dpp=[];
 dK=[];
@@ -57,7 +62,8 @@ dP2=[];
 drdw=0;
 dtdw=0;
 
-cw=any(cs(:)) || any(cpp(:));
+% We need Jacobian w.r.t. w in two cases.
+cw=cs || cpp;
 
 % Number of points.
 n=size(s,2);
@@ -221,10 +227,14 @@ if cw
     end
     
     if cs
-        [i,j,v]=find(dgdw);
-    
-        % Convert to 2-by-2 block diagonal.
-        ds=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
+        if cs>0
+            % Convert to 2-by-2 block diagonal.
+            [i,j,v]=find(dgdw);
+            ds=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
+        else
+            % Return in packed format.
+            ds=reshape(dgdw,2,2,n);
+        end
     end
 end
 
