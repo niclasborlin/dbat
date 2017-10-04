@@ -71,11 +71,16 @@ if e.code==0
 else
     status='fail';
 end
+hostname=getenv('HOST');
+if isempty(hostname)
+    hostname='<unknown>';
+end
 % Values are {name,format string,value}
 values={'Last Bundle Run:','%s',e.dateStamp,
         'DBAT version:','%s',e.version,
         'MATLAB version:','%s',version,
         'Host system:','%s',computer,
+        'Host name:','%s',hostname,
         'Status:','%s (%d)',{status,e.code},
         'Sigma0:','%g',e.s0,
         'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1)};
