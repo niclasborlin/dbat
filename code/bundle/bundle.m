@@ -184,8 +184,18 @@ end
 
 selfCal=any(s.estIO,1);
 
+strs={'Xp','Yp','f','K1','K2','K3','P1','P2'};
 if all(selfCal)
-    disp('Self-calibration: yes');
+    allParamCal=all(s.estIO,2);
+    anyParamCal=any(s.estIO,2);
+    if all(allParamCal==anyParamCal)
+        % Any parameters that is estimated in one camera is
+        % estimated in all cameras.
+        calParams=sprintf('%s ',strs{allParamCal(1:length(strs))});
+        disp(['Self-calibration: yes (',strtrim(calParams),')']);
+    else
+        disp('Self-calibration: yes (mixed parameters)');
+    end
 elseif ~any(selfCal)
     disp('Self-calibration: no');
 else

@@ -130,15 +130,27 @@ corrStr=sprintf('Correlations over %g%%:',corrThreshold*100);
 
 fprintf(fid,[p,p,'Cameras:\n']);
 
+% Construct a string that indicates what camera parameters are estimated.
 selfCal=any(s.estIO,1);
-
+strs={'Xp','Yp','f','K1','K2','K3','P1','P2'};
 if all(selfCal)
-    fprintf(fid,[p,p,p,'Calibration: %s\n'],'yes');
+    allParamCal=all(s.estIO,2);
+    anyParamCal=any(s.estIO,2);
+    if all(allParamCal==anyParamCal)
+        % Any parameters that is estimated in one camera is
+        % estimated in all cameras.
+        calParams=sprintf('%s ',strs{allParamCal(1:length(strs))});
+        selfCalStr=['yes (',strtrim(calParams),')'];
+    else
+        selfCalStr='yes (mixed parameters)';
+    end
 elseif ~any(selfCal)
-    fprintf(fid,[p,p,p,'Calibration: %s\n'],'no');
+    selfCalStr='no';
 else
-    fprintf(fid,[p,p,p,'Calibration: %s\n'],'mixed');
+    selfCalStr='mixed';
 end
+
+fprintf(fid,[p,p,p,'Calibration: %s\n'],selfCalStr);
 
 % IO standard deviation. Correlations were computed far above.
 ioSigma=reshape(sqrt(diag(CIO)),size(s.IO,1),[]);
