@@ -126,93 +126,106 @@ else
     fprintf(fid,[p,p,p,'Mixed Forward/Backward\n']);
 end
     
-fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
-
 corrStr=sprintf('Correlations over %g%%:',corrThreshold*100);
 
-if any(s.estIO(:))
-    % Camera calibration results.
-    fprintf(fid,[p,p,p,'Camera Calibration Standard Deviations:\n']);
-    
-    % IO standard devation. Correlations were computed far above.
-    ioSigma=reshape(sqrt(diag(CIO)),size(s.IO,1),[]);
+fprintf(fid,[p,p,'Cameras:\n']);
 
-    % Headers and values to print.
-    head={'Focal Length','Xp - principal point x','Yp - principal point y',...
-          'Fw - format width','Fh - format height',...
-          'K1 - radial distortion 1','K2 - radial distortion 2',...
-          'K3 - radial distortion 3',...
-          'P1 - decentering distortion 1','P2 - decentering distortion 2',...
-         'Iw - image width','Ih - image height',...
-          'Xr - X resolution','Yr - Y resolution',...
-         'Pw - pixel width','Ph - pixel height'};
-    names={'f','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2','Iw','Ih','Xr','Yr','Pw','Ph'};
-    unit={'cu','cu','cu','cu','cu','cu^(-3)','cu^(-5)','cu^(-7)',...
-           'cu^(-3)','cu^(-3)','px','px','px/cu','px/cu','cu','cu'};
-    % Original-to-presentation order mapping and inverse.
-    rows=[3,1:2,11:12,4:6,7:8,13:14,15:16,17:18]; % Last two are not in
-                                                  % real vector.
-    irows=sparse(rows,1,1:length(rows));
+selfCal=any(s.estIO,1);
 
-    % Flip signs of rows 3,6-10.
-    S=diag((-1).^double(ismember(1:length(rows),[3,6:10])));
+if all(selfCal)
+    fprintf(fid,[p,p,p,'Calibration: %s\n'],'yes');
+elseif ~any(selfCal)
+    fprintf(fid,[p,p,p,'Calibration: %s\n'],'no');
+else
+    fprintf(fid,[p,p,p,'Calibration: %s\n'],'mixed');
+end
 
-    % Significance values.
-    sig=nan(size(rows));
-    sig(6:8)=pk;
-    sig(9:10)=pp;
-    % Add symmetric correlations.
-    iio0=iio;
-    iio=[iio;jio];
-    jio=[jio;iio0];
-    kio=repmat(kio,2,1);
-    vio=repmat(vio,2,1);
+% IO standard deviation. Correlations were computed far above.
+ioSigma=reshape(sqrt(diag(CIO)),size(s.IO,1),[]);
 
+% Headers and values to print.
+head={'Focal Length','Xp - principal point x','Yp - principal point y',...
+      'Fw - format width','Fh - format height',...
+      'K1 - radial distortion 1','K2 - radial distortion 2',...
+      'K3 - radial distortion 3',...
+      'P1 - decentering distortion 1','P2 - decentering distortion 2',...
+      'Iw - image width','Ih - image height',...
+      'Xr - X resolution','Yr - Y resolution',...
+      'Pw - pixel width','Ph - pixel height'};
+names={'f','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2','Iw','Ih','Xr','Yr',...
+       'Pw','Ph'};
+% Spell out camera unit.
+unit0={'cu','cu','cu','cu','cu','cu^(-3)','cu^(-5)','cu^(-7)', ...
+       'cu^(-3)','cu^(-3)','px','px','px/cu','px/cu','cu', 'cu'};
+unit=strrep(unit0,'cu',s.camUnit);
+% Original-to-presentation order mapping and inverse.
+rows=[3,1:2,11:12,4:6,7:8,13:14,15:16,17:18]; % Last two are not in real vector.
+irows=sparse(rows,1,1:length(rows));
+
+% Flip signs of rows 3,6-10.
+S=diag((-1).^double(ismember(1:length(rows),[3,6:10])));
+
+for i=1:length(selfCal)
     % Create fake IO vector.
     sIO=[s.IO;1./s.IO(end-1:end,:)];
     % Extend ioSigma. Need to be fixed when Fw, Fh estimation is implemented.
     ioSigma(end+2,1)=0;
+    vals=S*full(sIO(rows,i));
+    % Significance values.
+    sig=nan(size(rows));
+    sigma=zeros(size(rows));
+    if selfCal(i)
+        sig(6:8)=pk;
+        sig(9:10)=pp;
+        % Add symmetric correlations.
+        iio0=iio;
+        iio=[iio;jio];
+        jio=[jio;iio0];
+        kio=repmat(kio,2,1);
+        vio=repmat(vio,2,1);
+
     
-    padLength=length('Significance:');
-    for i=1:size(s.estIO,2)
-        vals=S*full(sIO(rows,i));
+        padLength=length('Significance:');
+
         sigma=full(ioSigma(rows,i));
-        fprintf(fid,[p,p,p,p,'Camera%d (camera unit cu=%s)\n'],i,s.camUnit);
-        fprintf(fid,[p,p,p,p,p,'Lens distortion model:\n']);
-        switch s.IOdistModel(i)
-          case 1
-            fprintf(fid,[p,p,p,p,p,p,'Backward (Photogrammetry)\n']);
-          case -1
-            fprintf(fid,[p,p,p,p,p,p,'Forward (Computer Vision)\n']);
-          otherwise
-            fprintf(fid,[p,p,p,p,p,p,'Unknown'\n]);
+    else
+        padLength=length('Value:');
+    end
+    fprintf(fid,[p,p,p,'Camera%d\n'],i);
+    fprintf(fid,[p,p,p,p,'Lens distortion model:\n']);
+    switch s.IOdistModel(i)
+      case 1
+        fprintf(fid,[p,p,p,p,p,'Backward (Photogrammetry)\n']);
+      case -1
+        fprintf(fid,[p,p,p,p,p,'Forward (Computer Vision)\n']);
+      otherwise
+        fprintf(fid,[p,p,p,p,p,'Unknown'\n]);
+    end
+    for j=1:length(head)
+        fprintf(fid,[p,p,p,p,'%s:\n'],head{j});
+        values={'Value:','%g %s',{vals(j),unit{j}}};
+        if sigma(j)~=0
+            values(end+1,:)={'Deviation:','%.3g %s',{sigma(j),unit{j}}};
         end
-        for j=1:length(head)
-            fprintf(fid,[p,p,p,p,p,'%s:\n'],head{j});
-            values={'Value:','%g %s',{vals(j),unit{j}}};
-            if sigma(j)~=0
-                values(end+1,:)={'Deviation:','%.3g %s',{sigma(j),unit{j}}};
+        if ~isnan(sig(j))
+            values(end+1,:)={'Significance:','p=%.2f',sig(j)};
+        end
+        highCorr=find(kio==i & iio==rows(j));
+        if any(highCorr)
+            otherParam=irows(jio(highCorr));
+            ss='';
+            for kk=1:length(otherParam)
+                ss=[ss,sprintf(' %s:%.1f%%,',names{otherParam(kk)},...
+                               vio(highCorr(kk))*100)];
             end
-            if ~isnan(sig(j))
-                values(end+1,:)={'Significance:','p=%.2f',sig(j)};
-            end
-            highCorr=find(kio==i & iio==rows(j));
-            if any(highCorr)
-                otherParam=irows(jio(highCorr));
-                ss='';
-                for kk=1:length(otherParam)
-                    ss=[ss,sprintf(' %s:%.1f%%,',names{otherParam(kk)},...
-                                   vio(highCorr(kk))*100)];
-                end
-                ss(end)='.';
-                values(end+1,:)={corrStr,'%s',ss};
-            end
-            pretty_print(fid,[repmat(p,1,6),'  '],values,padLength,padLength);
-        end 
+            ss(end)='.';
+            values(end+1,:)={corrStr,'%s',ss};
+        end
+        pretty_print(fid,[repmat(p,1,5)],values,padLength,padLength);
     end
     % Print field of view.
     aov=2*atan([s.IO(11:12);norm(s.IO(11:12))]/(2*s.IO(3)))*180/pi;
-    fprintf(fid,[p,p,p,p,'Rated angle of view (h,v,d): (%.0f, %.0f, %.0f) deg\n'],aov);
+    fprintf(fid,[p,p,p,'Rated angle of view (h,v,d): (%.0f, %.0f, %.0f) deg\n'],aov);
     % Compute distortion at the sensor corners.
     xx=[1,s.IO(end-3)]+0.5*[-1,1];
     yy=[1,s.IO(end-2)]+0.5*[-1,1];
@@ -229,9 +242,11 @@ if any(s.estIO(:))
     mx=max(sqrt(xCorr.^2)+sqrt(yCorr.^2));
     % Length of sensor half-diagonal.
     d=sqrt(s.IO(end-5)^2+s.IO(end-4)^2)/2;
-    fprintf(fid,[p,p,p,p,'Largest distortion: %.2g cu (%.1f px, %.1f%% of half-diagonal)\n'],...
-                 mx,mx*mean(s.IO(end-1:end)),mx/d*100);
+    fprintf(fid,[p,p,p,'Largest distortion: %.2g %s (%.1f px, %.1f%% of half-diagonal)\n'],...
+                 mx,s.camUnit,mx*mean(s.IO(end-1:end)),mx/d*100);
 end
+
+fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
 
 fprintf(fid,[p,p,p,'Photograph Standard Deviations:\n']);
 
@@ -498,10 +513,16 @@ if any(~s.isCtrl)
     fprintf(fid,[p,p,p,p,'Smallest angles (ID, angle [deg], vis in ' ...
                  'cameras)\n']);
     [ang,i]=sort(aOP);
-    for j=1:nnz(ang<ang(min(3,end))*1.1+0.1)
+    % Get all points with at least third min angle + 10% + 0.1 deg...
+    angLimit=ang(min(3,end))*1.1+0.1;
+    % ...but no point above 80 degress.
+    angLimit=min(angLimit,80);
+    % At least 3 points but obviously not more than all.
+    nPts=min(max(nnz(ang<angLimit),3),length(ang));
+    for j=1:nPts
         camVis=find(s.vis(i(j),:));
         str=sprintf('%4d ',camVis);
-        fprintf(fid,'%6d: %5.2f (%s)\n',idOP(i(j)),ang(j),str(1:end-1));
+        fprintf(fid,[p,p,p,p,p,'%6d: %5.2f (%s)\n'],idOP(i(j)),ang(j),str(1:end-1));
     end
 else
     fprintf(fid,[p,p,p,p,'Minimum: -\n']);

@@ -179,8 +179,18 @@ elseif all(s.IOdistModel==-1)
     disp(['Using Forward Brown (Computer Vision) lens distortion ' ...
           'model for all cameras']);
 else
-    disp(['Using mix of Forward/Backward Brown lens distortion ' ...
-          'model']);
+    disp('Using mix of Forward/Backward Brown lens distortion models');
+end
+
+selfCal=any(s.estIO,1);
+
+if all(selfCal)
+    disp('Self-calibration: yes');
+elseif ~any(selfCal)
+    disp('Self-calibration: no');
+else
+    disp('Self-calibration: mixed');
+    warning('Mixed self-calibration is poorly tested.')
 end
     
 % Version string.
