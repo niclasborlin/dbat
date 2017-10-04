@@ -104,7 +104,7 @@ else
     % Compute radial distortion
     dr=w.*repmat(Kr,2,1);
 
-    if cK
+    if any(cK)
         % Analytical Jacobian w.r.t. K.
     
         % Each 2-by-nK block row is w(:,i)*r2k(i,:).
@@ -156,7 +156,7 @@ else
         dt=dt.*repmat(1+Sr,2,1);
     end
 
-    if cP
+    if any(cP)
         % Analytical Jacobian w.r.t. P.
 
         switch nP

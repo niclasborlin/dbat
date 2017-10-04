@@ -20,7 +20,7 @@ function [f,J,JJ]=brown_euler_cam2(x,s)
 
 
 % Create index vectors for unknown parameters.
-[ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 % Copy the current approximations of the unknown values.
 IO=s.IO;
@@ -105,9 +105,6 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
     
         f=[ptDist(:)-m(:);fPre];
     else
-        % Numerical Jacobian for the time being.
-        f=feval(mfilename,x,s);
-
         % Project into pinhole camera.
         [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
                                                 s.vis,s.estIO,s.estEO,s.estOP);
@@ -136,12 +133,15 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
 
         f=[ptDist(:)-m(:);fPre];
 
-        if ~isempty([ixK1;ixP1])
+        % Combine all lens distortion parameters
+        ixLD1=[ixK1;ixP1];
+        ixLD2=[ixK2;ixP2];
+        if nnz(ixLD1)>0
             % Insert partials w.r.t. K and P into dIO1.
-            dIO1(:,[ixK1;ixP1])=dIO2(:,[ixK2;ixP2]);
+            dIO1(:,ixLD1(ixLD1~=0))=dIO2(:,ixLD2(ixLD2~=0));
         end
         
-        if ~isempty(ixf)
+        if nnz(ixf)>0
             % Update Jacobian w.r.t. focal length.
             dIO1(:,ixf)=dIO1(:,ixf)+dxy*dIO1(:,ixf);
         end
