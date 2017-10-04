@@ -95,33 +95,62 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
         
         % Compute lens distortion for projected points.
-        ld=multilensdist(reshape(xy,2,[]),IO,s.nK,s.nP,s.ptCams);
+        ld=multilensdist(xy,IO,s.nK,s.nP,s.ptCams);
 
         % Add lens distortion to projected points.
         ptDist=xy+ld;
         
+        % Compute residual for prior observations.
         fPre=pm_preobs(x,s);
     
         f=[ptDist(:)-m(:);fPre];
     else
         % Numerical Jacobian for the time being.
         f=feval(mfilename,x,s);
-        J=jacapprox(mfilename,x,1e-6,{s});
-        return;
 
-        % % Project into pinhole camera.
-        % [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-        %                                         s.vis,s.estIO,s.estEO,s.estOP);
-	
-        % % Remove lens distortion from measured points.
-        % [ptCorr,dIO2]=pm_multilenscorr1(diag([1,-1])*s.markPts,IO,s.nK,s.nP, ...
-        %                                 s.ptCams,size(IO,2),s.estIO);
+        % Project into pinhole camera.
+        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                                s.vis,s.estIO,s.estEO,s.estOP);
+        xy=reshape(xy,2,[]);
+        
+        % Convert measured points from pixels to mm and flip y coordinate.
+        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
 
-        % [fPre,Jpre]=pm_preobs(x,s);
+        % Create arrays of columns indices for IO derivatives.
+        [ixpp,ixf,ixK1,ixP1]=createiocolumnindices(s.estIO,s.nK,s.nP);
+        % No need to compute the partials w.r.t. pp or f.
+        est=s.estIO;
+        est(ixpp)=0;
+        est(ixf)=0;
+        % Potentially new column indices for lens distortion parameters.
+        [~,~,ixK2,ixP2]=createiocolumnindices(est,s.nK,s.nP);
 
-        % f=[xy(:)-ptCorr(:);fPre];
-	
-        % J=[dIO1-dIO2,dEO,dOP;Jpre];
+        % Compute lens distortion for projected points.
+        [ld,dIO2,dxy]=multilensdist(xy,IO,s.nK,s.nP,s.ptCams,est);
+        
+        % Add lens distortion to projected points.
+        ptDist=xy+ld;
+        
+        % Compute residual for prior observations.
+        [fPre,Jpre]=pm_preobs(x,s);
+
+        f=[ptDist(:)-m(:);fPre];
+
+        if ~isempty([ixK1;ixP1])
+            % Insert partials w.r.t. K and P into dIO1.
+            dIO1(:,[ixK1;ixP1])=dIO2(:,[ixK2;ixP2]);
+        end
+        
+        if ~isempty(ixf)
+            % Update Jacobian w.r.t. focal length.
+            dIO1(:,ixf)=dIO1(:,ixf)+dxy*dIO1(:,ixf);
+        end
+        
+        % Update Jacobian w.r.t. EO and OP.
+        dEO2=dEO+dxy*dEO;
+        dOP2=dOP+dxy*dOP;
+        
+        J=[dIO1,dEO2,dOP2;Jpre];
     end
 else
     error('Mixed lens distortion models not implemented.');
