@@ -25,11 +25,12 @@ V=P(2,:);
 W=P(3,:);
 
 UVdivW=[U./W;V./W];
+fUVdivW=f*UVdivW;
 
-p=repmat(p0,1,n)-f*UVdivW;
+p=repmat(p0,1,n)-fUVdivW;
 
 if cp0
-    dp0=kron(ones(n,1),speye(2));
+    dp0=repmat(eye(2),n,1);
 end
 
 if cf
@@ -37,17 +38,12 @@ if cf
 end
 
 if cP
-    i1=1:2:2*n;
-    j1=1:3:3*n;
-    v1=-f./W;
-	
-    i2=i1+1;
-    j2=j1+1;
-    v2=v1;
-	
-    i3=1:2*n;
-    j3=kron(3:3:3*n,ones(1,2));
-    v3=f*UVdivW./[W;W];
-	
-    dP=sparse([i1,i2,i3],[j1,j2,j3],[v1(:);v2(:);v3(:)],2*n,3*n);
+    v12=-f./W;
+    v3=fUVdivW./[W;W];
+
+    vv=reshape([v12;v12;v3],2,[]);
+    i0=reshape(repmat(0:2:2*n-1,2,1),1,[]);
+    ii=[i0+1;i0+2];
+    jj=repmat(0:3:3*n-1,4,1)+repmat([1;2;3;3],1,n);
+    dP=sparse(ii,jj,vv,2*n,3*n);
 end

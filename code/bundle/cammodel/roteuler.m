@@ -36,7 +36,10 @@ if cAng
 end
 
 if any(cP(:))
-    dP=kron(speye(n),M);
+    % Same as dP=kron(speye(n),M), but faster.
+    MM=repmat(M,1,n);
+    [i,j,v]=find(MM);
+    dP=sparse(i+floor((j-1)/3)*3,j,v,3*n,3*n);
     if length(cP)>1 && any(~cP(:))
         % Remove unwanted columns.
         dP=dP(:,cP(:));
@@ -44,5 +47,5 @@ if any(cP(:))
 end
 
 if cC
-    dC=kron(ones(n,1),-M);
+    dC=repmat(-M,n,1);
 end
