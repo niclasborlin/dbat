@@ -40,7 +40,7 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         % Only residual vector requested.
     
         % Project into pinhole camera.
-        xy=reshape(pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis),2,[]);
+        xy=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
 
         % Convert measured points from pixels to mm and flip y coordinate.
         m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
@@ -61,9 +61,8 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         f=[fObs(:);fPre(:)];
     else
         % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                                s.vis,s.estIO,s.estEO,s.estOP);
-        xy=reshape(xy,2,[]);
+        [xy,dIO1,dEO,dOP]=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                            s.vis,s.estIO,s.estEO,s.estOP);
 	
         % Convert measured points from pixels to mm and flip y coordinate.
         m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
@@ -89,7 +88,7 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         % Only residual vector requested.
     
         % Project into pinhole camera.
-        xy=reshape(pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP,s.vis),2,[]);
+        xy=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
 
         % Convert measured points from pixels to mm and flip y coordinate.
         m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
@@ -106,9 +105,8 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         f=[ptDist(:)-m(:);fPre];
     else
         % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=pm_multieulerpinhole1(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                                s.vis,s.estIO,s.estEO,s.estOP);
-        xy=reshape(xy,2,[]);
+        [xy,dIO1,dEO,dOP]=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                            s.vis,s.estIO,s.estEO,s.estOP);
         
         % Convert measured points from pixels to mm and flip y coordinate.
         m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);

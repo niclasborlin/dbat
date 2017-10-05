@@ -90,7 +90,8 @@ else
         cIO=repmat(cIO,size(IO));
     end
     
-    % Pre-allocate dense Jacobian.
+    % Pre-allocate full IO Jacobian since it will be dense and nnz(cIO)
+    % will be small.
     dIO=zeros(2*n,nnz(cIO));
     
     % Create arrays of columns indices for IO derivatives.
