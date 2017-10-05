@@ -338,3 +338,43 @@ E.numParams=lenX;
 E.redundancy=dof;
 E.s0=s0;
 E.sigmas=sigmas;
+
+
+function [f,J,JJ]=both_brown_res(x,s)
+
+if nargout<2
+    f=brown_euler_cam(x,s);    
+    f2=brown_euler_cam2(x,s);
+    v=max(abs(f-f2));
+    if v>1e-14
+        warning('Residual difference=%g',v);
+    end
+elseif nargout==2
+    [f,J]=brown_euler_cam(x,s);    
+    [f2,J2]=brown_euler_cam2(x,s);
+    v=max(abs(f-f2));
+    if v>1e-14
+        warning('Residual difference=%g',v);
+    end
+    v=full(max(max(abs(J-J2))));
+    if v>1e-8
+        warning('Jacobian difference=%g',v);
+    end
+else
+    [f,J,JJ]=brown_euler_cam(x,s);
+    [f2,J2,JJ2]=brown_euler_cam(x,s);
+    v=max(abs(f-f2));
+    if v>1e-14
+        warning('Residual difference=%g',v);
+    end
+    v=full(max(max(abs(J-J2))));
+    if v>1e-8
+        warning('Jacobian difference=%g',v);
+    end
+    v=full(max(max(abs(JJ-JJ2))));
+    if v>1e-14
+        warning('Numerical jacobian difference=%g',v);
+    end
+end
+
+    

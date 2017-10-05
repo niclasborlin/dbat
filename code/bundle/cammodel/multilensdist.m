@@ -66,6 +66,18 @@ if ~(any(cIO(:)) || cp)
         ix=cams==i;
         q=p(:,ix);
         
+        % Trim K and P
+        kn0=find(K,1,'last');
+        kn0=max([kn0;0]);
+        if kn0<length(K)
+            K=K(1:kn0);
+        end
+        pn0=find(P,1,'last');
+        pn0=max([pn0;0]);
+        if pn0<length(P)
+            P=P(1:pn0);
+        end
+            
         % Compute lens distortion for these points.
         lens=browndist(q,pp,K,P);
         
@@ -87,7 +99,7 @@ else
     if cp
         % Jacobian w.r.t. points will be block diagonal with 2-by-2
         % blocks. Preallocate array to hold blocks.
-        dpBlocks=zeros(2,2,n);
+        dpBlock=zeros(2,2,n);
         % Ask browndist for packed Jacobian.
         cp=-1;
     else
@@ -108,6 +120,26 @@ else
         ix=find(cams==i);
         q=p(:,ix);
         
+        % Trim K and P
+        tixK=ixK;
+        kn0=find(K,1,'last');
+        ckn0=find(cK,1,'last');
+        kn0=max([kn0;ckn0;0]);
+        if kn0<length(K)
+            K=K(1:kn0);
+            cK=cK(1:kn0);
+            tixK=tixK(1:kn0);
+        end
+        tixP=ixP;
+        pn0=find(P,1,'last');
+        cpn0=find(cP,1,'last');
+        pn0=max([pn0;cpn0;0]);
+        if pn0<length(P)
+            P=P(1:pn0);
+            cP=cP(1:pn0);
+            tixP=tixP(1:pn0);
+        end
+            
         % Lens distortion.
         [lens,dldq,dldpp,dldK,dldP]=browndist(q,pp,K,P,cp,cpp,cK,cP);
         
@@ -122,10 +154,10 @@ else
             dIO(ixRow,ixpp(cpp,i))=dldpp(:,cpp);
         end
         if any(cK)
-            dIO(ixRow,ixK(cK,i))=dldK(:,cK);
+            dIO(ixRow,tixK(cK,i))=dldK(:,cK);
         end
         if any(cP)
-            dIO(ixRow,ixP(cP,i))=dldP(:,cP);
+            dIO(ixRow,tixP(cP,i))=dldP(:,cP);
         end
         if cp && nnz(ix)>0
             % Put diagonal blocks in stack.
