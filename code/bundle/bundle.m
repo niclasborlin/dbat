@@ -51,7 +51,7 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %       10.1111/phor.12037.
 %
 %See also: GAUSS_MARKOV, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
-%   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM, BUNDLE_COV,
+%   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM2, BUNDLE_COV,
 %   PROB2DBATSTRUCT, BUNDLE_RESULT_FILE
 
 
@@ -121,8 +121,8 @@ x0(ixEO)=s.EO(s.estEO);
 x0(ixOP)=s.OP(s.estOP);
 
 % Residual function.
-%resFun=@(x)brown_euler_cam2(x,s);
-resFun=@(x)both_brown_res(x,s);
+resFun=@(x)brown_euler_cam2(x,s);
+%resFun=@(x)both_brown_res(x,s);
 
 if veto
     vetoFun=@chirality;
