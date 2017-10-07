@@ -39,8 +39,12 @@ function [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K,P,cs,cpp,cK,cP)
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
 
-%   Undocumented: [D,dS,dPP,dK,dP,dS2,dSPP2,dK2,dP2]=... will also
-%   compute the numerical Jacobians dS2, dK2, dP2.
+%   Undocumented 1: BROWNDIST('SELFTEST') will run a self-test of
+%   the analytical Jacobians.
+%
+%   Undocumented 2: [D,dS,dPP,dK,dP,dS2,dSPP2,dK2,dP2]=... will also
+%   compute numerical approximations of the Jacobians dS2, dK2, and
+%   dP2.
 
 if nargin==1 && ischar(s), selftest, return; end
 
@@ -65,8 +69,36 @@ ds2=sparse(2*n,2*n);
 dpp2=sparse(2*n,2);
 dK2=sparse(2*n,length(K));
 dP2=sparse(2*n,length(P));
-drdw=0;
-dtdw=0;
+drdw=sparse(2,2*n);
+dtdw=sparse(2,2*n);
+
+if nargout>5
+    % Numerical approximation of dw.
+    vec=@(x)x(:);
+    f=@(s)vec(browndist(reshape(s,2,[]),pp,K,P));
+    ds2=jacapprox(f,s(:));
+end
+
+if nargout>6
+    % Numerical approximation of dw.
+    vec=@(x)x(:);
+    f=@(pp)vec(browndist(s,pp,K,P));
+    dpp2=jacapprox(f,pp,1e-8);
+end
+
+if nargout>7
+    % Numerical approximation of dK.
+    vec=@(x)x(:);
+    f=@(K)vec(browndist(s,pp,K,P));
+    dK2=jacapprox(f,K);
+end
+
+if nargout>8
+    % Numerical approximation of dP.
+    vec=@(x)x(:);
+    f=@(P)vec(browndist(s,pp,K,P));
+    dP2=jacapprox(f,P);
+end
 
 % Subtract principal point.
 w=s-repmat(pp,1,n);
@@ -194,44 +226,18 @@ end
 
 d=dr+dt;
 
-if nargout>5
-    % Numerical approximation of dw.
-    vec=@(x)x(:);
-    f=@(s)vec(browndist(reshape(s,2,[]),pp,K,P));
-    ds2=jacapprox(f,s(:));
-end
-
-if nargout>6
-    % Numerical approximation of dw.
-    vec=@(x)x(:);
-    f=@(pp)vec(browndist(s,pp,K,P));
-    dpp2=jacapprox(f,pp);
-end
-
-if nargout>7
-    % Numerical approximation of dK.
-    vec=@(x)x(:);
-    f=@(K)vec(browndist(s,pp,K,P));
-    dK2=jacapprox(f,K);
-end
-
-if nargout>8
-    % Numerical approximation of dP.
-    vec=@(x)x(:);
-    f=@(P)vec(browndist(s,pp,K,P));
-    dP2=jacapprox(f,P);
-end
-
 if cw
     % Analytical Jacobian w.r.t. w.
     
     % Add radial and tangential parts.
     dgdw=drdw+dtdw;
     
-    if all(cpp)
-        dpp=-dgdw';
-    elseif any(cpp)
-        dpp=-dgdw(cpp,:)';
+    if any(cpp)
+        % Stack the 2-by-2 blocks on top of each other.
+        dpp=-reshape([dgdw(:,1:2:end),dgdw(:,2:2:end)],[],2);
+        if ~all(cpp)
+            dpp=dpp(:,cpp);
+        end
     end
     
     if cs
@@ -256,20 +262,21 @@ pp=rand(2,1);
 K=rand(5,1);
 P=rand(5,1);
 mx=-inf;
+thres=1e-6;
 for kLen=0:length(K)
     for pLen=[0,2:length(P)]
         [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K(1:kLen),P(1:pLen));
-        mx=max(mx,max(max(abs(ds-ds2))));
-        mx=max(mx,max(max(abs(dpp-dpp2))));
-        mx=max(mx,max(max(abs(dK-dK2))));
-        mx=max(max(max(abs(dP-dP2))));
+        df=full(max(max(abs(ds-ds2)))); mx=max([mx,df]);
+        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'ds',df); end
+        df=full(max(max(abs(dpp-dpp2)))); mx=max([mx,df]);
+        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dpp',df); end
+        df=full(max(max(abs(dK-dK2)))); mx=max([mx,df]);
+        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dK',df); end
+        df=full(max(max(abs(dP-dP2)))); mx=max([mx,df]);
+        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dP',df); end
     end
 end
-thres=1e-9;
-if mx<thres
+if mx<=thres
     fprintf('%s selftest: Maximum diff = %g, max expected=%g, OK.\n',mfilename,mx,...
-            thres);
-else
-    warning('%s selftest: Maximum diff = %g, max expected=%g.\n',mfilename,mx,...
             thres);
 end
