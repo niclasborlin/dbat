@@ -255,25 +255,26 @@ end
 
 function selftest
 % Compare the analytical and numerical Jacobians and report the
-% maximum deviation. Should be below 1e-9.
+% maximum deviation. Should be below 1e-6.
 
 s=rand(2,8);
 pp=rand(2,1);
 K=rand(5,1);
 P=rand(5,1);
+
 mx=-inf;
 thres=1e-6;
 for kLen=0:length(K)
     for pLen=[0,2:length(P)]
         [d,ds,dpp,dK,dP,ds2,dpp2,dK2,dP2]=browndist(s,pp,K(1:kLen),P(1:pLen));
-        df=full(max(max(abs(ds-ds2)))); mx=max([mx,df]);
-        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'ds',df); end
-        df=full(max(max(abs(dpp-dpp2)))); mx=max([mx,df]);
-        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dpp',df); end
-        df=full(max(max(abs(dK-dK2)))); mx=max([mx,df]);
-        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dK',df); end
-        df=full(max(max(abs(dP-dP2)))); mx=max([mx,df]);
-        if df>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dP',df); end
+        dif=full(max(max(abs(ds-ds2)))); mx=max([mx,dif]);
+        if dif>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'ds',dif); end
+        dif=full(max(max(abs(dpp-dpp2)))); mx=max([mx,dif]);
+        if dif>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dpp',dif); end
+        dif=full(max(max(abs(dK-dK2)))); mx=max([mx,dif]);
+        if dif>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dK',dif); end
+        dif=full(max(max(abs(dP-dP2)))); mx=max([mx,dif]);
+        if dif>thres, warning('%s selftest: %s diff = %g.\n',mfilename,'dP',dif); end
     end
 end
 if mx<=thres
