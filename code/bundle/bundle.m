@@ -363,7 +363,7 @@ elseif nargout==2
     end
 else
     [f,J,JJ]=brown_euler_cam(x,s);
-    [f2,J2,JJ2]=brown_euler_cam(x,s);
+    [f2,J2,JJ2]=brown_euler_cam2(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);
