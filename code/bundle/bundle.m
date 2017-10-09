@@ -51,7 +51,7 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %       10.1111/phor.12037.
 %
 %See also: GAUSS_MARKOV, GAUSS_NEWTON_ARMIJO, LEVENBERG_MARQUARDT,
-%   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM2, BUNDLE_COV,
+%   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM3, BUNDLE_COV,
 %   PROB2DBATSTRUCT, BUNDLE_RESULT_FILE
 
 
@@ -121,8 +121,8 @@ x0(ixEO)=s.EO(s.estEO);
 x0(ixOP)=s.OP(s.estOP);
 
 % Residual function.
-resFun=@(x)brown_euler_cam2(x,s);
-%resFun=@(x)both_brown_res(x,s);
+%resFun=@(x)brown_euler_cam3(x,s);
+resFun=@(x)both_brown_res(x,s);
 
 if veto
     vetoFun=@chirality;
@@ -345,14 +345,14 @@ function [f,J,JJ]=both_brown_res(x,s)
 
 if nargout<2
     f=brown_euler_cam(x,s);    
-    f2=brown_euler_cam2(x,s);
+    f2=brown_euler_cam3(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);
     end
 elseif nargout==2
     [f,J]=brown_euler_cam(x,s);    
-    [f2,J2]=brown_euler_cam2(x,s);
+    [f2,J2]=brown_euler_cam3(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);
@@ -363,7 +363,7 @@ elseif nargout==2
     end
 else
     [f,J,JJ]=brown_euler_cam(x,s);
-    [f2,J2,JJ2]=brown_euler_cam2(x,s);
+    [f2,J2,JJ2]=brown_euler_cam3(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);
