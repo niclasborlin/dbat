@@ -77,7 +77,7 @@ s0.useIOobs=false(size(s0.IO));
 %s0.IOdistModel(:)=-1;
 
 % Noise sigma [m].
-noiseLevel=0.1;
+noiseLevel=0;
 
 % Reset random number generator.
 rng('default');
