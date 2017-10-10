@@ -35,7 +35,7 @@ while ~feof(fid)
         continue;
     end
     % Parse id.
-    [i,n,msg,ni]=sscanf(s,'%d,');
+    [i,n,msg,ni]=sscanf(s,'%d,',1);
     s=s(ni:end);
     % Parse name.
     [nn,n,msg,ni]=sscanf(s,'%s,');
