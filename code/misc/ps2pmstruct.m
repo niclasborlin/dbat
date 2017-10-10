@@ -23,7 +23,25 @@ if nargin<2, useSemiLocal=false; end
 
 % Create a fake job header with default camera.
 imSz=s.camera.imSz(:);
-defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);zeros(5,1)];
+% Lens distortion parameters.
+k1k3=zeros(3,1);
+p1p2=zeros(2,1);
+
+if length(s.camera.k)<=length(k1k3)
+    k1k3(1:length(s.camera.k))=s.camera.k(:);
+else
+    k1k3(1:end)=s.camera.k(1:length(k1k3));
+    warning('Ignoring K4');
+end
+
+if length(s.camera.p)<=length(p1p2)
+    p1p2(1:length(s.camera.p))=s.camera.p(:);
+else
+    p1p2(1:end)=s.camera.p(1:length(p1p2));
+    warning('Ignoring P3, ...');
+end
+
+defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);k1k3;p1p2];
 
 job=struct('fileName',s.fileName,'title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
 
