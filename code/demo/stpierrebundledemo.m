@@ -42,6 +42,9 @@ curDir=fileparts(mfilename('fullpath'));
 % Base dir with input files.
 inputDir=fullfile(curDir,'data','hamburg2017','stpierre');
 
+% Name of control point file.
+cpName=fullfile(inputDir,'ctrl_StPierre_weighted.txt');
+
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','stpierre-pmexport.txt');
 % Report file name.
@@ -57,6 +60,43 @@ disp('done.')
 fprintf('Setting all mark pts std to 1.\n');
 prob.markPts(:,5:6)=1;
 
+fprintf('Loading control point file %s...',cpName);
+ctrlPts=loadcpt(cpName);
+fprintf('done.\n');
+
+% Verify all CPs used by PM are given in CP file.
+if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
+    pmCtrlPtsId=prob.ctrlPts(:,1)'
+    cpFileId=ctrlPts.id
+    error('Control point id mismatch.');
+end
+
+% See if we have any check points, i.e. control points in ctrl pt
+% file that are not control points in PM file.
+[cpIdsUsedAsCP,ia,ib]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
+cpNamesUsedAsCP=cell(size(cpIdsUsedAsCP));
+cpNamesUsedAsCP(ia)=ctrlPts.name(ib);
+
+cpIdsUsedAsOP=setdiff(intersect(prob.objPts(:,1),ctrlPts.id),cpIdsUsedAsCP);
+[~,ia,ib]=intersect(cpIdsUsedAsOP,ctrlPts.id);
+cpNamesUsedAsOP=cell(size(cpIdsUsedAsOP));
+cpNamesUsedAsOP(ia)=ctrlPts.name(ib);
+
+if length(cpIdsUsedAsOP)>=3
+    % Align with original coordinate system.
+    alignIds=cpIdsUsedAsOP;
+    
+    % Get OP coordinates.
+    [~,ia,ib]=intersect(alignIds,prob.objPts(:,1));
+    OPcoords=prob.objPts(ib,2:4);
+    
+    % Get original CP coordinates.
+    [~,ia,ib]=intersect(alignIds,ctrlPts.id);
+    CPcoords=ctrlPts.pos(:,ib)';
+
+    % Find rigid-body transformation.
+    [D,Z,T]=procrustes(CPcoords,OPcoords,'scaling',false,'reflection',false);
+asf
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
 ss0=s0;
@@ -76,18 +116,11 @@ s0.useIOobs=false(size(s0.IO));
 % Switch to Forward/Computer Vision lens distortion model for all cameras.
 %s0.IOdistModel(:)=-1;
 
-% Noise sigma [m].
-noiseLevel=0;
-
-% Reset random number generator.
-rng('default');
-
 % Use supplied EO data as initial values. Again, this block is not
 % really necessary but may serve as a starting point for modifications.
 s0.EO=s0.prior.EO;
 s0.estEO(1:6,:)=true; % 7th element is just the axis convention.
 s0.useEOobs=false(size(s0.EO));
-s0.EO(1:3,:)=s0.EO(1:3,:)+randn(3,size(s0.EO,2))*noiseLevel;
 
 % Copy CP values and treat them as fixed.
 s0.OP(:,s0.isCtrl)=s0.prior.OP(:,s0.isCtrl);
