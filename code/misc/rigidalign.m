@@ -1,8 +1,8 @@
-function T=rigidalign(X,Y)
+function [R,d]=rigidalign(X,Y)
 %RIGIDALIGN Compute rigid-body transformation between two point sets.
 %
-%   T=RIGIDALIGN(X,Y), where X and Y are M-by-N arrays of M-D
-%   points, computes the rigid-body transformation the minimizes
+%   [R,d]=RIGIDALIGN(X,Y), where X and Y are M-by-N arrays of M-D
+%   points, computes the rigid-body transformation that minimizes
 %
 %      sum  norm( R * X(:,i) + d - Y(:,i) )^2,
 %       i
@@ -22,6 +22,20 @@ end
 [m,n]=size(X);
 
 % Compute center of mass for point clouds.
+xm=mean(X,2);
+ym=mean(Y,2);
 
+% Shift point clouds to have center of mass at origin.
+A=X-repmat(xm,1,n);
+B=Y-repmat(ym,1,n);
 
+C=B*A';
 
+% Perform singular value decomposition of C.
+[P,G,Q]=svd(C);
+
+% Compute optimal rotation matrix.
+R=P*diag([ones(1,m-1),det(P*Q')])*Q';
+
+% Compute optimal shift.
+d=ym-R*xm;
