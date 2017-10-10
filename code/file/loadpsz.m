@@ -208,7 +208,19 @@ end
 cameraIds=cellfun(@(x)sscanf(x.Attributes.id,'%d'),camera);
 cameraLabels=cellfun(@(x)x.Attributes.label,camera,'uniformoutput',false);
 sensorIds=cellfun(@(x)sscanf(x.Attributes.sensor_id,'%d'),camera);
-cameraEnabled=cellfun(@(x)strcmp(x.Attributes.enabled,'true'),camera);
+cameraEnabled=false(size(camera));
+for i=1:length(cameraEnabled)
+    switch camera{i}.Attributes.enabled
+      case {'1','true'}
+        cameraEnabled(i)=true;
+      case {'0','false'}
+        cameraEnabled(i)=false;
+      otherwise
+        warning('Unknown enabled status %s for camera %d (%s)',...
+                camera{i}.Attributes.enabled,cameraIds(i),cameraLabels{i});
+    end
+end
+
 if length(unique(sensorIds(cameraEnabled)))>1
     error('Handling of cameras for multiple sensor ids not implemented yet');
 end
@@ -250,7 +262,10 @@ for i=1:length(cameraIds)
     % Check if we have reference EO coordinates.
     if isfield(camera{i},'reference')
         attr=camera{i}.reference.Attributes;
-        if strcmp(attr.enabled,'true')
+        % TODO: Always load, recognize enable/disable status.
+        switch attr.enabled
+          case {'1','true'}
+            % Parse reference coordinates.
             if isfield(attr,'x')
                 priorCC(1,i)=sscanf(attr.x,'%g');
             end
@@ -260,6 +275,11 @@ for i=1:length(cameraIds)
             if isfield(attr,'z')
                 priorCC(3,i)=sscanf(attr.z,'%g');
             end
+          case {'0','false'}
+            % Do nothing. TODO: Load and recognize enable/disable status.
+          otherwise
+            warning('Unknown enabled status %s for reference for camera %d (%s)',...
+                    attr.enable,cameraIds(i),cameraLabels{i});
         end
     end
 end
@@ -389,7 +409,15 @@ for i=1:size(ctrlPts,1);
             sz=sscanf(m.reference.Attributes.sz,'%g');
         end
         if isfield(m.reference.Attributes,'enabled')
-            ctrlPtsEnabled(i)=strcmp(m.reference.Attributes.enabled,'true');
+            switch m.reference.Attributes.enabled
+              case {'1','true'}
+                ctrlPtsEnabled(i)=true;
+              case {'0','false'}
+                ctrlPtsEnabled(i)=false;
+              otherwise
+                warning('Unknown enabled status %s for ctrl pt %d (%s)',...
+                        m.reference.Attributes.enabled,i,ctrlPtsLabels{i});
+            end
         end
     end
     ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
@@ -545,8 +573,22 @@ for i=1:length(marker)
         camIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),location);
         x=cellfun(@(m)sscanf(m.Attributes.x,'%g'),location);
         y=cellfun(@(m)sscanf(m.Attributes.y,'%g'),location);
-        pinned=cellfun(@(m)isfield(m.Attributes,'pinned') && ...
-                       strcmp(m.Attributes.pinned,'true'),location);
+        pinned=false(size(location));
+        for j=1:length(pinned)
+            if isfield(location{j}.Attributes,'pinned')
+                switch location{j}.Attributes.pinned
+                  case {'1','true'}
+                    pinned(j)=true;
+                  case {'0','false'}
+                    pinned(j)=false;
+                  otherwise
+                    warning('Unknown pinned status %s for marker %d (%s) in camera %d (%s)',...
+                            location{j}.Attributes.pinned,markerId(i),...
+                            ctrlPtsLabels{i},camIds(j),...
+                            cameraLabels{camIds(j)==cameraIds});
+                end
+            end
+        end
         % What does 'pinned' mean? For now, just warn if a marker measurement
         % is not pinned.
         if ~all(pinned)
@@ -717,7 +759,15 @@ end
 fProp=sProps(strcmp(sensorProps,'fixed'));
 sensorFixed=true;
 if ~isempty(fProp)
-    sensorFixed=strcmp(fProp{1}.Attributes.value,'true');
+    switch fProp{1}.Attributes.value
+      case {'1','true'}
+        sensorFixed=true;
+      case {'0','false'}
+        sensorFixed=false;
+      otherwise
+        warning('Unknown sensorfixed property %s', ...
+                fProp{1}.Attributes.value);
+    end
 end
 
 if (fx*pixelWidth~=fy*pixelHeight)
@@ -733,7 +783,7 @@ s.camera.pixelSz=[pixelWidth,pixelHeight];
 s.camera.sensorFormat=s.camera.imSz.*s.camera.pixelSz;
 s.camera.focal=fx*s.camera.pixelSz(1);
 s.camera.pp=[cx,cy].*s.camera.pixelSz;
-s.camera.k=k; % TODO: Fix conversion to mm.
+s.camera.k=k; % TODO: Fkix conversion to mm.
 s.camera.p=p; % TODO: Fix conversion to mm.
 s.camera.isFixed=sensorFixed;
 s.camera.isAdjusted=isAdjusted;
