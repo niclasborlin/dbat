@@ -102,13 +102,22 @@ end
 % shouldn't estimate a parameter, we should not use the prior
 % observation of it during the bundle.
 if any(s.useIOobs(~s.estIO))
-    error('DBAT:bundle:badInput','IO estimate/use prior obs mismatch');
+    warning('DBAT:bundle:badInput',...
+            'Some IO parameters are set to both ''fixed'' and ''observed'');
+    disp('Setting IO parameters to fixed');
+    s.useIOobs(~s.estIO)=false;
 end
 if any(s.useEOobs(~s.estEO))
-    error('DBAT:bundle:badInput','EO estimate/use prior obs mismatch');
+    warning('DBAT:bundle:badInput',...
+            'Some EO parameters are set to both ''fixed'' and ''observed'');
+    disp('Setting EO parameters to fixed');
+    s.useEOobs(~s.estEO)=false;
 end
 if any(s.useOPobs(~s.estOP))
-    error('DBAT:bundle:badInput','OP estimate/use prior obs mismatch');
+    warning('DBAT:bundle:badInput',...
+            'Some OP parameters are set to both ''fixed'' and ''observed'');
+    disp('Setting OP parameters to fixed');
+    s.useOPobs(~s.estOP)=false;
 end
 
 % Create indices into the vector of unknowns. n is the total number of unknowns.
