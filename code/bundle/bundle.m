@@ -103,19 +103,19 @@ end
 % observation of it during the bundle.
 if any(s.useIOobs(~s.estIO))
     warning('DBAT:bundle:badInput',...
-            'Some IO parameters are set to both ''fixed'' and ''observed'');
+            'Some IO parameters are set to both ''fixed'' and ''observed''');
     disp('Setting IO parameters to fixed');
     s.useIOobs(~s.estIO)=false;
 end
 if any(s.useEOobs(~s.estEO))
     warning('DBAT:bundle:badInput',...
-            'Some EO parameters are set to both ''fixed'' and ''observed'');
+            'Some EO parameters are set to both ''fixed'' and ''observed''');
     disp('Setting EO parameters to fixed');
     s.useEOobs(~s.estEO)=false;
 end
 if any(s.useOPobs(~s.estOP))
     warning('DBAT:bundle:badInput',...
-            'Some OP parameters are set to both ''fixed'' and ''observed'');
+            'Some OP parameters are set to both ''fixed'' and ''observed''');
     disp('Setting OP parameters to fixed');
     s.useOPobs(~s.estOP)=false;
 end
