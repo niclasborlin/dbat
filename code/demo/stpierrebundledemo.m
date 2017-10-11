@@ -131,7 +131,7 @@ s0.estIO=false(size(s0.IO));
 s0.useIOobs=false(size(s0.IO));
 
 % Add self-calibration for all non-zero parameters...
-%s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
+s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
 % ...or for all lens distortion parameters.
 %s0.estIO(1:8)=true;
 
