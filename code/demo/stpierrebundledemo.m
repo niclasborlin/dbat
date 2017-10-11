@@ -131,7 +131,16 @@ s0.estIO=false(size(s0.IO));
 s0.useIOobs=false(size(s0.IO));
 
 % Add self-calibration for all non-zero parameters...
-s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
+%s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
+
+% Estimate f, pp, K1-K2, P1-P2
+selfCal=true(8,1);
+selfCal(6)=false;
+% Indicate that we want to estimate these parameters.
+s0.estIO(find(selfCal))=true;
+% Zero any unused lens distortion parameters.
+s0.IO(find(~selfCal))=0;
+
 % ...or for all lens distortion parameters.
 %s0.estIO(1:8)=true;
 
@@ -161,8 +170,9 @@ if all(uniqueSigmas==0)
 end
 
 % Datum is given by CPs.
+% Do nothing.
 
-fprintf('Running the bundle with damping %s...\n',damping);
+fprintf('\nRunning the bundle with damping %s...\n',damping);
 
 % Run the bundle.
 [result,ok,iters,sigma0,E]=bundle(s0,damping,'trace');
