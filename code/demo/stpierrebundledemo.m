@@ -46,13 +46,13 @@ inputDir=fullfile(curDir,'data','hamburg2017','stpierre');
 cpName=fullfile(inputDir,'ctrl_StPierre_weighted.txt');
 
 % PhotoModeler text export file and report file.
-inputFile=fullfile(inputDir,'pmexports','stpierre-pmexport.txt');
+inputFile=fullfile(inputDir,'pmexports','ExportDBAT_C5.txt');
 % Report file name.
-reportFile=fullfile(inputDir,'dbatexports','stpierre-dbatreport.txt');;
+reportFile=fullfile(inputDir,'dbatexports','stpierre-dbatreport.txt');
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
-probRaw=prob;
+probRaw=prob; %#ok<NASGU>
 if any(isnan(cat(2,prob.images.imSz)))
     error('Image sizes unknown!');
 end
@@ -66,37 +66,59 @@ fprintf('done.\n');
 
 % Verify all CPs used by PM are given in CP file.
 if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
-    pmCtrlPtsId=prob.ctrlPts(:,1)'
-    cpFileId=ctrlPts.id
+    pmCtrlPtsId=prob.ctrlPts(:,1)' %#ok<NOPRT,NASGU>
+    cpFileId=ctrlPts.id %#ok<NOPRT,NASGU>
     error('Control point id mismatch.');
 end
 
-% See if we have any check points, i.e. control points in ctrl pt
-% file that are not control points in PM file.
-[cpIdsUsedAsCP,ia,ib]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
-cpNamesUsedAsCP=cell(size(cpIdsUsedAsCP));
-cpNamesUsedAsCP(ia)=ctrlPts.name(ib);
+% Determine check point allocation among control points.
+[ctrlIds,~,ibCP]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
+checkIds=setdiff(intersect(prob.objPts(:,1),ctrlPts.id),ctrlIds);
+[~,~,ibCC]=intersect(checkIds,ctrlPts.id);
 
-cpIdsUsedAsOP=setdiff(intersect(prob.objPts(:,1),ctrlPts.id),cpIdsUsedAsCP);
-[~,ia,ib]=intersect(cpIdsUsedAsOP,ctrlPts.id);
-cpNamesUsedAsOP=cell(size(cpIdsUsedAsOP));
-cpNamesUsedAsOP(ia)=ctrlPts.name(ib);
+% Original coordinates.
+refCtrlData=[ctrlPts.id(ibCP);ctrlPts.pos(:,ibCP);ctrlPts.std(:,ibCP)]';
+refCheckData=[ctrlPts.id(ibCC);ctrlPts.pos(:,ibCC);ctrlPts.std(:,ibCC)]';
 
-if length(cpIdsUsedAsOP)>=3
-    % Align with original coordinate system.
-    alignIds=cpIdsUsedAsOP;
-    
-    % Get OP coordinates.
-    [~,ia,ib]=intersect(alignIds,prob.objPts(:,1));
-    OPcoords=prob.objPts(ib,2:4);
-    
-    % Get original CP coordinates.
-    [~,ia,ib]=intersect(alignIds,ctrlPts.id);
-    CPcoords=ctrlPts.pos(:,ib)';
+% Coordinate from PM.
+[~,ia]=intersect(prob.objPts(:,1),ctrlIds);
+pmCtrlData=prob.objPts(ia,:);
+[~,ia]=intersect(prob.objPts(:,1),checkIds);
+pmCheckData=prob.objPts(ia,:);
 
-    % Find rigid-body transformation.
-    [D,Z,T]=procrustes(CPcoords,OPcoords,'scaling',false,'reflection',false);
-asf
+% Compute rigid-body transformation for control points.
+TCP=rigidalign(pmCtrlData(:,2:4)',refCtrlData(:,2:4)');
+if length(checkIds)>=3
+    TCC=rigidalign(pmCheckData(:,2:4)',refCheckData(:,2:4)');
+else
+    TCC=[];
+end
+
+% Display info about CPT
+fprintf('\nFound %d control points:\n',length(ctrlIds))
+disp(refCtrlData(:,1)')
+disp(ctrlPts.name(ismember(ctrlPts.id,ctrlIds)));
+angCP=acosd(min(max((trace(TCP(1:3,1:3))-1)/2,0),1));
+fprintf('Rotation %.1f degress, translation %.1f object units.\n',...
+        angCP,norm(TCP(1:3,4)));
+fprintf('Max abs pos diff=%g\n',max(max(abs(refCtrlData(:,2:4)-pmCtrlData(:,2:4)))));
+fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(pmCtrlData(:,5:7))-log(refCtrlData(:,5:7))))))-1)*100)
+
+% Display info about CC
+fprintf('\nFound %d check points:\n',length(checkIds))
+disp(refCheckData(:,1)')
+disp(ctrlPts.name(ismember(ctrlPts.id,checkIds)));
+if ~isempty(TCC)
+    angCC=acosd(min(max((trace(TCC(1:3,1:3))-1)/2,0),1));
+    fprintf('Rotation %.1f degress, translation %.1f object units.\n',...
+            angCC,norm(TCC(1:3,4)));
+end
+fprintf('Max abs pos diff=%g\n',max(max(abs(refCheckData(:,2:4)-pmCheckData(:,2:4)))));
+fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(pmCheckData(:,5:7))-log(refCheckData(:,5:7))))))-1)*100)
+
+% Replace PM ctrl pt with prior.
+prob.ctrlPts=refCtrlData;
+
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
 ss0=s0;
@@ -122,14 +144,7 @@ s0.EO=s0.prior.EO;
 s0.estEO(1:6,:)=true; % 7th element is just the axis convention.
 s0.useEOobs=false(size(s0.EO));
 
-% Copy CP values and treat them as fixed.
-s0.OP(:,s0.isCtrl)=s0.prior.OP(:,s0.isCtrl);
-s0.estOP=repmat(~s0.isCtrl(:)',3,1);
-s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
-% Compute initial OP values by forward intersection.
-correctedPt=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,3,2,...
-                                      s0.ptCams,size(s0.IO,2)),2,[]);
-s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,s0.cams,s0.colPos,correctedPt,find(~s0.isCtrl));
+% Use estimated OP values as initial.
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));
@@ -145,12 +160,7 @@ if all(uniqueSigmas==0)
     s0.markStd(:)=1;
 end
 
-% Fix the datum by fixing camera 1...
-s0.estEO(:,1)=false;
-% ...and the largest other absolute camera coordinate.
-camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
-[i,j]=find(camDiff==max(camDiff(:)));
-s0.estEO(i,j)=false;
+% Datum is given by CPs.
 
 fprintf('Running the bundle with damping %s...\n',damping);
 
