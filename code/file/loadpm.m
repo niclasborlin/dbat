@@ -45,6 +45,8 @@ function [prob,err]=loadpm(name,varargin)
 %                  id       - same as image number.
 %                  label    - image name stripped of longest common path.
 %       ctrlPts  - array of control points [id,pos x,y,z (m),stdev x,y,z (m)].
+%       checkPts - array of check points [id,pos x,y,z (m),stdev x,y,z (m)]. 
+%                  Will always be empty on loading, but can be set later.
 %       objPts   - array of object points [id,pos x,y,z (m),stdev x,y,z (m)].
 %       markPts  - array of marked points [photo#,id,pos x,y(px),std x,y(mm)].
 %       features - cell array of vectors with points numbers in each
@@ -261,6 +263,9 @@ waitbar(ftell(fid)/sz,h);
 % Trim unused memory.
 ctrlPts=ctrlPts(1:nCtrlPts,:);
 
+% Just set check points to empty.
+checkPts=zeros(0,7);
+
 % Next expected block is object points.
 objPts=zeros(0,7);
 nObjPts=0;
@@ -392,8 +397,8 @@ if ~isempty(objPts)
     end
 end
 
-prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-			'rawOPids',rawOPids,'OPlabels',{OPlabels},...
+prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
+            'objPts',objPts,'rawOPids',rawOPids,'OPlabels',{OPlabels},...
             'markPts',markPts,'features',{features},'featVis',featVis);
 
 fclose(fid);

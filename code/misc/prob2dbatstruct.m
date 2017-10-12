@@ -22,6 +22,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       OPlabels - 1-by-nOP cell array with labels of the original ctrl pts.
 %       isCtrl   - 1-by-nOP logical vector indicating which OP are control
 %                  points.
+%       isCheck  - 1-by-nOP logical vector indicating which OP are control
+%                  points. Currently set to 
 %       markPts  - 2-by-nMarkPts array with measured image coordinates in
 %                  pixels, stored in image-major order.
 %       ptCams   - 1-by-nMarkPts array indicating which IO column
@@ -264,21 +266,30 @@ OPstd=nan(3,nOP);
 CP=nan(3,nOP);
 CPstd=nan(3,nOP);
 CPcov=[];
+CCP=nan(3,nOP);
+CCPstd=nan(3,nOP);
+CCPcov=[];
 [OPid,i]=sort(prob.objPts(:,1),'ascend');
 OPrawId=prob.rawOPids(i);
 OPlabels=prob.OPlabels(i);
 
 isCtrl=ismember(OPid,prob.ctrlPts(:,1));
+isCheck=ismember(OPid,prob.checkPts(:,1));
 
 % Copy object point coordinates...
 [~,ia,ib]=intersect(OPid,prob.objPts(:,1));
 OP(:,ia)=prob.objPts(ib,2:4)';
 OPstd(:,ia)=prob.objPts(ib,5:7)';
 
-% ...and control point coordinates.
+% ...and control point coordinates...
 [~,ia,ib]=intersect(OPid,prob.ctrlPts(:,1));
 CP(:,ia)=prob.ctrlPts(ib,2:4)';
 CPstd(:,ia)=prob.ctrlPts(ib,5:7)';
+
+% ...and check point coordinates...
+[~,ia,ib]=intersect(OPid,prob.checkPts(:,1));
+CCP(:,ia)=prob.checkPts(ib,2:4)';
+CCPstd(:,ia)=prob.checkPts(ib,5:7)';
 
 % Find out how many mark points have corresponding object/control points.
 imId=unique(prob.markPts(:,1:2),'rows');
@@ -326,7 +337,9 @@ ptCams=cams(j);
 
 prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
              'EO',EO,'EOstd',EOstd,'EOcov',EOcov,...
-             'OP',CP,'OPstd',CPstd,'OPcov',CPcov,'sigmas',priorSigma);
+             'OP',CP,'OPstd',CPstd,'OPcov',CPcov,...
+             'CCP',CCP,'CCPstd',CCPstd,'CCPcov',CCPcov,...
+             'sigmas',priorSigma);
 
 residuals=struct('markPt',nan(2,nMarkPts),'IO',nan(size(IO)),...
                  'EO',nan(size(EO)),'OP',nan(size(OP)));
@@ -357,7 +370,7 @@ s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,'imNa
          'cams',cams,...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
          'OPrawId',OPrawId,'OPlabels',{OPlabels},...
-         'isCtrl',isCtrl,...
+         'isCtrl',isCtrl,'isCheck',isCheck,...
          'markPts',markPts,'markStd',markStd,'ptCams',ptCams,...
          'vis',vis,'colPos',colPos,...
          'prior',prior,...
