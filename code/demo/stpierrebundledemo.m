@@ -80,6 +80,15 @@ checkIds=setdiff(intersect(prob.objPts(:,1),ctrlPts.id),ctrlIds);
 refCtrlData=[ctrlPts.id(ibCP);ctrlPts.pos(:,ibCP);ctrlPts.std(:,ibCP)]';
 refCheckData=[ctrlPts.id(ibCC);ctrlPts.pos(:,ibCC);ctrlPts.std(:,ibCC)]';
 
+% Expand with 0 stdev for fixed points.
+if ~isempty(refCtrlData) && size(refCtrlData,2)<7
+    refCtrlData(1,7)=0;
+end
+
+if ~isempty(refCheckData) && size(refCheckData,2)<7
+    refCheckData(1,7)=0;
+end
+
 % Coordinate from PM.
 [~,ia]=intersect(prob.objPts(:,1),ctrlIds);
 pmCtrlData=prob.objPts(ia,:);
@@ -118,6 +127,15 @@ fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(pmCheckData(:,5:7))-log
 
 % Replace PM ctrl pt with prior.
 prob.ctrlPts=refCtrlData;
+
+% Insert check points.
+prob.checkPts=refCheckData;
+
+% Set OP labels to original CP or CCP names.
+[~,ia,ib]=intersect(prob.objPts(:,1),ctrlPts.id);
+% Clear first.
+prob.OPlabels=cell(size(prob.OPlabels));
+prob.OPlabels(ia)=ctrlPts.name(ib);
 
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
