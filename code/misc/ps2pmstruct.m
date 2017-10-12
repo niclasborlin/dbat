@@ -76,6 +76,10 @@ end
 % Copy enabled control points.
 ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
 
+% Create blank check points. TODO: Use disabled control points and
+% check points.
+checkPts=zeros(0,7);
+
 % Track original ids and labels.
 rawCPids=s.PSCPid(ctrlPts(:,1));
 CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
@@ -102,8 +106,9 @@ if ~isempty(markPts)
 end
 
 % Construct PM structure.
-prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-             'rawOPids',rawOPids,'OPlabels',{OPlabels},'markPts',markPts);
+prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
+            'objPts',objPts,'rawOPids',rawOPids,'OPlabels',{OPlabels},...
+            'markPts',markPts);
 
 EO=[CC;ang;zeros(1,size(CC,2))];
 EOstd=nan(size(EO));
