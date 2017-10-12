@@ -73,6 +73,8 @@ end
 
 % Determine check point allocation among control points.
 [ctrlIds,~,ibCP]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
+% Assume that PM object points that are not among the PM control
+% points but are listed in the control point file are check points.
 checkIds=setdiff(intersect(prob.objPts(:,1),ctrlPts.id),ctrlIds);
 [~,~,ibCC]=intersect(checkIds,ctrlPts.id);
 
