@@ -12,9 +12,9 @@ function [v,date]=dbatversion(gitToo)
 if nargin<1, gitToo=false; end
 
 % Should always be x.y.z or x.y.z.w.
-v='0.6.5.0';
+v='0.6.5.5';
 
-date='2017-10-12';
+date='2017-10-15';
 
 if gitToo
     g=gitversion;
