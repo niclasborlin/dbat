@@ -73,23 +73,32 @@ for i=1:length(images)
     images(i).label=s.cameraLabels{i};
 end
 
-% Copy enabled control points.
+% Enabled control points are control points. Disabled control
+% points are check points.
 ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
-
-% Create blank check points. TODO: Use disabled control points and
-% check points.
-checkPts=zeros(0,7);
+checkPts=pos.ctrlPts(~pos.ctrlPtsEnabled,:);
 
 % Track original ids and labels.
 rawCPids=s.PSCPid(ctrlPts(:,1));
 CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
+rawCCPids=s.PSCPid(checkPts(:,1));
+CCPlabels=pos.ctrlPtsLabels(~pos.ctrlPtsEnabled);
+
+% Merge and sort ctrl and check pts.
+cPts=[ctrlPts;checkPts];
+rawCids=[rawCPids;rawCCPids];
+cLabels=cat(2,CPlabels,CCPlabels);
+[~,i]=sort(cPts(:,1));
+cPts=cPts(i,:);
+rawCids=rawCids(i);
+cLabels=cLabels(i);
 
 % Copy global object points. Set posterior uncertainty to unknown.
-objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
+objPts=[cPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
 
 % Track original object point IDs.
-rawOPids=[rawCPids;s.PSOPid(pos.objPts(:,1))];
-OPlabels=[CPlabels,repmat({''},1,size(pos.objPts,1))];
+rawOPids=[rawCids;s.PSOPid(pos.objPts(:,1))];
+OPlabels=[cLabels,repmat({''},1,size(pos.objPts,1))];
 
 % Copy mark points and set std.
 ctrlStd=s.defStd.projections;
