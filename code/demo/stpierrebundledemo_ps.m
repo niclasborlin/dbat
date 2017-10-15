@@ -1,4 +1,4 @@
-function [rr,s0,prob]=stpierrebundledemo(damping,doPause)
+function [rr,s0,prob]=stpierrebundledemo_ps(damping,doPause)
 %ROMABUNDLEDEMO Bundle demo for DBAT.
 %
 %   ROMABUNDLEDEMO runs the bundle on the PhotoModeler export file
@@ -61,12 +61,52 @@ if any(isnan(cat(2,prob.images.imSz)))
     error('Image sizes unknown!');
 end
 disp('done.')
-fprintf('Setting all mark pts std to 1.\n');
-prob.markPts(:,5:6)=1;
+
+markPtsStd=unique(prob.markPts(:,5:6));
+if isscalar(markPtsStd)
+    disp('Same stdev on all mark points:')
+    disp(markPtsStd);
+else
+    disp('Different stdev on some mark points:')
+    disp(markPtsStd);
+end    
+%fprintf('Setting all mark pts std to 1.\n');
+%prob.markPts(:,5:6)=1;
 
 fprintf('Loading control point file %s...',cpName);
 ctrlPts=loadcpt(cpName);
 fprintf('done.\n');
+
+% Remap ctrl ids from PM to PS using the labels.
+for i=1:length(ctrlPts.id)
+    n=ctrlPts.name{i};
+    if isempty(n)
+        error('Cannot remap unlabelled control/check point');
+    end
+    % Where is it among the PM points?
+    ix=find(strcmp(n,prob.OPlabels));
+    if isscalar(ix)
+        % Found exactly one match. Copy its id.
+        ctrlPts.id(i)=prob.objPts(ix,1);
+    elseif isempty(ix)
+        % Found none - remove it.
+        warning('Control point ''%s'' not found in PSZ file. Removing it.',n);
+        % Mark point for removal.
+        ctrlPts.id(i)=nan;
+    elseif length(ix)>1
+        % Found more than one - cannot handle this.
+        error('Duplicate matches for control point ''%s'' in PSZ file.',n);
+    end
+end
+
+% Remove any missing ctrl pts.
+if any(isnan(ctrlPts.id))
+    i=~isnan(ctrlPts.id);
+    ctrlPts.id=ctrlPts.id(i);
+    ctrlPts.name=ctrlPts.name(i);
+    ctrlPts.pos=ctrlPts.pos(:,i);
+    ctrlPts.std=ctrlPts.std(:,i);
+end
 
 % Verify all CPs used by PM are given in CP file.
 if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
@@ -95,7 +135,7 @@ if ~isempty(refCheckData) && size(refCheckData,2)<7
     refCheckData(1,7)=0;
 end
 
-% Coordinate from PM.
+% Coordinates from PM.
 [~,ia]=intersect(prob.objPts(:,1),ctrlIds);
 pmCtrlData=prob.objPts(ia,:);
 [~,ia]=intersect(prob.objPts(:,1),checkIds);
@@ -157,9 +197,9 @@ s0.useIOobs=false(size(s0.IO));
 % Add self-calibration for all non-zero parameters...
 %s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
 
-% Estimate f, pp, K1-K2, P1-P2
+% Estimate f, pp, K1-K3
 selfCal=true(8,1);
-% selfCal(6)=false;
+selfCal(7:8)=false;
 % Indicate that we want to estimate these parameters.
 s0.estIO(find(selfCal))=true;
 % Zero any unused lens distortion parameters.
