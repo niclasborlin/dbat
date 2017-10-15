@@ -606,7 +606,9 @@ if any(s.isCtrl)
     cIx=find(s.isCtrl);
     CPid=s.OPid(cIx);
 
-    fprintf(fid,[p,p,p,'Prior (id, x, y, z, stdx, stdy, stdz, label)\n']);
+    fprintf(fid,[p,p,p,'Prior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','label');
     pos0=s.prior.OP(:,cIx);
     std0=s.prior.OPstd(:,cIx);
     for i=1:length(cIx)
@@ -615,21 +617,25 @@ if any(s.isCtrl)
                 s.OPlabels{cIx(i)});
     end
     fprintf(fid,[p,p,p,'Posterior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','rays','label');
     pos1=s.OP(:,cIx);
     std1=OPstd(:,cIx);
     for i=1:length(cIx)
         fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
-                     '%8.3g, %8.3g, %s\n'],CPid(i),pos1(:,i),std1(:,i),...
-                s.OPlabels{cIx(i)});
+                     '%8.3g, %8.3g, %4d, %s\n'],CPid(i),pos1(:,i),std1(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
     end
-    fprintf(fid,[p,p,p,'Diff (id, abs pos diff, rel std post/' ...
-                 'prior)\n']);
+    fprintf(fid,[p,p,p,'Diff (pos=abs diff, std=rel diff)\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','xy','xyz','stdx','stdy','stdz','rays','label');
     posd=pos1-pos0;
     stdd=((std1+eps)./(std0+eps)-1)*100;
     for i=1:length(cIx)
-        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %7.1f%%, ' ...
-        '%7.1f%%, %7.1f%%, %s\n'],CPid(i),posd(:,i),stdd(:,i),...
-                s.OPlabels{cIx(i)});
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3f, %8.3f, %7.1f%%, ' ...
+        '%7.1f%%, %7.1f%%, %4d, %s\n'],CPid(i),posd(:,i),norm(posd(1:2,i)),...
+                norm(posd(:,i)),stdd(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
     end
 
     fprintf(fid,[p,p,p,'Ctrl point delta\n']);
@@ -653,7 +659,9 @@ if any(s.isCheck)
     cIx=find(s.isCheck);
     CPid=s.OPid(cIx);
 
-    fprintf(fid,[p,p,p,'Prior (id, x, y, z, stdx, stdy, stdz, label)\n']);
+    fprintf(fid,[p,p,p,'Prior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','label');
     pos0=s.prior.CCP(:,cIx);
     std0=s.prior.CCPstd(:,cIx);
     for i=1:length(cIx)
@@ -662,21 +670,25 @@ if any(s.isCheck)
                 s.OPlabels{cIx(i)});
     end
     fprintf(fid,[p,p,p,'Posterior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','rays','label');
     pos1=s.OP(:,cIx);
     std1=OPstd(:,cIx);
     for i=1:length(cIx)
         fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
-                     '%8.3g, %8.3g, %s\n'],CPid(i),pos1(:,i),std1(:,i),...
-                s.OPlabels{cIx(i)});
+                     '%8.3g, %8.3g, %4d, %s\n'],CPid(i),pos1(:,i),std1(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
     end
-    fprintf(fid,[p,p,p,'Diff (id, abs pos diff, rel std post/' ...
-                 'prior)\n']);
+    fprintf(fid,[p,p,p,'Diff (pos=abs diff, std=rel diff)\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','xy','xyz','stdx','stdy','stdz','rays','label');
     posd=pos1-pos0;
     stdd=((std1+eps)./(std0+eps)-1)*100;
     for i=1:length(cIx)
-        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %7.1f%%, ' ...
-        '%7.1f%%, %7.1f%%, %s\n'],CPid(i),posd(:,i),stdd(:,i),...
-                s.OPlabels{cIx(i)});
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3f, %8.3f, %7.1f%%, ' ...
+        '%7.1f%%, %7.1f%%, %4d, %s\n'],CPid(i),posd(:,i),norm(posd(1:2,i)),...
+                norm(posd(:,i)),stdd(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
     end
 
     fprintf(fid,[p,p,p,'Check point delta\n']);
