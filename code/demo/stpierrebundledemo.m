@@ -57,6 +57,15 @@ if any(isnan(cat(2,prob.images.imSz)))
     error('Image sizes unknown!');
 end
 disp('done.')
+
+markPtsStd=unique(prob.markPts(:,5:6));
+if isscalar(markPtsStd)
+    disp('Same stdev on all mark points:')
+    disp(markPtsStd);
+else
+    disp('Different stdev on some mark points:')
+    disp(markPtsStd);
+end    
 fprintf('Setting all mark pts std to 1.\n');
 prob.markPts(:,5:6)=1;
 
