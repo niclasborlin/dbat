@@ -783,8 +783,15 @@ s.camera.pixelSz=[pixelWidth,pixelHeight];
 s.camera.sensorFormat=s.camera.imSz.*s.camera.pixelSz;
 s.camera.focal=fx*s.camera.pixelSz(1);
 s.camera.pp=[cx,cy].*s.camera.pixelSz;
-s.camera.k=k; % TODO: Fkix conversion to mm.
-s.camera.p=p; % TODO: Fix conversion to mm.
+% Deal with scaling of distortion coefficients
+s.camera.k=-k.*s.camera.focal.^(-2*(1:length(k)));
+pScaled=p;
+if ~isempty(pScaled)
+    pScaled(1:2)=pScaled(1:2)/s.camera.focal;
+    pScaled(2)=-pScaled(2);
+    pScaled(1:2)=pScaled([2,1]);
+end
+s.camera.p=pScaled
 s.camera.isFixed=sensorFixed;
 s.camera.isAdjusted=isAdjusted;
 s.camera.nominalFocal=nominalFocal;
