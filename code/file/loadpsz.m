@@ -791,7 +791,7 @@ if ~isempty(pScaled)
     pScaled(2)=-pScaled(2);
     pScaled(1:2)=pScaled([2,1]);
 end
-s.camera.p=pScaled
+s.camera.p=pScaled;
 s.camera.isFixed=sensorFixed;
 s.camera.isAdjusted=isAdjusted;
 s.camera.nominalFocal=nominalFocal;
@@ -872,8 +872,6 @@ if isfield(chnk,'meta') && isfield(chnk.meta,'property')
             switch param
               case {'aspect','skew','b1','b2','k4','p3','p4'}
                 warnNotSupported{end+1}=param; %#ok<AGROW>
-              case {'k1','k2','k3','p1','p2'}
-                warnUsePhotoModeler{end+1}=param; %#ok<AGROW>
             end
         end
     end
@@ -885,12 +883,6 @@ s.camera.optimizedParams=optimizedParams;
 if ~isempty(warnNotSupported)
     warning(['The following camera calibration parameters are not ' ...
              'supported yet:',sprintf(' %s',warnNotSupported{:})]);
-end
-
-if ~isempty(warnUsePhotoModeler)
-    warning(['The following camera calibration parameters are supported, ' ...
-             'but currently the Photomodeler lens distortion model ' ...
-             'will be used:',sprintf(' %s',warnUsePhotoModeler{:})]);
 end
 
 % Delete unpacked files unless they should be kept.
