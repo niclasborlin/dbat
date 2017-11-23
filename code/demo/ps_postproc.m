@@ -65,6 +65,7 @@ end
 [inputDir,inputName]=fileparts(fileName);
 
 [psz,prob,s0,s0PreFilt]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
+s0.IOdistModel(:)=-1;
 
 resultFile1=fullfile(inputDir,[inputName,'-psstats-prefilt.txt']);
 fprintf('Writing report file %s...',resultFile1);

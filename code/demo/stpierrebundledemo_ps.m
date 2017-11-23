@@ -44,11 +44,13 @@ inputDir=fullfile(curDir,'data','hamburg2017','stpierre');
 
 % Name of control point file.
 cpName=fullfile(inputDir,'ctrl_StPierre_weighted.txt');
+cpName=fullfile(inputDir,'ctrl_close.txt');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'psprojects','C5.psz');
+inputFile=fullfile(getenv('HOME'),'photoscan','ari-close-range','S0.psz');
 % Report file name.
-reportFile=fullfile(inputDir,'dbatexports','stpierrePS_C5-dbatreport.txt');
+reportFile=fullfile(inputDir,'dbatexports','close-S0-dbatreport.txt');
 
 fprintf('Loading PhotoScan project file %s...',inputFile);
 psz=loadpsz(inputFile);
@@ -197,9 +199,9 @@ s0.useIOobs=false(size(s0.IO));
 % Add self-calibration for all non-zero parameters...
 %s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
 
-% Estimate f, pp, K1-K3
+% Estimate f, pp, K1-K3, P1-P2
 selfCal=true(8,1);
-selfCal(7:8)=false;
+%selfCal(7:8)=false;
 % Indicate that we want to estimate these parameters.
 s0.estIO(find(selfCal))=true;
 % Zero any unused lens distortion parameters.
