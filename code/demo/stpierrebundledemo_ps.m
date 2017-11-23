@@ -1,40 +1,26 @@
-function [rr,s0,prob]=stpierrebundledemo_ps(damping,doPause)
-%ROMABUNDLEDEMO Bundle demo for DBAT.
+function [rr,s0,psz]=stpierrebundledemo_ps
+%STPIERREBUNDLEDEMO_PS StPierre PhotoScan bundle demo for DBAT.
 %
-%   ROMABUNDLEDEMO runs the bundle on the PhotoModeler export file
-%   of the ROMA data set. The PhotoModeler EO values are used as
-%   initial values, except that the EO position are disturbed by
-%   random noise with sigma=0.1 m. The OP initial values are
-%   computed by forward intersection. The datum is defined by
-%   fixing the EO parameters of the first camera and the X
-%   coordinate of another camera. The other camera is chosen to
-%   maximize the baseline.
-%
-%   ROMABUNDLEDEMO uses the Gauss-Newton-Armijo damping scheme of [1]
-%   by default. Use CAMCALDEMO(DAMPING), where DAMPING is one of
-%   - 'none' or 'gm' for classical Gauss-Markov iterations,
-%   - 'gna'          Gauss-Newton with Armijo linesearch,
-%   - 'lm'           Levenberg-Marquardt, or
-%   - 'lmp'          Levenberg-Marquardt with Powell dogleg.
-%
-%   Use ROMABUNDLEDEMO(DAMPING,'off') to visualize the iteration
-%   sequence without waiting for a keypress.
+%   STPIERREBUNDLEDEMO_PS runs the bundle on the PhotoScan project
+%   file for the STPIERRE data set, used in [1]. The PhotoScan EO and
+%   OP values are used as initial values. The datum is defined via
+%   weighted control points. The Gauss-Newton-Armijo damping scheme
+%   of [2] is used for the bundle.
 %
 %   References:
-%       [1] Börlin and Grussenmeyer (2013). "Bundle adjustment with
-%       and without damping", Photogrammetric Record,
-%       vol. 28(144):396-415.
+%       [1] A. Murtiyoso and P. Grussenmeyer and N. Börlin (2017).
+%           "Reprocessing Close Range Terrestrial and UAV
+%           Photogrammetric Projects with the DBAT Toolbox for
+%           Independent Verification and Quality Control",
+%           International Archives of the Photogrammetry, Remote
+%           Sensing and Spatial Information Sciences, XLII-2/W8, p.
+%           171-177. Paper presented at the LowCost 3D Workshop,
+%           Hamburg 28-29 November 2017.
+%       [2] Börlin and Grussenmeyer (2013). "Bundle adjustment with
+%           and without damping", Photogrammetric Record, vol.
+%           28(144):396-415.
 
-if nargin<1, damping='gna'; end
-
-if nargin<2, doPause='on'; end
-
-switch damping
-  case {'none','gm','gna','lm','lmp'}
-    % Do nothing.
-  otherwise
-    error('Bad damping');
-end
+damping='gna';
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -44,13 +30,11 @@ inputDir=fullfile(curDir,'data','hamburg2017','stpierre');
 
 % Name of control point file.
 cpName=fullfile(inputDir,'ctrl_StPierre_weighted.txt');
-cpName=fullfile(inputDir,'ctrl_close.txt');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'psprojects','C5.psz');
-inputFile=fullfile(getenv('HOME'),'photoscan','ari-close-range','S0.psz');
 % Report file name.
-reportFile=fullfile(inputDir,'dbatexports','close-S0-dbatreport.txt');
+reportFile=fullfile(inputDir,'dbatexports','stpierrePS_C5-dbatreport.txt');
 
 fprintf('Loading PhotoScan project file %s...',inputFile);
 psz=loadpsz(inputFile);
@@ -137,7 +121,7 @@ if ~isempty(refCheckData) && size(refCheckData,2)<7
     refCheckData(1,7)=0;
 end
 
-% Coordinates from PM.
+% Coordinates from PM/PS.
 [~,ia]=intersect(prob.objPts(:,1),ctrlIds);
 pmCtrlData=prob.objPts(ia,:);
 [~,ia]=intersect(prob.objPts(:,1),checkIds);
@@ -173,7 +157,7 @@ end
 fprintf('Max abs pos diff=%g\n',max(max(abs(refCheckData(:,2:4)-pmCheckData(:,2:4)))));
 fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(pmCheckData(:,5:7))-log(refCheckData(:,5:7))))))-1)*100)
 
-% Replace PM ctrl pt with prior.
+% Replace PM/PS ctrl pt with prior.
 prob.ctrlPts=refCtrlData;
 
 % Insert check points.
@@ -269,7 +253,7 @@ fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         E.damping.name,double(fig));
 plotnetwork(result,E,'trans','up','align',1,'title',...
             ['Damping: ',damping,'. Iteration %d of %d'], ...
-            'axes',fig,'pause',doPause);
+            'axes',fig);
 
 if nargout>0
     rr=result;
