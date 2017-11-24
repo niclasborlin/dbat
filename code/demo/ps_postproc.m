@@ -25,7 +25,7 @@ function [rr,E,s0,prob,psz]=ps_postproc(fileName,sLocal,minRays,minAngle,pauseMo
 %   been loaded by loadpsz.
 %
 %   To run a self-calibration post-processing, please modify the
-%   code block near line 82.
+%   code block near line 86.
 %
 %   References:
 %       [1] Börlin and Grussenmeyer (2016), "External Verification
@@ -64,7 +64,9 @@ end
 % Extract dir of input file.
 [inputDir,inputName]=fileparts(fileName);
 
+% Load project file.
 [psz,prob,s0,s0PreFilt]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
+% Set the Forward Brown lens distortion model for all cameras.
 s0.IOdistModel(:)=-1;
 
 resultFile1=fullfile(inputDir,[inputName,'-psstats-prefilt.txt']);

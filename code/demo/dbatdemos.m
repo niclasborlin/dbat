@@ -38,6 +38,14 @@
 %        rotation). Use PSZNAME='' to use the Prague 2016 SXB data set.
 %    Data files:
 %        DBATHOME/code/demos/data/prague2016/sxb/psprojects
+%
+% stpierrebundledemo_ps - Run bundle on StPierre data set from Photoscan.
+%    Call:
+%        STPIERREBUNDLEDEMO_PS
+%    Data files:
+%        DBATHOME/code/demos/data/hamburg2017/stpierre
+%
+%
 
 % Run help if function is called.
 help(mfilename)

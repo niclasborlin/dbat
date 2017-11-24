@@ -5,8 +5,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 26-Jun-2016 17:59:26
-      DBAT version:    0.5.1 (2016-06-26)
+      Last Bundle Run: 24-Nov-2017 01:09:51
+      DBAT version:    0.7.0.0 (2017-11-24)
+      MATLAB version:  8.6.0.267246 (R2015b)
+      Host system:     GLNXA64
+      Host name:       slartibartfast
       Status:          OK (0)
       Sigma0:          1.0419
       Sigma0 (pixels): 1.0419
@@ -28,6 +31,48 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 4
          First error:          10.4471
          Last error:           8.33522
+         Execution time (s):   0.04
+      Lens distortion models:
+         Backward (Photogrammetry)
+      Cameras:
+         Calibration: no
+         Camera1
+            Lens distortion model:
+               Backward (Photogrammetry)
+            Focal Length:
+               Value: 123.939 mm
+            Xp - principal point x:
+               Value: 26.577 mm
+            Yp - principal point y:
+               Value: 38.811 mm
+            Fw - format width:
+               Value: 53.148 mm
+            Fh - format height:
+               Value: 77.976 mm
+            K1 - radial distortion 1:
+               Value: 0 mm^(-3)
+            K2 - radial distortion 2:
+               Value: 0 mm^(-5)
+            K3 - radial distortion 3:
+               Value: 0 mm^(-7)
+            P1 - decentering distortion 1:
+               Value: 0 mm^(-3)
+            P2 - decentering distortion 2:
+               Value: 0 mm^(-3)
+            Iw - image width:
+               Value: 8858 px
+            Ih - image height:
+               Value: 12996 px
+            Xr - X resolution:
+               Value: 166.667 px/mm
+            Yr - Y resolution:
+               Value: 166.667 px/mm
+            Pw - pixel width:
+               Value: 0.006 mm
+            Ph - pixel height:
+               Value: 0.006 mm
+         Rated angle of view (h,v,d): (24, 35, 42) deg
+         Largest distortion: 0 mm (0.0 px, 0.0% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: 8811.jpg
@@ -163,8 +208,14 @@ Damped Bundle Adjustment Toolbox result file
             <not available>
       Point Measurements
          Number of control pts: 16
+         Number of check pts: 0
          Number of object pts: 0
          CP ray count: 1-4 (2.9 avg)
+            1 points with 1 rays.
+            3 points with 2 rays.
+            8 points with 3 rays.
+            4 points with 4 rays.
+         CCP ray count: -
          OP ray count: -
       Point Marking Residuals
          Overall point RMS: 1.216 pixels
@@ -183,12 +234,82 @@ Damped Bundle Adjustment Toolbox result file
          Maximum X standard deviation: NaN (OP 317)
          Maximum Y standard deviation: NaN (OP 317)
          Maximum Z standard deviation: NaN (OP 317)
+         Points with high correlations
+            Points with correlation above 95%: 0
+            Points with correlation above 99%: 0
       Point Angles
          CP
-            Minimum: 0.0 degrees (CP 403)
-            Maximum: 25.8 degrees (CP 410)
+            Minimum: 0.0 degrees (CP 403, label 403)
+            Maximum: 25.8 degrees (CP 410, label 410)
             Average: 14.8 degrees
+         CCP
+            Minimum: -
+            Maximum: -
+            Average: -
          OP
             Minimum: -
             Maximum: -
             Average: -
+      Ctrl measurements
+         Prior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, label
+            317, -174.926,   83.852,   -0.379,        0,        0,        0, 317
+            333,  354.994,  330.569,   -1.822,        0,        0,        0, 333
+            347,  680.824,  505.229,   -0.382,        0,        0,        0, 347
+            351,  771.764,   14.689,    0.028,        0,        0,        0, 351
+            375, -160.465,  110.227,   -0.862,        0,        0,        0, 375
+            403, -608.832,  431.957,   -0.192,        0,        0,        0, 403
+            410,  194.926,  216.302,   -0.112,        0,        0,        0, 410
+            422,  347.242,  -81.498,   -1.292,        0,        0,        0, 422
+            428,  192.442, -216.051,   -0.282,        0,        0,        0, 428
+            492, -172.576,   81.759,   -0.732,        0,        0,        0, 492
+            552,  795.566,   -2.396,   -0.189,        0,        0,        0, 552
+            563,  387.284,  413.707,   -1.071,        0,        0,        0, 563
+            590,  201.491, -209.529,   -0.437,        0,        0,        0, 590
+            607,  722.961,  365.296,   -0.188,        0,        0,        0, 607
+            634,  662.400,  416.496,   -0.075,        0,        0,        0, 634
+            651,  579.956,  169.158,   -0.676,        0,        0,        0, 651
+         Posterior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
+            317, -174.926,   83.852,   -0.379,        0,        0,        0,    4, 317
+            333,  354.994,  330.569,   -1.822,        0,        0,        0,    3, 333
+            347,  680.824,  505.229,   -0.382,        0,        0,        0,    2, 347
+            351,  771.764,   14.689,    0.028,        0,        0,        0,    4, 351
+            375, -160.465,  110.227,   -0.862,        0,        0,        0,    3, 375
+            403, -608.832,  431.957,   -0.192,        0,        0,        0,    1, 403
+            410,  194.926,  216.302,   -0.112,        0,        0,        0,    3, 410
+            422,  347.242,  -81.498,   -1.292,        0,        0,        0,    4, 422
+            428,  192.442, -216.051,   -0.282,        0,        0,        0,    3, 428
+            492, -172.576,   81.759,   -0.732,        0,        0,        0,    3, 492
+            552,  795.566,   -2.396,   -0.189,        0,        0,        0,    3, 552
+            563,  387.284,  413.707,   -1.071,        0,        0,        0,    3, 563
+            590,  201.491, -209.529,   -0.437,        0,        0,        0,    2, 590
+            607,  722.961,  365.296,   -0.188,        0,        0,        0,    3, 607
+            634,  662.400,  416.496,   -0.075,        0,        0,        0,    2, 634
+            651,  579.956,  169.158,   -0.676,        0,        0,        0,    4, 651
+         Diff (pos=abs diff, std=rel diff)
+             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
+            317,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    4, 317
+            333,   -0.000,   -0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 333
+            347,   -0.000,   -0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    2, 347
+            351,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    4, 351
+            375,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 375
+            403,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    1, 403
+            410,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 410
+            422,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    4, 422
+            428,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 428
+            492,   -0.000,   -0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 492
+            552,   -0.000,   -0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 552
+            563,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 563
+            590,   -0.000,   -0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    2, 590
+            607,   -0.000,   -0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    3, 607
+            634,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    2, 634
+            651,   -0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    4, 651
+         Ctrl point delta
+            Max: 0.000 ou (651, pt 651)
+            Max X,Y,Z
+               X: 0.000 ou (651, pt 651)
+               Y: 0.000 ou (422, pt 422)
+               Z: 0.000 ou (403, pt 403)
+            RMS: 0.000 ou (from 16 items)
+      Check measurements

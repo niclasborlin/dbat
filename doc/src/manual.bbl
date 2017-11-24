@@ -33,12 +33,6 @@ N.~B{\"o}rlin and P.~Grussenmeyer.
 \newblock \emph{International Archives of Photogrammetry, Remote Sensing, and
   Spatial Information Sciences}, XLI-B5:\penalty0 7--14, July 2016.
 
-\bibitem[Brown(1971)]{Brown1971:Close-range}
-D.~C. Brown.
-\newblock Close-range camera calibration.
-\newblock \emph{Photogrammetric Engineering}, 37\penalty0 (8):\penalty0
-  855--866, 1971.
-
 \bibitem[Haralick et~al.(1994)Haralick, Lee, Ottenberg, and
   N{\"o}lle]{Haralick1994:Review}
 R.~M. Haralick, C.-N. Lee, K.~Ottenberg, and M.~N{\"o}lle.
@@ -51,6 +45,19 @@ C.~McGlone, E.~Mikhail, and J.~Bethel, editors.
 \newblock \emph{Manual of Photogrammetry}.
 \newblock ASPRS, 5th edition, July 2004.
 \newblock ISBN 1-57083-071-1.
+
+\bibitem[Murtiyoso et~al.(2017)Murtiyoso, Grussenmeyer, and
+  B{\"o}rlin]{Murtiyoso2017:Reprocessing}
+A.~Murtiyoso, P.~Grussenmeyer, and N.~B{\"o}rlin.
+\newblock Reprocessing close range terrestrial and {UAV} photogrammetric
+  projects with the {DBAT} toolbox for independent verification and quality
+  control.
+\newblock \emph{ISPRS - International Archives of the Photogrammetry, Remote
+  Sensing and Spatial Information Sciences}, XLII-2/W8:\penalty0 171--177,
+  2017.
+\newblock \doi{10.5194/isprs-archives-XLII-2-W8-171-2017}.
+\newblock URL
+  \url{https://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLII-2-W8/171/2017/}.
 
 \bibitem[Stew\'enius et~al.(2006)Stew\'enius, Engels, and
   Nist\'er]{Stewenius2006:Recent}

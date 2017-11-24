@@ -5,8 +5,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 12-Oct-2017 16:55:38
-      DBAT version:    0.6.4.3 (2017-10-11)
+      Last Bundle Run: 24-Nov-2017 01:08:17
+      DBAT version:    0.7.0.0 (2017-11-24)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast
@@ -582,21 +582,24 @@ Damped Bundle Adjustment Toolbox result file
                     8: 80.96 (   1    2    3    4    5    7    9   10   11   12   13   14   15   17   18   19   20   21)
                    92: 81.12 (   1    2    3    4    5    7    8    9   10   11   13   14   15   16   17   18   19   20   21)
       Ctrl measurements
-         Prior (id, x, y, z, stdx, stdy, stdz, label)
+         Prior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, label
            1001,   -0.500,    0.500,    0.000,        0,        0,        0, 1001
            1002,    0.500,    0.500,    0.000,        0,        0,        0, 1002
            1003,   -0.500,   -0.500,    0.000,        0,        0,        0, 1003
            1004,    0.500,   -0.500,    0.000,        0,        0,        0, 1004
          Posterior
-           1001,   -0.500,    0.500,    0.000,        0,        0,        0, 1001
-           1002,    0.500,    0.500,    0.000,        0,        0,        0, 1002
-           1003,   -0.500,   -0.500,    0.000,        0,        0,        0, 1003
-           1004,    0.500,   -0.500,    0.000,        0,        0,        0, 1004
-         Diff (id, abs pos diff, rel std post/prior)
-           1001,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%, 1001
-           1002,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%, 1002
-           1003,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%, 1003
-           1004,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%, 1004
+             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
+           1001,   -0.500,    0.500,    0.000,        0,        0,        0,   21, 1001
+           1002,    0.500,    0.500,    0.000,        0,        0,        0,   21, 1002
+           1003,   -0.500,   -0.500,    0.000,        0,        0,        0,   21, 1003
+           1004,    0.500,   -0.500,    0.000,        0,        0,        0,   21, 1004
+         Diff (pos=abs diff, std=rel diff)
+             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
+           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1001
+           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1002
+           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1003
+           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1004
          Ctrl point delta
             Max: 0.000 ou (1001, pt 1001)
             Max X,Y,Z

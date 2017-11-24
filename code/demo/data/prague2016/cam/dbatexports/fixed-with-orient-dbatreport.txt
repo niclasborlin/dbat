@@ -5,8 +5,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 26-Jun-2016 17:57:54
-      DBAT version:    0.5.1 (2016-06-26)
+      Last Bundle Run: 24-Nov-2017 01:08:29
+      DBAT version:    0.7.0.0 (2017-11-24)
+      MATLAB version:  8.6.0.267246 (R2015b)
+      Host system:     GLNXA64
+      Host name:       slartibartfast
       Status:          OK (0)
       Sigma0:          1.78095
       Sigma0 (pixels): 0.178095
@@ -28,6 +31,48 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 3
          First error:          460.624
          Last error:           108.827
+         Execution time (s):   0.19
+      Lens distortion models:
+         Backward (Photogrammetry)
+      Cameras:
+         Calibration: no
+         Camera1
+            Lens distortion model:
+               Backward (Photogrammetry)
+            Focal Length:
+               Value: 7.4693 mm
+            Xp - principal point x:
+               Value: 3.6178 mm
+            Yp - principal point y:
+               Value: 2.6087 mm
+            Fw - format width:
+               Value: 7.2532 mm
+            Fh - format height:
+               Value: 5.4399 mm
+            K1 - radial distortion 1:
+               Value: 0.004981 mm^(-3)
+            K2 - radial distortion 2:
+               Value: -9.814e-05 mm^(-5)
+            K3 - radial distortion 3:
+               Value: 0 mm^(-7)
+            P1 - decentering distortion 1:
+               Value: -6.587e-05 mm^(-3)
+            P2 - decentering distortion 2:
+               Value: -2.806e-05 mm^(-3)
+            Iw - image width:
+               Value: 2272 px
+            Ih - image height:
+               Value: 1704 px
+            Xr - X resolution:
+               Value: 313.241 px/mm
+            Yr - Y resolution:
+               Value: 313.241 px/mm
+            Pw - pixel width:
+               Value: 0.00319243 mm
+            Ph - pixel height:
+               Value: 0.00319243 mm
+         Rated angle of view (h,v,d): (52, 40, 63) deg
+         Largest distortion: 0.4 mm (124.9 px, 8.8% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
@@ -487,9 +532,18 @@ Damped Bundle Adjustment Toolbox result file
             <not available>
       Point Measurements
          Number of control pts: 4
+         Number of check pts: 0
          Number of object pts: 96
          CP ray count: 21-21 (21.0 avg)
+            4 points with 21 rays.
+         CCP ray count: -
          OP ray count: 16-21 (20.7 avg)
+            1 points with 16 rays.
+            1 points with 17 rays.
+            2 points with 18 rays.
+            3 points with 19 rays.
+            5 points with 20 rays.
+            84 points with 21 rays.
       Point Marking Residuals
          Overall point RMS: 0.239 pixels
          Mark point residuals:
@@ -507,12 +561,50 @@ Damped Bundle Adjustment Toolbox result file
          Maximum X standard deviation: 5.3e-05 (OP 90)
          Maximum Y standard deviation: 5.5e-05 (OP 90)
          Maximum Z standard deviation: 9.3e-05 (OP 90)
+         Points with high correlations
+            Points with correlation above 95%: 0
+            Points with correlation above 99%: 0
       Point Angles
          CP
-            Minimum: 83.4 degrees (CP 1003)
-            Maximum: 85.8 degrees (CP 1002)
+            Minimum: 83.4 degrees (CP 1003, label 1003)
+            Maximum: 85.8 degrees (CP 1002, label 1002)
             Average: 84.7 degrees
+         CCP
+            Minimum: -
+            Maximum: -
+            Average: -
          OP
             Minimum: 79.6 degrees (OP 90)
             Maximum: 90.0 degrees (OP 47)
             Average: 86.5 degrees
+            Smallest angles (ID, angle [deg], vis in cameras)
+                   90: 79.58 (   1    2    3    5    8    9   11   13   14   15   16   17   18   19   20   21)
+                    8: 80.96 (   1    2    3    4    5    7    9   10   11   12   13   14   15   17   18   19   20   21)
+                   92: 81.12 (   1    2    3    4    5    7    8    9   10   11   13   14   15   16   17   18   19   20   21)
+      Ctrl measurements
+         Prior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, label
+           1001,   -0.500,    0.500,    0.000,        0,        0,        0, 1001
+           1002,    0.500,    0.500,    0.000,        0,        0,        0, 1002
+           1003,   -0.500,   -0.500,    0.000,        0,        0,        0, 1003
+           1004,    0.500,   -0.500,    0.000,        0,        0,        0, 1004
+         Posterior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
+           1001,   -0.500,    0.500,    0.000,        0,        0,        0,   21, 1001
+           1002,    0.500,    0.500,    0.000,        0,        0,        0,   21, 1002
+           1003,   -0.500,   -0.500,    0.000,        0,        0,        0,   21, 1003
+           1004,    0.500,   -0.500,    0.000,        0,        0,        0,   21, 1004
+         Diff (pos=abs diff, std=rel diff)
+             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
+           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1001
+           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1002
+           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1003
+           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 1004
+         Ctrl point delta
+            Max: 0.000 ou (1001, pt 1001)
+            Max X,Y,Z
+               X: 0.000 ou (1001, pt 1001)
+               Y: 0.000 ou (1001, pt 1001)
+               Z: 0.000 ou (1001, pt 1001)
+            RMS: 0.000 ou (from 4 items)
+      Check measurements

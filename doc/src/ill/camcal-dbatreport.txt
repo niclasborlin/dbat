@@ -5,8 +5,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 05-May-2017 17:14:21
-      DBAT version:    0.6.2.2 (2017-05-05)
+      Last Bundle Run: 24-Nov-2017 01:04:34
+      DBAT version:    0.7.0.0 (2017-11-24)
+      MATLAB version:  8.6.0.267246 (R2015b)
+      Host system:     GLNXA64
+      Host name:       slartibartfast
       Status:          OK (0)
       Sigma0:          1.68901
       Sigma0 (pixels): 0.168901
@@ -28,58 +31,64 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 9
          First error:          30884.2
          Last error:           103.099
+         Execution time (s):   0.59
+      Lens distortion models:
+         Backward (Photogrammetry)
+      Cameras:
+         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2)
+         Camera1
+            Lens distortion model:
+               Backward (Photogrammetry)
+            Focal Length:
+               Value:        7.45894 mm
+               Deviation:    0.00109 mm
+            Xp - principal point x:
+               Value:        3.61664 mm
+               Deviation:    0.000858 mm
+            Yp - principal point y:
+               Value:        2.60896 mm
+               Deviation:    0.000988 mm
+            Fw - format width:
+               Value:        7.25319 mm
+            Fh - format height:
+               Value:        5.43764 mm
+            K1 - radial distortion 1:
+               Value:        0.00457026 mm^(-3)
+               Deviation:    2.31e-05 mm^(-3)
+               Significance: p=1.00
+            K2 - radial distortion 2:
+               Value:        -4.25869e-05 mm^(-5)
+               Deviation:    2.76e-06 mm^(-5)
+               Significance: p=1.00
+               Correlations over 95%: K3:-97.9%.
+            K3 - radial distortion 3:
+               Value:        -2.15843e-06 mm^(-7)
+               Deviation:    1.05e-07 mm^(-7)
+               Significance: p=1.00
+               Correlations over 95%: K2:-97.9%.
+            P1 - decentering distortion 1:
+               Value:        -6.5657e-05 mm^(-3)
+               Deviation:    3.67e-06 mm^(-3)
+               Significance: p=1.00
+            P2 - decentering distortion 2:
+               Value:        -2.9636e-05 mm^(-3)
+               Deviation:    4.05e-06 mm^(-3)
+               Significance: p=1.00
+            Iw - image width:
+               Value:        2272 px
+            Ih - image height:
+               Value:        1704 px
+            Xr - X resolution:
+               Value:        313.306 px/mm
+            Yr - Y resolution:
+               Value:        313.306 px/mm
+            Pw - pixel width:
+               Value:        0.00319176 mm
+            Ph - pixel height:
+               Value:        0.00319176 mm
+         Rated angle of view (h,v,d): (52, 40, 63) deg
+         Largest distortion: 0.37 mm (116.4 px, 8.2% of half-diagonal)
       Precisions / Standard Deviations:
-         Camera Calibration Standard Deviations:
-            Camera1 (camera unit cu=mm)
-               Focal Length:
-                    Value:        7.45894 cu
-                    Deviation:    0.00109 cu
-               Xp - principal point x:
-                    Value:        3.61664 cu
-                    Deviation:    0.000858 cu
-               Yp - principal point y:
-                    Value:        2.60896 cu
-                    Deviation:    0.000988 cu
-               Fw - format width:
-                    Value:        7.25319 cu
-               Fh - format height:
-                    Value:        5.43764 cu
-               K1 - radial distortion 1:
-                    Value:        0.00457026 cu^(-3)
-                    Deviation:    2.31e-05 cu^(-3)
-                    Significance: p=1.00
-               K2 - radial distortion 2:
-                    Value:        -4.25869e-05 cu^(-5)
-                    Deviation:    2.76e-06 cu^(-5)
-                    Significance: p=1.00
-                    Correlations over 95%: K3:-97.9%.
-               K3 - radial distortion 3:
-                    Value:        -2.15843e-06 cu^(-7)
-                    Deviation:    1.05e-07 cu^(-7)
-                    Significance: p=1.00
-                    Correlations over 95%: K2:-97.9%.
-               P1 - decentering distortion 1:
-                    Value:        -6.5657e-05 cu^(-3)
-                    Deviation:    3.67e-06 cu^(-3)
-                    Significance: p=1.00
-               P2 - decentering distortion 2:
-                    Value:        -2.9636e-05 cu^(-3)
-                    Deviation:    4.05e-06 cu^(-3)
-                    Significance: p=1.00
-               Iw - image width:
-                    Value:        2272 px
-               Ih - image height:
-                    Value:        1704 px
-               Xr - X resolution:
-                    Value:        313.306 px/cu
-               Yr - Y resolution:
-                    Value:        313.306 px/cu
-               Pw - pixel width:
-                    Value:        0.00319176 cu
-               Ph - pixel height:
-                    Value:        0.00319176 cu
-            Rated angle of view (h,v,d): (52, 40, 63) deg
-            Largest distortion: 0.37 cu (116.4 px, 8.2% of half-diagonal)
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
                Omega:
@@ -498,9 +507,11 @@ Damped Bundle Adjustment Toolbox result file
             none
       Point Measurements
          Number of control pts: 4
+         Number of check pts: 0
          Number of object pts: 96
          CP ray count: 21-21 (21.0 avg)
             4 points with 21 rays.
+         CCP ray count: -
          OP ray count: 16-21 (20.7 avg)
             1 points with 16 rays.
             1 points with 17 rays.
@@ -533,7 +544,42 @@ Damped Bundle Adjustment Toolbox result file
             Minimum: 83.4 degrees (CP 1003)
             Maximum: 85.8 degrees (CP 1002)
             Average: 84.7 degrees
+         CCP
+            Minimum: -
+            Maximum: -
+            Average: -
          OP
             Minimum: 79.6 degrees (OP 90)
             Maximum: 90.0 degrees (OP 47)
             Average: 86.5 degrees
+            Smallest angles (ID, angle [deg], vis in cameras)
+                   90: 79.57 (   1    2    3    5    8    9   11   13   14   15   16   17   18   19   20   21)
+                    8: 80.96 (   1    2    3    4    5    7    9   10   11   12   13   14   15   17   18   19   20   21)
+                   92: 81.12 (   1    2    3    4    5    7    8    9   10   11   13   14   15   16   17   18   19   20   21)
+      Ctrl measurements
+         Prior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, label
+           1001,    0.000,    1.000,    0.000,        0,        0,        0, 
+           1002,    1.000,    1.000,    0.000,        0,        0,        0, 
+           1003,    0.000,    0.000,    0.000,        0,        0,        0, 
+           1004,    1.000,    0.000,    0.000,        0,        0,        0, 
+         Posterior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
+           1001,    0.000,    1.000,    0.000,        0,        0,        0,   21, 
+           1002,    1.000,    1.000,    0.000,        0,        0,        0,   21, 
+           1003,    0.000,    0.000,    0.000,        0,        0,        0,   21, 
+           1004,    1.000,    0.000,    0.000,        0,        0,        0,   21, 
+         Diff (pos=abs diff, std=rel diff)
+             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
+           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
+           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
+           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
+           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
+         Ctrl point delta
+            Max: 0.000 ou (, pt 1001)
+            Max X,Y,Z
+               X: 0.000 ou (, pt 1001)
+               Y: 0.000 ou (, pt 1001)
+               Z: 0.000 ou (, pt 1001)
+            RMS: 0.000 ou (from 4 items)
+      Check measurements

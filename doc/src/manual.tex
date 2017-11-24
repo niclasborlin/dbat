@@ -14,8 +14,8 @@
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.6.2.2}
-\newcommand{\dbatdate}{May 5, 2017}
+\newcommand{\dbatversion}{0.7.0.0}
+\newcommand{\dbatdate}{Nov 24, 2017}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -31,9 +31,10 @@
 \vfill
 With contributions from
 \begin{itemize}
-\item Arnaud Durand, ICube, INSA Strasbourg.
+\item Arnaud Durand, ICube-SERTIT, INSA Strasbourg.
 \item Jan Hieronymus, TU Berlin.
 \item Jean-Fran{\c{c}}ois Hullo, EDF.
+\item Arnadi Murtiyoso, ICube, INSA Strasbourg.
 \item Kostas Naskou, University of Nottingham.
 \end{itemize}
 \newpage
@@ -71,16 +72,18 @@ The toolbox currently includes routines for (Matlab function names within parent
   \end{itemize}
 \item Post-processing:
   \begin{itemize}
-  \item Post-processing of PhotoScan projects
-    (\texttt{ps\_postproc}). Includes object point filtering on low
-    ray count and low intersection angles. \textbf{For
-      self-calibration post-processing, see the help text for
-      \texttt{ps\_postproc}.}
+  \item Post-processing of PhotoScan projects (\texttt{ps\_postproc}).
+    Includes object point filtering on low ray count and low
+    intersection angles. For self-calibration post-processing,
+    see the help text for \texttt{ps\_postproc}.
+  \item As of version 0.7.0.0, DBAT supports both lens distortion
+    models used by Photomodeler and Photoscan.
   \end{itemize}
 \item Photogrammetric calculations, including:
   \begin{itemize}
   \item Spatial resection (\texttt{resect}).
   \item Forward intersection (\texttt{forwintersect}).
+  \item Absolute orientation (\texttt{rigidbody}).
   \item Relative orientation based on the Nist{\'e}r 5-point algorithm
     \citep{Stewenius2006:Recent} will be added in the future.
   \end{itemize}
@@ -119,12 +122,13 @@ the demo functions, and reading the source code of each file directly.
 \subsubsection{Data}
 
 The toolbox contains several datasets, including datasets for the
-\citet{Borlin2016:External} paper.
+\citet{Borlin2016:External,Murtiyoso2017:Reprocessing} papers.
 \begin{itemize}
 \item PhotoModeler export files or PhotoScan projects.
 \item Images. To reduce the size of the distribution package, only low
-  resolution images are included in the package. The corresponding
-  high resolution images can be downloaded from
+  resolution images are included in the package\footnote{No images are
+    included in the StPierre data set.}. The corresponding high
+  resolution images can be downloaded from
   \url{http://www.cs.umu.se/~niclas/dbat_images}. Further instructions
   are found in \texttt{README.txt} files in the respective image
   directories.
@@ -148,8 +152,6 @@ included in the distribution. In summary:
   licensing details are also redistributed.
 \end{itemize}
 
-\newpage
-
 \section{Installation}
 \label{sec:install}
 \label{step:dbatInit}
@@ -157,8 +159,6 @@ included in the distribution. In summary:
 {\scriptsize
 \verbatiminput{../../INSTALL.txt}
 }
-
-\newpage
 
 \section{Usage}
 
@@ -389,7 +389,29 @@ observation weights incorrectly. The result is slightly different
 estimation results than in \citet{Borlin2016:External}. However, the
 conclusions remain valid.
 
+\paragraph{\sc Hamburg'17}
+The \texttt{stpierrebundledemo\_ps} function runs a self-calibration
+bundle on a Photoscan project included in the StPierre data set.
+
 \subsection{Using your own data}
+
+\subsubsection{Photoscan}
+
+DBAT can read native Photoscan Archive (\verb+.psz+) files. DBAT
+cannot read Photoscan Project (\verb+.psx+) files. If you have a
+\verb+.psx+ project, use the \verb+Save as...+ menu in
+Photoscan and save the project as a Photoscan Archive (\verb+.psz+).
+
+The \verb+ps_postproc+ function can be used to post-process a
+Photoscan project. \verb+loadplotpsz+ may be useful to visualize the
+project, as computed by Photoscan.
+
+\paragraph{Known limitations}
+
+DBAT cannot handle all Photoscan coordinate systems. If you get
+strange results, you may have to convert to Local Coordinates. \verb+loadplotpsz+ may be useful for debugging the input.
+
+\subsubsection{PhotoModeler}
 
 This section describes how to import you own data using PhotoModeler
 text export files. If you have another type of input file, you may be
@@ -398,7 +420,7 @@ wish to import, feel free to mail the file to the the toolbox authors
 and request an import function. Althought we cannot guarantee
 anything, we may adhere to the request, time permitting.
 
-\subsubsection{Export from PhotoModeler}
+\paragraph{Export from PhotoModeler}
 
 To import a PhotoModeler project into the toolbox, the following
 steps are valid in PhotoModeler Scanner 2012:
@@ -436,7 +458,7 @@ steps are valid in PhotoModeler Scanner 2012:
   \end{enumerate}
 \end{enumerate}
 
-\subsubsection{Loading into Matlab}
+\paragraph{Loading into Matlab}
 
 \begin{enumerate}
 \item In Matlab, run step~\ref{step:dbatInit} from
@@ -447,13 +469,17 @@ steps are valid in PhotoModeler Scanner 2012:
   been generated.
 \end{enumerate}
 
-\subsubsection{Using the bundle adjustment of DBAT}
+\paragraph{Using the bundle adjustment of DBAT}
 
 Modify either of the demo functions to match what you want to do. If
 you run into any problems, send us an email. The interesting results
 may either be in the plots or in the result file.
 
+\newpage
+
 \bibliography{ref}
+
+\newpage
 
 \appendix
 
@@ -478,8 +504,7 @@ PhotoModeler Scanner 2012:
 \subsection{Camera model}
 
 Currently, the only supported camera model is the omega-phi-kappa
-Euler angle camera model \citep[Ch.~2.1.2.3]{McGlone2004:Manual} with
-the \citet{Brown1971:Close-range} lens distortion model.
+Euler angle camera model \citep[Ch.~2.1.2.3]{McGlone2004:Manual}.
 
 \subsection{Result file example}
 \label{sec:resultFile}
