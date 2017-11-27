@@ -248,17 +248,19 @@ CC=nan(3,length(cameraIds));
 % Prior observations of camera centers
 priorCC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
-    T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
-    xforms(:,:,i)=T;
-    if 1
-        % TODO: Check this "mirroring"...
-        P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
-    else
-        warning('Untested non-mirroring');
-        P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+    if isfield(camera{i},'transform')
+        T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
+        xforms(:,:,i)=T;
+        if 1
+            % TODO: Check this "mirroring"...
+            P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
+        else
+            warning('Untested non-mirroring');
+            P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+        end
+        CC(:,i)=euclidean(null(P(:,:,i)));
     end
-    CC(:,i)=euclidean(null(P(:,:,i)));
-    
+       
     % Check if we have reference EO coordinates.
     if isfield(camera{i},'reference')
         attr=camera{i}.reference.Attributes;
