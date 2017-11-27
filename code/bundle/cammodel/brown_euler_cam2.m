@@ -115,8 +115,12 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         [ixpp,ixf,ixK1,ixP1]=createiocolumnindices(s.estIO,s.nK,s.nP);
         % No need to compute the partials w.r.t. pp or f.
         est=s.estIO;
-        est(ixpp)=0;
-        est(ixf)=0;
+        if nnz(ixpp)
+            est(ixpp)=0;
+        end
+        if nnz(ixf)
+            est(ixf)=0;
+        end
         % Potentially new column indices for lens distortion parameters.
         [~,~,ixK2,ixP2]=createiocolumnindices(est,s.nK,s.nP);
 
