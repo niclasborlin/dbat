@@ -34,6 +34,7 @@ function s=loadpsz(psFile,varargin)
 %   cameraIds - N-vector with camera ids,
 %   cameraLabels - N-cell vector with camera labels,
 %   cameraEnabled - logical N-vector indicating which cameras are enabled,
+%   cameraOriented - logical N-vector indicating which cameras are oriented,
 %   imNames   - N-vector with image file names,
 %   markPts   - struct with fields
 %               obj  - MMO-by-4 array with [imNo,id,x,y] for object points,
@@ -285,10 +286,14 @@ for i=1:length(cameraIds)
         end
     end
 end
+
+s.cameraOriented=all(isfinite(CC),1);
+
 s.raw.transforms=xforms;
 s.raw.P=P;
 s.raw.CC=CC;
 s.raw.priorCC=priorCC;
+
 
 s.local.P=s.raw.P;
 s.local.CC=s.raw.CC;
@@ -516,14 +521,21 @@ end
 s.raw.projections=projections;
 
 % Process all measured image coordinates.
-nPts=cellfun(@(x)length(x.vertex.id),projections);
+hasProj=~cellfun(@isempty,projections);
+if all(hasProj)
+    nPts=cellfun(@(x)length(x.vertex.id),projections);
+else
+    nPts=zeros(size(hasProj));
+    nPts(hasProj)=cellfun(@(x)length(x.vertex.id),projections(hasProj));
+end
 ptIx=cumsum([0,nPts]);
 objMarkPts=nan(sum(nPts),4);
 objKeyPtSize=nan(sum(nPts),1);
 
-for i=1:length(projections)
-    % Index for where to put the points.
+% Collect all measured points.
+for i=find(nPts)
     ni=nPts(i);
+    % Index for where to put the points.
     ix=ptIx(i)+1:ptIx(i+1);
     % Store object points with PS ids.
     objMarkPts(ix,:)=[repmat(s.cameraIds(i),ni,1),projections{i}.vertex.id,...
