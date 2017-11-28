@@ -372,11 +372,17 @@ fprintf(fid,[p,p,p,'Number of object pts: %d\n'],nnz(~s.isCtrl & ~s.isCheck));
 
 if any(s.isCtrl)
     CPrays=full(sum(s.vis(s.isCtrl,:),2));
+    n0=nnz(CPrays==0);
+    CPrays=CPrays(CPrays~=0);
     mn=min(CPrays);
     mx=max(CPrays);
     avg=mean(CPrays);
-    fprintf(fid,[p,p,p,'CP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
-
+    if n0>0
+        fprintf(fid,[p,p,p,'CP ray count: %dx0, %d-%d (%.1f avg)\n'],n0,mn,mx,avg);
+    else
+        fprintf(fid,[p,p,p,'CP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+    end
+    
     % Ray count histogram.
     cpRayHist=ihist(sum(s.vis(s.isCtrl,:),2)+1);
     i=find(cpRayHist);
@@ -520,7 +526,15 @@ fprintf(fid,[p,p,'Point Angles\n']);
 a=angles(s,'Computing angles')*180/pi;
 
 fprintf(fid,[p,p,p,'CP\n']);
-if any(s.isCtrl)
+
+% Ctrl pts with >0 rays
+cpIx=find(s.isCtrl);
+cpRays=sum(s.vis(cpIx,:),2);
+if any(cpRays==0)
+    fprintf(fid,[p,p,p,p,'Ignoring %d CP with 0 rays.\n'],nnz(cpRays==0));
+end
+% If we have any ctrl pts with rays.
+if any(cpIx(cpRays>0))
     aCP=a(s.isCtrl);
     idCP=s.OPid(s.isCtrl);
     labelCP=s.OPlabels(s.isCtrl);
@@ -538,7 +552,7 @@ if any(s.isCtrl)
     end
     fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (CP %d%s)\n'],mn,idCP(mni),lmn);
     fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (CP %d%s)\n'],mx,idCP(mxi),lmx);
-    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(aCP));
+    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],nanmean(aCP));
 else
     fprintf(fid,[p,p,p,p,'Minimum: -\n']);
     fprintf(fid,[p,p,p,p,'Maximum: -\n']);

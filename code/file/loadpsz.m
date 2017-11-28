@@ -307,8 +307,8 @@ invCameraIds=nan(max(camIds)+1,1);
 invCameraIds(camIds+1)=1:length(camIds);
 
 % Functions to convert between Photoscan camera id and DBAT camera number.
-PSCamId=@(id)camIds(id);
-DBATCamId=@(id)invCameraIds(id+1);
+PSCamId=@(dbatId)IDLookup(camIds,dbatId);
+DBATCamId=@(psCamId)IDInvLookup(camIds,psCamId);
 s.PSCamId=PSCamId;
 s.DBATCamId=DBATCamId;
 
@@ -728,8 +728,18 @@ givenParams=struct('aspect',false,'cxcy',false(1,2),'f',false,...
 % What camera parameters are listed as optimized?
 optimizedParams=givenParams;
 
+% Determine which sensor we want
+wantedSensorId=unique(sensorIds);
+sensors=chnk.sensors.sensor;
+if ~iscell(sensors)
+    sensors={sensors};
+end
+sensorId=cellfun(@(x)sscanf(x.Attributes.id,'%d'),sensors);
+keep=sensorId==wantedSensorId;
+sensor=sensors{keep};
+
 % Collect calibrated camera parameters.
-cal=chnk.sensors.sensor.calibration;
+cal=sensor.calibration;
 if iscell(cal)
     % If we have multiple cameras, prefer the adjusted.
     camTypes=cellfun(@(x)x.Attributes.class,cal,'uniformoutput',false);
@@ -786,7 +796,6 @@ K=[fx,skew,cx;0,fy,cy;0,0,1];
 
 s.K=K;
 
-sensor=chnk.sensors.sensor;
 imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
       sscanf(sensor.resolution.Attributes.height,'%d')];
 
@@ -1027,6 +1036,28 @@ for i=1:size(tbl,1)
         val=sscanf(settingsProps{ix}.Attributes.value,'%g');
     end
     defStd.(tbl{i,2})=val;
+end
+
+
+function j=IDLookup(tbl,i)
+% Do a forward id lookup in the vector TBL, i.e., return TBL(I). If I
+% is outside the vector, return NaN.
+
+j=nan(size(i));
+iOk=i>=1 & i<=length(tbl);
+j(iOk)=tbl(i(iOk));
+
+
+function i=IDInvLookup(tbl,j)
+% Do an inverse id lookup in the vector tbl, i.e., the position i
+% such that tbl(i)==j. If j is not found, return NaN.
+
+i=nan(size(j));
+for jj=1:length(j)
+    ii=find(tbl==j(jj),1);
+    if isscalar(ii),
+        i(jj)=ii;
+    end
 end
 
 

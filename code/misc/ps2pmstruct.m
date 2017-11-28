@@ -77,12 +77,21 @@ end
 % points are check points.
 ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
 checkPts=pos.ctrlPts(~pos.ctrlPtsEnabled,:);
+% Remove check points with <2 rays.
+ok=true(size(checkPts,1),1);
+for i=1:size(checkPts,1)
+    if nnz(s.markPts.ctrl(:,2)==checkPts(i,1))<2
+        ok(i)=false;
+    end
+end
+checkPts=checkPts(ok,:);
 
 % Track original ids and labels.
 rawCPids=s.PSCPid(ctrlPts(:,1));
 CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
 rawCCPids=s.PSCPid(checkPts(:,1));
 CCPlabels=pos.ctrlPtsLabels(~pos.ctrlPtsEnabled);
+CCPlabels=CCPlabels(ok);
 
 % Merge and sort ctrl and check pts.
 cPts=[ctrlPts;checkPts];
@@ -108,6 +117,12 @@ markPts=[s.markPts.ctrl,repmat(ctrlStd,size(s.markPts.ctrl,1),2);
 
 % Sort by image, then id.
 markPts=msort(markPts);
+
+% Remove any mark points not among 3D points.
+if ~isempty(markPts)
+    keep=ismember(markPts(:,2),objPts(:,1));
+    markPts=markPts(keep,:);
+end
 
 if ~isempty(markPts)
     % Convert image indices to zero-based for PhotoModeler compatibility.
