@@ -121,11 +121,11 @@ while ~isempty(varargin)
             asciiToo=true;
           otherwise
             error('%s: Bad argument %s',mfilename,varargin{1});
-        end
-    end
+		end
+	end
     varargin(1)=[];
 end
-            
+
 % Initialize waitbar to delay for 1s and update every 1s.
 DelayedWaitBar('init',1,1,'Loading Photoscan project file...');
 
@@ -472,7 +472,7 @@ s.global.ctrlPtsLabels=s.raw.ctrlPtsLabels;
 s.global.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 s.global.ctrlPts=s.raw.ctrlPts;
 if ~isempty(s.global.ctrlPts)
-    s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
+s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
 end
 % Transform ctrl pts from global to local and semilocal coordinate systems.
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
@@ -688,7 +688,6 @@ camId=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),camera);
 keep=~isnan(DBATCamId(camId));
 camId=camId(keep);
 camera=camera(keep);
-
 imNames=cell(1,length(camera));
 for i=1:length(camera)
     % Convert to DBAT camera number.
