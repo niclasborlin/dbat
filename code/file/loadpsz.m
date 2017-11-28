@@ -167,6 +167,11 @@ else
     end        
 end
 
+if isfield(chnk,'reference') && isfield(chnk.reference,'Text')
+    warning('%s: Non-local coordinate system. Bundle may fail: %s',...
+            mfilename,chnk.reference.Text);
+end
+    
 % Extract default standard deviations.
 s.defStd=getdefstd(chnk);
 
