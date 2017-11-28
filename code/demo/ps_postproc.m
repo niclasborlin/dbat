@@ -91,9 +91,6 @@ if psz.camera.isAdjusted
         psz.camera.optimizedParams.k(1:3);
     s0.estIO(7:8)=psz.camera.givenParams.p(1:2) | ...
         psz.camera.optimizedParams.p(1:2);
-    if any(s0.estIO(4:8))
-        warning(['Ki/Pi values will be estimated using the Photomodeler lens distortion model.']);
-    end
 end
 
 %TODO: Offset estimation.
