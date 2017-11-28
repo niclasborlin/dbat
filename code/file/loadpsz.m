@@ -84,13 +84,16 @@ function s=loadpsz(psFile,varargin)
 %               camAng      - std for camera angles [deg]
 %               scaleBars   - std for scale bar lengths [m]
 %
+%   By default, LOADPSZ loads enabled and oriented images. Use
+%   LOADPSZ(FILE,TRUE) to also load unoriented images.
+%
 %   By default, LOADPSZ unpacks the .PSZ file (a .ZIP archive) into a
 %   directory in TEMPDIR and deletes the unpacked files after loading.
-%   LOADPSZ(FILE,...,TRUE) instead unpacks the files into a local
-%   subdir and does not delete the unpacked files. If FILE is
-%   called PROJECT.PSZ, the subdir is called PROJECT_unpacked.
-%   Additionally, LOADPSZ(FILE,TRUE,TRUE) creates ascii versions of
-%   each .PLY file in a further 'ascii' subdir.
+%   LOADPSZ(FILE,...,'keep') instead unpacks the files into a local
+%   subdir and does not delete the unpacked files. If FILE is called
+%   PROJECT.PSZ, the subdir is called PROJECT_unpacked. Additionally,
+%   LOADPSZ(FILE,...,'ascii') creates ascii versions of each .PLY file
+%   in a further 'ascii' subdir.
 %
 %   If both an initial and an adjusted camera is available in the .psz
 %   file, the adjusted camera is loaded.
@@ -101,21 +104,28 @@ function s=loadpsz(psFile,varargin)
 chunkNo=1;
 unpackLocal=false;
 asciiToo=false;
+keepUnoriented=false;
 
-% Deal with numeric chunk number.
-if ~isempty(varargin) && isnumeric(varargin{1})
-    chunkNo=varargin{1};
+% Handle arguments.
+while ~isempty(varargin)
+    if islogical(varargin{1})
+        keepUnoriented=varargin{1};
+    elseif isnumeric(varargin{1})
+        checkNo=varargin{1};
+    else
+        switch varargin{1}
+          case 'keep'
+            unpackLocal=true;
+          case 'ascii'
+            unpackLocal=true;
+            asciiToo=true;
+          otherwise
+            error('%s: Bad argument %s',mfilename,varargin{1});
+        end
+    end
     varargin(1)=[];
 end
-
-if length(varargin)>=1
-    unpackLocal=varargin{1};
-end
-
-if length(varargin)>=2
-    asciiToo=varargin{2};
-end
-
+            
 % Initialize waitbar to delay for 1s and update every 1s.
 DelayedWaitBar('init',1,1,'Loading Photoscan project file...');
 
@@ -226,19 +236,6 @@ if length(unique(sensorIds(cameraEnabled)))>1
     error('Handling of cameras for multiple sensor ids not implemented yet');
 end
 
-s.cameraIds=cameraIds;
-s.cameraLabels=cameraLabels;
-s.cameraEnabled=cameraEnabled;
-
-invCameraIds=nan(max(cameraIds)+1,1);
-invCameraIds(cameraIds+1)=1:length(cameraIds);
-
-% Functions to convert between Photoscan camera id and DBAT camera number.
-PSCamId=@(id)cameraIds(id);
-DBATCamId=@(id)invCameraIds(id+1);
-s.PSCamId=PSCamId;
-s.DBATCamId=DBATCamId;
-
 % Extract transformation.
 % Transformations are from "image" coordinate system to local.
 xforms=nan(4,4,length(cameraIds));
@@ -287,12 +284,33 @@ for i=1:length(cameraIds)
     end
 end
 
-s.cameraOriented=all(isfinite(CC),1);
+cameraOriented=all(isfinite(CC),1);
 
-s.raw.transforms=xforms;
-s.raw.P=P;
-s.raw.CC=CC;
-s.raw.priorCC=priorCC;
+% Keep enabled cameras.
+keep=cameraEnabled;
+if ~keepUnoriented
+    keep=keep & cameraOriented;
+end
+
+s.cameraIds=cameraIds(keep);
+s.cameraLabels=cameraLabels(keep);
+s.cameraEnabled=cameraEnabled(keep);
+s.cameraOriented=cameraOriented(keep);
+
+camIds=cameraIds(keep);
+invCameraIds=nan(max(camIds)+1,1);
+invCameraIds(camIds+1)=1:length(camIds);
+
+% Functions to convert between Photoscan camera id and DBAT camera number.
+PSCamId=@(id)camIds(id);
+DBATCamId=@(id)invCameraIds(id+1);
+s.PSCamId=PSCamId;
+s.DBATCamId=DBATCamId;
+
+s.raw.transforms=xforms(:,:,keep);
+s.raw.P=P(:,:,keep);
+s.raw.CC=CC(:,keep);
+s.raw.priorCC=priorCC(:,keep);
 
 
 s.local.P=s.raw.P;
@@ -453,7 +471,9 @@ s.PSCPid=PSCPid;
 s.global.ctrlPtsLabels=s.raw.ctrlPtsLabels;
 s.global.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 s.global.ctrlPts=s.raw.ctrlPts;
-s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
+if ~isempty(s.global.ctrlPts)
+    s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
+end
 % Transform ctrl pts from global to local and semilocal coordinate systems.
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
 s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
@@ -503,10 +523,15 @@ else
 end
 if ~iscell(projs), projs={projs}; end
 
+% Remove any projections not to load.
+projCameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),projs);
+keepProjs=ismember(projCameraIds,s.cameraIds);
+projs=projs(keepProjs);
+projCameraIds=projCameraIds(keepProjs);
+
 % Projections will be sorted to match s.cameraId.
 projections=cell(size(projs));
 s.raw.paths.projections=cell(size(projs));
-projCameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),projs);
 
 for i=1:length(projections)
     % Where to store these measured points.
@@ -585,6 +610,18 @@ for i=1:length(marker)
         end
         % Extract camera ids for each measured point.
         camIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),location);
+        % Filter out markers in ignored images.
+        keep=~isnan(DBATCamId(camIds));
+        
+        if ~any(keep)
+            % No measurements in kept images.
+            continue;
+        end
+        
+        location=location(keep);
+        camIds=camIds(keep);
+
+        % Extract coordinates.
         x=cellfun(@(m)sscanf(m.Attributes.x,'%g'),location);
         y=cellfun(@(m)sscanf(m.Attributes.y,'%g'),location);
         pinned=false(size(location));
@@ -646,12 +683,16 @@ if ~iscell(camera)
     camera={camera};
 end
 
+% Filter out unwanted images.
+camId=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),camera);
+keep=~isnan(DBATCamId(camId));
+camId=camId(keep);
+camera=camera(keep);
+
 imNames=cell(1,length(camera));
 for i=1:length(camera)
-    % Extract camera id.
-    camId=sscanf(camera{i}.Attributes.camera_id,'%d');
     % Convert to DBAT camera number.
-    j=DBATCamId(camId);
+    j=DBATCamId(camId(i));
     % Guess  if image path is absolute or relative.
     p=camera{i}.photo.Attributes.path;
     if isempty(p)
