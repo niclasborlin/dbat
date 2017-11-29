@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.7.0.0 for Matlab (R), below called the Toolbox.
+# v0.7.0.1 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -101,6 +101,10 @@
 # Börlin and Grussenmeyer (2016). "External Verification of the Bundle
 #     Adjustment in Photogrammetric Software using the Damped Bundle
 #     Adjustment Toolbox", ISPRS Archives XLI-B5, p. 7-14.
+# Murtiyoso, Grussenmeyer, and Börlin (2017). "Reprocessing close
+#     range terrestrial and UAV photogrammetric projects with the DBAT
+#     toolbox for independent verification and quality control.",
+#     ISPRS Archives XLII-2/W8:171-177.
 #
 #
 # == CONTRIBUTIONS ==
