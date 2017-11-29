@@ -37,7 +37,7 @@
 # == NEWS ==
 # 
 # For a list of recent changes, consult the ChangeLog.txt file.
-#
+# Updates will also be posted on https://www.researchgate.net/project/DBAT-The-Damped-Bundle-Adjustment-Toolbox-in-Matlab.
 #
 # == USAGE ==
 #
