@@ -1,10 +1,10 @@
 function COP=bundle_result_file(s,e,f,COP)
 %BUNDLE_RESULT_FILE Generate result file of bundle run.
 %
-%   BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return files and
-%   F is a string, writes a text result file to the file F. The text
-%   result file contain information about the project, the status of the
-%   estimation process, and the quality of the result.
+%   BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return structs
+%   and F is a string, writes a text result file to the file F. The
+%   text result file contain information about the project, the status
+%   of the estimation process, and the quality of the result.
 %
 %   BUNDLE_RESULT_FILE(S,E,F,COP) supplies a pre-computed OP covariance
 %   matrix COP.
