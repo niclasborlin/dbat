@@ -6,7 +6,6 @@ function pts=loadcpt(fName)
 %   with fields
 %       id   - M-array with id numbers.
 %       name - M-cell array with names.
-%       vis  - M-by-N visibility array
 %       pos  - N-by-3 array of estimated positions
 %       std  - N-by-3 array with posteriori standard deviations
 %
