@@ -34,6 +34,7 @@ function s=loadpsz(psFile,varargin)
 %   cameraIds - N-vector with camera ids,
 %   cameraLabels - N-cell vector with camera labels,
 %   cameraEnabled - logical N-vector indicating which cameras are enabled,
+%   cameraOriented - logical N-vector indicating which cameras are oriented,
 %   imNames   - N-vector with image file names,
 %   markPts   - struct with fields
 %               obj  - MMO-by-4 array with [imNo,id,x,y] for object points,
@@ -83,13 +84,16 @@ function s=loadpsz(psFile,varargin)
 %               camAng      - std for camera angles [deg]
 %               scaleBars   - std for scale bar lengths [m]
 %
+%   By default, LOADPSZ loads enabled and oriented images. Use
+%   LOADPSZ(FILE,TRUE) to also load unoriented images.
+%
 %   By default, LOADPSZ unpacks the .PSZ file (a .ZIP archive) into a
 %   directory in TEMPDIR and deletes the unpacked files after loading.
-%   LOADPSZ(FILE,...,TRUE) instead unpacks the files into a local
-%   subdir and does not delete the unpacked files. If FILE is
-%   called PROJECT.PSZ, the subdir is called PROJECT_unpacked.
-%   Additionally, LOADPSZ(FILE,TRUE,TRUE) creates ascii versions of
-%   each .PLY file in a further 'ascii' subdir.
+%   LOADPSZ(FILE,...,'keep') instead unpacks the files into a local
+%   subdir and does not delete the unpacked files. If FILE is called
+%   PROJECT.PSZ, the subdir is called PROJECT_unpacked. Additionally,
+%   LOADPSZ(FILE,...,'ascii') creates ascii versions of each .PLY file
+%   in a further 'ascii' subdir.
 %
 %   If both an initial and an adjusted camera is available in the .psz
 %   file, the adjusted camera is loaded.
@@ -100,19 +104,26 @@ function s=loadpsz(psFile,varargin)
 chunkNo=1;
 unpackLocal=false;
 asciiToo=false;
+keepUnoriented=false;
 
-% Deal with numeric chunk number.
-if ~isempty(varargin) && isnumeric(varargin{1})
-    chunkNo=varargin{1};
+% Handle arguments.
+while ~isempty(varargin)
+    if islogical(varargin{1})
+        keepUnoriented=varargin{1};
+    elseif isnumeric(varargin{1})
+        checkNo=varargin{1};
+    else
+        switch varargin{1}
+          case 'keep'
+            unpackLocal=true;
+          case 'ascii'
+            unpackLocal=true;
+            asciiToo=true;
+          otherwise
+            error('%s: Bad argument %s',mfilename,varargin{1});
+		end
+	end
     varargin(1)=[];
-end
-
-if length(varargin)>=1
-    unpackLocal=varargin{1};
-end
-
-if length(varargin)>=2
-    asciiToo=varargin{2};
 end
 
 % Initialize waitbar to delay for 1s and update every 1s.
@@ -156,6 +167,11 @@ else
     end        
 end
 
+if isfield(chnk,'reference') && isfield(chnk.reference,'Text')
+    warning('%s: Non-local coordinate system. Bundle may fail: %s',...
+            mfilename,chnk.reference.Text);
+end
+    
 % Extract default standard deviations.
 s.defStd=getdefstd(chnk);
 
@@ -208,23 +224,22 @@ end
 cameraIds=cellfun(@(x)sscanf(x.Attributes.id,'%d'),camera);
 cameraLabels=cellfun(@(x)x.Attributes.label,camera,'uniformoutput',false);
 sensorIds=cellfun(@(x)sscanf(x.Attributes.sensor_id,'%d'),camera);
-cameraEnabled=cellfun(@(x)strcmp(x.Attributes.enabled,'true'),camera);
+cameraEnabled=false(size(camera));
+for i=1:length(cameraEnabled)
+    switch camera{i}.Attributes.enabled
+      case {'1','true'}
+        cameraEnabled(i)=true;
+      case {'0','false'}
+        cameraEnabled(i)=false;
+      otherwise
+        warning('Unknown enabled status %s for camera %d (%s)',...
+                camera{i}.Attributes.enabled,cameraIds(i),cameraLabels{i});
+    end
+end
+
 if length(unique(sensorIds(cameraEnabled)))>1
     error('Handling of cameras for multiple sensor ids not implemented yet');
 end
-
-s.cameraIds=cameraIds;
-s.cameraLabels=cameraLabels;
-s.cameraEnabled=cameraEnabled;
-
-invCameraIds=nan(max(cameraIds)+1,1);
-invCameraIds(cameraIds+1)=1:length(cameraIds);
-
-% Functions to convert between Photoscan camera id and DBAT camera number.
-PSCamId=@(id)cameraIds(id);
-DBATCamId=@(id)invCameraIds(id+1);
-s.PSCamId=PSCamId;
-s.DBATCamId=DBATCamId;
 
 % Extract transformation.
 % Transformations are from "image" coordinate system to local.
@@ -236,21 +251,26 @@ CC=nan(3,length(cameraIds));
 % Prior observations of camera centers
 priorCC=nan(3,length(cameraIds));
 for i=1:length(cameraIds)
-    T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
-    xforms(:,:,i)=T;
-    if 1
-        % TODO: Check this "mirroring"...
-        P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
-    else
-        warning('Untested non-mirroring');
-        P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+    if isfield(camera{i},'transform')
+        T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
+        xforms(:,:,i)=T;
+        if 1
+            % TODO: Check this "mirroring"...
+            P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
+        else
+            warning('Untested non-mirroring');
+            P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+        end
+        CC(:,i)=euclidean(null(P(:,:,i)));
     end
-    CC(:,i)=euclidean(null(P(:,:,i)));
-    
+       
     % Check if we have reference EO coordinates.
     if isfield(camera{i},'reference')
         attr=camera{i}.reference.Attributes;
-        if strcmp(attr.enabled,'true')
+        % TODO: Always load, recognize enable/disable status.
+        switch attr.enabled
+          case {'1','true'}
+            % Parse reference coordinates.
             if isfield(attr,'x')
                 priorCC(1,i)=sscanf(attr.x,'%g');
             end
@@ -260,13 +280,43 @@ for i=1:length(cameraIds)
             if isfield(attr,'z')
                 priorCC(3,i)=sscanf(attr.z,'%g');
             end
+          case {'0','false'}
+            % Do nothing. TODO: Load and recognize enable/disable status.
+          otherwise
+            warning('Unknown enabled status %s for reference for camera %d (%s)',...
+                    attr.enable,cameraIds(i),cameraLabels{i});
         end
     end
 end
-s.raw.transforms=xforms;
-s.raw.P=P;
-s.raw.CC=CC;
-s.raw.priorCC=priorCC;
+
+cameraOriented=all(isfinite(CC),1);
+
+% Keep enabled cameras.
+keep=cameraEnabled;
+if ~keepUnoriented
+    keep=keep & cameraOriented;
+end
+
+s.cameraIds=cameraIds(keep);
+s.cameraLabels=cameraLabels(keep);
+s.cameraEnabled=cameraEnabled(keep);
+s.cameraOriented=cameraOriented(keep);
+
+camIds=cameraIds(keep);
+invCameraIds=nan(max(camIds)+1,1);
+invCameraIds(camIds+1)=1:length(camIds);
+
+% Functions to convert between Photoscan camera id and DBAT camera number.
+PSCamId=@(dbatId)IDLookup(camIds,dbatId);
+DBATCamId=@(psCamId)IDInvLookup(camIds,psCamId);
+s.PSCamId=PSCamId;
+s.DBATCamId=DBATCamId;
+
+s.raw.transforms=xforms(:,:,keep);
+s.raw.P=P(:,:,keep);
+s.raw.CC=CC(:,keep);
+s.raw.priorCC=priorCC(:,keep);
+
 
 s.local.P=s.raw.P;
 s.local.CC=s.raw.CC;
@@ -389,7 +439,15 @@ for i=1:size(ctrlPts,1);
             sz=sscanf(m.reference.Attributes.sz,'%g');
         end
         if isfield(m.reference.Attributes,'enabled')
-            ctrlPtsEnabled(i)=strcmp(m.reference.Attributes.enabled,'true');
+            switch m.reference.Attributes.enabled
+              case {'1','true'}
+                ctrlPtsEnabled(i)=true;
+              case {'0','false'}
+                ctrlPtsEnabled(i)=false;
+              otherwise
+                warning('Unknown enabled status %s for ctrl pt %d (%s)',...
+                        m.reference.Attributes.enabled,i,ctrlPtsLabels{i});
+            end
         end
     end
     ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
@@ -418,7 +476,9 @@ s.PSCPid=PSCPid;
 s.global.ctrlPtsLabels=s.raw.ctrlPtsLabels;
 s.global.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 s.global.ctrlPts=s.raw.ctrlPts;
+if ~isempty(s.global.ctrlPts)
 s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
+end
 % Transform ctrl pts from global to local and semilocal coordinate systems.
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
 s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
@@ -468,10 +528,15 @@ else
 end
 if ~iscell(projs), projs={projs}; end
 
+% Remove any projections not to load.
+projCameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),projs);
+keepProjs=ismember(projCameraIds,s.cameraIds);
+projs=projs(keepProjs);
+projCameraIds=projCameraIds(keepProjs);
+
 % Projections will be sorted to match s.cameraId.
 projections=cell(size(projs));
 s.raw.paths.projections=cell(size(projs));
-projCameraIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),projs);
 
 for i=1:length(projections)
     % Where to store these measured points.
@@ -486,14 +551,21 @@ end
 s.raw.projections=projections;
 
 % Process all measured image coordinates.
-nPts=cellfun(@(x)length(x.vertex.id),projections);
+hasProj=~cellfun(@isempty,projections);
+if all(hasProj)
+    nPts=cellfun(@(x)length(x.vertex.id),projections);
+else
+    nPts=zeros(size(hasProj));
+    nPts(hasProj)=cellfun(@(x)length(x.vertex.id),projections(hasProj));
+end
 ptIx=cumsum([0,nPts]);
 objMarkPts=nan(sum(nPts),4);
 objKeyPtSize=nan(sum(nPts),1);
 
-for i=1:length(projections)
-    % Index for where to put the points.
+% Collect all measured points.
+for i=find(nPts)
     ni=nPts(i);
+    % Index for where to put the points.
     ix=ptIx(i)+1:ptIx(i+1);
     % Store object points with PS ids.
     objMarkPts(ix,:)=[repmat(s.cameraIds(i),ni,1),projections{i}.vertex.id,...
@@ -543,10 +615,36 @@ for i=1:length(marker)
         end
         % Extract camera ids for each measured point.
         camIds=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),location);
+        % Filter out markers in ignored images.
+        keep=~isnan(DBATCamId(camIds));
+        
+        if ~any(keep)
+            % No measurements in kept images.
+            continue;
+        end
+        
+        location=location(keep);
+        camIds=camIds(keep);
+
+        % Extract coordinates.
         x=cellfun(@(m)sscanf(m.Attributes.x,'%g'),location);
         y=cellfun(@(m)sscanf(m.Attributes.y,'%g'),location);
-        pinned=cellfun(@(m)isfield(m.Attributes,'pinned') && ...
-                       strcmp(m.Attributes.pinned,'true'),location);
+        pinned=false(size(location));
+        for j=1:length(pinned)
+            if isfield(location{j}.Attributes,'pinned')
+                switch location{j}.Attributes.pinned
+                  case {'1','true'}
+                    pinned(j)=true;
+                  case {'0','false'}
+                    pinned(j)=false;
+                  otherwise
+                    warning('Unknown pinned status %s for marker %d (%s) in camera %d (%s)',...
+                            location{j}.Attributes.pinned,markerId(i),...
+                            ctrlPtsLabels{i},camIds(j),...
+                            cameraLabels{camIds(j)==cameraIds});
+                end
+            end
+        end
         % What does 'pinned' mean? For now, just warn if a marker measurement
         % is not pinned.
         if ~all(pinned)
@@ -590,12 +688,15 @@ if ~iscell(camera)
     camera={camera};
 end
 
+% Filter out unwanted images.
+camId=cellfun(@(x)sscanf(x.Attributes.camera_id,'%d'),camera);
+keep=~isnan(DBATCamId(camId));
+camId=camId(keep);
+camera=camera(keep);
 imNames=cell(1,length(camera));
 for i=1:length(camera)
-    % Extract camera id.
-    camId=sscanf(camera{i}.Attributes.camera_id,'%d');
     % Convert to DBAT camera number.
-    j=DBATCamId(camId);
+    j=DBATCamId(camId(i));
     % Guess  if image path is absolute or relative.
     p=camera{i}.photo.Attributes.path;
     if isempty(p)
@@ -627,8 +728,18 @@ givenParams=struct('aspect',false,'cxcy',false(1,2),'f',false,...
 % What camera parameters are listed as optimized?
 optimizedParams=givenParams;
 
+% Determine which sensor we want
+wantedSensorId=unique(sensorIds);
+sensors=chnk.sensors.sensor;
+if ~iscell(sensors)
+    sensors={sensors};
+end
+sensorId=cellfun(@(x)sscanf(x.Attributes.id,'%d'),sensors);
+keep=sensorId==wantedSensorId;
+sensor=sensors{keep};
+
 % Collect calibrated camera parameters.
-cal=chnk.sensors.sensor.calibration;
+cal=sensor.calibration;
 if iscell(cal)
     % If we have multiple cameras, prefer the adjusted.
     camTypes=cellfun(@(x)x.Attributes.class,cal,'uniformoutput',false);
@@ -685,7 +796,6 @@ K=[fx,skew,cx;0,fy,cy;0,0,1];
 
 s.K=K;
 
-sensor=chnk.sensors.sensor;
 imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
       sscanf(sensor.resolution.Attributes.height,'%d')];
 
@@ -717,7 +827,15 @@ end
 fProp=sProps(strcmp(sensorProps,'fixed'));
 sensorFixed=true;
 if ~isempty(fProp)
-    sensorFixed=strcmp(fProp{1}.Attributes.value,'true');
+    switch fProp{1}.Attributes.value
+      case {'1','true'}
+        sensorFixed=true;
+      case {'0','false'}
+        sensorFixed=false;
+      otherwise
+        warning('Unknown sensorfixed property %s', ...
+                fProp{1}.Attributes.value);
+    end
 end
 
 if (fx*pixelWidth~=fy*pixelHeight)
@@ -733,8 +851,15 @@ s.camera.pixelSz=[pixelWidth,pixelHeight];
 s.camera.sensorFormat=s.camera.imSz.*s.camera.pixelSz;
 s.camera.focal=fx*s.camera.pixelSz(1);
 s.camera.pp=[cx,cy].*s.camera.pixelSz;
-s.camera.k=k; % TODO: Fix conversion to mm.
-s.camera.p=p; % TODO: Fix conversion to mm.
+% Deal with scaling of distortion coefficients
+s.camera.k=-k.*s.camera.focal.^(-2*(1:length(k)));
+pScaled=p;
+if ~isempty(pScaled)
+    pScaled(1:2)=pScaled(1:2)/s.camera.focal;
+    pScaled(2)=-pScaled(2);
+    pScaled(1:2)=pScaled([2,1]);
+end
+s.camera.p=pScaled;
 s.camera.isFixed=sensorFixed;
 s.camera.isAdjusted=isAdjusted;
 s.camera.nominalFocal=nominalFocal;
@@ -815,8 +940,6 @@ if isfield(chnk,'meta') && isfield(chnk.meta,'property')
             switch param
               case {'aspect','skew','b1','b2','k4','p3','p4'}
                 warnNotSupported{end+1}=param; %#ok<AGROW>
-              case {'k1','k2','k3','p1','p2'}
-                warnUsePhotoModeler{end+1}=param; %#ok<AGROW>
             end
         end
     end
@@ -828,12 +951,6 @@ s.camera.optimizedParams=optimizedParams;
 if ~isempty(warnNotSupported)
     warning(['The following camera calibration parameters are not ' ...
              'supported yet:',sprintf(' %s',warnNotSupported{:})]);
-end
-
-if ~isempty(warnUsePhotoModeler)
-    warning(['The following camera calibration parameters are supported, ' ...
-             'but currently the Photomodeler lens distortion model ' ...
-             'will be used:',sprintf(' %s',warnUsePhotoModeler{:})]);
 end
 
 % Delete unpacked files unless they should be kept.
@@ -919,6 +1036,28 @@ for i=1:size(tbl,1)
         val=sscanf(settingsProps{ix}.Attributes.value,'%g');
     end
     defStd.(tbl{i,2})=val;
+end
+
+
+function j=IDLookup(tbl,i)
+% Do a forward id lookup in the vector TBL, i.e., return TBL(I). If I
+% is outside the vector, return NaN.
+
+j=nan(size(i));
+iOk=i>=1 & i<=length(tbl);
+j(iOk)=tbl(i(iOk));
+
+
+function i=IDInvLookup(tbl,j)
+% Do an inverse id lookup in the vector tbl, i.e., the position i
+% such that tbl(i)==j. If j is not found, return NaN.
+
+i=nan(size(j));
+for jj=1:length(j)
+    ii=find(tbl==j(jj),1);
+    if isscalar(ii),
+        i(jj)=ii;
+    end
 end
 
 

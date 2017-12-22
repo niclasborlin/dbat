@@ -247,7 +247,7 @@ if cw
             ds=sparse(i+floor((j-1)/2)*2,j,v,2*n,2*n);
         else
             % Return in packed format.
-            ds=reshape(dgdw,2,2,n);
+            ds=reshape(full(dgdw),2,2,n);
         end
     end
 end

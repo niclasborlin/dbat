@@ -23,7 +23,25 @@ if nargin<2, useSemiLocal=false; end
 
 % Create a fake job header with default camera.
 imSz=s.camera.imSz(:);
-defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);zeros(5,1)];
+% Lens distortion parameters.
+k1k3=zeros(3,1);
+p1p2=zeros(2,1);
+
+if length(s.camera.k)<=length(k1k3)
+    k1k3(1:length(s.camera.k))=s.camera.k(:);
+else
+    k1k3(1:end)=s.camera.k(1:length(k1k3));
+    warning('Ignoring K4');
+end
+
+if length(s.camera.p)<=length(p1p2)
+    p1p2(1:length(s.camera.p))=s.camera.p(:);
+else
+    p1p2(1:end)=s.camera.p(1:length(p1p2));
+    warning('Ignoring P3, ...');
+end
+
+defCam=[s.camera.focal;s.camera.pp(:);s.camera.sensorFormat(:);k1k3;p1p2];
 
 job=struct('fileName',s.fileName,'title','Photoscan import','defCam',defCam,'defCamStd',zeros(size(defCam)),'imSz',imSz);
 
@@ -55,19 +73,41 @@ for i=1:length(images)
     images(i).label=s.cameraLabels{i};
 end
 
-% Copy enabled control points.
+% Enabled control points are control points. Disabled control
+% points are check points.
 ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
+checkPts=pos.ctrlPts(~pos.ctrlPtsEnabled,:);
+% Remove check points with <2 rays.
+ok=true(size(checkPts,1),1);
+for i=1:size(checkPts,1)
+    if nnz(s.markPts.ctrl(:,2)==checkPts(i,1))<2
+        ok(i)=false;
+    end
+end
+checkPts=checkPts(ok,:);
 
 % Track original ids and labels.
 rawCPids=s.PSCPid(ctrlPts(:,1));
 CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
+rawCCPids=s.PSCPid(checkPts(:,1));
+CCPlabels=pos.ctrlPtsLabels(~pos.ctrlPtsEnabled);
+CCPlabels=CCPlabels(ok);
+
+% Merge and sort ctrl and check pts.
+cPts=[ctrlPts;checkPts];
+rawCids=[rawCPids;rawCCPids];
+cLabels=cat(2,CPlabels,CCPlabels);
+[~,i]=sort(cPts(:,1));
+cPts=cPts(i,:);
+rawCids=rawCids(i);
+cLabels=cLabels(i);
 
 % Copy global object points. Set posterior uncertainty to unknown.
-objPts=[ctrlPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
+objPts=[cPts;[pos.objPts,nan(size(pos.objPts,1),3)]];
 
 % Track original object point IDs.
-rawOPids=[rawCPids;s.PSOPid(pos.objPts(:,1))];
-OPlabels=[CPlabels,repmat({''},1,size(pos.objPts,1))];
+rawOPids=[rawCids;s.PSOPid(pos.objPts(:,1))];
+OPlabels=[cLabels,repmat({''},1,size(pos.objPts,1))];
 
 % Copy mark points and set std.
 ctrlStd=s.defStd.projections;
@@ -78,14 +118,21 @@ markPts=[s.markPts.ctrl,repmat(ctrlStd,size(s.markPts.ctrl,1),2);
 % Sort by image, then id.
 markPts=msort(markPts);
 
+% Remove any mark points not among 3D points.
+if ~isempty(markPts)
+    keep=ismember(markPts(:,2),objPts(:,1));
+    markPts=markPts(keep,:);
+end
+
 if ~isempty(markPts)
     % Convert image indices to zero-based for PhotoModeler compatibility.
     markPts(:,1)=markPts(:,1)-1;
 end
 
 % Construct PM structure.
-prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'objPts',objPts,...
-             'rawOPids',rawOPids,'OPlabels',{OPlabels},'markPts',markPts);
+prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
+            'objPts',objPts,'rawOPids',rawOPids,'OPlabels',{OPlabels},...
+            'markPts',markPts);
 
 EO=[CC;ang;zeros(1,size(CC,2))];
 EOstd=nan(size(EO));

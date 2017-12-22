@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.6.2.2 for Matlab (R), below called the Toolbox.
+# v0.7.0.1 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -37,7 +37,7 @@
 # == NEWS ==
 # 
 # For a list of recent changes, consult the ChangeLog.txt file.
-#
+# Updates will also be posted on https://www.researchgate.net/project/DBAT-The-Damped-Bundle-Adjustment-Toolbox-in-Matlab.
 #
 # == USAGE ==
 #
@@ -101,6 +101,10 @@
 # Börlin and Grussenmeyer (2016). "External Verification of the Bundle
 #     Adjustment in Photogrammetric Software using the Damped Bundle
 #     Adjustment Toolbox", ISPRS Archives XLI-B5, p. 7-14.
+# Murtiyoso, Grussenmeyer, and Börlin (2017). "Reprocessing close
+#     range terrestrial and UAV photogrammetric projects with the DBAT
+#     toolbox for independent verification and quality control.",
+#     ISPRS Archives XLII-2/W8:171-177.
 #
 #
 # == CONTRIBUTIONS ==
@@ -110,11 +114,13 @@
 # * Arnaud Durand, ICube-SERTIT, University of Strasbourg.
 # * Jan Hieronymus, TU Berlin.
 # * Jean-Francois Hullo, EDF.
+# * Arnadi Murtiyoso, ICube, INSA Strasbourg.
 # * Kostas Naskou, University of Nottingham.
 #
 #
 # == TRADEMARKS ==
 #
 # Matlab is a registered trademark by The Mathworks, Inc., Natick MA,
-# USA.
-#
+# USA. PhotoModeler is a trademark owned by Eos System, Inc., Vancouver,
+# Canada. PhotoScan is a trademark owned by Agisoft LLC, St. Petersburg,
+# Russia. Other trademarks are owned by their respective owners.

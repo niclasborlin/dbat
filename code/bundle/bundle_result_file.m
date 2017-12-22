@@ -1,10 +1,10 @@
 function COP=bundle_result_file(s,e,f,COP)
 %BUNDLE_RESULT_FILE Generate result file of bundle run.
 %
-%   BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return files and
-%   F is a string, writes a text result file to the file F. The text
-%   result file contain information about the project, the status of the
-%   estimation process, and the quality of the result.
+%   BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return structs
+%   and F is a string, writes a text result file to the file F. The
+%   text result file contain information about the project, the status
+%   of the estimation process, and the quality of the result.
 %
 %   BUNDLE_RESULT_FILE(S,E,F,COP) supplies a pre-computed OP covariance
 %   matrix COP.
@@ -39,6 +39,8 @@ fprintf(fid,[p,p,'Project Problems: Not evaluated\n']);
 if nargin<4
     COP=bundle_cov(s,e,'COP');
 end
+OPstd=sqrt(reshape(full(diag(COP)),3,[]));
+
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
 % Compute p values for distortion parameters.
 [pk,pp]=test_distortion_params(s,e);
@@ -365,15 +367,22 @@ end
 
 fprintf(fid,[p,p,'Point Measurements\n']);
 fprintf(fid,[p,p,p,'Number of control pts: %d\n'],nnz(s.isCtrl));
-fprintf(fid,[p,p,p,'Number of object pts: %d\n'],nnz(~s.isCtrl));
+fprintf(fid,[p,p,p,'Number of check pts: %d\n'],nnz(s.isCheck));
+fprintf(fid,[p,p,p,'Number of object pts: %d\n'],nnz(~s.isCtrl & ~s.isCheck));
 
 if any(s.isCtrl)
     CPrays=full(sum(s.vis(s.isCtrl,:),2));
+    n0=nnz(CPrays==0);
+    CPrays=CPrays(CPrays~=0);
     mn=min(CPrays);
     mx=max(CPrays);
     avg=mean(CPrays);
-    fprintf(fid,[p,p,p,'CP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
-
+    if n0>0
+        fprintf(fid,[p,p,p,'CP ray count: %dx0, %d-%d (%.1f avg)\n'],n0,mn,mx,avg);
+    else
+        fprintf(fid,[p,p,p,'CP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+    end
+    
     % Ray count histogram.
     cpRayHist=ihist(sum(s.vis(s.isCtrl,:),2)+1);
     i=find(cpRayHist);
@@ -383,6 +392,24 @@ if any(s.isCtrl)
     end
 else
     fprintf(fid,[p,p,p,'CP ray count: -\n']);
+end
+
+if any(s.isCheck)
+    CCPrays=full(sum(s.vis(s.isCheck,:),2));
+    mn=min(CCPrays);
+    mx=max(CCPrays);
+    avg=mean(CCPrays);
+    fprintf(fid,[p,p,p,'CCP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
+
+    % Ray count histogram.
+    cpRayHist=ihist(sum(s.vis(s.isCheck,:),2)+1);
+    i=find(cpRayHist);
+    for j=1:length(i)
+        fprintf(fid,[p,p,p,p,'%d points with %d rays.\n'],...
+                full(cpRayHist(i(j))),i(j)-1);
+    end
+else
+    fprintf(fid,[p,p,p,'CCP ray count: -\n']);
 end
 
 if any(~s.isCtrl)
@@ -499,14 +526,59 @@ fprintf(fid,[p,p,'Point Angles\n']);
 a=angles(s,'Computing angles')*180/pi;
 
 fprintf(fid,[p,p,p,'CP\n']);
-if any(s.isCtrl)
+
+% Ctrl pts with >0 rays
+cpIx=find(s.isCtrl);
+cpRays=sum(s.vis(cpIx,:),2);
+if any(cpRays==0)
+    fprintf(fid,[p,p,p,p,'Ignoring %d CP with 0 rays.\n'],nnz(cpRays==0));
+end
+% If we have any ctrl pts with rays.
+if any(cpIx(cpRays>0))
     aCP=a(s.isCtrl);
     idCP=s.OPid(s.isCtrl);
+    labelCP=s.OPlabels(s.isCtrl);
     [mn,mni]=min(aCP);
     [mx,mxi]=max(aCP);
-    fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (CP %d)\n'],mn,idCP(mni));
-    fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (CP %d)\n'],mx,idCP(mxi));
-    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(aCP));
+    if isempty(labelCP{mni})
+        lmn='';
+    else
+        lmn=sprintf(', label %s',labelCP{mni});
+    end
+    if isempty(labelCP{mxi})
+        lmx='';
+    else
+        lmx=sprintf(', label %s',labelCP{mxi});
+    end
+    fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (CP %d%s)\n'],mn,idCP(mni),lmn);
+    fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (CP %d%s)\n'],mx,idCP(mxi),lmx);
+    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],nanmean(aCP));
+else
+    fprintf(fid,[p,p,p,p,'Minimum: -\n']);
+    fprintf(fid,[p,p,p,p,'Maximum: -\n']);
+    fprintf(fid,[p,p,p,p,'Average: -\n']);
+end
+
+fprintf(fid,[p,p,p,'CCP\n']);
+if any(s.isCheck)
+    aCCP=a(s.isCheck);
+    idCCP=s.OPid(s.isCheck);
+    labelCCP=s.OPlabels(s.isCheck);
+    [mn,mni]=min(aCCP);
+    [mx,mxi]=max(aCCP);
+    if isempty(labelCCP{mni})
+        lmn='';
+    else
+        lmn=sprintf(', label %s',labelCCP{mni});
+    end
+    if isempty(labelCCP{mxi})
+        lmx='';
+    else
+        lmx=sprintf(', label %s',labelCCP{mxi});
+    end
+    fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (CCP %d%s)\n'],mn,idCCP(mni),lmn);
+    fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (CCP %d%s)\n'],mx,idCCP(mxi),lmx);
+    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],mean(aCCP));
 else
     fprintf(fid,[p,p,p,p,'Minimum: -\n']);
     fprintf(fid,[p,p,p,p,'Maximum: -\n']);
@@ -514,9 +586,10 @@ else
 end
 
 fprintf(fid,[p,p,p,'OP\n']);
-if any(~s.isCtrl)
-    aOP=a(~s.isCtrl);
-    idOP=s.OPid(~s.isCtrl);
+isOP=~s.isCtrl & ~s.isCheck;
+if any(isOP)
+    aOP=a(isOP);
+    idOP=s.OPid(isOP);
     [mn,mni]=min(aOP);
     [mx,mxi]=max(aOP);
     fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (OP %d)\n'],mn,idOP(mni));
@@ -540,6 +613,112 @@ else
     fprintf(fid,[p,p,p,p,'Minimum: -\n']);
     fprintf(fid,[p,p,p,p,'Maximum: -\n']);
     fprintf(fid,[p,p,p,p,'Average: -\n']);
+end
+
+fprintf(fid,[p,p,'Ctrl measurements\n']);
+if any(s.isCtrl)
+    cIx=find(s.isCtrl);
+    CPid=s.OPid(cIx);
+
+    fprintf(fid,[p,p,p,'Prior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','label');
+    pos0=s.prior.OP(:,cIx);
+    std0=s.prior.OPstd(:,cIx);
+    for i=1:length(cIx)
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
+                     '%8.3g, %8.3g, %s\n'],CPid(i),pos0(:,i),std0(:,i),...
+                s.OPlabels{cIx(i)});
+    end
+    fprintf(fid,[p,p,p,'Posterior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','rays','label');
+    pos1=s.OP(:,cIx);
+    std1=OPstd(:,cIx);
+    for i=1:length(cIx)
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
+                     '%8.3g, %8.3g, %4d, %s\n'],CPid(i),pos1(:,i),std1(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
+    end
+    fprintf(fid,[p,p,p,'Diff (pos=abs diff, std=rel diff)\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','xy','xyz','stdx','stdy','stdz','rays','label');
+    posd=pos1-pos0;
+    stdd=((std1+eps)./(std0+eps)-1)*100;
+    for i=1:length(cIx)
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3f, %8.3f, %7.1f%%, ' ...
+        '%7.1f%%, %7.1f%%, %4d, %s\n'],CPid(i),posd(:,i),norm(posd(1:2,i)),...
+                norm(posd(:,i)),stdd(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
+    end
+
+    fprintf(fid,[p,p,p,'Ctrl point delta\n']);
+    diffNorm=sqrt(sum(posd.^2));
+    [mx,i]=max(diffNorm);
+    maxId=CPid(i);
+    maxLabel=s.OPlabels{cIx(i)};
+    fprintf(fid,[p,p,p,p,'Max: %.3f ou (%s, pt %d)\n'],mx,maxLabel,maxId);
+    fprintf(fid,[p,p,p,p,'Max X,Y,Z\n']);
+    for i=1:3
+        [mx,j]=max(abs(posd(i,:)));
+        fprintf(fid,[p,p,p,p,p,'%c: %.3f ou (%s, pt %d)\n'],'X'-1+i,mx,...
+                s.OPlabels{cIx(j)},CPid(j));
+    end
+    fprintf(fid,[p,p,p,p,'RMS: %.3f ou (from %d items)\n'],...
+            sqrt(mean(diffNorm.^2)),length(diffNorm));
+end
+
+fprintf(fid,[p,p,'Check measurements\n']);
+if any(s.isCheck)
+    cIx=find(s.isCheck);
+    CPid=s.OPid(cIx);
+
+    fprintf(fid,[p,p,p,'Prior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','label');
+    pos0=s.prior.CCP(:,cIx);
+    std0=s.prior.CCPstd(:,cIx);
+    for i=1:length(cIx)
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
+                     '%8.3g, %8.3g, %s\n'],CPid(i),pos0(:,i),std0(:,i),...
+                s.OPlabels{cIx(i)});
+    end
+    fprintf(fid,[p,p,p,'Posterior\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','stdx','stdy','stdz','rays','label');
+    pos1=s.OP(:,cIx);
+    std1=OPstd(:,cIx);
+    for i=1:length(cIx)
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
+                     '%8.3g, %8.3g, %4d, %s\n'],CPid(i),pos1(:,i),std1(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
+    end
+    fprintf(fid,[p,p,p,'Diff (pos=abs diff, std=rel diff)\n']);
+    fprintf(fid,[p,p,p,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %8s, %4s, %s\n'],...
+            'id','x','y','z','xy','xyz','stdx','stdy','stdz','rays','label');
+    posd=pos1-pos0;
+    stdd=((std1+eps)./(std0+eps)-1)*100;
+    for i=1:length(cIx)
+        fprintf(fid,[p,p,p,'%6d, %8.3f, %8.3f, %8.3f, %8.3f, %8.3f, %7.1f%%, ' ...
+        '%7.1f%%, %7.1f%%, %4d, %s\n'],CPid(i),posd(:,i),norm(posd(1:2,i)),...
+                norm(posd(:,i)),stdd(:,i),...
+                full(sum(s.vis(cIx(i),:))),s.OPlabels{cIx(i)});
+    end
+
+    fprintf(fid,[p,p,p,'Check point delta\n']);
+    diffNorm=sqrt(sum(posd.^2));
+    [mx,i]=max(diffNorm);
+    maxId=CPid(i);
+    maxLabel=s.OPlabels{cIx(i)};
+    fprintf(fid,[p,p,p,p,'Max: %.3f ou (%s, pt %d)\n'],mx,maxLabel,maxId);
+    fprintf(fid,[p,p,p,p,'Max X,Y,Z\n']);
+    for i=1:3
+        [mx,j]=max(abs(posd(i,:)));
+        fprintf(fid,[p,p,p,p,p,'%c: %.3f ou (%s, pt %d)\n'],'X'-1+i,mx,...
+                s.OPlabels{cIx(j)},CPid(j));
+    end
+    fprintf(fid,[p,p,p,p,'RMS: %.3f ou (from %d items)\n'],...
+            sqrt(mean(diffNorm.^2)),length(diffNorm));
 end
 
 fclose(fid);

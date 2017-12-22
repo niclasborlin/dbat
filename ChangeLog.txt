@@ -1,5 +1,52 @@
 Summary changelog file for release.
 
+Release 0.7.0.1, Nov 29, 2017.
+- Various bugfixes.
+- Now ignores disabled and unoriented cameras in .psz project files.
+- Added warning for non-local coordinate system in .psz file.
+
+Release 0.7.0.0, Nov 24, 2017.
+- Public release of version with StPierre test data and support for
+  Forward Brown (Computer Vision/Photoscan) lens distortion model.
+
+Release 0.6.5.5, Oct 16, 2017.
+- Bugfixes.
+- Added computation and printout of rigid-body transformation for
+  ctrl/check pts to detect mismatches between ctrl pt file and projects.
+- Added cleaned (no image info) StPierre .psz file.
+- Added ray count printout for ctrl/check pts in result file.
+- Fixed scaling of PS lens distortion coordinates.
+
+Release 0.6.5.0, Oct 12, 2017.
+- Added automatic support for check points. Ctrl pts found in the
+  control point file but not used as ctrl pts in the PM/PS project are
+  used as check points.
+- Added printout of prior and posterior ctrl pts estimates.
+
+Release 0.6.4.3, Oct 11, 2017.
+- Added loading of external ctrl pts for the StPierre data set.
+
+Release 0.6.4.2, Oct 6, 2017.
+- General performance increase, especially with self-calibration.
+
+Release 0.6.4.1, Oct 5, 2017.
+- Performance increase when a subset of K and P are used/self-calibrated.
+
+Release 0.6.4.0, Oct 4, 2017.
+- Added analytical Jacobian for Forward Brown.
+- Always print camera parameters, even without self-calibration.
+- Added self-calibration info to report file.
+
+Release 0.6.3.1, Oct 4, 2017.
+- Added execution time, host info, etc. to report file.
+- Added analytical Jacobian for Backward Brown.
+
+Release 0.6.3.0, Sep 28, 2017.
+- ID bugfixes.
+- Added printout of OP with smallest angles in report file.
+- First version to support both Forward and Backward Brown lens distortion.
+  Numerical Jacobians only.
+
 Release 0.6.2.2, May 5, 2017.
 - ps_postproc now runs self-calibration on all parameters that were either 
   part of an "adjusted" camera or marked as optimized.

@@ -6,7 +6,6 @@ function pts=loadcpt(fName)
 %   with fields
 %       id   - M-array with id numbers.
 %       name - M-cell array with names.
-%       vis  - M-by-N visibility array
 %       pos  - N-by-3 array of estimated positions
 %       std  - N-by-3 array with posteriori standard deviations
 %
@@ -35,7 +34,7 @@ while ~feof(fid)
         continue;
     end
     % Parse id.
-    [i,n,msg,ni]=sscanf(s,'%d,');
+    [i,n,msg,ni]=sscanf(s,'%d,',1);
     s=s(ni:end);
     % Parse name.
     [nn,n,msg,ni]=sscanf(s,'%s,');
