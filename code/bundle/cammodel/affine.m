@@ -13,6 +13,8 @@ function [Q,db,dc,dP,db2,dc2,dP2]=affine(b,c,P,cb,cc,cP)
 %   and P, respectively. Use AFFINE(B,C,P,cB,cC,cP), where cB, cC, and
 %   cP are logical, to individually control which Jacobians are
 %   computated.
+%
+%   If cP==-1, DP is returned in compact form.
 
 %   Undocumented 1: AFFINE('SELFTEST') will run a self-test of the
 %   analytical Jacobians.
@@ -68,7 +70,11 @@ if cc
 end
 
 if cP
-    dP=kron(speye(n),sparse(IB));
+    if cP>0
+        dP=kron(speye(n),sparse(IB));
+    else
+        dP=IB;
+    end
 end
 
     
