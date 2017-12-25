@@ -69,7 +69,9 @@ if ~(any(cIO(:)) || cp)
         
         % Apply any affine transformation
         if any(b)
-            q=affine(b,pp,q);
+            qa=affine(b,pp,q);
+        else
+            qa=q;
         end
         
         % Trim K and P
@@ -85,10 +87,10 @@ if ~(any(cIO(:)) || cp)
         end
             
         % Compute lens distortion for these points.
-        lens=browndist(q,pp,K,P);
+        lens=browndist(qa,pp,K,P);
         
         % Store.
-        ld(:,ix)=lens;
+        ld(:,ix)=lens+qa-q;
     end
 else
     % Which IO partial derivatives are requested?
@@ -161,19 +163,22 @@ else
         
         % IO jacobians.
         if any(cpp)
+            dldc=zeros(size(dAdc));
             % Transform dAdc
             for ii=1:size(dAdc,1)/2
-                dAdc((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdc((ii-1)*2+(1:2),:);
+                dldc((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdc((ii-1)*2+(1:2),:);
             end
-            dldpp=dldpp+dAdc;
+            dldpp=dldpp+dldc+dAdc;
             dIO(ixRow,ixpp(cpp,i))=dldpp(:,cpp);
         end
         if any(cb)
+            dldb=zeros(size(dAdb));
             % Transform dAdb
             for ii=1:size(dAdb,1)/2
-                dAdb((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdb((ii-1)*2+(1:2),:);
+                dldb((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdb((ii-1)*2+(1:2),:);
             end
-            dIO(ixRow,ixb(cb,i))=dAdb(:,cb);
+            dldb=dldb+dAdb;
+            dIO(ixRow,ixb(cb,i))=dldb(:,cb);
         end
         if any(cK)
             dIO(ixRow,tixK(cK,i))=dldK(:,cK);
@@ -184,7 +189,7 @@ else
         if cp && nnz(ix)>0
             % Put diagonal blocks in stack.
             for ii=1:size(dldq,3)
-                dldq(:,:,ii)=dldq(:,:,ii)*dAdq;
+                dldq(:,:,ii)=dldq(:,:,ii)*dAdq+dAdq-eye(2);
             end
             dpBlock(:,:,ix)=dldq;
         end
@@ -203,6 +208,7 @@ function selftest
 
 vec=@(x)x(:);
 
+rng('default');
 nCams=15;
 IO=rand(16,nCams);
 nK=3;
@@ -218,7 +224,7 @@ dp2=jacapprox(fp,p(:));
 mx=-inf;
 mx=max(mx,full(max(max(abs(dIO-dIO2)))));
 mx=max(mx,full(max(max(abs(dp-dp2)))));
-thres=1e-8;
+thres=1e-7;
 if mx<thres
     fprintf('%s selftest: Maximum diff = %g, max expected=%g, OK.\n',mfilename,mx,...
             thres);
