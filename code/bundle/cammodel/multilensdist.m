@@ -3,8 +3,9 @@ function [ld,dIO,dp]=multilensdist(p,IO,nK,nP,cams,cIO,cp)
 %
 %   MULTILENSDIST(P,IO,nK,nP) computes the lens distortion of the
 %   points in the 2-by-N array P using the internal orientation
-%   parameters in the 16-vector IO. nK and nP contain the radial and
-%   tangential distortion parameters, respectively, stored in IO.
+%   parameters in the 16-vector IO. The scalars nK and nP contain the
+%   number of radial and tangential distortion parameters,
+%   respectively, stored in IO.
 %
 %   MULTILENSDIST(P,IO,nK,nP,CAMS), where IO is 16-by-nCams, and
 %   CAMS is as N-vector, computes the lens distortion for points in
