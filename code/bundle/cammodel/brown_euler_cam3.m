@@ -60,28 +60,37 @@ if all(s.IOdistModel==1) % backward/photogrammetric
         % Combine residuals.
         f=[fObs(:);fPre(:)];
     else
-        % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                            s.vis,s.estIO,s.estEO,s.estOP);
+        [~,~,~,~,estAffine]=unpackio(s.estIO,s.nK,s.nP);
+        [~,~,~,~,hasAffine]=unpackio(IO,s.nK,s.nP);
+        if any(hasAffine(:)) || any(estAffine(:))
+            % Temporary fix - use numerical Jacobian.
+            f=brown_euler_cam3(x,s);
+            J=jacapprox(mfilename,x,1e-6,{s});
+            disp('Estimating affine parameters - using numerical Jacobian');
+        else
+            % Project into pinhole camera.
+            [xy,dIO1,dEO,dOP]=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP, ...
+                                                s.vis,s.estIO,s.estEO,s.estOP);
 	
-        % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
+            % Convert measured points from pixels to mm and flip y coordinate.
+            m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
 
-        % Compute lens distortion for all measured point.
-        [ld,dIO2]=multilensdistaffine(m,IO,s.nK,s.nP,s.ptCams,s.estIO);
+            % Compute lens distortion for all measured point.
+            [ld,dIO2]=multilensdist(m,IO,s.nK,s.nP,s.ptCams,s.estIO);
 
-        % Remove lens distortion from measured points.
-        ptCorr=m-ld;
+            % Remove lens distortion from measured points.
+            ptCorr=m-ld;
         
-        % Compute residual for image observations.
-        fObs=xy-ptCorr;
+            % Compute residual for image observations.
+            fObs=xy-ptCorr;
 
-        % Compute residual for prior observations.
-        [fPre,Jpre]=pm_preobs(x,s);
+            % Compute residual for prior observations.
+            [fPre,Jpre]=pm_preobs(x,s);
 
-        f=[fObs(:);fPre(:)];
+            f=[fObs(:);fPre(:)];
 	
-        J=[dIO1+dIO2,dEO,dOP;Jpre];
+            J=[dIO1+dIO2,dEO,dOP;Jpre];
+        end
     end
 elseif all(s.IOdistModel==-1) % forward/computer vision
     if (nargout<2)

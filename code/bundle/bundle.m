@@ -130,8 +130,8 @@ x0(ixEO)=s.EO(s.estEO);
 x0(ixOP)=s.OP(s.estOP);
 
 % Residual function.
-%resFun=@(x)brown_euler_cam3(x,s);
-resFun=@(x)both_brown_res(x,s);
+resFun=@(x)brown_euler_cam3(x,s);
+%resFun=@(x)both_brown_res(x,s);
 
 if veto
     vetoFun=@chirality;
@@ -194,7 +194,7 @@ end
 
 selfCal=any(s.estIO,1);
 
-strs={'Xp','Yp','f','K1','K2','K3','P1','P2'};
+strs={'Xp','Yp','f','K1','K2','K3','P1','P2','aspect','skew'};
 if all(selfCal)
     allParamCal=all(s.estIO,2);
     anyParamCal=any(s.estIO,2);
@@ -353,15 +353,15 @@ E.sigmas=sigmas;
 function [f,J,JJ]=both_brown_res(x,s)
 
 if nargout<2
-    f=brown_euler_cam(x,s);    
-    f2=brown_euler_cam3(x,s);
+    f=brown_euler_cam3(x,s);    
+    f2=brown_euler_cam(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);
     end
 elseif nargout==2
-    [f,J]=brown_euler_cam(x,s);    
-    [f2,J2]=brown_euler_cam3(x,s);
+    [f,J]=brown_euler_cam3(x,s);    
+    [f2,J2]=brown_euler_cam(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);
@@ -371,8 +371,8 @@ elseif nargout==2
         warning('Jacobian difference=%g',v);
     end
 else
-    [f,J,JJ]=brown_euler_cam(x,s);
-    [f2,J2,JJ2]=brown_euler_cam3(x,s);
+    [f,J,JJ]=brown_euler_cam3(x,s);
+    [f2,J2,JJ2]=brown_euler_cam(x,s);
     v=max(abs(f-f2));
     if v>1e-14
         warning('Residual difference=%g',v);

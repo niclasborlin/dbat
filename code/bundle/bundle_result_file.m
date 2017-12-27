@@ -43,8 +43,8 @@ OPstd=sqrt(reshape(full(diag(COP)),3,[]));
 
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
 % Compute p values for distortion parameters.
-[pk,pp]=test_distortion_params(s,e);
-n=any(iio)+any(ieo)+any(iop)+any([pk;pp]<sigThreshold);
+[pk,pp,pb]=test_distortion_params(s,e);
+n=any(iio)+any(ieo)+any(iop)+any([pk;pp;pb]<sigThreshold);
 
 fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
@@ -60,8 +60,8 @@ if any(iop)
     fprintf(fid,[p,p,p,'One or more of the object point coordinates ' ...
                  'has a high correlation.\n']);
 end
-if any([pk;pp]<sigThreshold)
-    fprintf(fid,[p,p,p,'One or more estimated lens distortion coefficients ' ...
+if any([pk;pp;pb]<sigThreshold)
+    fprintf(fid,[p,p,p,'One or more estimated lens and/or affine distortion coefficients ' ...
                  'failed significance test (see below).\n']);
 end    
 
@@ -134,7 +134,7 @@ fprintf(fid,[p,p,'Cameras:\n']);
 
 % Construct a string that indicates what camera parameters are estimated.
 selfCal=any(s.estIO,1);
-strs={'Xp','Yp','f','K1','K2','K3','P1','P2'};
+strs={'Xp','Yp','f','K1','K2','K3','P1','P2','aspect','skew'};
 if all(selfCal)
     allParamCal=all(s.estIO,2);
     anyParamCal=any(s.estIO,2);
@@ -163,17 +163,18 @@ head={'Focal Length','Xp - principal point x','Yp - principal point y',...
       'K1 - radial distortion 1','K2 - radial distortion 2',...
       'K3 - radial distortion 3',...
       'P1 - decentering distortion 1','P2 - decentering distortion 2',...
+      'B1 - aspect ratio','B2 - skew',...
       'Iw - image width','Ih - image height',...
       'Xr - X resolution','Yr - Y resolution',...
       'Pw - pixel width','Ph - pixel height'};
-names={'f','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2','Iw','Ih','Xr','Yr',...
+names={'f','Xp','Yp','Fw','Fh','K1','K2','K3','P1','P2','B1','B2','Iw','Ih','Xr','Yr',...
        'Pw','Ph'};
 % Spell out camera unit.
 unit0={'cu','cu','cu','cu','cu','cu^(-3)','cu^(-5)','cu^(-7)', ...
-       'cu^(-3)','cu^(-3)','px','px','px/cu','px/cu','cu', 'cu'};
+       'cu^(-3)','cu^(-3)','cu','cu','px','px','px/cu','px/cu','cu', 'cu'};
 unit=strrep(unit0,'cu',s.camUnit);
 % Original-to-presentation order mapping and inverse.
-rows=[3,1:2,11:12,4:6,7:8,13:14,15:16,17:18]; % Last two are not in real vector.
+rows=[3,1:2,11:12,4:6,7:8,9:10,13:14,15:16,17:18]; % Last two are not in real vector.
 irows=sparse(rows,1,1:length(rows));
 
 % Flip signs of rows 3,6-10.
@@ -191,6 +192,7 @@ for i=1:length(selfCal)
     if selfCal(i)
         sig(6:8)=pk;
         sig(9:10)=pp;
+        sig(11:12)=pb;
         % Add symmetric correlations.
         iio0=iio;
         iio=[iio;jio];

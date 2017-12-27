@@ -82,7 +82,7 @@ if ~(any(cIO(:)) || cp)
         end
         pn0=find(P,1,'last');
         pn0=max([pn0;0]);
-        if pn0<length(P)
+        if pn0<length(P) && pn0~=1
             P=P(1:pn0);
         end
             
@@ -146,7 +146,7 @@ else
         pn0=find(P,1,'last');
         cpn0=find(cP,1,'last');
         pn0=max([pn0;cpn0;0]);
-        if pn0<length(P)
+        if pn0<length(P) && pn0~=1
             P=P(1:pn0);
             cP=cP(1:pn0);
             tixP=tixP(1:pn0);
@@ -163,19 +163,27 @@ else
         
         % IO jacobians.
         if any(cpp)
-            dldc=zeros(size(dAdc));
-            % Transform dAdc
-            for ii=1:size(dAdc,1)/2
-                dldc((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdc((ii-1)*2+(1:2),:);
+            if issparse(dldq)
+                dldc=dldq*dAdc;
+            else
+                dldc=zeros(size(dAdc));
+                % Transform dAdc
+                for ii=1:size(dAdc,1)/2
+                    dldc((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdc((ii-1)*2+(1:2),:);
+                end
             end
-            dldpp=dldpp+dldc+dAdc;
+            dldpp=dldpp+dldc; %+dAdc;
             dIO(ixRow,ixpp(cpp,i))=dldpp(:,cpp);
         end
         if any(cb)
-            dldb=zeros(size(dAdb));
-            % Transform dAdb
-            for ii=1:size(dAdb,1)/2
-                dldb((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdb((ii-1)*2+(1:2),:);
+            if issparse(dldq)
+                dldb=dldq*dAdb;
+            else
+                dldb=zeros(size(dAdb));
+                % Transform dAdb
+                for ii=1:size(dAdb,1)/2
+                    dldb((ii-1)*2+(1:2),:)=dldq(:,:,ii)*dAdb((ii-1)*2+(1:2),:);
+                end
             end
             dldb=dldb+dAdb;
             dIO(ixRow,ixb(cb,i))=dldb(:,cb);

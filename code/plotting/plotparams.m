@@ -53,7 +53,7 @@ if plotIO && any(s.estIO(:))
 
     % Axes in this plot.
     axH=[];
-    ax=subplot(3,1,1,'parent',fig);
+    ax=subplot(4,1,1,'parent',fig);
     axH(end+1)=ax;
     cla(ax);
     cc=get(ax,'colororder');
@@ -92,8 +92,9 @@ if plotIO && any(s.estIO(:))
     title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
     set(ax,'xtick',0:size(e.trace,2)-1);
     set(ax,'xlim',[0,size(e.trace,2)-1]);
+    set(ax,'xticklabel',[]);
     
-    ax=subplot(3,1,2,'parent',fig);
+    ax=subplot(4,1,2,'parent',fig);
     axH(end+1)=ax;
     % Legend strings.
     lgs={};
@@ -130,8 +131,10 @@ if plotIO && any(s.estIO(:))
     end
     title(ax,'Radial distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
+    set(ax,'xlim',[0,size(e.trace,2)-1]);
+    set(ax,'xticklabel',[]);
     
-    ax=subplot(3,1,3,'parent',fig);
+    ax=subplot(4,1,3,'parent',fig);
     axH(end+1)=ax;
     % Legend strings.
     lgs={};
@@ -167,6 +170,46 @@ if plotIO && any(s.estIO(:))
     end
     title(ax,'Tangential distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
+    set(ax,'xlim',[0,size(e.trace,2)-1]);
+    set(ax,'xticklabel',[]);
+
+    ax=subplot(4,1,4,'parent',fig);
+    axH(end+1)=ax;
+    % Legend strings.
+    lgs={};
+    % For each camera.
+    for ci=1:size(s.IO,2)
+        % Create array with B1-B2 parameters.
+        B=repmat(s.IO(9:10,ci),1,size(e.trace,2));
+        % Update with estimated values.
+        ixp=ixPos(9:10,ci);
+        B(s.estIO(9:10,ci),:)=e.trace(ixp(s.estIO(9:10,ci)),:);
+        avgScale=floor(median(log10(abs(B)),2));
+        % Use scaling of 1 for all-zero values.
+        avgScale(avgScale==-inf)=0;
+        v=repmat(10.^(-avgScale),1,size(B,2)).*B;
+        for i=1:size(B,1)
+            if avgScale(i)==0
+                prefix='';
+            else
+                prefix=sprintf('10^{%d}',-avgScale(i));
+            end
+            if size(s.IO,2)==1
+                color=cc(i,:);
+                lgs{end+1}=sprintf('%sB%d',prefix,i);
+            else
+                color=cc(rem(ci-1,size(cc,1))+1,:);
+                lgs{end+1}=sprintf('%sB%d-%d',prefix,i,ci);
+            end
+
+            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
+                 'marker','x','color',color);
+        end
+        legend(lgs,'location','NorthEastOutside');
+    end
+    title(ax,'Affine distortion');
+    set(ax,'xtick',0:size(e.trace,2)-1);
+    set(ax,'xlim',[0,size(e.trace,2)-1]);
     xlabel(ax,'Iteration count')
 
     % Scale axes to have same width.
