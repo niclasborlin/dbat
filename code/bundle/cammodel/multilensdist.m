@@ -75,7 +75,7 @@ if ~(any(cIO(:)) || cp)
         end
         pn0=find(P,1,'last');
         pn0=max([pn0;0]);
-        if pn0<length(P)
+        if pn0<length(P) && pn0~=1
             P=P(1:pn0);
         end
             
@@ -136,7 +136,7 @@ else
         pn0=find(P,1,'last');
         cpn0=find(cP,1,'last');
         pn0=max([pn0;cpn0;0]);
-        if pn0<length(P)
+        if pn0<length(P) && pn0~=1
             P=P(1:pn0);
             cP=cP(1:pn0);
             tixP=tixP(1:pn0);
@@ -180,6 +180,7 @@ function selftest
 
 vec=@(x)x(:);
 
+rng('default');
 nCams=35;
 IO=rand(16,nCams);
 nK=3;
