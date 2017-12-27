@@ -5,7 +5,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 27-Dec-2017 14:46:47
+      Last Bundle Run: 27-Dec-2017 14:47:13
       DBAT version:    0.7.0.2 (2017-12-27)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
@@ -29,16 +29,16 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 3
-         First error:          121.326
+         First error:          93.8342
          Last error:           48.1954
-         Execution time (s):   0.2
+         Execution time (s):   0.21
       Lens distortion models:
-         Backward (Photogrammetry)
+         Forward (Computer Vision)
       Cameras:
          Calibration: no
          Camera1
             Lens distortion model:
-               Backward (Photogrammetry)
+               Forward (Computer Vision)
             Focal Length:
                Value: 123.939 mm
             Xp - principal point x:
@@ -115,7 +115,7 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: 0.0811 ou
                   Correlations over 95%: Phi:99.8%.
                Yc:
-                  Value:     112626.161293 ou
+                  Value:     112626.161294 ou
                   Deviation: 0.151 ou
                   Correlations over 95%: Omega:-100.0%.
                Zc:
@@ -180,7 +180,7 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -92.543776 deg
                   Deviation: 0.000633 deg
                Xc:
-                  Value:     1000481.404201 ou
+                  Value:     1000481.404202 ou
                   Deviation: 0.144 ou
                   Correlations over 95%: Phi:99.9%.
                Yc:

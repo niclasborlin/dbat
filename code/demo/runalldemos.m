@@ -1,3 +1,4 @@
+pause off
 loadplotdemo
 romabundledemo
 camcaldemo
