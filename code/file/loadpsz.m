@@ -168,8 +168,13 @@ else
 end
 
 if isfield(chnk,'reference') && isfield(chnk.reference,'Text')
-    warning('%s: Non-local coordinate system. Bundle may fail: %s',...
-            mfilename,chnk.reference.Text);
+    % Warn unless the coordinate system is local.
+    prefix='local_cs[';
+    isLocal=strncmpi(chnk.reference.Text,prefix,length(prefix));
+    if ~isLocal
+        warning('%s: Non-local coordinate system. Bundle may fail: %s',...
+                mfilename,chnk.reference.Text);
+    end
 end
     
 % Extract default standard deviations.
