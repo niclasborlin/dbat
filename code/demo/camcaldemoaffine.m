@@ -1,37 +1,24 @@
-function [rr,s0,prob]=camcaldemo(damping,doPause)
-%CAMCALDEMO Camera calibration demo for DBAT.
+function [rr,s0,prob]=camcaldemoaffine(estAspect,estSkew)
+%CAMCALDEMOAFFINE Camera calibration demo for DBAT with affine parameters.
 %
-%   CAMCALDEMO runs a camera calibration bundle on a PhotoModeler
-%   export file. The project is a 21-image data set of the single 2D
-%   Photomodeler calibration sheet. The Camera is a Olympus Camedia
-%   C4040Z with a 7.25-by-5.44 mm sensor size. As a starting
-%   approximation, the EXIF focal length value of 7.3mm is used.
+%   CAMCALDEMOAFFINE is a modification of CAMCALDEMO to run the camera
+%   calibration including estimation of the pixel aspect ratio. For
+%   simpler comparisons, the sensor height is set to 5.4 mm,
+%   corresponding to a sensor width of 7.2 mm at unit pixel aspect
+%   ratio. All lens distortion parameters except K3 are also
+%   estimated.
 %
-%   CAMCALDEMO uses the Gauss-Newton-Armijo damping scheme of [1]
-%   by default. Use CAMCALDEMO(DAMPING), where DAMPING is one of
-%   - 'none' or 'gm' for classical Gauss-Markov iterations,
-%   - 'gna'          Gauss-Newton with Armijo linesearch,
-%   - 'lm'           Levenberg-Marquardt, or
-%   - 'lmp'          Levenberg-Marquardt with Powell dogleg.
+%   CAMCALDEMOAFFINE(false) runs the same estimation with the pixel
+%   aspect ratio fixed to unity.
 %
-%   Use CAMCALDEMO(DAMPING,'off') to visualize the iteration
-%   sequence without waiting for a keypress.
+%   CAMCALDEMOAFFINE(true,true) also estimates the skew.
 %
-%   References:
-%       [1] Börlin and Grussenmeyer (2013). "Bundle adjustment with
-%       and without damping", Photogrammetric Record,
-%       vol. 28(144):396-415.
+%   See also: CAMCALDEMO.
 
-if nargin<1, damping='gna'; end
+if nargin<1, estAspect=true; end
+if nargin<2, estSkew=false; end
 
-if nargin<2, doPause='on'; end
-
-switch damping
-  case {'none','gm','gna','lm','lmp'}
-    % Do nothing.
-  otherwise
-    error('Bad damping');
-end
+damping='gna';
 
 % Extract name of current directory.
 curDir=fileparts(mfilename('fullpath'));
@@ -42,7 +29,16 @@ inputDir=fullfile(curDir,'data','dbat');
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','camcal-pmexport.txt');
 % Report file name.
-reportFile=fullfile(inputDir,'dbatexports','camcal-dbatreport.txt');;
+if estAspect
+    reportFile=fullfile(inputDir,'dbatexports',...
+                        'camcal-aspect-free-dbatreport.txt');
+else
+    reportFile=fullfile(inputDir,'dbatexports',...
+                        'camcal-aspect-fixed-dbatreport.txt');
+end
+if estSkew
+    reportFile=strrep(reportFile,'-dbatreport','-skew-free-dbatreport');
+end
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
@@ -83,10 +79,16 @@ s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
 s0.useIOobs=false(size(s0.IO));
 % Estimate px,py,c,K1-K3,P1-P2.
 s0.estIO=false(size(s0.IO));
+% Estimate f,px,py
 s0.estIO(1:3,:)=true;
+% Estimate K1,K2
 s0.estIO(3+(1:2),:)=true;
+% Estimate P1,P2
 s0.estIO(6+(1:2),:)=true;
-s0.estIO(8+1,:)=true;
+% Estimate aspect if asked for.
+s0.estIO(8+1,:)=estAspect;
+% Estimate skew if asked for.
+s0.estIO(8+2,:)=estSkew;
 
 % Don't use any prior EO paramters.
 s0.useEOobs=false(size(s0.EO));
@@ -144,7 +146,7 @@ fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         E.damping.name,double(fig));
 h=plotnetwork(result,E,'title',...
               ['Damping: ',damping,'. Iteration %d of %d'], ...
-              'axes',fig,'pause',doPause,'camsize',0.1); 
+              'axes',fig,'camsize',0.1); 
 
 if nargout>0
     rr=result;
