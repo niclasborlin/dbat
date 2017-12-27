@@ -245,4 +245,4 @@ end
 % No acceptable reduction found. Return alpha=0.
 alpha=0;
 xNew=x;
-rNew=f0;
+rNew=r0;
