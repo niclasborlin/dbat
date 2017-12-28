@@ -144,6 +144,11 @@ function s=prob2dbatstruct(prob,individualCameras)
 
 if nargin<2, individualCameras=false; end
 
+if ~isstruct(prob)
+    error(['PROB2DBATSTRUCT: parameter PROB is not a structure. Was ' ...
+           'loading it OK?']);
+end
+
 % Determine number of each type of object.
 if individualCameras
     nCams=length(prob.images);

@@ -46,6 +46,10 @@ reportFile=fullfile(inputDir,'dbatexports','camcal-dbatreport.txt');;
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
+if ~isstruct(prob)
+    error('Loading error.');
+end
+
 probRaw=prob;
 if any(isnan(cat(2,prob.images.imSz)))
     error('Image sizes unknown!');
