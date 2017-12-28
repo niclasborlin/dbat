@@ -46,7 +46,7 @@
 # the doc/manual directory.
 #
 #
-# == BUG REPORTS ==
+# == BUG REPORTS and/or FEATURE REQUESTS ==
 #
 # Instruction on how to submit bug reports and feature requests can be
 # found in the file BUGREPORTS.txt
