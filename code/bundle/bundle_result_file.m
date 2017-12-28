@@ -554,7 +554,7 @@ if any(cpIx(cpRays>0))
     end
     fprintf(fid,[p,p,p,p,'Minimum: %.1f degrees (CP %d%s)\n'],mn,idCP(mni),lmn);
     fprintf(fid,[p,p,p,p,'Maximum: %.1f degrees (CP %d%s)\n'],mx,idCP(mxi),lmx);
-    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],nanmean(aCP));
+    fprintf(fid,[p,p,p,p,'Average: %.1f degrees\n'],NaNMean(aCP));
 else
     fprintf(fid,[p,p,p,p,'Minimum: -\n']);
     fprintf(fid,[p,p,p,p,'Maximum: -\n']);
@@ -740,4 +740,15 @@ for i=1:size(values,1)
     if ~iscell(val), val={val}; end
     fprintf(fid,[prefix,'%s%s',values{i,2},'\n'],values{i,1},...
             repmat(' ',1,pad(i)),val{:});
+end
+
+
+function m=NaNMean(v)
+% Compute mean of non-nan values of v.
+
+i=isnan(v);
+if nnz(~i)==0
+    m=nan;
+else
+    m=mean(v(~i));
 end

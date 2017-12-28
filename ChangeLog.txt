@@ -1,5 +1,19 @@
 Summary changelog file for release.
 
+Release 0.7.0.4, Dec 28, 2017.
+- Bugfixes and updated instructions.
+- Removed unintended reliance on the Statistical Toolbox (nanmean function).
+- Improved error messages and testing of loading problems for
+  Photomodeler export files reported by some users.
+- Added a loadpm bugfix that showed up in early (pre-R2015b) Matlab
+  versions only. Bugfix provided by Fabio Menna.
+- Updated INSTALL.txt with instructions for git cloning and DBAT updates.
+- Added file BUGREPORTS with instructions how to submit a bug report
+  and/or feature request.
+
+Release 0.7.0.3, Dec 27, 2017.
+- Internal release for testing only.
+
 Release 0.7.0.2, Dec 27, 2017.
 - Bugfixes, including removing spurious incorrect warning for
   non-local coordinate system in .psz file.

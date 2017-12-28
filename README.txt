@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.7.0.2 for Matlab (R), below called the Toolbox.
+# v0.7.0.4 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -13,16 +13,32 @@
 #
 # == INSTALLATION ==
 #
+# You can either install DBAT by downloading the source code or (if
+# you use a git client) by cloning the repository.
+#
+# === Download ===
+#
 # 1) Download the package file dbat-x.y.z.zip or dbat-x.y.z.tar.gz
 #    from https://github.com/niclasborlin/dbat/
 #
 # 2) Unpack the file into a directory, e.g. c:\dbat or ~/dbat.
-# 
-# 3) Start Matlab. Inside Matlab, do the following initialization:
-# 3.1) cd c:\dbat % (change to where you unpacked the files)
-# 3.2) dbatSetup  % will set the necessary paths, etc.
 #
-# 4) To test the demos, do 'help dbatdemos' or consult the manual.
+# === Clone ===
+#
+# At the unix/windows command line, write:
+#
+#   git clone https://github.com/niclasborlin/dbat.git
+#
+# to clone the repository into the directory 'dbat'. Use
+#
+#   git clone https://github.com/niclasborlin/dbat.git <dir-name>
+#
+# to clone the repository to another directory.
+#
+# If you use a graphical git client, e.g., tortoisegit
+# (https://tortoisegit.org), select Git Clone... and enter
+# https://github.com/niclasborlin/dbat.git or
+# git@github.com:niclasborlin/dbat.git as the URL.
 #
 #
 # ==== Download high-resolution images ====
@@ -34,15 +50,54 @@
 # image directories.
 #
 #
+# == TESTING THE INSTALLATION ==
+#
+# 1) Start Matlab. Inside Matlab, do the following initialization:
+# 1.1) cd c:\dbat % (change to where you unpacked the files)
+# 1.2) dbatSetup  % will set the necessary paths, etc.
+#
+# 2) To test the demos, do 'help dbatdemos' or consult the manual.
+#
+#
+# == UPDATING THE INSTALLATION==
+#
+# === Git ===
+#
+# If you cloned the archive, updating to the latest release is a
+# simple as (replace ~/dbat and c:\dbat with where you cloned the
+# repository):
+#
+#   cd ~/dbat
+#   git pull
+#
+# at the command line. In TortoiseGit, right-click on the folder
+# c:\dbat, select Git Sync... followed by Pull.
+#
+# === Download ===
+#
+# If you downloaded the code, repeat the download process under
+# INSTALLATION. Most of the time it should be ok to unzip the new
+# version on top of the old. However, we suggest you unzip the new
+# version into a new directory, e.g. dbat-x-y-z-w, where x-y-z-w is
+# the version number.
+#
+#
 # == NEWS ==
 # 
 # For a list of recent changes, consult the ChangeLog.txt file.
 # Updates will also be posted on https://www.researchgate.net/project/DBAT-The-Damped-Bundle-Adjustment-Toolbox-in-Matlab.
 #
+#
 # == USAGE ==
 #
 # For examples of usage, see the usage section of the manual found in
 # the doc/manual directory.
+#
+#
+# == BUG REPORTS and/or FEATURE REQUESTS ==
+#
+# Instruction on how to submit bug reports and feature requests can be
+# found in the file BUGREPORTS.txt
 #
 #
 # == LICENSE ==
@@ -111,11 +166,12 @@
 #
 # The toolbox includes contributions from the MathWorks File Exchange
 # and the following people:
-# * Arnaud Durand, ICube-SERTIT, University of Strasbourg.
-# * Jan Hieronymus, TU Berlin.
-# * Jean-Francois Hullo, EDF.
-# * Arnadi Murtiyoso, ICube, INSA Strasbourg.
-# * Kostas Naskou, University of Nottingham.
+# * Arnaud Durand, ICube-SERTIT, University of Strasbourg, France.
+# * Jan Hieronymus, TU Berlin, Germany.
+# * Jean-Francois Hullo, EDF, France.
+# * Fabio Menna, Fondazione Bruno Kessler, Trento, Italy.
+# * Arnadi Murtiyoso, ICube, INSA Strasbourg, France.
+# * Kostas Naskou, University of Nottingham, UK.
 #
 #
 # == TRADEMARKS ==
