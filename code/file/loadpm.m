@@ -132,8 +132,8 @@ images=struct('imName',cell(0,1),... % Image file names.
                                 ...  % [c,xp,yp,xs,ys,K1,K2,K3,P1,P2]
               'innerStd',zeros(0,10),...  % ...and standard deviations.
               'imSz',zeros(0,2),...    % Image size [w,h].
-              'id',nan, ... % image id
-              'label',cell(0,1)); % Image label
+              'label',cell(0,1),... % image id
+              'id',nan); % Image label
 % Scan the file line by line.
 while ~feof(fid)
     s=fgetl(fid);
