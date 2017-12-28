@@ -39,10 +39,17 @@
 # For a list of recent changes, consult the ChangeLog.txt file.
 # Updates will also be posted on https://www.researchgate.net/project/DBAT-The-Damped-Bundle-Adjustment-Toolbox-in-Matlab.
 #
+#
 # == USAGE ==
 #
 # For examples of usage, see the usage section of the manual found in
 # the doc/manual directory.
+#
+#
+# == BUG REPORTS ==
+#
+# Instruction on how to submit bug reports and feature requests can be
+# found in the file BUGREPORTS.txt
 #
 #
 # == LICENSE ==
@@ -111,11 +118,12 @@
 #
 # The toolbox includes contributions from the MathWorks File Exchange
 # and the following people:
-# * Arnaud Durand, ICube-SERTIT, University of Strasbourg.
-# * Jan Hieronymus, TU Berlin.
-# * Jean-Francois Hullo, EDF.
-# * Arnadi Murtiyoso, ICube, INSA Strasbourg.
-# * Kostas Naskou, University of Nottingham.
+# * Arnaud Durand, ICube-SERTIT, University of Strasbourg, France.
+# * Jan Hieronymus, TU Berlin, Germany.
+# * Jean-Francois Hullo, EDF, France.
+# * Fabio Menna, Fondazione Bruno Kessler, Trento, Italy.
+# * Arnadi Murtiyoso, ICube, INSA Strasbourg, France.
+# * Kostas Naskou, University of Nottingham, UK.
 #
 #
 # == TRADEMARKS ==
