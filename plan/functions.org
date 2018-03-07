@@ -1,19 +1,19 @@
 * Function list
-| Function              | Name        | Parameters                          |
-|-----------------------+-------------+-------------------------------------|
-| Translate 3D          | xlat3       | point p, point c                    |
-| Translate 2D          | xlat2       | point p, point c                    |
-| Scale 3D              | scale3      | scale factor c, point p             |
-| Scale 2D              | scale2      | scale factor c, point p             |
-| Linear transform 3D   | lin3        | 3x3 matrix, point p                 |
-| Linear transform 2D   | lin2        | 2x2 matrix, point p                 |
-| Reflection 3D         | reflect3    | ?                                   |
-| Reflection 2D         | reflect2    | ?                                   |
-| Pinhole projection    | pinhole     | 3D point p                          |
-|-----------------------+-------------+-------------------------------------|
-| Euler rotation matrix | rotmateuler | angles, axis sequence, fixed/moving |
-| Affine 3D             | affinemat3  | 3x3 affine matrix                   |
-| Affine 2D             | affinemat2  | 2x2 affine matrix                   |
+| Function              | Name        | Parameters                          | Done |
+|-----------------------+-------------+-------------------------------------+------|
+| Translate 3D          | xlat3       | point p, point c                    | X    |
+| Translate 2D          | xlat2       | point p, point c                    | X    |
+| Scale 3D              | scale3      | scale factor c, point p             | X    |
+| Scale 2D              | scale2      | scale factor c, point p             | X    |
+| Linear transform 3D   | lin3        | 3x3 matrix, point p                 | X    |
+| Linear transform 2D   | lin2        | 2x2 matrix, point p                 | X    |
+| Reflection 3D         | reflect3    | ?                                   |      |
+| Reflection 2D         | reflect2    | ?                                   |      |
+| Pinhole projection    | pinhole     | 3D point p                          | X    |
+|-----------------------+-------------+-------------------------------------+------|
+| Euler rotation matrix | rotmateuler | angles, axis sequence, fixed/moving |      |
+| Affine 2D matrix      | affinemat2  | b                                   | X    |
+| Affine 2D             | affine2     | b,p                                 | X    |
 
 * Lens distortion
 
