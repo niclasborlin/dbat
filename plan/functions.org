@@ -1,0 +1,50 @@
+* Function list
+| Function              | Name        | Parameters                          |
+|-----------------------+-------------+-------------------------------------|
+| Translate 3D          | xlat3       | point p, point c                    |
+| Translate 2D          | xlat2       | point p, point c                    |
+| Scale 3D              | scale3      | scale factor c, point p             |
+| Scale 2D              | scale2      | scale factor c, point p             |
+| Linear transform 3D   | lin3        | 3x3 matrix, point p                 |
+| Linear transform 2D   | lin2        | 2x2 matrix, point p                 |
+| Reflection 3D         | reflect3    | ?                                   |
+| Reflection 2D         | reflect2    | ?                                   |
+| Pinhole projection    | pinhole     | 3D point p                          |
+|-----------------------+-------------+-------------------------------------|
+| Euler rotation matrix | rotmateuler | angles, axis sequence, fixed/moving |
+| Affine 3D             | affinemat3  | 3x3 affine matrix                   |
+| Affine 2D             | affinemat2  | 2x2 affine matrix                   |
+
+* Lens distortion
+
+* General structure
+The public definition of each model function is
+
+  =[v, dv]=name(param1, param2, ..., deriv1, deriv2, ...)=
+
+The number of input parameters will wary with function. The number of
+output parameters will be the same. The first parameter =v= is the
+actual computed value. The second parameter =dv= is a structure that
+can contain the analytical Jacobian with respect to each parameter.
+
+The Jacobians are often expensive to compute and are not always
+needed. Thus, no Jacobian is computed unless =dv= is asked for.
+Furthermore, the derivN parameters allow for a fine-grained selection
+of what Jacobians should be computed. For instance,
+
+  =[x,dv]=xlat3(p,c,false,true)=
+
+would only compute the Jacobian with respect to c.
+
+Furthermore, for every function there are two 'undocumented' features
+used for testing purposes.
+1) The real implementation contains a third return parameter =[v, dv,
+   dva]...=. If asked for, =dva= will contain numerical approximations
+   of the analytical Jacobians, in a struct with the same structure as
+   =dv=.
+2) If the function is called with a single, string, parameter, e.g.
+   'selftest', a self-test will be carried out and the result written
+   in the command window. The self-test computes and compares the
+   numerical and analytical Jacobians with each other and can be used
+   to verify a correct implementation of the analytical Jacobian.
+
