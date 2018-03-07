@@ -5,7 +5,7 @@ function [Q,dQ,dQn]=scale3(k,P,varargin)
 %   scalar K.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to P and K in the fields dP and dK. For more details,
+%   with respect to K and P in the fields dK and dP. For more details,
 %   see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
@@ -28,8 +28,8 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cP=nargout>1 && (length(varargin)<1 || varargin{1});
-cK=nargout>1 && (length(varargin)<2 || varargin{2});
+cK=nargout>1 && (length(varargin)<1 || varargin{1});
+cP=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
 [m,n]=size(P);

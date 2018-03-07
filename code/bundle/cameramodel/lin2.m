@@ -1,8 +1,8 @@
-function [Q,dQ,dQn]=lin3(M,P,varargin)
-%LIN3 3D linear transform for the DBAT projection model
+function [Q,dQ,dQn]=lin2(M,P,varargin)
+%LIN2 2D linear transform for the DBAT projection model
 %
-%   Q=LIN3(M,P) applies the linear transform M to the 3D points in the
-%   3-by-N array P, i.e. computes M*P.
+%   Q=LIN2(M,P) applies the linear transform M to the 2D points in the
+%   2-by-N array P, i.e. computes M*P.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
 %   with respect to M and P in the fields dM and dP. For more details,
@@ -33,7 +33,7 @@ cP=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
 [m,n]=size(P);
-if m~=3 || any(size(M)~=m)
+if m~=2 || any(size(M)~=m)
     error([mfilename,': bad size']);
 end
 
@@ -46,12 +46,12 @@ if nargout>2
     % FMT is function handle to repackage vector argument to what
     % the function expects.
     if cP
-        fmt=@(P)reshape(P,3,[]);
+        fmt=@(P)reshape(P,2,[]);
         fun=@(P)feval(mfilename,M,fmt(P));
         dQn.dP=jacapprox(fun,P);
     end
     if cM
-        fmt=@(M)reshape(M,3,[]);
+        fmt=@(M)reshape(M,2,[]);
         fun=@(M)feval(mfilename,fmt(M),P);
         dQn.dM=jacapprox(fun,M);
     end
@@ -71,7 +71,7 @@ end
 function fail=selftest(verbose)
 
 % Set up test data.
-m=3;
+m=2;
 n=5;
 M=rand(m);
 P=rand(m,n);
