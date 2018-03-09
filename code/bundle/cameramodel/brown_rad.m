@@ -6,13 +6,13 @@ function [v,dv,dvn]=brown_rad(u,K,varargin)
 %   radial coefficients.
 %
 %   [V,dV]=... also returns a struct dV with the analytical Jacobians
-%   with respect to U and P in the field dU and dP, respectively. For
+%   with respect to U and K in the field dU and dK, respectively. For
 %   more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
 %
-%SEE ALSO: BROWN_TANG, DIST_BROWN, DBAT_BUNDLE_FUNCTIONS.
+%SEE ALSO: BROWN_TANG, BROWN_DIST_ABS, DBAT_BUNDLE_FUNCTIONS.
 
 % Treat selftest call separately.
 if nargin>=1 && ischar(u), v=selftest(nargin>1 && K); return; end

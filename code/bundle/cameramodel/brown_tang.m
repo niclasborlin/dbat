@@ -10,7 +10,7 @@ function [v,dv,dvn]=brown_tang(u,P,varargin)
 %   with respect to U and P in the field dU and dP, respectively. For
 %   more details, see DBAT_BUNDLE_FUNCTIONS.
 %
-%SEE ALSO: BROWN_RAD, DIST_BROWN, DBAT_BUNDLE_FUNCTIONS
+%SEE ALSO: BROWN_RAD, BROWN_DIST_ABS, DBAT_BUNDLE_FUNCTIONS.
 
 % Treat selftest call separately.
 if nargin>=1 && ischar(u), v=selftest(nargin>1 && p); return; end
