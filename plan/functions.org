@@ -12,10 +12,15 @@
 | Pinhole projection    | pinhole     | 3D point p                          | X    |
 |-----------------------+-------------+-------------------------------------+------|
 | Euler rotation matrix | rotmateuler | angles, axis sequence, fixed/moving |      |
+|-----------------------+-------------+-------------------------------------+------|
 | Affine 2D matrix      | affinemat2  | b                                   | X    |
 | Affine 2D             | affine2     | b,p                                 | X    |
-
-* Lens distortion
+|-----------------------+-------------+-------------------------------------+------|
+| Lens distortion       |             |                                     |      |
+| radius                | lens_rad2   | u                                   | X    |
+| vector of powers      | power_vec   | x                                   | X    |
+| radial scaling        | rad_scale   | u,c                                 | X    |
+| tangential scaling    | tang_scale  | u,p                                 | X    |
 
 * General structure
 The public definition of each model function is

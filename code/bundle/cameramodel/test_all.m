@@ -1,6 +1,9 @@
-tests={'scale2','scale3','xlat2','xlat3','lin3','lin2','pinhole','affine2mat','affine2'};
+function test_all
 
-for i=length(tests):-1:1
+tests={'scale2','scale3','xlat2','xlat3','lin3','lin2','pinhole','affine2mat','affine2','lens_rad2','power_vec','rad_scale','tang_scale'};
+
+%for i=length(tests):-1:1
+for i=1:length(tests)
     fprintf('Testing %s...',tests{i});
     fail=feval(tests{i},'selftest');
     if fail
