@@ -1,18 +1,18 @@
-function [v,dv,dvn]=tang_scale(p,u,varargin)
+function [v,dv,dvn]=tang_scale(u,p,varargin)
 %TANG_SCALE Radial scaling function used by DBAT lens distortion functions.
 %
-%   V=TANG_SCALE(P,U) returns the tangential scaling between the 2-vector P
+%   V=TANG_SCALE(U,P) returns the tangential scaling between the 2-vector P
 %   and 2-by-N point array U. Each column V(:,I) is
 %   V(I,:)=U(:,I)'*U(:,I)*P+2*U(:,I)*U(:,I)'*P.
 %
 %   [V,dV]=... also returns a struct dV with the analytical Jacobians
-%   with respect to P and U in the field dP and dP, respectively. For
+%   with respect to U and P in the field dU and dP, respectively. For
 %   more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(p), v=selftest(nargin>1 && u); return; end
+if nargin>=1 && ischar(u), v=selftest(nargin>1 && p); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(1,4);
@@ -29,8 +29,8 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cP=nargout>1 && (length(varargin)<1 || varargin{1});
-cU=nargout>1 && (length(varargin)<2 || varargin{2});
+cU=nargout>1 && (length(varargin)<1 || varargin{1});
+cP=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
 [um,un]=size(u);
@@ -50,12 +50,12 @@ if nargout>2
     % FMT is function handle to repackage vector argument to what
     % the function expects.
     if cP
-        fun=@(p)feval(mfilename,p,u);
+        fun=@(p)feval(mfilename,u,p);
         dvn.dP=jacapprox(fun,p);
     end
     if cU
         fmt=@(u)reshape(u,2,[]);
-        fun=@(u)feval(mfilename,p,fmt(u));
+        fun=@(u)feval(mfilename,fmt(u),p);
         dvn.dU=jacapprox(fun,u);
     end
 end
@@ -96,5 +96,5 @@ p=rand(2,1);
 m=7;
 u=rand(2,m);
 
-fail=full_self_test(mfilename,{p,u},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{u,p},1e-8,1e-8,verbose);
 

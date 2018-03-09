@@ -1,7 +1,7 @@
-function [v,dv,dvn]=rad_scale(c,u,varargin)
+function [v,dv,dvn]=rad_scale(u,c,varargin)
 %RAD_SCALE Radial scaling function used by DBAT lens distortion functions.
 %
-%   V=RAD_SCALE(C,U) returns the radial scaling between the M-vector C
+%   V=RAD_SCALE(U,C) returns the radial scaling between the M-vector C
 %   with coefficients 2-by-N point array U. Each element V(I) is
 %   V(I)=C(1)*R(U)^2 + C(2)*R(U)^4 + ....
 %
@@ -12,7 +12,7 @@ function [v,dv,dvn]=rad_scale(c,u,varargin)
 %SEE ALSO: LENS_RAD2, POWER_VEC, DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(c), v=selftest(nargin>1 && u); return; end
+if nargin>=1 && ischar(u), v=selftest(nargin>1 && c); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(1,4);
@@ -29,8 +29,8 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cC=nargout>1 && (length(varargin)<1 || varargin{1});
-cU=nargout>1 && (length(varargin)<2 || varargin{2});
+cU=nargout>1 && (length(varargin)<1 || varargin{1});
+cC=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
 [cm,cn]=size(c);
@@ -56,12 +56,12 @@ if nargout>2
     % FMT is function handle to repackage vector argument to what
     % the function expects.
     if cC
-        fun=@(c)feval(mfilename,c,u);
+        fun=@(c)feval(mfilename,u,c);
         dvn.dC=jacapprox(fun,c);
     end
     if cU
         fmt=@(u)reshape(u,2,[]);
-        fun=@(u)feval(mfilename,c,fmt(u));
+        fun=@(u)feval(mfilename,fmt(u),c);
         dvn.dU=jacapprox(fun,u);
     end
 end
@@ -84,5 +84,5 @@ c=rand(5,1);
 m=7;
 u=rand(2,m);
 
-fail=full_self_test(mfilename,{c,u},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{u,c},1e-8,1e-8,verbose);
 
