@@ -23,7 +23,8 @@
 | radial distortion        | brown_rad      | u,K                                 | X    |
 | tangential distortion    | brown_tang     | u,P                                 | X    |
 | absolute lens distortion | brown_dist_abs | u,K,P                               | X    |
-| relative lens distortion | brown_dist_rel | u,u0,K,P                            |      |
+| relative lens distortion | brown_dist_rel | u,u0,K,P                            | X    |
+
 
 
 * General structure
