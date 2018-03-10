@@ -1,4 +1,5 @@
 * Function list
+|--------------------------+----------------+-------------------------------------+------|
 | Function                 | Name           | Parameters                          | Done |
 |--------------------------+----------------+-------------------------------------+------|
 | Translate 3D             | xlat3          | point p, point c                    | X    |
@@ -11,10 +12,14 @@
 | Reflection 2D            | reflect2       | ?                                   |      |
 | Pinhole projection       | pinhole        | 3D point p                          | X    |
 |--------------------------+----------------+-------------------------------------+------|
-| Euler rotation matrix    | rotmateuler    | angles, axis sequence, fixed/moving |      |
+| Euler rotation matrix    | rotmateuler    | angles, axis sequence, fixed/moving | X    |
+|--------------------------+----------------+-------------------------------------+------|
+| AFFINE                   |                |                                     |      |
 |--------------------------+----------------+-------------------------------------+------|
 | Affine 2D matrix         | affinemat2     | b                                   | X    |
 | Affine 2D                | affine2        | b,p                                 | X    |
+|--------------------------+----------------+-------------------------------------+------|
+| LENS DISTORTION          |                |                                     |      |
 |--------------------------+----------------+-------------------------------------+------|
 | radius                   | lens_rad2      | u                                   | X    |
 | vector of powers         | power_vec      | x                                   | X    |
@@ -24,6 +29,8 @@
 | tangential distortion    | brown_tang     | u,P                                 | X    |
 | absolute lens distortion | brown_dist_abs | u,K,P                               | X    |
 | relative lens distortion | brown_dist_rel | u,u0,K,P                            | X    |
+|--------------------------+----------------+-------------------------------------+------|
+| 3D similarity            | similar3       | angles, p, p0                       |      |
 
 
 
