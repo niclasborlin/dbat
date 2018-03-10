@@ -15,6 +15,19 @@ function [M,dM,dMn]=eulerrotmat(k,seq,fixed)
 %   with respect to K in the field dK. For more details, see
 %   DBAT_BUNDLE_FUNCTIONS.
 %
+%   EULERROTMAT is defined for any sequence of axis. However, if
+%   two subsequent axis are identical, or if the second rotation
+%   rotates the first axis to the third, the 
+%
+%   References:
+%
+%     Lucas (1963), "Differentiation of the Orientation Matrix by Matrix
+%       Multipliers". Photogrammetric Engineering 29(4):708-715.
+%
+%     Forstner, Wrobel (2004), "Mathematical Concepts in Photogrammetry",  
+%       Ch. 2.1.2. In "Manual of Photogrammetry", 5th ed. McGlone, et al.,
+%       eds. ASPRS.
+%
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
@@ -39,57 +52,94 @@ if length(k)~=3
 end
 
 %% Actual function code
-M=P+repmat(c,1,n);
+
+% Rotation functions.
+fh={@R1,@R2,@R3};
+
+% Decode what rotations we should use.
+i1=floor(seq/100);
+i2=floor(rem(seq,100)/10);
+i3=rem(seq,10);
+
+% Compute the elementary rotations.
+if nargout<2
+    M1=fh{i1}(k(1));
+    M2=fh{i2}(k(2));
+    M3=fh{i3}(k(3));
+else
+    [M1,P1]=fh{i1}(k(1));
+    [M2,P2]=fh{i2}(k(2));
+    [M3,P3]=fh{i3}(k(3));
+end
+
+% Combine differently depending on whether the rotation is with
+% respect to a fixed or rotation frame.
+if fixed
+    M=M3*M2*M1;
+else
+    M=M1*M2*M3;
+end
 
 if nargout>2
     %% Numerical Jacobian
 
     % FMT is function handle to repackage vector argument to what
     % the function expects.
-    if cP
-        fmt=@(P)reshape(P,2,[]);
-        fun=@(P)feval(mfilename,fmt(P),c);
-        dMn.dP=jacapprox(fun,P);
-    end
-    if cC
-        fun=@(c)feval(mfilename,P,c);
-        dMn.dC=jacapprox(fun,c);
-    end
+    fun=@(k)feval(mfilename,k,seq,fixed);
+    dMn.dK=jacapprox(fun,k);
 end
 
 if nargout>1
     %% Analytical Jacobian
-    if cP
-        dM.dP=speye(numel(P));
+    if fixed
+        dK1=M*P1;
+        dK2=M3*M2*P2*M1;
+        dK3=P3*M;
+    else
+        dK1=P1*M;
+        dK2=M1*M2*P2*M3;
+        dK3=M*P3;
     end
-    if cC
-        dM.dC=repmat(speye(m),n,1);
-    end    
+    dM.dK=[dK1(:),dK2(:),dK3(:)];
 end
 
 % Elementary rotations about each axis.
 
-function R=R1(alpha)
+function [R,P]=R1(alpha)
 
 R=[1,0,0;0,cos(alpha),-sin(alpha);0,sin(alpha),cos(alpha)];
+P=[0,0,0;0,0,-1;0,1,0];
 
 
-function R=R2(alpha)
+function [R,P]=R2(alpha)
 
 R=[cos(alpha),0,sin(alpha);0,1,0;-sin(alpha),0,cos(alpha)];
+P=[0,0,1;0,0,0;-1,0,0];
 
 
-function R=R3(alpha)
+function [R,P]=R3(alpha)
 
 R=[cos(alpha),-sin(alpha),0;sin(alpha),cos(alpha),0;0,0,1];
+P=[0,-1,0;1,0,0;0,0,0];
 
 
 function fail=selftest(verbose)
 
 % Set up test data.
-n=2;
-m=5;
-c=rand(n,1);
-P=rand(n,m);
+seqs=[];
+for i=1:3
+    for j=1:3 % find(~ismember(1:3,i))
+        for k=1:3 % find(~ismember(1:3,j))
+            seqs(end+1)=i*100+j*10+k;
+        end
+    end
+end
 
-fail=full_self_test(mfilename,{P,c},1e-8,1e-8,verbose);
+k=rand(3,1);
+fail=false;
+for i=1:length(seqs)
+    seq=seqs(i);
+    for t=[false,true]
+        fail=fail | full_self_test(mfilename,{k,seq,t},1e-8,1e-8,verbose,0);
+    end
+end
