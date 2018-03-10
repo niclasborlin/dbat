@@ -15,9 +15,10 @@ function [M,dM,dMn]=eulerrotmat(k,seq,fixed)
 %   with respect to K in the field dK. For more details, see
 %   DBAT_BUNDLE_FUNCTIONS.
 %
-%   EULERROTMAT is defined for any sequence of axis. However, if
-%   two subsequent axis are identical, or if the second rotation
-%   rotates the first axis to the third, the 
+%   EULERROTMAT is defined for any angles and any sequence of axis.
+%   However, if two subsequent axis are identical, or if the second
+%   rotation rotates the first axis to the third, the inverse is
+%   not true.
 %
 %   References:
 %
