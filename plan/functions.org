@@ -31,10 +31,7 @@
 | relative lens distortion  | brown_dist_rel | u,u0,K,P                            | X      |
 |---------------------------+----------------+-------------------------------------+--------|
 | xform pt to cam coord sys | world2cam      | M, P, p0                            | X      |
-| pinhole with euler angles | eulerpinhole   | angles, P, p0                       | X      |
-
-
-
+| pinhole with euler angles | eulerpinhole   | f, angles, P, p0                    | X      |
 
 * General structure
 The public definition of each model function is
