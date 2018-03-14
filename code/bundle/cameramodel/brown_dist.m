@@ -1,8 +1,8 @@
-function [v,dv,dvn]=brown_dist_abs(u,K,P,varargin)
-%BROWN_DIST_ABS Brown radial distortion with absolute coordinates.
+function [v,dv,dvn]=brown_dist(u,K,P,varargin)
+%BROWN_DIST Brown radial distortion with absolute coordinates.
 %
-%   V=BROWN_DIST_ABS(U,K,P) returns the lens distortion of Brown
-%   (1971) for each 2D point in the 2-by-N array U. The vector K
+%   V=BROWN_DIST(U,K,P) applies lens distortion according to Brown
+%   (1971) to the 2D points in the 2-by-N array U. The vector K
 %   contain the radial coefficients. The vector P contain the
 %   tangential coefficients.
 %

@@ -1,5 +1,5 @@
 function [Q,dQ,dQn]=pinhole(P,varargin)
-%PINHOLE Pinhole projection for the DBAT projection model
+%PINHOLE Pinhole projection for the DBAT projection model.
 %
 %   Q=PINHOLE(P) applies the pinhole projection on the 3D points in
 %   the 3-by-N array P, i.e. computes P(1:2)/P(3) for each column.

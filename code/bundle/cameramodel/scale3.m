@@ -1,5 +1,5 @@
 function [Q,dQ,dQn]=scale3(P,k,varargin)
-%SCALE3 3D scaling for the DBAT projection model
+%SCALE3 3D isotropic scaling for the DBAT projection model.
 %
 %   Q=SCALE3(P,K) scales the 3D points in the 3-by-N array P by the
 %   scalar K.

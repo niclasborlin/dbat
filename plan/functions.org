@@ -1,48 +1,77 @@
 * Function list
-|---------------------------+----------------+-------------------------------------+--------|
-| Function                  | Name           | Parameters                          | Tested |
-|---------------------------+----------------+-------------------------------------+--------|
-| Translate 3D              | xlat3          | point p, point c                    | X      |
-| Translate 2D              | xlat2          | point p, point c                    | X      |
-| Scale 3D                  | scale3         | point p, scale factor c             | X      |
-| Scale 2D                  | scale2         | point p, scale factor c             | X      |
-| Linear transform 3D       | lin3           | 3x3 matrix, point p                 | X      |
-| Linear transform 2D       | lin2           | 2x2 matrix, point p                 | X      |
-| Reflection 3D             | reflect3       | ?                                   |        |
-| Reflection 2D             | reflect2       | ?                                   |        |
-| Pinhole projection        | pinhole        | 3D point p                          | X      |
-|---------------------------+----------------+-------------------------------------+--------|
-| Euler rotation matrix     | eulerrotmat    | angles, axis sequence, fixed/moving | X      |
-|---------------------------+----------------+-------------------------------------+--------|
-| AFFINE                    |                |                                     |        |
-|---------------------------+----------------+-------------------------------------+--------|
-| Affine 2D matrix          | affine2mat     | b1,b2                               | X      |
-| Affine 2D                 | affine2        | p,b1,b2                             | X      |
-| Aspect ratio              | aspect         | p,k                                 |        |
-| Skew                      | skew           | p,k                                 |        |
-|---------------------------+----------------+-------------------------------------+--------|
-| LENS DISTORTION           |                |                                     |        |
-|---------------------------+----------------+-------------------------------------+--------|
-| radius                    | lens_rad2      | u                                   | X      |
-| vector of powers          | power_vec      | x                                   | X      |
-| radial scaling            | rad_scale      | u,c                                 | X      |
-| tangential scaling        | tang_scale     | u,p                                 | X      |
-| radial distortion         | brown_rad      | u,K                                 | X      |
-| tangential distortion     | brown_tang     | u,P                                 | X      |
-| absolute lens distortion  | brown_dist_abs | u,K,P                               | X      |
-| relative lens distortion  | brown_dist_rel | u,u0,K,P                            | X      |
-|---------------------------+----------------+-------------------------------------+--------|
-| xform pt to cam coord sys | world2cam      | P, M, p0                            | X      |
-| pinhole with euler angles | eulerpinhole   | f, angles, P, p0                    | X      |
-| affine scaling            | affscale2      | pt, k, b1, b2                       | X      |
+|---------------------------+--------------+-------------------------------------+--------|
+| Function                  | Name         | Parameters                          | Tested |
+|---------------------------+--------------+-------------------------------------+--------|
+| BASIC                     |              |                                     |        |
+|---------------------------+--------------+-------------------------------------+--------|
+| Translate 3D              | xlat3        | point p, point c                    | X      |
+| Translate 2D              | xlat2        | point u, point c                    | X      |
+| Scale 3D                  | scale3       | point p, scale factor c             | X      |
+| Scale 2D                  | scale2       | point u, scale factor c             | X      |
+| Linear transform 3D       | lin3         | point p, 3x3 matrix                 | X      |
+| Linear transform 2D       | lin2         | point u, 2x2 matrix                 | X      |
+| Pinhole projection        | pinhole      | 3D point p                          | X      |
+|---------------------------+--------------+-------------------------------------+--------|
+| ROTATION                  |              |                                     |        |
+|---------------------------+--------------+-------------------------------------+--------|
+| Euler rotation matrix     | eulerrotmat  | angles, axis sequence, fixed/moving | X      |
+|---------------------------+--------------+-------------------------------------+--------|
+| AFFINE                    |              |                                     |        |
+|---------------------------+--------------+-------------------------------------+--------|
+| Affine 2D matrix          | affine2mat   | b1,b2                               | X      |
+| Affine 2D                 | affine2      | u,b1,b2                             | X      |
+| Anisotropic scaling       | aniscale     | u,k                                 | X      |
+| Skew                      | skew         | u,k                                 | X      |
+|---------------------------+--------------+-------------------------------------+--------|
+| LENS DISTORTION           |              |                                     |        |
+|---------------------------+--------------+-------------------------------------+--------|
+| radius                    | lens_rad2    | u                                   | X      |
+| vector of powers          | power_vec    | x                                   | X      |
+| radial scaling            | rad_scale    | u,c                                 | X      |
+| tangential scaling        | tang_scale   | u,p                                 | X      |
+| radial distortion         | brown_rad    | u,K                                 | X      |
+| tangential distortion     | brown_tang   | u,P                                 | X      |
+| total lens distortion     | brown_dist   | u,K,P                               | X      |
+|---------------------------+--------------+-------------------------------------+--------|
+| xform pt to cam coord sys | world2cam    | P, M, p0                            | X      |
+| pinhole with euler angles | eulerpinhole | P, angles, p0, f                    | X      |
+| brown with affine xform   | brown_affine | u, k, u0, K, P, b1, b2, case        |        |
+
+|--------------------------+----------------+--------------+---|
+| UNUSED                   |                |              |   |
+|--------------------------+----------------+--------------+---|
+| relative lens distortion | brown_dist_rel | u,u0,K,P     | X |
+| affine scaling           | affscale2      | u, k, b1, b2 | X |
+| Reflection 3D            | reflect3       | ?            |   |
+| Reflection 2D            | reflect2       | ?            |   |
+
 
 * RHS versions
-- No affinity :: eulerpinhole(f,ang,P,p0)-brown_dist_rel(scale2(k,pt),u0,K,P)
-- Before lens distortion ::
-     eulerpinhole(f,ang,P,p0) - brown_dist_rel(affine2(b1,b2,scale2(k,pt)),u0,K,P)
-- After lens distortion :: 
-     eulerpinhole(f,ang,P,p0) - affine2(b1,b2,brown_dist_rel(scale2(k,pt),u0,K,P))
-- 
+
+0) [@0] No affinity and with square pixels
+   1) Convert from pixels to mm
+   2) Subtract principal point
+   3) Correct for lens distortion
+1) Before lens distortion
+   1) Convert from pixels to mm
+   2) Subtract principal point
+   2.5) Apply affine transformation
+      a) Anisotropic scaling
+      b) Skew
+   3) Correct for lens distortion
+2) After lens distortion
+   1) Convert from pixels to mm
+   2) Subtract principal point
+   3) Correct for lens distortion
+   3.5) Apply affine transformation
+      a) Anisotropic scaling
+      b) Skew
+3) Mixed
+   1) Convert from pixels to mm
+   1.5) Anisotropic scaling
+   1) Subtract principal point
+   2) Correct for lens distortion
+   3.5) Apply skew
 
 * General structure
 The public definition of each model function is

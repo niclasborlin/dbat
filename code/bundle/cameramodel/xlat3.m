@@ -1,5 +1,5 @@
 function [Q,dQ,dQn]=xlat3(P,c,varargin)
-%XLAT3 3D translation for the DBAT projection model
+%XLAT3 3D translation for the DBAT projection model.
 %
 %   Q=XLAT3(P,C) translates the 3D points in the 3-by-N array P by
 %   the 3-vector C.

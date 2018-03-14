@@ -1,8 +1,8 @@
-function [Q,dQ,dQn]=scale2(U,k,varargin)
-%SCALE2 2D isotropic scaling for the DBAT projection model.
+function [Q,dQ,dQn]=skew(U,k,varargin)
+%SKEW 2D anisotropic scaling for the DBAT projection model.
 %
-%   Q=SCALE2(U,K) scales the 2D points in the 2-by-N array U by the
-%   scalar K.
+%   Q=SKEW(U,K) applies a skew to the 2D points in the 2-by-N array
+%   U. The actual transformation is Q=[1,k;0,1]*U.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
 %   with respect to U and K in the fields dU and dK, respectively. For
@@ -38,7 +38,7 @@ if m~=2 || ~isscalar(k)
 end
 
 %% Actual function code
-Q=k*U;
+Q=[1,k;0,1]*U;
 
 if nargout>2
     %% Numerical Jacobian
@@ -59,10 +59,19 @@ end
 if nargout>1
     %% Analytical Jacobian
     if cU
-        dQ.dU=k*speye(numel(U));
+        % Each block is A = [1, K; 0, 1].
+
+        % Values for Jacobian in memory-order.
+        vv=repmat([1,k,1]',1,n);
+        % Row indices.
+        ii=repmat(0:2:2*n-1,3,1)+repmat([1,1,2]',1,n);
+        % Column indices.
+        jj=repmat(0:2:2*n-1,3,1)+repmat([1,2,2]',1,n);
+        dQ.dU=sparse(ii,jj,vv,2*n,2*n);
     end
     if cK
-        dQ.dK=vec(U);
+        dQ.dK=zeros(2*n,1);
+        dQ.dK(1:2:end)=U(2,:)';
     end    
 end
 
@@ -72,7 +81,7 @@ function fail=selftest(verbose)
 % Set up test data.
 n=2;
 m=5;
-k=rand+1;
+k=rand+0.01;
 U=rand(n,m);
 
 fail=full_self_test(mfilename,{U,k},1e-8,1e-8,verbose);

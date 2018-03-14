@@ -1,5 +1,5 @@
 function [Q,dQ,dQn]=lin3(P,M,varargin)
-%LIN3 3D linear transform for the DBAT projection model
+%LIN3 3D linear transform for the DBAT projection model.
 %
 %   Q=LIN3(P,M) applies the linear transform M to the 3D points in the
 %   3-by-N array P, i.e. computes M*P.

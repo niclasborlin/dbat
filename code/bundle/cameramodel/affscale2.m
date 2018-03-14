@@ -1,18 +1,18 @@
-function [Q,dQ,dQn]=affscale2(P,k,b1,b2,varargin)
-%AFFSCALE2 2D affine scaling for the DBAT projection model
+function [Q,dQ,dQn]=affscale2(U,k,b1,b2,varargin)
+%AFFSCALE2 2D affine scaling for the DBAT projection model.
 %
-%   Q=AFFSCALE2(P,K,B1,B2) scales the 2D points in the 2-by-N array P
+%   Q=AFFSCALE2(U,K,B1,B2) scales the 2D points in the 2-by-N array U
 %   by the scalar K and applies an affine transformation. The affine
 %   transformation matrix is [1+B1 B2;0 1].
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to P, K, B1, and B2 in the fields dP, dK, dB1, and
+%   with respect to U, K, B1, and B2 in the fields dU, dK, dB1, and
 %   dB2, respectively. For more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: AFFINE2, DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(P), Q=selftest(nargin>1 && k); return; end
+if nargin>=1 && ischar(U), Q=selftest(nargin>1 && k); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(4,8);
@@ -23,7 +23,7 @@ dQn=[];
 
 if nargout>1
     % Construct empty Jacobian struct.
-    dQ=struct('dP',[],...
+    dQ=struct('dU',[],...
               'dB1',[],...
               'dB2',[],...
               'dK',[]);
@@ -31,19 +31,19 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cP=nargout>1 && (length(varargin)<1 || varargin{1});
+cU=nargout>1 && (length(varargin)<1 || varargin{1});
 cK=nargout>1 && (length(varargin)<2 || varargin{2});
 cB1=nargout>1 && (length(varargin)<3 || varargin{3});
 cB2=nargout>1 && (length(varargin)<4 || varargin{4});
 
 %% Test parameters
-[m,n]=size(P);
+[m,n]=size(U);
 if m~=2 || ~isscalar(k) || ~isscalar(b1) || ~isscalar(b2)
     error([mfilename,': bad size']);
 end
 
 %% Actual function code
-[A,dA]=affine2(P,b1,b2);
+[A,dA]=affine2(U,b1,b2);
 Q=k*A;
 
 if nargout>2
@@ -51,29 +51,29 @@ if nargout>2
 
     % FMT is function handle to repackage vector argument to what
     % the function expects.
-    if cP
-        fmt=@(P)reshape(P,2,[]);
-        fun=@(P)feval(mfilename,fmt(P),k,b1,b2);
-        dQn.dP=jacapprox(fun,P);
+    if cU
+        fmt=@(U)reshape(U,2,[]);
+        fun=@(U)feval(mfilename,fmt(U),k,b1,b2);
+        dQn.dU=jacapprox(fun,U);
     end
     if cK
-        fun=@(k)feval(mfilename,P,k,b1,b2);
+        fun=@(k)feval(mfilename,U,k,b1,b2);
         dQn.dK=jacapprox(fun,k);
     end
     if cB1
-        fun=@(b1)feval(mfilename,P,k,b1,b2);
+        fun=@(b1)feval(mfilename,U,k,b1,b2);
         dQn.dB1=jacapprox(fun,b1);
     end
     if cB2
-        fun=@(b2)feval(mfilename,P,k,b1,b2);
+        fun=@(b2)feval(mfilename,U,k,b1,b2);
         dQn.dB2=jacapprox(fun,b2);
     end
 end
 
 if nargout>1
     %% Analytical Jacobian
-    if cP
-        dQ.dP=k*dA.dP;
+    if cU
+        dQ.dU=k*dA.dU;
     end
     if cK
         dQ.dK=A(:);
@@ -95,6 +95,6 @@ m=5;
 k=rand+1;
 b1=0.1+rand;
 b2=0.1+rand;
-P=rand(n,m);
+U=rand(n,m);
 
-fail=full_self_test(mfilename,{P,k,b1,b2},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{U,k,b1,b2},1e-8,1e-8,verbose);

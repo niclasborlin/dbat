@@ -1,7 +1,7 @@
-function [Q,dQ,dQn]=eulerpinhole(P,ang,p0,f,varargin)
+function [Q,dQ,dQn]=eulerpinhole(P,p0,ang,f,varargin)
 %EULERPINHOLE 3D-to-2D pinhole camera transformation with Euler angles.
 %
-%   Q=EULERPINHOLE(P,A,P0,F) performs a 3D-to-2D transformation of the
+%   Q=EULERPINHOLE(P,P0,A,F) performs a 3D-to-2D transformation of the
 %   3D points in the 3-by-N array P according to the pinhole camera
 %   model. The position of the camera center is given by the 3-vector
 %   P0. The world-to-camera rotation is specified by the 3-vector A
@@ -10,13 +10,13 @@ function [Q,dQ,dQn]=eulerpinhole(P,ang,p0,f,varargin)
 %   image coordinates in the same unit as F.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to P, A, P0, and F in the fields dP, dA, dP0, and dF,
+%   with respect to P, P0, A, and F in the fields dP, dP0, dA, and dF,
 %   respectively. For more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: WORLD2CAM, ROTMATEULER, DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(P), Q=selftest(nargin>1 && ang); return; end
+if nargin>=1 && ischar(P), Q=selftest(nargin>1 && p0); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(4,8);
@@ -36,8 +36,8 @@ end
 
 % What Jacobians to compute?
 cP=nargout>1 && (length(varargin)<1 || varargin{1});
-cA=nargout>1 && (length(varargin)<2 || varargin{2});
-cP0=nargout>1 && (length(varargin)<3 || varargin{3});
+cP0=nargout>1 && (length(varargin)<2 || varargin{2});
+cA=nargout>1 && (length(varargin)<3 || varargin{3});
 cF=nargout>1 && (length(varargin)<4 || varargin{4});
 
 %% Test parameters
@@ -73,20 +73,20 @@ if nargout>2
     % FMT is function handle to repackage vector argument to what
     % the function expects.
     if cF
-        fun=@(f)feval(mfilename,P,ang,p0,f);
+        fun=@(f)feval(mfilename,P,p0,ang,f);
         dQn.dF=jacapprox(fun,f);
     end
     if cA
-        fun=@(ang)feval(mfilename,P,ang,p0,f);
+        fun=@(ang)feval(mfilename,P,p0,ang,f);
         dQn.dA=jacapprox(fun,ang);
     end
     if cP
         fmt=@(P)reshape(P,3,[]);
-        fun=@(P)feval(mfilename,fmt(P),ang,p0,f);
+        fun=@(P)feval(mfilename,fmt(P),p0,ang,f);
         dQn.dP=jacapprox(fun,P);
     end
     if cP0
-        fun=@(p0)feval(mfilename,P,ang,p0,f);
+        fun=@(p0)feval(mfilename,P,p0,ang,f);
         dQn.dP0=jacapprox(fun,p0);
     end
 end
@@ -119,4 +119,4 @@ ang=rand(3,1)*pi/6;
 p0=rand(m,1);
 P=rand(m,n)+3;
 
-fail=full_self_test(mfilename,{P,ang,p0,f},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{P,p0,ang,f},1e-8,1e-8,verbose);
