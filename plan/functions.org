@@ -4,8 +4,8 @@
 |---------------------------+----------------+-------------------------------------+--------|
 | Translate 3D              | xlat3          | point p, point c                    | X      |
 | Translate 2D              | xlat2          | point p, point c                    | X      |
-| Scale 3D                  | scale3         | scale factor c, point p             | X      |
-| Scale 2D                  | scale2         | scale factor c, point p             | X      |
+| Scale 3D                  | scale3         | point p, scale factor c             | X      |
+| Scale 2D                  | scale2         | point p, scale factor c             | X      |
 | Linear transform 3D       | lin3           | 3x3 matrix, point p                 | X      |
 | Linear transform 2D       | lin2           | 2x2 matrix, point p                 | X      |
 | Reflection 3D             | reflect3       | ?                                   |        |
@@ -17,7 +17,9 @@
 | AFFINE                    |                |                                     |        |
 |---------------------------+----------------+-------------------------------------+--------|
 | Affine 2D matrix          | affine2mat     | b1,b2                               | X      |
-| Affine 2D                 | affine2        | b1,b2,p                             | X      |
+| Affine 2D                 | affine2        | p,b1,b2                             | X      |
+| Aspect ratio              | aspect         | p,k                                 |        |
+| Skew                      | skew           | p,k                                 |        |
 |---------------------------+----------------+-------------------------------------+--------|
 | LENS DISTORTION           |                |                                     |        |
 |---------------------------+----------------+-------------------------------------+--------|
@@ -30,14 +32,16 @@
 | absolute lens distortion  | brown_dist_abs | u,K,P                               | X      |
 | relative lens distortion  | brown_dist_rel | u,u0,K,P                            | X      |
 |---------------------------+----------------+-------------------------------------+--------|
-| xform pt to cam coord sys | world2cam      | M, P, p0                            | X      |
+| xform pt to cam coord sys | world2cam      | P, M, p0                            | X      |
 | pinhole with euler angles | eulerpinhole   | f, angles, P, p0                    | X      |
-| affine scaling            | affscale2      | pt, k, b1, b2                       |        |
+| affine scaling            | affscale2      | pt, k, b1, b2                       | X      |
 
 * RHS versions
-- No affinity :: lensdist(xlat2(scale2(pxsz,impt),-u0),K,P)
-- After lens distortion :: affine(lensdist(xlat2(scale2(pxsz,impt),-u0),K,P),b)
-- Before lens distortion :: 
+- No affinity :: eulerpinhole(f,ang,P,p0)-brown_dist_rel(scale2(k,pt),u0,K,P)
+- Before lens distortion ::
+     eulerpinhole(f,ang,P,p0) - brown_dist_rel(affine2(b1,b2,scale2(k,pt)),u0,K,P)
+- After lens distortion :: 
+     eulerpinhole(f,ang,P,p0) - affine2(b1,b2,brown_dist_rel(scale2(k,pt),u0,K,P))
 - 
 
 * General structure

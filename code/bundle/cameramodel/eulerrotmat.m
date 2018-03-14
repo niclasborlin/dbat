@@ -1,8 +1,8 @@
-function [M,dM,dMn]=eulerrotmat(k,seq,fixed)
+function [M,dM,dMn]=eulerrotmat(ang,seq,fixed)
 %EULERROTMAT 3D Euler rotation matrix.
 %
-%   M=EULERROTMAT(K,SEQ,FIXED) computes the 3D rotation matrix that
-%   correspond to the Euler angles in the 3-vector K for the axis
+%   M=EULERROTMAT(A,SEQ,FIXED) computes the 3D rotation matrix that
+%   correspond to the Euler angles in the 3-vector A for the axis
 %   sequence given by the 3-digit integer SEQ. Each digit can be 1
 %   (X), 2 (Y), or 3 (Z), and determines the axes about which the
 %   elementary rotations takes place. For instance, SEQ=123
@@ -12,13 +12,13 @@ function [M,dM,dMn]=eulerrotmat(k,seq,fixed)
 %   performed in a moving coordinate system.
 %
 %   [M,dM]=... also returns a struct dM with the analytical Jacobian
-%   with respect to K in the field dK. For more details, see
+%   with respect to K in the field dA. For more details, see
 %   DBAT_BUNDLE_FUNCTIONS.
 %
 %   EULERROTMAT is defined for any angles and any sequence of axis.
 %   However, if two subsequent axis are identical, or if the second
-%   rotation rotates the first axis to the third, the inverse is
-%   not true.
+%   rotation rotates the first axis to the third, the decomposition
+%   from rotation matrix to angles is not unique.
 %
 %   References:
 %
@@ -32,7 +32,7 @@ function [M,dM,dMn]=eulerrotmat(k,seq,fixed)
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(k), M=selftest(nargin>1 && seq); return; end
+if nargin>=1 && ischar(ang), M=selftest(nargin>1 && seq); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(3,3);
@@ -43,12 +43,12 @@ dMn=[];
 
 if nargout>1
     % Construct empty Jacobian struct.
-    dM=struct('dK',[]);
+    dM=struct('dA',[]);
     dMn=dM;
 end
 
 %% Test parameters
-if length(k)~=3
+if length(ang)~=3
     error([mfilename,': bad size']);
 end
 
@@ -64,13 +64,13 @@ i3=rem(seq,10);
 
 % Compute the elementary rotations.
 if nargout<2
-    M1=fh{i1}(k(1));
-    M2=fh{i2}(k(2));
-    M3=fh{i3}(k(3));
+    M1=fh{i1}(ang(1));
+    M2=fh{i2}(ang(2));
+    M3=fh{i3}(ang(3));
 else
-    [M1,P1]=fh{i1}(k(1));
-    [M2,P2]=fh{i2}(k(2));
-    [M3,P3]=fh{i3}(k(3));
+    [M1,P1]=fh{i1}(ang(1));
+    [M2,P2]=fh{i2}(ang(2));
+    [M3,P3]=fh{i3}(ang(3));
 end
 
 % Combine differently depending on whether the rotation is with
@@ -86,22 +86,22 @@ if nargout>2
 
     % FMT is function handle to repackage vector argument to what
     % the function expects.
-    fun=@(k)feval(mfilename,k,seq,fixed);
-    dMn.dK=jacapprox(fun,k);
+    fun=@(ang)feval(mfilename,ang,seq,fixed);
+    dMn.dA=jacapprox(fun,ang);
 end
 
 if nargout>1
     %% Analytical Jacobian
     if fixed
-        dK1=M*P1;
-        dK2=M3*M2*P2*M1;
-        dK3=P3*M;
+        dA1=M*P1;
+        dA2=M3*M2*P2*M1;
+        dA3=P3*M;
     else
-        dK1=P1*M;
-        dK2=M1*M2*P2*M3;
-        dK3=M*P3;
+        dA1=P1*M;
+        dA2=M1*M2*P2*M3;
+        dA3=M*P3;
     end
-    dM.dK=[dK1(:),dK2(:),dK3(:)];
+    dM.dA=[dA1(:),dA2(:),dA3(:)];
 end
 
 % Elementary rotations about each axis.
@@ -136,11 +136,11 @@ for i=1:3
     end
 end
 
-k=rand(3,1);
+ang=rand(3,1);
 fail=false;
 for i=1:length(seqs)
     seq=seqs(i);
     for t=[false,true]
-        fail=fail | full_self_test(mfilename,{k,seq,t},1e-8,1e-8,verbose,0);
+        fail=fail | full_self_test(mfilename,{ang,seq,t},1e-8,1e-8,verbose,0);
     end
 end

@@ -5,7 +5,8 @@ tests={'xlat2','xlat3','scale2','scale3','lin3','lin2','pinhole', ...
        'tang_scale','brown_rad','brown_tang','brown_dist_abs', ...
        'brown_dist_rel','eulerrotmat','world2cam','eulerpinhole','affscale2'};
 
-for i=length(tests):-1:1
+%for i=length(tests):-1:1
+for i=1:length(tests)
     fprintf('Testing %s...',tests{i});
     fail=feval(tests{i},'selftest');
     if fail

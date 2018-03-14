@@ -1,17 +1,17 @@
-function [Q,dQ,dQn]=lin3(M,P,varargin)
+function [Q,dQ,dQn]=lin3(P,M,varargin)
 %LIN3 3D linear transform for the DBAT projection model
 %
-%   Q=LIN3(M,P) applies the linear transform M to the 3D points in the
+%   Q=LIN3(P,M) applies the linear transform M to the 3D points in the
 %   3-by-N array P, i.e. computes M*P.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to M and P in the fields dM and dP. For more details,
-%   see DBAT_BUNDLE_FUNCTIONS.
+%   with respect to M and P in the fields dP and dM, respectively. For
+%   more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(M), Q=selftest(nargin>1 && P); return; end
+if nargin>=1 && ischar(P), Q=selftest(nargin>1 && M); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(2,4);
@@ -28,8 +28,8 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cM=nargout>1 && (length(varargin)<1 || varargin{1});
-cP=nargout>1 && (length(varargin)<2 || varargin{2});
+cP=nargout>1 && (length(varargin)<1 || varargin{1});
+cM=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
 [m,n]=size(P);
@@ -47,12 +47,12 @@ if nargout>2
     % the function expects.
     if cP
         fmt=@(P)reshape(P,3,[]);
-        fun=@(P)feval(mfilename,M,fmt(P));
+        fun=@(P)feval(mfilename,fmt(P),M);
         dQn.dP=jacapprox(fun,P);
     end
     if cM
         fmt=@(M)reshape(M,3,[]);
-        fun=@(M)feval(mfilename,fmt(M),P);
+        fun=@(M)feval(mfilename,P,fmt(M));
         dQn.dM=jacapprox(fun,M);
     end
 end
@@ -76,4 +76,4 @@ n=5;
 M=rand(m);
 P=rand(m,n);
 
-fail=full_self_test(mfilename,{M,P},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{P,M},1e-8,1e-8,verbose);

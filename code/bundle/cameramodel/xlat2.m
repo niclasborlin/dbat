@@ -5,8 +5,8 @@ function [Q,dQ,dQn]=xlat2(P,c,varargin)
 %   the 2-vector C.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to P and C in the fields dP and dC. For more
-%   details, see DBAT_BUNDLE_FUNCTIONS.
+%   with respect to P and C in the fields dP and dC, respectively. For
+%   more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 

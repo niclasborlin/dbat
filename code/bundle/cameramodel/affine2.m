@@ -1,18 +1,18 @@
-function [Q,dQ,dQn]=affine2(b1,b2,P,varargin)
+function [Q,dQ,dQn]=affine2(P,b1,b2,varargin)
 %AFFINE2 2D affine transform for the DBAT projection model
 %
-%   Q=AFFINE2(B1,B2,P) applies the linear transform AFFINE2MAT(B1,B2)
+%   Q=AFFINE2(P,B1,B2) applies the linear transform AFFINE2MAT(B1,B2)
 %   to the 2D points in the 2-by-N array P, i.e. computes
 %   AFFINE2MAT(B1,B2)*P.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to B1, B2, and P in the fields dB1, dB2, and dP. For
-%   more details, see DBAT_BUNDLE_FUNCTIONS.
+%   with respect to P, B1, and B2 in the fields dP, dB1, and dB2,
+%   respectively. For more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(b1), Q=selftest(nargin>1 && b2); return; end
+if nargin>=1 && ischar(P), Q=selftest(nargin>1 && b1); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(3,6);
@@ -30,9 +30,9 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cB1=nargout>1 && (length(varargin)<1 || varargin{1});
-cB2=nargout>1 && (length(varargin)<2 || varargin{2});
-cP=nargout>1 && (length(varargin)<3 || varargin{3});
+cP=nargout>1 && (length(varargin)<1 || varargin{1});
+cB1=nargout>1 && (length(varargin)<2 || varargin{2});
+cB2=nargout>1 && (length(varargin)<3 || varargin{3});
 
 %% Test parameters
 [m,n]=size(P);
@@ -51,15 +51,15 @@ if nargout>2
     % the function expects.
     if cP
         fmt=@(P)reshape(P,2,[]);
-        fun=@(P)feval(mfilename,b1,b2,fmt(P));
+        fun=@(P)feval(mfilename,fmt(P),b1,b2);
         dQn.dP=jacapprox(fun,P);
     end
     if cB1
-        fun=@(b1)feval(mfilename,b1,b2,P);
+        fun=@(b1)feval(mfilename,P,b1,b2);
         dQn.dB1=jacapprox(fun,b1);
     end
     if cB2
-        fun=@(b2)feval(mfilename,b1,b2,P);
+        fun=@(b2)feval(mfilename,P,b1,b2);
         dQn.dB2=jacapprox(fun,b2);
     end
 end
@@ -97,4 +97,4 @@ b1=rand+0.1;
 b2=rand+0.1;
 P=rand(m,n);
 
-fail=full_self_test(mfilename,{b1,b2,P},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{P,b1,b2},1e-8,1e-8,verbose);

@@ -1,17 +1,17 @@
-function [Q,dQ,dQn]=scale3(k,P,varargin)
+function [Q,dQ,dQn]=scale3(P,k,varargin)
 %SCALE3 3D scaling for the DBAT projection model
 %
-%   Q=SCALE3(K,P) scales the 3D points in the 3-by-N array P by the
+%   Q=SCALE3(P,K) scales the 3D points in the 3-by-N array P by the
 %   scalar K.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to K and P in the fields dK and dP. For more details,
-%   see DBAT_BUNDLE_FUNCTIONS.
+%   with respect to P and K in the fields dP and dK, respectively. For
+%   more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(k), Q=selftest(nargin>1 && P); return; end
+if nargin>=1 && ischar(P), Q=selftest(nargin>1 && k); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(2,4);
@@ -28,8 +28,8 @@ if nargout>1
 end
 
 % What Jacobians to compute?
-cK=nargout>1 && (length(varargin)<1 || varargin{1});
-cP=nargout>1 && (length(varargin)<2 || varargin{2});
+cP=nargout>1 && (length(varargin)<1 || varargin{1});
+cK=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
 [m,n]=size(P);
@@ -47,11 +47,11 @@ if nargout>2
     % the function expects.
     if cP
         fmt=@(P)reshape(P,3,[]);
-        fun=@(P)feval(mfilename,k,fmt(P));
+        fun=@(P)feval(mfilename,fmt(P),k);
         dQn.dP=jacapprox(fun,P);
     end
     if cK
-        fun=@(k)feval(mfilename,k,P);
+        fun=@(k)feval(mfilename,P,k);
         dQn.dK=jacapprox(fun,k);
     end
 end
@@ -75,4 +75,4 @@ m=5;
 k=rand+1;
 P=rand(n,m);
 
-fail=full_self_test(mfilename,{k,P},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{P,k},1e-8,1e-8,verbose);
