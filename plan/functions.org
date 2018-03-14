@@ -35,7 +35,7 @@
 |---------------------------+--------------+-------------------------------------+--------|
 | xform pt to cam coord sys | world2cam    | P, M, p0                            | X      |
 | pinhole with euler angles | eulerpinhole | P, angles, p0, f                    | X      |
-| brown with affine xform   | brown_affine | u, k, u0, K, P, b1, b2, case        |        |
+| brown with affine xform   | brown_affine | u, sz, u0, K, P, b1, b2, case       |        |
 
 |--------------------------+----------------+--------------+---|
 | UNUSED                   |                |              |   |
