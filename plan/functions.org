@@ -16,8 +16,8 @@
 |---------------------------+----------------+-------------------------------------+--------|
 | AFFINE                    |                |                                     |        |
 |---------------------------+----------------+-------------------------------------+--------|
-| Affine 2D matrix          | affinemat2     | b                                   | X      |
-| Affine 2D                 | affine2        | b,p                                 | X      |
+| Affine 2D matrix          | affine2mat     | b1,b2                               | X      |
+| Affine 2D                 | affine2        | b1,b2,p                             | X      |
 |---------------------------+----------------+-------------------------------------+--------|
 | LENS DISTORTION           |                |                                     |        |
 |---------------------------+----------------+-------------------------------------+--------|
@@ -32,6 +32,13 @@
 |---------------------------+----------------+-------------------------------------+--------|
 | xform pt to cam coord sys | world2cam      | M, P, p0                            | X      |
 | pinhole with euler angles | eulerpinhole   | f, angles, P, p0                    | X      |
+| affine scaling            | affscale2      | pt, k, b1, b2                       |        |
+
+* RHS versions
+- No affinity :: lensdist(xlat2(scale2(pxsz,impt),-u0),K,P)
+- After lens distortion :: affine(lensdist(xlat2(scale2(pxsz,impt),-u0),K,P),b)
+- Before lens distortion :: 
+- 
 
 * General structure
 The public definition of each model function is

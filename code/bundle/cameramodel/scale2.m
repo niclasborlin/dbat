@@ -14,7 +14,7 @@ function [Q,dQ,dQn]=scale2(k,P,varargin)
 if nargin>=1 && ischar(k), Q=selftest(nargin>1 && P); return; end
 
 % Otherwise, verify number of parameters.
-narginchk(1,4);
+narginchk(2,4);
 
 Q=[];
 dQ=[];

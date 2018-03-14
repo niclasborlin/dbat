@@ -14,7 +14,7 @@ function [Q,dQ,dQn]=xlat3(P,c,varargin)
 if nargin>=1 && ischar(P), Q=selftest(nargin>1 && c); return; end
 
 % Otherwise, verify number of parameters.
-narginchk(1,4);
+narginchk(2,4);
 
 Q=[];
 dQ=[];
