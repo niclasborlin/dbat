@@ -48,7 +48,7 @@ end
 
 %% Actual function code
 if nargout<2
-    Q=f*pinhole(world2cam(P,eulerrotmat(ang,123,false)',p0));
+    Q=f*pinhole(world2cam(P,p0,eulerrotmat(ang,123,false)'));
 else
     if cA
         [M,dM]=eulerrotmat(ang,123,false);
@@ -62,7 +62,7 @@ else
         MT=eulerrotmat(ang,123,false)';
     end
     
-    [W2C,dW2C]=world2cam(P,MT,p0,cP,cA,cP0);
+    [W2C,dW2C]=world2cam(P,p0,MT,cP,cP0,cA);
     [PH,dPH]=pinhole(W2C,cA | cP | cP0);
     Q=f*PH;
 end

@@ -1,19 +1,19 @@
-function [Q,dQ,dQn]=world2cam(P,M,p0,varargin)
+function [Q,dQ,dQn]=world2cam(P,p0,M,varargin)
 %WORLD2CAM Transform 3D points from the world to the camera coordinate system.
 %
-%   Q=WORLD2CAM(P,M,P0), where P is 3-by-N with 3D points in world
+%   Q=WORLD2CAM(P,P0,M), where P is 3-by-N with 3D points in world
 %   coordinates, M is a 3-by-3 rotation matrix, and P0 is 3-by-1 with
 %   the camera center, transforms the points to the camera coordinate
 %   system. The actual transformation is M*(P-P0).
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians
-%   with respect to P, M, and P0 in the fields dP, dM, and dP0,
+%   with respect to P, P0, and M in the fields dP, dP0, and dM,
 %   respectively. For more details, see DBAT_BUNDLE_FUNCTIONS.
 %
 %SEE ALSO: XLAT3, LIN3, DBAT_BUNDLE_FUNCTIONS
 
 % Treat selftest call separately.
-if nargin>=1 && ischar(P), Q=selftest(nargin>1 && M); return; end
+if nargin>=1 && ischar(P), Q=selftest(nargin>1 && p0); return; end
 
 % Otherwise, verify number of parameters.
 narginchk(3,6);
@@ -32,8 +32,8 @@ end
 
 % What Jacobians to compute?
 cP=nargout>1 && (length(varargin)<1 || varargin{1});
-cM=nargout>1 && (length(varargin)<2 || varargin{2});
-cP0=nargout>1 && (length(varargin)<3 || varargin{3});
+cP0=nargout>1 && (length(varargin)<2 || varargin{2});
+cM=nargout>1 && (length(varargin)<3 || varargin{3});
 
 %% Test parameters
 [m,n]=size(P);
@@ -56,16 +56,16 @@ if nargout>2
     % the function expects.
     if cM
         fmt=@(M)reshape(M,3,3);
-        fun=@(M)feval(mfilename,P,fmt(M),p0);
+        fun=@(M)feval(mfilename,P,p0,fmt(M));
         dQn.dM=jacapprox(fun,M);
     end
     if cP
         fmt=@(P)reshape(P,3,[]);
-        fun=@(P)feval(mfilename,fmt(P),M,p0);
+        fun=@(P)feval(mfilename,fmt(P),p0,M);
         dQn.dP=jacapprox(fun,P);
     end
     if cP0
-        fun=@(p0)feval(mfilename,P,M,p0);
+        fun=@(p0)feval(mfilename,P,p0,M);
         dQn.dP0=jacapprox(fun,p0);
     end
 end
@@ -98,4 +98,4 @@ end
 p0=rand(m,1);
 P=rand(m,n);
 
-fail=full_self_test(mfilename,{P,M,p0},1e-8,1e-8,verbose);
+fail=full_self_test(mfilename,{P,p0,M},1e-8,1e-8,verbose);
