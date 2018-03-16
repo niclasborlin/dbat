@@ -1,7 +1,7 @@
-function [Q,dQ,dQn]=eulerpinhole(P,p0,ang,f,varargin)
-%EULERPINHOLE 3D-to-2D pinhole camera transformation with Euler angles.
+function [Q,dQ,dQn]=eulerpinhole2(P,p0,ang,f,varargin)
+%EULERPINHOLE2 3D-to-2D pinhole camera transformation with Euler angles.
 %
-%   Q=EULERPINHOLE(P,P0,A,F) performs a 3D-to-2D transformation of the
+%   Q=EULERPINHOLE2(P,P0,A,F) performs a 3D-to-2D transformation of the
 %   3D points in the 3-by-N array P according to the pinhole camera
 %   model. The position of the camera center is given by the 3-vector
 %   P0. The world-to-camera rotation is specified by the 3-vector A
