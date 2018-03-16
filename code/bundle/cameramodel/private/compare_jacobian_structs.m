@@ -1,7 +1,7 @@
-function fail=comparejacobianstructs(caller,A,N,absThres,relThres,verbose)
-%COMPAREJACOBIANSTRUCTS Compare Jacobian structs.
+function fail=compare_jacobian_structs(caller,A,N,absThres,relThres,verbose)
+%COMPARE_JACOBIAN_STRUCTS Compare Jacobian structs.
 %
-%   FAIL=COMPAREJACOBIANSTRUCTS(CALLER,A,N,ABSTHRES,RELTHRES,VERBOSE)
+%   FAIL=COMPARE_JACOBIAN_STRUCTS(CALLER,A,N,ABSTHRES,RELTHRES,VERBOSE)
 %   Compare all fields of the structs A and N holding analytical and
 %   numerical Jacobians, respectively. Return TRUE and output warnings
 %   if any absolute or relative errors exceed given thresholds. If
@@ -37,6 +37,4 @@ for i=1:length(fn)
                     caller,fn{i},relErr,relThres);
         end
     end
-    
 end
-
