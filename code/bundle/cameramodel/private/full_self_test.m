@@ -26,9 +26,31 @@ for l=1:testParams
     end
 end
 
+fail=false;
+
 for i=1:length(computeJacobians)
     compute=computeJacobians{i};
-    [v,A,N]=feval(caller,params{:},compute{:});
-    fail=compare_jacobian_structs(caller,A,N,absThres,relThres,verbose);
+    v0=feval(caller,params{:});
+    [v1,A,N]=feval(caller,params{:},compute{:});
+
+    absErr=abserr(v0,v1);
+    relErr=relerr(v0,v1);
+    if verbose
+        fprintf('%s: res absErr = %g, relErr= %g.\n',caller,absErr,relErr);
+    end
+    if absErr>absThres
+        fail=true;
+        warning('%s: res absolute error (%g) above threshold (%g)',...
+                caller,absErr,absThres);
+    elseif relErr>relThres
+        fail=true;
+        warning('%s: res relative error (%g) above threshold (%g)',...
+                caller,relErr,relThres);
+    end
+
+    if fail, return, end
+    
+    fail=fail | compare_jacobian_structs(caller,A,N,absThres,relThres,verbose);
+
     if fail, return, end
 end
