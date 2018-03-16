@@ -1,7 +1,7 @@
-function [Q,dQ,dQn]=aniscale(U,k,varargin)
-%ANISCALE 2D anisotropic scaling for the DBAT projection model.
+function [Q,dQ,dQn]=aniscale2b(U,k,varargin)
+%ANISCALE2B 2D anisotropic scaling for the DBAT projection model.
 %
-%   Q=ANISCALE(U,K) applies the anisotropic scaling to the 2D points
+%   Q=ANISCALE2B(U,K) applies the anisotropic scaling to the 2D points
 %   in the 2-by-N array U. The actual scaling is Q=[1+k,0;0,1]*U.
 %
 %   [Q,dQ]=... also returns a struct dQ with the analytical Jacobians

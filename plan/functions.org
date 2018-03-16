@@ -20,8 +20,9 @@
 |---------------------------+-------------------+--------------------------------------+--------|
 | Affine 2D matrix          | affine2mat        | b                                    | X      |
 | Affine 2D                 | affine2           | u,b                                  | X      |
-| Anisotropic scaling       | aniscale          | u,k                                  | X      |
-| Skew                      | skew              | u,k                                  | X      |
+| Anisotropic scaling       | aniscale          | u,b1                                 | X      |
+| Anisotropic scaling       | aniscale2         | u,k                                  |        |
+| Skew                      | skew              | u,b2                                 | X      |
 |---------------------------+-------------------+--------------------------------------+--------|
 | LENS DISTORTION           |                   |                                      |        |
 |---------------------------+-------------------+--------------------------------------+--------|

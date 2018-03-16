@@ -26,7 +26,7 @@ function [v,dv,dvn]=res_euler_brown_3(Q,q0,ang,f,u,sz,u0,K,P,b,varargin)
 %   References: Brown (1971), "Close-range camera calibration".
 %       Photogrammetric Engineering, 37(8): 855-866.
 %
-%SEE ALSO: BROWN_DIST, EULERPINHOLE, AFFINE2, ANISCALE, SKEW, DBAT_BUNDLE_FUNCTIONS.
+%SEE ALSO: BROWN_DIST, EULERPINHOLE, AFFINE2, ANISCALE2B, SKEW, DBAT_BUNDLE_FUNCTIONS.
 
 % Treat selftest call separately.
 if nargin>=1 && ischar(Q), v=selftest(nargin>1 && q0); return; end
@@ -84,13 +84,13 @@ end
 if nargout<2
     % Only need the function values.
     lhs=eulerpinhole(Q,q0,ang,f);
-    rhs=skew(brown_dist(xlat2(aniscale(scale2(u,sz),b(1)),-u0),K,P),b(2));
+    rhs=skew(brown_dist(xlat2(aniscale2b(scale2(u,sz),b(1)),-u0),K,P),b(2));
     v=lhs-rhs;
 else
     % Need Jacobians too.
     [lhs,dlhs]=eulerpinhole(Q,q0,ang,f,cQ,cQ0,cA,cF);
     [s,dS]=scale2(u,sz,cU,cSZ);
-    [as,dAS]=aniscale(s,b(1),cU | cSZ,cB);
+    [as,dAS]=aniscale2b(s,b(1),cU | cSZ,cB);
     [x,dX]=xlat2(as,-u0,cU | cSZ | cB,cU0);
     [l,dL]=brown_dist(x,K,P,cU | cSZ | cB | cU0,cK,cP);
     [sk,dSK]=skew(l,b(2),cU | cSZ | cB | cU0 | cK | cP,cB);
