@@ -84,13 +84,14 @@ end
 if nargout<2
     % Only need the function values.
     lhs=eulerpinhole(Q,q0,ang,f);
-    rhs=skew(brown_dist(xlat2(aniscale2b(scale2(u,sz),b(1)),-u0),K,P),b(2));
+    rhs=skew(brown_dist(xlat2(aniscale2b(aniscale2(scale2(u,sz),[1;-1]),b(1)),-u0),K,P),b(2));
     v=lhs-rhs;
 else
     % Need Jacobians too.
     [lhs,dlhs]=eulerpinhole(Q,q0,ang,f,cQ,cQ0,cA,cF);
     [s,dS]=scale2(u,sz,cU,cSZ);
-    [as,dAS]=aniscale2b(s,b(1),cU | cSZ,cB);
+    [as0,dAS0]=aniscale2(s,[1;-1],cU | cSZ,false);
+    [as,dAS]=aniscale2b(as0,b(1),cU | cSZ,cB);
     [x,dX]=xlat2(as,-u0,cU | cSZ | cB,cU0);
     [l,dL]=brown_dist(x,K,P,cU | cSZ | cB | cU0,cK,cP);
     [sk,dSK]=skew(l,b(2),cU | cSZ | cB | cU0 | cK | cP,cB);
@@ -161,10 +162,10 @@ if nargout>1
         dv.dF=dlhs.dF;
     end
     if cU
-        dv.dU=-dSK.dU*dL.dU*dX.dU*dAS.dU*dS.dU;
+        dv.dU=-dSK.dU*dL.dU*dX.dU*dAS.dU*dAS0.dU*dS.dU;
     end
     if cSZ
-        dv.dSZ=-dSK.dU*dL.dU*dX.dU*dAS.dU*dS.dK;
+        dv.dSZ=-dSK.dU*dL.dU*dX.dU*dAS.dU*dAS0.dU*dS.dK;
     end
     if cU0
         dv.dU0=dSK.dU*dL.dU*dX.dC;
