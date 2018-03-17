@@ -213,7 +213,7 @@ for i=1:length(selfCal)
       case -1
         fprintf(fid,[p,p,p,p,p,'Forward (Computer Vision)\n']);
       otherwise
-        fprintf(fid,[p,p,p,p,p,'Unknown'\n]);
+        fprintf(fid,[p,p,p,p,p,'Unknown (%d)\n'],s.IOdistModel(i));
     end
     for j=1:length(head)
         fprintf(fid,[p,p,p,p,'%s:\n'],head{j});

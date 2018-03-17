@@ -1,4 +1,4 @@
-function [v,dv,dvn]=res_euler_brown_0(Q,q0,ang,f,u,sz,u0,K,P,B,varargin)
+function [v,dv,dvn]=res_euler_brown_0(Q,q0,ang,f,u,sz,u0,K,P,B,varargin) %#ok<INUSL>
 %RES_EULER_BROWN_0 Residual function 0 for DBAT.
 %
 %   V=RES_EULER_BROWN_0(Q,Q0,A,F,U,SZ,U0,K,P) computes the residual
@@ -30,7 +30,7 @@ if nargin>=1 && ischar(Q), v=selftest(nargin>1 && q0); return; end
 % Otherwise, verify number of parameters.
 narginchk(9,18);
 
-v=[];
+v=[]; %#ok<NASGU>
 dv=[];
 dvn=[];
 
@@ -77,16 +77,16 @@ end
 %% Actual function code
 if nargout<2
     % Only need the function values.
-    lhs=eulerpinhole2(Q,q0,ang,f);
-    rhs=brown_dist(xlat2(aniscale2(scale2(u,sz),[1;-1]),-u0),K,P);
+    lhs=eulerpinhole2(Q,q0,ang,-f);
+    rhs=brown_dist(xlat2(aniscale2(scale2(u,sz),[1;-1]),-u0),-K,-P);
     v=lhs-rhs;
 else
     % Need Jacobians too.
-    [lhs,dlhs]=eulerpinhole2(Q,q0,ang,f,cQ,cQ0,cA,cF);
+    [lhs,dlhs]=eulerpinhole2(Q,q0,ang,-f,cQ,cQ0,cA,cF);
     [s,dS]=scale2(u,sz,cU,cSZ);
     [as,dAS]=aniscale2(s,[1;-1],cU | cSZ,false);
     [x,dX]=xlat2(as,-u0,cU | cSZ,cU0);
-    [l,dL]=brown_dist(x,K,P,cU | cSZ | cU0,cK,cP);
+    [l,dL]=brown_dist(x,-K,-P,cU | cSZ | cU0,cK,cP);
     v=lhs-l;
 end
 
@@ -147,7 +147,7 @@ if nargout>1
         dv.dQ0=dlhs.dP0;
     end
     if cF
-        dv.dF=dlhs.dF;
+        dv.dF=-dlhs.dF;
     end
     if cU
         dv.dU=-dL.dU*dX.dU*dAS.dU*dS.dU;
@@ -159,10 +159,10 @@ if nargout>1
         dv.dU0=dL.dU*dX.dC;
     end
     if cK
-        dv.dK=-dL.dK;
+        dv.dK=dL.dK;
     end
     if cP
-        dv.dP=-dL.dP;
+        dv.dP=dL.dP;
     end
 end
 

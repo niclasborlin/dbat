@@ -130,7 +130,7 @@ x0(ixEO)=s.EO(s.estEO);
 x0(ixOP)=s.OP(s.estOP);
 
 % Residual function.
-resFun=@(x)brown_euler_cam2(x,s);
+resFun=@(x)brown_euler_cam4(x,s);
 %resFun=@(x)both_brown_res(x,s);
 
 if veto

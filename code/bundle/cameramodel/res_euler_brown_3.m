@@ -10,7 +10,7 @@ function [v,dv,dvn]=res_euler_brown_3(Q,q0,ang,f,u,sz,u0,K,P,b,varargin)
 %   camera has a focal length F (scalar), principal point U0 (2-by-1),
 %   and pixel size SZ (scalar). The residual is formed between the
 %   projected object points and the measured image points after the
-%   image points have been converted to mm, and corrected for lens
+%   image points have been converted to mm and corrected for lens
 %   distortion. The vectors K and P contain the radial and tangential
 %   distortion coefficients, respectively. Furthermore, an affine
 %   transformation is applied on the image observations. An
@@ -83,17 +83,17 @@ end
 %% Actual function code
 if nargout<2
     % Only need the function values.
-    lhs=eulerpinhole2(Q,q0,ang,f);
-    rhs=skew(brown_dist(xlat2(aniscale2b(aniscale2(scale2(u,sz),[1;-1]),b(1)),-u0),K,P),b(2));
+    lhs=eulerpinhole2(Q,q0,ang,-f);
+    rhs=skew(brown_dist(xlat2(aniscale2b(aniscale2(scale2(u,sz),[1;-1]),b(1)),-u0),-K,-P),b(2));
     v=lhs-rhs;
 else
     % Need Jacobians too.
-    [lhs,dlhs]=eulerpinhole2(Q,q0,ang,f,cQ,cQ0,cA,cF);
+    [lhs,dlhs]=eulerpinhole2(Q,q0,ang,-f,cQ,cQ0,cA,cF);
     [s,dS]=scale2(u,sz,cU,cSZ);
     [as0,dAS0]=aniscale2(s,[1;-1],cU | cSZ,false);
     [as,dAS]=aniscale2b(as0,b(1),cU | cSZ,cB);
     [x,dX]=xlat2(as,-u0,cU | cSZ | cB,cU0);
-    [l,dL]=brown_dist(x,K,P,cU | cSZ | cB | cU0,cK,cP);
+    [l,dL]=brown_dist(x,-K,-P,cU | cSZ | cB | cU0,cK,cP);
     [sk,dSK]=skew(l,b(2),cU | cSZ | cB | cU0 | cK | cP,cB);
     v=lhs-sk;
 end
@@ -159,7 +159,7 @@ if nargout>1
         dv.dQ0=dlhs.dP0;
     end
     if cF
-        dv.dF=dlhs.dF;
+        dv.dF=-dlhs.dF;
     end
     if cU
         dv.dU=-dSK.dU*dL.dU*dX.dU*dAS.dU*dAS0.dU*dS.dU;
@@ -171,10 +171,10 @@ if nargout>1
         dv.dU0=dSK.dU*dL.dU*dX.dC;
     end
     if cK
-        dv.dK=-dSK.dU*dL.dK;
+        dv.dK=dSK.dU*dL.dK;
     end
     if cP
-        dv.dP=-dSK.dU*dL.dP;
+        dv.dP=dSK.dU*dL.dP;
     end
     if cB
         dv.dB=-[dSK.dU*dL.dU*dX.dU*dAS.dK,dSK.dK];
