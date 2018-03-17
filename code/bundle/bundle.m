@@ -196,7 +196,7 @@ end
 
 selfCal=any(s.estIO,1);
 
-strs={'Xp','Yp','f','K1','K2','K3','P1','P2'};
+strs={'Xp','Yp','f','K1','K2','K3','P1','P2','aspect','skew'};
 if all(selfCal)
     allParamCal=all(s.estIO,2);
     anyParamCal=any(s.estIO,2);
