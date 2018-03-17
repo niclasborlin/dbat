@@ -1,4 +1,4 @@
-function [rr,s0,prob]=camcaldemo_flex(damping,doPause)
+function [rr,s0,prob]=camcaldemo_affine(damping,doPause)
 %CAMCALDEMO Camera calibration demo for DBAT.
 %
 %   CAMCALDEMO runs a camera calibration bundle on a PhotoModeler
@@ -72,7 +72,7 @@ s0=prob2dbatstruct(prob);
 % 4 - Photogrammetry, affine after lens distortion
 % 5 - Photogrammetry, anisotropic scale before lens dist, skew after.
 % -1 - Computer Vision, no affine (fast).
-s0.IOdistModel(:)=5;
+s0.IOdistModel(:)=3;
 
 ss0=s0;
 
