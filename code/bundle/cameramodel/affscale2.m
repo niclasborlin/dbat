@@ -17,7 +17,7 @@ if nargin>=1 && ischar(U), Q=selftest(nargin>1 && k); return; end
 % Otherwise, verify number of parameters.
 narginchk(4,8);
 
-Q=[];
+Q=[]; %#ok<NASGU>
 dQ=[];
 dQn=[];
 
@@ -37,7 +37,7 @@ cB1=nargout>1 && (length(varargin)<3 || varargin{3});
 cB2=nargout>1 && (length(varargin)<4 || varargin{4});
 
 %% Test parameters
-[m,n]=size(U);
+[m,~]=size(U);
 if m~=2 || ~isscalar(k) || ~isscalar(b1) || ~isscalar(b2)
     error([mfilename,': bad size']);
 end

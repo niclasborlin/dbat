@@ -87,7 +87,7 @@ while true
     r=R*s;
     J=R*K;
 
-    rr(end+1)=sqrt(r'*r);
+    rr(end+1)=sqrt(r'*r); %#ok<AGROW>
     if trace
         if isempty(alphas)
             fprintf('Gauss-Newton-Armijo: iteration %d, residual norm=%.2g\n', ...
@@ -95,7 +95,7 @@ while true
         else
             fprintf(['Gauss-Newton-Armijo: iteration %d, residual norm=%.2g, ' ...
                      'last alpha=%s\n'],n,rr(end),...
-                    fliplr(deblank(fliplr(deblank(rats(alphas(end)))))));
+                    strtrim(rats(alphas(end))));
         end
     end
     
@@ -178,7 +178,7 @@ while true
         % Not sufficient descent, stop.
         code=-2;
         % Ensure that length of residual norm vector matches length of alpha.
-        rr(end+1)=rr(end);
+        rr(end+1)=rr(end); %#ok<AGROW>
         break;
     end
     
@@ -186,7 +186,7 @@ while true
         % Too many iterations, stop.
         code=-1; %
         % Ensure that length of residual norm vector matches length of  alpha.
-        rr(end+1)=sqrt(r'*r);
+        rr(end+1)=sqrt(r'*r); %#ok<AGROW>
         break;
     end
 

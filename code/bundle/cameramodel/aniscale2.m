@@ -17,7 +17,7 @@ if nargin>=1 && ischar(U), Q=selftest(nargin>1 && k); return; end
 % Otherwise, verify number of parameters.
 narginchk(2,4);
 
-Q=[];
+Q=[]; %#ok<NASGU>
 dQ=[];
 dQn=[];
 

@@ -49,7 +49,7 @@ if nargin>=1 && ischar(u), v=selftest(nargin>1 && sz); return; end
 % Otherwise, verify number of parameters.
 narginchk(8,15);
 
-v=[];
+v=[]; %#ok<NASGU>
 dv=[];
 dvn=[];
 
@@ -75,9 +75,9 @@ cB1=nargout>1 && (length(varargin)<6 || varargin{6});
 cB2=nargout>1 && (length(varargin)<7 || varargin{7});
 
 %% Test parameters
-[um,un]=size(u);
-[km,kn]=size(K);
-[pm,pn]=size(P);
+[um,~]=size(u);
+[~,kn]=size(K);
+[~,pn]=size(P);
 if um~=2 || ~isscalar(sz) || any(size(u0)~=[2,1]) || ...
        (kn~=1 && ~isempty(K)) || (pn~=1 && ~isempty(P)) || ~isscalar(b1) ...
        || ~isscalar(b2) || ~isscalar(cs)

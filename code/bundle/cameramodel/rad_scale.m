@@ -17,7 +17,7 @@ if nargin>=1 && ischar(u), v=selftest(nargin>1 && c); return; end
 % Otherwise, verify number of parameters.
 narginchk(1,4);
 
-v=[];
+v=[]; %#ok<NASGU>
 dv=[];
 dvn=[];
 
@@ -33,7 +33,7 @@ cU=nargout>1 && (length(varargin)<1 || varargin{1});
 cC=nargout>1 && (length(varargin)<2 || varargin{2});
 
 %% Test parameters
-[cm,cn]=size(c);
+[~,cn]=size(c);
 [um,un]=size(u);
 if cn~=1 || um~=2
     error([mfilename,': bad size']);

@@ -37,7 +37,7 @@ if nargin>=1 && ischar(ang), M=selftest(nargin>1 && seq); return; end
 % Otherwise, verify number of parameters.
 narginchk(3,3);
 
-M=[];
+M=[]; %#ok<NASGU>
 dM=[];
 dMn=[];
 
@@ -131,7 +131,7 @@ seqs=[];
 for i=1:3
     for j=1:3 % find(~ismember(1:3,i))
         for k=1:3 % find(~ismember(1:3,j))
-            seqs(end+1)=i*100+j*10+k;
+            seqs(end+1)=i*100+j*10+k; %#ok<AGROW>
         end
     end
 end

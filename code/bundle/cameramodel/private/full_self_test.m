@@ -22,7 +22,7 @@ computeJacobians={{}};
 for l=1:testParams
     words=0:pow2(l)-1;
     for i=1:length(words)
-        computeJacobians{end+1}=num2cell(logical(bitget(words(i),1:l)));
+        computeJacobians{end+1}=num2cell(logical(bitget(words(i),1:l))); %#ok<AGROW>
     end
 end
 

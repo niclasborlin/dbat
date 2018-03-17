@@ -19,7 +19,7 @@ if nargin>=1 && ischar(x), v=selftest(nargin>1 && varargin{1}); return; end
 % testing we may get 4.
 narginchk(1,4);
 
-v=[];
+v=[]; %#ok<NASGU>
 dv=[];
 dvn=[];
 
