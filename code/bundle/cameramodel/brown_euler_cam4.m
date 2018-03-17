@@ -90,13 +90,15 @@ if distModel>0
             J=[dIO1+dIO2,dEO,dOP;Jpre];
         end
     else
-        if distModel==2
+        if distModel>=2 && distModel<=5
             % Compute residuals for each camera.
             if (nargout<2)
                 % Only residual vector requested.
     
+                funs={@res_euler_brown_0,@res_euler_brown_1,...
+                      @res_euler_brown_2,@res_euler_brown_3};
                 % Compute residual for image observations.
-                fObs=multi_res(IO,EO,OP,s,@res_euler_brown_0);
+                fObs=multi_res(IO,EO,OP,s,funs{distModel-1});
 
                 % Compute residual for prior observations.
                 fPre=pm_preobs(x,s);

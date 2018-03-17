@@ -182,12 +182,14 @@ convTol=1e-6;
 % 3) x* found at maxIter
 % 4) x* not found at maxIter
 
-if all(s.IOdistModel==1)
-    disp(['Using Backward Brown (Photogrammetry) lens distortion ' ...
-          'model for all cameras']);
-elseif all(s.IOdistModel==-1)
+distModel=unique(s.IOdistModel);
+
+if isscalar(distModel) && distModel>0
+    fprintf(['Using Backward Brown (Photogrammetry) lens distortion ' ...
+          'model %d for all cameras\n'],distModel);
+elseif isscalar(distModel) && distModel<0
     disp(['Using Forward Brown (Computer Vision) lens distortion ' ...
-          'model for all cameras']);
+          'model %dfor all cameras\n'],-distModel);
 else
     disp('Using mix of Forward/Backward Brown lens distortion models');
 end

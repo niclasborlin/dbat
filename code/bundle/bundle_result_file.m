@@ -120,10 +120,11 @@ values={
 pretty_print(fid,repmat(p,1,3),values);
 
 fprintf(fid,[p,p,'Lens distortion models:\n']);
-if all(s.IOdistModel==1)
-    fprintf(fid,[p,p,p,'Backward (Photogrammetry)\n']);
-elseif all(s.IOdistModel==-1)
-    fprintf(fid,[p,p,p,'Forward (Computer Vision)\n']);
+distModel=unique(s.IOdistModel);
+if isscalar(distModel) && distModel>0
+    fprintf(fid,[p,p,p,'Backward (Photogrammetry) model %d\n'],distModel);
+elseif isscalar(distModel) && distModel<0
+    fprintf(fid,[p,p,p,'Forward (Computer Vision) model %d\n'],-distModel);
 else
     fprintf(fid,[p,p,p,'Mixed Forward/Backward\n']);
 end
@@ -207,13 +208,10 @@ for i=1:length(selfCal)
     end
     fprintf(fid,[p,p,p,'Camera%d\n'],i);
     fprintf(fid,[p,p,p,p,'Lens distortion model:\n']);
-    switch s.IOdistModel(i)
-      case 1
-        fprintf(fid,[p,p,p,p,p,'Backward (Photogrammetry)\n']);
-      case -1
-        fprintf(fid,[p,p,p,p,p,'Forward (Computer Vision)\n']);
-      otherwise
-        fprintf(fid,[p,p,p,p,p,'Unknown (%d)\n'],s.IOdistModel(i));
+    if s.IOdistModel(i)>0
+        fprintf(fid,[p,p,p,p,p,'Backward (Photogrammetry) model %d\n'],s.IOdistModel);
+    else
+        fprintf(fid,[p,p,p,p,p,'Forward (Computer Vision) model %d\n'],-s.IOdistModel);
     end
     for j=1:length(head)
         fprintf(fid,[p,p,p,p,'%s:\n'],head{j});
