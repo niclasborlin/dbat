@@ -276,8 +276,11 @@ if plotEO && any(s.estEO(:))
             lineH=reshape(objh(size(s.EO,2)+1:end),2,[]);
             % Set lines to highlight when selected.
             set(lineH','selectionhighlight','on');
-            for j=1:size(s.EO,2)
-                set(lineH(:,j),'userdata',j,'buttondownfcn',cb,'hittest','on');
+            if ~isempty(lineH)
+                for j=1:size(s.EO,2)
+                    set(lineH(:,j),'userdata',j,'buttondownfcn', ...
+                                   cb,'hittest','on');
+                end
             end
         end
     end
@@ -436,32 +439,40 @@ if plotParams
         ax=subplot(4,1,1,'parent',fig);
         semilogy(ax,0:length(e.res)-1,e.res,'x-');
         set(ax,'xtick',0:size(e.trace,2)-1);
-        set(ax,'xlim',[0,size(e.trace,2)]);
+        if size(e.trace,2)>0
+            set(ax,'xlim',[0,size(e.trace,2)]);
+        end
         title(ax,sprintf('Residual norm (%s)',e.damping.name));
         
         ax=subplot(4,1,2,'parent',fig);
-        semilogy(ax,0:length(e.res)-1,e.damping.delta,'x-');
-        set(ax,'xtick',0:size(e.trace,2)-1);
-        set(ax,'xlim',[0,size(e.trace,2)]);
+        if ~isempty(e.damping.delta)
+            semilogy(ax,0:length(e.res)-1,e.damping.delta,'x-');
+            set(ax,'xtick',0:size(e.trace,2)-1);
+            set(ax,'xlim',[0,size(e.trace,2)]);
+        end
         title(ax,'Damping (delta)');
     
         ax=subplot(4,1,3,'parent',fig);
-        plot(ax,0:length(e.res)-1,e.damping.step,'x-');
+        if ~isempty(e.damping.step)
+            plot(ax,0:length(e.res)-1,e.damping.step,'x-');
+            set(ax,'xlim',[0,size(e.trace,2)]);
+        end
         set(ax,'xtick',0:size(e.trace,2)-1);
-        set(ax,'xlim',[0,size(e.trace,2)]);
         set(ax,'ytick',0:2,'ylim',[-0.1,2.1],...
                'yticklabel',{'Gauss-Newton','Interpolated','Cauchy'});
         
         title(ax,'Step type');
         
         ax=subplot(4,1,4,'parent',fig);
-        plot(ax,0:length(e.damping.rho)-1,e.damping.rho,'x-');
-        line([0,length(e.damping.rho)-1],e.damping.rhoBad*[1,1],...
-             'linestyle','--','parent',ax);
-        line([0,length(e.damping.rho)-1],e.damping.rhoGood*[1,1],...
-             'linestyle','--','parent',ax);
+        if ~isempty(e.damping.rho)
+            plot(ax,0:length(e.damping.rho)-1,e.damping.rho,'x-');
+            line([0,length(e.damping.rho)-1],e.damping.rhoBad*[1,1],...
+                 'linestyle','--','parent',ax);
+            line([0,length(e.damping.rho)-1],e.damping.rhoGood*[1,1],...
+                 'linestyle','--','parent',ax);
+            set(ax,'xlim',[0,size(e.trace,2)]);
+        end
         set(ax,'xtick',0:size(e.trace,2)-1);
-        set(ax,'xlim',[0,size(e.trace,2)]);
         set(ax,'ylim',[-0.1,1.1]);
         title(ax,'Gain ratio (rho)');
         xlabel(ax,'Iteration count')
