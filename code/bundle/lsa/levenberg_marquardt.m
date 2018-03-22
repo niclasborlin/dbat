@@ -1,19 +1,20 @@
 function [x,code,n,final,T,rr,lambdas]=levenberg_marquardt(...
-    resFun,vetoFun,x0,W,maxIter,convTol,doTrace,lambda0,lambdaMin,params)
+    resFun,vetoFun,x0,W,maxIter,termFun,doTrace,lambda0,lambdaMin,params)
 %LEVENBERG_MARQUARDT Levenberg-Marquardt least squares adjustment algorithm.
 %
-%   [X,CODE,I]=LEVENBERG_MARQUARDT(RES,VETO,X0,N,TOL,TRACE,L0,MINL)
+%   [X,CODE,I]=LEVENBERG_MARQUARDT(RES,VETO,X0,N,TERM,TRACE,L0,MINL)
 %   runs the Levenberg-Marquardt least squares adjustment algorithm
 %   with weight matrix W on the problem with residual function RES and
-%   with initial values X0. A maximum of N iterations are allowed and
-%   the convergence tolerance is TOL. The final estimate is returned
-%   in X. The damping algorithm uses L0 as the initial lambda
-%   value. Any lambda value below MINL is considered to be zero. In
-%   addition, if supplied and non-empty, the VETO function is called
-%   to verify that the suggested trial point is not invalid. The
-%   number of iteration I and a success code (0 - OK, -1 - too many
-%   iterations, -2 - matrix is singular) are also returned. If TRACE
-%   is true, output sigma0 estimates at each iteration.
+%   with initial values X0. A maximum of N iterations are allowed. The
+%   handle TERM should point to a termination function (see
+%   GAUSS_NEWTON_ARMIJO) that will return TRUE if we are close enough
+%   to the solution. The final estimate is returned in X. The damping
+%   algorithm uses L0 as the initial lambda value. Any lambda value
+%   below MINL is considered to be zero. In addition, if supplied and
+%   non-empty, the VETO function is called to verify that the
+%   suggested trial point is not invalid. The number of iteration I
+%   and a success code (see GAUSS_NEWTON_ARMIJO) are also returned. If
+%   TRACE is true, output sigma0 estimates at each iteration.
 %
 %   If the supplied L0 is negative, the initial lambda is calculated as
 %   abs(L0)*trace(J0'*J0)/NN, where J0 is the Jacobian of the residual
@@ -119,6 +120,19 @@ while true
         
         % Store current residual norm and used lambda value.
         rr(end+1)=sqrt(r'*r);
+
+        % Verify the structural rank of the Jacobian. If it is less
+        % than the number of columns, something is wrong.
+        if n==0
+            % A structural rank deficiency is a setup problems. Thus,
+            % do the test only at the first iteration.
+            srJ=sprank(J);
+            if srJ<size(J,2)
+                code=-4;
+                p=nan(size(x));
+                break;
+            end
+        end
         lambdas(end+1)=lambda;
 
         if doTrace
@@ -192,11 +206,15 @@ while true
         end
     end
 
+    if code~=0
+        break;
+    end
+    
     % We have either found a better point or run out of iterations.
     
     % Terminate with success if last step was without damping and we
     % satisfy the termination criteria.
-    if prevLambda==0 && norm(Jp)<convTol*norm(r)
+    if prevLambda==0 && termFun(Jp,r)
         break;
     end
     

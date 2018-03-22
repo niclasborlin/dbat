@@ -92,12 +92,15 @@ fprintf(fid,[p,p,'Processing options:\n']);
 
 offon={'off','on'};
 
+relabs={'relative','absolute'};
+
 values={'Orientation:','%s','on',
         'Global optimization:','%s','on',
         'Calibration:','%s',offon{double(any(s.estIO(:)))+1},
         'Constraints:','%s','off',
         'Maximum # of iterations:','%d',e.maxIter,
         'Convergence tolerance:','%g',e.convTol,
+        'Termination criteria:','%s',relabs{double(e.absTerm)+1},
         'Singular test:','%s',offon{double(e.singularTest)+1},
         'Chirality veto:','%s',offon{double(e.chirality)+1},
         'Damping:','%s',e.damping.name,

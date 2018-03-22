@@ -1,20 +1,21 @@
 function [x,code,n,final,T,rr,deltas,rhos,steps]=levenberg_marquardt_powell(...
-    resFun,vetoFun,x0,W,maxIter,convTol,doTrace,delta0,mu,eta)
+    resFun,vetoFun,x0,W,maxIter,termFun,doTrace,delta0,mu,eta)
 %LEVENBERG_MARQUARDT_POWELL Levenberg-Marquardt algorithm with Powell dogleg.
 %
-%   [X,CODE,I]=LEVENBERG_MARQUARDT_POWELL(RES,VETO,X0,W,N,TOL,TRACE,D0,MU,ETA)
+%   [X,CODE,I]=LEVENBERG_MARQUARDT_POWELL(RES,VETO,X0,W,N,TERM,TRACE,D0,MU,ETA)
 %   runs the trust-region verions of the Levenberg-Marquardt least
 %   squares adjustment algorithm with weight matrix W and Powell
 %   dogleg on the problem with residual function RES and with initial
-%   values X0. A maximum of N iterations are allowed and the
-%   convergence tolerance is TOL. The final estimate is returned in
-%   X. The damping algorithm uses D0 as the initial delta value.  The
-%   quality of each proposed step is determined by the constants 0 <
-%   MU < ETA < 1. In addition, if supplied and non-empty, the VETO
-%   function is called to verify that the suggested trial point is not
-%   invalid. The number of iteration I and a success code (0 - OK, -1
-%   - too many iterations) are also returned. If TRACE is true, output
-%   sigma0 estimates at each iteration.
+%   values X0. A maximum of N iterations are allowed. The handle TERM
+%   should point to a termination function (see GAUSS_NEWTON_ARMIJO)
+%   that will return TRUE if we are close enough to the solution. The
+%   final estimate is returned in X. The damping algorithm uses D0 as
+%   the initial delta value. The quality of each proposed step is
+%   determined by the constants 0 < MU < ETA < 1. In addition, if
+%   supplied and non-empty, the VETO function is called to verify that
+%   the suggested trial point is not invalid. The number of iteration
+%   I and a success code (see GAUSS_NEWTON_ARMIJO) are also returned.
+%   If TRACE is true, output sigma0 estimates at each iteration.
 %
 %   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
 %   step and the estimates of the weighted and unweighted residual
@@ -104,19 +105,37 @@ rr=[];
 stepStr={'GN','IP','CP'};
 
 while true
+    % Store current residual norm.
+    rr(end+1)=sqrt(r'*r);
+
+    % Verify the structural rank of the Jacobian. If it is less
+    % than the number of columns, something is wrong.
+    if n==0
+        % A structural rank deficiency is a setup problems. Thus,
+        % do the test only at the first iteration.
+        srJ=sprank(J);
+        if srJ<size(J,2)
+            code=-4;
+            p=nan(size(x));
+            break;
+        end
+    end
+    
     % Find search direction using the Powell single dogleg algorithm.
     [p,pGN,step]=dogleg(r,J,delta);
 
-    % Store current residual norm and used lambda value.
-    rr(end+1)=sqrt(r'*r);
+    % Store used lambda value.
     deltas(end+1)=delta;
     steps(end+1)=step;
     
     JpGN=J*pGN;
     Jp=J*p;
-    if step==0 && norm(J*pGN)<convTol*norm(r)
-        % Only terminate with success if last step was without damping,
-        % i.e. a full G-N step.
+
+    if step==0 && termFun(J*pGN,r)
+        % Call termination detection function. See BUNDLE for a discussion on
+        % selection of termination detection functions. Only terminate
+        % with success if last step was without damping, i.e. a full
+        % G-N step.
         break;
     end
 

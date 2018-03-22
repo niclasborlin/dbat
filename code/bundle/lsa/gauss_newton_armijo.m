@@ -1,22 +1,49 @@
 function [x,code,n,final,T,rr,alphas]=gauss_newton_armijo(...
-    resFun,vetoFun,x0,W,maxIter,convTol,trace,sTest,mu,alphaMin)
+    resFun,vetoFun,x0,W,maxIter,termFun,trace,sTest,mu,alphaMin)
 %GAUSS_NEWTON_ARMIJO Gauss-Newton-Armijo least squares adjustment algorithm.
 %
-%   [X,CODE,I]=GAUSS_NEWTON_ARMIJO(RES,VETO,X0,W,N,TOL,TRACE,STEST,MU,AMIN)
+%   [X,CODE,I]=GAUSS_NEWTON_ARMIJO(RES,VETO,X0,W,N,TERM,TRACE,STEST,MU,AMIN)
 %   runs the Gauss-Newton-Armijo least squares adjustment algorithm
 %   with weight matrix W on the problem with residual function RES and
-%   with initial values X0. A maximum of N iterations are allowed and
-%   the convergence tolerance is TOL. The final estimate is returned
-%   in X. If STEST is true, the iterations are terminated if a (near)
-%   singularity warning on the normal matrix is issued. The steplength
-%   algorithm uses the constant MU for the Armijo condition and
-%   accepts steplengths down to AMIN. In addition, if supplied and
-%   non-empty, the VETO function is called to verify that the
-%   steplength does not generate an invalid point. The number of
-%   iteration I and a success code (0 - OK, -1 - too many iterations,
-%   -2 - matrix is singular, -3 - no alpha found) are also
-%   returned. If TRACE is true, output sigma0 estimates at each
+%   with initial values X0. A maximum of N iterations are allowed. The
+%   handle TERM should point to a termination function (see below)
+%   that will return TRUE if we are close enough to the solution. The
+%   final estimate is returned in X. If STEST is true, the iterations
+%   are terminated if a (near) singularity warning on the normal
+%   matrix is issued. The steplength algorithm uses the constant MU
+%   for the Armijo condition and accepts steplengths down to AMIN. In
+%   addition, if supplied and non-empty, the VETO function is called
+%   to verify that the steplength does not generate an invalid point.
+%   The number of iteration I and a success code (see below) are also
+%   returned. If TRACE is true, sigma0 estimates are printed at each
 %   iteration.
+%
+%   Termination function
+%
+%       The termination function should accept two vectors Jp and r
+%       and return TRUE if they indicate that we are close enough to
+%       the solution.
+%
+%       Standard termination functions are the relative termination
+%       function
+%
+%             norm(Jp) <= tol*norm(r)
+%
+%       and the absolute termination function
+%       
+%             norm(r) <= tol,
+%
+%       where tol is a (small) constant.
+%
+%   Success codes
+%
+%       The following success codes are returned:
+%
+%        0  - OK
+%       -1 - too many iterations,
+%       -2 - normal matrix is singular
+%       -3 - no alpha found by the line search
+%       -4 - Jacobian is structurally rank deficient.
 %
 %   [X,CODE,I,FINAL]=... also returns the struct FINAL with the final
 %   step and the estimates of the weighted and unweighted residual
@@ -99,6 +126,19 @@ while true
         end
     end
     
+    % Verify the structural rank of the Jacobian. If it is less
+    % than the number of columns, something is wrong.
+    if n==0
+        % A structural rank deficiency is a setup problems. Thus,
+        % do the test only at the first iteration.
+        srJ=sprank(J);
+        if srJ<size(J,2)
+            code=-4;
+            p=nan(size(x));
+            break;
+        end
+    end
+    
     % Solve normal equations. Corresponds to p=(K'*W*K)\-(K'*W*s).
     
     % Do column scaling of the Jacobian to reduce the condition number.
@@ -144,10 +184,9 @@ while true
     % Pre-calculate J*p.
     Jp=J*p;
     
-    % Terminate if angle between projected residual is smaller than
-    % threshold. Warning! This test may be very strict on synthetic data
-    % where norm(r) is close to zero at the solution.
-    if norm(Jp)<=convTol*norm(r)
+    % Call termination detection function. See BUNDLE for a
+    % discussion on selection of termination detection functions.
+    if termFun(Jp,r)
         % Converged.
         break
     end

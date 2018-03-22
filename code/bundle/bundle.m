@@ -20,6 +20,14 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %   ...=BUNDLE(S,...,'trace') specifies that the bundle should
 %   print an trace during the iterations.
 %
+%   ...=BUNDLE(S,...,TOL), where TOL is a scalar < 1, sets the
+%   convergence tolerance. Default: 1e-06.
+%
+%   ...=BUNDLE(S,...,'absterm') specifies that the bundle should
+%   use an absolute termination criteria instead of a relative (the
+%   default). This might be useful if you are testing the bundle on
+%   synthetic data with zero residual.
+%
 %   ...=BUNDLE(S,...,'singulartest') specifies that the bundle should
 %   stop immediately if a 'Matrix is singular' or 'Matrix is almost
 %   singular' warning is issued on the normal matrix.
@@ -62,11 +70,18 @@ singularTest=false;
 trace=false;
 dofVerb=false;
 pmDof=false;
+absTerm=false;
+convTol=1e-6;
 
 while ~isempty(varargin)
     if isnumeric(varargin{1}) && isscalar(varargin{1})
         % N
-        maxIter=varargin{1};
+        v=varargin{1};
+        if v==round(v)
+            maxIter=v;
+        else
+            convTol=v;
+        end
         varargin(1)=[];
     elseif ischar(varargin{1})
         % DAMP, TRACE, or CXX
@@ -86,6 +101,9 @@ while ~isempty(varargin)
             varargin(1)=[];
           case 'dofverb'
             dofVerb=true;
+            varargin(1)=[];
+          case 'absterm'
+            absTerm=true;
             varargin(1)=[];
           otherwise
             error('DBAT:bundle:badInput','Unknown damping');
@@ -163,8 +181,22 @@ Cobs=spdiags(varAll,0,nObs,nObs);
 % Use the inverse as the weight matrix.
 W=inv(Cobs);
 
-% Convergence tolerance.
-convTol=1e-6;
+% Choose between a relative and absolute termination criteria. The
+% relative termination criteria (default) corresponds to the angle
+% between the residual vector and the tangent plane of the non-linear
+% residual surface. For real-world, noisy data, it is generally the
+% best, as it does not depend on the scaling of the parameters or
+% observations. However, for synthetic data with zero residual, the
+% termination critera may never activate and the bundle will fail. In
+% such cases, an absolute termination criteria on the residual vector
+% alone can be used.
+if absTerm
+    % Absolute termination criteria.
+    termFun=@(Jp,r)norm(r)<=convTol;
+else
+    % Relative termination criteria (angle).
+    termFun=@(Jp,r)norm(Jp)<=convTol*norm(r);
+end
 
 % For all optimization methods below, the final estimate is returned
 % in x.  The final weighted and unweighted residual vectors and
@@ -217,9 +249,9 @@ end
     
 % Version string.
 [v,d]=dbatversion;
-E=struct('maxIter',maxIter,'convTol',convTol,'singularTest',singularTest,...
-         'chirality',veto,'dateStamp',datestr(now),...
-         'version',sprintf('%s (%s)',v,d));
+E=struct('maxIter',maxIter,'convTol',convTol,'absTerm',absTerm, ...
+         'singularTest',singularTest, 'chirality',veto,'dateStamp', ...
+         datestr(now), 'version',sprintf('%s (%s)',v,d));
 
 switch lower(damping)
   case {'none','gm'}
@@ -228,7 +260,7 @@ switch lower(damping)
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
     [x,code,iters,final,X,res]=gauss_markov(resFun,x0,W,maxIter, ...
-                                          convTol,trace, singularTest);
+                                          termFun,trace, singularTest);
     time=cputime-stopWatch;
     E.damping=struct('name','gm');
   case 'gna'
@@ -245,7 +277,7 @@ switch lower(damping)
     [x,code,iters,final,X,res,alpha]=gauss_newton_armijo(resFun, ...
                                                       vetoFun,x0,W, ...
                                                       maxIter, ...
-                                                      convTol,trace, ...
+                                                      termFun,trace, ...
                                                       singularTest, ...
                                                       mu,alphaMin);  
     time=cputime-stopWatch;
@@ -265,7 +297,7 @@ switch lower(damping)
     stopWatch=cputime;
     [x,code,iters,final,X,res,lambda]=levenberg_marquardt(resFun,vetoFun,x0, ...
                                                       W,maxIter, ...
-                                                      convTol,trace, ...
+                                                      termFun,trace, ...
                                                       lambda0,lambdaMin);
     time=cputime-stopWatch;
     E.damping=struct('name','lm','lambda',lambda,'lambda0',lambda(1), ...
@@ -286,7 +318,7 @@ switch lower(damping)
     % each iteration.
     stopWatch=cputime;
     [x,code,iters,final,X,res,delta,rho,step]=levenberg_marquardt_powell(...
-        resFun,vetoFun,x0,W,maxIter,convTol,trace, delta0,rhoBad,rhoGood);
+        resFun,vetoFun,x0,W,maxIter,termFun,trace, delta0,rhoBad,rhoGood);
     time=cputime-stopWatch;
     E.damping=struct('name','lmp','delta',delta,'rho',rho,'delta0',delta0,...
                      'rhoBad',rhoBad,'rhoGood',rhoGood,'step',step);
