@@ -91,7 +91,9 @@ if plotIO && any(s.estIO(:))
     legh=legend(lgs,'location','NorthEastOutside');
     title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
     set(ax,'xtick',0:size(e.trace,2)-1);
-    set(ax,'xlim',[0,size(e.trace,2)-1]);
+    if size(e.trace,2)>1
+        set(ax,'xlim',[0,size(e.trace,2)-1]);
+    end
     set(ax,'xticklabel',[]);
     
     ax=subplot(4,1,2,'parent',fig);
@@ -131,7 +133,9 @@ if plotIO && any(s.estIO(:))
     end
     title(ax,'Radial distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
-    set(ax,'xlim',[0,size(e.trace,2)-1]);
+    if size(e.trace,2)>1
+        set(ax,'xlim',[0,size(e.trace,2)-1]);
+    end
     set(ax,'xticklabel',[]);
     
     ax=subplot(4,1,3,'parent',fig);
@@ -170,7 +174,9 @@ if plotIO && any(s.estIO(:))
     end
     title(ax,'Tangential distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
-    set(ax,'xlim',[0,size(e.trace,2)-1]);
+    if size(e.trace,2)>1
+        set(ax,'xlim',[0,size(e.trace,2)-1]);
+    end
     set(ax,'xticklabel',[]);
 
     ax=subplot(4,1,4,'parent',fig);
@@ -209,7 +215,9 @@ if plotIO && any(s.estIO(:))
     end
     title(ax,'Affine distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
-    set(ax,'xlim',[0,size(e.trace,2)-1]);
+    if size(e.trace,2)>1
+        set(ax,'xlim',[0,size(e.trace,2)-1]);
+    end
     xlabel(ax,'Iteration count')
 
     % Scale axes to have same width.
