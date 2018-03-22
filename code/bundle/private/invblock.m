@@ -11,6 +11,10 @@ if isempty(ix)
     return;
 end
 
+if isnan(L(1,1))
+    x=nan(nnz(ix));
+end
+
 % Create inverse permutation.
 invP=zeros(size(p));
 invP(p)=1:length(p);

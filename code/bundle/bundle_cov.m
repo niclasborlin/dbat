@@ -68,7 +68,15 @@ bixOP(s.estOP)=ixOP;
 p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
 % Perform Cholesky on permuted J'*J.
-L=chol(JTJ(p,p))';
+[LT,fail]=chol(JTJ(p,p));
+
+if fail==0
+    L=LT';
+else
+    warning(['Posterior covariance matrix was not positive definite. ' ...
+             'Results will be inaccurate.'])
+    L=nan(size(JTJ));
+end
 
 % Memory limit in elements.
 memLimit=1e7;
@@ -77,16 +85,24 @@ for i=1:length(varargin)
     switch varargin{i}
       case 'cxx' % Raw, whole covariance matrix.
 
-        C=invblock(L,p,1:size(L,1),'direct');
-            
+        if fail
+            C=nan(size(L));
+        else
+            C=invblock(L,p,1:size(L,1),'direct');
+        end
+        
       case 'ciof' % Whole CIO covariance matrix.
             
         % Pre-allocate matrix with place for nnz(s.estIO)^2 elements.
         C=spalloc(numel(s.IO),numel(s.IO),nnz(s.estIO)^2);
         
-        % Compute needed part of inverse and put it into the right
-        % part of C.
-        C(s.estIO(:),s.estIO(:))=invblock(L,p,ixIO,'sqrt');
+        if fail
+            C(s.estIO(:),s.estIO(:))=nan;
+        else
+            % Compute needed part of inverse and put it into the right
+            % part of C.
+            C(s.estIO(:),s.estIO(:))=invblock(L,p,ixIO,'sqrt');
+        end
         
       case 'ceof' % Whole CEO covariance matrix.
         
@@ -94,10 +110,14 @@ for i=1:length(varargin)
         % Pre-allocate matrix with place for nnz(s.estEO)^2 elements.
         C=spalloc(numel(s.EO),numel(s.EO),nnz(s.estEO)^2);
         
-        % Compute needed part of inverse and put it into the right
-        % part of C.
-        C(s.estEO(:),s.estEO(:))=invblock(L,p,ixEO,'sqrt');
-
+        if fail
+            C(s.estEO(:),s.estEO(:))=nan;
+        else
+            % Compute needed part of inverse and put it into the right
+            % part of C.
+            C(s.estEO(:),s.estEO(:))=invblock(L,p,ixEO,'sqrt');
+        end
+        
         % Remove axis indicator psuedo-elements.
         keep=rem(1:size(C,1),7)~=0;
         C=C(keep,keep);
@@ -110,9 +130,13 @@ for i=1:length(varargin)
         % Pre-allocate matrix with place for nnz(s.estOP)^2 elements.
         C=spalloc(numel(s.OP),numel(s.OP),nnz(s.estOP)^2);
         
-        % Compute needed part of inverse and put it into the right
-        % part of C.
-        C(s.estOP(:),s.estOP(:))=invblock(L,p,ixOP,'sqrt');
+        if fail
+            C(s.estOP(:),s.estOP(:))=nan;
+        else
+            % Compute needed part of inverse and put it into the right
+            % part of C.
+            C(s.estOP(:),s.estOP(:))=invblock(L,p,ixOP,'sqrt');
+        end
         
         %etime(clock,start)
         
