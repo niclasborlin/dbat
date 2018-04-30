@@ -4,7 +4,7 @@
 # submit an issue on github at
 # https://github.com/niclasborlin/dbat/issues or send an email to
 # niclas.borlin@cs.umu.se. Please include 'DBAT bug' or 'DBAT feature'
-# in the subject.
+# in the subject line.
 #
 # In both cases, please include the following information:
 # - One-line summary (necssary on github).
@@ -12,8 +12,9 @@
 # - DBAT version (output of 'dbatversion' command).
 # - Matlab version (output of 'ver' command).
 # - operating system version.
-# - offending .m file, if clear from error messages, etc.
-# - any loading files .txt, .psz, if applicable.
-# - diary of commands the led up to the problem, ideally from Matlab
-#   start to when the problem occurs.
+# - offending .m file, if this is clear from any error messages, etc.
+# - any loading files .txt, .psz, if applicable, that may be used to
+#   replicate the error,
+# - a diary of commands the led up to the problem, ideally from Matlab
+#   start (use command 'diary') to when the problem occurs.
 # - any other files that may help us to replicate the problem.
