@@ -31,7 +31,17 @@ p=repmat(' ',1,3);
 fprintf(fid,[p,'Project Name: %s\n'],s.title);
 
 fprintf(fid,[p,'Problems and suggestions:\n']);
-fprintf(fid,[p,p,'Project Problems: Not evaluated\n']);
+fprintf(fid,[p,p,'Project Problems:\n']);
+if isempty(e.structureFlaw)
+    fprintf(fid,[p,p,p,'Structural rank: ok.\n']);
+else
+    fprintf(fid,[p,p,p,'Structural rank:\n']);
+    fprintf(fid,[p,p,p,p,'DMPERM (Dulmage-Mendelsohn) suggests the ' ...
+                        'following parameters have problems:\n']);
+    for i=1:length(e.structureFlaw)
+        fprintf(fid,[p,p,p,p,p,'%s\n'],e.structureFlaw{i});
+    end
+end
 
 % Check if we have any large correlations.
 [iio,jio,kio,vio,CIO]=high_io_correlations(s,e,corrThreshold);
@@ -83,7 +93,7 @@ values={'Last Bundle Run:','%s',e.dateStamp,
         'MATLAB version:','%s',version,
         'Host system:','%s',computer,
         'Host name:','%s',hostname,
-        'Status:','%s (%d)',{status,e.code},
+        'Status:','%s (code: %d)',{status,e.code},
         'Sigma0:','%g',e.s0,
         'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1)};
 pretty_print(fid,repmat(p,1,2),values);

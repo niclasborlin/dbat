@@ -147,6 +147,13 @@ x0(ixIO)=s.IO(s.estIO);
 x0(ixEO)=s.EO(s.estEO);
 x0(ixOP)=s.OP(s.estOP);
 
+% Construct parameter type vector for debugging problems with
+% bundle and/or data set.
+paramTypes=cell(size(x0));
+paramTypes(ixIO)=s.paramTypes.IO(s.estIO);
+paramTypes(ixEO)=s.paramTypes.EO(s.estEO);
+paramTypes(ixOP)=s.paramTypes.OP(s.estOP);
+
 % Residual function.
 resFun=@(x)brown_euler_cam4(x,s);
 %resFun=@(x)both_brown_res(x,s);
@@ -344,6 +351,17 @@ if ok
     s.IO(s.estIO)=x(ixIO);
     s.EO(s.estEO)=x(ixEO);
     s.OP(s.estOP)=x(ixOP);
+end
+
+E.paramTypes=paramTypes;
+
+if code==-4
+    % Structural rank deficiency. Record potential cause.
+    E.dmperm=dmperm(E.final.weighted.J);
+    E.structureFlaw=E.paramTypes(E.dmperm==0);
+else
+    E.dmperm=[];
+    E.structureFlaw={};
 end
 
 % Always update the residuals.

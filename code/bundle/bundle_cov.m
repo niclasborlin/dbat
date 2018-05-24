@@ -75,7 +75,8 @@ if fail==0
 else
     warning(['Posterior covariance matrix was not positive definite. ' ...
              'Results will be inaccurate.'])
-    L=nan(size(JTJ));
+    n=size(JTJ,1);
+    L=sparse(1:n,1:n,nan,n,n);
 end
 
 % Memory limit in elements.

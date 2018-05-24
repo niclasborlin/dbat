@@ -70,9 +70,12 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                           observations were used in the bundle.
 %                  OP     - 3-by-nOP array with OP and CP residuals if prior 
 %                           OP/CP observations were used in the bundle.
+%       paramTypes - struct with fields IO, EO, OP that indicate
+%                  what type of parameter is stored at the
+%                  respective position. See PARAMETER TYPES below.
 %       sigmas   - vector with a posteriori standard deviations
 %                  (prior.sigmas scaled by estimated sigma0).
-%       estIO    - 12-by-nCams logical array indicating which internal
+%       estIO    - 16-by-nCams logical array indicating which internal
 %                  parameters should be estimated by the bundle. Defaults
 %                  to all false.
 %       estEO    - 7-by-nImages logical array indicating which external
@@ -82,7 +85,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  are considered free and should be estimated by the
 %                  bundle. Defaults to true for all but fixed control
 %                  points.
-%       useIOobs - 12-by-nCams logical array indicating which prior IO
+%       useIOobs - 16-by-nCams logical array indicating which prior IO
 %                  observations should be used by the bundle. Defaults 
 %                  to all false.
 %       useEOobs - 7-by-nCams logical array indicating which prior EO
@@ -94,7 +97,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       nK       - scalar indicating how many (potentially zero) K values
 %                  are used in the model. nK=3.
 %       nP       - scalar indicating how many (potentially zero) P values
-%                  are used in the model. nK=2.
+%                  are used in the model. nP=2.
 %       camUnit  - string with the unit used internally by the camera
 %                  mm     - nominal mm,
 %                  35mm   - '35 mm equivalent' units, i.e. sensor height=24mm,
@@ -109,11 +112,14 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       imLabels - nEO-cell array with image labels.
 %       camId    - nEO-vector with camera ids.
 %
-%   Each IO column stores the parameters below. Currently, only the first
-%   8 may be estimated by the bundle.
+%
+%   PARAMETER TYPES:
+%
+%   Each IO column stores the parameters below. Only the first 10
+%   may be estimated by the bundle.
 %       px,
 %       py      - principal point in camera units (typically mm).
-%       c       - camera constant in camera units.
+%       cc      - camera constant in camera units.
 %       K1,
 %       K2,
 %       K3      - radial distortion parameters of Brown (1971).
@@ -128,16 +134,33 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       rx,
 %       ry      - image resolution.
 %
+%   The names above are stored in the paramTypes.IO field. If
+%   multiple IO columns are present, the column number is appended.
+%
 %   Each EO column stores the parameters below. The first 6 parameters
 %   may be estimated by the bundle.
-%       X,
-%       Y,
-%       Z       - external coordinates of the camera center in project units.
+%       EX,
+%       EY,
+%       EZ       - external coordinates of the camera center in project units.
 %       omega,
 %       phi,
 %       kappa   - Euler angles for the camera orientation in radians.
-%       t       - parameter indicating which Euler convention is
+%       tt      - parameter indicating which Euler convention is
 %                 used. Currently only t=0 (omega, phi,kappa) is supported.
+%
+%   The first two letters of the names above are stored in the
+%   paramTypes.EO field. If multiple EO columns are present, a camera
+%   identifier is appended to each parameter. The camera parameter is
+%   consists of the camera sequence number and camera id.
+%
+%   Each OP column stores the X, Y, Z coordinates.
+%
+%   The OP names are stored in the paramTypes.OP field. Object points
+%   are prefixed with 'O', i.e. 'OX', 'OY', 'OZ'. Control points are
+%   prefixed with 'C'. Check points are prefixed with 'H'.
+%   Furthermore, a point identifier is appended. The point
+%   identifier consists of the sequence number and if necessary,
+%   the OP id, the OP raw id, and the OP label.
 %
 %See also: LOADPM.
 
@@ -202,6 +225,18 @@ IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
 % Fix to force square pixels.
 IO(3+nK+nP+6+(1:2),:)=mean(IO(3+nK+nP+6+(1:2),:),1);
 
+% Set IO parameter types.
+Knames=arrayfun(@(x)sprintf('K%d',x),1:nK,'uniformoutput',false);
+Pnames=arrayfun(@(x)sprintf('P%d',x),1:nP,'uniformoutput',false);
+IOtypes={'px','py','cc',Knames{:},Pnames{:},'fa','fs','sw','sh','iw','ih','rx','ry'}';
+if size(IO,2)>1
+    IOtypes=repmat(IOtypes,1,size(IO,2));
+    for i=1:size(IO,2)
+        IOtypes(:,i)=cellfun(@(x)sprintf('%s-%d',x,i),IOtypes(:,i),...
+                             'uniformoutput',false);
+    end
+end
+
 % First-order error propagation.
 % C=A/B; std(C) = abs(A/B^2)*std(B).
 IOstd(3+nK+nP+6+(1:2),:)=...
@@ -237,6 +272,23 @@ imLabels=cellfun(@(x)strrep(x,'\','/'),{prob.images.label},...
                  'uniformoutput',false);
 
 camIds=cell2mat({prob.images.id});
+
+% Set EO parameter types.
+EOtypes={'EX','EY','EZ','om','ph','ka','tt'}';
+if size(EO,2)>1
+    EOtypes=repmat(EOtypes,1,size(EO,2));
+    % Only specify camera ids if any differ from camera sequence number.
+    useCamIds=any(1:length(camIds)~=camIds);
+    for i=1:size(EO,2)
+        % Id for this camera.
+        if useCamIds
+            camStr=sprintf('-%d(%d)',i,camIds(i));
+        else
+            camStr=sprintf('-%d',i);
+        end
+        EOtypes(:,i)=cellfun(@(x)[x,camStr],EOtypes(:,i),'uniformoutput',false);
+    end
+end
 
 % Find shortest common dir prefix.
 imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
@@ -295,6 +347,32 @@ CPstd(:,ia)=prob.ctrlPts(ib,5:7)';
 [~,ia,ib]=intersect(OPid,prob.checkPts(:,1));
 CCP(:,ia)=prob.checkPts(ib,2:4)';
 CCPstd(:,ia)=prob.checkPts(ib,5:7)';
+
+OPtypes={'OX','OY','OZ'}';
+if size(OP,2)>1
+    OPtypes=repmat(OPtypes,1,size(OP,2));
+    if any(isCtrl)
+        OPtypes(:,isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(isCtrl));
+    end
+    if any(isCheck)
+        OPtypes(:,isCheck)=repmat({'HX','HY','HZ'}',1,nnz(isCheck));
+    end
+
+    for i=1:size(OP,2)
+        % Id for this OP.
+        OPstr=sprintf('-%d',i);
+        if OPid(i)~=i
+            OPstr=[OPstr,sprintf('/%d',OPid(i))];
+        end
+        if OPrawId(i)~=OPid(i)
+            OPstr=[OPstr,sprintf('/%d',OPrawId(i))];
+        end
+        if ~isempty(OPlabels{i})
+            OPstr=[OPstr,'-',OPlabels{i}];
+        end
+        OPtypes(:,i)=cellfun(@(x)[x,OPstr],OPtypes(:,i),'uniformoutput',false);
+    end
+end
 
 % Find out how many mark points have corresponding object/control points.
 imId=unique(prob.markPts(:,1:2),'rows');
@@ -382,5 +460,6 @@ s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,'imNa
          'residuals',residuals,...
          'estIO',estIO,'estEO',estEO,'estOP',estOP,...
          'useIOobs',useIOobs,'useEOobs',useEOobs,'useOPobs',useOPobs,...
+         'paramTypes',struct('IO',{IOtypes},'EO',{EOtypes},'OP',{OPtypes}),...
          'nK',nK,'nP',nP,'camUnit',camUnit,...
          'objUnit',objUnit,'x0desc','');
