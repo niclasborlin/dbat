@@ -211,7 +211,7 @@ IOstd(3+(1:nK),:)=innerStd(5+(1:nK),:);
 nP=2;
 IO(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
 IOstd(3+nK+(1:nP),:)=innerStd(5+nK+(1:nP),:);
-% Skew (not used).
+% Aspect, skew.
 IO(3+nK+nP+(1:2),:)=0;
 IOstd(3+nK+nP+(1:2),:)=0;
 % Sensor size in camera units.

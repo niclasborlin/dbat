@@ -107,20 +107,21 @@ if distModel>0
                 f=[fObs(:);fPre(:)];
             else
                 fun=@(x)feval(mfilename,x,s);
-                f=feval(fun,x);
-                J=jacapprox(fun,x);
-                
-                % % Compute residual and Jacobian for image
-                % % observations.
-                % [fObs,JObs]=multi_res(IO,EO,OP,s,@res_euler_brown_0);
-                
-                % % Compute residual for prior observations.
-                % [fPre,Jpre]=pm_preobs(x,s);
+                %JJ=jacapprox(fun,x);
 
-                % % Combine residual and Jacobian
-                % f=[fObs(:);fPre(:)];
+                funs={@res_euler_brown_0,@res_euler_brown_1,...
+                      @res_euler_brown_2,@res_euler_brown_3};
+                % Compute residual and Jacobian for image
+                % observations.
+                [fObs,JObs]=multi_res(IO,EO,OP,s,funs{distModel-1});
+                
+                % Compute residual for prior observations.
+                [fPre,Jpre]=pm_preobs(x,s);
+
+                % Combine residual and Jacobian
+                f=[fObs(:);fPre(:)];
             
-                % J=[JObs;Jpre];
+                J=[JObs;Jpre];
             end
         end
     end

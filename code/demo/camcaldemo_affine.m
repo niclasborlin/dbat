@@ -137,8 +137,8 @@ if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
             iters,sigma0,sigma0*s0.prior.sigmas(1));
 else
-    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,sigma0,sigma0*s0.prior.sigmas(1));
+    fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
 end
 
 COP=bundle_result_file(result,E,reportFile);
