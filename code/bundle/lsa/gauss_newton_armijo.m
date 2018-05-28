@@ -125,7 +125,7 @@ while true
                     strtrim(rats(alphas(end))));
         end
     end
-    
+
     % Verify the structural rank of the Jacobian. If it is less
     % than the number of columns, something is wrong.
     if n==0
@@ -135,6 +135,7 @@ while true
         if srJ<size(J,2)
             code=-4;
             p=nan(size(x));
+            Js=[]; % To avoid breaking 'final' structure.
             break;
         end
     end
@@ -234,6 +235,7 @@ end
 if nargout>3
     final=struct('unweighted',struct('r',s,'J',K),...
                  'weighted',struct('r',r,'J',J),...
+                 'scaled',struct('D',D,'J',Js),...
                  'p',p);
 end
 
