@@ -28,7 +28,7 @@ function [v,dv,dvn]=res_euler_brown_0(Q,q0,ang,f,u,sz,u0,K,P,B,varargin) %#ok<IN
 if nargin>=1 && ischar(Q), v=selftest(nargin>1 && q0); return; end
 
 % Otherwise, verify number of parameters.
-narginchk(9,18);
+narginchk(10,20);
 
 v=[]; %#ok<NASGU>
 dv=[];

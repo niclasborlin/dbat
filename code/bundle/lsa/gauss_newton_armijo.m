@@ -110,6 +110,7 @@ wResFun=@(x)R*feval(resFun,x);
 while true
     % Calculate unweighted residual and Jacobian at current point.
     [s,K]=feval(resFun,x);
+    % [s,K,KK]=feval(resFun,x); abserr(K,KK), relerr(K,KK)
     % Scale by Cholesky factor.
     r=R*s;
     J=R*K;
@@ -135,7 +136,7 @@ while true
         if srJ<size(J,2)
             code=-4;
             p=nan(size(x));
-            Js=[]; % To avoid breaking 'final' structure.
+            D=[]; Js=[]; % To avoid breaking 'final' structure.
             break;
         end
     end
@@ -216,7 +217,7 @@ while true
 
     if alpha==0
         % Not sufficient descent, stop.
-        code=-2;
+        code=-3;
         % Ensure that length of residual norm vector matches length of alpha.
         rr(end+1)=rr(end); %#ok<AGROW>
         break;
