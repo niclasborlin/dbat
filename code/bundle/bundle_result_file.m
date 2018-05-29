@@ -32,14 +32,32 @@ fprintf(fid,[p,'Project Name: %s\n'],s.title);
 
 fprintf(fid,[p,'Problems and suggestions:\n']);
 fprintf(fid,[p,p,'Project Problems:\n']);
-if isempty(e.structureFlaw)
+if isempty(e.weakness.structural)
     fprintf(fid,[p,p,p,'Structural rank: ok.\n']);
 else
-    fprintf(fid,[p,p,p,'Structural rank:\n']);
+    fprintf(fid,[p,p,p,'Structural rank: %d (deficiency: %d)\n'],...
+            e.weakness.structural.rank,e.weakness.structural.deficiency);
     fprintf(fid,[p,p,p,p,'DMPERM (Dulmage-Mendelsohn) suggests the ' ...
                         'following parameters have problems:\n']);
-    for i=1:length(e.structureFlaw)
-        fprintf(fid,[p,p,p,p,p,'%s\n'],e.structureFlaw{i});
+    for i=1:length(e.weakness.structural.suspectedParams)
+        fprintf(fid,[p,p,p,p,p,'%s\n'],e.weakness.structural.suspectedParams{i});
+    end
+end
+if isempty(e.weakness.numerical) || e.weakness.numerical.deficiency==0
+    fprintf(fid,[p,p,p,'Numerical rank: ok.\n']);
+else
+    fprintf(fid,[p,p,p,'Numerical rank: %d (deficiency: %d)\n'],...
+            e.weakness.numerical.rank,e.weakness.numerical.deficiency);
+    fprintf(fid,[p,p,p,p,'Null-space suggest the following parameters ' ...
+                 'are part of the problem:\n']);
+    
+    for i=1:length(e.weakness.numerical.suspectedParams)
+        fprintf(fid,[p,p,p,p,p,'Vector %d (eigenvalue %g):\n'],...
+                i,e.weakness.numerical.d(i));
+        sp=e.weakness.numerical.suspectedParams{i};
+        for j=1:length(sp.values)
+            fprintf(fid,[p,p,p,p,p,p,'(%s, %.3g)\n'],sp.params{j},sp.values(j));
+        end
     end
 end
 
@@ -55,7 +73,6 @@ OPstd=sqrt(reshape(full(diag(COP)),3,[]));
 % Compute p values for distortion parameters.
 [pk,pp,pb]=test_distortion_params(s,e);
 n=any(iio)+any(ieo)+any(iop)+any([pk;pp;pb]<sigThreshold);
-
 fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
 if any(iio)

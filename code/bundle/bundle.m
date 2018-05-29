@@ -30,7 +30,9 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %
 %   ...=BUNDLE(S,...,'singulartest') specifies that the bundle should
 %   stop immediately if a 'Matrix is singular' or 'Matrix is almost
-%   singular' warning is issued on the normal matrix.
+%   singular' warning is issued on the normal matrix. This is the
+%   default. Use ...=BUNDLE(S,...,'nosingulartest') to inhibit
+%   singular tests.
 %
 %   ...=BUNDLE(S,...,CHI), where CHI is a logical scalar, specifies if
 %   chirality veto damping should be used (default: false). Chirality
@@ -66,8 +68,8 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 maxIter=20;
 damping='gna';
 veto=false;
-singularTest=false;
-trace=false;
+singularTest=true;
+doTrace=false;
 dofVerb=false;
 pmDof=false;
 absTerm=false;
@@ -91,10 +93,13 @@ while ~isempty(varargin)
             damping=varargin{1};
             varargin(1)=[];
           case 'trace'
-            trace=true;
+            doTrace=true;
             varargin(1)=[];
           case 'singulartest'
             singularTest=true;
+            varargin(1)=[];
+          case 'nosingulartest'
+            singularTest=false;
             varargin(1)=[];
           case 'pmdof'
             pmDof=true;
@@ -267,7 +272,7 @@ switch lower(damping)
     % Call Gauss-Markov optimization routine.
     stopWatch=cputime;
     [x,code,iters,final,X,res]=gauss_markov(resFun,x0,W,maxIter, ...
-                                          termFun,trace, singularTest);
+                                          termFun,doTrace, singularTest);
     time=cputime-stopWatch;
     E.damping=struct('name','gm');
   case 'gna'
@@ -284,7 +289,7 @@ switch lower(damping)
     [x,code,iters,final,X,res,alpha]=gauss_newton_armijo(resFun, ...
                                                       vetoFun,x0,W, ...
                                                       maxIter, ...
-                                                      termFun,trace, ...
+                                                      termFun,doTrace, ...
                                                       singularTest, ...
                                                       mu,alphaMin);  
     time=cputime-stopWatch;
@@ -304,7 +309,7 @@ switch lower(damping)
     stopWatch=cputime;
     [x,code,iters,final,X,res,lambda]=levenberg_marquardt(resFun,vetoFun,x0, ...
                                                       W,maxIter, ...
-                                                      termFun,trace, ...
+                                                      termFun,doTrace, ...
                                                       lambda0,lambdaMin);
     time=cputime-stopWatch;
     E.damping=struct('name','lm','lambda',lambda,'lambda0',lambda(1), ...
@@ -325,7 +330,7 @@ switch lower(damping)
     % each iteration.
     stopWatch=cputime;
     [x,code,iters,final,X,res,delta,rho,step]=levenberg_marquardt_powell(...
-        resFun,vetoFun,x0,W,maxIter,termFun,trace, delta0,rhoBad,rhoGood);
+        resFun,vetoFun,x0,W,maxIter,termFun,doTrace, delta0,rhoBad,rhoGood);
     time=cputime-stopWatch;
     E.damping=struct('name','lmp','delta',delta,'rho',rho,'delta0',delta0,...
                      'rhoBad',rhoBad,'rhoGood',rhoGood,'step',step);
@@ -355,13 +360,72 @@ end
 
 E.paramTypes=paramTypes;
 
+% Analyse potential problem with the Jacobian (design matrix).
+
+E.weakness=struct('structural',[],'numerical',[]);
+
 if code==-4
     % Structural rank deficiency. Record potential cause.
-    E.dmperm=dmperm(E.final.weighted.J);
-    E.structureFlaw=E.paramTypes(E.dmperm==0);
+    E.weakness.structural.dmperm=dmperm(E.final.weighted.J);
+    E.weakness.structural.rank=nnz(E.weakness.structural.dmperm);
+    E.weakness.structural.deficiency=...
+        size(E.final.weighted.J,2)-E.weakness.structural.rank;
+    E.weakness.structural.suspectedParams=...
+        E.paramTypes(E.weakness.structural.dmperm==0);
+end
+
+if code==-2
+    % Numerically rank deficient, try to figure out why.
+    
+    E.weakness.numerical.rank=size(E.final.weighted.J,2);
+    try
+        % Use spnrank to find rank.
+        fprintf('Trying to estimate numerical rank of Jacobian...');
+        E.weakness.numerical.rank=spnrank(E.final.scaled.J);
+        fprintf('done.\n');
+    catch
+        % If spnrank failed
+        E.weakness.numerical.rank=nan;
+    end
+    % Deficiency.
+    E.weakness.numerical.deficiency=...
+        size(E.final.scaled.J,2)-E.weakness.numerical.rank;
+    if E.weakness.numerical.deficiency>0
+        % Find vectors in offending null-space.
+        try
+            fprintf('Trying to estimate null-space...');
+            JTJ=E.final.scaled.J'*E.final.scaled.J;
+            [V,D]=eigs(JTJ,E.weakness.numerical.deficiency,'SM',...
+                       struct('issym',true,'isreal',true));
+            fprintf('done.\n');
+            % Sort increasingly by eigenvalue.
+            [~,i]=sort(abs(diag(D)),'ascend');
+            D=D(i,i);
+            V=V(:,i);
+            E.weakness.numerical.V=V;
+            E.weakness.numerical.d=diag(D);
+            E.weakness.numerical.trace=trace(JTJ);
+            E.weakness.numerical.suspectedParams=cell(1,size(V,2));
+            for j=1:size(V,2)
+                % Sort values descendingly.
+                [~,k]=sort(abs(V(:,j)),'descend');
+                v=V(k,j);
+                % Keep element halfway between average and max.
+                avg=sqrt(1/size(V,1));
+                keep=abs(v)>mean([avg,abs(v(1))]);
+                k=k(keep);
+                v=v(keep);
+                sp=struct('values',v,'indices',k,'params',{E.paramTypes(k)});
+                E.weakness.numerical.suspectedParams{j}=sp;
+            end
+        catch
+            % If eigs fails.
+            E.weakness.numerical.suspectedParams={};
+        end
+    end
 else
-    E.dmperm=[];
-    E.structureFlaw={};
+    E.weakness.numerical.rank=size(E.final.weighted.J,2);
+    E.weakness.numerical.deficiency=0;
 end
 
 % Always update the residuals.
