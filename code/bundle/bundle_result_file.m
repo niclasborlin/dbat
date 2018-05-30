@@ -37,7 +37,7 @@ if isempty(e.weakness.structural)
 else
     fprintf(fid,[p,p,p,'Structural rank: %d (deficiency: %d)\n'],...
             e.weakness.structural.rank,e.weakness.structural.deficiency);
-    fprintf(fid,[p,p,p,p,'DMPERM (Dulmage-Mendelsohn) suggests the ' ...
+    fprintf(fid,[p,p,p,p,'DMPERM suggests the ' ...
                         'following parameters have problems:\n']);
     for i=1:length(e.weakness.structural.suspectedParams)
         fprintf(fid,[p,p,p,p,p,'%s\n'],e.weakness.structural.suspectedParams{i});
@@ -45,6 +45,8 @@ else
 end
 if isempty(e.weakness.numerical) || e.weakness.numerical.deficiency==0
     fprintf(fid,[p,p,p,'Numerical rank: ok.\n']);
+elseif isnan(e.weakness.numerical.rank)
+    fprintf(fid,[p,p,p,'Numerical rank: not tested.\n']);
 else
     fprintf(fid,[p,p,p,'Numerical rank: %d (deficiency: %d)\n'],...
             e.weakness.numerical.rank,e.weakness.numerical.deficiency);
@@ -72,9 +74,15 @@ OPstd=sqrt(reshape(full(diag(COP)),3,[]));
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
 % Compute p values for distortion parameters.
 [pk,pp,pb]=test_distortion_params(s,e);
-n=any(iio)+any(ieo)+any(iop)+any([pk;pp;pb]<sigThreshold);
+n=double(any(iio))+double(any(ieo))+double(any(iop))+ ...
+  double(any([pk;pp;pb]<sigThreshold))+double(e.code~=0);
 fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
+if e.code~=0
+    fprintf(fid,[p,p,p,'Bundle failed with code %d (see below for details).\n'],...
+            e.code);
+end
+    
 if any(iio)
     fprintf(fid,[p,p,p,'One or more of the camera parameter ' ...
                  'has a high correlation (see below).\n']);
@@ -98,8 +106,16 @@ fprintf(fid,[p,'Information from last bundle\n']);
 if e.code==0
     status='OK';
 else
-    status='fail';
+    msgs={'Too many iterations','Normal matrix is singular',...
+          'No step length found by the line search',...
+          'Normal matrix is structurally rank deficient'};
+    if abs(e.code)<=length(msgs)
+        status=sprintf('fail (code %d: %s)',e.code,msgs{abs(e.code)});
+    else
+        status=sprintf('fail (code %d: unknown code)',e.code);
+    end
 end
+
 hostname=getenv('HOST');
 if isempty(hostname)
     hostname='<unknown>';
@@ -110,7 +126,7 @@ values={'Last Bundle Run:','%s',e.dateStamp,
         'MATLAB version:','%s',version,
         'Host system:','%s',computer,
         'Host name:','%s',hostname,
-        'Status:','%s (code: %d)',{status,e.code},
+        'Status:','%s',status,
         'Sigma0:','%g',e.s0,
         'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1)};
 pretty_print(fid,repmat(p,1,2),values);
@@ -208,12 +224,13 @@ unit=strrep(unit0,'cu',s.camUnit);
 rows=[3,1:2,11:12,4:6,7:8,9:10,13:14,15:16,17:18]; % Last two are not in real vector.
 irows=sparse(rows,1,1:length(rows));
 
-% Flip signs of rows 3,6-10.
-S=diag((-1).^double(ismember(1:length(rows),[3,6:10])));
+% Flip signs of rows py, Ki, Pi.
+S=diag((-1).^double(ismember(1:length(rows),[3,5+(1:s.nK+s.nP)])));
 
 for i=1:length(selfCal)
     % Create fake IO vector.
     sIO=[s.IO;1./s.IO(end-1:end,:)];
+    sIO(end-1,:)=sIO(end-1,:).*(1+sIO(3+s.nK+s.nP+1,:));
     % Extend ioSigma. Need to be fixed when Fw, Fh estimation is implemented.
     ioSigma(end+2,1)=0;
     vals=S*full(sIO(rows,i));
@@ -646,7 +663,9 @@ else
 end
 
 fprintf(fid,[p,p,'Ctrl measurements\n']);
-if any(s.isCtrl)
+if ~any(s.isCtrl)
+    fprintf(fid,[p,p,p,'none\n']);
+else
     cIx=find(s.isCtrl);
     CPid=s.OPid(cIx);
 
@@ -699,7 +718,9 @@ if any(s.isCtrl)
 end
 
 fprintf(fid,[p,p,'Check measurements\n']);
-if any(s.isCheck)
+if ~any(s.isCheck)
+    fprintf(fid,[p,p,p,'none\n']);
+else
     cIx=find(s.isCheck);
     CPid=s.OPid(cIx);
 
