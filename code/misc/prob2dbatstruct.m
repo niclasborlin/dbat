@@ -125,7 +125,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       K3      - radial distortion parameters of Brown (1971).
 %       P1,
 %       P2      - tangential distortion parameters of Brown (1971).
-%       fa      - affine parameter,    .
+%       fa      - affine parameter. Aspect will be (1+fa):1.
 %       fs      - skew parameters.
 %       sw,
 %       sh      - sensor width and height in camera units.
@@ -211,9 +211,6 @@ IOstd(3+(1:nK),:)=innerStd(5+(1:nK),:);
 nP=2;
 IO(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
 IOstd(3+nK+(1:nP),:)=innerStd(5+nK+(1:nP),:);
-% Aspect, skew.
-IO(3+nK+nP+(1:2),:)=0;
-IOstd(3+nK+nP+(1:2),:)=0;
 % Sensor size in camera units.
 IO(3+nK+nP+2+(1:2),:)=inner(4:5,:);
 IOstd(3+nK+nP+2+(1:2),:)=innerStd(4:5,:);
@@ -222,8 +219,15 @@ IO(3+nK+nP+4+(1:2),:)=imSz;
 IOstd(3+nK+nP+4+(1:2),:)=0;
 % Sensor resolution.
 IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
-% Fix to force square pixels.
-IO(3+nK+nP+6+(1:2),:)=mean(IO(3+nK+nP+6+(1:2),:),1);
+% Use y as the pixel size. Store diff as aspect.
+pixelSize=IO(3+nK+nP+6+(1:2),:);
+IO(3+nK+nP+6+(1:2),:)=pixelSize([2,2],:);
+% Aspect
+IO(3+nK+nP+1,:)=1-pixelSize(1,:)./pixelSize(2,:);
+IOstd(3+nK+nP+1,:)=0; % TODO: Fix this estimate.
+% Skew.
+IO(3+nK+nP+2,:)=0;
+IOstd(3+nK+nP+2,:)=0;
 
 % Set IO parameter types.
 Knames=arrayfun(@(x)sprintf('K%d',x),1:nK,'uniformoutput',false);
