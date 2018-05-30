@@ -124,10 +124,12 @@ if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
             iters,sigma0,sigma0*s.prior.sigmas(1));
 else
-    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,sigma0,sigma0*s.prior.sigmas(1));
+    fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
 end
 
+% Pre-factorize posterior covariance matrix for speed.
+E=bundle_cov(result,E,'prepare');
 
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,[inputName,'-dbatreport.txt']);

@@ -1,19 +1,21 @@
 Damped Bundle Adjustment Toolbox result file
    Project Name: Bundle Soln 
    Problems and suggestions:
-      Project Problems: Not evaluated
+      Project Problems:
+         Structural rank: ok.
+         Numerical rank: ok.
       Problems related to the processing: (2)
          One or more of the camera station parameters has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run: 28-Dec-2017 22:54:21
-      DBAT version:    0.7.0.4 (2017-12-28)
+      Last Bundle Run: 30-May-2018 15:07:48
+      DBAT version:    0.7.2.0 (2018-03-22)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast
-      Status:          OK (0)
-      Sigma0:          0.610237
-      Sigma0 (pixels): 0.610237
+      Status:          OK
+      Sigma0:          0.616912
+      Sigma0 (pixels): 0.616912
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -21,7 +23,8 @@ Damped Bundle Adjustment Toolbox result file
          Constraints:             off
          Maximum # of iterations: 20
          Convergence tolerance:   1e-06
-         Singular test:           off
+         Termination criteria:    relative
+         Singular test:           on
          Chirality veto:          off
          Damping:                 gna
          Camera unit (cu):        mm
@@ -29,17 +32,17 @@ Damped Bundle Adjustment Toolbox result file
          Initial value comment:   
       Total error:
          Number of stages:     1
-         Number of iterations: 4
-         First error:          8604.91
-         Last error:           194.709
-         Execution time (s):   5.06
+         Number of iterations: 5
+         First error:          8608.56
+         Last error:           196.838
+         Execution time (s):   6.13
       Lens distortion models:
-         Backward (Photogrammetry)
+         Backward (Photogrammetry) model 3
       Cameras:
          Calibration: no
          Camera1
             Lens distortion model:
-               Backward (Photogrammetry)
+               Backward (Photogrammetry) model 3
             Focal Length:
                Value: 24.3581 mm
             Xp - principal point x:
@@ -60,20 +63,24 @@ Damped Bundle Adjustment Toolbox result file
                Value: 0 mm^(-3)
             P2 - decentering distortion 2:
                Value: 0 mm^(-3)
+            B1 - aspect ratio:
+               Value: -0.000999888 
+            B2 - skew:
+               Value: 0 
             Iw - image width:
                Value: 5616 px
             Ih - image height:
                Value: 3744 px
             Xr - X resolution:
-               Value: 156.078 px/mm
+               Value: 156 px/mm
             Yr - Y resolution:
-               Value: 156.078 px/mm
+               Value: 156 px/mm
             Pw - pixel width:
-               Value: 0.00640705 mm
+               Value: 0.00640385 mm
             Ph - pixel height:
-               Value: 0.00640705 mm
+               Value: 0.00641026 mm
          Rated angle of view (h,v,d): (73, 52, 83) deg
-         Largest distortion: 2.1 mm (323.3 px, 9.6% of half-diagonal)
+         Largest distortion: 2.1 mm (323.2 px, 9.6% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: img_0087.jpg
@@ -91,1166 +98,1168 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     -6.489885 ou
             Photo 2: img_0088.jpg
                Omega:
-                  Value:     40.863803 deg
-                  Deviation: 0.00429 deg
+                  Value:     40.871201 deg
+                  Deviation: 0.00434 deg
                Phi:
-                  Value:     -0.807143 deg
-                  Deviation: 0.00403 deg
+                  Value:     -0.659411 deg
+                  Deviation: 0.00408 deg
                   Correlations over 95%: Xc:99.3%.
                Kappa:
-                  Value:     9.604867 deg
-                  Deviation: 0.00134 deg
+                  Value:     9.600960 deg
+                  Deviation: 0.00136 deg
                Xc:
-                  Value:     1.890055 ou
-                  Deviation: 0.00143 ou
+                  Value:     1.931656 ou
+                  Deviation: 0.00145 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -19.261143 ou
-                  Deviation: 0.00149 ou
+                  Value:     -19.236863 ou
+                  Deviation: 0.00151 ou
                Zc:
-                  Value:     -6.531559 ou
-                  Deviation: 0.00109 ou
+                  Value:     -6.547630 ou
+                  Deviation: 0.0011 ou
             Photo 3: img_0089.jpg
                Omega:
-                  Value:     42.472543 deg
-                  Deviation: 0.00508 deg
+                  Value:     42.493516 deg
+                  Deviation: 0.00514 deg
                Phi:
-                  Value:     3.125275 deg
-                  Deviation: 0.0047 deg
+                  Value:     3.276016 deg
+                  Deviation: 0.00476 deg
                   Correlations over 95%: Xc:99.3%.
                Kappa:
-                  Value:     8.537503 deg
-                  Deviation: 0.00152 deg
+                  Value:     8.526631 deg
+                  Deviation: 0.00154 deg
                Xc:
-                  Value:     1.613520 ou
-                  Deviation: 0.00163 ou
+                  Value:     1.657118 ou
+                  Deviation: 0.00164 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -17.948457 ou
-                  Deviation: 0.00177 ou
+                  Value:     -17.929754 ou
+                  Deviation: 0.00179 ou
                Zc:
-                  Value:     -5.584530 ou
-                  Deviation: 0.00124 ou
+                  Value:     -5.602256 ou
+                  Deviation: 0.00125 ou
             Photo 4: img_0090.jpg
                Omega:
-                  Value:     41.831746 deg
-                  Deviation: 0.00584 deg
+                  Value:     41.862983 deg
+                  Deviation: 0.00591 deg
                Phi:
-                  Value:     0.858799 deg
-                  Deviation: 0.00556 deg
+                  Value:     1.005299 deg
+                  Deviation: 0.00562 deg
                   Correlations over 95%: Xc:99.2%.
                Kappa:
-                  Value:     8.627965 deg
-                  Deviation: 0.00178 deg
+                  Value:     8.616969 deg
+                  Deviation: 0.00181 deg
                Xc:
-                  Value:     0.964211 ou
-                  Deviation: 0.002 ou
+                  Value:     1.009310 ou
+                  Deviation: 0.00202 ou
                   Correlations over 95%: Phi:99.2%.
                Yc:
-                  Value:     -16.622195 ou
-                  Deviation: 0.00223 ou
+                  Value:     -16.610199 ou
+                  Deviation: 0.00226 ou
                Zc:
-                  Value:     -3.156772 ou
-                  Deviation: 0.0014 ou
+                  Value:     -3.175790 ou
+                  Deviation: 0.00142 ou
             Photo 5: img_0091.jpg
                Omega:
-                  Value:     40.811270 deg
-                  Deviation: 0.00666 deg
+                  Value:     40.842779 deg
+                  Deviation: 0.00675 deg
                Phi:
-                  Value:     0.083545 deg
-                  Deviation: 0.00683 deg
+                  Value:     0.222566 deg
+                  Deviation: 0.00691 deg
                   Correlations over 95%: Xc:99.1%.
                Kappa:
-                  Value:     10.346908 deg
-                  Deviation: 0.00221 deg
+                  Value:     10.336175 deg
+                  Deviation: 0.00224 deg
                Xc:
-                  Value:     0.386876 ou
-                  Deviation: 0.00246 ou
+                  Value:     0.430551 ou
+                  Deviation: 0.00249 ou
                   Correlations over 95%: Phi:99.1%.
                Yc:
-                  Value:     -14.425147 ou
-                  Deviation: 0.00269 ou
+                  Value:     -14.417982 ou
+                  Deviation: 0.00272 ou
                Zc:
-                  Value:     -1.013103 ou
-                  Deviation: 0.00167 ou
+                  Value:     -1.029615 ou
+                  Deviation: 0.00169 ou
             Photo 6: img_0092.jpg
                Omega:
-                  Value:     32.795671 deg
-                  Deviation: 0.00722 deg
+                  Value:     32.832649 deg
+                  Deviation: 0.00731 deg
                Phi:
-                  Value:     -0.269288 deg
-                  Deviation: 0.00714 deg
+                  Value:     -0.137140 deg
+                  Deviation: 0.00723 deg
                   Correlations over 95%: Xc:99.1%.
                Kappa:
-                  Value:     8.379553 deg
-                  Deviation: 0.00259 deg
+                  Value:     8.385600 deg
+                  Deviation: 0.00262 deg
                Xc:
-                  Value:     -0.065561 ou
-                  Deviation: 0.00262 ou
+                  Value:     -0.023135 ou
+                  Deviation: 0.00265 ou
                   Correlations over 95%: Phi:99.1%.
                Yc:
-                  Value:     -12.299344 ou
-                  Deviation: 0.00304 ou
-               Zc:
-                  Value:     0.841363 ou
-                  Deviation: 0.00171 ou
-            Photo 7: img_0093.jpg
-               Omega:
-                  Value:     23.796325 deg
-                  Deviation: 0.00771 deg
-               Phi:
-                  Value:     -2.117585 deg
-                  Deviation: 0.00677 deg
-                  Correlations over 95%: Xc:98.6%.
-               Kappa:
-                  Value:     5.383087 deg
-                  Deviation: 0.00332 deg
-               Xc:
-                  Value:     -0.219355 ou
-                  Deviation: 0.00235 ou
-                  Correlations over 95%: Phi:98.6%.
-               Yc:
-                  Value:     -8.435168 ou
-                  Deviation: 0.00324 ou
-               Zc:
-                  Value:     1.737070 ou
-                  Deviation: 0.00169 ou
-            Photo 8: img_0094.jpg
-               Omega:
-                  Value:     15.956505 deg
-                  Deviation: 0.00834 deg
-               Phi:
-                  Value:     -2.258734 deg
-                  Deviation: 0.00665 deg
-                  Correlations over 95%: Xc:98.2%.
-               Kappa:
-                  Value:     3.151263 deg
-                  Deviation: 0.00417 deg
-               Xc:
-                  Value:     -0.222368 ou
-                  Deviation: 0.00221 ou
-                  Correlations over 95%: Phi:98.2%.
-               Yc:
-                  Value:     -5.621474 ou
-                  Deviation: 0.00339 ou
-               Zc:
-                  Value:     1.920857 ou
-                  Deviation: 0.00173 ou
-            Photo 9: img_0095.jpg
-               Omega:
-                  Value:     7.125206 deg
-                  Deviation: 0.00887 deg
-               Phi:
-                  Value:     -1.130534 deg
-                  Deviation: 0.00606 deg
-                  Correlations over 95%: Xc:96.9%.
-               Kappa:
-                  Value:     0.781406 deg
-                  Deviation: 0.00517 deg
-               Xc:
-                  Value:     -0.067034 ou
-                  Deviation: 0.00188 ou
-                  Correlations over 95%: Phi:96.9%.
-               Yc:
-                  Value:     -1.983286 ou
-                  Deviation: 0.00338 ou
-               Zc:
-                  Value:     1.479222 ou
-                  Deviation: 0.00177 ou
-            Photo 10: img_0096.jpg
-               Omega:
-                  Value:     3.003597 deg
-                  Deviation: 0.00906 deg
-               Phi:
-                  Value:     -1.391859 deg
-                  Deviation: 0.00593 deg
-                  Correlations over 95%: Xc:96.6%.
-               Kappa:
-                  Value:     -0.585666 deg
-                  Deviation: 0.00557 deg
-               Xc:
-                  Value:     -0.117065 ou
-                  Deviation: 0.00188 ou
-                  Correlations over 95%: Phi:96.6%.
-               Yc:
-                  Value:     -0.736318 ou
-                  Deviation: 0.00344 ou
-               Zc:
-                  Value:     1.722701 ou
-                  Deviation: 0.00186 ou
-            Photo 11: img_0097.jpg
-               Omega:
-                  Value:     -6.111090 deg
-                  Deviation: 0.00986 deg
-               Phi:
-                  Value:     -1.024400 deg
-                  Deviation: 0.00555 deg
-                  Correlations over 95%: Xc:95.3%.
-               Kappa:
-                  Value:     -4.351756 deg
-                  Deviation: 0.00637 deg
-               Xc:
-                  Value:     -0.000450 ou
-                  Deviation: 0.00178 ou
-                  Correlations over 95%: Phi:95.3%.
-               Yc:
-                  Value:     2.443711 ou
-                  Deviation: 0.0035 ou
-               Zc:
-                  Value:     1.289467 ou
-                  Deviation: 0.00206 ou
-            Photo 12: img_0098.jpg
-               Omega:
-                  Value:     -17.277342 deg
-                  Deviation: 0.0107 deg
-               Phi:
-                  Value:     -0.751848 deg
-                  Deviation: 0.0052 deg
-               Kappa:
-                  Value:     -6.793423 deg
-                  Deviation: 0.007 deg
-               Xc:
-                  Value:     0.195943 ou
-                  Deviation: 0.00175 ou
-               Yc:
-                  Value:     5.714614 ou
-                  Deviation: 0.00343 ou
-               Zc:
-                  Value:     0.495456 ou
-                  Deviation: 0.00242 ou
-            Photo 13: img_0099.jpg
-               Omega:
-                  Value:     -21.365216 deg
-                  Deviation: 0.0115 deg
-               Phi:
-                  Value:     -0.590777 deg
-                  Deviation: 0.00521 deg
-               Kappa:
-                  Value:     -8.254109 deg
-                  Deviation: 0.00718 deg
-               Xc:
-                  Value:     0.459781 ou
-                  Deviation: 0.00174 ou
-               Yc:
-                  Value:     8.155305 ou
-                  Deviation: 0.0034 ou
-               Zc:
-                  Value:     -0.511924 ou
-                  Deviation: 0.00274 ou
-            Photo 14: img_0100.jpg
-               Omega:
-                  Value:     -30.566427 deg
-                  Deviation: 0.0126 deg
-               Phi:
-                  Value:     0.784178 deg
-                  Deviation: 0.00608 deg
-               Kappa:
-                  Value:     -10.447941 deg
-                  Deviation: 0.00748 deg
-               Xc:
-                  Value:     0.728605 ou
-                  Deviation: 0.00207 ou
-               Yc:
-                  Value:     10.505990 ou
-                  Deviation: 0.0035 ou
-               Zc:
-                  Value:     -1.471946 ou
-                  Deviation: 0.00325 ou
-            Photo 15: img_0101.jpg
-               Omega:
-                  Value:     -36.176269 deg
-                  Deviation: 0.0138 deg
-               Phi:
-                  Value:     1.827228 deg
-                  Deviation: 0.00671 deg
-               Kappa:
-                  Value:     -12.468495 deg
-                  Deviation: 0.00764 deg
-               Xc:
-                  Value:     1.091267 ou
-                  Deviation: 0.00233 ou
-               Yc:
-                  Value:     13.199997 ou
-                  Deviation: 0.00343 ou
-               Zc:
-                  Value:     -3.082719 ou
-                  Deviation: 0.00389 ou
-            Photo 16: img_0102.jpg
-               Omega:
-                  Value:     -45.918306 deg
-                  Deviation: 0.0141 deg
-               Phi:
-                  Value:     2.105206 deg
-                  Deviation: 0.00721 deg
-                  Correlations over 95%: Xc:95.4%.
-               Kappa:
-                  Value:     -12.625645 deg
-                  Deviation: 0.00765 deg
-               Xc:
-                  Value:     1.518203 ou
-                  Deviation: 0.00253 ou
-                  Correlations over 95%: Phi:95.4%.
-               Yc:
-                  Value:     15.041581 ou
+                  Value:     -12.297742 ou
                   Deviation: 0.00308 ou
                Zc:
-                  Value:     -4.718086 ou
-                  Deviation: 0.00432 ou
-            Photo 17: img_0103.jpg
+                  Value:     0.825968 ou
+                  Deviation: 0.00174 ou
+            Photo 7: img_0093.jpg
                Omega:
-                  Value:     -54.842990 deg
+                  Value:     23.833197 deg
+                  Deviation: 0.0078 deg
+               Phi:
+                  Value:     -1.999550 deg
+                  Deviation: 0.00685 deg
+                  Correlations over 95%: Xc:98.6%.
+               Kappa:
+                  Value:     5.405371 deg
+                  Deviation: 0.00337 deg
+               Xc:
+                  Value:     -0.183812 ou
+                  Deviation: 0.00237 ou
+                  Correlations over 95%: Phi:98.6%.
+               Yc:
+                  Value:     -8.436723 ou
+                  Deviation: 0.00327 ou
+               Zc:
+                  Value:     1.725538 ou
+                  Deviation: 0.00171 ou
+            Photo 8: img_0094.jpg
+               Omega:
+                  Value:     15.989655 deg
+                  Deviation: 0.00844 deg
+               Phi:
+                  Value:     -2.150207 deg
+                  Deviation: 0.00674 deg
+                  Correlations over 95%: Xc:98.2%.
+               Kappa:
+                  Value:     3.186950 deg
+                  Deviation: 0.00422 deg
+               Xc:
+                  Value:     -0.191164 ou
+                  Deviation: 0.00224 ou
+                  Correlations over 95%: Phi:98.2%.
+               Yc:
+                  Value:     -5.623165 ou
+                  Deviation: 0.00343 ou
+               Zc:
+                  Value:     1.911626 ou
+                  Deviation: 0.00175 ou
+            Photo 9: img_0095.jpg
+               Omega:
+                  Value:     7.151954 deg
+                  Deviation: 0.00898 deg
+               Phi:
+                  Value:     -1.030352 deg
+                  Deviation: 0.00614 deg
+                  Correlations over 95%: Xc:96.8%.
+               Kappa:
+                  Value:     0.832216 deg
+                  Deviation: 0.00523 deg
+               Xc:
+                  Value:     -0.040530 ou
+                  Deviation: 0.0019 ou
+                  Correlations over 95%: Phi:96.8%.
+               Yc:
+                  Value:     -1.983977 ou
+                  Deviation: 0.00342 ou
+               Zc:
+                  Value:     1.471734 ou
+                  Deviation: 0.00179 ou
+            Photo 10: img_0096.jpg
+               Omega:
+                  Value:     3.028880 deg
+                  Deviation: 0.00917 deg
+               Phi:
+                  Value:     -1.296573 deg
+                  Deviation: 0.00601 deg
+                  Correlations over 95%: Xc:96.6%.
+               Kappa:
+                  Value:     -0.527759 deg
+                  Deviation: 0.00564 deg
+               Xc:
+                  Value:     -0.091813 ou
+                  Deviation: 0.0019 ou
+                  Correlations over 95%: Phi:96.6%.
+               Yc:
+                  Value:     -0.736892 ou
+                  Deviation: 0.00348 ou
+               Zc:
+                  Value:     1.715284 ou
+                  Deviation: 0.00189 ou
+            Photo 11: img_0097.jpg
+               Omega:
+                  Value:     -6.090423 deg
+                  Deviation: 0.00997 deg
+               Phi:
+                  Value:     -0.940623 deg
+                  Deviation: 0.00562 deg
+                  Correlations over 95%: Xc:95.3%.
+               Kappa:
+                  Value:     -4.278302 deg
+                  Deviation: 0.00645 deg
+               Xc:
+                  Value:     0.020595 ou
+                  Deviation: 0.0018 ou
+                  Correlations over 95%: Phi:95.3%.
+               Yc:
+                  Value:     2.444072 ou
+                  Deviation: 0.00354 ou
+               Zc:
+                  Value:     1.282217 ou
+                  Deviation: 0.00209 ou
+            Photo 12: img_0098.jpg
+               Omega:
+                  Value:     -17.260753 deg
+                  Deviation: 0.0108 deg
+               Phi:
+                  Value:     -0.683416 deg
+                  Deviation: 0.00527 deg
+               Kappa:
+                  Value:     -6.705002 deg
+                  Deviation: 0.00709 deg
+               Xc:
+                  Value:     0.212285 ou
+                  Deviation: 0.00177 ou
+               Yc:
+                  Value:     5.714882 ou
+                  Deviation: 0.00347 ou
+               Zc:
+                  Value:     0.487720 ou
+                  Deviation: 0.00245 ou
+            Photo 13: img_0099.jpg
+               Omega:
+                  Value:     -21.349774 deg
+                  Deviation: 0.0116 deg
+               Phi:
+                  Value:     -0.529017 deg
+                  Deviation: 0.00527 deg
+               Kappa:
+                  Value:     -8.160787 deg
+                  Deviation: 0.00727 deg
+               Xc:
+                  Value:     0.471828 ou
+                  Deviation: 0.00176 ou
+               Yc:
+                  Value:     8.155678 ou
+                  Deviation: 0.00344 ou
+               Zc:
+                  Value:     -0.519723 ou
+                  Deviation: 0.00277 ou
+            Photo 14: img_0100.jpg
+               Omega:
+                  Value:     -30.553518 deg
+                  Deviation: 0.0128 deg
+               Phi:
+                  Value:     0.829667 deg
+                  Deviation: 0.00615 deg
+               Kappa:
+                  Value:     -10.346654 deg
+                  Deviation: 0.00758 deg
+               Xc:
+                  Value:     0.736332 ou
+                  Deviation: 0.00209 ou
+               Yc:
+                  Value:     10.505431 ou
+                  Deviation: 0.00354 ou
+               Zc:
+                  Value:     -1.479886 ou
+                  Deviation: 0.00329 ou
+            Photo 15: img_0101.jpg
+               Omega:
+                  Value:     -36.162210 deg
                   Deviation: 0.0139 deg
                Phi:
-                  Value:     2.700663 deg
-                  Deviation: 0.00763 deg
+                  Value:     1.860820 deg
+                  Deviation: 0.00678 deg
+               Kappa:
+                  Value:     -12.362892 deg
+                  Deviation: 0.00773 deg
+               Xc:
+                  Value:     1.093082 ou
+                  Deviation: 0.00235 ou
+               Yc:
+                  Value:     13.198509 ou
+                  Deviation: 0.00346 ou
+               Zc:
+                  Value:     -3.090005 ou
+                  Deviation: 0.00394 ou
+            Photo 16: img_0102.jpg
+               Omega:
+                  Value:     -45.911498 deg
+                  Deviation: 0.0143 deg
+               Phi:
+                  Value:     2.119820 deg
+                  Deviation: 0.00729 deg
+                  Correlations over 95%: Xc:95.4%.
+               Kappa:
+                  Value:     -12.515957 deg
+                  Deviation: 0.00775 deg
+               Xc:
+                  Value:     1.514676 ou
+                  Deviation: 0.00256 ou
+                  Correlations over 95%: Phi:95.4%.
+               Yc:
+                  Value:     15.040912 ou
+                  Deviation: 0.00312 ou
+               Zc:
+                  Value:     -4.726604 ou
+                  Deviation: 0.00438 ou
+            Photo 17: img_0103.jpg
+               Omega:
+                  Value:     -54.840456 deg
+                  Deviation: 0.0141 deg
+               Phi:
+                  Value:     2.697655 deg
+                  Deviation: 0.00771 deg
                   Correlations over 95%: Xc:96.1%.
                Kappa:
-                  Value:     -13.810791 deg
-                  Deviation: 0.00756 deg
+                  Value:     -13.700322 deg
+                  Deviation: 0.00765 deg
                Xc:
-                  Value:     1.998347 ou
-                  Deviation: 0.00279 ou
+                  Value:     1.988786 ou
+                  Deviation: 0.00282 ou
                   Correlations over 95%: Phi:96.1%.
                Yc:
-                  Value:     17.394977 ou
-                  Deviation: 0.00258 ou
+                  Value:     17.394096 ou
+                  Deviation: 0.00261 ou
                Zc:
-                  Value:     -6.490625 ou
-                  Deviation: 0.00474 ou
+                  Value:     -6.500272 ou
+                  Deviation: 0.00479 ou
             Photo 18: img_0104.jpg
                Omega:
-                  Value:     -61.443091 deg
-                  Deviation: 0.0114 deg
+                  Value:     -61.443088 deg
+                  Deviation: 0.0115 deg
                Phi:
-                  Value:     4.122742 deg
-                  Deviation: 0.0069 deg
+                  Value:     4.109049 deg
+                  Deviation: 0.00697 deg
                Kappa:
-                  Value:     -14.696200 deg
-                  Deviation: 0.00747 deg
+                  Value:     -14.586348 deg
+                  Deviation: 0.00757 deg
                Xc:
-                  Value:     2.753482 ou
-                  Deviation: 0.00269 ou
+                  Value:     2.738591 ou
+                  Deviation: 0.00272 ou
                Yc:
-                  Value:     18.770810 ou
-                  Deviation: 0.00149 ou
+                  Value:     18.769696 ou
+                  Deviation: 0.0015 ou
                Zc:
-                  Value:     -9.190628 ou
-                  Deviation: 0.00435 ou
+                  Value:     -9.200808 ou
+                  Deviation: 0.00441 ou
             Photo 19: img_0105.jpg
                Omega:
-                  Value:     -64.089338 deg
-                  Deviation: 0.0107 deg
+                  Value:     -64.099324 deg
+                  Deviation: 0.0108 deg
                Phi:
-                  Value:     9.776842 deg
-                  Deviation: 0.00665 deg
+                  Value:     9.757558 deg
+                  Deviation: 0.00673 deg
                Kappa:
-                  Value:     -15.590036 deg
-                  Deviation: 0.00761 deg
+                  Value:     -15.479944 deg
+                  Deviation: 0.0077 deg
                Xc:
-                  Value:     3.554518 ou
-                  Deviation: 0.00279 ou
+                  Value:     3.534721 ou
+                  Deviation: 0.00282 ou
                Yc:
                   Value:     19.891263 ou
                Zc:
-                  Value:     -11.858211 ou
-                  Deviation: 0.00427 ou
+                  Value:     -11.868337 ou
+                  Deviation: 0.00432 ou
             Photo 20: img_0106.jpg
                Omega:
-                  Value:     -69.216557 deg
-                  Deviation: 0.0104 deg
+                  Value:     -69.227376 deg
+                  Deviation: 0.0105 deg
                Phi:
-                  Value:     10.785502 deg
-                  Deviation: 0.00639 deg
+                  Value:     10.755496 deg
+                  Deviation: 0.00646 deg
                Kappa:
-                  Value:     -17.249770 deg
-                  Deviation: 0.00758 deg
+                  Value:     -17.141816 deg
+                  Deviation: 0.00767 deg
                Xc:
-                  Value:     4.507332 ou
-                  Deviation: 0.00278 ou
+                  Value:     4.482692 ou
+                  Deviation: 0.00281 ou
                Yc:
-                  Value:     19.679659 ou
-                  Deviation: 0.00128 ou
+                  Value:     19.681066 ou
+                  Deviation: 0.00129 ou
                Zc:
-                  Value:     -14.921586 ou
-                  Deviation: 0.00408 ou
+                  Value:     -14.932121 ou
+                  Deviation: 0.00412 ou
             Photo 21: img_0107.jpg
                Omega:
-                  Value:     -75.247886 deg
-                  Deviation: 0.0104 deg
+                  Value:     -75.262357 deg
+                  Deviation: 0.0105 deg
                Phi:
-                  Value:     12.866829 deg
-                  Deviation: 0.00653 deg
+                  Value:     12.825393 deg
+                  Deviation: 0.00661 deg
                Kappa:
-                  Value:     -18.777231 deg
-                  Deviation: 0.0075 deg
+                  Value:     -18.673020 deg
+                  Deviation: 0.00759 deg
                Xc:
-                  Value:     5.272565 ou
-                  Deviation: 0.00275 ou
+                  Value:     5.245458 ou
+                  Deviation: 0.00279 ou
                Yc:
-                  Value:     18.576970 ou
-                  Deviation: 0.00162 ou
+                  Value:     18.579759 ou
+                  Deviation: 0.00164 ou
                Zc:
-                  Value:     -17.376662 ou
-                  Deviation: 0.00386 ou
+                  Value:     -17.387616 ou
+                  Deviation: 0.0039 ou
             Photo 22: img_0109.jpg
                Omega:
-                  Value:     -82.998068 deg
-                  Deviation: 0.0107 deg
-               Phi:
-                  Value:     16.652827 deg
-                  Deviation: 0.00701 deg
-               Kappa:
-                  Value:     -17.957868 deg
-                  Deviation: 0.00739 deg
-               Xc:
-                  Value:     5.882592 ou
-                  Deviation: 0.00277 ou
-               Yc:
-                  Value:     17.535961 ou
-                  Deviation: 0.00203 ou
-               Zc:
-                  Value:     -19.590211 ou
-                  Deviation: 0.00367 ou
-            Photo 23: img_0110.jpg
-               Omega:
-                  Value:     -83.390802 deg
+                  Value:     -83.020686 deg
                   Deviation: 0.0108 deg
                Phi:
-                  Value:     24.293487 deg
-                  Deviation: 0.00708 deg
+                  Value:     16.597061 deg
+                  Deviation: 0.00709 deg
                Kappa:
-                  Value:     -21.826786 deg
-                  Deviation: 0.00779 deg
+                  Value:     -17.858520 deg
+                  Deviation: 0.00748 deg
                Xc:
-                  Value:     6.132556 ou
-                  Deviation: 0.00252 ou
+                  Value:     5.853109 ou
+                  Deviation: 0.00281 ou
                Yc:
-                  Value:     14.822308 ou
-                  Deviation: 0.00212 ou
+                  Value:     17.540165 ou
+                  Deviation: 0.00205 ou
                Zc:
-                  Value:     -20.375339 ou
-                  Deviation: 0.00319 ou
-            Photo 24: img_0111.jpg
-               Omega:
-                  Value:     -85.105221 deg
-                  Deviation: 0.011 deg
-               Phi:
-                  Value:     29.782577 deg
-                  Deviation: 0.00728 deg
-               Kappa:
-                  Value:     -23.767301 deg
-                  Deviation: 0.00809 deg
-               Xc:
-                  Value:     6.344274 ou
-                  Deviation: 0.00244 ou
-               Yc:
-                  Value:     13.484211 ou
-                  Deviation: 0.00221 ou
-               Zc:
-                  Value:     -21.155943 ou
-                  Deviation: 0.00295 ou
-            Photo 25: img_0112.jpg
-               Omega:
-                  Value:     -99.948851 deg
-                  Deviation: 0.0114 deg
-               Phi:
-                  Value:     34.023876 deg
-                  Deviation: 0.00805 deg
-               Kappa:
-                  Value:     -23.229819 deg
-                  Deviation: 0.00747 deg
-               Xc:
-                  Value:     6.732252 ou
-                  Deviation: 0.00244 ou
-               Yc:
-                  Value:     12.415198 ou
-                  Deviation: 0.00245 ou
-               Zc:
-                  Value:     -22.862108 ou
-                  Deviation: 0.00274 ou
-            Photo 26: img_0113.jpg
-               Omega:
-                  Value:     -106.006782 deg
-                  Deviation: 0.0114 deg
-               Phi:
-                  Value:     35.004760 deg
-                  Deviation: 0.00834 deg
-               Kappa:
-                  Value:     -23.528274 deg
-                  Deviation: 0.00713 deg
-               Xc:
-                  Value:     7.177093 ou
-                  Deviation: 0.00237 ou
-               Yc:
-                  Value:     10.746647 ou
-                  Deviation: 0.00262 ou
-               Zc:
-                  Value:     -24.319137 ou
-                  Deviation: 0.00247 ou
-            Photo 27: img_0114.jpg
-               Omega:
-                  Value:     -117.894371 deg
-                  Deviation: 0.0117 deg
-               Phi:
-                  Value:     38.053488 deg
-                  Deviation: 0.00871 deg
-               Kappa:
-                  Value:     -20.450931 deg
-                  Deviation: 0.00677 deg
-               Xc:
-                  Value:     7.559521 ou
-                  Deviation: 0.00234 ou
-               Yc:
-                  Value:     9.368207 ou
-                  Deviation: 0.00279 ou
-               Zc:
-                  Value:     -25.600077 ou
-                  Deviation: 0.0023 ou
-            Photo 28: img_0115.jpg
-               Omega:
-                  Value:     -124.120592 deg
-                  Deviation: 0.0118 deg
-               Phi:
-                  Value:     37.535541 deg
-                  Deviation: 0.00882 deg
-               Kappa:
-                  Value:     -18.528943 deg
-                  Deviation: 0.00655 deg
-               Xc:
-                  Value:     7.885015 ou
-                  Deviation: 0.0023 ou
-               Yc:
-                  Value:     8.183253 ou
-                  Deviation: 0.00292 ou
-               Zc:
-                  Value:     -26.631278 ou
-                  Deviation: 0.00218 ou
-            Photo 29: img_0116.jpg
-               Omega:
-                  Value:     -129.511850 deg
-                  Deviation: 0.0121 deg
-               Phi:
-                  Value:     38.802594 deg
-                  Deviation: 0.00885 deg
-               Kappa:
-                  Value:     -15.330460 deg
-                  Deviation: 0.00671 deg
-               Xc:
-                  Value:     8.271632 ou
-                  Deviation: 0.00227 ou
-               Yc:
-                  Value:     6.679168 ou
-                  Deviation: 0.00312 ou
-               Zc:
-                  Value:     -28.009214 ou
-                  Deviation: 0.0021 ou
-            Photo 30: img_0117.jpg
-               Omega:
-                  Value:     -128.216487 deg
-                  Deviation: 0.0123 deg
-               Phi:
-                  Value:     39.446469 deg
-                  Deviation: 0.00888 deg
-               Kappa:
-                  Value:     -15.191654 deg
-                  Deviation: 0.0069 deg
-               Xc:
-                  Value:     8.694338 ou
-                  Deviation: 0.00223 ou
-               Yc:
-                  Value:     5.107844 ou
-                  Deviation: 0.00334 ou
-               Zc:
-                  Value:     -29.441962 ou
-                  Deviation: 0.00206 ou
-            Photo 31: img_0118.jpg
-               Omega:
-                  Value:     -127.617695 deg
-                  Deviation: 0.0126 deg
-               Phi:
-                  Value:     41.145262 deg
-                  Deviation: 0.00891 deg
-               Kappa:
-                  Value:     -15.698335 deg
-                  Deviation: 0.00719 deg
-               Xc:
-                  Value:     9.006977 ou
-                  Deviation: 0.00222 ou
-               Yc:
-                  Value:     4.070727 ou
-                  Deviation: 0.00351 ou
-               Zc:
-                  Value:     -30.436990 ou
-                  Deviation: 0.00206 ou
-            Photo 32: img_0119.jpg
-               Omega:
-                  Value:     -128.689500 deg
-                  Deviation: 0.0124 deg
-               Phi:
-                  Value:     39.010136 deg
-                  Deviation: 0.00895 deg
-               Kappa:
-                  Value:     -14.867262 deg
-                  Deviation: 0.00712 deg
-               Xc:
-                  Value:     9.339047 ou
-                  Deviation: 0.00219 ou
-               Yc:
-                  Value:     2.666958 ou
+                  Value:     -19.601605 ou
                   Deviation: 0.00371 ou
-               Zc:
-                  Value:     -31.646836 ou
-                  Deviation: 0.00209 ou
-            Photo 33: img_0120.jpg
+            Photo 23: img_0110.jpg
                Omega:
-                  Value:     -127.653030 deg
-                  Deviation: 0.0124 deg
-               Phi:
-                  Value:     38.988654 deg
-                  Deviation: 0.00903 deg
-               Kappa:
-                  Value:     -15.473206 deg
-                  Deviation: 0.0072 deg
-               Xc:
-                  Value:     9.618457 ou
-                  Deviation: 0.00218 ou
-               Yc:
-                  Value:     1.515093 ou
-                  Deviation: 0.00388 ou
-               Zc:
-                  Value:     -32.648759 ou
-                  Deviation: 0.00217 ou
-            Photo 34: img_0121.jpg
-               Omega:
-                  Value:     -128.431731 deg
-                  Deviation: 0.0124 deg
-               Phi:
-                  Value:     39.398972 deg
-                  Deviation: 0.00908 deg
-               Kappa:
-                  Value:     -13.648174 deg
-                  Deviation: 0.00719 deg
-               Xc:
-                  Value:     9.799947 ou
-                  Deviation: 0.00219 ou
-               Yc:
-                  Value:     0.720263 ou
-                  Deviation: 0.00398 ou
-               Zc:
-                  Value:     -33.350259 ou
-                  Deviation: 0.00224 ou
-            Photo 35: img_0123.jpg
-               Omega:
-                  Value:     -145.099386 deg
-                  Deviation: 0.0128 deg
-               Phi:
-                  Value:     43.029671 deg
-                  Deviation: 0.00881 deg
-               Kappa:
-                  Value:     -9.117766 deg
-                  Deviation: 0.00775 deg
-               Xc:
-                  Value:     10.850390 ou
-                  Deviation: 0.00227 ou
-               Yc:
-                  Value:     -3.286223 ou
-                  Deviation: 0.00417 ou
-               Zc:
-                  Value:     -36.722829 ou
-                  Deviation: 0.00293 ou
-            Photo 36: img_0124.jpg
-               Omega:
-                  Value:     -146.262017 deg
-                  Deviation: 0.0129 deg
-               Phi:
-                  Value:     43.357697 deg
-                  Deviation: 0.00879 deg
-               Kappa:
-                  Value:     -8.032456 deg
-                  Deviation: 0.0079 deg
-               Xc:
-                  Value:     11.121575 ou
-                  Deviation: 0.00232 ou
-               Yc:
-                  Value:     -4.399230 ou
-                  Deviation: 0.00429 ou
-               Zc:
-                  Value:     -38.168049 ou
-                  Deviation: 0.00325 ou
-            Photo 37: img_0125.jpg
-               Omega:
-                  Value:     -156.511126 deg
-                  Deviation: 0.0131 deg
-               Phi:
-                  Value:     43.324332 deg
-                  Deviation: 0.0084 deg
-               Kappa:
-                  Value:     -5.415147 deg
-                  Deviation: 0.00851 deg
-               Xc:
-                  Value:     11.478814 ou
-                  Deviation: 0.00238 ou
-               Yc:
-                  Value:     -6.044503 ou
-                  Deviation: 0.00436 ou
-               Zc:
-                  Value:     -39.575370 ou
-                  Deviation: 0.00363 ou
-            Photo 38: img_0126.jpg
-               Omega:
-                  Value:     -170.780145 deg
-                  Deviation: 0.0132 deg
-               Phi:
-                  Value:     41.714118 deg
-                  Deviation: 0.00764 deg
-               Kappa:
-                  Value:     -1.102015 deg
-                  Deviation: 0.00926 deg
-               Xc:
-                  Value:     12.035530 ou
-                  Deviation: 0.00245 ou
-               Yc:
-                  Value:     -8.285635 ou
-                  Deviation: 0.00448 ou
-               Zc:
-                  Value:     -41.617932 ou
-                  Deviation: 0.0042 ou
-            Photo 39: img_0127.jpg
-               Omega:
-                  Value:     169.652643 deg
-                  Deviation: 0.0143 deg
-                  Correlations over 95%: Yc:95.4%.
-               Phi:
-                  Value:     45.347834 deg
-                  Deviation: 0.0063 deg
-               Kappa:
-                  Value:     112.586784 deg
-                  Deviation: 0.0113 deg
-               Xc:
-                  Value:     12.527869 ou
-                  Deviation: 0.00249 ou
-               Yc:
-                  Value:     -10.138854 ou
-                  Deviation: 0.00447 ou
-                  Correlations over 95%: Omega:95.4%.
-               Zc:
-                  Value:     -42.957833 ou
-                  Deviation: 0.00468 ou
-            Photo 40: img_0128.jpg
-               Omega:
-                  Value:     -172.986898 deg
-                  Deviation: 0.0129 deg
-                  Correlations over 95%: Yc:95.5%.
-               Phi:
-                  Value:     41.577183 deg
-                  Deviation: 0.00752 deg
-               Kappa:
-                  Value:     -1.705317 deg
-                  Deviation: 0.00907 deg
-               Xc:
-                  Value:     12.523257 ou
-                  Deviation: 0.00249 ou
-               Yc:
-                  Value:     -10.236946 ou
-                  Deviation: 0.00446 ou
-                  Correlations over 95%: Omega:95.5%.
-               Zc:
-                  Value:     -42.998983 ou
-                  Deviation: 0.0047 ou
-            Photo 41: img_0129.jpg
-               Omega:
-                  Value:     176.779132 deg
-                  Deviation: 0.0127 deg
-                  Correlations over 95%: Yc:95.6%.
-               Phi:
-                  Value:     40.809722 deg
-                  Deviation: 0.00663 deg
-               Kappa:
-                  Value:     0.409062 deg
-                  Deviation: 0.00936 deg
-               Xc:
-                  Value:     12.419409 ou
-                  Deviation: 0.00235 ou
-               Yc:
-                  Value:     -12.655359 ou
-                  Deviation: 0.00403 ou
-                  Correlations over 95%: Omega:95.6%.
-               Zc:
-                  Value:     -42.725934 ou
-                  Deviation: 0.00496 ou
-            Photo 42: img_0130.jpg
-               Omega:
-                  Value:     160.781322 deg
-                  Deviation: 0.0128 deg
-               Phi:
-                  Value:     40.179161 deg
-                  Deviation: 0.00539 deg
-               Kappa:
-                  Value:     3.358296 deg
-                  Deviation: 0.00993 deg
-               Xc:
-                  Value:     12.133609 ou
-                  Deviation: 0.00216 ou
-               Yc:
-                  Value:     -15.303212 ou
-                  Deviation: 0.00352 ou
-               Zc:
-                  Value:     -41.916347 ou
-                  Deviation: 0.00513 ou
-            Photo 43: img_0131.jpg
-               Omega:
-                  Value:     150.241169 deg
-                  Deviation: 0.0126 deg
-               Phi:
-                  Value:     37.732701 deg
-                  Deviation: 0.00479 deg
-               Kappa:
-                  Value:     6.053378 deg
-                  Deviation: 0.00973 deg
-               Xc:
-                  Value:     11.777270 ou
-                  Deviation: 0.00199 ou
-               Yc:
-                  Value:     -17.653326 ou
-                  Deviation: 0.00311 ou
-               Zc:
-                  Value:     -40.806506 ou
-                  Deviation: 0.00523 ou
-            Photo 44: img_0132.jpg
-               Omega:
-                  Value:     139.244507 deg
-                  Deviation: 0.0124 deg
-               Phi:
-                  Value:     35.291197 deg
-                  Deviation: 0.00445 deg
-               Kappa:
-                  Value:     11.234066 deg
-                  Deviation: 0.00943 deg
-               Xc:
-                  Value:     11.380141 ou
-                  Deviation: 0.00183 ou
-               Yc:
-                  Value:     -20.090531 ou
-                  Deviation: 0.00274 ou
-               Zc:
-                  Value:     -39.461864 ou
-                  Deviation: 0.00535 ou
-            Photo 45: img_0133.jpg
-               Omega:
-                  Value:     131.518469 deg
-                  Deviation: 0.012 deg
-               Phi:
-                  Value:     33.428220 deg
-                  Deviation: 0.00431 deg
-               Kappa:
-                  Value:     11.703043 deg
-                  Deviation: 0.00909 deg
-               Xc:
-                  Value:     10.970226 ou
-                  Deviation: 0.00171 ou
-               Yc:
-                  Value:     -21.462665 ou
-                  Deviation: 0.00246 ou
-               Zc:
-                  Value:     -38.140423 ou
-                  Deviation: 0.00532 ou
-            Photo 46: img_0134.jpg
-               Omega:
-                  Value:     122.559315 deg
-                  Deviation: 0.0115 deg
-               Phi:
-                  Value:     31.655815 deg
-                  Deviation: 0.00439 deg
-               Kappa:
-                  Value:     14.938193 deg
-                  Deviation: 0.00867 deg
-               Xc:
-                  Value:     10.493874 ou
-                  Deviation: 0.0016 ou
-               Yc:
-                  Value:     -22.962100 ou
-                  Deviation: 0.00222 ou
-               Zc:
-                  Value:     -36.586402 ou
-                  Deviation: 0.00527 ou
-            Photo 47: img_0135.jpg
-               Omega:
-                  Value:     111.654927 deg
+                  Value:     -83.427734 deg
                   Deviation: 0.0109 deg
                Phi:
-                  Value:     28.674685 deg
-                  Deviation: 0.00469 deg
+                  Value:     24.238038 deg
+                  Deviation: 0.00717 deg
                Kappa:
-                  Value:     18.097947 deg
-                  Deviation: 0.00803 deg
+                  Value:     -21.727396 deg
+                  Deviation: 0.00788 deg
                Xc:
-                  Value:     9.973715 ou
-                  Deviation: 0.00152 ou
+                  Value:     6.106987 ou
+                  Deviation: 0.00256 ou
                Yc:
-                  Value:     -24.529837 ou
-                  Deviation: 0.00207 ou
+                  Value:     14.828527 ou
+                  Deviation: 0.00214 ou
                Zc:
-                  Value:     -34.708083 ou
+                  Value:     -20.386285 ou
+                  Deviation: 0.00322 ou
+            Photo 24: img_0111.jpg
+               Omega:
+                  Value:     -85.152499 deg
+                  Deviation: 0.0112 deg
+               Phi:
+                  Value:     29.724740 deg
+                  Deviation: 0.00736 deg
+               Kappa:
+                  Value:     -23.667659 deg
+                  Deviation: 0.00818 deg
+               Xc:
+                  Value:     6.319950 ou
+                  Deviation: 0.00247 ou
+               Yc:
+                  Value:     13.491381 ou
+                  Deviation: 0.00224 ou
+               Zc:
+                  Value:     -21.166664 ou
+                  Deviation: 0.00298 ou
+            Photo 25: img_0112.jpg
+               Omega:
+                  Value:     -99.989151 deg
+                  Deviation: 0.0115 deg
+               Phi:
+                  Value:     33.946618 deg
+                  Deviation: 0.00815 deg
+               Kappa:
+                  Value:     -23.149775 deg
+                  Deviation: 0.00755 deg
+               Xc:
+                  Value:     6.706139 ou
+                  Deviation: 0.00247 ou
+               Yc:
+                  Value:     12.421832 ou
+                  Deviation: 0.00248 ou
+               Zc:
+                  Value:     -22.871597 ou
+                  Deviation: 0.00277 ou
+            Photo 26: img_0113.jpg
+               Omega:
+                  Value:     -106.039571 deg
+                  Deviation: 0.0115 deg
+               Phi:
+                  Value:     34.919840 deg
+                  Deviation: 0.00844 deg
+               Kappa:
+                  Value:     -23.458869 deg
+                  Deviation: 0.00721 deg
+               Xc:
+                  Value:     7.150614 ou
+                  Deviation: 0.0024 ou
+               Yc:
+                  Value:     10.754438 ou
+                  Deviation: 0.00265 ou
+               Zc:
+                  Value:     -24.328459 ou
+                  Deviation: 0.0025 ou
+            Photo 27: img_0114.jpg
+               Omega:
+                  Value:     -117.914499 deg
+                  Deviation: 0.0118 deg
+               Phi:
+                  Value:     37.957376 deg
+                  Deviation: 0.00882 deg
+               Kappa:
+                  Value:     -20.404365 deg
+                  Deviation: 0.00684 deg
+               Xc:
+                  Value:     7.532252 ou
+                  Deviation: 0.00236 ou
+               Yc:
+                  Value:     9.376964 ou
+                  Deviation: 0.00282 ou
+               Zc:
+                  Value:     -25.608882 ou
+                  Deviation: 0.00232 ou
+            Photo 28: img_0115.jpg
+               Omega:
+                  Value:     -124.130970 deg
+                  Deviation: 0.0119 deg
+               Phi:
+                  Value:     37.434323 deg
+                  Deviation: 0.00893 deg
+               Kappa:
+                  Value:     -18.496162 deg
+                  Deviation: 0.00661 deg
+               Xc:
+                  Value:     7.857165 ou
+                  Deviation: 0.00233 ou
+               Yc:
+                  Value:     8.192935 ou
+                  Deviation: 0.00296 ou
+               Zc:
+                  Value:     -26.640342 ou
+                  Deviation: 0.00221 ou
+            Photo 29: img_0116.jpg
+               Omega:
+                  Value:     -129.517167 deg
+                  Deviation: 0.0122 deg
+               Phi:
+                  Value:     38.699491 deg
+                  Deviation: 0.00896 deg
+               Kappa:
+                  Value:     -15.307939 deg
+                  Deviation: 0.00677 deg
+               Xc:
+                  Value:     8.243475 ou
+                  Deviation: 0.0023 ou
+               Yc:
+                  Value:     6.689560 ou
+                  Deviation: 0.00315 ou
+               Zc:
+                  Value:     -28.018700 ou
+                  Deviation: 0.00212 ou
+            Photo 30: img_0117.jpg
+               Omega:
+                  Value:     -128.225145 deg
+                  Deviation: 0.0124 deg
+               Phi:
+                  Value:     39.345486 deg
+                  Deviation: 0.00899 deg
+               Kappa:
+                  Value:     -15.164857 deg
+                  Deviation: 0.00696 deg
+               Xc:
+                  Value:     8.666100 ou
+                  Deviation: 0.00226 ou
+               Yc:
+                  Value:     5.118638 ou
+                  Deviation: 0.00338 ou
+               Zc:
+                  Value:     -29.451968 ou
+                  Deviation: 0.00208 ou
+            Photo 31: img_0118.jpg
+               Omega:
+                  Value:     -127.626950 deg
+                  Deviation: 0.0127 deg
+               Phi:
+                  Value:     41.045610 deg
+                  Deviation: 0.00902 deg
+               Kappa:
+                  Value:     -15.670255 deg
+                  Deviation: 0.00725 deg
+               Xc:
+                  Value:     8.978685 ou
+                  Deviation: 0.00225 ou
+               Yc:
+                  Value:     4.081979 ou
+                  Deviation: 0.00355 ou
+               Zc:
+                  Value:     -30.447024 ou
+                  Deviation: 0.00208 ou
+            Photo 32: img_0119.jpg
+               Omega:
+                  Value:     -128.695696 deg
+                  Deviation: 0.0126 deg
+               Phi:
+                  Value:     38.910407 deg
+                  Deviation: 0.00905 deg
+               Kappa:
+                  Value:     -14.842395 deg
+                  Deviation: 0.00718 deg
+               Xc:
+                  Value:     9.310079 ou
+                  Deviation: 0.00222 ou
+               Yc:
+                  Value:     2.678789 ou
+                  Deviation: 0.00375 ou
+               Zc:
+                  Value:     -31.657079 ou
+                  Deviation: 0.00211 ou
+            Photo 33: img_0120.jpg
+               Omega:
+                  Value:     -127.658762 deg
+                  Deviation: 0.0126 deg
+               Phi:
+                  Value:     38.890141 deg
+                  Deviation: 0.00915 deg
+               Kappa:
+                  Value:     -15.447333 deg
+                  Deviation: 0.00726 deg
+               Xc:
+                  Value:     9.589235 ou
+                  Deviation: 0.00221 ou
+               Yc:
+                  Value:     1.527526 ou
+                  Deviation: 0.00392 ou
+               Zc:
+                  Value:     -32.658882 ou
+                  Deviation: 0.00219 ou
+            Photo 34: img_0121.jpg
+               Omega:
+                  Value:     -128.438869 deg
+                  Deviation: 0.0126 deg
+               Phi:
+                  Value:     39.301763 deg
+                  Deviation: 0.0092 deg
+               Kappa:
+                  Value:     -13.622797 deg
+                  Deviation: 0.00725 deg
+               Xc:
+                  Value:     9.770582 ou
+                  Deviation: 0.00221 ou
+               Yc:
+                  Value:     0.732851 ou
+                  Deviation: 0.00402 ou
+               Zc:
+                  Value:     -33.360439 ou
+                  Deviation: 0.00226 ou
+            Photo 35: img_0123.jpg
+               Omega:
+                  Value:     -145.061156 deg
+                  Deviation: 0.0129 deg
+               Phi:
+                  Value:     42.930365 deg
+                  Deviation: 0.00892 deg
+               Kappa:
+                  Value:     -9.145470 deg
+                  Deviation: 0.00781 deg
+               Xc:
+                  Value:     10.819725 ou
+                  Deviation: 0.00229 ou
+               Yc:
+                  Value:     -3.268137 ou
+                  Deviation: 0.00422 ou
+               Zc:
+                  Value:     -36.730830 ou
+                  Deviation: 0.00296 ou
+            Photo 36: img_0124.jpg
+               Omega:
+                  Value:     -146.220354 deg
+                  Deviation: 0.013 deg
+               Phi:
+                  Value:     43.260531 deg
+                  Deviation: 0.0089 deg
+               Kappa:
+                  Value:     -8.064339 deg
+                  Deviation: 0.00797 deg
+               Xc:
+                  Value:     11.090267 ou
+                  Deviation: 0.00235 ou
+               Yc:
+                  Value:     -4.380209 ou
+                  Deviation: 0.00434 ou
+               Zc:
+                  Value:     -38.175168 ou
+                  Deviation: 0.00328 ou
+            Photo 37: img_0125.jpg
+               Omega:
+                  Value:     -156.443210 deg
+                  Deviation: 0.0132 deg
+               Phi:
+                  Value:     43.230845 deg
+                  Deviation: 0.00851 deg
+               Kappa:
+                  Value:     -5.478280 deg
+                  Deviation: 0.00858 deg
+               Xc:
+                  Value:     11.447170 ou
+                  Deviation: 0.0024 ou
+               Yc:
+                  Value:     -6.022262 ou
+                  Deviation: 0.00441 ou
+               Zc:
+                  Value:     -39.581801 ou
+                  Deviation: 0.00367 ou
+            Photo 38: img_0126.jpg
+               Omega:
+                  Value:     -170.684625 deg
+                  Deviation: 0.0134 deg
+               Phi:
+                  Value:     41.633253 deg
+                  Deviation: 0.00774 deg
+               Kappa:
+                  Value:     -1.201283 deg
+                  Deviation: 0.00934 deg
+               Xc:
+                  Value:     12.003368 ou
+                  Deviation: 0.00248 ou
+               Yc:
+                  Value:     -8.258752 ou
+                  Deviation: 0.00453 ou
+               Zc:
+                  Value:     -41.623710 ou
+                  Deviation: 0.00425 ou
+            Photo 39: img_0127.jpg
+               Omega:
+                  Value:     169.701960 deg
+                  Deviation: 0.0145 deg
+                  Correlations over 95%: Yc:95.4%.
+               Phi:
+                  Value:     45.241926 deg
+                  Deviation: 0.00638 deg
+               Kappa:
+                  Value:     112.463189 deg
+                  Deviation: 0.0114 deg
+               Xc:
+                  Value:     12.488981 ou
+                  Deviation: 0.00252 ou
+               Yc:
+                  Value:     -10.116042 ou
+                  Deviation: 0.00452 ou
+                  Correlations over 95%: Omega:95.4%.
+               Zc:
+                  Value:     -42.969545 ou
+                  Deviation: 0.00473 ou
+            Photo 40: img_0128.jpg
+               Omega:
+                  Value:     -172.889561 deg
+                  Deviation: 0.013 deg
+                  Correlations over 95%: Yc:95.5%.
+               Phi:
+                  Value:     41.497812 deg
+                  Deviation: 0.00761 deg
+               Kappa:
+                  Value:     -1.810250 deg
+                  Deviation: 0.00915 deg
+               Xc:
+                  Value:     12.490563 ou
+                  Deviation: 0.00252 ou
+               Yc:
+                  Value:     -10.207932 ou
+                  Deviation: 0.00451 ou
+                  Correlations over 95%: Omega:95.5%.
+               Zc:
+                  Value:     -43.004419 ou
+                  Deviation: 0.00475 ou
+            Photo 41: img_0129.jpg
+               Omega:
+                  Value:     176.877378 deg
+                  Deviation: 0.0128 deg
+                  Correlations over 95%: Yc:95.6%.
+               Phi:
+                  Value:     40.738815 deg
+                  Deviation: 0.00672 deg
+               Kappa:
+                  Value:     0.285633 deg
+                  Deviation: 0.00945 deg
+               Xc:
+                  Value:     12.390959 ou
+                  Deviation: 0.00237 ou
+               Yc:
+                  Value:     -12.626764 ou
+                  Deviation: 0.00408 ou
+                  Correlations over 95%: Omega:95.6%.
+               Zc:
+                  Value:     -42.733906 ou
+                  Deviation: 0.00502 ou
+            Photo 42: img_0130.jpg
+               Omega:
+                  Value:     160.882262 deg
+                  Deviation: 0.0129 deg
+                  Correlations over 95%: Yc:95.0%.
+               Phi:
+                  Value:     40.131362 deg
+                  Deviation: 0.00546 deg
+               Kappa:
+                  Value:     3.217886 deg
+                  Deviation: 0.01 deg
+               Xc:
+                  Value:     12.109952 ou
+                  Deviation: 0.00219 ou
+               Yc:
+                  Value:     -15.276323 ou
+                  Deviation: 0.00356 ou
+                  Correlations over 95%: Omega:95.0%.
+               Zc:
+                  Value:     -41.924798 ou
                   Deviation: 0.00518 ou
+            Photo 43: img_0131.jpg
+               Omega:
+                  Value:     150.334649 deg
+                  Deviation: 0.0127 deg
+               Phi:
+                  Value:     37.704924 deg
+                  Deviation: 0.00485 deg
+               Kappa:
+                  Value:     5.910654 deg
+                  Deviation: 0.00984 deg
+               Xc:
+                  Value:     11.758217 ou
+                  Deviation: 0.00201 ou
+               Yc:
+                  Value:     -17.627122 ou
+                  Deviation: 0.00314 ou
+               Zc:
+                  Value:     -40.813951 ou
+                  Deviation: 0.00529 ou
+            Photo 44: img_0132.jpg
+               Omega:
+                  Value:     139.328423 deg
+                  Deviation: 0.0125 deg
+               Phi:
+                  Value:     35.282935 deg
+                  Deviation: 0.0045 deg
+               Kappa:
+                  Value:     11.094687 deg
+                  Deviation: 0.00954 deg
+               Xc:
+                  Value:     11.365859 ou
+                  Deviation: 0.00185 ou
+               Yc:
+                  Value:     -20.064955 ou
+                  Deviation: 0.00277 ou
+               Zc:
+                  Value:     -39.468736 ou
+                  Deviation: 0.00541 ou
+            Photo 45: img_0133.jpg
+               Omega:
+                  Value:     131.603360 deg
+                  Deviation: 0.0121 deg
+               Phi:
+                  Value:     33.435774 deg
+                  Deviation: 0.00436 deg
+               Kappa:
+                  Value:     11.563555 deg
+                  Deviation: 0.00921 deg
+               Xc:
+                  Value:     10.959832 ou
+                  Deviation: 0.00173 ou
+               Yc:
+                  Value:     -21.436422 ou
+                  Deviation: 0.00249 ou
+               Zc:
+                  Value:     -38.147520 ou
+                  Deviation: 0.00538 ou
+            Photo 46: img_0134.jpg
+               Omega:
+                  Value:     122.635418 deg
+                  Deviation: 0.0117 deg
+               Phi:
+                  Value:     31.680171 deg
+                  Deviation: 0.00444 deg
+               Kappa:
+                  Value:     14.805485 deg
+                  Deviation: 0.00879 deg
+               Xc:
+                  Value:     10.487591 ou
+                  Deviation: 0.00162 ou
+               Yc:
+                  Value:     -22.936338 ou
+                  Deviation: 0.00225 ou
+               Zc:
+                  Value:     -36.592860 ou
+                  Deviation: 0.00533 ou
+            Photo 47: img_0135.jpg
+               Omega:
+                  Value:     111.718936 deg
+                  Deviation: 0.0111 deg
+               Phi:
+                  Value:     28.719422 deg
+                  Deviation: 0.00474 deg
+               Kappa:
+                  Value:     17.977247 deg
+                  Deviation: 0.00814 deg
+               Xc:
+                  Value:     9.972038 ou
+                  Deviation: 0.00154 ou
+               Yc:
+                  Value:     -24.504090 ou
+                  Deviation: 0.00209 ou
+               Zc:
+                  Value:     -34.714081 ou
+                  Deviation: 0.00524 ou
             Photo 48: img_0136.jpg
                Omega:
-                  Value:     97.644433 deg
-                  Deviation: 0.0102 deg
+                  Value:     97.700326 deg
+                  Deviation: 0.0103 deg
                Phi:
-                  Value:     25.378279 deg
-                  Deviation: 0.005 deg
+                  Value:     25.446728 deg
+                  Deviation: 0.00506 deg
                Kappa:
-                  Value:     18.408018 deg
-                  Deviation: 0.00714 deg
+                  Value:     18.302533 deg
+                  Deviation: 0.00724 deg
                Xc:
-                  Value:     9.299686 ou
-                  Deviation: 0.00144 ou
+                  Value:     9.303276 ou
+                  Deviation: 0.00145 ou
                Yc:
-                  Value:     -25.829359 ou
-                  Deviation: 0.00196 ou
+                  Value:     -25.803941 ou
+                  Deviation: 0.00199 ou
                Zc:
-                  Value:     -32.433932 ou
-                  Deviation: 0.00499 ou
+                  Value:     -32.440698 ou
+                  Deviation: 0.00504 ou
             Photo 49: img_0137.jpg
                Omega:
-                  Value:     94.874895 deg
-                  Deviation: 0.00938 deg
+                  Value:     94.920627 deg
+                  Deviation: 0.0095 deg
                Phi:
-                  Value:     21.982155 deg
-                  Deviation: 0.0046 deg
+                  Value:     22.053992 deg
+                  Deviation: 0.00466 deg
                Kappa:
-                  Value:     18.883741 deg
-                  Deviation: 0.0068 deg
+                  Value:     18.787034 deg
+                  Deviation: 0.00689 deg
                Xc:
-                  Value:     8.704077 ou
-                  Deviation: 0.0014 ou
+                  Value:     8.712212 ou
+                  Deviation: 0.00141 ou
                Yc:
-                  Value:     -27.643426 ou
-                  Deviation: 0.00202 ou
+                  Value:     -27.618164 ou
+                  Deviation: 0.00204 ou
                Zc:
-                  Value:     -30.255535 ou
-                  Deviation: 0.00487 ou
+                  Value:     -30.261188 ou
+                  Deviation: 0.00492 ou
             Photo 50: img_0138.jpg
                Omega:
-                  Value:     90.316303 deg
-                  Deviation: 0.0088 deg
+                  Value:     90.358852 deg
+                  Deviation: 0.00891 deg
                Phi:
-                  Value:     21.962278 deg
-                  Deviation: 0.00459 deg
+                  Value:     22.040607 deg
+                  Deviation: 0.00465 deg
                Kappa:
-                  Value:     17.047564 deg
-                  Deviation: 0.00645 deg
+                  Value:     16.957821 deg
+                  Deviation: 0.00653 deg
                Xc:
-                  Value:     8.080577 ou
-                  Deviation: 0.00136 ou
+                  Value:     8.092662 ou
+                  Deviation: 0.00138 ou
                Yc:
-                  Value:     -28.452984 ou
-                  Deviation: 0.00211 ou
+                  Value:     -28.428084 ou
+                  Deviation: 0.00214 ou
                Zc:
-                  Value:     -28.203477 ou
-                  Deviation: 0.00462 ou
+                  Value:     -28.207807 ou
+                  Deviation: 0.00467 ou
             Photo 51: img_0139.jpg
                Omega:
-                  Value:     86.230398 deg
-                  Deviation: 0.00816 deg
+                  Value:     86.263297 deg
+                  Deviation: 0.00827 deg
                Phi:
-                  Value:     18.988872 deg
-                  Deviation: 0.00454 deg
+                  Value:     19.072322 deg
+                  Deviation: 0.0046 deg
                Kappa:
-                  Value:     16.274739 deg
-                  Deviation: 0.0058 deg
+                  Value:     16.194671 deg
+                  Deviation: 0.00588 deg
                Xc:
-                  Value:     7.496834 ou
-                  Deviation: 0.00131 ou
+                  Value:     7.511295 ou
+                  Deviation: 0.00132 ou
                Yc:
-                  Value:     -28.497500 ou
-                  Deviation: 0.00216 ou
+                  Value:     -28.472792 ou
+                  Deviation: 0.00219 ou
                Zc:
-                  Value:     -26.172349 ou
-                  Deviation: 0.00428 ou
+                  Value:     -26.175308 ou
+                  Deviation: 0.00433 ou
             Photo 52: img_0140.jpg
                Omega:
-                  Value:     75.052823 deg
-                  Deviation: 0.0074 deg
+                  Value:     75.070330 deg
+                  Deviation: 0.0075 deg
                Phi:
-                  Value:     16.478758 deg
-                  Deviation: 0.00493 deg
+                  Value:     16.574561 deg
+                  Deviation: 0.005 deg
                Kappa:
-                  Value:     15.221094 deg
-                  Deviation: 0.0046 deg
+                  Value:     15.160766 deg
+                  Deviation: 0.00466 deg
                Xc:
-                  Value:     6.688987 ou
-                  Deviation: 0.00128 ou
+                  Value:     6.706858 ou
+                  Deviation: 0.0013 ou
                Yc:
-                  Value:     -28.160182 ou
-                  Deviation: 0.00222 ou
+                  Value:     -28.135164 ou
+                  Deviation: 0.00224 ou
                Zc:
-                  Value:     -23.439817 ou
-                  Deviation: 0.00377 ou
+                  Value:     -23.440654 ou
+                  Deviation: 0.00382 ou
             Photo 53: img_0141.jpg
                Omega:
-                  Value:     65.968338 deg
-                  Deviation: 0.00668 deg
+                  Value:     65.972662 deg
+                  Deviation: 0.00677 deg
                Phi:
-                  Value:     10.661948 deg
-                  Deviation: 0.00523 deg
+                  Value:     10.767098 deg
+                  Deviation: 0.0053 deg
                Kappa:
-                  Value:     12.570995 deg
-                  Deviation: 0.00358 deg
+                  Value:     12.528251 deg
+                  Deviation: 0.00363 deg
                Xc:
-                  Value:     5.830484 ou
-                  Deviation: 0.00134 ou
+                  Value:     5.851665 ou
+                  Deviation: 0.00136 ou
                Yc:
-                  Value:     -27.670069 ou
-                  Deviation: 0.00229 ou
+                  Value:     -27.643426 ou
+                  Deviation: 0.00231 ou
                Zc:
-                  Value:     -20.481931 ou
-                  Deviation: 0.00329 ou
+                  Value:     -20.482021 ou
+                  Deviation: 0.00333 ou
             Photo 54: img_0142.jpg
                Omega:
-                  Value:     62.817285 deg
-                  Deviation: 0.00648 deg
+                  Value:     62.819536 deg
+                  Deviation: 0.00656 deg
                Phi:
-                  Value:     13.023243 deg
-                  Deviation: 0.00537 deg
+                  Value:     13.133513 deg
+                  Deviation: 0.00544 deg
                Kappa:
-                  Value:     10.977362 deg
-                  Deviation: 0.00327 deg
+                  Value:     10.939357 deg
+                  Deviation: 0.00332 deg
                Xc:
-                  Value:     5.235970 ou
-                  Deviation: 0.00143 ou
+                  Value:     5.260188 ou
+                  Deviation: 0.00144 ou
                Yc:
-                  Value:     -26.757004 ou
-                  Deviation: 0.00223 ou
+                  Value:     -26.729692 ou
+                  Deviation: 0.00225 ou
                Zc:
-                  Value:     -18.498796 ou
-                  Deviation: 0.00296 ou
+                  Value:     -18.497983 ou
+                  Deviation: 0.00299 ou
             Photo 55: img_0143.jpg
                Omega:
-                  Value:     55.022921 deg
-                  Deviation: 0.00604 deg
+                  Value:     55.016194 deg
+                  Deviation: 0.00612 deg
                Phi:
-                  Value:     6.597212 deg
-                  Deviation: 0.00545 deg
-                  Correlations over 95%: Xc:95.7%.
+                  Value:     6.714548 deg
+                  Deviation: 0.00552 deg
+                  Correlations over 95%: Xc:95.6%.
                Kappa:
-                  Value:     10.583605 deg
-                  Deviation: 0.00255 deg
+                  Value:     10.560837 deg
+                  Deviation: 0.00259 deg
                Xc:
-                  Value:     4.516592 ou
-                  Deviation: 0.0015 ou
-                  Correlations over 95%: Phi:95.7%.
+                  Value:     4.543049 ou
+                  Deviation: 0.00152 ou
+                  Correlations over 95%: Phi:95.6%.
                Yc:
-                  Value:     -25.610760 ou
-                  Deviation: 0.00213 ou
+                  Value:     -25.581850 ou
+                  Deviation: 0.00215 ou
                Zc:
-                  Value:     -16.003120 ou
-                  Deviation: 0.00257 ou
+                  Value:     -16.003694 ou
+                  Deviation: 0.0026 ou
             Photo 56: img_0144.jpg
                Omega:
-                  Value:     48.973161 deg
-                  Deviation: 0.00575 deg
+                  Value:     48.963381 deg
+                  Deviation: 0.00582 deg
                Phi:
-                  Value:     3.759603 deg
-                  Deviation: 0.0053 deg
+                  Value:     3.883738 deg
+                  Deviation: 0.00538 deg
                   Correlations over 95%: Xc:96.9%.
                Kappa:
-                  Value:     10.631849 deg
-                  Deviation: 0.00214 deg
+                  Value:     10.620209 deg
+                  Deviation: 0.00216 deg
                Xc:
-                  Value:     4.001178 ou
-                  Deviation: 0.00151 ou
+                  Value:     4.029729 ou
+                  Deviation: 0.00153 ou
                   Correlations over 95%: Phi:96.9%.
                Yc:
-                  Value:     -24.286572 ou
-                  Deviation: 0.00196 ou
+                  Value:     -24.256590 ou
+                  Deviation: 0.00198 ou
                Zc:
-                  Value:     -14.143733 ou
-                  Deviation: 0.00225 ou
+                  Value:     -14.146729 ou
+                  Deviation: 0.00228 ou
             Photo 57: img_0145.jpg
                Omega:
-                  Value:     45.196056 deg
-                  Deviation: 0.00545 deg
+                  Value:     45.190880 deg
+                  Deviation: 0.00552 deg
                Phi:
-                  Value:     2.947483 deg
-                  Deviation: 0.00506 deg
+                  Value:     3.079535 deg
+                  Deviation: 0.00513 deg
                   Correlations over 95%: Xc:97.8%.
                Kappa:
-                  Value:     8.833735 deg
-                  Deviation: 0.00187 deg
+                  Value:     8.828104 deg
+                  Deviation: 0.00189 deg
                Xc:
-                  Value:     3.494673 ou
-                  Deviation: 0.00151 ou
+                  Value:     3.526443 ou
+                  Deviation: 0.00153 ou
                   Correlations over 95%: Phi:97.8%.
                Yc:
-                  Value:     -23.095580 ou
-                  Deviation: 0.00181 ou
+                  Value:     -23.065756 ou
+                  Deviation: 0.00183 ou
                Zc:
-                  Value:     -12.456356 ou
-                  Deviation: 0.00195 ou
+                  Value:     -12.462952 ou
+                  Deviation: 0.00197 ou
             Photo 58: img_0146.jpg
                Omega:
-                  Value:     49.846908 deg
-                  Deviation: 0.00503 deg
+                  Value:     49.841803 deg
+                  Deviation: 0.0051 deg
                Phi:
-                  Value:     7.391663 deg
-                  Deviation: 0.00467 deg
-                  Correlations over 95%: Xc:97.9%.
+                  Value:     7.524414 deg
+                  Deviation: 0.00473 deg
+                  Correlations over 95%: Xc:97.8%.
                Kappa:
-                  Value:     10.319229 deg
-                  Deviation: 0.00187 deg
+                  Value:     10.301603 deg
+                  Deviation: 0.0019 deg
                Xc:
-                  Value:     3.339574 ou
-                  Deviation: 0.0014 ou
-                  Correlations over 95%: Phi:97.9%.
+                  Value:     3.370871 ou
+                  Deviation: 0.00142 ou
+                  Correlations over 95%: Phi:97.8%.
                Yc:
-                  Value:     -21.465510 ou
-                  Deviation: 0.00155 ou
+                  Value:     -21.436485 ou
+                  Deviation: 0.00157 ou
                Zc:
-                  Value:     -11.836142 ou
-                  Deviation: 0.00166 ou
+                  Value:     -11.842055 ou
+                  Deviation: 0.00168 ou
             Photo 59: img_0147.jpg
                Omega:
-                  Value:     46.884323 deg
-                  Deviation: 0.00478 deg
+                  Value:     46.881343 deg
+                  Deviation: 0.00484 deg
                Phi:
-                  Value:     4.518714 deg
-                  Deviation: 0.00446 deg
+                  Value:     4.658672 deg
+                  Deviation: 0.00452 deg
                   Correlations over 95%: Xc:98.6%.
                Kappa:
-                  Value:     9.973247 deg
-                  Deviation: 0.00162 deg
+                  Value:     9.958829 deg
+                  Deviation: 0.00164 deg
                Xc:
-                  Value:     2.849802 ou
-                  Deviation: 0.0014 ou
+                  Value:     2.884382 ou
+                  Deviation: 0.00142 ou
                   Correlations over 95%: Phi:98.6%.
                Yc:
-                  Value:     -20.488132 ou
-                  Deviation: 0.0015 ou
+                  Value:     -20.459673 ou
+                  Deviation: 0.00151 ou
                Zc:
-                  Value:     -10.161940 ou
-                  Deviation: 0.00143 ou
+                  Value:     -10.171418 ou
+                  Deviation: 0.00144 ou
             Photo 60: img_0148.jpg
                Omega:
-                  Value:     47.084500 deg
-                  Deviation: 0.00545 deg
+                  Value:     47.112893 deg
+                  Deviation: 0.00551 deg
                Phi:
-                  Value:     5.945656 deg
-                  Deviation: 0.00522 deg
+                  Value:     5.950080 deg
+                  Deviation: 0.00529 deg
                   Correlations over 95%: Xc:99.3%.
                Kappa:
-                  Value:     100.136715 deg
-                  Deviation: 0.00169 deg
+                  Value:     100.128053 deg
+                  Deviation: 0.00171 deg
                Xc:
-                  Value:     2.473728 ou
-                  Deviation: 0.00194 ou
+                  Value:     2.474805 ou
+                  Deviation: 0.00196 ou
                   Correlations over 95%: Phi:99.3%.
                Yc:
-                  Value:     -24.165535 ou
-                  Deviation: 0.00193 ou
+                  Value:     -24.169404 ou
+                  Deviation: 0.00196 ou
                Zc:
-                  Value:     -8.988945 ou
-                  Deviation: 0.00193 ou
+                  Value:     -8.998478 ou
+                  Deviation: 0.00195 ou
    Quality
       Photographs
          Total number: 60
@@ -1291,31 +1300,31 @@ Damped Bundle Adjustment Toolbox result file
             1 points with 16 rays.
             1 points with 17 rays.
       Point Marking Residuals
-         Overall point RMS: 0.647 pixels
+         Overall point RMS: 0.654 pixels
          Mark point residuals:
-            Maximum: 3.566 pixels (OP 32600 on photo 1)
+            Maximum: 3.324 pixels (OP 26366 on photo 50)
          Object point residuals (RMS over all images of a point):
-            Minimum: 0.000 pixels (OP 13618 over 2 images)
-            Maximum: 3.067 pixels (OP 26366 over 2 images)
+            Minimum: 0.000 pixels (OP 24421 over 2 images)
+            Maximum: 3.034 pixels (OP 26366 over 2 images)
          Photo residuals (RMS over all points in an image):
-            Minimum: 0.515 pixels (photo 4 over 1571 points)
-            Maximum: 0.825 pixels (photo 23 over 1567 points)
+            Minimum: 0.517 pixels (photo 4 over 1571 points)
+            Maximum: 0.836 pixels (photo 39 over 1007 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
-            Minimum: 0.0027 (OP 29934)
+            Minimum: 0.0028 (OP 29934)
             Maximum: 0.27 (OP 11799)
-         Maximum X standard deviation: 0.098 (OP 11778)
-         Maximum Y standard deviation: 0.22 (OP 11806)
+         Maximum X standard deviation: 0.099 (OP 11778)
+         Maximum Y standard deviation: 0.23 (OP 11806)
          Maximum Z standard deviation: 0.15 (OP 5016)
          Points with high correlations
-            Points with correlation above 95%: 15639
-            Points with correlation above 99%: 3591
+            Points with correlation above 95%: 15644
+            Points with correlation above 99%: 3573
             Points with highest correlations:
-               Points 25725: -99.96
-               Points 25833: -99.95
-               Points 25719: -99.95
-               Points 25664: -99.94
-               Points 25366: -99.93
+               Points 25725: -99.95
+               Points 25833: -99.94
+               Points 25719: -99.94
+               Points 25664: -99.92
+               Points 25366: -99.92
       Point Angles
          CP
             Minimum: -
@@ -1326,21 +1335,27 @@ Damped Bundle Adjustment Toolbox result file
             Maximum: -
             Average: -
          OP
-            Minimum: 1.1 degrees (OP 33362)
+            Minimum: 1.2 degrees (OP 11827)
             Maximum: 90.0 degrees (OP 29922)
             Average: 23.4 degrees
             Smallest angles (ID, angle [deg], vis in cameras)
-                33362:  1.08 (  59   60)
-                33485:  1.12 (  59   60)
-                33356:  1.16 (  59   60)
                 11827:  1.17 (  23   24)
+                33362:  1.20 (  59   60)
                 11806:  1.23 (  23   24)
+                33485:  1.25 (  59   60)
+                33356:  1.28 (  59   60)
                 10997:  1.28 (  22   23)
-                33293:  1.28 (  59   60)
                 11799:  1.31 (  23   24)
                 11046:  1.32 (  22   23)
-                11663:  1.35 (  23   24)
+                11663:  1.36 (  23   24)
                 11165:  1.36 (  22   23)
                 11119:  1.37 (  22   23)
+                11837:  1.38 (  23   24)
+                11870:  1.39 (  23   24)
+                33293:  1.40 (  59   60)
+                11959:  1.41 (  23   24)
+                11948:  1.42 (  23   24)
       Ctrl measurements
+         none
       Check measurements
+         none

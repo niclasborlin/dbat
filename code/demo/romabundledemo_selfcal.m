@@ -1,29 +1,10 @@
-function [rr,s0,prob]=romabundledemo(damping,doPause)
-%ROMABUNDLEDEMO Bundle demo for DBAT.
+function [rr,s0,prob]=romabundledemo_selfcal(damping,doPause)
+%ROMABUNDLEDEMO_SELFCAL Bundle demo for DBAT, self calibration version.
 %
-%   ROMABUNDLEDEMO runs the bundle on the PhotoModeler export file
-%   of the ROMA data set. The PhotoModeler EO values are used as
-%   initial values, except that the EO position are disturbed by
-%   random noise with sigma=0.1 m. The OP initial values are
-%   computed by forward intersection. The datum is defined by
-%   fixing the EO parameters of the first camera and the X
-%   coordinate of another camera. The other camera is chosen to
-%   maximize the baseline.
+%   ROMABUNDLEDEMO_SELFCAL runs the bundle on the PhotoModeler export
+%   file of the ROMA data set with self calibration. 
 %
-%   ROMABUNDLEDEMO uses the Gauss-Newton-Armijo damping scheme of [1]
-%   by default. Use CAMCALDEMO(DAMPING), where DAMPING is one of
-%   - 'none' or 'gm' for classical Gauss-Markov iterations,
-%   - 'gna'          Gauss-Newton with Armijo linesearch,
-%   - 'lm'           Levenberg-Marquardt, or
-%   - 'lmp'          Levenberg-Marquardt with Powell dogleg.
-%
-%   Use ROMABUNDLEDEMO(DAMPING,'off') to visualize the iteration
-%   sequence without waiting for a keypress.
-%
-%   References:
-%       [1] Börlin and Grussenmeyer (2013). "Bundle adjustment with
-%       and without damping", Photogrammetric Record,
-%       vol. 28(144):396-415.
+%See also: ROMABUNDLEDEMO
 
 if nargin<1, damping='gna'; end
 
@@ -45,7 +26,7 @@ inputDir=fullfile(curDir,'data','dbat');
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','roma-pmexport.txt');
 % Report file name.
-reportFile=fullfile(inputDir,'dbatexports','roma-dbatreport.txt');;
+reportFile=fullfile(inputDir,'dbatexports','roma-dbatreport-selfcal.txt');;
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
@@ -68,8 +49,10 @@ s0.useIOobs=false(size(s0.IO));
 
 % Add self-calibration for all non-zero parameters...
 %s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
-% ...or for all lens distortion parameters.
-%s0.estIO(1:8)=true;
+% ...or for pp, f, and all lens distortion parameters...
+s0.estIO(1:3+s0.nK+s0.nP)=true;
+% ...and aspect (but not skew).
+s0.estIO(4+s0.nK+s0.nP)=true;
 
 % Default distortion model is now 3: With aspect/skew.
 s0.IOdistModel(:)=3;

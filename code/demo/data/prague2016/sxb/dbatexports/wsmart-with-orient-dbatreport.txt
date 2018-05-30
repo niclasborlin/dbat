@@ -1,16 +1,18 @@
 Damped Bundle Adjustment Toolbox result file
    Project Name: Bundle Soln 
    Problems and suggestions:
-      Project Problems: Not evaluated
+      Project Problems:
+         Structural rank: ok.
+         Numerical rank: ok.
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 28-Dec-2017 22:55:42
-      DBAT version:    0.7.0.4 (2017-12-28)
+      Last Bundle Run: 30-May-2018 15:09:37
+      DBAT version:    0.7.2.0 (2018-03-22)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast
-      Status:          OK (0)
+      Status:          OK
       Sigma0:          1.07447
       Sigma0 (pixels): 1.07447
       Processing options:
@@ -20,7 +22,8 @@ Damped Bundle Adjustment Toolbox result file
          Constraints:             off
          Maximum # of iterations: 20
          Convergence tolerance:   1e-06
-         Singular test:           off
+         Termination criteria:    relative
+         Singular test:           on
          Chirality veto:          off
          Damping:                 gna
          Camera unit (cu):        mm
@@ -31,14 +34,14 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 4
          First error:          60.1091
          Last error:           38.2456
-         Execution time (s):   0.09
+         Execution time (s):   0.08
       Lens distortion models:
-         Backward (Photogrammetry)
+         Backward (Photogrammetry) model 1
       Cameras:
          Calibration: no
          Camera1
             Lens distortion model:
-               Backward (Photogrammetry)
+               Backward (Photogrammetry) model 1
             Focal Length:
                Value: 123.939 mm
             Xp - principal point x:
@@ -59,6 +62,10 @@ Damped Bundle Adjustment Toolbox result file
                Value: 0 mm^(-3)
             P2 - decentering distortion 2:
                Value: 0 mm^(-3)
+            B1 - aspect ratio:
+               Value: 0 
+            B2 - skew:
+               Value: 0 
             Iw - image width:
                Value: 8858 px
             Ih - image height:
@@ -440,3 +447,4 @@ Damped Bundle Adjustment Toolbox result file
                Z: 0.016 ou (492, pt 492)
             RMS: 0.016 ou (from 16 items)
       Check measurements
+         none

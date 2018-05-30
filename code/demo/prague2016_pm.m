@@ -210,6 +210,8 @@ s1=resect(s0,'all',cpId,1,0,cpId);
 % Compute OP parameters by forward intersection.
 s2=forwintersect(s1,'all',true);
 
+%s2.IOdistModel(:)=3;
+
 s=s2;
 h=plotnetwork(s,'title','Initial network (EO, OP computed from CP, IO, MP)',...
               'axes',tagfigure(mfilename),'camsize',0.1);
@@ -226,9 +228,12 @@ if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
             iters,sigma0,sigma0*s.prior.sigmas(1));
 else
-    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,sigma0,sigma0*s.prior.sigmas(1));
+    fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
 end
+
+% Pre-factorize posterior covariance matrix for speed.
+E=bundle_cov(result,E,'prepare');
 
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,'dbatexports',[stub,orientStr,'-dbatreport.txt']);

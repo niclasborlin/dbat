@@ -1,17 +1,19 @@
 Damped Bundle Adjustment Toolbox result file
    Project Name: Photoscan import
    Problems and suggestions:
-      Project Problems: Not evaluated
+      Project Problems:
+         Structural rank: ok.
+         Numerical rank: ok.
       Problems related to the processing: (2)
          One or more of the camera parameter has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run: 28-Dec-2017 22:56:34
-      DBAT version:    0.7.0.4 (2017-12-28)
+      Last Bundle Run: 30-May-2018 15:10:29
+      DBAT version:    0.7.2.0 (2018-03-22)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast
-      Status:          OK (0)
+      Status:          OK
       Sigma0:          1.29552
       Sigma0 (pixels): 1.29552
       Processing options:
@@ -21,7 +23,8 @@ Damped Bundle Adjustment Toolbox result file
          Constraints:             off
          Maximum # of iterations: 20
          Convergence tolerance:   1e-06
-         Singular test:           off
+         Termination criteria:    relative
+         Singular test:           on
          Chirality veto:          off
          Damping:                 gna
          Camera unit (cu):        mm
@@ -32,14 +35,14 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 2
          First error:          754.082
          Last error:           753.214
-         Execution time (s):   12.89
+         Execution time (s):   9.04
       Lens distortion models:
-         Forward (Computer Vision)
+         Forward (Computer Vision) model 1
       Cameras:
          Calibration: yes (Xp Yp f K1 K2 K3 P1 P2)
          Camera1
             Lens distortion model:
-               Forward (Computer Vision)
+               Forward (Computer Vision) model 1
             Focal Length:
                Value:        7.92378 mm
                Deviation:    0.000147 mm
@@ -76,6 +79,10 @@ Damped Bundle Adjustment Toolbox result file
                Value:        -1.68215e-05 mm^(-3)
                Deviation:    1.08e-06 mm^(-3)
                Significance: p=1.00
+            B1 - aspect ratio:
+               Value:        0 
+            B2 - skew:
+               Value:        0 
             Iw - image width:
                Value:        7152 px
             Ih - image height:

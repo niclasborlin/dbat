@@ -65,8 +65,8 @@ prob.ctrlPts=[1001,0,1,0,0,0,0
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
 
-% Switch to Forward/Computer Vision lens distortion model for all cameras.
-%s0.IOdistModel(:)=-1;
+% Switch to lens distortion model that supports skew/aspect.
+s0.IOdistModel(:)=3;
 
 ss0=s0;
 
@@ -83,6 +83,10 @@ s0.useIOobs=false(size(s0.IO));
 % Estimate px,py,c,K1-K3,P1-P2.
 s0.estIO=false(size(s0.IO));
 s0.estIO(1:8,:)=true;
+% Estimate aspect.
+s0.estIO(9,:)=true;
+% Do not estimate skew.
+s0.estIO(10,:)=false;
 
 % Don't use any prior EO paramters.
 s0.useEOobs=false(size(s0.EO));
@@ -119,9 +123,12 @@ if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
             iters,sigma0,sigma0*s0.prior.sigmas(1));
 else
-    fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,sigma0,sigma0*s0.prior.sigmas(1));
+    fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
 end
+
+% Pre-factorize posterior covariance matrix for speed.
+E=bundle_cov(result,E,'prepare');
 
 COP=bundle_result_file(result,E,reportFile);
 
