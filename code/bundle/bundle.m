@@ -44,6 +44,17 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %   ...=BUNDLE(S,...,'dofverb') outputs how the degrees of freedom
 %   are calculated.
 %
+%   The used distortion model is specified by the vector
+%   s.IOdistModel. The available values are:
+%     1 - Legacy Photogrammetry, no affine (slightly faster than
+%         2+). Default for DBAT versions before v0.7.1.
+%     2 - Flexible Photogrammetry, no affine (replica of 1)
+%     3 - Photogrammetry, affine before lens distortion. Default
+%         since DBAT versions v0.7.2. 
+%     4 - Photogrammetry, affine after lens distortion
+%     5 - Photogrammetry, anisotropic scale before lens dist, skew after.
+%    -1 - Computer Vision, no affine (fast).
+%
 %   [S,OK,N,S0]=... returns the sigma0 (in pixel units) for the last iteration.
 %
 %   [S,OK,N,S0,E]=... returns a struct E with information about the iterations:
@@ -230,10 +241,10 @@ distModel=unique(s.IOdistModel);
 
 if isscalar(distModel) && distModel>0
     fprintf(['Using Backward Brown (Photogrammetry) lens distortion ' ...
-          'model %d for all cameras\n'],distModel);
+             'model %d for all cameras\n'],distModel);
 elseif isscalar(distModel) && distModel<0
-    disp(['Using Forward Brown (Computer Vision) lens distortion ' ...
-          'model %dfor all cameras\n'],-distModel);
+    fprintf(['Using Forward Brown (Computer Vision) lens distortion ' ...
+             'model %d for all cameras\n'],-distModel);
 else
     disp('Using mix of Forward/Backward Brown lens distortion models');
 end
@@ -258,7 +269,22 @@ else
     disp('Self-calibration: mixed');
     warning('Mixed self-calibration is poorly tested.')
 end
-    
+
+% Warn if non-zero aspect/skew is specified for a model that does
+% not support it.
+modelsWithoutB=ismember(s.IOdistModel,1:2);
+usedBadModels=unique(s.IOdistModel(modelsWithoutB));
+if any(s.IO(s.nK+s.nP+3+(1:2),modelsWithoutB))
+    warning(['Non-zero aspect and/or skew specified. This is not ' ...
+             'supported by lens distortion model %d! Results may be inaccurate.'],usedBadModels);
+end
+% Warn if asked to estimate aspect and/or skew with a model that
+% does not support it.
+if any(s.estIO(s.nK+s.nP+3+(1:2),modelsWithoutB))
+    warning(['Trying to estimate aspect and/or skew. This is not ' ...
+             'supported by lens distortion model %d! Results will be inaccurate.'],usedBadModels);
+end
+
 % Version string.
 [v,d]=dbatversion;
 E=struct('maxIter',maxIter,'convTol',convTol,'absTerm',absTerm, ...
@@ -347,6 +373,8 @@ E.usedIters=iters;
 
 % Store final weighted residual and Jacobian for later covariance calculations.
 E.final=final;
+% Signal that posterior covariance matrix has not been factorized.
+E.final.factorized=[];
 
 % Handle returned values.
 ok=code==0;
@@ -356,6 +384,14 @@ if ok
     s.IO(s.estIO)=x(ixIO);
     s.EO(s.estEO)=x(ixEO);
     s.OP(s.estOP)=x(ixOP);
+    
+    % Update formats.
+    aspect=ones(2,size(s.IO,2));
+    aspect(1,:)=1+s.IO(3+s.nK+s.nP+1,:);
+    imSz=s.IO(3+s.nK+s.nP+2+2+(1:2),:);
+    imRes=s.IO(3+s.nK+s.nP+2+2+2+(1:2),:);
+    imFormat=imSz./imRes.*aspect;
+    s.IO(3+s.nK+s.nP+2+(1:2),:)=imFormat;
 end
 
 E.paramTypes=paramTypes;
@@ -363,16 +399,6 @@ E.paramTypes=paramTypes;
 % Analyse potential problem with the Jacobian (design matrix).
 
 E.weakness=struct('structural',[],'numerical',[]);
-
-if code==-4
-    % Structural rank deficiency. Record potential cause.
-    E.weakness.structural.dmperm=dmperm(E.final.weighted.J);
-    E.weakness.structural.rank=nnz(E.weakness.structural.dmperm);
-    E.weakness.structural.deficiency=...
-        size(E.final.weighted.J,2)-E.weakness.structural.rank;
-    E.weakness.structural.suspectedParams=...
-        E.paramTypes(E.weakness.structural.dmperm==0);
-end
 
 if code==-2
     % Numerically rank deficient, try to figure out why.
@@ -426,6 +452,20 @@ if code==-2
 else
     E.weakness.numerical.rank=size(E.final.weighted.J,2);
     E.weakness.numerical.deficiency=0;
+end
+
+if code==-4
+    % Structural rank deficiency. Record potential cause.
+    E.weakness.structural.dmperm=dmperm(E.final.weighted.J);
+    E.weakness.structural.rank=nnz(E.weakness.structural.dmperm);
+    E.weakness.structural.deficiency=...
+        size(E.final.weighted.J,2)-E.weakness.structural.rank;
+    E.weakness.structural.suspectedParams=...
+        E.paramTypes(E.weakness.structural.dmperm==0);
+    
+    % Mark numerical rank as unchecked.
+    E.weakness.numerical.rank=nan;
+    E.weakness.numerical.deficiency=nan;
 end
 
 % Always update the residuals.
