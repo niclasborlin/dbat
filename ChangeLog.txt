@@ -1,5 +1,21 @@
 Summary changelog file for release.
 
+Release 0.7.5.0, May 30, 2018.
+- Restructured Jacobian computations for Riva 2018 conference paper.
+- Added support for affine parameters (aspect and skew) (lens distortion
+  models 3-5).
+- Bugfixes to generate report file also when bundle fails.
+- Added absolute termination criteria - useful when testing on
+  synthetic data without errors.
+- Added sanity check of input problem based on structural rank
+  (Dulmage-Mendelsohn permutations) to detect if any parameter is
+  impossible to estimate due to too few observations.
+- Added null-space analysis if normal matrix is singular to suggest
+  what parameters are linearly dependent. Uses spnrank function by
+  Leslie Foster, Math Dept., San Jose State University.
+- Added example demos with missing observations or no datum.
+- Updated manual with descriptions of the error detection demos.
+
 Release 0.7.0.4, Dec 28, 2017.
 - Bugfixes and updated instructions.
 - Removed unintended reliance on the Statistical Toolbox (nanmean function).

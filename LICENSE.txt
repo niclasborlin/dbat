@@ -1,6 +1,6 @@
 # == LICENSE ==
 #
-# Copyright (C) 2013-2017, Niclas Börlin, niclas.borlin@cs.umu.se (*),
+# Copyright (C) 2013-2018, Niclas Börlin, niclas.borlin@cs.umu.se (*),
 # and Pierre Grussenmeyer, pierre.grussenmeyer@insa-strasbourg.fr (**).
 # All rights reserved.
 #
@@ -58,5 +58,9 @@
 #     range terrestrial and UAV photogrammetric projects with the DBAT
 #     toolbox for independent verification and quality control.",
 #     ISPRS Archives XLII-2/W8:171-177.
+# Börlin, Murtiyoso, Grussenmeyer, Menna, and Nocerino. "Modular bundle
+#     adjustment for photogrammeric computations", ISPRS Archives XLII(2),
+#     June 2018. Paper accepted for the ISPRS TC II mid-term symposium in
+#     Riva del Garda, Italy, Jun 3-7, 2018.
 #
 #

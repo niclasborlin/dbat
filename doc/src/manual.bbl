@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{10}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -32,6 +32,22 @@ N.~B{\"o}rlin and P.~Grussenmeyer.
   software using the damped bundle adjustment toolbox.
 \newblock \emph{International Archives of Photogrammetry, Remote Sensing, and
   Spatial Information Sciences}, XLI-B5:\penalty0 7--14, July 2016.
+
+\bibitem[B{\"o}rlin et~al.(2018)B{\"o}rlin, Murtiyoso, Grussenmeyer, Menna, and
+  Nocerino]{Borlin2018:Modular}
+N.~B{\"o}rlin, A.~Murtiyoso, P.~Grussenmeyer, F.~Menna, and E.~Nocerino.
+\newblock Modular bundle adjustment for photogrammeric computations.
+\newblock \emph{International Archives of Photogrammetry, Remote Sensing, and
+  Spatial Information Sciences}, XLII\penalty0 (2):\penalty0 ?, June 2018.
+\newblock Paper accepted for the ISPRS TC II mid-term symposium in Riva del
+  Garda, Italy, Jun 3-7, 2018.
+
+\bibitem[Foster(2009)]{Foster2009:Calculating}
+L.~Foster.
+\newblock Calculating the rank of sparse matrices using spnrank.
+\newblock
+  http://www.math.sjsu.edu/singular/matrices/software/SJsingular/Doc/spnrank.pdf,
+  Apr. 2009.
 
 \bibitem[Haralick et~al.(1994)Haralick, Lee, Ottenberg, and
   N{\"o}lle]{Haralick1994:Review}

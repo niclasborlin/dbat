@@ -14,8 +14,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          Bundle failed with code -4 (see below for details).
    Information from last bundle
-      Last Bundle Run: 30-May-2018 16:17:07
-      DBAT version:    0.7.2.0 (2018-03-22)
+      Last Bundle Run: 30-May-2018 22:52:49
+      DBAT version:    0.7.5.0 (2018-05-30)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast

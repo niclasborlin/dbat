@@ -1,0 +1,13 @@
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Problems and suggestions:
+      Project Problems:
+         Structural rank: 422 (deficiency: 1)
+            DMPERM suggests the following parameters have problems:
+               OZ-87/88
+         Numerical rank: not tested.
+      Problems related to the processing: (1)
+         Bundle failed with code -4 (see below for details).
+.
+.
+.

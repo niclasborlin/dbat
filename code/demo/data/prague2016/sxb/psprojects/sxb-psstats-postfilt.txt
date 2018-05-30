@@ -2,7 +2,7 @@ Filtered statitistics with minRays=0, minAngle=0
 
 Project file: /home/niclas/dbat/code/demo/data/prague2016/sxb/psprojects/sxb.psz
 
-Execution time stamp: 2018-05-30 16:18:44
+Execution time stamp: 2018-05-30 22:55:01
 
 Total # OP          : 1166
 Total # CP          : 16

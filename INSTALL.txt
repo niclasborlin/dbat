@@ -5,8 +5,9 @@
 #
 # === Download ===
 #
-# 1) Download the package file dbat-x.y.z.zip or dbat-x.y.z.tar.gz
-#    from https://github.com/niclasborlin/dbat/
+# 1) Download the package file dbat-master.zip (from the main page) or
+#    dbat-x.y.z.w.zip/dbat-x.y.z.w.tar.gz (from the releases page) of
+#    https://github.com/niclasborlin/dbat/
 #
 # 2) Unpack the file into a directory, e.g. c:\dbat or ~/dbat.
 #

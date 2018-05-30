@@ -342,3 +342,67 @@ abstract = {Photogrammetry has recently seen a rapid increase in many
 keywords = {close range, UAV, bundle adjustment, quality control,
                   photogrammetry, software, DBAT}
 }
+
+@Article{Borlin2018:Modular,
+  seqno = 963,
+  author =       {Niclas B{\"o}rlin and Arnadi Murtiyoso and Pierre
+                  Grussenmeyer and Fabio Menna and Erica Nocerino},
+  title =        {Modular Bundle Adjustment for Photogrammeric Computations},
+  journal =      iaprs,
+  year =         2018,
+  volume =       {XLII},
+  number =       2,
+  month = jun,
+  pages =        {?},
+  note =         {Paper accepted for the ISPRS TC II mid-term
+                  symposium in Riva del Garda, Italy, Jun 3-7, 2018},
+  abstract = {In this paper we investigate how the residuals in bundle
+                  adjustment can be split into a composition of simple
+                  functions. According to the chain rule, the Jacobian
+                  (linearisation) of the residual can be formed as a
+                  product of the Jacobians of the individual steps.
+                  When implemented, this enables a modularisation of
+                  the computation of the bundle adjustment residuals
+                  and Jacobians where each component has limited
+                  responsibility. This enables simple replacement of
+                  components to e.g. implement different projection or
+                  rotation models by exchanging a module. The
+                  technique has previously been used to implement
+                  bundle adjustment in the open-source package DBAT
+                  (Borlin and Grussenmeyer, ¨ 2013) based on the
+                  Photogrammetric and Computer Vision interpretations
+                  of Brown (1971) lens distortion model. In this
+                  paper, we applied the technique to investigate how
+                  affine distortions can be used to model the
+                  projection of a tilt-shift lens. Two extended
+                  distortion models were implemented to test the
+                  hypothesis that the ordering of the affine and lens
+                  distortion steps can be changed to reduce the size
+                  of the residuals of a tilt-shift lens calibration.
+                  Results on synthetic data confirm that the ordering
+                  of the affine and lens distortion steps matter and
+                  is detectable by DBAT. However, when applied to a
+                  real camera calibration data set of a tilt-shift
+                  lens, no difference between the extended models was
+                  seen. This suggests that the tested hypothesis is
+                  false and that other effects need to be modelled to
+                  better explain the projection. The relatively low
+                  implementation effort that was needed to generate
+                  the models suggest that the technique can be used to
+                  investigate other novel projection models in
+                  photogrammetry, including modelling changes in the
+                  3D geometry to better understand the tilt-shift
+                  lens.},
+  keywords = {Bundle adjustment, Camera model, Analytical Jacobians,
+                  Software, Photogrammetry, Tilt-shift lens},
+  haveit = "pdf"
+}
+
+@Misc{Foster2009:Calculating,
+  author =       {Leslie Foster},
+  title =        {Calculating the rank of sparse matrices using spnrank},
+  howpublished = {http://www.math.sjsu.edu/singular/matrices/software/SJsingular/Doc/spnrank.pdf},
+  month =        apr,
+  year =         2009
+}
+

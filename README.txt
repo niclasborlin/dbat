@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.7.0.4 for Matlab (R), below called the Toolbox.
+# v0.7.5.0 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -18,8 +18,9 @@
 #
 # === Download ===
 #
-# 1) Download the package file dbat-x.y.z.zip or dbat-x.y.z.tar.gz
-#    from https://github.com/niclasborlin/dbat/
+# 1) Download the package file dbat-master.zip (from the main page) or
+#    dbat-x.y.z.w.zip/dbat-x.y.z.w.tar.gz (from the releases page) of
+#    https://github.com/niclasborlin/dbat/
 #
 # 2) Unpack the file into a directory, e.g. c:\dbat or ~/dbat.
 #
@@ -102,7 +103,7 @@
 #
 # == LICENSE ==
 #
-# Copyright (C) 2013-2017, Niclas Börlin, niclas.borlin@cs.umu.se (*),
+# Copyright (C) 2013-2018, Niclas Börlin, niclas.borlin@cs.umu.se (*),
 # and Pierre Grussenmeyer, pierre.grussenmeyer@insa-strasbourg.fr (**).
 # All rights reserved.
 #
@@ -160,6 +161,10 @@
 #     range terrestrial and UAV photogrammetric projects with the DBAT
 #     toolbox for independent verification and quality control.",
 #     ISPRS Archives XLII-2/W8:171-177.
+# Börlin, Murtiyoso, Grussenmeyer, Menna, and Nocerino. "Modular bundle
+#     adjustment for photogrammeric computations", ISPRS Archives XLII(2),
+#     June 2018. Paper accepted for the ISPRS TC II mid-term symposium in
+#     Riva del Garda, Italy, Jun 3-7, 2018.
 #
 #
 # == CONTRIBUTIONS ==
@@ -172,6 +177,7 @@
 # * Fabio Menna, Fondazione Bruno Kessler, Trento, Italy.
 # * Arnadi Murtiyoso, ICube, INSA Strasbourg, France.
 # * Kostas Naskou, University of Nottingham, UK.
+# * Erica Nocerino, Fondazione Bruno Kessler, Trento, Italy.
 #
 #
 # == TRADEMARKS ==

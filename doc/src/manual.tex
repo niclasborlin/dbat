@@ -8,14 +8,224 @@
 \usepackage{subcaption}
 \usepackage{times}
 \usepackage{authblk}
+\usepackage{pdflscape}
+\usepackage{afterpage}
 \usepackage{hyperref}
+\usepackage{capt-of}
+\usepackage{filecontents}
+
+\begin{filecontents*}{missing-observations.txt}
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Problems and suggestions:
+      Project Problems:
+         Structural rank: 417 (deficiency: 6)
+            DMPERM suggests the following parameters have problems:
+               OX-12/13
+               OY-12/13
+               OZ-12/13
+               OX-59/60
+               OY-59/60
+               OZ-59/60
+         Numerical rank: not tested.
+      Problems related to the processing: (1)
+         Bundle failed with code -4 (see below for details).
+.
+.
+.
+\end{filecontents*}
+
+\begin{filecontents*}{1ray.txt}
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Problems and suggestions:
+      Project Problems:
+         Structural rank: 422 (deficiency: 1)
+            DMPERM suggests the following parameters have problems:
+               OZ-87/88
+         Numerical rank: not tested.
+      Problems related to the processing: (1)
+         Bundle failed with code -4 (see below for details).
+.
+.
+.
+\end{filecontents*}
+
+\begin{filecontents*}{missing-datum.txt}
+Damped Bundle Adjustment Toolbox result file
+   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Problems and suggestions:
+      Project Problems:
+         Structural rank: ok.
+         Numerical rank: 428 (deficiency: 7)
+            Null-space suggest the following parameters are part of the problem:
+               Vector 1 (eigenvalue 1.36254e-18):
+                  (EX-21, -0.156)
+                  (EX-9, -0.13)
+                  (EX-13, -0.12)
+                  (EX-10, -0.119)
+                  (EX-11, -0.115)
+                  (EX-12, -0.108)
+                  (EX-14, -0.104)
+               Vector 2 (eigenvalue -1.60532e-17):
+                  (EX-21, 0.207)
+                  (EY-21, 0.195)
+                  (EY-1, 0.192)
+                  (EY-2, 0.178)
+                  (EX-13, 0.167)
+                  (EY-15, 0.166)
+                  (EY-3, 0.166)
+                  (EY-4, 0.163)
+                  (EY-16, 0.161)
+                  (EX-14, 0.157)
+                  (EX-15, 0.151)
+                  (EX-11, 0.149)
+                  (EY-18, 0.147)
+                  (EX-12, 0.146)
+                  (EX-16, 0.145)
+                  (EY-20, 0.133)
+                  (EY-17, 0.128)
+               Vector 3 (eigenvalue 5.21745e-17):
+                  (om-21, -0.16)
+                  (EX-3, -0.155)
+                  (EX-4, -0.151)
+                  (EX-5, -0.147)
+                  (EX-6, -0.136)
+                  (EZ-7, 0.132)
+                  (om-13, -0.129)
+                  (EX-1, -0.129)
+                  (om-15, -0.127)
+                  (om-16, -0.125)
+                  (EZ-8, 0.125)
+                  (om-14, -0.125)
+                  (EZ-9, 0.122)
+                  (EX-2, -0.117)
+                  (om-11, -0.116)
+                  (EZ-10, 0.116)
+                  (om-12, -0.114)
+                  (om-18, -0.113)
+                  (om-20, -0.113)
+                  (EZ-11, 0.111)
+                  (EX-7, -0.111)
+                  (EZ-12, 0.11)
+                  (om-19, -0.109)
+                  (om-9, -0.108)
+                  (EZ-5, 0.107)
+                  (om-1, -0.106)
+                  (om-17, -0.106)
+                  (om-2, -0.105)
+                  (om-10, -0.105)
+               Vector 4 (eigenvalue -5.5516e-17):
+                  (EZ-21, -0.174)
+                  (EX-5, -0.13)
+                  (EX-7, -0.129)
+                  (EX-8, -0.12)
+                  (EX-6, -0.119)
+                  (EY-9, -0.114)
+                  (EY-11, -0.111)
+               Vector 5 (eigenvalue -1.45759e-16):
+                  (EY-7, 0.158)
+                  (EY-5, 0.154)
+                  (EY-8, 0.153)
+                  (EY-9, 0.151)
+                  (om-4, -0.147)
+                  (EY-19, 0.147)
+                  (om-3, -0.144)
+                  (EY-6, 0.143)
+                  (EY-10, 0.143)
+                  (EY-17, 0.133)
+                  (EZ-3, -0.132)
+                  (EZ-4, -0.129)
+                  (om-17, -0.126)
+                  (om-19, -0.126)
+                  (om-18, -0.125)
+                  (om-1, -0.124)
+                  (om-9, -0.124)
+                  (om-2, -0.124)
+                  (EY-18, 0.121)
+                  (om-10, -0.121)
+                  (EY-20, 0.12)
+                  (om-20, -0.12)
+                  (om-5, -0.12)
+                  (EZ-2, -0.118)
+                  (EZ-1, -0.118)
+                  (om-6, -0.116)
+                  (ph-9, -0.114)
+                  (ph-7, -0.113)
+                  (ph-11, -0.112)
+                  (EY-11, 0.112)
+                  (ph-12, -0.111)
+                  (ph-8, -0.11)
+                  (ph-10, -0.109)
+                  (ph-5, -0.108)
+                  (om-11, -0.108)
+                  (EY-12, 0.107)
+                  (EZ-5, -0.106)
+                  (ph-13, -0.106)
+                  (om-7, -0.104)
+                  (ph-19, -0.104)
+                  (om-12, -0.104)
+                  (ph-14, -0.104)
+               Vector 6 (eigenvalue -1.54875e-16):
+                  (om-21, 0.185)
+                  (ph-9, -0.174)
+                  (EZ-21, 0.174)
+                  (ph-10, -0.169)
+                  (ph-11, -0.167)
+                  (ph-7, -0.167)
+                  (ph-8, -0.165)
+                  (ph-12, -0.164)
+                  (EX-9, -0.152)
+                  (EX-7, -0.151)
+                  (EX-8, -0.151)
+                  (EY-11, -0.148)
+                  (EY-12, -0.146)
+                  (EX-10, -0.146)
+                  (EZ-15, 0.142)
+                  (EZ-16, 0.137)
+                  (EY-13, -0.136)
+                  (ph-5, -0.135)
+                  (EY-14, -0.133)
+                  (EZ-13, 0.127)
+                  (ph-13, -0.127)
+                  (EZ-14, 0.126)
+                  (ph-14, -0.124)
+                  (ph-6, -0.123)
+                  (ph-19, -0.12)
+                  (EY-21, -0.117)
+               Vector 7 (eigenvalue 1.9046e-16):
+                  (ph-1, 0.194)
+                  (ph-2, 0.194)
+                  (ph-15, 0.173)
+                  (EX-2, 0.173)
+                  (om-5, -0.173)
+                  (ph-16, 0.169)
+                  (ph-4, 0.169)
+                  (EX-1, 0.168)
+                  (ph-3, 0.164)
+                  (om-8, -0.163)
+                  (om-7, -0.16)
+                  (om-6, -0.16)
+                  (ph-21, 0.157)
+                  (EY-21, -0.138)
+                  (EY-5, 0.138)
+                  (EY-6, 0.132)
+                  (om-3, -0.127)
+                  (ph-20, 0.126)
+                  (om-4, -0.125)
+      Problems related to the processing: (1)
+         Bundle failed with code -2 (see below for details).  
+.
+.
+.
+\end{filecontents*}
 
 \begin{document}
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.7.0.4}
-\newcommand{\dbatdate}{Dec 28, 2017}
+\newcommand{\dbatversion}{0.7.5.0}
+\newcommand{\dbatdate}{May 30, 2018}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -37,6 +247,7 @@ With contributions from:
 \item Fabio Menna, Fondazione Bruno Kessler, Trento, Italy.
 \item Arnadi Murtiyoso, ICube, INSA Strasbourg, France.
 \item Kostas Naskou, University of Nottingham, UK.
+\item Erica Nocerino, Fondazione Bruno Kessler, Trento, Italy.
 \end{itemize}
 \newpage
 
@@ -95,9 +306,22 @@ The toolbox currently includes routines for (Matlab function names within parent
     Gauss-Newton-Armijo, Levenberg-Marquardt, or
     Levenberg-Marquardt-Powell damping schemes
     \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
-  \item Covariance calculations (\texttt{bundle\_cov}) from the bundle
-    result.
+  \item Posterior covariance calculations (\texttt{bundle\_cov}) from
+    the bundle result.
   \end{itemize}
+\item Analysis of camera networks, including:
+  \begin{itemize}
+  \item Detection of structural rank deficiency (Matlab's
+    \texttt{dmperm}, \texttt{sprank}). Useful as a sanity check on
+    input data. Structural rank deficiency is typically caused by
+    trying to estimate a parameter with too few direct observations.
+  \item Null-space analysis if the normal matrix is singular using
+    \texttt{spnrank} \citep{Foster2009:Calculating}. This might, e.g.
+    be caused by insufficient datum specification.
+  \end{itemize}
+  The result of the analysis, including suggestions for what
+  parameters may be impossible to estimate are written by to the report
+  file by (\texttt{bundle\_result\_file}).
 \item Various plotting functions, including:
   \begin{itemize}
   \item Plot image covered by measurements
@@ -147,7 +371,7 @@ included in the distribution. In summary:
   long as you give due credit. Specifically, if you use the code, or
   derivatives thereof, for scientific publications, you should refer
   to on or more of the papers
-  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External}
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External,Borlin2018:Modular}
   that the code is based on.
 \item You may modify and redistribute the code as long as the
   licensing details are also redistributed.
@@ -169,6 +393,8 @@ included in the distribution. In summary:
 
 \textbf{Hint: You may wish to use the command \texttt{close all}
   between the demos to close all windows.}
+
+A summary of the demos is found in Table~\ref{tab:demos}.
 
 \subsubsection{Plotting}
 \label{sec:loadplotdemo}
@@ -395,6 +621,90 @@ conclusions remain valid.
 The \texttt{stpierrebundledemo\_ps} function runs a self-calibration
 bundle on a Photoscan project included in the StPierre data set.
 
+\subsubsection{Error detection}
+
+Three demos are included to illustrate the error detection
+capabilities of \texttt{sprank} (\texttt{dmperm}) and
+\texttt{spnrank}. All are modelled from =camcaldemo=.
+
+\paragraph{Missing observations}
+
+The \texttt{camcaldemo\_missing\_obs} demo contains a data file where
+the image observations of two object points (id 13 and 60,
+respectively) have been deleted. With no observations of either point,
+the rank deficiency detected by \texttt{sprank} is six. In the
+generated result file (Section~\ref{sec:missingObsResultFile}), the
+X/Y/Z coordinates of both points number 12 and 59 (with id 13 and 60,
+respectively) are indeed listed as suspicious.
+
+\paragraph{Single-ray observations}
+
+The \texttt{camcaldemo\_1ray} demo contains a data file that contains
+only one observation of object point with id 88. Since two
+observations (one 2D point) is present but three parameter (one 3D
+point) is to be estimated, the rank deficiency is one, the rank
+deficiency detected by \texttt{sprank} is one. The generated result
+file (Section~\ref{sec:singleRayResultFile}) lists one coordinate of
+point 87 (with id 88) as suspicious.
+
+\paragraph{Missing datum}
+
+The \texttt{camcaldemo\_no\_datum} demo contains a demo where no datum
+has been specified. As in the previous problems, the result is a
+numerical problem with a singular (rank deficient) normal matrix.
+However, in this case the problem is manifested by that many or all
+parameters are linearly dependent of each other. This will not be
+detected by \texttt{sprank}. In such a case, the null-space of the
+normal matrix will carry information about what parameters are
+linearly dependent, i.e. what parameters are part of the problem.
+However, when the normal matrix is large, computing the null-space of
+the normal matrix in the conventional way using the Matlab function
+\texttt{null} will be intractable. Instead, the \texttt{spnrank}
+\citep{Foster2009:Calculating} function is used to estimate the rank
+deficiency of the normal matrix, i.e. the dimension of the null-space.
+Given the dimension of the null-space, a basis for the null-space is
+found using Matlab's \texttt{eigs} function. For this demo, the
+generated result file (Section~\ref{sec:missingDatumResultFile}) lists
+many EO parameters as suspicious. The cause of the problem is less
+straight-forward to determine from the list. However, the listed rank
+deficiency of seven should be a strong hint of a datum problem.
+
+\afterpage{%
+    \clearpage% Flush earlier floats (otherwise order might not be correct)
+    \thispagestyle{empty}% empty page style (?)
+    \begin{landscape}% Landscape page
+        \centering % Center table
+\begin{tabular}{llll}
+Demo & Description & Datum & Self-calibration\\
+\hline
+\texttt{loadplotdemo} & Load and plot & - & -\\
+\hline
+\texttt{romabundledemo} & Bundle adjustment & Relative dependent orientation & no\\
+\texttt{romabundledemo\_selfcal} & Bundle adjustment & Relative dependent orientation & yes\\
+\hline
+\texttt{camcaldemo} & Camera calibration & Hard-coded control pts & yes\\
+\texttt{camcaldemo\_missing\_obs} & Exact singular normal matrix & Hard-coded control pts & yes\\
+\texttt{camcaldemo\_1ray} & Exact singular normal matrix & Hard-coded control pts & yes\\
+\texttt{camcaldemo\_no\_datum} & Numerically singular normal matrix & Missing & yes\\
+\hline
+\texttt{prague2016\_pm('c1')} & Camera calibration & Hard-coded fixed control points & yes\\
+\texttt{prague2016\_pm('c2')} & Camera calibration & Hard-coded weighted control points & yes\\
+\texttt{prague2016\_pm('s1')} & Bundle adjustment & Fixed ctrl pts from text file & no\\
+\texttt{prague2016\_pm('s2')} & Bundle adjustment & Weighted ctrl pts from text file & no\\
+\texttt{prague2016\_pm('s4')} & Bundle adjustment & Weighted ctrl pts from text file & no\\
+\hline
+\texttt{prague2016\_ps('s5')} & Photoscan post-processing & Weighted ctrl pts from psz file & no\\
+\hline
+\texttt{ps\_postproc('')} & Photoscan post-processing & Weighted ctrl pts from psz file & no\\
+\hline
+\texttt{stpierrebundledemo\_ps} & Photoscan post-processing & Weighted ctrl pts from psz file & yes\\
+\end{tabular}
+\captionof{table}{Summary of demos.}
+\label{tab:demos}
+    \end{landscape}
+    \clearpage% Flush page
+  }
+
 \subsection{Using your own data}
 
 \subsubsection{Photoscan}
@@ -488,7 +798,7 @@ may either be in the plots or in the result file.
 \section{Appendices}
 
 \subsection{Enabling text export from PhotoModeler}
-\label{sec:enableTextExport}.
+\label{sec:enableTextExport}
 
 Some versions of PhotoModeler do not have the text file export option
 enabled by default. In that case, the following steps worked in
@@ -508,7 +818,28 @@ PhotoModeler Scanner 2012:
 Currently, the only supported camera model is the omega-phi-kappa
 Euler angle camera model \citep[Ch.~2.1.2.3]{McGlone2004:Manual}.
 
-\subsection{Result file example}
+\subsection{Result file with missing observations}
+\label{sec:missingObsResultFile}
+
+\scriptsize
+
+\verbatiminput{missing-observations.txt}
+
+\subsection{Result file with single-ray observations}
+\label{sec:singleRayResultFile}
+
+\scriptsize
+
+\verbatiminput{1ray.txt}
+
+\subsection{Result file with missing datum}
+\label{sec:missingDatumResultFile}
+
+\scriptsize
+
+\verbatiminput{missing-datum.txt}
+
+\subsection{Successful result file example}
 \label{sec:resultFile}
 
 \scriptsize
