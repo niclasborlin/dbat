@@ -421,8 +421,14 @@ if code==-2
         try
             fprintf('Trying to estimate null-space...');
             JTJ=E.final.scaled.J'*E.final.scaled.J;
+            % Add shift of sqrt(eps) to diagonal to avoid failure for exact
+            % rank-deficiency.
+            shift=sqrt(eps);
+            JTJ=JTJ+shift*speye(size(JTJ));
             [V,D]=eigs(JTJ,E.weakness.numerical.deficiency,'SM',...
                        struct('issym',true,'isreal',true));
+            % Remove shift.
+            D=D-shift*speye(size(D));
             fprintf('done.\n');
             % Sort increasingly by eigenvalue.
             [~,i]=sort(abs(diag(D)),'ascend');
