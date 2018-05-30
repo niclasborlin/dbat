@@ -92,7 +92,7 @@ if plotIO && any(s.estIO(:))
     title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
     set(ax,'xtick',0:size(e.trace,2)-1);
     if size(e.trace,2)>1
-        set(ax,'xlim',[0,size(e.trace,2)-1]);
+    set(ax,'xlim',[0,size(e.trace,2)-1]);
     end
     set(ax,'xticklabel',[]);
     
@@ -277,7 +277,7 @@ if plotEO && any(s.estEO(:))
             % Set lines to highlight when selected.
             set(lineH','selectionhighlight','on');
             if ~isempty(lineH)
-                for j=1:size(s.EO,2)
+            for j=1:size(s.EO,2)
                     set(lineH(:,j),'userdata',j,'buttondownfcn', ...
                                    cb,'hittest','on');
                 end
@@ -440,21 +440,21 @@ if plotParams
         semilogy(ax,0:length(e.res)-1,e.res,'x-');
         set(ax,'xtick',0:size(e.trace,2)-1);
         if size(e.trace,2)>0
-            set(ax,'xlim',[0,size(e.trace,2)]);
+        set(ax,'xlim',[0,size(e.trace,2)]);
         end
         title(ax,sprintf('Residual norm (%s)',e.damping.name));
         
         ax=subplot(4,1,2,'parent',fig);
         if ~isempty(e.damping.delta)
-            semilogy(ax,0:length(e.res)-1,e.damping.delta,'x-');
-            set(ax,'xtick',0:size(e.trace,2)-1);
-            set(ax,'xlim',[0,size(e.trace,2)]);
+        semilogy(ax,0:length(e.res)-1,e.damping.delta,'x-');
+        set(ax,'xtick',0:size(e.trace,2)-1);
+        set(ax,'xlim',[0,size(e.trace,2)]);
         end
         title(ax,'Damping (delta)');
     
         ax=subplot(4,1,3,'parent',fig);
         if ~isempty(e.damping.step)
-            plot(ax,0:length(e.res)-1,e.damping.step,'x-');
+        plot(ax,0:length(e.res)-1,e.damping.step,'x-');
             set(ax,'xlim',[0,size(e.trace,2)]);
         end
         set(ax,'xtick',0:size(e.trace,2)-1);
@@ -465,11 +465,11 @@ if plotParams
         
         ax=subplot(4,1,4,'parent',fig);
         if ~isempty(e.damping.rho)
-            plot(ax,0:length(e.damping.rho)-1,e.damping.rho,'x-');
-            line([0,length(e.damping.rho)-1],e.damping.rhoBad*[1,1],...
-                 'linestyle','--','parent',ax);
-            line([0,length(e.damping.rho)-1],e.damping.rhoGood*[1,1],...
-                 'linestyle','--','parent',ax);
+        plot(ax,0:length(e.damping.rho)-1,e.damping.rho,'x-');
+        line([0,length(e.damping.rho)-1],e.damping.rhoBad*[1,1],...
+             'linestyle','--','parent',ax);
+        line([0,length(e.damping.rho)-1],e.damping.rhoGood*[1,1],...
+             'linestyle','--','parent',ax);
             set(ax,'xlim',[0,size(e.trace,2)]);
         end
         set(ax,'xtick',0:size(e.trace,2)-1);

@@ -17,7 +17,6 @@ function [K,P,B]=test_distortion_params(s,e)
 % Estimated IO values and their covariances.
 x=s.IO;
 CIO=bundle_cov(s,e,'CIO');
-
 K=nan(3,1);
 P=nan;
 B=nan(2,1);
@@ -53,4 +52,3 @@ for i=1:length(B)
         B(i)=cumchi2(v,1);
     end
 end
-

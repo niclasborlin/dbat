@@ -169,7 +169,6 @@ paramTypes=cell(size(x0));
 paramTypes(ixIO)=s.paramTypes.IO(s.estIO);
 paramTypes(ixEO)=s.paramTypes.EO(s.estEO);
 paramTypes(ixOP)=s.paramTypes.OP(s.estOP);
-
 % Residual function.
 resFun=@(x)brown_euler_cam4(x,s);
 %resFun=@(x)both_brown_res(x,s);
@@ -284,7 +283,7 @@ if any(s.estIO(s.nK+s.nP+3+(1:2),modelsWithoutB))
     warning(['Trying to estimate aspect and/or skew. This is not ' ...
              'supported by lens distortion model %d! Results will be inaccurate.'],usedBadModels);
 end
-
+    
 % Version string.
 [v,d]=dbatversion;
 E=struct('maxIter',maxIter,'convTol',convTol,'absTerm',absTerm, ...
@@ -384,7 +383,6 @@ if ok
     s.IO(s.estIO)=x(ixIO);
     s.EO(s.estEO)=x(ixEO);
     s.OP(s.estOP)=x(ixOP);
-    
     % Update formats.
     aspect=ones(2,size(s.IO,2));
     aspect(1,:)=1+s.IO(3+s.nK+s.nP+1,:);

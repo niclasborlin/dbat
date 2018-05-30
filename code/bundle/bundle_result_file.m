@@ -76,13 +76,13 @@ OPstd=sqrt(reshape(full(diag(COP)),3,[]));
 [pk,pp,pb]=test_distortion_params(s,e);
 n=double(any(iio))+double(any(ieo))+double(any(iop))+ ...
   double(any([pk;pp;pb]<sigThreshold))+double(e.code~=0);
+
 fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
 if e.code~=0
     fprintf(fid,[p,p,p,'Bundle failed with code %d (see below for details).\n'],...
             e.code);
 end
-    
 if any(iio)
     fprintf(fid,[p,p,p,'One or more of the camera parameter ' ...
                  'has a high correlation (see below).\n']);
@@ -113,9 +113,8 @@ else
         status=sprintf('fail (code %d: %s)',e.code,msgs{abs(e.code)});
     else
         status=sprintf('fail (code %d: unknown code)',e.code);
-    end
 end
-
+end
 hostname=getenv('HOST');
 if isempty(hostname)
     hostname='<unknown>';
@@ -134,7 +133,6 @@ pretty_print(fid,repmat(p,1,2),values);
 fprintf(fid,[p,p,'Processing options:\n']);
 
 offon={'off','on'};
-
 relabs={'relative','absolute'};
 
 values={'Orientation:','%s','on',
