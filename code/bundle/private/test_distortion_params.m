@@ -18,8 +18,16 @@ function [K,P,B]=test_distortion_params(s,e)
 x=s.IO;
 CIO=bundle_cov(s,e,'CIO');
 
-% Test radial coefficients individually.
 K=nan(3,1);
+P=nan;
+B=nan(2,1);
+
+if ~isempty(e.final.factorized) && e.final.factorized.fail
+    % Tests are useless if factorization failed.
+    return;
+end
+
+% Test radial coefficients individually.
 for i=1:length(K)
     % Chi-square statistic is (x-mu)'*inv(C)*(x-mu), where x is N(mu,C).
     ix=3+i;
@@ -34,12 +42,9 @@ ix=7:8;
 if all(s.estIO(ix))
     v=x(ix)'*(CIO(ix,ix)\x(ix));
     P=cumchi2(v,2);
-else
-    P=nan;
 end
 
 % Test affine coefficients individually.
-B=nan(2,1);
 for i=1:length(B)
     % Chi-square statistic is (x-mu)'*inv(C)*(x-mu), where x is N(mu,C).
     ix=8+i;

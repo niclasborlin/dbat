@@ -26,6 +26,9 @@ function varargout=bundle_cov(s,e,varargin)
 %   [CA,CB,...]=BUNDLE_COV(S,E,CCA,CCB,...) returns multiple covariance
 %   matrices CA, CB, etc.
 %
+%   E=BUNDLE_COV(S,E,'prepare') performs some initial factorisations
+%   that will speed up later covariance computations.
+%
 %See also: BUNDLE.
 
 
@@ -36,11 +39,15 @@ if isempty(varargin)
     return;
 end
 
+doPrepare=false;
+
 for i=1:length(varargin)
     varargin{i}=lower(varargin{i});
     switch lower(varargin{i})
       case {'cxx','cio','ceo','cop','ciof','ceof','copf'}
         % OK, do nothing.
+      case 'prepare'
+        doPrepare=true;
       otherwise
         error('DBAT:bundle_cov:badInput',...
               ['Bad covariance string ''',varargin{i},'''']);
@@ -50,37 +57,57 @@ end
 % Create indices into the vector of unknowns.
 [ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
-% We may need J'*J many times. Precalculate and prefactor.
-JTJ=e.final.weighted.J'*e.final.weighted.J;
-    
-% Use block column count reordering to reduce fill-in in Cholesky factor.
-    
-% IO blocks.
-bixIO=double(s.estIO);
-bixIO(s.estIO)=ixIO;
-% EO blocks.
-bixEO=double(s.estEO);
-bixEO(s.estEO)=ixEO;
-% OP blocks.
-bixOP=double(s.estOP);
-bixOP(s.estOP)=ixOP;
-    
-p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
-% Perform Cholesky on permuted J'*J.
-[LT,fail]=chol(JTJ(p,p));
+if isempty(e.final.factorized) || doPrepare
+    % We may need J'*J many times. Precalculate and prefactor.
+    JTJ=e.final.weighted.J'*e.final.weighted.J;
+    
+    % Use block column count reordering to reduce fill-in in Cholesky factor.
+    
+    % IO blocks.
+    bixIO=double(s.estIO);
+    bixIO(s.estIO)=ixIO;
+    % EO blocks.
+    bixEO=double(s.estEO);
+    bixEO(s.estEO)=ixEO;
+    % OP blocks.
+    bixOP=double(s.estOP);
+    bixOP(s.estOP)=ixOP;
 
-if fail==0
-    L=LT';
+    p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
+
+    % Perform Cholesky on permuted J'*J.
+    [LT,fail]=chol(JTJ(p,p));
+
+    if fail==0
+        L=LT';
+    else
+        warning(['Posterior covariance matrix was not positive definite. ' ...
+                 'Results will be inaccurate.'])
+        n=size(JTJ,1);
+        L=sparse(1:n,1:n,nan,n,n);
+    end
+    e.final.factorized=struct('p',p,'L',L,'fail',fail);
+    ok=~fail;
+    if doPrepare
+        varargout{1}=e;
+        return;
+    end
 else
-    warning(['Posterior covariance matrix was not positive definite. ' ...
-             'Results will be inaccurate.'])
-    n=size(JTJ,1);
-    L=sparse(1:n,1:n,nan,n,n);
+    p=e.final.factorized.p;
+    L=e.final.factorized.L;
+    fail=e.final.factorized.fail;
 end
 
 % Memory limit in elements.
 memLimit=1e7;
+
+warnState=[];
+if fail
+    % Turn off some numerical warnings
+    warnState=warning('off','MATLAB:singularMatrix');
+    warnState(2)=warning('off','MATLAB:nearlySingularMatrix');
+end
 
 for i=1:length(varargin)
     switch varargin{i}
@@ -161,6 +188,10 @@ for i=1:length(varargin)
     varargout{i}=e.s0^2*C; %#ok<*AGROW>
 end
 
+if ~isempty(warnState)
+    % Restore warning state.
+    warning(warnState);
+end
 
 function C=BlockDiagonalC(L,p,calc,xIx,bsElems,msg)
 %L       - Cholesky factor of the permuted normal matrix A(p,p).
