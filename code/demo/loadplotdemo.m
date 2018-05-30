@@ -81,6 +81,12 @@ hh=plotnetwork(s,'title',titleStr,alignCmd{:},'camsize',camSize,...
 imName='';
 imNo=1;
 % Check if image files exist.
+isAbsPath=~isempty(s.imDir) && ismember(s.imDir(1),'\\/') || ...
+          length(s.imDir)>1 && s.imDir(2)==':';
+if ~isAbsPath && exist(fullfile(curDir,s.imDir),'dir')
+    % Expand path relative to current dir for this file.
+    s.imDir=fullfile(curDir,s.imDir);
+end
 if exist(s.imDir,'dir')
     % Handle both original-case and lower-case file names.
     imNames={s.imNames{imNo},lower(s.imNames{imNo}),upper(s.imNames{imNo})};    

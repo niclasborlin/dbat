@@ -160,6 +160,12 @@ end
 imName='';
 imNo=1;
 % Check if image files exist.
+isAbsPath=~isempty(s0.imDir) && ismember(s0.imDir(1),'\\/') || ...
+          length(s0.imDir)>1 && s0.imDir(2)==':';
+if ~isAbsPath && exist(fullfile(curDir,s0.imDir),'dir')
+    % Expand path relative to current dir for this file.
+    s0.imDir=fullfile(curDir,s0.imDir);
+end
 if exist(s0.imDir,'dir')
     % Handle both original-case and lower-case file names.
     imNames={s0.imNames{imNo},lower(s0.imNames{imNo}),upper(s0.imNames{imNo})};    
