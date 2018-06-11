@@ -10,12 +10,16 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
 %   The struct S has the following fields:
-%       IO       - 16-by-nCams array with estimates of the internal
+%       IO       - 16-by-nImages array with estimates of the internal
 %                  orientation for each camera.
+%       IOblock  - 16-by-nImages array with numbering indicating
+%                  what IO values are distinct. Block-variant
+%                  projects have only one unique value.
+%                  Image-variant projects have all values distinct.
 %       EO       - 7-by-nImages array with the external orientation for
 %                  each image.
-%       cams     - 1-by-nImages numerical array indicating which IO column
-%                  correspond to which image. 
+%       EOblock  - 7-by-nImages array with numbering indicating
+%                  what EO values are distinct.
 %       OP       - 3-by-nOP array with object and control points.
 %       OPid     - 1-by-nOP array with object points ids.
 %       OPrawId  - 1-by-nOP array with original object point ids.
@@ -38,12 +42,12 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  stored. colPos(I,J)==K indicates the the measurement of
 %                  object point I in image J is stored in column K of markPts.
 %       prior    - struct with prior observations
-%                  IO     - 16-by-nCams array with prior observations of
+%                  IO     - 16-by-nImages array with prior observations of
 %                           the IO parameters, or NaN if no observation.
-%                  IOstd  - 16-by-nCams array with prior standard
+%                  IOstd  - 16-by-nImages array with prior standard
 %                           deviations for the IO parameters, 0 if
 %                           exact, NaN if none.
-%                  IOcov  - 16-by-16-by-nCams array with prior
+%                  IOcov  - 16-by-16-by-nImages array with prior
 %                           covariance matrices for the IO
 %                           parameters, or empty if none.
 %                  EO     - 7-by-nImages array with prior observations of
@@ -64,7 +68,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       residuals - posterior residuals after the bundle
 %                  markPt - 2-by-nMarkPts array with mark point residuals
 %                           in pixels. Filled in by the bundle. 
-%                  IO     - 16-by-nCams array with IO residuals if prior IO
+%                  IO     - 16-by-nImages array with IO residuals if prior IO
 %                           observations were used in the bundle.
 %                  EO     - 7-by-nImages array with EO residuals if prior EO
 %                           observations were used in the bundle.
@@ -75,7 +79,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  respective position. See PARAMETER TYPES below.
 %       sigmas   - vector with a posteriori standard deviations
 %                  (prior.sigmas scaled by estimated sigma0).
-%       estIO    - 16-by-nCams logical array indicating which internal
+%       estIO    - 16-by-nImages logical array indicating which internal
 %                  parameters should be estimated by the bundle. Defaults
 %                  to all false.
 %       estEO    - 7-by-nImages logical array indicating which external
@@ -85,19 +89,35 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  are considered free and should be estimated by the
 %                  bundle. Defaults to true for all but fixed control
 %                  points.
-%       useIOobs - 16-by-nCams logical array indicating which prior IO
+%       serial   - struct with serialisation indices used when
+%                  constructing the vector x of unknowns
+%                  IOIO - where from in IO should the values be copied?
+%                  IOx  - where in x should the values end up?
+%                  EOEO - where from in EO should the values be copied?
+%                  EOx  - where in x should the values end up?
+%                  OPOP - where from in OP should the values be copied?
+%                  OPx  - where in x should the values end up?
+%       deserial - struct with deserialisation indices used when
+%                  deconstructing the vector of unknowns
+%                  IOx  - where from in x should the IO values be copied?
+%                  IOIO - where in IO should the elements end up?
+%                  EOx  - where from in x should the EO values be copied?
+%                  EOEO - where in EO should the elements end up?
+%                  OPx  - where from in x should the OP values be copied?
+%                  OPOP - where in OP should the elements end up?
+%       useIOobs - 16-by-nImages logical array indicating which prior IO
 %                  observations should be used by the bundle. Defaults 
 %                  to all false.
-%       useEOobs - 7-by-nCams logical array indicating which prior EO
+%       useEOobs - 7-by-nImages logical array indicating which prior EO
 %                  observations should be used by the bundle. Defaults 
 %                  to all false.
 %       useOPobs - 3-by-nOP logical array indicating which prior OP
 %                  observations should be used by the bundle. Defaults 
 %                  to true for non-fixed control points.
 %       nK       - scalar indicating how many (potentially zero) K values
-%                  are used in the model. nK=3.
+%                  are used in the model. Default: nK=3.
 %       nP       - scalar indicating how many (potentially zero) P values
-%                  are used in the model. nP=2.
+%                  are used in the model. Default: nP=2.
 %       camUnit  - string with the unit used internally by the camera
 %                  mm     - nominal mm,
 %                  35mm   - '35 mm equivalent' units, i.e. sensor height=24mm,
@@ -183,18 +203,22 @@ nImages=length(prob.images);
 nOP=length(unique([prob.ctrlPts(:,1);prob.objPts(:,1)]));
 
 % Internal orientation.
-IO=nan(16,nCams);
-IOstd=nan(16,nCams);
+IO=nan(16,nImages);
+IOstd=nan(size(IO));
 IOcov=[];
 
 if individualCameras
+    % Image-invariant
     inner=cat(1,prob.images.inner)';
     innerStd=cat(1,prob.images.innerStd)';
     imSz=reshape(cat(1,prob.images.imSz),2,[]);
+    IOblock=repmat(1:nImages,1,16);
 else
-    inner=prob.job.defCam;
-    innerStd=prob.job.defCamStd;
-    imSz=prob.job.imSz(:);
+    % Block-invariant
+    inner=repmat(prob.job.defCam,1,nImages);
+    innerStd=repmat(prob.job.defCamStd,1,nImages);
+    imSz=repmat(prob.job.imSz(:),1,nImages);
+    IOblock=ones(16,nImages);
 end
 
 % Principal point. Flip y coordinate.
@@ -228,18 +252,6 @@ IOstd(3+nK+nP+1,:)=0; % TODO: Fix this estimate.
 % Skew.
 IO(3+nK+nP+2,:)=0;
 IOstd(3+nK+nP+2,:)=0;
-
-% Set IO parameter types.
-Knames=arrayfun(@(x)sprintf('K%d',x),1:nK,'uniformoutput',false);
-Pnames=arrayfun(@(x)sprintf('P%d',x),1:nP,'uniformoutput',false);
-IOtypes={'px','py','cc',Knames{:},Pnames{:},'fa','fs','sw','sh','iw','ih','rx','ry'}';
-if size(IO,2)>1
-    IOtypes=repmat(IOtypes,1,size(IO,2));
-    for i=1:size(IO,2)
-        IOtypes(:,i)=cellfun(@(x)sprintf('%s-%d',x,i),IOtypes(:,i),...
-                             'uniformoutput',false);
-    end
-end
 
 % First-order error propagation.
 % C=A/B; std(C) = abs(A/B^2)*std(B).
@@ -277,22 +289,8 @@ imLabels=cellfun(@(x)strrep(x,'\','/'),{prob.images.label},...
 
 camIds=cell2mat({prob.images.id});
 
-% Set EO parameter types.
-EOtypes={'EX','EY','EZ','om','ph','ka','tt'}';
-if size(EO,2)>1
-    EOtypes=repmat(EOtypes,1,size(EO,2));
-    % Only specify camera ids if any differ from camera sequence number.
-    useCamIds=any(1:length(camIds)~=camIds);
-    for i=1:size(EO,2)
-        % Id for this camera.
-        if useCamIds
-            camStr=sprintf('-%d(%d)',i,camIds(i));
-        else
-            camStr=sprintf('-%d',i);
-        end
-        EOtypes(:,i)=cellfun(@(x)[x,camStr],EOtypes(:,i),'uniformoutput',false);
-    end
-end
+% Default to no common cam stations.
+EOblock=repmat(1:nImages,7,1);
 
 % Find shortest common dir prefix.
 imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
@@ -419,8 +417,8 @@ else
 end
     
 % Pre-calculate which camera corresponds to each point.
-[i,j]=find(vis); %#ok<ASGLU>
-ptCams=cams(j);
+[~,j]=find(vis);
+ptCams=j;
 
 prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
              'EO',EO,'EOstd',EOstd,'EOcov',EOcov,...
@@ -452,10 +450,9 @@ objUnit='m';
 IOdistModel=ones(1,size(IO,2));
 
 s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,...
-         'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds, ...
-         'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,...
-         'EO',EO,'EOstd',EOstd, ...
-         'cams',cams,...
+         'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds,...
+         'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,'IOblock',IOblock,...
+         'EO',EO,'EOstd',EOstd,'EOblock',EOblock,...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
          'OPrawId',OPrawId,'OPlabels',{OPlabels},...
          'isCtrl',isCtrl,'isCheck',isCheck,...
