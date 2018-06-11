@@ -54,7 +54,7 @@ for i=1:length(cams)
     camIx=cams(i);
 
     % Create camera calibration matrix.
-    IO=s0.IO(:,s0.cams(camIx));
+    IO=s0.IO(:,camIx);
     K=diag([-IO(3),-IO(3),1]);
     K(1:2,3)=IO(1:2);
     

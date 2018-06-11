@@ -35,7 +35,7 @@ end
 i=find(ismember(s0.OPid,ids) & doEst);
 
 % Compute the forward intersection.
-[OP,res]=pm_multiforwintersect(s0.IO,s0.EO,s0.cams,s0.colPos,xy,i);
+[OP,res]=pm_multiforwintersect(s0.IO,s0.EO,1:size(s0.IO,2),s0.colPos,xy,i);
 
 % Store result.
 id=s0.OPid(i);
