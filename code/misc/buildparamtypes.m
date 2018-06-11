@@ -68,7 +68,7 @@ if strcmp(sel,'IO') || strcmp(sel,'all')
              'sh','iw','ih','rx','ry'}';
     if size(s.IO,2)>1
         IOtypes=repmat(IOtypes,1,size(s.IO,2));
-        for i=1:size(IO,2)
+        for i=1:size(s.IO,2)
             IOtypes(:,i)=cellfun(@(x)sprintf('%s-%d',x,i),IOtypes(:,i),...
                                  'uniformoutput',false);
         end
