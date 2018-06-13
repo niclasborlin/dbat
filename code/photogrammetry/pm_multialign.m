@@ -1,4 +1,4 @@
-function [EO,OP]=pm_multialign(EO,OP,i,ra)
+function [EO,OP,T]=pm_multialign(EO,OP,i,ra)
 %PM_MULTIALIGN Align network with specified camera.
 %
 %   [EO,OP]=pm_multialign(EO,OP,i[,ra])
@@ -10,6 +10,8 @@ function [EO,OP]=pm_multialign(EO,OP,i,ra)
 %        right. Defaults to 0 degrees roll angle.
 %
 %   After alignment, the i:th column will correspond to the origin.
+%
+%   [EO,OP,T]=... also returns the point transformation that was applied.
 
 
 if nargin<4, ra=0; end
