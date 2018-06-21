@@ -75,7 +75,6 @@ function [s,ok,iters,s0,E]=bundle(s,varargin)
 %   LEVENBERG_MARQUARDT_POWELL, BROWN_EULER_CAM2, BUNDLE_COV,
 %   PROB2DBATSTRUCT, BUNDLE_RESULT_FILE
 
-
 maxIter=20;
 damping='gna';
 veto=false;
@@ -154,21 +153,14 @@ if any(s.useOPobs(~s.estOP))
     s.useOPobs(~s.estOP)=false;
 end
 
-% Create indices into the vector of unknowns. n is the total number of unknowns.
-[ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
+if isempty(s.serial) || isempty(s.deserial)
+    % Compute (de-)serialization indices.
+    s=buildserialindices(s);
+end
 
-% Set up vector of initial values.
-x0=nan(n,1);
-x0(ixIO)=s.IO(s.estIO);
-x0(ixEO)=s.EO(s.estEO);
-x0(ixOP)=s.OP(s.estOP);
+% Create x0 vector.
+[x0,paramTypes]=serialize(s);
 
-% Construct parameter type vector for debugging problems with
-% bundle and/or data set.
-paramTypes=cell(size(x0));
-paramTypes(ixIO)=s.paramTypes.IO(s.estIO);
-paramTypes(ixEO)=s.paramTypes.EO(s.estEO);
-paramTypes(ixOP)=s.paramTypes.OP(s.estOP);
 % Residual function.
 resFun=@(x)brown_euler_cam4(x,s);
 %resFun=@(x)both_brown_res(x,s);

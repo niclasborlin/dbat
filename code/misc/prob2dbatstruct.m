@@ -91,20 +91,22 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  points.
 %       serial   - struct with serialisation indices used when
 %                  constructing the vector x of unknowns
-%                  IOIO - where from in IO should the values be copied?
-%                  IOx  - where in x should the values end up?
-%                  EOEO - where from in EO should the values be copied?
-%                  EOx  - where in x should the values end up?
-%                  OPOP - where from in OP should the values be copied?
-%                  OPx  - where in x should the values end up?
+%                  IO.src  - where from in IO should the values be copied?
+%                  IO.dest - where in x should the values end up?
+%                  EO.src  - where from in EO should the values be copied?
+%                  EO.dest - where in x should the values end up?
+%                  OP.src  - where from in OP should the values be copied?
+%                  OP.dest - where in x should the values end up?
+%                  n       - total number of unknowns.
 %       deserial - struct with deserialisation indices used when
 %                  deconstructing the vector x of unknowns
-%                  IOx  - where from in x should the IO values be copied?
-%                  IOIO - where in IO should the elements end up?
-%                  EOx  - where from in x should the EO values be copied?
-%                  EOEO - where in EO should the elements end up?
-%                  OPx  - where from in x should the OP values be copied?
-%                  OPOP - where in OP should the elements end up?
+%                  IO.src  - where from in x should the IO values be copied?
+%                  IO.dest - where in IO should the elements end up?
+%                  EO.src  - where from in x should the EO values be copied?
+%                  EO.dest - where in EO should the elements end up?
+%                  OP.src  - where from in x should the OP values be copied?
+%                  OP.dest - where in OP should the elements end up?
+%                  n       - total number of unknowns.
 %       useIOobs - 16-by-nImages logical array indicating which prior IO
 %                  observations should be used by the bundle. Defaults 
 %                  to all false.

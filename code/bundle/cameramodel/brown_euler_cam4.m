@@ -18,16 +18,8 @@ function [f,J,JJ]=brown_euler_cam4(x,s)
 %   See also PROB2DBATSTRUCT, BUNDLE, GAUSS_NEWTON_ARMIJO,
 %       LEVENBERG_MARQUARDT, LEVENBERG_MARQUARDT_POWELL.
 
-% Create index vectors for unknown parameters.
-[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
-
-% Copy the current approximations of the unknown values.
-IO=s.IO;
-IO(s.estIO)=x(ixIO);
-EO=s.EO;
-EO(s.estEO)=x(ixEO);
-OP=s.OP;
-OP(s.estOP)=x(ixOP);
+% Update DBAT structure with current estimates in x.
+s=deserialize(s,x);
 
 if (nargout>2)
     % Numerical approximation of Jacobian (for debugging only).
@@ -46,13 +38,13 @@ if distModel>0
             % Only residual vector requested.
     
             % Project into pinhole camera.
-            xy=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
+            xy=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.cams,s.OP,s.vis);
 
             % Convert measured points from pixels to mm and flip y coordinate.
-            m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
+            m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
         
             % Compute lens distortion for all measured point.
-            ld=multilensdist(m,IO,s.nK,s.nP,s.ptCams);
+            ld=multilensdist(m,s.IO,s.nK,s.nP,s.ptCams);
         
             % Remove lens distortion from measured points.
             ptCorr=m-ld;
@@ -67,14 +59,15 @@ if distModel>0
             f=[fObs(:);fPre(:)];
         else
             % Project into pinhole camera.
-            [xy,dIO1,dEO,dOP]=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP, ...
-                                                s.vis,s.estIO,s.estEO,s.estOP);
+            [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.cams,...
+                                                s.OP,s.vis,s.estIO,s.estEO,...
+                                                s.estOP);
             
             % Convert measured points from pixels to mm and flip y coordinate.
-            m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
+            m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
 
             % Compute lens distortion for all measured point.
-            [ld,dIO2]=multilensdist(m,IO,s.nK,s.nP,s.ptCams,s.estIO);
+            [ld,dIO2]=multilensdist(m,s.IO,s.nK,s.nP,s.ptCams,s.estIO);
 
             % Remove lens distortion from measured points.
             ptCorr=m-ld;
@@ -98,7 +91,7 @@ if distModel>0
                 funs={@res_euler_brown_0,@res_euler_brown_1,...
                       @res_euler_brown_2,@res_euler_brown_3};
                 % Compute residual for image observations.
-                fObs=multi_res(IO,EO,OP,s,funs{distModel-1});
+                fObs=multi_res(s.IO,s.EO,s.OP,s,funs{distModel-1});
 
                 % Compute residual for prior observations.
                 fPre=pm_preobs(x,s);
@@ -113,7 +106,7 @@ if distModel>0
                       @res_euler_brown_2,@res_euler_brown_3};
                 % Compute residual and Jacobian for image
                 % observations.
-                [fObs,JObs]=multi_res(IO,EO,OP,s,funs{distModel-1});
+                [fObs,JObs]=multi_res(s.IO,s.EO,s.OP,s,funs{distModel-1});
                 
                 % Compute residual for prior observations.
                 [fPre,Jpre]=pm_preobs(x,s);
@@ -130,13 +123,13 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         % Only residual vector requested.
     
         % Project into pinhole camera.
-        xy=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP,s.vis);
+        xy=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.cams,s.OP,s.vis);
 
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
+        m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
         
         % Compute lens distortion for projected points.
-        ld=multilensdist(xy,IO,s.nK,s.nP,s.ptCams);
+        ld=multilensdist(xy,s.IO,s.nK,s.nP,s.ptCams);
 
         % Add lens distortion to projected points.
         ptDist=xy+ld;
@@ -147,11 +140,11 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         f=[ptDist(:)-m(:);fPre];
     else
         % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=multieulerpinhole(IO,s.nK,s.nP,EO,s.cams,OP, ...
+        [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.cams,s.OP, ...
                                             s.vis,s.estIO,s.estEO,s.estOP);
         
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,IO,s.nK,s.nP,s.ptCams);
+        m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
 
         % Create arrays of columns indices for IO derivatives.
         [ixpp,ixf,ixK1,ixP1]=createiocolumnindices(s.estIO,s.nK,s.nP);
@@ -167,7 +160,7 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         [~,~,ixK2,ixP2]=createiocolumnindices(est,s.nK,s.nP);
 
         % Compute lens distortion for projected points.
-        [ld,dIO2,dxy]=multilensdist(xy,IO,s.nK,s.nP,s.ptCams,est);
+        [ld,dIO2,dxy]=multilensdist(xy,s.IO,s.nK,s.nP,s.ptCams,est);
         
         % Add lens distortion to projected points.
         ptDist=xy+ld;

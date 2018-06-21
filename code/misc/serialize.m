@@ -1,58 +1,25 @@
-function s=serialize(s,order)
-%SERIALIZE Compute serialize and deserialize indices.
+function [x,t]=serialize(s)
+%SERIALIZE Serialize DBAT struct to vector.
 %
-%   S0=SERIALIZE(S0) populates the serial/deserial fields of the DBAT
-%   struct S0 based on the information in the IOblock, EOblock, and
-%   estIO, estEO, estOP fields, as described below. The order of the
-%   elements are IO, EO, and OP as default. Use SERIALIZE(S0,ORDER),
-%   where ORDER is a cell array with strings 'IO', 'EO', 'OP' to
-%   modify the order.
+%   X=SERIALIZE(S) extracts and reorders IO, EO, and OP parameters
+%   from the DBAT struct S into the vector X. The parameter
+%   selection and ordering is given by the S.serial field.
 %
-%   S0.IOblock indicates how IO parameters are blocked, i.e., shared
-%   between images (columns). S0.estIO indicates what IO parameters
-%   should be estimated. The field serial.IOIO will indicate what IO
-%   elements should be inserted into the vector x of unknowns. The
-%   field serial.IOx will indicate where in x the elements should be
-%   put. Only the first element from each block will be copied.
+%   [X,T]=... also returns a same-sized cell array T with parameter
+%   type strings.
 %
-%   Correspondingly, the deserial.IOx indicate what estimated elements
-%   in x should be copied and deserial.IOIO indicate where in IO
-%   the elements should be put.
-%
-%   Similar reason applies to EO and OP, except the OP parameters
-%   are all assumed to be distinct.
+%See also: DESERIALIZE, BUILDSERIALINDICES.
 
-if nargin<2, order={'IO','EO','OP'}; end
+% Pre-allocate vector.
+x=nan(s.serial.n,1);
+% Insert element according to pre-calculated selection and ordering.
+x(s.serial.IO.dest)=s.IO(s.serial.IO.src);
+x(s.serial.EO.dest)=s.EO(s.serial.EO.src);
+x(s.serial.OP.dest)=s.OP(s.serial.OP.src);
 
-% Extract what parameters of IOblock to estimate.
-block=s.IOblock;
-% Do not touch fixed elements.
-block(~s.estIO)=0;
-
-% Find the leading elements of each row.
-lead=zeros(size(block));
-for i=1:size(block,1)
-  [~,ia,ib]=unique([0,block(i,:)]);
-  lead(i,ia(2:end)-1)=true;
+if nargout>1
+    t=cell(size(x));
+    t(s.serial.IO.dest)=s.paramTypes.IO(s.serial.IO.src);
+    t(s.serial.EO.dest)=s.paramTypes.EO(s.serial.EO.src);
+    t(s.serial.OP.dest)=s.paramTypes.OP(s.serial.OP.src);
 end
-
-% Indeces to serialize v (matrix -> vector)
-serial.IOIO=find(lead);
-serial.IOx=1:nnz(lead);
-
-% Now create the inverse mapping to distribute x elements to IO.
-% (This can be done quicker.)
-dist=lead;
-dist(lead~=0)=serial.IOx;
-
-% Expand to all elements that should be equal.
-for k=1:length(serial.IOx)
-    [i,j]=find(lead==k);
-    % Distribute over the block.
-    inBlock=block(i,:)==block(i,j);
-    dist(i,inBlock)=k;
-end
-
-[i,j,v]=find(dist(:));
-deserial.IOIO=i;
-deserial.IOx=v;
