@@ -1,10 +1,12 @@
-function [IOtypes,EOtypes,OPtypes]=buildparamtypes(s,sel)
+function ret=buildparamtypes(s,sel)
 %BUILDPARAMTYPES Build parameter type strings.
 %
-%   [IO,EO,OP]=BUILDPARAMTYPES(S) constructs cell arrays IO, EO and OP
-%   of parameter type strings from the content of the DBAT struct S.
-%   Use T=BUILDPARAMTYPES(S,SEL), where SEL is 'IO', 'EO', or 'OP',
-%   to build only one set of strings.
+%   S1=BUILDPARAMTYPES(S0) populates the paramTypes fields of the DBAT
+%   struct S1 based on the information in the DBAT struct S0, as
+%   described below.
+%
+%   T=BUILDPARAMTYPES(S,SEL), where SEL is 'IO', 'EO', or 'OP',
+%   returns the cell array of selected parameter types instead.
 %
 %   Each S.IO column stores the parameters below. The first 10 may
 %   be estimated by the bundle.
@@ -54,13 +56,13 @@ function [IOtypes,EOtypes,OPtypes]=buildparamtypes(s,sel)
 %
 %See also: PROB2DBATSTRUCT.
 
-if nargin<2, sel='all'; end
+if nargin<2, sel='struct'; end
 
 IOtypes={};
 EOtypes={};
 OPtypes={};
 
-if strcmp(sel,'IO') || strcmp(sel,'all')
+if strcmp(sel,'IO') || strcmp(sel,'struct')
     % IO parameter types.
     Knames=arrayfun(@(x)sprintf('K%d',x),1:s.nK,'uniformoutput',false);
     Pnames=arrayfun(@(x)sprintf('P%d',x),1:s.nP,'uniformoutput',false);
@@ -75,7 +77,7 @@ if strcmp(sel,'IO') || strcmp(sel,'all')
     end
 end
 
-if strcmp(sel,'EO') || strcmp(sel,'all')
+if strcmp(sel,'EO') || strcmp(sel,'struct')
     % Set EO parameter types.
     EOtypes={'EX','EY','EZ','om','ph','ka','tt'}';
     if size(s.EO,2)>1
@@ -95,7 +97,7 @@ if strcmp(sel,'EO') || strcmp(sel,'all')
     end
 end
 
-if strcmp(sel,'OP') || strcmp(sel,'all')
+if strcmp(sel,'OP') || strcmp(sel,'struct')
     OPtypes={'OX','OY','OZ'}';
     if size(s.OP,2)>1
         OPtypes=repmat(OPtypes,1,size(s.OP,2));
@@ -126,10 +128,13 @@ end
 
 % Determine what parameter(s) to return.
 switch sel
-  case {'all','IO'}
-    % Do nothing.
+  case 'struct'
+    s.paramTypes=struct('IO',{IOtypes},'EO',{EOtypes},'OP',{OPtypes});
+    ret=s;
+  case 'IO'
+    ret=IOtypes;
   case 'EO'
-    IOtypes=EOtypes;
+    ret=EOtypes;
   case 'OP'
-    IOtypes=OPtypes;
+    ret=OPtypes;
 end
