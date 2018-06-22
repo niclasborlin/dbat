@@ -93,10 +93,13 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  constructing the vector x of unknowns
 %                  IO.src  - where from in IO should the values be copied?
 %                  IO.dest - where in x should the values end up?
+%                  IO.obs  - what IO values should be used as observations?
 %                  EO.src  - where from in EO should the values be copied?
 %                  EO.dest - where in x should the values end up?
+%                  EO.obs  - what EO values should be used as observations?
 %                  OP.src  - where from in OP should the values be copied?
 %                  OP.dest - where in x should the values end up?
+%                  OP.obs  - what OP values should be used as observations?
 %                  n       - total number of unknowns.
 %       deserial - struct with deserialisation indices used when
 %                  deconstructing the vector x of unknowns

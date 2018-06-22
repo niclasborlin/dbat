@@ -22,22 +22,43 @@ function s=buildserialindices(s,wantedOrder)
 %   Similar reason applies to EO and OP, except the OP parameters
 %   are all assumed to be distinct.
 
+% Serialization:
+%
+%   serial.IO.src is index into IO.
+%   serial.IO.dest is index into x.
+%   serial.IO.obs is index into serial.IO.src and serial.IO.dest.
+%   serial.EO.src is index into EO.
+%   serial.EO.dest is index into x.
+%   serial.EO.obs is index into serial.EO.src and serial.EO.dest.
+%   serial.OP.src is index into OP.
+%   serial.OP.dest is index into x.
+%   serial.OP.obs is index into serial.OP.src and serial.OP.dest.
+%
+% Deserialization:
+%   deserial.IO.src is index into x.
+%   deserial.IO.dest is index into IO.
+%   deserial.EO.src is index into x.
+%   deserial.EO.dest is index into EO.
+%   deserial.OP.src is index into x.
+%   deserial.OP.dest is index into OP.
+
 if nargin<2, wantedOrder={'IO','EO','OP'}; end
 
 % Serialize each block. All x-related indices are 1-based.
-[IOserial,IOdeserial,warn]=serializeblock(s.IOblock,s.estIO);
+[IOserial,IOdeserial,warn]=serializeblock(s.IOblock,s.estIO,s.useIOobs);
 if warn
     warning(['All IO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
              'overwritten.']);
 end
-[EOserial,EOdeserial,warn]=serializeblock(s.EOblock,s.estEO);
+[EOserial,EOdeserial,warn]=serializeblock(s.EOblock,s.estEO,s.useEOobs);
 if warn
     warning(['All EO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
              'overwritten.']);
 end
-[OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(s.OP,2),3,1),s.estOP);
+[OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(s.OP,2),3,1),s.estOP,...
+                                          s.useOPobs);
 if warn
     warning(['All OP parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -72,7 +93,7 @@ s.deserial=struct('IO',IOdeserial,'EO',EOdeserial,'OP',OPdeserial,'n',n);
 
 
 % Comput serialize indices for one block
-function [serial,deserial,warn]=serializeblock(block,est)
+function [serial,deserial,warn]=serializeblock(block,est,useObs)
 
 % Elements within one parameter block should all be marked as
 % 'estimate' or 'fixed', not a combination.
@@ -92,12 +113,16 @@ block(~est)=0;
 lead=zeros(size(block));
 for i=1:size(block,1)
   [~,ia,ib]=unique([0,block(i,:)]);
-  lead(i,ia(2:end)-1)=true;
+  lead(i,ia(2:end)-1)=1;
 end
 
 % Indices to serialize v (matrix -> vector)
 serial.src=find(lead);
 serial.dest=(1:nnz(lead))';
+
+% Find subset of serial indices that correspond to parameters with
+% prior observations.
+serial.obs=find(useObs(lead>0));
 
 % Now create the inverse mapping to distribute x elements to IO.
 % (This can be done quicker.)
