@@ -171,29 +171,8 @@ else
     vetoFun='';
 end
 
-% Covariance estimates for observations.
-
-% Mark points. Standard deviation is given in pixel units, the
-% residuals are in mm, so scale the variance.
-ptCols=s.colPos(s.vis);
-varMark=(s.markStd(:,ptCols)./s.IO(end-1:end,s.ptCams(ptCols))).^2;
-% Variance of prior IO observations.
-varIO=s.prior.IOstd(s.useIOobs).^2;
-% Prior EO observations.
-varEO=s.prior.EOstd(s.useEOobs).^2;
-% Prior OP observations.
-varOP=s.prior.OPstd(s.useOPobs).^2;
-
-% Create indices into the residual vector. nObs is the total number
-% of observations.
-[resIxMarkPt,resIxIO,resIxEO,resIxOP,nObs]=indvec(...
-    [numel(varMark),numel(varIO),numel(varEO),numel(varOP)]);
-
-% Weight matrix.
-varAll=[varMark(:);varIO(:);varEO(:);varOP(:)];
-Cobs=spdiags(varAll,0,nObs,nObs);
-% Use the inverse as the weight matrix.
-W=inv(Cobs);
+% Compute weight matrix.
+W=buildweightmatrix(s);
 
 % Choose between a relative and absolute termination criteria. The
 % relative termination criteria (default) corresponds to the angle

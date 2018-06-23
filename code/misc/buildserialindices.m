@@ -41,16 +41,36 @@ function s=buildserialindices(s,wantedOrder)
 %   deserial.EO.dest is index into EO.
 %   deserial.OP.src is index into x.
 %   deserial.OP.dest is index into OP.
+%
+% Observation ordering
+%   residuals.ix.IP - index into the residual vector for image observations.
+%   residuals.ix.IO - index into the residual vector for IO observations.
+%   residuals.ix.EO - index into the residual vector for EO observations.
+%   residuals.ix.OP - index into the residual vector for OP observations.
+%   residuals.ix.n  - total number of observations.
 
 if nargin<2, wantedOrder={'IO','EO','OP'}; end
 
 % Serialize each block. All x-related indices are 1-based.
-[IOserial,IOdeserial,warn]=serializeblock(s.IOblock,s.estIO,s.useIOobs);
+[IOserial,IOdeserial,warn,blockIx]=serializeblock(s.IOblock,s.estIO,s.useIOobs);
 if warn
     warning(['All IO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
              'overwritten.']);
 end
+switch length(blockIx)
+  case 0
+    % No IO blocks. Legacy models will work with one IO column per
+    % image.
+    s.imCams=1:size(s.EO,2);
+  case 1
+    % One IO block. Legacy models require column indices to the
+    % block. WARNING: Untested for blockIx!=1.
+    s.imCams=repmat(blockIx,1,size(s.EO,2));
+  otherwise
+    % More than one code block => signal incompatibility with NaN's.
+    s.imCams=nan(1,size(s.EO,2));
+end    
 [EOserial,EOdeserial,warn]=serializeblock(s.EOblock,s.estEO,s.useEOobs);
 if warn
     warning(['All EO parameters in a block should be estimated or ' ...
@@ -91,9 +111,21 @@ end
 s.serial=struct('IO',IOserial,'EO',EOserial,'OP',OPserial,'n',n);
 s.deserial=struct('IO',IOdeserial,'EO',EOdeserial,'OP',OPdeserial,'n',n);
 
+% Indices for observations.
+% Create indices into the residual vector. nObs is the total number
+% of observations.
+numObs=[nnz(s.vis)*2,length(IOserial.obs),length(EOserial.obs),...
+        length(OPserial.obs)];
+[obsIPix,obsIOix,obsEOix,obsOPix,nObs]=indvec(numObs);
 
-% Comput serialize indices for one block
-function [serial,deserial,warn]=serializeblock(block,est,useObs)
+s.residuals.ix=struct('IP',obsIPix,...
+                      'IO',obsIOix,...
+                      'EO',obsEOix,...
+                      'OP',obsOPix,...
+                      'n',nObs);
+
+% Compute serialize indices for one block
+function [serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
 
 % Elements within one parameter block should all be marked as
 % 'estimate' or 'fixed', not a combination.
@@ -115,6 +147,9 @@ for i=1:size(block,1)
   [~,ia,ib]=unique([0,block(i,:)]);
   lead(i,ia(2:end)-1)=1;
 end
+
+% Return columns corresponding to parameter blocks.
+blockIx=find(any(lead,1));
 
 % Indices to serialize v (matrix -> vector)
 serial.src=find(lead);

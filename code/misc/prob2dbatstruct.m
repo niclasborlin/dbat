@@ -16,6 +16,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  what IO values are distinct. Block-variant
 %                  projects have only one unique value.
 %                  Image-variant projects have all values distinct.
+%       imCams   - Index into IO for each image (legacy distortion
+%                  models +/-1 only).
 %       EO       - 7-by-nImages array with the external orientation for
 %                  each image.
 %       EOblock  - 7-by-nImages array with numbering indicating
@@ -66,14 +68,17 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  sigmas - single or multiple sigmas for different
 %                           measurement types.
 %       residuals - posterior residuals after the bundle
-%                  markPt - 2-by-nMarkPts array with mark point residuals
-%                           in pixels. Filled in by the bundle. 
-%                  IO     - 16-by-nImages array with IO residuals if prior IO
-%                           observations were used in the bundle.
-%                  EO     - 7-by-nImages array with EO residuals if prior EO
-%                           observations were used in the bundle.
-%                  OP     - 3-by-nOP array with OP and CP residuals if prior 
-%                           OP/CP observations were used in the bundle.
+%                  IP - 2-by-nMarkPts array with image point
+%                       residuals in pixels. Filled in by the bundle. 
+%                  IO - 16-by-nImages array with IO residuals if prior IO
+%                       observations were used in the bundle.
+%                  EO - 7-by-nImages array with EO residuals if prior EO
+%                       observations were used in the bundle.
+%                  OP - 3-by-nOP array with OP and CP residuals if prior 
+%                       OP/CP observations were used in the bundle.
+%                  ix - struct with fields IP, IO, EO, OP,
+%                       indicating the corresponding residual
+%                       vector indices.
 %       paramTypes - struct with fields IO, EO, OP that indicate
 %                  what type of parameter is stored at the
 %                  respective position. See PARAMETER TYPES below.
@@ -431,8 +436,8 @@ prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
              'CCP',CCP,'CCPstd',CCPstd,'CCPcov',CCPcov,...
              'sigmas',priorSigma);
 
-residuals=struct('markPt',nan(2,nMarkPts),'IO',nan(size(IO)),...
-                 'EO',nan(size(EO)),'OP',nan(size(OP)));
+residuals=struct('IP',nan(2,nMarkPts), 'IO',nan(size(IO)), 'EO', ...
+                 nan(size(EO)), 'OP',nan(size(OP)));
 
 % Treat IO as fixed.
 estIO=false(size(IO));
@@ -457,6 +462,7 @@ IOdistModel=ones(1,size(IO,2));
 s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,...
          'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds,...
          'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,'IOblock',IOblock,...
+         'imCams',[],...
          'EO',EO,'EOstd',EOstd,'EOblock',EOblock,...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
          'OPrawId',OPrawId,'OPlabels',{OPlabels},...

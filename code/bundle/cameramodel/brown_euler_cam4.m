@@ -34,11 +34,14 @@ end
 
 if distModel>0
     if distModel==1 % backward/photogrammetric
+        
+        % Legacy modification.
+        s.estIO(:,2:end)=false;
         if (nargout<2)
             % Only residual vector requested.
     
             % Project into pinhole camera.
-            xy=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.cams,s.OP,s.vis);
+            xy=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,s.OP,s.vis);
 
             % Convert measured points from pixels to mm and flip y coordinate.
             m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
@@ -59,7 +62,7 @@ if distModel>0
             f=[fObs(:);fPre(:)];
         else
             % Project into pinhole camera.
-            [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.cams,...
+            [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,...
                                                 s.OP,s.vis,s.estIO,s.estEO,...
                                                 s.estOP);
             
