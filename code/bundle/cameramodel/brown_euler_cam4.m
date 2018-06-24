@@ -55,11 +55,19 @@ if distModel>0
             % Compute residual for image observations.
             fObs=xy-ptCorr;
 
-            % Compute residual for prior observations.
-            fPre=pm_preobs(x,s);
-
-            % Combine residuals.
-            f=[fObs(:);fPre(:)];
+            % Residuals for prior observations.
+            fPre=prior_obs(x,s,true);
+            
+            % Pre-allocate residual vector.
+            f=nan(s.residuals.ix.n,1);
+            % Insert image residuals...
+            f(s.residuals.ix.IP)=fObs(:);
+            % ...IO residuals...
+            f(s.residuals.ix.IO)=fPre.IO;
+            % ...EO residuals...
+            f(s.residuals.ix.EO)=fPre.EO;
+            % ...OP residuals...
+            f(s.residuals.ix.OP)=fPre.OP;
         else
             % Project into pinhole camera.
             [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,...
@@ -79,11 +87,30 @@ if distModel>0
             fObs=xy-ptCorr;
 
             % Compute residual for prior observations.
-            [fPre,Jpre]=pm_preobs(x,s);
+            [fPre,Jpre]=prior_obs(x,s,true);
 
-            f=[fObs(:);fPre(:)];
-            
-            J=[dIO1+dIO2,dEO,dOP;Jpre];
+            % Pre-allocate residual vector.
+            f=nan(s.residuals.ix.n,1);
+            % Insert image residuals...
+            f(s.residuals.ix.IP)=fObs(:);
+            % ...IO residuals...
+            f(s.residuals.ix.IO)=fPre.IO;
+            % ...EO residuals...
+            f(s.residuals.ix.EO)=fPre.EO;
+            % ...OP residuals...
+            f(s.residuals.ix.OP)=fPre.OP;
+
+            J=sparse(length(f),length(x));
+            % Insert image point jacobians...
+            J(s.residuals.ix.IP,s.serial.IO.dest)=dIO1+dIO2;
+            J(s.residuals.ix.IP,s.serial.EO.dest)=dEO;
+            J(s.residuals.ix.IP,s.serial.OP.dest)=dOP;
+            % ...IO jacobian...
+            J(s.residuals.ix.IO,:)=Jpre.IO;
+            % ...EO jacobian...
+            J(s.residuals.ix.EO,:)=Jpre.EO;
+            % ...OP jacobian...
+            J(s.residuals.ix.OP,:)=Jpre.OP;
         end
     else
         if distModel>=2 && distModel<=5
