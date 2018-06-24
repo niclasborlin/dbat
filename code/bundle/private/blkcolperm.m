@@ -51,7 +51,7 @@ if length(bix)~=m || any(bix'~=1:m)
     error('DBAT:blkcolperm:invalidArgument','Bad index count');
 end
 
-% Column count first, append zero to enable vectorized summation.
+% Column count first, prepend zero to enable vectorized summation.
 colCount=[0,full(sum(M~=0,1))];
 
 % Compute the average column count within each block.
@@ -59,7 +59,7 @@ blockCount=sum(colCount(ix+1),1);
 avgCount=blockCount./sum(ix~=0,1);
 
 % Sort block column count nondecreasingly.
-[dummy,q]=sort(avgCount);
+[~,q]=sort(avgCount);
 
 % Extract column indices in correct block order.
 p=ix(:,q);
