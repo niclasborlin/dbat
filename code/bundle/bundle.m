@@ -351,9 +351,7 @@ ok=code==0;
 
 % Update s if optimization converged.
 if ok
-    s.IO(s.estIO)=x(ixIO);
-    s.EO(s.estEO)=x(ixEO);
-    s.OP(s.estOP)=x(ixOP);
+    s=deserialize(s,x);
     % Update formats.
     aspect=ones(2,size(s.IO,2));
     aspect(1,:)=1+s.IO(3+s.nK+s.nP+1,:);
@@ -444,13 +442,15 @@ if code==-4
 end
 
 % Always update the residuals.
-s.residuals.markPt(:)=final.unweighted.r(resIxMarkPt);
+s.residuals.IP(:)=final.unweighted.r(s.residuals.ix.IP);
 % Mark pt residuals are in mm, scale to pixels.
-s.residuals.markPt=s.residuals.markPt.*s.IO(end-1:end,s.ptCams(ptCols));
+ptCols=s.colPos(s.vis);
+s.residuals.IP=s.residuals.IP.*s.IO(end-1:end,s.ptCams(ptCols));
 
-s.residuals.IO(s.useIOobs)=final.unweighted.r(resIxIO);
-s.residuals.EO(s.useEOobs)=final.unweighted.r(resIxEO);
-s.residuals.OP(s.useOPobs)=final.unweighted.r(resIxOP);
+% This might be problematic if a block parameter is used as an observation...
+s.residuals.IO(s.useIOobs)=final.unweighted.r(s.residuals.ix.IO);
+s.residuals.EO(s.useEOobs)=final.unweighted.r(s.residuals.ix.EO);
+s.residuals.OP(s.useOPobs)=final.unweighted.r(s.residuals.ix.OP);
 
 % Sigma0 is sqrt(r'*r/(m-n)), where m is the number of
 % observations, and n is the number of unknowns.

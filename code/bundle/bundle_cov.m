@@ -54,10 +54,6 @@ for i=1:length(varargin)
     end
 end
 
-% Create indices into the vector of unknowns.
-[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
-
-
 if isempty(e.final.factorized) || doPrepare
     % We may need J'*J many times. Precalculate and prefactor.
     JTJ=e.final.weighted.J'*e.final.weighted.J;
@@ -65,14 +61,14 @@ if isempty(e.final.factorized) || doPrepare
     % Use block column count reordering to reduce fill-in in Cholesky factor.
     
     % IO blocks.
-    bixIO=double(s.estIO);
-    bixIO(s.estIO)=ixIO;
+    [i,j]=ind2sub(size(s.estIO),s.serial.IO.src);
+    bixIO=full(sparse(i,j,s.serial.IO.dest,size(s.estIO,1),size(s.estIO,2)));
     % EO blocks.
-    bixEO=double(s.estEO);
-    bixEO(s.estEO)=ixEO;
+    [i,j]=ind2sub(size(s.estEO),s.serial.EO.src);
+    bixEO=full(sparse(i,j,s.serial.EO.dest,size(s.estEO,1),size(s.estEO,2)));
     % OP blocks.
-    bixOP=double(s.estOP);
-    bixOP(s.estOP)=ixOP;
+    [i,j]=ind2sub(size(s.estOP),s.serial.OP.src);
+    bixOP=full(sparse(i,j,s.serial.OP.dest,size(s.estOP,1),size(s.estOP,2)));
 
     p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
