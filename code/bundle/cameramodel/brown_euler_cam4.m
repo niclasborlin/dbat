@@ -35,8 +35,10 @@ end
 if distModel>0
     if distModel==1 % backward/photogrammetric
         
-        % Legacy modification.
+        % Legacy modifications.
         s.estIO(:,2:end)=false;
+        s.imCams(:)=1;
+        s.ptCams(:)=1;
         if (nargout<2)
             % Only residual vector requested.
     

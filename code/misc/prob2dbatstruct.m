@@ -428,7 +428,7 @@ end
     
 % Pre-calculate which camera corresponds to each point.
 [~,j]=find(vis);
-ptCams=j;
+ptCams=j';
 
 prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
              'EO',EO,'EOstd',EOstd,'EOcov',EOcov,...
