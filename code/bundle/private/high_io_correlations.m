@@ -32,6 +32,13 @@ if cross
     % Output parameters are shifted, i.e. k is v, v is CIO.
     k=full(CIOC(sub2ind(size(CIOC),i,j)));
     v=CIO;
+    % Only keep the correlations that correspond to unique cameras.
+    [~,ia]=unique(s.IOblock','rows');
+    keep=ismember(k,ia);
+    i=i(keep);
+    j=j(keep);
+    k=k(keep);
+    v=v(keep);
 else
     % Ditto but sparse.
     CIO=bundle_cov(s,e,'CIO');
@@ -43,4 +50,11 @@ else
     k=floor((i-1)/size(s.IO,1))+1;
     i=rem(i-1,size(s.IO,1))+1;
     j=rem(j-1,size(s.IO,1))+1;
+    % Only keep the correlations that correspond to unique cameras.
+    [~,ia]=unique(s.IOblock','rows');
+    keep=ismember(k,ia);
+    i=i(keep);
+    j=j(keep);
+    k=k(keep);
+    v=v(keep);
 end

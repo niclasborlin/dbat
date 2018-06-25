@@ -121,11 +121,12 @@ for i=1:length(varargin)
         C=spalloc(numel(s.IO),numel(s.IO),nnz(s.estIO)^2);
         
         if fail
-            C(s.estIO(:),s.estIO(:))=nan;
+            C(s.deserial.IO.dest,s.deserial.IO.dest)=nan;
         else
             % Compute needed part of inverse and put it into the right
             % part of C.
-            C(s.estIO(:),s.estIO(:))=invblock(L,p,ixIO,'sqrt');
+            C(s.deserial.IO.dest,s.deserial.IO.dest)=...
+                invblock(L,p,s.deserial.IO.src,'sqrt');
         end
         
       case 'ceof' % Whole CEO covariance matrix.
@@ -135,11 +136,12 @@ for i=1:length(varargin)
         C=spalloc(numel(s.EO),numel(s.EO),nnz(s.estEO)^2);
         
         if fail
-            C(s.estEO(:),s.estEO(:))=nan;
+            C(s.deserial.EO.dest,s.deserial.EO.dest)=nan;
         else
             % Compute needed part of inverse and put it into the right
             % part of C.
-            C(s.estEO(:),s.estEO(:))=invblock(L,p,ixEO,'sqrt');
+            C(s.deserial.EO.dest,s.deserial.EO.dest)=...
+                invblock(L,p,s.deserial.EO.src,'sqrt');
         end
         
         % Remove axis indicator psuedo-elements.
@@ -155,22 +157,25 @@ for i=1:length(varargin)
         C=spalloc(numel(s.OP),numel(s.OP),nnz(s.estOP)^2);
         
         if fail
-            C(s.estOP(:),s.estOP(:))=nan;
+            C(s.deserial.OP.dest,s.deserial.OP.dest)=nan;
         else
             % Compute needed part of inverse and put it into the right
             % part of C.
-            C(s.estOP(:),s.estOP(:))=invblock(L,p,ixOP,'sqrt');
+            C(s.deserial.OP.dest,s.deserial.OP.dest)=...
+                invblock(L,p,s.deserial.OP.src,'sqrt');
         end
         
         %etime(clock,start)
         
       case 'cio' % Block-diagonal CIO
         
-        C=BlockDiagonalC(L,p,s.estIO,ixIO,memLimit,'Computing IO covariances');
+        C=BlockDiagonalC(L,p,s.estIO,s.deserial.IO.src,memLimit,...
+                         'Computing IO covariances');
         
       case 'ceo' % Block-diagonal CEO
         
-        C=BlockDiagonalC(L,p,s.estEO,ixEO,memLimit,'Computing EO covariances');
+        C=BlockDiagonalC(L,p,s.estEO,s.deserial.EO.src,memLimit,...
+                         'Computing EO covariances');
 
         % Remove axis indicator psuedo-elements.
         keep=rem(1:size(C,1),7)~=0;
@@ -178,7 +183,8 @@ for i=1:length(varargin)
         
       case 'cop' % Block-diagonal COP
         
-        C=BlockDiagonalC(L,p,s.estOP,ixOP,memLimit,'Computing OP covariances');
+        C=BlockDiagonalC(L,p,s.estOP,s.deserial.OP.src,memLimit,...
+                         'Computing OP covariances');
         
     end
     varargout{i}=e.s0^2*C; %#ok<*AGROW>
