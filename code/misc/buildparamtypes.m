@@ -28,7 +28,9 @@ function ret=buildparamtypes(s,sel)
 %       ry      - image resolution.
 %
 %   The names above are returned in the 16-by-nCams IO cell array. If
-%   multiple S.IO columns are present, the column number is appended.
+%   multiple S.IO columns are present, the column number is
+%   appended. If the block number is different from the image
+%   number, the block number is appended in parantheses.
 %
 %   Each S.EO column stores the parameters below. The first 6 parameters
 %   may be estimated by the bundle.
@@ -70,9 +72,20 @@ if strcmp(sel,'IO') || strcmp(sel,'struct')
              'sh','iw','ih','rx','ry'}';
     if size(s.IO,2)>1
         IOtypes=repmat(IOtypes,1,size(s.IO,2));
-        for i=1:size(s.IO,2)
-            IOtypes(:,i)=cellfun(@(x)sprintf('%s-%d',x,i),IOtypes(:,i),...
-                                 'uniformoutput',false);
+        if any(any(s.IOblock~=repmat(1:size(s.IO,2),size(s.IO,1),1)))
+            % At least partly block-invariant.
+            for j=1:size(s.IO,2)
+                for i=1:size(s.IO,1)
+                    IOtypes{i,j}=sprintf('%s-%d(%d)',IOtypes{i,j},j,...
+                                         s.IOblock(i,j));
+                end
+            end
+        else
+            % Purely image-invariant.
+            for i=1:size(s.IO,2)
+                IOtypes(:,i)=cellfun(@(x)sprintf('%s-%d',x,i),IOtypes(:,i),...
+                                     'uniformoutput',false);
+            end
         end
     end
 end
