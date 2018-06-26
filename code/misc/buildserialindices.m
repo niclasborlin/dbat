@@ -51,14 +51,17 @@ function s=buildserialindices(s,wantedOrder)
 
 if nargin<2, wantedOrder={'IO','EO','OP'}; end
 
-% Find unique IOblock and EOblock columns.
+% Find unique IOblock and EOblock columns and indicate if columns
+% are simple.
 s.IOunique=false(1,size(s.IOblock,2));
 [~,ia]=unique(s.IOblock','rows');
 s.IOunique(ia)=true;
+s.IOsimple=all(s.IOblock==s.IOblock(ones(end,1),:),1)
 
 s.EOunique=false(1,size(s.EOblock,2));
 [~,ia]=unique(s.EOblock','rows');
 s.EOunique(ia)=true;
+s.EOsimple=all(s.EOblock==s.EOblock(ones(end,1),:),1)
 
 % Serialize each block. All x-related indices are 1-based.
 [IOserial,IOdeserial,warn,blockIx]=serializeblock(s.IOblock,s.estIO,s.useIOobs);
