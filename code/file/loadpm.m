@@ -384,6 +384,7 @@ if ~isempty(objPts)
     % Are all object point ids increasing?
     split=find(diff(objPts(:,1))<0);
     if length(split)==1
+        warning('Found non-increasing OP id, renumbering assumed smartpoints');
         % If not, first sequence is object point ids, second sequence is
         % smart point ids.
         objId=objPts(1:split,1);
