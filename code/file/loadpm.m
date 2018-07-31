@@ -207,7 +207,7 @@ while ~feof(fid)
                          'inner',inner,'innerStd',innerStd,...
                          'imSz',imSz,'label',imName,'id',id); %#ok<AGROW>
 end
-waitbar(ftell(fid)/sz,h);
+if ishandle(h), waitbar(ftell(fid)/sz,h); end
 
 % Find longest common path of image names.
 imPaths={images.imName};
@@ -259,7 +259,7 @@ while ~feof(fid)
     end
     ctrlPts(nCtrlPts,:)=cp;
 end
-waitbar(ftell(fid)/sz,h);
+if ishandle(h), waitbar(ftell(fid)/sz,h); end
 % Trim unused memory.
 ctrlPts=ctrlPts(1:nCtrlPts,:);
 
@@ -293,7 +293,7 @@ while ~feof(fid)
     end
     objPts(nObjPts,:)=op;
 end
-waitbar(ftell(fid)/sz,h);
+if ishandle(h), waitbar(ftell(fid)/sz,h); end
 % Trim unused memory.
 objPts=objPts(1:nObjPts,:);
 
@@ -327,7 +327,7 @@ while ~feof(fid)
     end
     markPts(nMarkPts,:)=mp;
 end
-waitbar(ftell(fid)/sz,h);
+if ishandle(h), waitbar(ftell(fid)/sz,h); end
 markPts=markPts(1:nMarkPts,:);
 
 features=cell(0,0);
@@ -403,4 +403,4 @@ prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
             'markPts',markPts,'features',{features},'featVis',featVis);
 
 fclose(fid);
-close(h);
+if ishandle(h), close(h); end
