@@ -138,8 +138,8 @@ for i=1:size(s123,1)
     res(i)=sqrt(mean(sum((euclidean(P*homogeneous(XTest))-xTest).^2)));
 end
 
-[dummy,i]=min(res);
-if (length(i)>0)
+[~,i]=min(res);
+if (~isempty(i))
     P=PP{i(1)};
 else
     P=[];

@@ -34,7 +34,7 @@ for j=1:size(T,1)
     A(j)=polyarea(pts(1,T(j,:)),pts(2,T(j,:)));
 end
 
-[dummy,i]=sort(-A);
+[~,i]=sort(-A);
 T=T(i,:);
 A=A(i);
 tri=T(1,:);

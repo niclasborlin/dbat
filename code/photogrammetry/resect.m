@@ -67,7 +67,7 @@ for i=1:length(cams)
         % Visible measured points.
         meaIx=find(s0.vis(:,camIx) & ismember(s0.OPid,cpId));
         mea=xy(:,s0.colPos(meaIx,camIx));
-        [tri,area,T,A]=largesttriangle(mea);
+        [~,~,T,A]=largesttriangle(mea);
         % Try triangles among N best and above v times highest area.
         tryPt=T((1:end)'<=n & A>=v*A(1),:);
         % Ids of points to try.
@@ -106,7 +106,7 @@ for i=1:length(cams)
         pt3=pt3(:,keep);
         visId=visId(keep);
         
-        [P,PP,res]=pm_resect_3pt(pt3,pt2N,ismember(visId,useId),true);
+        [P,PP,res]=pm_resect_3pt(pt3,pt2N,ismember(visId,useId),true); %#ok<ASGLU>
         if ~isempty(res) && min(res)<bestRes
             bestRes=min(res);
             bestP=P;

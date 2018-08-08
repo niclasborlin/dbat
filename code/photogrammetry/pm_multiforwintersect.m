@@ -30,7 +30,7 @@ end
 OP=nan(3,length(i));
 R=nan(1,length(i));
 % Find out which camera combinations we have.
-[camComb,dummy,ui]=unique(colPos(i,:)~=0,'rows');
+[camComb,~,ui]=unique(colPos(i,:)~=0,'rows');
 
 % Do one forward intersection for each camera combination.
 for ii=1:size(camComb,1)
