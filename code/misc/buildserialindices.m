@@ -56,15 +56,16 @@ if nargin<2, wantedOrder={'IO','EO','OP'}; end
 s.IOunique=false(1,size(s.IOblock,2));
 [~,ia]=unique(s.IOblock','rows');
 s.IOunique(ia)=true;
-s.IOsimple=all(s.IOblock==s.IOblock(ones(end,1),:),1)
+s.IOsimple=all(s.IOblock==s.IOblock(ones(end,1),:),1);
 
 s.EOunique=false(1,size(s.EOblock,2));
 [~,ia]=unique(s.EOblock','rows');
 s.EOunique(ia)=true;
-s.EOsimple=all(s.EOblock==s.EOblock(ones(end,1),:),1)
+s.EOsimple=all(s.EOblock==s.EOblock(ones(end,1),:),1);
 
 % Serialize each block. All x-related indices are 1-based.
-[IOserial,IOdeserial,warn,blockIx]=serializeblock(s.IOblock,s.estIO,s.useIOobs);
+[IOlead,IOserial,IOdeserial,warn,blockIx]=serializeblock(s.IOblock,s.estIO,...
+                                                  s.useIOobs);
 if warn
     warning(['All IO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -83,13 +84,13 @@ switch length(blockIx)
     % More than one code block => signal incompatibility with NaN's.
     s.imCams=nan(1,size(s.EO,2));
 end    
-[EOserial,EOdeserial,warn]=serializeblock(s.EOblock,s.estEO,s.useEOobs);
+[EOlead,EOserial,EOdeserial,warn]=serializeblock(s.EOblock,s.estEO,s.useEOobs);
 if warn
     warning(['All EO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
              'overwritten.']);
 end
-[OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(s.OP,2),3,1),s.estOP,...
+[~,OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(s.OP,2),3,1),s.estOP,...
                                           s.useOPobs);
 if warn
     warning(['All OP parameters in a block should be estimated or ' ...
@@ -119,6 +120,10 @@ for i=1:length(wantedOrder)
     end
 end
 
+% Storead leading arrays.
+s.IOlead=IOlead;
+s.EOlead=EOlead;
+
 % Store indices.
 s.serial=struct('IO',IOserial,'EO',EOserial,'OP',OPserial,'n',n);
 s.deserial=struct('IO',IOdeserial,'EO',EOdeserial,'OP',OPdeserial,'n',n);
@@ -137,7 +142,7 @@ s.residuals.ix=struct('IP',obsIPix,...
                       'n',nObs);
 
 % Compute serialize indices for one block
-function [serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
+function [lead,serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
 
 % Elements within one parameter block should all be marked as
 % 'estimate' or 'fixed', not a combination.
@@ -156,7 +161,7 @@ block(~est)=0;
 % Find the leading elements of each row.
 lead=zeros(size(block));
 for i=1:size(block,1)
-  [~,ia,ib]=unique([0,block(i,:)]);
+  [~,ia,~]=unique([0,block(i,:)]);
   lead(i,ia(2:end)-1)=1;
 end
 

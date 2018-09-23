@@ -16,6 +16,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  what IO values are distinct. Block-variant
 %                  projects have only one unique value.
 %                  Image-variant projects have all values distinct.
+%       IOlead   - 16-by-nImages logical array indicating what
+%                  parameters are leading a block.
 %       IOunique - logical nImages-vector indicating which IOblock
 %                  columns are unique.
 %       IOsimple - logical nImages-vector indicating which IOblock
@@ -26,6 +28,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  each image.
 %       EOblock  - 7-by-nImages array with numbering indicating
 %                  what EO values are distinct.
+%       EOlead   - 7-by-nImages logical array indicating what
+%                  parameters are leading a block.
 %       EOunique - logical nImages-vector indicating which EOblock
 %                  columns are unique.
 %       EOsimple - logical nImages-vector indicating which IOblock
@@ -238,6 +242,7 @@ else
     imSz=repmat(prob.job.imSz(:),1,nImages);
     IOblock=ones(16,nImages);
 end
+IOlead=[];
 
 % Principal point. Flip y coordinate.
 IO(1:2,:)=diag([1,-1])*inner(2:3,:);
@@ -309,6 +314,7 @@ camIds=cell2mat({prob.images.id});
 
 % Default to no common cam stations.
 EOblock=repmat(1:nImages,7,1);
+EOlead=[];
 
 % Find shortest common dir prefix.
 imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
@@ -470,8 +476,9 @@ IOdistModel=ones(1,size(IO,2));
 s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,...
          'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds,...
          'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,'IOblock',IOblock,...
-         'imCams',[],'IOunique',[],'IOsimple',[],...
+         'IOlead',IOlead,'imCams',[],'IOunique',[],'IOsimple',[],...
          'EO',EO,'EOstd',EOstd,'EOblock',EOblock,'EOunique',[],'EOsimple',[],...
+         'EOlead',EOlead,...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
          'OPrawId',OPrawId,'OPlabels',{OPlabels},...
          'isCtrl',isCtrl,'isCheck',isCheck,...
