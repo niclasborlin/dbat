@@ -9,8 +9,8 @@ function [i,j,k,v,CIO]=high_io_correlations(s,e,thres,cross)
 %
 %   [I,J,V]=HIGH_IO_CORRELEATIONS(S,E,T,TRUE) also considers cross-camera
 %   correlations, i.e. correlations between IO parameters of all cameras.
-%   In this case, the I,J indices will be 1..M*N, where M is the number
-%   of cameras.
+%   In this case, I,J will have two columns [R,C], indicating the
+%   row and column of each parameter.
 %
 %   [...,CIO]=... also returns the estimated covariance matrix CIO or CIOF
 %   returned from BUNDLE_COV.
@@ -28,17 +28,18 @@ if cross
     % Extract IO covariances and correlations.
     CIO=bundle_cov(s,e,'CIOF');
     CIOC=tril(corrmat(CIO,true));
+    % Remove any high correlations due to parameter blocks.
+    CIOC(~s.IOlead,:)=0;
+    CIOC(:,~s.IOlead)=0;
     [i,j]=find(abs(CIOC)>thres);
     % Output parameters are shifted, i.e. k is v, v is CIO.
     k=full(CIOC(sub2ind(size(CIOC),i,j)));
     v=CIO;
-    % Only keep the correlations that correspond to unique cameras.
-    [~,ia]=unique(s.IOblock','rows');
-    keep=ismember(k,ia);
-    i=i(keep);
-    j=j(keep);
-    k=k(keep);
-    v=v(keep);
+    % Convert to row, column within IO.
+    [ri,ci]=ind2sub(size(s.IO),i);
+    [rj,cj]=ind2sub(size(s.IO),j);
+    i=[ri,ci];
+    j=[rj,cj];
 else
     % Ditto but sparse.
     CIO=bundle_cov(s,e,'CIO');
