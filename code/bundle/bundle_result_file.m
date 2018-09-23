@@ -64,7 +64,7 @@ else
 end
 
 % Check if we have any large correlations.
-[iio,jio,kio,vio,CIO]=high_io_correlations(s,e,corrThreshold);
+[iio,jio,vio,CIO]=high_io_correlations(s,e,corrThreshold,true);
 [ieo,jeo,keo,veo,CEO]=high_eo_correlations(s,e,corrThreshold);
 if nargin<4
     COP=bundle_cov(s,e,'COP');
@@ -73,9 +73,9 @@ OPstd=sqrt(reshape(full(diag(COP)),3,[]));
 
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
 % Compute p values for distortion parameters.
-[pk,pp,pb]=test_distortion_params(s,e);
-n=double(any(iio))+double(any(ieo))+double(any(iop))+ ...
-  double(any([pk;pp;pb]<sigThreshold))+double(e.code~=0);
+[pk,pp,pb,pkc]=test_distortion_params(s,e);
+n=double(any(vio))+double(any(veo))+double(any(vop))+ ...
+  double(any(any([pk;pp;pb]<sigThreshold)))+double(e.code~=0);
 
 fprintf(fid,[p,p,'Problems related to the processing: (%d)\n'],n);
 
@@ -95,7 +95,7 @@ if any(iop)
     fprintf(fid,[p,p,p,'One or more of the object point coordinates ' ...
                  'has a high correlation.\n']);
 end
-if any([pk;pp;pb]<sigThreshold)
+if any(any([pk;pp;pb]<sigThreshold))
     fprintf(fid,[p,p,p,'One or more estimated lens and/or affine distortion coefficients ' ...
                  'failed significance test (see below).\n']);
 end    
@@ -200,7 +200,7 @@ end
 fprintf(fid,[p,p,p,'Calibration: %s\n'],selfCalStr);
 
 % IO standard deviation. Correlations were computed far above.
-ioSigma=reshape(sqrt(diag(CIO)),size(s.IO,1),[]);
+ioSigma=full(reshape(sqrt(diag(CIO)),size(s.IO,1),[]));
 
 % Headers and values to print.
 head={'Focal Length','Xp - principal point x','Yp - principal point y',...
@@ -225,27 +225,30 @@ irows=sparse(rows,1,1:length(rows));
 % Flip signs of rows py, Ki, Pi.
 S=diag((-1).^double(ismember(1:length(rows),[3,5+(1:s.nK+s.nP)])));
 
-for i=1:length(selfCal)
+% Extend ioSigma. Need to be fixed when Fw, Fh estimation is implemented.
+ioSigma(end+2,1)=0;
+
+% For each camera with parameters that were estimated
+for i=find(s.IOunique)
     % Create fake IO vector.
     sIO=[s.IO;1./s.IO(end-1:end,:)];
     sIO(end-1,:)=sIO(end-1,:).*(1+sIO(3+s.nK+s.nP+1,:));
-    % Extend ioSigma. Need to be fixed when Fw, Fh estimation is implemented.
-    ioSigma(end+2,1)=0;
     vals=S*full(sIO(rows,i));
     % Significance values.
     sig=nan(size(rows));
+    % Cumulative significance values (Ki only)
+    cumSig=nan(size(rows));
     sigma=zeros(size(rows));
     if selfCal(i)
-        sig(6:8)=pk;
-        sig(9:10)=pp;
-        sig(11:12)=pb;
-        % Add symmetric correlations.
-        iio0=iio;
-        iio=[iio;jio];
-        jio=[jio;iio0];
-        kio=repmat(kio,2,1);
-        vio=repmat(vio,2,1);
-
+        sig(6:8)=pk(:,i);
+        cumSig(6:8)=pkc(:,i);
+        sig(9:10)=pp(i);
+        sig(11:12)=pb(:,i);
+        % Correlations [i,k1,j,k2,v]. IO parameter i in camera k1
+        % is correlated with IO parameter j in camera k2 with
+        % correlation v.
+        cc=[iio,jio,vio;
+            jio,iio,vio];
     
         padLength=length('Significance:');
 
@@ -256,9 +259,11 @@ for i=1:length(selfCal)
     fprintf(fid,[p,p,p,'Camera%d\n'],i);
     fprintf(fid,[p,p,p,p,'Lens distortion model:\n']);
     if s.IOdistModel(i)>0
-        fprintf(fid,[p,p,p,p,p,'Backward (Photogrammetry) model %d\n'],s.IOdistModel);
+        fprintf(fid,[p,p,p,p,p,'Backward (Photogrammetry) model %d\n'],...
+                s.IOdistModel(i));
     else
-        fprintf(fid,[p,p,p,p,p,'Forward (Computer Vision) model %d\n'],-s.IOdistModel);
+        fprintf(fid,[p,p,p,p,p,'Forward (Computer Vision) model %d\n'],...
+                -s.IOdistModel(i));
     end
     for j=1:length(head)
         fprintf(fid,[p,p,p,p,'%s:\n'],head{j});
@@ -269,13 +274,25 @@ for i=1:length(selfCal)
         if ~isnan(sig(j))
             values(end+1,:)={'Significance:','p=%.2f',sig(j)};
         end
-        highCorr=find(kio==i & iio==rows(j));
+        if ~isnan(cumSig(j))
+            values(end+1,:)={'Cumulative significance:','p=%.2f',cumSig(j)};
+        end
+        highCorr=find(cc(:,2)==i & cc(:,1)==rows(j));
         if any(highCorr)
-            otherParam=irows(jio(highCorr));
+            otherParam=irows(cc(highCorr,3));
+            otherCam=cc(highCorr,4);
+            corrVal=cc(highCorr,5);
             ss='';
             for kk=1:length(otherParam)
-                ss=[ss,sprintf(' %s:%.1f%%,',names{otherParam(kk)},...
-                               vio(highCorr(kk))*100)];
+                if otherCam(kk)==i
+                    % Same camera
+                    ss=[ss,sprintf(' %s:%.1f%%,',names{otherParam(kk)},...
+                                   corrVal(kk)*100)];
+                else
+                    % Other camera
+                    ss=[ss,sprintf(' %s(cam%d):%.1f%%,',names{otherParam(kk)},...
+                                   otherCam(kk),corrVal(kk)*100)];
+                end
             end
             ss(end)='.';
             values(end+1,:)={corrStr,'%s',ss};
@@ -283,26 +300,26 @@ for i=1:length(selfCal)
         pretty_print(fid,[repmat(p,1,5)],values,padLength,padLength);
     end
     % Print field of view.
-    aov=2*atan([s.IO(11:12);norm(s.IO(11:12))]/(2*s.IO(3)))*180/pi;
+    aov=2*atan([s.IO(11:12,i);norm(s.IO(11:12,i))]/(2*s.IO(3,i)))*180/pi;
     fprintf(fid,[p,p,p,'Rated angle of view (h,v,d): (%.0f, %.0f, %.0f) deg\n'],aov);
     % Compute distortion at the sensor corners.
-    xx=[1,s.IO(end-3)]+0.5*[-1,1];
-    yy=[1,s.IO(end-2)]+0.5*[-1,1];
+    xx=[1,s.IO(end-3,i)]+0.5*[-1,1];
+    yy=[1,s.IO(end-2,i)]+0.5*[-1,1];
     corners=[xx([1,1,2,2]);yy([1,2,2,1])];
-    xr=corners(1,:)/s.IO(end-1)-s.IO(1);
-    yr=corners(2,:)/s.IO(end)+s.IO(2);
+    xr=corners(1,:)/s.IO(end-1,i)-s.IO(1,i);
+    yr=corners(2,:)/s.IO(end,i)+s.IO(2,i);
     r2=xr.^2+yr.^2;
-    xcorrR=xr.*(s.IO(4)*r2+s.IO(5)*r2.^2+s.IO(6)*r2.^3);
-    ycorrR=yr.*(s.IO(4)*r2+s.IO(5)*r2.^2+s.IO(6)*r2.^3);
-    xcorrT=s.IO(7)*(r2+2*xr.^2)+2*s.IO(8)*xr.*yr;
-    ycorrT=s.IO(8)*(r2+2*yr.^2)+2*s.IO(7)*xr.*yr;
+    xcorrR=xr.*(s.IO(4,i)*r2+s.IO(5,i)*r2.^2+s.IO(6,i)*r2.^3);
+    ycorrR=yr.*(s.IO(4,i)*r2+s.IO(5,i)*r2.^2+s.IO(6,i)*r2.^3);
+    xcorrT=s.IO(7,i)*(r2+2*xr.^2)+2*s.IO(8,i)*xr.*yr;
+    ycorrT=s.IO(8,i)*(r2+2*yr.^2)+2*s.IO(7,i)*xr.*yr;
     xCorr=xcorrR+xcorrT;
     yCorr=ycorrR+ycorrT;
     mx=max(sqrt(xCorr.^2)+sqrt(yCorr.^2));
     % Length of sensor half-diagonal.
-    d=sqrt(s.IO(end-5)^2+s.IO(end-4)^2)/2;
+    d=sqrt(s.IO(end-5,i)^2+s.IO(end-4,i)^2)/2;
     fprintf(fid,[p,p,p,'Largest distortion: %.2g %s (%.1f px, %.1f%% of half-diagonal)\n'],...
-                 mx,s.camUnit,mx*mean(s.IO(end-1:end)),mx/d*100);
+                 mx,s.camUnit,mx*mean(s.IO(end-1:end,i)),mx/d*100);
 end
 
 fprintf(fid,[p,p,'Precisions / Standard Deviations:\n']);
@@ -370,20 +387,20 @@ values={
 pretty_print(fid,repmat(p,1,3),values);
 
 fprintf(fid,[p,p,'Cameras\n']);
-fprintf(fid,[p,p,p,'Total number: %d\n'],size(s.IO,2));
-for i=1:size(s.IO,2)
+fprintf(fid,[p,p,p,'Total number: %d\n'],nnz(s.IOunique));
+for i=find(s.IOunique)
     fprintf(fid,[p,p,p,'Camera%d:\n'],i);
 
     calStrs={'<not available>','yes'};
     values={
         'Calibration:','%s',calStrs{any(s.estIO(:,i))+1},
-        'Number of photos using camera:','%d',nnz(s.cams==i)
+        'Number of photos using camera:','%d',nnz(s.imCams==i)
         };
     pretty_print(fid,repmat(p,1,4),values);
 
     % Compute individual and union coverage.
-    [c,cr,crr]=coverage(s,find(s.cams==i));
-    [uc,ucr,ucrr]=coverage(s,find(s.cams==i),true);
+    [c,cr,crr]=coverage(s,find(s.imCams==i));
+    [uc,ucr,ucrr]=coverage(s,find(s.imCams==i),true);
     fprintf(fid,[p,p,p,p,'Photo point coverage:\n']);
     values={
         'Rectangular:','%s',...
@@ -403,11 +420,13 @@ for i=1:size(s.IO,2)
 end
 
 fprintf(fid,[p,p,'Photo Coverage\n']);
-fprintf(fid,[p,p,p,'References points outside calibrated region:\n']);
-if any(s.estIO(:))
-    fprintf(fid,[p,p,p,p,'none\n']);
-else
-    fprintf(fid,[p,p,p,p,'<not available>\n']);
+fprintf(fid,[p,p,p,'Reference points outside calibrated region:\n']);
+for i=find(s.IOunique)
+    if any(s.estIO(:,i))
+        fprintf(fid,[p,p,p,p,'Camera %d: none\n'],i);
+    else
+        fprintf(fid,[p,p,p,p,'Camera %d: <not available>\n'],i);
+    end
 end
 
 fprintf(fid,[p,p,'Point Measurements\n']);
@@ -769,6 +788,8 @@ else
     fprintf(fid,[p,p,p,p,'RMS: %.3f ou (from %d items)\n'],...
             sqrt(mean(diffNorm.^2)),length(diffNorm));
 end
+
+fprintf(fid,'End of result file\n');
 
 fclose(fid);
 
