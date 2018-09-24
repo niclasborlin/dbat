@@ -48,21 +48,21 @@ if union
     % Compute the union of the coverage.
     
     % Assume identical image sizes.
-    totArea=prod(s.IO(end-3:end-2,s.imCams(ix(1))),1);
+    totArea=prod(s.IO(end-3:end-2,s.cams(ix(1))),1);
 
     % Set up for computation of radial distance.
     
     % Scaling matrix from mm to pixels.
-    S=diag([1,-1,1])*diag([s.IO(end-1:end,s.imCams(ix(1)));1]);
+    S=diag([1,-1,1])*diag([s.IO(end-1:end,s.cams(ix(1)));1]);
     % Subtract principal point.
     PP=eye(3);
-    PP(1:2,3)=s.IO(1:2,s.imCams(ix(1)));
+    PP(1:2,3)=s.IO(1:2,s.cams(ix(1)));
     % Principal point in pixels.
     pp=euclidean(S*PP*homogeneous(zeros(2,1)));
 
     % Determine maximum radial distance.
-    xx=[1,s.IO(end-3,s.imCams(ix(1)))]+0.5*[-1,1];
-    yy=[1,s.IO(end-2,s.imCams(ix(1)))]+0.5*[-1,1];
+    xx=[1,s.IO(end-3,s.cams(ix(1)))]+0.5*[-1,1];
+    yy=[1,s.IO(end-2,s.cams(ix(1)))]+0.5*[-1,1];
     corners=[xx([1,1,2,2]);yy([1,2,2,1])];
     radCorner=sqrt(sum(euclidean(PP\(S\homogeneous(corners))).^2,1));
     maxRad=max(radCorner);
@@ -113,7 +113,7 @@ else
     % Compute individual coverage for each image.
     
     % Image areas.
-    totArea=prod(s.IO(end-3:end-2,s.imCams(ix)),1);
+    totArea=prod(s.IO(end-3:end-2,s.cams(ix)),1);
 
     % Pre-allocate return variables.
     cc=cell(size(ix));
@@ -130,18 +130,18 @@ else
         % for image ix(i).
     
         % Scaling matrix from mm to pixels.
-        S=diag([1,-1,1])*diag([s.IO(end-1:end,s.imCams(ix(i)));1]);
+        S=diag([1,-1,1])*diag([s.IO(end-1:end,s.cams(ix(i)));1]);
         % Subtract principal point.
         PP=eye(3);
-        PP(1:2,3)=s.IO(1:2,s.imCams(ix(i)));
+        PP(1:2,3)=s.IO(1:2,s.cams(ix(i)));
         % Principal point in pixels.
         pp=euclidean(S*PP*homogeneous(zeros(2,1)));
 
         % Determine maximum radial distance. With the center of the
         % pixels at [1,w] x [1,h], the outermost coordinates in the image
         % becomes [0.5,w+0.5] x [0.5,h+0.5].
-        xx=[1,s.IO(end-3,s.imCams(ix(i)))]+0.5*[-1,1];
-        yy=[1,s.IO(end-2,s.imCams(ix(i)))]+0.5*[-1,1];
+        xx=[1,s.IO(end-3,s.cams(ix(i)))]+0.5*[-1,1];
+        yy=[1,s.IO(end-2,s.cams(ix(i)))]+0.5*[-1,1];
         corners=[xx([1,1,2,2]);yy([1,2,2,1])];
         radCorner=sqrt(sum(euclidean(PP\(S\homogeneous(corners))).^2,1));
         maxRad=max(radCorner);
