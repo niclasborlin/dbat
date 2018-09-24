@@ -98,7 +98,7 @@ else
         cIO=s.estIO(:,camNo);
         [cpp,cf,cK,cP,cb,csz]=unpackio(s.estIO(:,camNo),s.nK,s.nP);
         % Where should we store the partials?
-        [ppIx,fIx,Kix,Pix,bIx,~]=unpackio(destIOcols,s.nK,s.nP);
+        [ppIx,fIx,Kix,Pix,bIx,~]=unpackio(destIOcols(:,camNo),s.nK,s.nP);
         
         % Trim K and/or P unless we need the Jacobians.
         if ~any(cK)
