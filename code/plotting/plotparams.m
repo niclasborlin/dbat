@@ -40,17 +40,16 @@ end
     
 h=nan(4,1);
 
-[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
-
 if plotIO && any(s.estIO(:))
-    ixPos=double(s.estIO);
-    ixPos(s.estIO)=ixIO;
-    
     % IO parameter plot.
     fig=tagfigure(sprintf('paramplot_io_%s',e.damping.name));
+    set(fig,'name','IO parameter iteration trace');
     h(1)=fig;
     clf(fig);
 
+    % Extract IO values for each iteration.
+    IO=deserialize(s,e,'all','IO');
+    
     % Axes in this plot.
     axH=[];
     ax=subplot(4,1,1,'parent',fig);
@@ -59,16 +58,16 @@ if plotIO && any(s.estIO(:))
     cc=get(ax,'colororder');
     % Legend strings.
     lgs={};
+    % Corresponding line handles.
+    hh=[];
     % Line styles.
     ls={'-','--','-.'};
-    
-    % For each camera.
-    for ci=1:size(s.IO,2)
-        % Create array with fixed focal length, principal point.
-        fp=repmat(s.IO(1:3,ci),1,size(e.trace,2));
-        % Update with estimated values.
-        ixp=ixPos(1:3,ci);
-        fp(s.estIO(1:3,ci),:)=e.trace(ixp(s.estIO(1:3,ci)),:);
+
+    % For each unique camera.
+    for ci=find(s.IOunique)
+        % Extract focal length, principal point for this camera
+        % over all iterations.
+        fp=squeeze(IO(1:3,ci,:));
         % Flip y coordinate.
         v=diag([1,-1,1])*fp;
         % Change order to be f, px, py.
@@ -77,22 +76,24 @@ if plotIO && any(s.estIO(:))
         ls={'-','--','-.'};
         fps={'f','px','py'};
         for i=1:size(v,1)
-            if size(s.IO,2)==1
+            % Use individual f, px, py colors if we have only one
+            % camera. Otherwise, use a single color per camera.
+            if nnz(s.IOunique)==1
                 color=cc(i,:);
                 lgs{end+1}=fps{i};
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
                 lgs{end+1}=sprintf('%s-%d',fps{i},ci);
             end
-            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color);
+            hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
+                           'linestyle',ls{i},'marker','x','color',color);
         end
     end
-    legh=legend(lgs,'location','NorthEastOutside');
+    legh=legend(hh,lgs,'location','NorthEastOutside');
     title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
     set(ax,'xtick',0:size(e.trace,2)-1);
     if size(e.trace,2)>1
-    set(ax,'xlim',[0,size(e.trace,2)-1]);
+        set(ax,'xlim',[0,size(e.trace,2)-1]);
     end
     set(ax,'xticklabel',[]);
     
@@ -100,14 +101,13 @@ if plotIO && any(s.estIO(:))
     axH(end+1)=ax;
     % Legend strings.
     lgs={};
-    % For each camera.
-    for ci=1:size(s.IO,2)
-        % Create array with K1-K3 parameters.
-        K=repmat(s.IO(4:6,ci),1,size(e.trace,2));
-        % Update with estimated values.
-        ixp=ixPos(4:6,ci);
-        K(s.estIO(4:6,ci),:)=e.trace(ixp(s.estIO(4:6,ci)),:);
-        % Scale K values.
+    % Corresponding line handles.
+    hh=[];
+    % For each unique camera.
+    for ci=find(s.IOunique)
+        % Extract K values for this camera over all iterations.
+        K=squeeze(IO(4:6,ci,:));
+        % Determine scale.
         avgScale=floor(median(log10(abs(K)),2));
         % Use scaling of 1 for all-zero values.
         avgScale(avgScale==-inf)=0;
@@ -118,18 +118,17 @@ if plotIO && any(s.estIO(:))
             else
                 prefix=sprintf('10^{%d}',-avgScale(i));
             end
-            if size(s.IO,2)==1
+            if nnz(s.IOunique)==1
                 color=cc(i,:);
                 lgs{end+1}=sprintf('%sK%d',prefix,i);
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
                 lgs{end+1}=sprintf('%sK%d-%d',prefix,i,ci);
             end
-            
-            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color);
+            hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
+                           'linestyle',ls{i},'marker','x','color',color);
         end
-        legend(lgs,'location','NorthEastOutside');
+        legend(hh,lgs,'location','NorthEastOutside');
     end
     title(ax,'Radial distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
@@ -142,13 +141,13 @@ if plotIO && any(s.estIO(:))
     axH(end+1)=ax;
     % Legend strings.
     lgs={};
-    % For each camera.
-    for ci=1:size(s.IO,2)
-        % Create array with P1-P2 parameters.
-        P=repmat(s.IO(7:8,ci),1,size(e.trace,2));
-        % Update with estimated values.
-        ixp=ixPos(7:8,ci);
-        P(s.estIO(7:8,ci),:)=e.trace(ixp(s.estIO(7:8,ci)),:);
+    % Corresponding line handles.
+    hh=[];
+    % For each unique camera.
+    for ci=find(s.IOunique)
+        % Extract K values for this camera over all iterations.
+        P=squeeze(IO(7:8,ci,:));
+        % Determine scale.
         avgScale=floor(median(log10(abs(P)),2));
         % Use scaling of 1 for all-zero values.
         avgScale(avgScale==-inf)=0;
@@ -159,18 +158,17 @@ if plotIO && any(s.estIO(:))
             else
                 prefix=sprintf('10^{%d}',-avgScale(i));
             end
-            if size(s.IO,2)==1
+            if nnz(s.IOunique)==1
                 color=cc(i,:);
                 lgs{end+1}=sprintf('%sP%d',prefix,i);
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
                 lgs{end+1}=sprintf('%sP%d-%d',prefix,i,ci);
             end
-
-            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color);
+            hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
+                           'linestyle',ls{i},'marker','x','color',color);
         end
-        legend(lgs,'location','NorthEastOutside');
+        legend(hh,lgs,'location','NorthEastOutside');
     end
     title(ax,'Tangential distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
@@ -183,13 +181,13 @@ if plotIO && any(s.estIO(:))
     axH(end+1)=ax;
     % Legend strings.
     lgs={};
-    % For each camera.
-    for ci=1:size(s.IO,2)
-        % Create array with B1-B2 parameters.
-        B=repmat(s.IO(9:10,ci),1,size(e.trace,2));
-        % Update with estimated values.
-        ixp=ixPos(9:10,ci);
-        B(s.estIO(9:10,ci),:)=e.trace(ixp(s.estIO(9:10,ci)),:);
+    % Corresponding line handles.
+    hh=[];
+    % For each unique camera.
+    for ci=find(s.IOunique)
+        % Extract K values for this camera over all iterations.
+        B=squeeze(IO(9:10,ci,:));
+        % Determine scale.
         avgScale=floor(median(log10(abs(B)),2));
         % Use scaling of 1 for all-zero values.
         avgScale(avgScale==-inf)=0;
@@ -200,18 +198,17 @@ if plotIO && any(s.estIO(:))
             else
                 prefix=sprintf('10^{%d}',-avgScale(i));
             end
-            if size(s.IO,2)==1
+            if nnz(s.IOunique)==1
                 color=cc(i,:);
                 lgs{end+1}=sprintf('%sB%d',prefix,i);
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
                 lgs{end+1}=sprintf('%sB%d-%d',prefix,i,ci);
             end
-
-            line(0:size(e.trace,2)-1,v(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color);
+            hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
+                           'linestyle',ls{i},'marker','x','color',color);
         end
-        legend(lgs,'location','NorthEastOutside');
+        legend(hh,lgs,'location','NorthEastOutside');
     end
     title(ax,'Affine distortion');
     set(ax,'xtick',0:size(e.trace,2)-1);
@@ -225,13 +222,14 @@ if plotIO && any(s.estIO(:))
 end
 
 if plotEO && any(s.estEO(:))
-    ixPos=double(s.estEO);
-    ixPos(s.estEO)=ixEO;
-
     % EO parameter plot.
     fig=tagfigure(sprintf('paramplot_eo_%s',e.damping.name));
+    set(fig,'name','EO parameter iteration trace');
     h(2)=fig;
     clf(fig);
+
+    % EO values for each iteration.
+    EO=deserialize(s,e,'all','EO');
 
     % Axes in this plot.
     axH=[];
@@ -241,6 +239,8 @@ if plotEO && any(s.estEO(:))
     cc=get(ax,'colororder');
     % Legend strings.
     lgs={};
+    % Corresponding line handles.
+    hh=[];
     % Line styles.
     ls={'-','--','-.'};
 
@@ -251,13 +251,11 @@ if plotEO && any(s.estEO(:))
     % Plot each coordinate as the outer loop to get a better legend.
     % (There is a better way, but now this works.)
     for i=1:3
-        % For each camera.
-        for ci=1:size(s.EO,2)
-            % Create array with camera centers.
-            c=repmat(s.EO(1:3,ci),1,size(e.trace,2));
-            % Update with estimated values.
-            ixp=ixPos(1:3,ci);
-            c(s.estEO(1:3,ci),:)=e.trace(ixp(s.estEO(1:3,ci)),:);
+        % For each unique camera position.
+        for ci=find(s.EOunique)
+            % Extract camera center coordinates for this camera over all
+            % iterations.
+            c=squeeze(EO(1:3,ci,:));
             % Line style and legend strings.
             ls={'-','--','-.'};
             fps={'X0','Y0','Z0'};
@@ -265,19 +263,19 @@ if plotEO && any(s.estEO(:))
             if i==1
                 lgs{end+1}=sprintf('C%d',ci);
             end
-            line(0:size(e.trace,2)-1,c(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color,...
-                 'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
-                 'userdata',ci,'buttondownfcn',cb);
+            hh(end+1)=line(0:size(e.trace,2)-1,c(i,:),'parent',ax,...
+                           'linestyle',ls{i},'marker','x','color',color,...
+                           'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
+                           'userdata',ci,'buttondownfcn',cb);
         end
         if i==1
-            [legh,objh,outh,outm]=legend(lgs,'location','NorthEastOutside');
+            [legh,objh,outh,outm]=legend(hh,lgs,'location','NorthEastOutside');
             % First comes text handles, then line handles.
             lineH=reshape(objh(size(s.EO,2)+1:end),2,[]);
             % Set lines to highlight when selected.
             set(lineH','selectionhighlight','on');
             if ~isempty(lineH)
-            for j=1:size(s.EO,2)
+                for j=1:size(s.EO,2)
                     set(lineH(:,j),'userdata',j,'buttondownfcn', ...
                                    cb,'hittest','on');
                 end
@@ -291,24 +289,23 @@ if plotEO && any(s.estEO(:))
     axH(end+1)=ax;
     % Angle strings.
     aStrs={'\omega','\phi','\kappa'};
+    % Corresponding line handles.
+    hh=[];
     
-    % For each camera.
-    for ci=1:size(s.EO,2)
-        % Create array with K1-K3 parameters.
-        angles=repmat(s.EO(4:6,ci),1,size(e.trace,2));
-        % Update with estimated values.
-        ixp=ixPos(4:6,ci);
-        angles(s.estEO(4:6,ci),:)=e.trace(ixp(s.estEO(4:6,ci)),:);
+    % For each unique camera position.
+    for ci=find(s.EOunique)
+        % Extract camera angles for this camera over all iterations.
+        angles=squeeze(EO(4:6,ci,:));
         % Convert to degrees.
         angles=angles*180/pi;
         for i=1:size(angles,1)
             color=cc(rem(ci-1,size(cc,1))+1,:);
-            
-            line(0:size(e.trace,2)-1,angles(i,:),'parent',ax,...
-                 'linestyle',ls{i}, ... 
-                 'marker','x','color',color,...
-                 'tag',sprintf('%s-%d',aStrs{i},ci),'userdata',ci,...
-                 'buttondownfcn',cb);
+
+            hh(end+1)=line(0:size(e.trace,2)-1,angles(i,:),'parent',ax,...
+                           'linestyle',ls{i}, ... 
+                           'marker','x','color',color,...
+                           'tag',sprintf('%s-%d',aStrs{i},ci),'userdata',ci,...
+                           'buttondownfcn',cb);
 
         end
     end
@@ -321,19 +318,22 @@ if plotEO && any(s.estEO(:))
 end
 
 if plotOP && any(s.estOP(:))
-    ixPos=double(s.estOP);
-    ixPos(s.estOP)=ixOP;
-
     % OP parameter plot.
     fig=tagfigure(sprintf('paramplot_op_%s',e.damping.name));
+    set(fig,'name','OP iteration trace');
     h(3)=fig;
     clf(fig);
+
+    % OP values for each iteration.
+    OP=deserialize(s,e,'all','OP');
 
     ax=subplot(1,1,1,'parent',fig);
     cla(ax);
     cc=get(ax,'colororder');
     % Legend strings.
     lgs={};
+    % Corresponding line handles.
+    hh=[];
     % Line styles.
     ls={'-','--','-.'};
 
@@ -345,11 +345,8 @@ if plotOP && any(s.estOP(:))
     for i=1:3
         % For each point.
         for ci=1:size(s.OP,2)
-            % Create array with OP coordinates.
-            c=repmat(s.OP(1:3,ci),1,size(e.trace,2));
-            % Update with estimated values.
-            ixp=ixPos(1:3,ci);
-            c(s.estOP(1:3,ci),:)=e.trace(ixp(s.estOP(1:3,ci)),:);
+            % Extract OP coordinates for this point.
+            c=squeeze(OP(:,ci,:));
             % Line style and legend strings.
             ls={'-','--','-.'};
             fps={'X','Y','Z'};
@@ -357,13 +354,14 @@ if plotOP && any(s.estOP(:))
             if i==1
                 lgs{end+1}=sprintf('P%d',ci);
             end
-            line(0:size(e.trace,2)-1,c(i,:),'parent',ax,'linestyle',ls{i},...
-                 'marker','x','color',color,...
-                 'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
-                 'userdata',ci,'buttondownfcn',cb);
+            hh(end+1)=line(0:size(e.trace,2)-1,c(i,:),'parent',ax,...
+                           'linestyle',ls{i},...
+                           'marker','x','color',color,...
+                           'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
+                           'userdata',ci,'buttondownfcn',cb);
         end
         if i==1
-            [legh,objh,outh,outm]=legend(lgs,'location','NorthEastOutside');
+            [legh,objh,outh,outm]=legend(hh,lgs,'location','NorthEastOutside');
             % First comes text handles, then line handles.
             lineH=reshape(objh(size(s.OP,2)+1:end),2,[]);
             % Set lines to highlight when selected.
@@ -386,6 +384,9 @@ if plotParams
     
     % IO parameter plot.
     fig=tagfigure(sprintf('paramplot_damping_%s',e.damping.name));
+    set(fig,'name',...
+            sprintf('Optimization parameters iteration trace (%s)',...
+                    e.damping.name));
     h(4)=fig;
     clf(fig);
 
