@@ -79,8 +79,8 @@ s0.IO=s0.prior.IO;
 s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
 s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
 s0.IO(3)=7.3;          % c = EXIF value.
-s0.IO(4:8)=0;          % K1-K3, P1-P2 = 0.
-s0.IO(9:10,:)=0;
+s0.IO(4:10)=0;          % K1-K3, P1-P2, B1-B2 = 0.
+s0.IO=repmat(s0.IO(:,1),1,size(s0.IO,2));
 
 % Don't use any prior estimates of the IO parameters.
 s0.useIOobs=false(size(s0.IO));
