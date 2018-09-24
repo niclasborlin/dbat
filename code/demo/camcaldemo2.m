@@ -116,7 +116,7 @@ s2.x0desc='Camera calibration from EXIF value';
 
 % Plot initial camera network.
 s=s2;
-h=plotnetwork(s,'title','Initial network',...
+h=plotnetwork(s,'title','Initial network','name','Initial network',...
               'axes',tagfigure('camcal'),'camsize',0.1);
 
 fprintf('Running the bundle with damping %s...\n',damping);
@@ -152,6 +152,7 @@ fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         E.damping.name,double(fig));
 h=plotnetwork(result,E,'title',...
               ['Damping: ',damping,'. Iteration %d of %d'], ...
+              'name','3D iteration trace',...
               'axes',fig,'pause',doPause,'camsize',0.1); 
 
 if nargout>0
@@ -182,6 +183,7 @@ end
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
+    set(imFig,'name',sprintf('Image %d: %s',imNo,imName));
     h=[h;imshow(imName,'parent',gca(imFig))];
     pts=s.markPts(:,s.colPos(s.vis(:,imNo),imNo));
     ptsId=s.OPid(s.vis(:,imNo));
