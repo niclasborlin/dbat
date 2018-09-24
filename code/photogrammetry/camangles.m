@@ -16,14 +16,14 @@ function a=camangles(s,msg)
 
 if nargin<2, msg=''; end
 
-a=zeros(size(s.cams));
+a=zeros(size(s.imCams));
 
 % Delayed progress dialog.
 start=clock;
 lapTime=start;
 h=[];
 
-for i=1:length(s.cams)
+for i=1:length(s.imCams)
     % Camera center.
     c=s.EO(1:3,i);
     % Object points.
@@ -47,15 +47,15 @@ for i=1:length(s.cams)
     
     if ~isempty(msg)
         % Use waitbar only if we have a message.
-        if isempty(h) && etime(clock,start)>1 && i~=length(s.cams)
+        if isempty(h) && etime(clock,start)>1 && i~=length(s.imCams)
             % Only create dialog if execution takes more than 1s and this
             % iteration is not the last.
-            h=waitbar(i/length(s.cams),msg);
+            h=waitbar(i/length(s.imCams),msg);
             lapTime=clock;
         elseif etime(clock,lapTime)>1
             % Update dialog every 1 s.
             if ishandle(h) % Guard against window close.
-                waitbar(i/length(s.cams),h);
+                waitbar(i/length(s.imCams),h);
             end
             lapTime=clock;
         end
