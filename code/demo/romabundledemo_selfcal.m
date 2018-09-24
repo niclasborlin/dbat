@@ -50,9 +50,9 @@ s0.useIOobs=false(size(s0.IO));
 % Add self-calibration for all non-zero parameters...
 %s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
 % ...or for pp, f, and all lens distortion parameters...
-s0.estIO(1:3+s0.nK+s0.nP)=true;
+s0.estIO(1:3+s0.nK+s0.nP,:)=true;
 % ...and aspect (but not skew).
-s0.estIO(4+s0.nK+s0.nP)=true;
+s0.estIO(4+s0.nK+s0.nP,:)=true;
 
 % Default distortion model is now 3: With aspect/skew.
 s0.IOdistModel(:)=3;
@@ -77,7 +77,7 @@ s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
 % Compute initial OP values by forward intersection.
 correctedPt=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,3,2,...
                                       s0.ptCams,size(s0.IO,2)),2,[]);
-s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,s0.cams,s0.colPos,correctedPt,find(~s0.isCtrl));
+s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,1:size(s0.IO,2),s0.colPos,correctedPt,find(~s0.isCtrl));
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));

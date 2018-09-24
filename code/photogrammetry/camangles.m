@@ -16,7 +16,7 @@ function a=camangles(s,msg)
 
 if nargin<2, msg=''; end
 
-a=zeros(size(s.EOno));
+a=zeros(1,size(s.EO,2));
 
 % Delayed progress dialog.
 start=clock;

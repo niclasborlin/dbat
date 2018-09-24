@@ -94,7 +94,7 @@ s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
 % Compute initial OP values by forward intersection.
 correctedPt=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,3,2,...
                                       s0.ptCams,size(s0.IO,2)),2,[]);
-s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,s0.cams,s0.colPos,correctedPt,find(~s0.isCtrl));
+s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,1:size(s0.IO,2),s0.colPos,correctedPt,find(~s0.isCtrl));
 
 % Warn for non-uniform mark std.
 uniqueSigmas=unique(s0.markStd(:));

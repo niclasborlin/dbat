@@ -197,9 +197,9 @@ maxCPstdDiff=max(max(OPstdDiff(:,OPisCP)));
 [~,j]=ismember(pts2d.id,result.OPid);
 % Find columns in markPts that correspond to pts2d id, imNo.
 cols=result.colPos(sub2ind(size(result.colPos),j,pts2d.imNo));
-res2d=nan(size(result.residuals.markPt));
+res2d=nan(size(result.residuals.IP));
 res2d(:,cols)=pts2d.res;
-maxRes2d=max(max(abs(res2d-result.residuals.markPt)));
+maxRes2d=max(max(abs(res2d-result.residuals.IP)));
 
 fprintf(['\nExperiment %s:\n%d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
          'n=%d, r=%d.\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r);

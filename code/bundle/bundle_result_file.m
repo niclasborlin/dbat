@@ -254,6 +254,7 @@ for i=find(s.IOunique)
 
         sigma=full(ioSigma(rows,i));
     else
+        cc=zeros(0,5);
         padLength=length('Value:');
     end
     if s.IOsimple(i)
@@ -429,9 +430,9 @@ fprintf(fid,[p,p,'Photo Coverage\n']);
 fprintf(fid,[p,p,p,'Reference points outside calibrated region:\n']);
 for i=find(s.IOunique)
     if any(s.estIO(:,i))
-        fprintf(fid,[p,p,p,p,'Camera %d: none\n'],i);
+        fprintf(fid,[p,p,p,p,'Camera %d: none\n'],s.IOno(i));
     else
-        fprintf(fid,[p,p,p,p,'Camera %d: <not available>\n'],i);
+        fprintf(fid,[p,p,p,p,'Camera %d: <not available>\n'],s.IOno(i));
     end
 end
 

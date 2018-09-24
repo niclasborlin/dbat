@@ -187,9 +187,9 @@ s0.useIOobs=false(size(s0.IO));
 selfCal=true(8,1);
 %selfCal(7:8)=false;
 % Indicate that we want to estimate these parameters.
-s0.estIO(find(selfCal))=true;
+s0.estIO(find(selfCal),:)=true;
 % Zero any unused lens distortion parameters.
-s0.IO(find(~selfCal))=0;
+s0.IO(find(~selfCal),:)=0;
 
 % ...or for all lens distortion parameters.
 %s0.estIO(1:8)=true;
