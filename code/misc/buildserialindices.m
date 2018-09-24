@@ -120,7 +120,8 @@ for i=1:length(wantedOrder)
     end
 end
 
-% Storead leading arrays.
+% Store arrays indicating leading parameters, i.e., the first
+% parameter within each block to be estimated.
 s.IOlead=IOlead;
 s.EOlead=EOlead;
 

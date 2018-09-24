@@ -1,4 +1,4 @@
-function [rr,s0,prob]=camcaldemo(damping,doPause)
+function [rr,s0,prob]=camcaldemo_allmodels(damping,doPause)
 %CAMCALDEMO Camera calibration demo for DBAT.
 %
 %   CAMCALDEMO runs a camera calibration bundle on a PhotoModeler
