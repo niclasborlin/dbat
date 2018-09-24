@@ -1,25 +1,18 @@
-function [r,J]=multi_res(IO,EO,OP,s,fun)
+function [r,J]=multi_res(s,fun)
 %MULTI_RES Compute residuals for multiple cameras.
 %
-%   MULTI_RES(IO,EO,OP,S,FUN) computes residuals for all image
-%   observations. The current IO, EO, OP values are stored in the
-%   respective arrays. The structure S contains the project
-%   information. FUN is a function handle that will compute the image
-%   residuals for one camera.
+%   MULTI_RES(S,FUN) computes residuals for all image observations.
+%   The structure S contains the project information. FUN is a
+%   function handle that will compute the image residuals for one
+%   camera.
 %
 %   [R,J]=... also returns the requested Jacobian J.
 %
 %   See also: RES_EULER_BROWN_0, RES_EULER_BROWN_1, RES_EULER_BROWN_2,
 %   RES_EULER_BROWN_3.
 
-nPhotos=size(EO,2);
-nObjs=size(OP,2);
-
-% Which camera was used for which image?
-cams=s.cams;
-if length(cams)~=nPhotos
-    error('%s: bad size',mfilename);
-end
+nPhotos=size(s.EO,2);
+nObjs=size(s.OP,2);
 
 % Total number of projected points.
 nProj=nnz(s.vis);
@@ -32,13 +25,13 @@ if nargout<2
 
     for i=find(any(s.vis))
         % Get camera station.
-        camStation=EO(:,i);
+        camStation=s.EO(:,i);
         center=camStation(1:3);
         ang=camStation(4:6);
         
         % Get inner orientation.
-        camNo=cams(i);
-        [pp,f,K,P,b,sz]=unpackio(IO(:,camNo),s.nK,s.nP);
+        camNo=i;
+        [pp,f,K,P,b,sz]=unpackio(s.IO(:,camNo),s.nK,s.nP);
 
         % Trim K and P
         K=trimkp(K,false);
@@ -46,7 +39,7 @@ if nargout<2
 	
         % Get object points visible in this image
         v=s.vis(:,i);
-        obj=OP(:,v);
+        obj=s.OP(:,v);
 
         % Get corresponding mark pts.
         cp=s.colPos(v,i);
@@ -61,21 +54,20 @@ if nargout<2
     end
     r=xy(:);
 else
-    % Create indices into the vector of unknowns.
-    [ixIO,ixEO,ixOP,n]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
-    % Re-pack to original shapes.
+    % Create indices into the vector of unknowns = columns of J
     destIOcols=zeros(size(s.estIO));
-    destIOcols(s.estIO)=ixIO;
+    destIOcols(s.deserial.IO.dest)=s.deserial.IO.src;
     destEOcols=zeros(size(s.estEO));
-    destEOcols(s.estEO)=ixEO;
+    destEOcols(s.deserial.EO.dest)=s.deserial.EO.src;
     destOPcols=zeros(size(s.estOP));
-    destOPcols(s.estOP)=ixOP;
-    
+    destOPcols(s.deserial.OP.dest)=s.deserial.OP.src;
     % Preallocate residual vector.
     xy=nan(2*nProj,1);
 
-    % Pre-allocate JIO as full.
-    JIO=nan(numel(xy),nnz(s.estIO));
+    % Vectors for "sparse" IO: rows, cols, and values.
+    IOrows=nan(numel(xy)*max(sum(s.estIO,1)),1);
+    IOcols=IOrows;
+    IOvals=IOrows;
     
     % Vectors for "sparse" EO: rows, cols, and values.
     EOrows=nan(numel(xy)*max(sum(s.estEO,1)),1);
@@ -87,7 +79,9 @@ else
     OPcols=OProws;
     OPvals=OProws;
 
-    % Last used rows in EOrows/cols/vals and OProws/cols/vals, respectively.
+    % Last used rows in IOrows/cols/vals, EOrows/cols/vals and
+    % OProws/cols/vals, respectively.
+    IOlast=0;
     EOlast=0;
     OPlast=0;
     
@@ -97,13 +91,14 @@ else
     % For each camera with observations
     for i=find(any(s.vis))
         % Get inner orientation.
-        camNo=cams(i);
+        camNo=i;
         % Values
-        [pp,f,K,P,b,sz]=unpackio(IO(:,camNo),s.nK,s.nP);
+        [pp,f,K,P,b,sz]=unpackio(s.IO(:,camNo),s.nK,s.nP);
         % Do we need the partials?
+        cIO=s.estIO(:,camNo);
         [cpp,cf,cK,cP,cb,csz]=unpackio(s.estIO(:,camNo),s.nK,s.nP);
         % Where should we store the partials?
-        [ppIx,fIx,Kix,Pix,bIx,szIx]=unpackio(destIOcols,s.nK,s.nP);
+        [ppIx,fIx,Kix,Pix,bIx,~]=unpackio(destIOcols,s.nK,s.nP);
         
         % Trim K and/or P unless we need the Jacobians.
         if ~any(cK)
@@ -114,7 +109,7 @@ else
         end
 
         % Get external orientation.
-        camStation=EO(:,i);
+        camStation=s.EO(:,i);
         center=camStation(1:3);
         ang=camStation(4:6);
         
@@ -127,7 +122,7 @@ else
 	
         % Get object points visible in this image
         v=s.vis(:,i);
-        obj=OP(:,v);
+        obj=s.OP(:,v);
         % Do we need the partials?
         cOP=s.estOP(:,v);
         % Where should we store the partials?
@@ -152,41 +147,104 @@ else
         blockRowIx=jacLast+(1:2*numel(cp));
         xy(blockRowIx)=camRes(:);
 
-        % Store IO partials.
-        switch nnz(cpp)
-          case 2
-            JIO(blockRowIx,ppIx)=camJac.dU0;
-          case 0
-            % Do nothing.
-          otherwise
-            JIO(blockRowIx,ppIx(cpp))=camJac.dU0(:,cpp);
-        end
-        if cf
-            JIO(blockRowIx,fIx)=camJac.dF;
-        end
-        if any(cK)
-            if all(cK)
-                JIO(blockRowIx,Kix)=camJac.dK;
-            else
-                JIO(blockRowIx,Kix(cK))=camJac.dK(:,cK);
-            end
-        end
-        if any(cP)
-            if all(cP)
-                JIO(blockRowIx,Pix)=camJac.dP;
-            else
-                JIO(blockRowIx,Pix(cP))=camJac.dP(:,cP);
-            end
-        end
-        switch nnz(cb)
-          case 2
-            JIO(blockRowIx,bIx)=camJac.dB;
-          case 0
-            % Do nothing.
-          otherwise
-            JIO(blockRowIx,bIx(cb))=camJac.dB(:,cb);
-        end
+        if any(cIO)
+            % Pack IO partials
+            if any(cpp)
+                if all(cpp)
+                    [ii,jj,vv]=find(camJac.dU0);
+                else
+                    [ii,jj,vv]=find(camJac.dU0(:,cpp));
+                    jj=jj-1+find(cpp);
+                end
 
+                % Where to store rows, cols, values in the respective IO vectors.
+                IOblockIx=IOlast+(1:length(ii));
+                % Store rows, cols, values.
+                IOrows(IOblockIx)=jacLast+ii;
+                IOcols(IOblockIx)=ppIx(jj);
+                IOvals(IOblockIx)=vv;
+                % Advance past used block.
+                IOlast=IOlast+length(ii);
+            end
+            
+            if cf
+                [ii,~,vv]=find(camJac.dF);
+                
+                % Where to store rows, cols, values in the respective IO vectors.
+                IOblockIx=IOlast+(1:length(ii));
+                % Store rows, cols, values.
+                IOrows(IOblockIx)=jacLast+ii;
+                IOcols(IOblockIx)=fIx;
+                IOvals(IOblockIx)=vv;
+                % Advance past used block.
+                IOlast=IOlast+length(ii);
+            end
+            
+            if any(cK)
+                % Ensure that cK has one 1-block followed by at
+                % most one 0-block.
+                cK1=find(cK);
+                cK0=find(cK==0);
+                if ~isempty(cK0) && min(cK0)<max(cK1)
+                    error('Illegal cK vector');
+                end
+                
+                % Will always work since we're always asking for
+                % the leading columns.
+                [ii,jj,vv]=find(camJac.dK(:,cK));
+
+                % Where to store rows, cols, values in the respective IO vectors.
+                IOblockIx=IOlast+(1:length(ii));
+                % Store rows, cols, values.
+                IOrows(IOblockIx)=jacLast+ii;
+                IOcols(IOblockIx)=Kix(jj);
+                IOvals(IOblockIx)=vv;
+                % Advance past used block.
+                IOlast=IOlast+length(ii);
+            end
+            
+            if any(cP)
+                % Ensure that cP has one 1-block followed by at most one 0-block.
+                % First two elements count as one block.
+                cP1=find(cP);
+                cP0=find(cP==0);
+                if any(cP0<=2) || (~isempty(cP0) && min(cP0)<max(cP1))
+                    error('Illegal cP vector');
+                end
+                
+                % Will always work since we're always asking for
+                % the leading columns.
+                [ii,jj,vv]=find(camJac.dP(:,cP));
+
+                % Where to store rows, cols, values in the respective IO vectors.
+                IOblockIx=IOlast+(1:length(ii));
+                % Store rows, cols, values.
+                IOrows(IOblockIx)=jacLast+ii;
+                IOcols(IOblockIx)=Pix(jj);
+                IOvals(IOblockIx)=vv;
+                % Advance past used block.
+                IOlast=IOlast+length(ii);
+            end
+            
+            if any(cb)
+                if all(cb)
+                    [ii,jj,vv]=find(camJac.dB);
+                else
+                    [ii,jj,vv]=find(camJac.dB(:,cb));
+                    jj=jj-1+find(cb);
+                end
+
+                % Where to store rows, cols, values in the respective IO vectors.
+                IOblockIx=IOlast+(1:length(ii));
+                % Store rows, cols, values.
+                IOrows(IOblockIx)=jacLast+ii;
+                IOcols(IOblockIx)=bIx(jj);
+                IOvals(IOblockIx)=vv;
+                % Advance past used block.
+                IOlast=IOlast+length(ii);
+            end
+        end
+            
         if any(cEO)
             % Pack EO partials.
             switch nnz(cC)
@@ -243,7 +301,9 @@ else
         jacLast=jacLast+numel(camRes);
     end
 
-    [IOrows,IOcols,IOvals]=find(JIO);
+    IOrows=IOrows(1:IOlast);
+    IOcols=IOcols(1:IOlast);
+    IOvals=IOvals(1:IOlast);
 
     % Re-sort OP values after column.
     [OPcols,i]=sort(OPcols(1:OPlast));
@@ -254,7 +314,7 @@ else
     jj=[IOcols;EOcols(1:EOlast);OPcols]; 
     vv=[IOvals;EOvals(1:EOlast);OPvals];
     
-    J=sparse(ii,jj,vv,2*nProj,n);
+    J=sparse(ii,jj,vv,2*nProj,s.serial.n);
     r=xy(:);
 end
 
