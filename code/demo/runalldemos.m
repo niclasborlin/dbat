@@ -3,6 +3,7 @@ loadplotdemo
 romabundledemo
 romabundledemo_selfcal
 camcaldemo
+camcaldemo2
 camcaldemo_allmodels
 camcaldemo_missing_obs
 camcaldemo_1ray
