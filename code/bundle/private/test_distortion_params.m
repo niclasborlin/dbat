@@ -63,7 +63,7 @@ end
 
 % Test affine coefficients individually.
 for j=find(s.IOunique)
-    for i=1:size(B,2)
+    for i=1:size(B,1)
         % Chi-square statistic is (x-mu)'*inv(C)*(x-mu), where x is N(mu,C).
         ii=8+i;
         ix=sub2ind(size(x),ii,j);
