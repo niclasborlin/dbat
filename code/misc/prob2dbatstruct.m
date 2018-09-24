@@ -20,6 +20,7 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  parameters are leading a block.
 %       IOunique - logical nImages-vector indicating which IOblock
 %                  columns are unique.
+%       IOno     - nImages-vector with unique numbers for IOblock columns.
 %       IOsimple - logical nImages-vector indicating which IOblock
 %                  are simple (contain elements from one block only).
 %       imCams   - Index into IO for each image (legacy distortion
@@ -32,7 +33,8 @@ function s=prob2dbatstruct(prob,individualCameras)
 %                  parameters are leading a block.
 %       EOunique - logical nImages-vector indicating which EOblock
 %                  columns are unique.
-%       EOsimple - logical nImages-vector indicating which IOblock
+%       EOno     - nImages-vector with unique numbers for EOblock columns.
+%       EOsimple - logical nImages-vector indicating which EOblock
 %                  are simple (contain elements from one block only).
 %       OP       - 3-by-nOP array with object and control points.
 %       OPid     - 1-by-nOP array with object points ids.
@@ -214,13 +216,6 @@ if ~isstruct(prob)
            'loading it OK?']);
 end
 
-% Determine number of each type of object.
-if individualCameras
-    nCams=length(prob.images);
-else
-    nCams=1;
-end
-
 nImages=length(prob.images);
 nOP=length(unique([prob.ctrlPts(:,1);prob.objPts(:,1)]));
 
@@ -297,12 +292,6 @@ EO(4:6,:)=outer([6,5,4],:)/180*pi;
 EOstd(4:6,:)=outerStd([6,5,4],:)/180*pi;
 EO(7,:)=0;
 EOstd(7,:)=0;
-
-if individualCameras
-    cams=1:nImages;
-else
-    cams=ones(1,nImages);
-end
 
 imNames=cellfun(@(x)strrep(x,'\','/'),{prob.images.imName},...
                 'uniformoutput',false);
@@ -388,13 +377,13 @@ if size(OP,2)>1
         % Id for this OP.
         OPstr=sprintf('-%d',i);
         if OPid(i)~=i
-            OPstr=[OPstr,sprintf('/%d',OPid(i))];
+            OPstr=[OPstr,sprintf('/%d',OPid(i))]; %#ok<AGROW>
         end
         if OPrawId(i)~=OPid(i)
-            OPstr=[OPstr,sprintf('/%d',OPrawId(i))];
+            OPstr=[OPstr,sprintf('/%d',OPrawId(i))]; %#ok<AGROW>
         end
         if ~isempty(OPlabels{i})
-            OPstr=[OPstr,'-',OPlabels{i}];
+            OPstr=[OPstr,'-',OPlabels{i}]; %#ok<AGROW>
         end
         OPtypes(:,i)=cellfun(@(x)[x,OPstr],OPtypes(:,i),'uniformoutput',false);
     end
@@ -427,7 +416,7 @@ for i=1:nImages
     markStd(:,ii+(1:nnz(valid)))=measured(valid,5:6)';
     % Update visibility column and pointers.
     vis(:,i)=ismember(OPid,measured(:,2));
-    colPos(vis(:,i),i)=ii+(1:nnz(valid)); % Consider replacing indexing for speed
+    colPos(vis(:,i),i)=ii+(1:nnz(valid)); %#ok<SPRIX> % Consider replacing indexing for speed
     ii=ii+nnz(valid);
 end
 
@@ -476,9 +465,9 @@ IOdistModel=ones(1,size(IO,2));
 s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,...
          'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds,...
          'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,'IOblock',IOblock,...
-         'IOlead',IOlead,'imCams',[],'IOunique',[],'IOsimple',[],...
-         'EO',EO,'EOstd',EOstd,'EOblock',EOblock,'EOunique',[],'EOsimple',[],...
-         'EOlead',EOlead,...
+         'IOlead',IOlead,'imCams',[],'IOunique',[],'IOno',[],'IOsimple',[],...
+         'EO',EO,'EOstd',EOstd,'EOblock',EOblock,'EOunique',[],'EOno',[],...
+         'EOsimple',[],'EOlead',EOlead,...
          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
          'OPrawId',OPrawId,'OPlabels',{OPlabels},...
          'isCtrl',isCtrl,'isCheck',isCheck,...

@@ -256,7 +256,11 @@ for i=find(s.IOunique)
     else
         padLength=length('Value:');
     end
-    fprintf(fid,[p,p,p,'Camera%d\n'],i);
+    if s.IOsimple(i)
+        fprintf(fid,[p,p,p,'Camera%d (simple)\n'],s.IOno(i));
+    else
+        fprintf(fid,[p,p,p,'Camera%d (mixed)\n'],s.IOno(i));
+    end
     fprintf(fid,[p,p,p,p,'Lens distortion model:\n']);
     if s.IOdistModel(i)>0
         fprintf(fid,[p,p,p,p,p,'Backward (Photogrammetry) model %d\n'],...
@@ -387,20 +391,22 @@ values={
 pretty_print(fid,repmat(p,1,3),values);
 
 fprintf(fid,[p,p,'Cameras\n']);
-fprintf(fid,[p,p,p,'Total number: %d\n'],nnz(s.IOunique));
+fprintf(fid,[p,p,p,'Total number: %d (%d simple, %d mixed)\n'],...
+        nnz(s.IOunique),nnz(s.IOunique & s.IOsimple),...
+        nnz(s.IOunique & ~s.IOsimple));
 for i=find(s.IOunique)
-    fprintf(fid,[p,p,p,'Camera%d:\n'],i);
+    fprintf(fid,[p,p,p,'Camera%d:\n'],s.IOno(i));
 
     calStrs={'<not available>','yes'};
     values={
         'Calibration:','%s',calStrs{any(s.estIO(:,i))+1},
-        'Number of photos using camera:','%d',nnz(s.imCams==i)
+        'Number of photos using camera:','%d',nnz(s.IOno==s.IOno(i))
         };
     pretty_print(fid,repmat(p,1,4),values);
 
     % Compute individual and union coverage.
-    [c,cr,crr]=coverage(s,find(s.imCams==i));
-    [uc,ucr,ucrr]=coverage(s,find(s.imCams==i),true);
+    [c,cr,crr]=coverage(s,find(s.IOno==s.IOno(i)));
+    [uc,ucr,ucrr]=coverage(s,find(s.IOno==s.IOno(i)),true);
     fprintf(fid,[p,p,p,p,'Photo point coverage:\n']);
     values={
         'Rectangular:','%s',...

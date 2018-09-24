@@ -54,13 +54,15 @@ if nargin<2, wantedOrder={'IO','EO','OP'}; end
 % Find unique IOblock and EOblock columns and indicate if columns
 % are simple.
 s.IOunique=false(1,size(s.IOblock,2));
-[~,ia]=unique(s.IOblock','rows');
+[~,ia,ic]=unique(s.IOblock','rows');
 s.IOunique(ia)=true;
+s.IOno=ic';
 s.IOsimple=all(s.IOblock==s.IOblock(ones(end,1),:),1);
 
 s.EOunique=false(1,size(s.EOblock,2));
-[~,ia]=unique(s.EOblock','rows');
+[~,ia,ic]=unique(s.EOblock','rows');
 s.EOunique(ia)=true;
+s.EOno=ic';
 s.EOsimple=all(s.EOblock==s.EOblock(ones(end,1),:),1);
 
 % Serialize each block. All x-related indices are 1-based.
