@@ -46,6 +46,7 @@ if strcmp(ix,'all'), ix=1:size(s.EO,2); end
 if isempty(h)
     h=tagfigure('imagestats');
 end
+set(h,'name','Image/EO stats')
 
 clf(h);
 

@@ -40,6 +40,8 @@ function hh=plotnetwork(s,varargin)
 %  STR contains a '%d', it is replaced by the iteration number. If STR
 %  contains a second '%d', it is replaced by the total iteration count.
 %
+%  PLOTNETWORK(...,'name',STR), uses STR as the name of the figure.
+%
 %  PLOTNETWORK(...,'pause',P), where P is numeric scalar, pauses between
 %  each iteration for P seconds. If P is 'on', waits for keypress between
 %  iterations instead.
@@ -74,9 +76,11 @@ camSize=[1,0.73,0.36];
 ax=[];
 % Should we plot X0 points separately?
 plotX0pts=false;
-% Title string.
+% Axes title string.
 titleStr='';
 titleStrNums=0;
+% Figure name string.
+nameStr='';
 % Which cameras to plot.
 EOplot=[];
 % Pause or not.
@@ -156,6 +160,13 @@ while ~isempty(varargin)
             end
             % How many %d does the title string have?
             titleStrNums=length(strfind(titleStr,'%d'));
+          case 'name'
+            nameStr=varargin{2};
+            % title string should be a string
+            if ~ischar(nameStr)
+                error('DBAT:plotnetwork:badInput',...
+                      'STR should be a string'); 
+            end
           case 'alig' % 'align'
             align=varargin{2};
             if ~isnumeric(align) || length(align)>2
@@ -201,7 +212,7 @@ end
 % Activate camera toolbar.
 cameratoolbar(get(ax,'parent'),'show');
 
-[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
+%[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
 
 if ~isempty(E)
     % Number of iterations.
@@ -218,17 +229,23 @@ EOsave=nan(size(s.EO,1),size(s.EO,2),length(iters));
 
 x0OP=s.OP;
 
+if isempty(E)
+    % No iteration performed yes, we only have the current values.
+    IOtrace=s.IO;
+    EOtrace=s.EO;
+    OPtrace=s.OP;
+else
+    % Extract traces of all parameters.
+    IOtrace=deserialize(s,E,'all','IO');
+    EOtrace=deserialize(s,E,'all','EO');
+    OPtrace=deserialize(s,E,'all','OP');
+end
+
 for iter=iters
-    % Extract base parameters.
-    IO=s.IO;
-    EO=s.EO;
-    OP=s.OP;
-    if ~isempty(E)
-        % Replace unknown parameters with estimated value at iteration iter.
-        IO(s.estIO)=E.trace(ixIO,iter+1);
-        EO(s.estEO)=E.trace(ixEO,iter+1);
-        OP(s.estOP)=E.trace(ixOP,iter+1);
-    end
+    % Extract base parameters for this iteration
+    IO=squeeze(IOtrace(:,:,iter+1));
+    EO=squeeze(EOtrace(:,:,iter+1));
+    OP=squeeze(OPtrace(:,:,iter+1));
 
     if ~isempty(align)
         if length(align)==2
@@ -331,6 +348,11 @@ for iter=iters
         end
     end
 
+    % Set name of figure
+    if ~isempty(nameStr)
+        set(get(ax,'parent'),'name',nameStr);
+    end
+        
     % Pause if requested unless after showing last iteration.
     if ~isempty(pauseMode) && iter<nIters
         if ischar(pauseMode) && strcmp(lower(pauseMode),'on')

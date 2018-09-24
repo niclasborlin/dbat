@@ -33,6 +33,7 @@ end
 if strcmp(ix,'all'), ix=1:size(s.EO,2); end
 
 h=tagfigure('coverage');
+set(h,'name','Image coverage');
 
 clf(h);
 

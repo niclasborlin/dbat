@@ -38,6 +38,7 @@ ix=find(ismember(s.OPid,id));
 i=1:length(ix); % Identity sort.
 
 fig=tagfigure('opstats');
+set(fig,'name','OP stats');
 
 axH=zeros(4,1);
 
