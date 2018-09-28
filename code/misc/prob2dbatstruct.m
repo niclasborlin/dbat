@@ -422,6 +422,11 @@ end
 
 priorSigmas=unique(markStd(:));
 if isscalar(priorSigmas)
+    if priorSigmas==0
+        warning('All prior sigmas==0. Using prior sigma==1.');
+        priorSigmas=1;
+        markStd(:)=priorSigmas;
+    end
     priorSigma=priorSigmas;
 else
     warning('Multiple prior sigmas detected. Using prior sigma==1.');
