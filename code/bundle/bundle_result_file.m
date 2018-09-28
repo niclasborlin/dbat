@@ -119,6 +119,16 @@ hostname=getenv('HOST');
 if isempty(hostname)
     hostname='<unknown>';
 end
+
+numParams=sprintf('%d (%d IO, %d EO, %d OP)',...
+                  e.numParams,nnz(s.IOlead),nnz(s.EOlead), ...
+                  nnz(s.estOP));
+numObs=sprintf('%d (%d IP, %d IO, %d EO, %d OP)',...
+               e.numObs,length(s.residuals.ix.IP),...
+               length(s.residuals.ix.IO),...
+               length(s.residuals.ix.EO),...
+               length(s.residuals.ix.OP));
+
 % Values are {name,format string,value}
 values={'Last Bundle Run:','%s',e.dateStamp,
         'DBAT version:','%s',e.version,
@@ -127,7 +137,10 @@ values={'Last Bundle Run:','%s',e.dateStamp,
         'Host name:','%s',hostname,
         'Status:','%s',status,
         'Sigma0:','%g',e.s0,
-        'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1)};
+        'Sigma0 (pixels):','%g',e.s0*s.prior.sigmas(1),
+        'Redundancy','%d',e.redundancy,
+        'Number of params:','%s',numParams,
+        'Number of observations:','%s',numObs};
 pretty_print(fid,repmat(p,1,2),values);
     
 fprintf(fid,[p,p,'Processing options:\n']);
