@@ -127,6 +127,10 @@ end
 s.IOlead=IOlead;
 s.EOlead=EOlead;
 
+% Mask out any useObs that correspond to a repeated parameter.
+s.useIOobs=s.useIOobs & s.IOlead;
+s.useEOobs=s.useEOobs & s.EOlead;
+
 % Store indices.
 s.serial=struct('IO',IOserial,'EO',EOserial,'OP',OPserial,'n',n);
 s.deserial=struct('IO',IOdeserial,'EO',EOdeserial,'OP',OPdeserial,'n',n);
