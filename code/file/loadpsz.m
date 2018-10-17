@@ -100,6 +100,9 @@ function s=loadpsz(psFile,varargin)
 %
 %See also: TEMPDIR, TEMPNAME, UNPACKPSZ.
 
+% Highest tested version.
+highestTestedVersion='1.4.0'; %#ok<NASGU>
+
 % Default values.
 chunkNo=1;
 unpackLocal=false;
@@ -111,7 +114,7 @@ while ~isempty(varargin)
     if islogical(varargin{1})
         keepUnoriented=varargin{1};
     elseif isnumeric(varargin{1})
-        checkNo=varargin{1};
+        chunkNo=varargin{1};
     else
         switch varargin{1}
           case 'keep'
@@ -121,8 +124,8 @@ while ~isempty(varargin)
             asciiToo=true;
           otherwise
             error('%s: Bad argument %s',mfilename,varargin{1});
-		end
-	end
+        end
+    end
     varargin(1)=[];
 end
 
@@ -149,6 +152,14 @@ DelayedWaitBar(0.25);
 fName=fullfile(unpackDir,'doc.xml');
 s=dbatxml2struct(fName);
 DelayedWaitBar(0.3);
+
+% Extract document version.
+s.version='0.0.0';
+if isfield(s,'document') && ...
+        isfield(s.document,'Attributes') && ...
+        isfield(s.document.Attributes,'version')
+    s.version=s.document.Attributes.version;
+end
 
 s.fileName=psFile;
 
@@ -263,8 +274,8 @@ for i=1:length(cameraIds)
             % TODO: Check this "mirroring"...
             P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
         else
-            warning('Untested non-mirroring');
-            P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+            warning('Untested non-mirroring'); %#ok<UNRCH>
+            P(:,:,i)=eye(3,4)/T; % *inv(T)
         end
         CC(:,i)=euclidean(null(P(:,:,i)));
     end
@@ -308,8 +319,6 @@ s.cameraEnabled=cameraEnabled(keep);
 s.cameraOriented=cameraOriented(keep);
 
 camIds=cameraIds(keep);
-invCameraIds=nan(max(camIds)+1,1);
-invCameraIds(camIds+1)=1:length(camIds);
 
 % Functions to convert between Photoscan camera id and DBAT camera number.
 PSCamId=@(dbatId)IDLookup(camIds,dbatId);
@@ -482,7 +491,7 @@ s.global.ctrlPtsLabels=s.raw.ctrlPtsLabels;
 s.global.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
 s.global.ctrlPts=s.raw.ctrlPts;
 if ~isempty(s.global.ctrlPts)
-s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
+    s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
 end
 % Transform ctrl pts from global to local and semilocal coordinate systems.
 s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
@@ -756,10 +765,36 @@ if iscell(cal)
     end
 end
 isAdjusted=strcmp(cal.Attributes.class,'adjusted');
-fx=sscanf(cal.fx.Text,'%g');
-fy=sscanf(cal.fy.Text,'%g');
-cx=sscanf(cal.cx.Text,'%g');
-cy=sscanf(cal.cy.Text,'%g');
+% Parse focal length(s)
+if isfield(cal,'fx')
+    fx=sscanf(cal.fx.Text,'%g');
+else
+    fx=nan;
+end
+if isfield(cal,'fy')
+    fy=sscanf(cal.fy.Text,'%g');
+else
+    fy=nan;
+end
+if isfield(cal,'f')
+    fy=sscanf(cal.f.Text,'%g');
+    if isfield(cal,'b1')
+        b1=sscanf(cal.b1.Text,'%g');
+    else
+        b1=0;
+    end
+    fx=fy+b1;
+end
+if isfield(cal,'cx')
+    cx=sscanf(cal.cx.Text,'%g');
+else
+    cx=nan;
+end
+if isfield(cal,'cy')
+    cy=sscanf(cal.cy.Text,'%g');
+else
+    cy=nan;
+end
 % Dynamic for lens distortion parameters.
 fn=fieldnames(cal);
 % Get all 'kN' fields.
@@ -788,18 +823,15 @@ givenParams.cxcy(:)=true;
 givenParams.k(1:length(k))=true;
 givenParams.p(1:length(p))=true;
 
-% is skew given?
+skew=0;
+% Is skew given?
 if isfield(cal,'skew')
     skew=sscanf(cal.skew.Text,'%g');
     givenParams.skew=true;
-else
-    skew=0;
+elseif isfield(cal,'b2')
+    skew=sscanf(cal.b2.Text,'%g');
+    givenParams.skew=true;
 end
-
-% Construct camera calibration matrix.
-K=[fx,skew,cx;0,fy,cy;0,0,1];
-
-s.K=K;
 
 imSz=[sscanf(sensor.resolution.Attributes.width,'%d'),...
       sscanf(sensor.resolution.Attributes.height,'%d')];
@@ -822,6 +854,19 @@ else
     pixelWidth=sscanf(pwProp{1}.Attributes.value,'%g');
     pixelHeight=sscanf(phProp{1}.Attributes.value,'%g');
 end
+
+% File version before 1.4.0 had raw cx/cy values. From 1.4.0, cx
+% and cy are w.r.t the image center.
+if CompareVersion(s.version,'1.4.0')>=0
+    cx=cx+imSz(1)/2;
+    cy=cy+imSz(2)/2;
+end
+
+% Construct camera calibration matrix.
+K=[fx,skew,cx;0,fy,cy;0,0,1];
+
+s.K=K;
+
 % Specified sensor focal length.
 fProp=sProps(strcmp(sensorProps,'focal_length'));
 nominalFocal=NaN;
@@ -877,7 +922,6 @@ s.camera.givenParams=givenParams;
 
 % Parameters to warn about.
 warnNotSupported={};
-warnUsePhotoModeler={};
 
 % Have we found any optimize/fit_XXX fields?
 optFitTagsFound=false;
@@ -1118,5 +1162,42 @@ else
             waitbar(val,H);
         end
         LAPTIME=clock;
+    end
+end
+
+
+function z=CompareVersion(s,t)
+%Compare version strings. Return -1, 0 or +1 if s is lower, equal
+%to, or higher than t.
+%
+%S and T must be in digits separated by dots, e.g. 1.4.0.
+%The comparison is done section by section.
+
+sDigits=sscanf(s,'%d.');
+tDigits=sscanf(t,'%d.');
+
+% Make versions have the same number of digits.
+l=max(length(sDigits),length(tDigits));
+
+z=0;
+
+for i=1:l
+    if i<=length(sDigits)
+        sd=sDigits(i);
+    else
+        sd=0;
+    end
+    if i<=length(tDigits)
+        td=tDigits(i);
+    else
+        td=0;
+    end
+    if sd>td
+        z=1;
+        return;
+    end
+    if sd<td
+        z=-1;
+        return;
     end
 end
