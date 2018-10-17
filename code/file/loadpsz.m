@@ -111,7 +111,7 @@ while ~isempty(varargin)
     if islogical(varargin{1})
         keepUnoriented=varargin{1};
     elseif isnumeric(varargin{1})
-        checkNo=varargin{1};
+        chunkNo=varargin{1};
     else
         switch varargin{1}
           case 'keep'
@@ -121,8 +121,8 @@ while ~isempty(varargin)
             asciiToo=true;
           otherwise
             error('%s: Bad argument %s',mfilename,varargin{1});
-		end
-	end
+        end
+    end
     varargin(1)=[];
 end
 
@@ -263,8 +263,8 @@ for i=1:length(cameraIds)
             % TODO: Check this "mirroring"...
             P(:,:,i)=eye(3,4)/(T*diag([1,-1,-1,1]));
         else
-            warning('Untested non-mirroring');
-            P(:,:,i)=eye(3,4)/T; %#ok<UNRCH> % *inv(T)
+            warning('Untested non-mirroring'); %#ok<UNRCH>
+            P(:,:,i)=eye(3,4)/T; % *inv(T)
         end
         CC(:,i)=euclidean(null(P(:,:,i)));
     end
@@ -308,8 +308,6 @@ s.cameraEnabled=cameraEnabled(keep);
 s.cameraOriented=cameraOriented(keep);
 
 camIds=cameraIds(keep);
-invCameraIds=nan(max(camIds)+1,1);
-invCameraIds(camIds+1)=1:length(camIds);
 
 % Functions to convert between Photoscan camera id and DBAT camera number.
 PSCamId=@(dbatId)IDLookup(camIds,dbatId);
@@ -877,7 +875,6 @@ s.camera.givenParams=givenParams;
 
 % Parameters to warn about.
 warnNotSupported={};
-warnUsePhotoModeler={};
 
 % Have we found any optimize/fit_XXX fields?
 optFitTagsFound=false;
