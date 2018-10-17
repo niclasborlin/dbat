@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.7.6.0, Oct 17, 2018.
+- Added support for Photoscan file version 1.4.0 (Photoscan program
+  1.4.x).
+
 Release 0.7.5.0, May 30, 2018.
 - Restructured Jacobian computations for Riva 2018 conference paper.
 - Added support for affine parameters (aspect and skew) (lens distortion
