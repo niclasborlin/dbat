@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.7.5.0 for Matlab (R), below called the Toolbox.
+# v0.7.6.0 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -161,10 +161,10 @@
 #     range terrestrial and UAV photogrammetric projects with the DBAT
 #     toolbox for independent verification and quality control.",
 #     ISPRS Archives XLII-2/W8:171-177.
-# Börlin, Murtiyoso, Grussenmeyer, Menna, and Nocerino. "Modular bundle
-#     adjustment for photogrammeric computations", ISPRS Archives XLII(2),
-#     June 2018. Paper accepted for the ISPRS TC II mid-term symposium in
-#     Riva del Garda, Italy, Jun 3-7, 2018.
+# Börlin, Murtiyoso, Grussenmeyer, Menna, and Nocerino (2018).
+#     "Modular bundle adjustment for photogrammeric computations",
+#     ISPRS Archives XLII(2), June 2018. Paper accepted for the ISPRS
+#     TC II mid-term symposium in Riva del Garda, Italy, Jun 3-7.
 #
 #
 # == CONTRIBUTIONS ==
@@ -178,6 +178,7 @@
 # * Arnadi Murtiyoso, ICube, INSA Strasbourg, France.
 # * Kostas Naskou, University of Nottingham, UK.
 # * Erica Nocerino, Fondazione Bruno Kessler, Trento, Italy.
+# * Deni Suwardhi, Bandung Institute of Technology, Indonesia.
 #
 #
 # == TRADEMARKS ==

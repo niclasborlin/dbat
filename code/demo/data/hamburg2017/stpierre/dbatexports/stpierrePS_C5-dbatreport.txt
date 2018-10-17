@@ -8,8 +8,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera parameter has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run: 25-Sep-2018 00:35:25
-      DBAT version:    0.7.5.0 (2018-05-30)
+      Last Bundle Run: 17-Oct-2018 15:11:22
+      DBAT version:    0.7.6.0 (2018-10-17)
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast
@@ -35,12 +35,12 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 2
          First error:          754.082
          Last error:           753.214
-         Execution time (s):   10.99
+         Execution time (s):   8.99
       Lens distortion models:
          Forward (Computer Vision) model 1
       Cameras:
          Calibration: yes (Xp Yp f K1 K2 K3 P1 P2)
-         Camera1 (simple)
+         Camera1
             Lens distortion model:
                Forward (Computer Vision) model 1
             Focal Length:
@@ -60,19 +60,16 @@ Damped Bundle Adjustment Toolbox result file
                Value:        -0.00387225 mm^(-3)
                Deviation:    2.18e-06 mm^(-3)
                Significance: p=1.00
-               Cumulative significance:p=1.00
                Correlations over 95%: K2:-97.4%.
             K2 - radial distortion 2:
                Value:        0.000162098 mm^(-5)
                Deviation:    1.4e-07 mm^(-5)
                Significance: p=1.00
-               Cumulative significance:p=1.00
                Correlations over 95%: K1:-97.4%, K3:-98.5%.
             K3 - radial distortion 3:
                Value:        -2.01634e-06 mm^(-7)
                Deviation:    2.69e-09 mm^(-7)
                Significance: p=1.00
-               Cumulative significance:p=1.00
                Correlations over 95%: K2:-98.5%.
             P1 - decentering distortion 1:
                Value:        -1.86342e-05 mm^(-3)
@@ -4648,7 +4645,7 @@ Damped Bundle Adjustment Toolbox result file
          Total number: 239
          Numbers used: 239
       Cameras
-         Total number: 1 (1 simple, 0 mixed)
+         Total number: 1
          Camera1:
             Calibration:                   yes
             Number of photos using camera: 239
@@ -4657,8 +4654,8 @@ Damped Bundle Adjustment Toolbox result file
                Convex hull: 65%-95% (90% average, 98% union)
                Radial:      86%-97% (94% average, 97% union)
       Photo Coverage
-         Reference points outside calibrated region:
-            Camera 1: none
+         References points outside calibrated region:
+            none
       Point Measurements
          Number of control pts: 6
          Number of check pts: 3
@@ -4863,4 +4860,3 @@ Damped Bundle Adjustment Toolbox result file
                Y: 0.004 ou (105, pt 4)
                Z: 0.006 ou (105, pt 4)
             RMS: 0.008 ou (from 3 items)
-End of result file

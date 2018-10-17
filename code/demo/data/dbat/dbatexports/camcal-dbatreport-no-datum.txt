@@ -142,8 +142,13 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          Bundle failed with code -2 (see below for details).
    Information from last bundle
+<<<<<<< HEAD
       Last Bundle Run: 25-Sep-2018 00:32:49
       DBAT version:    0.7.5.0 (2018-05-30)
+=======
+      Last Bundle Run: 17-Oct-2018 15:08:55
+      DBAT version:    0.7.6.0 (2018-10-17)
+>>>>>>> master
       MATLAB version:  8.6.0.267246 (R2015b)
       Host system:     GLNXA64
       Host name:       slartibartfast
@@ -167,9 +172,15 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 0
+<<<<<<< HEAD
          First error:          15336.7
          Last error:           15336.7
          Execution time (s):   0.09
+=======
+         First error:          30802.6
+         Last error:           30802.6
+         Execution time (s):   0.11
+>>>>>>> master
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
