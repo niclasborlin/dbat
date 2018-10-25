@@ -8,7 +8,7 @@
 # code at your own risk and may use it for any purpose, including
 # commercial, as long as you give due credit. Furthermore, if you use
 # the code, or derivatives thereof, for scientific publications, you
-# should refer to on or more papers listed in the REFERENCES section.
+# should refer to one or more papers listed in the REFERENCES section.
 #
 #
 # == INSTALLATION ==
