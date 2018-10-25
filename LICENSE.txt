@@ -43,24 +43,28 @@
 #
 # Börlin and Grussenmeyer (2013). "Bundle adjustment with and without
 #     damping", Photogrammetric Record, vol. 28(144):396-415.
+#     DOI: 10.1111/phor.12037.
 # Börlin and Grussenmeyer (2013). "Experiments with Metadata-derived
 #     Initial Values and Linesearch Bundle Adjustment in Architectural
 #     Photogrammetry", ISPRS Annals of the Photogrammetry, Remote
 #     Sensing, and Spatial Information Sciences, vol II-5/W1:43-48.
+#     DOI: 10.5194/isprsannals-II-5-W1-43-2013.
 # Börlin and Grussenmeyer (2014). "Camera Calibration using the Damped
 #     Bundle Adjustment Toolbox", ISPRS Annals of the Photogrammetry,
 #     Remote Sensing, and Spatial Information Sciences, vol
-#     II-5:89-96.
+#     II-5:89-96. DOI: 10.5194/isprsannals-II-5-89-2014.
 # Börlin and Grussenmeyer (2016). "External Verification of the Bundle
 #     Adjustment in Photogrammetric Software using the Damped Bundle
 #     Adjustment Toolbox", ISPRS Archives XLI-B5, p. 7-14.
+#     DOI: 10.5194/isprs-archives-XLI-B5-7-2016.
 # Murtiyoso, Grussenmeyer, and Börlin (2017). "Reprocessing close
 #     range terrestrial and UAV photogrammetric projects with the DBAT
 #     toolbox for independent verification and quality control.",
 #     ISPRS Archives XLII-2/W8:171-177.
-# Börlin, Murtiyoso, Grussenmeyer, Menna, and Nocerino. "Modular bundle
-#     adjustment for photogrammeric computations", ISPRS Archives XLII(2),
-#     June 2018. Paper accepted for the ISPRS TC II mid-term symposium in
-#     Riva del Garda, Italy, Jun 3-7, 2018.
+#     DOI: 10.5194/isprs-archives-XLII-2-W8-171-2017.
+# Börlin, Murtiyoso, Grussenmeyer, Menna, and Nocerino (2018).
+#     "Modular bundle adjustment for photogrammeric computations",
+#     ISPRS Archives XLII-2:133-140.
+#     DOI: 10.5194/isprs-archives-XLII-2-133-2018.
 #
 #
