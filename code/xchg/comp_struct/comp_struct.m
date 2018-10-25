@@ -55,7 +55,7 @@ d1 = s1; d2 = s2; common = s1;
 %% begin analysis
 flag = [0 0];
 % test entire structure
-if ~isequal(s1,s2)
+if ~isequaln(s1,s2)
 	% differances noted - parse
 	if isstruct(s1) && isstruct(s2)
 		% both structures - once sub structures are tested, do not 
@@ -105,7 +105,7 @@ if ~isequal(s1,s2)
 		flag(1) = 1;
 	else
 		% the same?
-		if ~isequal(s1,s2)
+		if ~isequaln(s1,s2)
 			flag(1) = 1;
 			% not the same - differance?
 			% class error
