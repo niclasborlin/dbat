@@ -19,12 +19,15 @@ N.~B{\"o}rlin and P.~Grussenmeyer.
   bundle adjustment in architectural photogrammetry.
 \newblock \emph{ISPRS Annals of the Photogrammetry, Remote Sensing, and Spatial
   Information Sciences}, II-5/W1:\penalty0 43--48, Sept. 2013{\natexlab{b}}.
+\newblock \doi{10.5194/isprsannals-II-5-W1-43-2013}.
 
 \bibitem[B{\"o}rlin and Grussenmeyer(2014)]{Borlin2014:Camera}
 N.~B{\"o}rlin and P.~Grussenmeyer.
 \newblock Camera calibration using the damped bundle adjustment toolbox.
 \newblock \emph{ISPRS Annals of the Photogrammetry, Remote Sensing, and Spatial
   Information Sciences}, II\penalty0 (5):\penalty0 89--96, June 2014.
+\newblock \doi{10.5194/isprsannals-II-5-89-2014}.
+\newblock Best paper award.
 
 \bibitem[B{\"o}rlin and Grussenmeyer(2016)]{Borlin2016:External}
 N.~B{\"o}rlin and P.~Grussenmeyer.
@@ -32,15 +35,16 @@ N.~B{\"o}rlin and P.~Grussenmeyer.
   software using the damped bundle adjustment toolbox.
 \newblock \emph{International Archives of Photogrammetry, Remote Sensing, and
   Spatial Information Sciences}, XLI-B5:\penalty0 7--14, July 2016.
+\newblock \doi{10.5194/isprs-archives-XLI-B5-7-2016}.
 
 \bibitem[B{\"o}rlin et~al.(2018)B{\"o}rlin, Murtiyoso, Grussenmeyer, Menna, and
   Nocerino]{Borlin2018:Modular}
 N.~B{\"o}rlin, A.~Murtiyoso, P.~Grussenmeyer, F.~Menna, and E.~Nocerino.
 \newblock Modular bundle adjustment for photogrammeric computations.
 \newblock \emph{International Archives of Photogrammetry, Remote Sensing, and
-  Spatial Information Sciences}, XLII\penalty0 (2):\penalty0 ?, June 2018.
-\newblock Paper accepted for the ISPRS TC II mid-term symposium in Riva del
-  Garda, Italy, Jun 3-7, 2018.
+  Spatial Information Sciences}, XLII\penalty0 (2):\penalty0 133--140, June
+  2018.
+\newblock \doi{https://doi.org/10.5194/isprs-archives-XLII-2-133-2018}.
 
 \bibitem[Foster(2009)]{Foster2009:Calculating}
 L.~Foster.
@@ -72,8 +76,6 @@ A.~Murtiyoso, P.~Grussenmeyer, and N.~B{\"o}rlin.
   Sensing and Spatial Information Sciences}, XLII-2/W8:\penalty0 171--177,
   2017.
 \newblock \doi{10.5194/isprs-archives-XLII-2-W8-171-2017}.
-\newblock URL
-  \url{https://www.int-arch-photogramm-remote-sens-spatial-inf-sci.net/XLII-2-W8/171/2017/}.
 
 \bibitem[Stew\'enius et~al.(2006)Stew\'enius, Engels, and
   Nist\'er]{Stewenius2006:Recent}
