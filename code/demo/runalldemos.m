@@ -2,6 +2,7 @@ pause off
 loadplotdemo
 romabundledemo
 romabundledemo_selfcal
+romabundledemo_imagevariant
 camcaldemo
 camcaldemo2
 camcaldemo_allmodels
