@@ -7,14 +7,17 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 25-Sep-2018 00:32:00
-      DBAT version:    0.7.5.0 (2018-05-30)
-      MATLAB version:  8.6.0.267246 (R2015b)
-      Host system:     GLNXA64
-      Host name:       slartibartfast
-      Status:          OK
-      Sigma0:          1.68901
-      Sigma0 (pixels): 0.168901
+      Last Bundle Run:        26-Oct-2018 16:22:05
+      DBAT version:           0.8.0.0 (2018-10-26)
+      MATLAB version:         8.6.0.267246 (R2015b)
+      Host system:            GLNXA64
+      Host name:              slartibartfast
+      Status:                 OK
+      Sigma0:                 1.68901
+      Sigma0 (pixels):        0.168901
+      Redundancy              3726
+      Number of params:       422 (8 IO, 126 EO, 288 OP)
+      Number of observations: 4148 (4148 IP, 0 IO, 0 EO, 0 OP)
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -34,7 +37,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 9
          First error:          30873.8
          Last error:           103.099
-         Execution time (s):   0.59
+         Execution time (s):   0.62
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:

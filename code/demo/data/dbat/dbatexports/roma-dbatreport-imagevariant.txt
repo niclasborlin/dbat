@@ -9,8 +9,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the object point coordinates has a high correlation.
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:04:48
-      DBAT version:           0.7.6.1 (2018-10-25)
+      Last Bundle Run:        26-Oct-2018 16:20:59
+      DBAT version:           0.8.0.0 (2018-10-26)
       MATLAB version:         8.6.0.267246 (R2015b)
       Host system:            GLNXA64
       Host name:              slartibartfast
@@ -39,7 +39,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 5
          First error:          8608.56
          Last error:           160.245
-         Execution time (s):   13.24
+         Execution time (s):   12.52
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -105,9 +105,6 @@ Damped Bundle Adjustment Toolbox result file
                Value:        0.00641026 mm
          Rated angle of view (h,v,d): (73, 52, 83) deg
          Largest distortion: 2 mm (309.6 px, 9.2% of half-diagonal)
-         ----------------------------------------
-         ----------------------------------------
-         ----------------------------------------
          Camera2 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3

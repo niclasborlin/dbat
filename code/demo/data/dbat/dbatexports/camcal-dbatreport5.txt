@@ -9,14 +9,17 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run: 25-Sep-2018 00:31:49
-      DBAT version:    0.7.5.0 (2018-05-30)
-      MATLAB version:  8.6.0.267246 (R2015b)
-      Host system:     GLNXA64
-      Host name:       slartibartfast
-      Status:          OK
-      Sigma0:          0.495675
-      Sigma0 (pixels): 0.0495675
+      Last Bundle Run:        26-Oct-2018 16:21:55
+      DBAT version:           0.8.0.0 (2018-10-26)
+      MATLAB version:         8.6.0.267246 (R2015b)
+      Host system:            GLNXA64
+      Host name:              slartibartfast
+      Status:                 OK
+      Sigma0:                 0.495675
+      Sigma0 (pixels):        0.0495675
+      Redundancy              44
+      Number of params:       68 (8 IO, 30 EO, 30 OP)
+      Number of observations: 112 (100 IP, 0 IO, 0 EO, 12 OP)
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -36,7 +39,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 5
          First error:          254.75
          Last error:           3.28793
-         Execution time (s):   0.11
+         Execution time (s):   0.22
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:

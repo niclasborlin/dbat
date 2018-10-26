@@ -7,14 +7,17 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 25-Oct-2018 20:57:35
-      DBAT version:    0.7.6.1 (2018-10-25)
-      MATLAB version:  8.6.0.267246 (R2015b)
-      Host system:     GLNXA64
-      Host name:       slartibartfast
-      Status:          OK
-      Sigma0:          0.710294
-      Sigma0 (pixels): 0.710294
+      Last Bundle Run:        26-Oct-2018 16:24:27
+      DBAT version:           0.8.0.0 (2018-10-26)
+      MATLAB version:         8.6.0.267246 (R2015b)
+      Host system:            GLNXA64
+      Host name:              slartibartfast
+      Status:                 OK
+      Sigma0:                 0.710294
+      Sigma0 (pixels):        0.710294
+      Redundancy              4604
+      Number of params:       3576 (0 IO, 30 EO, 3546 OP)
+      Number of observations: 8180 (8132 IP, 0 IO, 0 EO, 48 OP)
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -34,12 +37,12 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 3
          First error:          121.326
          Last error:           48.1954
-         Execution time (s):   0.18
+         Execution time (s):   0.21
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:
          Calibration: no
-         Camera1
+         Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 1
             Focal Length:
@@ -202,7 +205,7 @@ Damped Bundle Adjustment Toolbox result file
          Total number: 5
          Numbers used: 5
       Cameras
-         Total number: 1
+         Total number: 1 (1 simple, 0 mixed)
          Camera1:
             Calibration:                   <not available>
             Number of photos using camera: 5
@@ -211,8 +214,8 @@ Damped Bundle Adjustment Toolbox result file
                Convex hull: 58%-95% (72% average, 98% union)
                Radial:      95%-98% (96% average, 98% union)
       Photo Coverage
-         References points outside calibrated region:
-            <not available>
+         Reference points outside calibrated region:
+            Camera 1: <not available>
       Point Measurements
          Number of control pts: 16
          Number of check pts: 0
@@ -537,3 +540,4 @@ Damped Bundle Adjustment Toolbox result file
             RMS: 0.128 ou (from 16 items)
       Check measurements
          none
+End of result file
