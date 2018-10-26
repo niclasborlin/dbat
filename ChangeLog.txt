@@ -1,8 +1,11 @@
 Summary changelog file for release.
 
+Release 0.7.6.1, Oct 25, 2018.
+- Bugfix to v0.7.6.0 to fix that the format change was introduced with
+  Photoscan v1.4.1 and not with v1.4.0.
+
 Release 0.7.6.0, Oct 17, 2018.
-- Added support for Photoscan file version 1.4.0 (Photoscan program
-  1.4.x).
+- Added support for Photoscan file format v1.4.0 (Photoscan program v1.4.x).
 
 Release 0.7.5.0, May 30, 2018.
 - Restructured Jacobian computations for Riva 2018 conference paper.

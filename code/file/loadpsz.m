@@ -765,18 +765,26 @@ if iscell(cal)
     end
 end
 isAdjusted=strcmp(cal.Attributes.class,'adjusted');
+
+% cx, cy are relative to the image center if 'f' is specified and
+% aboslute if 'fx', 'fy' are specified.
+ppIsAbsolute=false;
+
 % Parse focal length(s)
 if isfield(cal,'fx')
     fx=sscanf(cal.fx.Text,'%g');
+    ppIsAbsolute=true;
 else
     fx=nan;
 end
 if isfield(cal,'fy')
     fy=sscanf(cal.fy.Text,'%g');
+    ppIsAbsolute=true;
 else
     fy=nan;
 end
 if isfield(cal,'f')
+    ppIsAbsolute=false;
     fy=sscanf(cal.f.Text,'%g');
     if isfield(cal,'b1')
         b1=sscanf(cal.b1.Text,'%g');
@@ -788,12 +796,12 @@ end
 if isfield(cal,'cx')
     cx=sscanf(cal.cx.Text,'%g');
 else
-    cx=nan;
+    cx=0;
 end
 if isfield(cal,'cy')
     cy=sscanf(cal.cy.Text,'%g');
 else
-    cy=nan;
+    cy=0;
 end
 % Dynamic for lens distortion parameters.
 fn=fieldnames(cal);
@@ -857,7 +865,7 @@ end
 
 % File version before 1.4.0 had raw cx/cy values. From 1.4.0, cx
 % and cy are w.r.t the image center.
-if CompareVersion(s.version,'1.4.0')>=0
+if ~ppIsAbsolute
     cx=cx+imSz(1)/2;
     cy=cy+imSz(2)/2;
 end
