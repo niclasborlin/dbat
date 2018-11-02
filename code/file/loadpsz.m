@@ -31,7 +31,7 @@ function s=loadpsz(psFile,varargin)
 %                 pos     - 3-by-MC with positions
 %                 std     - 3-by-MC with standard deviations
 %                 cov     - 3-by-3-by-MC with full covariance matrices
-%                 enabled - MC-by-1 with logical
+%                 enabled - 1-by-MC with logical
 %                 labels  - 1-by-MC cell array with strings
 %               objPts  - MO-by-4 array with [id,x,y,z] for object pts,
 %               P       - 3-by-4-by-N array with camera matrices,
@@ -264,8 +264,12 @@ xforms=nan(4,4,length(cameraIds));
 P=nan(3,4,length(cameraIds));
 % Camera centers in local coordinates.
 CC=nan(3,length(cameraIds));
+
 % Prior observations of camera centers
-priorCC=nan(3,length(cameraIds));
+priorCamPos=struct('pos',nan(3,length(cameraIds)),...
+                   'std',nan(3,length(cameraIds)),...
+                   'cov',nan(3,3,length(cameraIds)),...
+                   'enabled',false(1,length(cameraIds)));
 for i=1:length(cameraIds)
     if isfield(camera{i},'transform')
         T=reshape(sscanf(camera{i}.transform.Text,'%g '),4,4)';
@@ -284,24 +288,13 @@ for i=1:length(cameraIds)
     if isfield(camera{i},'reference')
         attr=camera{i}.reference.Attributes;
         % TODO: Always load, recognize enable/disable status.
-        switch attr.enabled
-          case {'1','true'}
-            % Parse reference coordinates.
-            if isfield(attr,'x')
-                priorCC(1,i)=sscanf(attr.x,'%g');
-            end
-            if isfield(attr,'y')
-                priorCC(2,i)=sscanf(attr.y,'%g');
-            end
-            if isfield(attr,'z')
-                priorCC(3,i)=sscanf(attr.z,'%g');
-            end
-          case {'0','false'}
-            % Do nothing. TODO: Load and recognize enable/disable status.
-          otherwise
-            warning('Unknown enabled status %s for reference for camera %d (%s)',...
-                    attr.enable,cameraIds(i),cameraLabels{i});
-        end
+        priorCamPos.enabled(i)=...
+            ParseTF(attr.enabled,...
+                    sprintf('Unknown status for reference for camera %d (%s)',...
+                            cameraIds(i),cameraLabels{i}));
+        [priorCamPos.pos(:,i),...
+         priorCamPos.std(:,i),...
+         priorCamPos.cov(:,:,i)]=ParseReferencePos(attr,s.defStd.camPos);
     end
 end
 
@@ -329,12 +322,15 @@ s.DBATCamId=DBATCamId;
 s.raw.transforms=xforms(:,:,keep);
 s.raw.P=P(:,:,keep);
 s.raw.CC=CC(:,keep);
-s.raw.priorCC=priorCC(:,keep);
-
+priorCamPos.pos=priorCamPos.pos(:,keep);
+priorCamPos.std=priorCamPos.std(:,keep);
+priorCamPos.cov=priorCamPos.cov(:,:,keep);
+priorCamPos.enabled=priorCamPos.enabled(keep);
+s.raw.priorCamPos=priorCamPos;
 
 s.local.P=s.raw.P;
 s.local.CC=s.raw.CC;
-s.local.priorCC=XformPts(s.raw.priorCC,G2L);
+s.local.priorCamPos=XformPos(s.raw.priorCamPos,G2L);
 s.local.R=nan(3,3,size(s.local.P,3));
 for i=1:size(s.local.R,3)
     R=s.local.P(:,1:3,i);
@@ -343,7 +339,7 @@ end
 
 s.global.P=XformCams(s.local.P,L2G);
 s.global.CC=XformPts(s.local.CC,L2G);
-s.global.priorCC=s.raw.priorCC;
+s.global.priorCamPos=s.raw.priorCamPos;
 s.global.R=nan(3,3,size(s.global.P,3));
 for i=1:size(s.global.R,3)
     R=s.global.P(:,1:3,i);
@@ -356,7 +352,7 @@ end
 
 s.semilocal.P=XformCams(s.local.P,L2SL);
 s.semilocal.CC=XformPts(s.local.CC,L2SL);
-s.semilocal.priorCC=XformPts(s.global.CC,G2SL);
+s.semilocal.priorCamPos=XformPos(s.global.priorCamPos,G2SL);
 s.semilocal.R=nan(3,3,size(s.semilocal.P,3));
 for i=1:size(s.semilocal.R,3)
     R=s.semilocal.P(:,1:3,i);
@@ -412,7 +408,7 @@ controlPts=struct('id',nan(1,length(markers)),...
                   'pos',nan(3,length(markers)),...
                   'std',nan(3,length(markers)),...
                   'cov',nan(3,3,length(markers)),...
-                  'enabled',false(length(markers),1),...
+                  'enabled',false(1,length(markers)),...
                   'labels',{cell(1,length(markers))});
 
 for i=1:length(markers)
@@ -1003,7 +999,7 @@ R=M(1:3,1:3);
 
 q=p;
 q.pos=euclidean(M*homogeneous(p.pos));
-for i=1:size(p.pos,3)
+for i=1:size(p.pos,2)
     q.std(:,i)=diag(sqrt(R*diag(p.std(:,i).^2)*R'));
     q.cov(:,:,i)=R*p.cov(:,:,i)*R';
 end
