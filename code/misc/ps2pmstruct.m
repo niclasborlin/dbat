@@ -75,8 +75,11 @@ end
 
 % Enabled control points are control points. Disabled control
 % points are check points.
-ctrlPts=pos.ctrlPts(pos.ctrlPtsEnabled,:);
-checkPts=pos.ctrlPts(~pos.ctrlPtsEnabled,:);
+enabled=pos.controlPts.enabled;
+ctrlPts=[pos.controlPts.id(enabled),pos.controlPts.pos(:,enabled)',...
+         pos.controlPts.std(:,enabled)'];
+checkPts=[pos.controlPts.id(~enabled),pos.controlPts.pos(:,~enabled)',...
+          pos.controlPts.std(:,~enabled)'];
 % Remove check points with <2 rays.
 ok=true(size(checkPts,1),1);
 for i=1:size(checkPts,1)
@@ -88,9 +91,9 @@ checkPts=checkPts(ok,:);
 
 % Track original ids and labels.
 rawCPids=s.PSCPid(ctrlPts(:,1));
-CPlabels=pos.ctrlPtsLabels(pos.ctrlPtsEnabled);
+CPlabels=pos.controlPts.labels(enabled);
 rawCCPids=s.PSCPid(checkPts(:,1));
-CCPlabels=pos.ctrlPtsLabels(~pos.ctrlPtsEnabled);
+CCPlabels=pos.controlPts.labels(~enabled);
 CCPlabels=CCPlabels(ok);
 
 % Merge and sort ctrl and check pts.
@@ -141,26 +144,26 @@ pmReport=struct('EO',EO,'EOstd',EOstd);
 
 % Create tables of 3D and 2D info.
 id3d=zeros(1,0);
-if ~isempty(pos.ctrlPts)
-    id3d=[id3d,pos.ctrlPts(:,1)'];
+if ~isempty(pos.controlPts.id)
+    id3d=[id3d,pos.controlPts.id'];
 end
 if ~isempty(pos.objPts)
     id3d=[id3d,pos.objPts(:,1)'];
 end
 name=repmat({''},size(id3d));
-name(s.DBATCPid(s.raw.ctrlPts(:,1)))=s.raw.ctrlPtsLabels;
+name(s.DBATCPid(s.raw.controlPts.id))=s.raw.controlPts.labels;
 pos3d=zeros(3,0);
-if size(pos.ctrlPts,2)>=4
-    pos3d=[pos3d,pos.ctrlPts(:,2:4)'];
+if ~isempty(pos.controlPts.pos)
+    pos3d=[pos3d,pos.controlPts.pos];
 end
 if size(pos.objPts,2)>=4
     pos3d=[pos3d,pos.objPts(:,2:4)'];
 end
 std3d=zeros(3,0);
-if size(pos.ctrlPts,2)>=7
-    std3d=[std3d,pos.ctrlPts(:,5:7)'];
+if ~isempty(pos.controlPts.std)
+    std3d=[std3d,pos.controlPts.std];
 else
-    std3d=[std3d,nan(size(pos.ctrlPts,1),3)'];
+    std3d=[std3d,nan(size(pos.controlPts.pos))];
 end
 if size(pos.objPts,2)>=7
     std3d=[std3d,pos.objPts(:,5:7)'];

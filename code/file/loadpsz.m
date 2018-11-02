@@ -187,7 +187,7 @@ if isfield(chnk,'reference') && isfield(chnk.reference,'Text')
                 mfilename,chnk.reference.Text);
     end
 end
-    
+
 % Extract default standard deviations.
 s.defStd=getdefstd(chnk);
 
@@ -242,15 +242,9 @@ cameraLabels=cellfun(@(x)x.Attributes.label,camera,'uniformoutput',false);
 sensorIds=cellfun(@(x)sscanf(x.Attributes.sensor_id,'%d'),camera);
 cameraEnabled=false(size(camera));
 for i=1:length(cameraEnabled)
-    switch camera{i}.Attributes.enabled
-      case {'1','true'}
-        cameraEnabled(i)=true;
-      case {'0','false'}
-        cameraEnabled(i)=false;
-      otherwise
-        warning('Unknown enabled status %s for camera %d (%s)',...
-                camera{i}.Attributes.enabled,cameraIds(i),cameraLabels{i});
-    end
+    cameraEnabled(i)=ParseTF(camera{i}.Attributes.enabled,...
+                             sprintf('Unknown status for camera %d',...
+                                     cameraIds(i)));
 end
 
 if length(unique(sensorIds(cameraEnabled)))>1
@@ -279,7 +273,7 @@ for i=1:length(cameraIds)
         end
         CC(:,i)=euclidean(null(P(:,:,i)));
     end
-       
+    
     % Check if we have reference EO coordinates.
     if isfield(camera{i},'reference')
         attr=camera{i}.reference.Attributes;
@@ -388,7 +382,7 @@ else
     points=[];
 end
 s.raw.points=points;
-   
+
 DelayedWaitBar(0.35);
 
 if ~isempty(points)
@@ -407,73 +401,41 @@ else
     markers=cell(0);
 end
 
-% Pre-allocate.
-ctrlPts=nan(length(markers),7);
-ctrlPtsEnabled=false(length(markers),1);
-ctrlPtsLabels=cell(1,length(markers));
+% Pre-allocate control point information.
+controlPts=struct('id',nan(1,length(markers)),...
+                  'pos',nan(3,length(markers)),...
+                  'std',nan(3,length(markers)),...
+                  'cov',nan(3,3,length(markers)),...
+                  'enabled',false(length(markers),1),...
+                  'labels',{cell(1,length(markers))});
 
-for i=1:size(ctrlPts,1)
+for i=1:length(markers)
     m=markers{i};
     id=sscanf(m.Attributes.id,'%d');
+    controlPts.id(i)=id;
     if isfield(m.Attributes,'label')
-        ctrlPtsLabels{i}=m.Attributes.label;
+        controlPts.labels{i}=m.Attributes.label;
     end
-    x=nan;
-    y=nan;
-    z=nan;
-    % Use default marker std setting.
-    sx=s.defStd.markers;
-    sy=s.defStd.markers;
-    sz=s.defStd.markers;
-    if isfield(m,'reference')
-        if isfield(m.reference.Attributes,'x')
-            x=sscanf(m.reference.Attributes.x,'%g');
-        end
-        if isfield(m.reference.Attributes,'y')
-            y=sscanf(m.reference.Attributes.y,'%g');
-        end
-        if isfield(m.reference.Attributes,'z')
-            z=sscanf(m.reference.Attributes.z,'%g');
-        end
-        if isfield(m.reference.Attributes,'sxyz')
-            sx=sscanf(m.reference.Attributes.sxyz,'%g');
-            sy=sx;
-            sz=sx;
-        elseif isfield(m.reference.Attributes,'sxy')
-            sx=sscanf(m.reference.Attributes.sxy,'%g');
-            sy=sx;
-        end
-        if isfield(m.reference.Attributes,'sx')
-            sx=sscanf(m.reference.Attributes.sx,'%g');
-        end    
-        if isfield(m.reference.Attributes,'sy')
-            sy=sscanf(m.reference.Attributes.sy,'%g');
-        end    
-        if isfield(m.reference.Attributes,'sz')
-            sz=sscanf(m.reference.Attributes.sz,'%g');
-        end
+    pos=nan(3,1);
+    st=nan(3,1);
+    cc=nan(3);
+    if isfield(m,'reference') && isfield(m.reference,'Attributes')
+        [pos,st,cc]=ParseReferencePos(m.reference.Attributes,s.defStd.markers);
         if isfield(m.reference.Attributes,'enabled')
-            switch m.reference.Attributes.enabled
-              case {'1','true'}
-                ctrlPtsEnabled(i)=true;
-              case {'0','false'}
-                ctrlPtsEnabled(i)=false;
-              otherwise
-                warning('Unknown enabled status %s for ctrl pt %d (%s)',...
-                        m.reference.Attributes.enabled,i,ctrlPtsLabels{i});
-            end
+            controlPts.enabled(i)=ParseTF(m.reference.Attributes.enabled,...
+                                          sprintf('Unknown status for ctrl pt %d',id));
         end
     end
-    ctrlPts(i,:)=[id,x,y,z,sx,sy,sz];
+    controlPts.pos(:,i)=pos;
+    controlPts.std(:,i)=st;
+    controlPts.cov(:,:,i)=cc;
 end
-s.raw.ctrlPts=ctrlPts;
-s.raw.ctrlPtsLabels=ctrlPtsLabels;
-s.raw.ctrlPtsEnabled=ctrlPtsEnabled;
+s.raw.controlPts=controlPts;
 
 DelayedWaitBar(0.4);
 
 % Make local/global ctrl pt ids 1-based.
-rawCPids=ctrlPts(:,1);
+rawCPids=controlPts.id(:);
 
 invCPids=nan(max(rawCPids)+1,1);
 invCPids(rawCPids+1)=1:length(rawCPids);
@@ -487,18 +449,11 @@ s.DBATCPid=DBATCPid;
 s.PSCPid=PSCPid;
 
 % Copy raw ctrl pts and adjust id.
-s.global.ctrlPtsLabels=s.raw.ctrlPtsLabels;
-s.global.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
-s.global.ctrlPts=s.raw.ctrlPts;
-if ~isempty(s.global.ctrlPts)
-    s.global.ctrlPts(:,1)=DBATCPid(s.global.ctrlPts(:,1));
-end
+s.global.controlPts=s.raw.controlPts;
+s.global.controlPts.id=DBATCPid(s.global.controlPts.id);
 % Transform ctrl pts from global to local and semilocal coordinate systems.
-s.local.ctrlPts=XformPtsi(s.global.ctrlPts,G2L);
-s.semilocal.ctrlPts=XformPtsi(s.global.ctrlPts,G2SL,true);
-
-s.semilocal.ctrlPtsLabels=s.raw.ctrlPtsLabels;
-s.semilocal.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
+s.local.controlPts=XformPos(s.global.controlPts,G2L);
+s.semilocal.controlPts=XformPos(s.global.controlPts,G2SL);
 
 % Highest DBAT CP id.
 maxDBATCPid=length(rawCPids);
@@ -511,8 +466,7 @@ s.DBATOPid=DBATOPid;
 s.PSOPid=PSOPid;
 
 % Copy raw object points and adjust id.
-s.local.ctrlPtsLabels=s.raw.ctrlPtsLabels;
-s.local.ctrlPtsEnabled=s.raw.ctrlPtsEnabled;
+s.local.controlPts=s.raw.controlPts;
 s.local.objPts=s.raw.objPts;
 s.local.objPts(:,1)=DBATOPid(s.local.objPts(:,1));
 % Transform obj pts from local to global and semilocal coordinate systems.
@@ -646,17 +600,10 @@ for i=1:length(marker)
         pinned=false(size(location));
         for j=1:length(pinned)
             if isfield(location{j}.Attributes,'pinned')
-                switch location{j}.Attributes.pinned
-                  case {'1','true'}
-                    pinned(j)=true;
-                  case {'0','false'}
-                    pinned(j)=false;
-                  otherwise
-                    warning('Unknown pinned status %s for marker %d (%s) in camera %d (%s)',...
-                            location{j}.Attributes.pinned,markerId(i),...
-                            ctrlPtsLabels{i},camIds(j),...
-                            cameraLabels{camIds(j)==cameraIds});
-                end
+                pinned(j)=ParseTF(location{j}.Attributes.pinned,...
+                                  sprintf(['Unknown pinned status ' ...
+                                    'for marker %d in camera %d'],...
+                                          markerId,camIds(j)));
             end
         end
         % What does 'pinned' mean? For now, just warn if a marker measurement
@@ -885,15 +832,8 @@ end
 fProp=sProps(strcmp(sensorProps,'fixed'));
 sensorFixed=true;
 if ~isempty(fProp)
-    switch fProp{1}.Attributes.value
-      case {'1','true'}
-        sensorFixed=true;
-      case {'0','false'}
-        sensorFixed=false;
-      otherwise
-        warning('Unknown sensorfixed property %s', ...
-                fProp{1}.Attributes.value);
-    end
+    sensorFixed=ParseTF(fProp{1}.Attributes.value,...
+                        'Unknown sensorfixed property');
 end
 
 if (fx*pixelWidth~=fy*pixelHeight)
@@ -901,7 +841,7 @@ if (fx*pixelWidth~=fy*pixelHeight)
     % locked at unity. Otherwise assume it has been estimated.
     givenParams.aspect=true;
 end
-    
+
 s.camera.name=camName;
 s.camera.type=camType;
 s.camera.imSz=imSz;
@@ -1046,6 +986,20 @@ q=[p(:,1),XformPts(p(:,2:4)',M)'];
 if stdToo
     std=M(1:3,1:3)*p(:,5:7)';
     q=[q,std'];
+end
+
+
+function q=XformPos(p,M)
+%Apply 4-by-4 point transformation matrix M to point structure p.
+%The structure has fields pos, std, and cov.
+
+R=M(1:3,1:3);
+
+q=p;
+q.pos=euclidean(M*homogeneous(p.pos));
+for i=1:size(p.pos,3)
+    q.std(:,i)=diag(sqrt(R*diag(p.std(:,i).^2)*R'));
+    q.cov(:,:,i)=R*p.cov(:,:,i)*R';
 end
 
 function Q=XformCams(P,M)
@@ -1208,4 +1162,63 @@ for i=1:l
         z=-1;
         return;
     end
+end
+
+
+function [p,st,cc]=ParseReferencePos(s,defStd)
+%Parse x/y/z + std values for a reference struct.
+%
+%s contains the struct to be parsed. Fields that are parsed:
+%  x, y, z, sx, sy, sz, sxy, sxyz
+%defStd is the default standard deviation if none is specified in
+%  the struct. Can be scalar or 3-by-1.
+%3-by-1 p returns the position.
+%3-by-1 st returns the standard deviations.
+%3-by-3 cc returns any covariance matrix, if specified.
+
+p=nan(3,1);
+st=nan(3,1);
+if isscalar(defStd)
+    st(:)=defStd;
+elseif length(defStd)==3
+    st(:)=defStd(1:3);
+end
+
+if isfield(s,'x')
+    p(1)=sscanf(s.x,'%g');
+end
+if isfield(s,'y')
+    p(2)=sscanf(s.y,'%g');
+end
+if isfield(s,'z')
+    p(3)=sscanf(s.z,'%g');
+end
+if isfield(s,'sxyz')
+    st(:)=sscanf(s.sxyz,'%g');
+elseif isfield(s,'sxy')
+    st(1:2)=sscanf(s.sxy,'%g');
+end
+if isfield(s,'sx')
+    st(1)=sscanf(s.sx,'%g');
+end    
+if isfield(s,'sy')
+    st(2)=sscanf(s.sy,'%g');
+end    
+if isfield(s,'sz')
+    st(3)=sscanf(s.sz,'%g');
+end
+cc=diag(st.^2);
+
+
+function t=ParseTF(s,msg)
+%Parse the string s containing 0/1 or false/true. Return false or true.
+%Uses msg to generate an error message if s is bad.
+
+switch s
+  case {'1','true'}
+    t=true;
+  case {'0','false'}
+    t=false;
+  otherwise
+    warning('%s: Trying to parse true/false string, got %s.',msg,s);
 end
