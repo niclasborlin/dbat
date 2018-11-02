@@ -412,7 +412,7 @@ ctrlPts=nan(length(markers),7);
 ctrlPtsEnabled=false(length(markers),1);
 ctrlPtsLabels=cell(1,length(markers));
 
-for i=1:size(ctrlPts,1);
+for i=1:size(ctrlPts,1)
     m=markers{i};
     id=sscanf(m.Attributes.id,'%d');
     if isfield(m.Attributes,'label')
@@ -1112,7 +1112,7 @@ function i=IDInvLookup(tbl,j)
 i=nan(size(j));
 for jj=1:length(j)
     ii=find(tbl==j(jj),1);
-    if isscalar(ii),
+    if isscalar(ii)
         i(jj)=ii;
     end
 end
@@ -1174,7 +1174,7 @@ else
 end
 
 
-function z=CompareVersion(s,t)
+function z=CompareVersion(s,t) %#ok<DEFNU>
 %Compare version strings. Return -1, 0 or +1 if s is lower, equal
 %to, or higher than t.
 %
