@@ -1,18 +1,35 @@
-function pts=loadcpt(fName)
+function pts=loadcpt(fName,has)
 %LOADCPT Load control points from text file. 
 %
-%   PTS=loadcpt(FNAME) loads control point information
+%   PTS=LOADCPT(FNAME) loads control point information
 %   from the text file FNAME. The data is returned in a struct PTS
 %   with fields
-%       id   - M-array with id numbers.
-%       name - M-cell array with names.
-%       pos  - N-by-3 array of estimated positions
-%       std  - N-by-3 array with posteriori standard deviations
+%       id   - 1-by-M array with id numbers.
+%       name - 1-by-M cell array with names.
+%       pos  - 3-by-M array of positions.
+%       std  - 3-by-M array with prior standard deviations.
+%       cov  - 3-by-3-by-M array with prior covariance matrices.
 %
 %   Each line is expected to contain a comma-separated list of an
-%   integer id, a name, X, Y, Z positions, and optionally X, Y, Z standard
-%   devations. Blank lines and lines starting with # are ignored.
+%   integer id, a name, X, Y, Z positions, and optional std/covariance
+%   information. Blank lines and lines starting with # are ignored.
+%
+%   PTS=LOADCPT(FNAME,[HAS_ID,HAS_NAME]), where HAS_ID and
+%   HAS_NAME are logical, indicates whether the ID and/or NAME are
+%   present in the file. At least one of HAS_ID and HAS_NAME must
+%   be TRUE.
+%
+%   The std/covariance information may consist of:
+%     - no value - pt is fixed,
+%     - 1 value  - sigma_xyz,
+%     - 2 values - sigma_xy, sigma_z,
+%     - 3 values - sigma_x, sigma_y, sigma_z,
+%     - 9 values - full covariance matrix.
 
+if nargin<2, has=[true,true]; end
+
+hasId=has(1);
+hasName=has(2);
 
 [fid,msg]=fopen(fName,'rt');
 if fid<0
@@ -22,6 +39,7 @@ end
 id=zeros(1,0);
 pos=zeros(3,0);
 std=zeros(3,0);
+cov=zeros(3,3,0);
 name=cell(1,0);
 
 while ~feof(fid)
@@ -33,30 +51,53 @@ while ~feof(fid)
     if isempty(s) || s(1)=='#'
         continue;
     end
-    % Parse id.
-    [i,n,msg,ni]=sscanf(s,'%d,',1);
-    s=s(ni:end);
-    % Parse name.
-    [nn,n,msg,ni]=sscanf(s,'%s,');
-    if ~isempty(nn) && nn(end)==','
-        nn=nn(1:end-1);
+    if hasId
+        % Parse id if present.
+        [i,~,msg,ni]=sscanf(s,'%d,',1); %#ok<ASGLU>
+        s=s(ni:end);
+    else
+        i=nan;
     end
-    s=s(ni:end);
-    [a,n,msg,ni]=sscanf(s,'%g,');
-    id(end+1)=i;
-    name{end+1}=nn;
+    if hasName
+        % Parse name if present.
+        [nn,s]=strtok(s,','); %#ok<STTOK>
+        % Remove any blanks.
+        nn=fliplr(deblank(fliplr(nn)));
+        if ~isempty(s) && s(1)==','
+            s=s(2:end);
+        end
+    else
+        nn='';
+    end
+    % Parse numbers.
+    [a,n,msg,ni]=sscanf(s,'%g,'); %#ok<ASGLU>
+    id(end+1)=i; %#ok<AGROW>
+    name{end+1}=nn; %#ok<AGROW>
+    pos(:,end+1)=a(1:3); %#ok<AGROW>
+    st=nan(3,1);
+    cc=nan(3,3);
     switch n
       case 3
-        pos(:,end+1)=a;
-        std(:,end+1)=0;
+        st(:)=0;
+      case 4
+        st(:)=a(4); % sigma_xyz
+      case 5
+        st(:)=a([4,4,5]); % sigma_xy, sigma_z
       case 6
-        pos(:,end+1)=a(1:3);
-        std(:,end+1)=a(4:6);
+        st=a(4:6);
+      case 12
+        cc(:)=a(4:end);
+        st=sqrt(diag(cc));
       otherwise
         error('Bad number of items on CP line.');
     end
+    if all(isnan(cc(:)))
+        cc=diag(st.^2);
+    end
+    std(:,end+1)=st; %#ok<AGROW>
+    cov(:,:,end+1)=cc; %#ok<AGROW>
 end
 
 fclose(fid);
 
-pts=struct('id',id,'name',{name},'pos',pos,'std',std);
+pts=struct('id',id,'name',{name},'pos',pos,'std',std,'cov',cov);
