@@ -26,7 +26,13 @@ function s=loadpsz(psFile,varargin)
 %   global,
 %   local,
 %   semilocal - structs with 3D info in global/local coordinates with fields
-%               ctrlPts - MC-by-7 array with [id,x,y,z,sx,sy,sz] for ctrl pts,
+%               controlPts - struct with arrays
+%                 id      - 1-by-MC with ids
+%                 pos     - 3-by-MC with positions
+%                 std     - 3-by-MC with standard deviations
+%                 cov     - 3-by-3-by-MC with full covariance matrices
+%                 enabled - MC-by-1 with logical
+%                 labels  - 1-by-MC cell array with strings
 %               objPts  - MO-by-4 array with [id,x,y,z] for object pts,
 %               P       - 3-by-4-by-N array with camera matrices,
 %               CC      - 3-by-N array with camera centers,
