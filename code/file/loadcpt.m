@@ -4,8 +4,8 @@ function pts=loadcpt(fName,has)
 %   PTS=LOADCPT(FNAME) loads control point information
 %   from the text file FNAME. The data is returned in a struct PTS
 %   with fields
-%       id   - 1-by-M array with id numbers.
-%       name - 1-by-M cell array with names.
+%       id   - 1-by-M array with id numbers, or NaN if no id.
+%       name - 1-by-M cell array with names, or blank if no name.
 %       pos  - 3-by-M array of positions.
 %       std  - 3-by-M array with prior standard deviations.
 %       cov  - 3-by-3-by-M array with prior covariance matrices.
