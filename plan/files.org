@@ -1,14 +1,14 @@
-- [0/3] code
-  - [0/10] file
-    - [ ] loadcpt.m
-    - [ ] loadlnz.m
-    - [ ] loadpm.m
-    - [ ] loadpm2dtbl.m
-    - [ ] loadpm3dtbl.m
-    - [ ] loadpmreport.m
-    - [ ] loadpsz.m
-    - [ ] plytoascii.m
-    - [ ] unpackpsz.m
+- [3/3] code
+  - [9/10] file
+    - [X] loadcpt.m
+    - [X] loadlnz.m
+    - [X] loadpm.m
+    - [X] loadpm2dtbl.m
+    - [X] loadpm3dtbl.m
+    - [X] loadpmreport.m
+    - [X] loadpsz.m
+    - [X] plytoascii.m
+    - [X] unpackpsz.m
     - [ ] writestats.m
   - [0/19] demo
     - [ ] camcaldemo.m
@@ -177,6 +177,6 @@
     - [ ] plotparams.m
     - [ ] pm_plotmulti.m
     - [ ] tagfigure.m
-  - [ ] dbatroot.m
-  - [ ] dbatSetup.m
-  - [ ] dbatversion.m
+  - [X] dbatroot.m
+  - [X] dbatSetup.m
+  - [X] dbatversion.m
