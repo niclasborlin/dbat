@@ -227,6 +227,7 @@
 | prior.OP      | OP.prior.val         |                          |
 | prior.OPstd   | OP.prior.std         |                          |
 | prior.OPcov   | OP.prior.cov         |                          |
+| useOPobs      | OP.prior.use         |                          |
 | prior.CCP     | OP.prior.val         |                          |
 | prior.CCPstd  | OP.prior.std         |                          |
 | prior.CCPcov  | OP.prior.cov         |                          |
@@ -264,7 +265,7 @@
   use autodie;
 
   my $srcVar='s'; # shift;
-  my $destVar='tt'; # shift;
+  my $destVar='ss'; # shift;
 
   open(my $in,"<","./dbatstruct.org");
   open(my $out,">","/tmp/perlscript.pl");
@@ -272,18 +273,21 @@
   print $out "#!/usr/local/bin/perl -i.bak\n\n";
 
   print $out "while (<>) {\n";
+  print $out "\tif (/^\\s*%/) { print; next; }\n";
   while (<$in>) {
       if (/^\|[^-]/) {
           # Table row, no hline
           my @a=split(/\s*\|\s*/);
           my $from=$a[1];
           next if $from eq 'Old';
+          next if $from eq '';
           # Escape .
           $from =~ s/\./\\./g;
           my $to=$a[2];
-          print $out "\ts/$srcVar\\\.$from/$destVar.$to/g;\n";
+          print $out "\ts/\\b$srcVar\\\.$from\\b/$destVar.$to/g;\n";
       }
   }
+  print $out "\tprint;\n";
   print $out "}\n";
   close $in;
   close $out;

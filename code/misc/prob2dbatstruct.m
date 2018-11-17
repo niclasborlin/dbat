@@ -226,13 +226,13 @@ if individualCameras
     inner=cat(1,prob.images.inner)';
     innerStd=cat(1,prob.images.innerStd)';
     imSz=reshape(cat(1,prob.images.imSz),2,[]);
-    IOblock=repmat(1:nImages,1,16);
+    IOblock=repmat(1:nImages,5+nK+nP,1);
 else
     % Block-invariant
     inner=repmat(prob.job.defCam,1,nImages);
     innerStd=repmat(prob.job.defCamStd,1,nImages);
     imSz=repmat(prob.job.imSz(:),1,nImages);
-    IOblock=ones(16,nImages);
+    IOblock=ones(5+nK+nP,nImages);
 end
 
 % Principal point. Flip y coordinate.
@@ -287,7 +287,7 @@ imLabels=cellfun(@(x)strrep(x,'\','/'),{prob.images.label},...
 camIds=cell2mat({prob.images.id});
 
 % Default to no common cam stations.
-EOblock=repmat(1:nImages,1);
+EOblock=repmat(1:nImages,6,1);
 
 % Find shortest common dir prefix.
 imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
@@ -399,10 +399,10 @@ useIOobs=false(size(IO));
 estEO=true(size(EO));
 useEOobs=false(size(EO));
 % Estimate all non-fixed OP.
-estOP=~(prior.OPstd==0);
+estOP=~(priorCPstd==0);
 % Use all non-fixed CP observations. For fixed CP, we only need the
 % current "observation".
-useOPobs=~isnan(prior.OP) & ~(prior.OPstd==0);
+useOPobs=repmat(isCtrl,3,1);
 
 % Default camera and object space units.
 camUnit='mm';
@@ -556,4 +556,5 @@ s=struct('proj',proj,...
 %          'nK',nK,'nP',nP,'camUnit',camUnit,...
 %          'objUnit',objUnit,'x0desc','');
 
+s=buildserialindices(s);
 s=buildparamtypes(s);
