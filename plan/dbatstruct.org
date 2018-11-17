@@ -1,0 +1,277 @@
+- proj
+  - objUnit :: string with the object space unit.
+  - x0desc :: comment string on the initial values used by bundle.
+  - title :: title string.
+  - imDir :: string with the image directory.
+  - fileName :: name of the original project file.
+- IO
+  - val :: 16-by-nImages array with estimates of the internal
+           orientation for each camera.
+  - std :: 16-by-nImages array with estimates of the posterior
+           standard deviation of IO.val.
+  - type :: val-sized struct indicate what type of parameter is stored
+            at the respective position. See PARAMETER TYPES below.
+  - model :: struct with fields
+    - distModel :: nImages array distortion number for each image.
+    - nK :: scalar indicating how many (potentially zero) K values are
+            used in the model. Default: nK=3.
+    - nP :: scalar indicating how many (potentially zero) P values are
+            used in the model. Default: nP=2.
+    - camUnit :: string with the unit used internally by the camera
+      - mm :: nominal mm,
+      - 35mm :: '35 mm equivalent' units, i.e. sensor height=24mm,
+      - pixels :: pixels,
+      - unity :: sensor height=1.
+  - prior :: struct with prior observations in fields
+    - val :: IO.val-sized array with prior observations, or NaN if no
+             observation.
+    - std :: IO.std-sized array with prior standard deviations for the
+             IO parameters, 0 if exact, NaN if none.
+    - cov :: 16--by-16--by-nImages array with prior covariance
+             matrices for the IO parameters, or empty if none.
+    - use :: val-sized logical array indicating whether the
+             corresponding IO entry should be used an observation in
+             the bundle. Default is all-false.
+  - struct :: struct with fields
+    - block :: 16-by-nImages array with numbering indicating what IO
+               values are distinct. Block-variant projects have only
+               one unique value. Image-variant projects have all
+               values distinct.
+    - lead :: 16-by-nImages logical array indicating what parameters
+              are leading a block.
+    - uniq :: logical nImages-vector indicating which IOblock columns
+              are unique.
+    - no ::  nImages-vector with unique numbers for IOblock columns.
+    - simple :: logical nImages-vector indicating which IOblock are
+                simple (contain elements from one block only).
+- EO
+  - val :: 7-by-nImages array with the external orientation for each
+           image.
+  - std :: 7-by-nImages array with estimates of the posterior standard
+           deviation of EO.val.
+  - cams :: Index into IO for each image (legacy distortion models
+            +/-1 only).
+  - names :: nEO-cell array with image names.
+  - id :: nEO-vector with camera ids.
+  - labels :: nEO-cell array with image labels.
+  - type :: val-sized struct indicate what type of parameter is stored
+            at the respective position. See PARAMETER TYPES below.
+  - prior :: struct with prior observations in fields
+    - val :: EO.val-sized array with prior observations, or NaN if no
+             observation.
+    - std :: EO.std-sized array with prior standard deviations for the
+             EO parameters, 0 if exact, NaN if none.
+    - cov :: 7-by-7-by-nImages array with prior covariance
+             matrices for the EO parameters, or empty if none.
+    - use :: val-sized logical array indicating whether the
+             corresponding EO entry should be used an observation in
+             the bundle. Default is all-false.
+  - struct :: struct with fields
+    - block :: 7-by-nImages array with numbering indicating what EO
+               values are distinct.
+    - lead :: 7-by-nImages logical array indicating what parameters
+              are leading a block.
+    - uniq :: logical nImages-vector indicating which EOblock columns
+              are unique.
+    - no :: nImages-vector with unique numbers for EOblock columns.
+    - simple :: logical nImages-vector indicating which EOblock are
+                simple (contain elements from one block only).
+- OP
+  - val :: 3-by-nOP array with object and control points.
+  - std :: 3-by-nOP array with estimates of the posterior standard
+           deviation of OP.val.
+  - id :: 1-by-nOP array with object points ids.
+  - rawId :: 1-by-nOP array with original object point ids.
+  - labels :: 1-by-nOP cell array with labels of the original ctrl pts.
+  - type :: val-sized struct indicate what type of parameter is stored
+            at the respective position. See PARAMETER TYPES below.
+  - prior :: struct with prior IO information in fields
+    - val :: 3-by-nOP array, with prior observations of the OP
+             parameters, or NaN if no observation.
+    - std :: val-sized array with prior standard deviations for the IO
+             parameters, 0 if exact, NaN if none.
+    - cov :: 3-by-3-nOP array with prior covariance matrices for the
+             OP parameters, or empty if none.
+    - use :: val-sized logical array indicating whether the
+             corresponding IO entry should be used an observation in
+             the bundle. Default is true for each control point.
+    - isCtrl :: 1-by-nOP logical vector indicating which OP are
+                control points.
+    - isCheck :: 1-by-nOP logical vector indicating which OP are
+                 control points. Currently set to ???
+- IP
+  - val :: 2-by-nMarkPts array with measured image coordinates in
+           pixels, stored in image-major order.
+  - std :: 2-by-nMarkPts array with standard deviations for the
+           markPts coordinates.
+  - ptCams :: 1-by-nMarkPts array indicating which IO column
+              correspond to which measured point.
+  - vis :: nOP-by-nImage sparse logical array indicating in which
+           image(s) each OP is visible. vis(I,J)==true if object point
+           I has a measured coordinate in image J.
+  - colPos :: nOP-by-nImage numerical array indicating which column in
+              markPts the corresponding measurement is stored.
+              colPos(I,J)==K indicates the the measurement of object
+              point I in image J is stored in column K of markPts.
+  - sigmas :: single or multiple prior sigmas for different IP types
+- bundle
+  - est :: struct with fields
+    - IO :: 16-by-nImages logical array indicating what internal
+            parameters should be estimated by the bundle. Defaults to
+            all false.
+    - EO :: 7-by-nImages logical array indicating what external
+            parameters should be estimated by the bundle. Defaults to
+            true for first 6 rows (camera position and Euler angles).
+    - OP :: 3-by-nOP logical array indicating what OP parameters are
+            considered free and should be estimated by the bundle.
+            Defaults to false for fixed control points, otherwise true.
+  - serial :: struct with serialisation indices used when constructing
+              the vector x of unknowns
+    - IO.src :: where from in IO should the values be copied?
+    - IO.dest :: where in x should the values end up?
+    - IO.obs :: what IO values should be used as observations?
+    - EO.src :: where from in EO should the values be copied?
+    - EO.dest :: where in x should the values end up?
+    - EO.obs :: what EO values should be used as observations?
+    - OP.src :: where from in OP should the values be copied?
+    - OP.dest :: where in x should the values end up?
+    - OP.obs :: what OP values should be used as observations?
+    - n :: total number of unknowns.
+  - deserial :: struct with deserialisation indices used when
+                deconstructing the vector x of unknowns
+    - IO.src :: where from in x should the IO values be copied?
+    - IO.dest :: where in IO should the elements end up?
+    - EO.src :: where from in x should the EO values be copied?
+    - EO.dest :: where in EO should the elements end up?
+    - OP.src :: where from in x should the OP values be copied?
+    - OP.dest :: where in OP should the elements end up?
+    - n :: total number of unknowns.
+- post
+  - res :: posterior residuals after the bundle
+    - IP :: 2-by-nMarkPts array with image point residuals in pixels.
+            Filled in by the bundle.
+    - IO :: 16-by-nImages array with IO residuals if prior IO
+            observations were used in the bundle.
+    - EO :: 7-by-nImages array with EO residuals if prior EO
+            observations were used in the bundle.
+    - OP :: 3-by-nOP array with OP and CP residuals if prior OP/CP
+            observations were used in the bundle.
+    - ix :: struct with fields IP, IO, EO, OP, indicating the
+            corresponding residual vector indices.
+  - sigmas :: vector with a posteriori standard deviations
+              (prior.sigmas scaled by estimated sigma0).
+
+| Old           | New                |                              |
+|---------------+--------------------+------------------------------|
+| objUnit       | proj.objUnit       |                              |
+| x0desc        | proj.x0desc        |                              |
+| title         | proj.title         |                              |
+| imDir         | proj.imDir         |                              |
+| fileName      | proj.fileName      |                              |
+|---------------+--------------------+------------------------------|
+| IO            | IO.val             |                              |
+| IOstd         | IO.std             |                              |
+| paramTypes.IO | IO.type            |                              |
+| distmodel     | IO.model.distModel |                              |
+| nK            | IO.model.nK        |                              |
+| nP            | IO.model.nP        |                              |
+| camUnit       | IO.model.camUnit   |                              |
+| prior.IO      | IO.prior.val       |                              |
+| prior.IOstd   | IO.prior.std       |                              |
+| prior.IOcov   | IO.prior.cov       |                              |
+| useIOobs      | IO.prior.use       |                              |
+| IOblock       | IO.struct.block    |                              |
+| IOlead        | IO.struct.lead     |                              |
+| IOunique      | IO.struct.uniq     |                              |
+| IOno          | IO.struct.no       |                              |
+| IOsimple      | IO.struct.simple   |                              |
+|---------------+--------------------+------------------------------|
+| EO            | EO.val             |                              |
+| EOstd         | EO.std             |                              |
+| imCams        | EO.cams            |                              |
+| imNames       | EO.names           |                              |
+| camIds        | EO.id              |                              |
+| imLabels      | EO.labels          |                              |
+| paramTypes.EO | EO.type            |                              |
+| prior.EO      | EO.prior.val       |                              |
+| prior.EOstd   | EO.prior.std       |                              |
+| prior.EOcov   | EO.prior.cov       |                              |
+| useEOobs      | EO.prior.use       |                              |
+| EOblock       | EO.struct.block    |                              |
+| EOlead        | EO.struct.lead     |                              |
+| EOunique      | EO.struct.uniq     |                              |
+| EOno          | EO.struct.no       |                              |
+| EOsimple      | EO.struct.simple   |                              |
+|---------------+--------------------+------------------------------|
+| OP            | OP.val             |                              |
+| OPstd         | OP.std             |                              |
+| OPid          | OP.id              |                              |
+| OPrawId       | OP.rawId           |                              |
+| OPlabels      | OP.labels          |                              |
+| paramTypes.OP | OP.type            |                              |
+| prior.OP      | OP.prior.val       |                              |
+| prior.OPstd   | OP.prior.std       |                              |
+| prior.OPcov   | OP.prior.cov       |                              |
+| prior.CCP     | OP.prior.val       |                              |
+| prior.CCPstd  | OP.prior.std       |                              |
+| prior.CCPcov  | OP.prior.cov       |                              |
+| isCtrl        | OP.prior.isCtrl    |                              |
+| isCheck       | OP.prior.isCheck   |                              |
+|---------------+--------------------+------------------------------|
+| markPts       | IP.val             |                              |
+| markStd       | IP.std             |                              |
+| ptCams        | IP.ptCams          |                              |
+| vis           | IP.vis             |                              |
+| colPos        | IP.colPos          |                              |
+| prior.sigmas  | IP.sigmas          |                              |
+|---------------+--------------------+------------------------------|
+| estIO         | bundle.est.IO      |                              |
+| estEO         | bundle.est.EO      |                              |
+| estOP         | bundle.est.OP      |                              |
+| serial        | bundle.serial      |                              |
+| deserial      | bundle.deserial    |                              |
+|---------------+--------------------+------------------------------|
+| residuals.IP  | post.res.IP        |                              |
+| residuals.IO  | post.res.IO        |                              |
+| residuals.EO  | post.res.EO        |                              |
+| residuals.OP  | post.res.OP        |                              |
+| residuals.ix  | post.res.ix        |                              |
+| residuals     | post.res           |                              |
+| sigmas        | post.sigmas        |                              |
+|---------------+--------------------+------------------------------|
+| paramTypes    | #paramTypes#       | # To trigger a matlab error. |
+| prior         | #prior#            |                              |
+
+#+BEGIN_SRC perl
+  use strict;
+  use warnings;
+  use autodie;
+
+  my $srcVar='s0'; # shift;
+  my $destVar='tt'; # shift;
+
+  open(my $in,"<","./dbatstruct.org");
+  open(my $out,">","/tmp/perlscript.pl");
+
+  print $out "#!/usr/local/bin/perl -i.bak\n\n";
+
+  print $out "while (<>) {\n";
+  while (<$in>) {
+      if (/^\|[^-]/) {
+          # Table row, no hline
+          my @a=split(/\s*\|\s*/);
+          my $from=$a[1];
+          next if $from eq 'Old';
+          # Escape .
+          $from =~ s/\./\\./g;
+          my $to=$a[2];
+          print $out "\ts/$srcVar\\\.$from/$destVar.$to/g;\n";
+      }
+  }
+  print $out "}\n";
+  close $in;
+  close $out;
+#+END_src
+
+#+RESULTS:
+: 1
