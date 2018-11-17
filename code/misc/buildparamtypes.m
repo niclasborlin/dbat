@@ -8,24 +8,17 @@ function ret=buildparamtypes(s,sel)
 %   T=BUILDPARAMTYPES(S,SEL), where SEL is 'IO', 'EO', or 'OP',
 %   returns the cell array of selected parameter types instead.
 %
-%   Each S.IO column stores the parameters below. The first 10 may
-%   be estimated by the bundle.
+%   Each S.IO column stores the parameters below.
+%       cc      - camera constant in camera units.
 %       px,
 %       py      - principal point in camera units (typically mm).
-%       cc      - camera constant in camera units.
+%       af      - affine parameter. Aspect will be (1+af):1.
+%       sk      - skew parameters.
 %       K1,
 %       K2,
 %       K3      - radial distortion parameters of Brown (1971).
 %       P1,
 %       P2      - tangential distortion parameters of Brown (1971).
-%       fa      - affine parameter. Aspect will be (1+fa):1.
-%       fs      - skew parameters.
-%       sw,
-%       sh      - sensor width and height in camera units.
-%       iw,
-%       ih      - image width in pixels.
-%       rx,
-%       ry      - image resolution.
 %
 %   The names above are returned in the 16-by-nCams IO cell array. If
 %   multiple S.IO columns are present, the column number is
@@ -40,13 +33,11 @@ function ret=buildparamtypes(s,sel)
 %       omega,
 %       phi,
 %       kappa   - Euler angles for the camera orientation in radians.
-%       tt      - parameter indicating which Euler convention is
-%                 used. Currently only t=0 (omega, phi,kappa) is supported.
 %
 %   The first two letters of the names above are returned in the
-%   7-by-nImages EO cell array. If multiple EO columns are present, a
+%   6-by-nImages EO cell array. If multiple EO columns are present, a
 %   camera identifier is appended to each parameter. The camera
-%   parameter is consists of the camera sequence number and camera id.
+%   parameter consists of the camera sequence number and camera id.
 %
 %   Each S.OP column stores the X, Y, Z coordinates. The OP names are
 %   returned in the 3-by-nOP cell array OP. Object points are prefixed
