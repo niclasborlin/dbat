@@ -10,8 +10,8 @@
     - [X] plytoascii.m
     - [X] unpackpsz.m
     - [ ] writestats.m
-  - [0/19] demo
-    - [ ] camcaldemo.m
+  - [1/19] demo
+    - [X] camcaldemo.m
     - [ ] camcaldemo2.m
     - [ ] camcaldemo_1ray.m
     - [ ] camcaldemo_allmodels.m
@@ -30,12 +30,12 @@
     - [ ] runalldemos.m
     - [ ] stpierrebundledemo_ps.m
     - [ ] stpierrebundledemo_ps_brown.m
-  - [4/19] photogrammetry
-    - [ ] angles.m
+  - [7/19] photogrammetry
+    - [X] angles.m
     - [ ] applyhomoxform.m
-    - [ ] camangles.m
+    - [X] camangles.m
     - [ ] camsfrome.m
-    - [ ] coverage.m
+    - [X] coverage.m
     - [ ] derotmat3d.m
     - [ ] essmat5.m
     - [ ] euclidean.m
@@ -50,7 +50,7 @@
     - [X] pm_resect_3pt.m
     - [ ] ptdepth.m
     - [X] resect.m
-  - [2/23] misc
+  - [4/23] misc
     - [ ] abserr.m
     - [ ] analyzepsz.m
     - [X] buildparamtypes.m
@@ -58,7 +58,7 @@
     - [ ] buildweightmatrix.m
     - [ ] corrmat.m
     - [ ] cumchi2.m
-    - [ ] deserialize.m
+    - [X] deserialize.m
     - [ ] ihist.m
     - [ ] indvec.m
     - [ ] isblkdiag.m
@@ -71,11 +71,11 @@
     - [ ] ps2pmstruct.m
     - [ ] relerr.m
     - [ ] rigidalign.m
-    - [ ] serialize.m
+    - [X] serialize.m
     - [ ] spnrank.m
     - [ ] vec.m
-  - [0/4] bundle
-    - [0/11] lsa
+  - [4/4] bundle
+    - [1/11] lsa
       - [ ] gauss_markov.m
       - [ ] gauss_newton_armijo.m
       - [ ] gaussn_paper.m
@@ -86,7 +86,7 @@
       - [ ] pm_eulerbundle1p_v3.m
       - [ ] pm_eulerbundle1p_v3all.m
       - [ ] pm_preobs.m
-      - [ ] prior_obs.m
+      - [X] prior_obs.m
     - [2/18] cammodel
       - [1/5] private
         - [ ] createeocolumnindices.m
@@ -112,7 +112,7 @@
       - [ ] proj.m
       - [ ] roteuler.m
       - [ ] rotmat.m
-    - [0/33] cameramodel
+    - [2/33] cameramodel
       - [0/7] private
         - [ ] compare_jacobian_structs.m
         - [ ] createeocolumnindices.m
@@ -129,7 +129,7 @@
       - [ ] brown_affine.m
       - [ ] brown_dist.m
       - [ ] brown_dist_rel.m
-      - [ ] brown_euler_cam4.m
+      - [X] brown_euler_cam4.m
       - [ ] brown_rad.m
       - [ ] brown_tang.m
       - [ ] dbat_bundle_functions.m
@@ -138,7 +138,7 @@
       - [ ] lens_rad2.m
       - [ ] lin2.m
       - [ ] lin3.m
-      - [ ] multi_res.m
+      - [X] multi_res.m
       - [ ] pinhole.m
       - [ ] power_vec.m
       - [ ] rad_scale.m
@@ -154,27 +154,27 @@
       - [ ] world2cam.m
       - [ ] xlat2.m
       - [ ] xlat3.m
-    - [0/6] private
+    - [4/6] private
       - [ ] blkcolperm.m
-      - [ ] high_eo_correlations.m
-      - [ ] high_io_correlations.m
-      - [ ] high_op_correlations.m
+      - [X] high_eo_correlations.m
+      - [X] high_io_correlations.m
+      - [X] high_op_correlations.m
       - [ ] invblock.m
-      - [ ] test_distortion_params.m
-    - [ ] bundle.m
-    - [ ] bundle_cov.m
-    - [ ] bundle_residuals.m
-    - [ ] bundle_result_file.m
-  - [2/9] plotting
-    - [0/1] private
-      - [ ] scalewidth.m
-    - [ ] cameraicon.m
-    - [ ] plotcoverage.m
+      - [X] test_distortion_params.m
+    - [X] bundle.m
+    - [X] bundle_cov.m
+    - [X] bundle_residuals.m
+    - [X] bundle_result_file.m
+  - [7/9] plotting
+    - [1/1] private
+      - [X] scalewidth.m
+    - [X] cameraicon.m
+    - [X] plotcoverage.m
     - [ ] plotimages.m
-    - [ ] plotimagestats.m
+    - [X] plotimagestats.m
     - [X] plotnetwork.m
-    - [ ] plotopstats.m
-    - [ ] plotparams.m
+    - [X] plotopstats.m
+    - [X] plotparams.m
     - [ ] pm_plotmulti.m
     - [X] tagfigure.m
   - [X] dbatroot.m
