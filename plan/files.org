@@ -30,7 +30,7 @@
     - [ ] runalldemos.m
     - [ ] stpierrebundledemo_ps.m
     - [ ] stpierrebundledemo_ps_brown.m
-  - [0/19] photogrammetry
+  - [4/19] photogrammetry
     - [ ] angles.m
     - [ ] applyhomoxform.m
     - [ ] camangles.m
@@ -39,22 +39,22 @@
     - [ ] derotmat3d.m
     - [ ] essmat5.m
     - [ ] euclidean.m
-    - [ ] forwintersect.m
+    - [X] forwintersect.m
     - [ ] homogeneous.m
     - [ ] pm_forwintersect1.m
     - [ ] pm_forwintersect3.m
     - [ ] pm_multialign.m
     - [ ] pm_multidepth.m
-    - [ ] pm_multiforwintersect.m
+    - [X] pm_multiforwintersect.m
     - [ ] pm_multixform.m
-    - [ ] pm_resect_3pt.m
+    - [X] pm_resect_3pt.m
     - [ ] ptdepth.m
-    - [ ] resect.m
-  - [0/23] misc
+    - [X] resect.m
+  - [2/23] misc
     - [ ] abserr.m
     - [ ] analyzepsz.m
-    - [ ] buildparamtypes.m
-    - [ ] buildserialindices.m
+    - [X] buildparamtypes.m
+    - [X] buildserialindices.m
     - [ ] buildweightmatrix.m
     - [ ] corrmat.m
     - [ ] cumchi2.m
@@ -87,13 +87,13 @@
       - [ ] pm_eulerbundle1p_v3all.m
       - [ ] pm_preobs.m
       - [ ] prior_obs.m
-    - [0/18] cammodel
-      - [0/5] private
+    - [2/18] cammodel
+      - [1/5] private
         - [ ] createeocolumnindices.m
         - [ ] createiocolumnindices.m
         - [ ] createopcolumnindices.m
         - [ ] createptcolumnindices.m
-        - [ ] unpackio.m
+        - [X] unpackio.m
       - [ ] brown_euler_cam.m
       - [ ] brown_euler_cam2.m
       - [ ] browndist.m
@@ -104,9 +104,9 @@
       - [ ] multiscalepts.m
       - [ ] pm_eulerpinhole1.m
       - [ ] pm_eulerrotmat.m
-      - [ ] pm_lens1.m
+      - [X] pm_lens1.m
       - [ ] pm_multieulerpinhole1.m
-      - [ ] pm_multilenscorr1.m
+      - [X] pm_multilenscorr1.m
       - [ ] pm_proj1.m
       - [ ] pm_roteuler1.m
       - [ ] proj.m
@@ -165,18 +165,18 @@
     - [ ] bundle_cov.m
     - [ ] bundle_residuals.m
     - [ ] bundle_result_file.m
-  - [0/9] plotting
+  - [2/9] plotting
     - [0/1] private
       - [ ] scalewidth.m
     - [ ] cameraicon.m
     - [ ] plotcoverage.m
     - [ ] plotimages.m
     - [ ] plotimagestats.m
-    - [ ] plotnetwork.m
+    - [X] plotnetwork.m
     - [ ] plotopstats.m
     - [ ] plotparams.m
     - [ ] pm_plotmulti.m
-    - [ ] tagfigure.m
+    - [X] tagfigure.m
   - [X] dbatroot.m
   - [X] dbatSetup.m
   - [X] dbatversion.m

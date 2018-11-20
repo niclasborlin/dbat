@@ -17,12 +17,12 @@ if (nargin<6), cp0=(nargout>1); end
 if (nargin<7), cK=(nargout>2); end
 if (nargin<8), cP=(nargout>3); end
 
-if (isempty(K) & isempty(P))
+if (isempty(K) && isempty(P))
 	delta=sparse(size(p,1),size(p,2));
-	dp=sparse(prod(size(p)),prod(size(p)));
-	dp0=sparse(prod(size(p)),2);
-	dK=sparse(prod(size(p)),0);
-	dP=sparse(prod(size(p)),0);
+	dp=sparse(numel(p),numel(p));
+	dp0=sparse(numel(p),2);
+	dK=sparse(numel(p),0);
+	dP=sparse(numel(p),0);
 	return;
 end
 
@@ -45,7 +45,7 @@ r2=xBar.^2+yBar.^2;
 
 % Create r2 exponent matrix.
 nK=length(K);
-r2e=repmat([1:nK]',1,n);
+r2e=repmat((1:nK)',1,n);
 			
 r2k=repmat(r2,nK,1).^r2e;
 
@@ -55,7 +55,7 @@ Kr=(r2k'*K)';
 deltaRx=xBar.*Kr;
 deltaRy=yBar.*Kr;
 
-if (length(P)==0)
+if (isempty(P))
 	deltaTx=0;
 	deltaTy=0;
 else
@@ -71,16 +71,16 @@ end
 delta=[deltaRx+deltaTx;
 	   deltaRy+deltaTy];
 
-if (any([cp,cp0]) & length(K)>0)
+if (any([cp,cp0]) && ~isempty(K))
 	% Inner product K(1)+2*K(2)*r^2+3*K(3)*r^4+...
-	kK=[1:nK]'.*K;
+	kK=(1:nK)'.*K;
 	Krm1=([ones(1,n);r2k(1:end-1,:)]'*kK)';
 else
 	Krm1=[];
 end
 
 if (cp)
-	if (length(K)==0)
+	if (isempty(K))
 		drxdx=0;
 		drxdy=0;
 		drydx=0;
@@ -92,7 +92,7 @@ if (cp)
 		drydy=Kr+2*yBar.^2.*Krm1;
 	end
 	
-	if (length(P)==0)
+	if (isempty(P))
 		dtxdx=0;
 		dtxdy=0;
 		dtydx=0;
@@ -129,7 +129,7 @@ if (cp)
 end
 
 if (cp0)
-	if (length(K)==0)
+	if (isempty(K))
 		drxdxp=0;
 		drxdyp=0;
 		drydxp=0;
@@ -141,7 +141,7 @@ if (cp0)
 		drydyp=-(Kr+2*yBar.^2.*Krm1);
 	end
 	
-	if (length(P)==0)
+	if (isempty(P))
 		dtxdxp=0;
 		dtxdyp=0;
 		dtydxp=0;
@@ -171,7 +171,7 @@ if (cK)
 end
 
 if (cP)
-	if (length(P)==0)
+	if (isempty(P))
 		dP=zeros(2*n,0);
 	else
 		if (length(P)>2)

@@ -16,7 +16,7 @@ function a=camangles(s,msg)
 
 if nargin<2, msg=''; end
 
-a=zeros(1,size(s.EO,2));
+a=zeros(1,size(s.EO.val,2));
 
 % Delayed progress dialog.
 start=clock;
@@ -25,9 +25,9 @@ h=[];
 
 for i=1:length(a)
     % Camera center.
-    c=s.EO(1:3,i);
+    c=s.EO.val(1:3,i);
     % Object points.
-    pp=s.OP(:,s.vis(:,i));
+    pp=s.OP.val(:,s.IP.vis(:,i));
     % How many rays?
     switch size(pp,2)
       case 0

@@ -31,9 +31,9 @@ for i=1:length(varargin)
     end
 end
 
-if strcmp(id,'all'), id=s.OPid; end
+if strcmp(id,'all'), id=s.OP.id; end
 
-ix=find(ismember(s.OPid,id));
+ix=find(ismember(s.OP.id,id));
 % Any sorting would go here.
 i=1:length(ix); % Identity sort.
 
@@ -48,7 +48,7 @@ nPts=length(id);
 
 % Point count plot.
 ax=subplot(4,1,1,'parent',fig);
-n=sum(s.vis(ix,:),2);
+n=sum(s.IP.vis(ix,:),2);
 bar(ax,1:nPts,n);
 title(ax,'Point count')
 set(ax,'xtick',[],'xgrid','on')
@@ -73,7 +73,7 @@ axH(2)=ax;
 ax=subplot(4,1,3,'parent',fig);
 [rms,res]=bundle_residuals(s,e);
 % Compute averages per OP.
-nOP=full(sum(s.vis,2));
+nOP=full(sum(s.IP.vis,2));
 sqSumOP=full(sum(res.^2,2));
 meanOP=sqrt(sqSumOP./nOP);
 bar(ax,ix,meanOP(ix));

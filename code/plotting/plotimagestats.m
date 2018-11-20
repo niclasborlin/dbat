@@ -41,7 +41,7 @@ if length(varargin)>2
     ix=varargin{3};
 end
 
-if strcmp(ix,'all'), ix=1:size(s.EO,2); end
+if strcmp(ix,'all'), ix=1:size(s.EO.val,2); end
 
 if isempty(h)
     h=tagfigure('imagestats');
@@ -72,7 +72,7 @@ set(ax,'xticklabel','')
 % Point count plot.
 ax=subplot(numPlots,1,2,'parent',h);
 axH(end+1)=ax;
-n=sum(s.vis(:,ix),1);
+n=sum(s.IP.vis(:,ix),1);
 bar(ax,ix,n);
 set(ax,'xlim',[0.5,max(ix)+0.5],'ylim',[0,max(n)*1.05]);
 title(ax,'Point count')
@@ -93,7 +93,7 @@ if ~isempty(e)
     axH(end+1)=ax;
     [rms,res]=bundle_residuals(s,e);
     % Compute averages per photo.
-    nPhoto=full(sum(s.vis,1));
+    nPhoto=full(sum(s.IP.vis,1));
     sqSumPhoto=full(sum(res.^2,1));
     meanPhoto=sqrt(sqSumPhoto./nPhoto);
     bar(ax,ix,meanPhoto(ix));
@@ -104,8 +104,7 @@ if ~isempty(e)
     set(ax,'xticklabel','')
 
     % Variance
-    CEO=bundle_cov(s,e,'CEO');
-    var=reshape(diag(CEO),6,[]);
+    var=s.post.std.EO.^2;
 
     ax=subplot(numPlots,1,5,'parent',h);
     axH(end+1)=ax;

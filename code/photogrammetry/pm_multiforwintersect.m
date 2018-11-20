@@ -22,7 +22,7 @@ P=nan(3,4,size(EO,2));
 for j=find(any(colPos(i,:),1))
     RR=pm_eulerrotmat(EO(4:6,j));
     CC=EO(1:3,j);
-    K=[-IO(3,ei(j))*eye(2),IO(1:2,ei(j));0,0,1];
+    K=[-IO(1,ei(j))*eye(2),IO(2:3,ei(j));0,0,1];
     P(:,:,j)=K*RR*[eye(3),-CC];
 end
 

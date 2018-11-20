@@ -108,11 +108,11 @@ while ~isempty(varargin)
         switch lower(arg(1:4))
           case 'tran' % 'trans'
             T0=varargin{2};
-            if ischar(T0) && strcmp(lower(T0),'up')
+            if ischar(T0) && strcmpi(T0,'up')
                 T0=blkdiag(1,[0,-1;1,0],1);
             end
             % T0 should be numeric 4x4
-            if ~isnumeric(T0) || ndims(T0)~=2 || any(size(T0)~=4)
+            if ~isnumeric(T0) || ~ismatrix(T0) || any(size(T0)~=4)
                 error('DBAT:plotnetwork:badInput','T0 should be numeric 4x4');
             end
           case 'line' % 'lines'
@@ -192,7 +192,7 @@ while ~isempty(varargin)
 end
 
 if isempty(ax), ax=gca; end
-if isempty(EOplot), EOplot=1:size(s.EO,2); end
+if isempty(EOplot), EOplot=1:size(s.EO.val,2); end
 if isempty(iters)
     if isempty(E)
         iters=0;
@@ -201,7 +201,6 @@ if isempty(iters)
     end
 end
 
-movingCamera=any(isnan(camIters));
 camIters(any(isnan(camIters)))=[];
 
 if ~isempty(E)
@@ -225,25 +224,25 @@ end
 camC=cell(size(EOplot));
 
 % Store EO for all cameras that should be plotted.
-EOsave=nan(size(s.EO,1),size(s.EO,2),length(iters));
+EOsave=nan(size(s.EO.val,1),size(s.EO.val,2),length(iters));
 
-x0OP=s.OP;
+x0OP=s.OP.val;
 
 if isempty(E)
     % No iteration performed yes, we only have the current values.
-    IOtrace=s.IO;
-    EOtrace=s.EO;
-    OPtrace=s.OP;
+    %IOtrace=s.IO.val;
+    EOtrace=s.EO.val;
+    OPtrace=s.OP.val;
 else
     % Extract traces of all parameters.
-    IOtrace=deserialize(s,E,'all','IO');
+    %IOtrace=deserialize(s,E,'all','IO');
     EOtrace=deserialize(s,E,'all','EO');
     OPtrace=deserialize(s,E,'all','OP');
 end
 
 for iter=iters
     % Extract base parameters for this iteration
-    IO=squeeze(IOtrace(:,:,iter+1));
+    %IO=squeeze(IOtrace(:,:,iter+1));
     EO=squeeze(EOtrace(:,:,iter+1));
     OP=squeeze(OPtrace(:,:,iter+1));
 
@@ -256,7 +255,7 @@ for iter=iters
     end
 
     % Transform points and cameras.
-    [EO,OP,fail]=pm_multixform(EO,OP,T0);
+    [EO,OP,fail]=pm_multixform(EO,OP,T0); %#ok<ASGLU>
 
     EOsave(:,:,iter==iters)=EO;
     if iter==0
@@ -264,15 +263,15 @@ for iter=iters
     end
     
     % Plot points.
-    plot3(ax,OP(1,~s.isCtrl),OP(2,~s.isCtrl),OP(3,~s.isCtrl),'b.',...
-          'tag','OP');
+    isCtrl=s.OP.prior.isCtrl;
+    plot3(ax,OP(1,~isCtrl),OP(2,~isCtrl),OP(3,~isCtrl),'b.','tag','OP');
     hold(ax,'on');
-    plot3(ax,OP(1,s.isCtrl),OP(2,s.isCtrl),OP(3,s.isCtrl),'r^','tag','CP');
+    plot3(ax,OP(1,isCtrl),OP(2,isCtrl),OP(3,isCtrl),'r^','tag','CP');
     hold(ax,'off');
 
     if plotX0pts
         hold(ax,'on');
-        plot3(ax,x0OP(1,~s.isCtrl),x0OP(2,~s.isCtrl),x0OP(3,~s.isCtrl),'.',...
+        plot3(ax,x0OP(1,~isCtrl),x0OP(2,~isCtrl),x0OP(3,~isCtrl),'.',...
               'color',0.5*ones(1,3),'tag','x0OP');
         hold(ax,'off');
     end
@@ -355,7 +354,7 @@ for iter=iters
         
     % Pause if requested unless after showing last iteration.
     if ~isempty(pauseMode) && iter<nIters
-        if ischar(pauseMode) && strcmp(lower(pauseMode),'on')
+        if ischar(pauseMode) && strcmpi(pauseMode,'on')
             pause
         else
             pause(pauseMode);

@@ -40,7 +40,7 @@ end
     
 h=nan(4,1);
 
-if plotIO && any(s.estIO(:))
+if plotIO && any(s.bundle.est.IO(:))
     % IO parameter plot.
     fig=tagfigure(sprintf('paramplot_io_%s',e.damping.name));
     set(fig,'name','IO parameter iteration trace');
@@ -64,32 +64,30 @@ if plotIO && any(s.estIO(:))
     ls={'-','--','-.'};
 
     % For each unique camera.
-    for ci=find(s.IOunique)
+    for ci=find(s.IO.struct.uniq)
         % Extract focal length, principal point for this camera
         % over all iterations.
         fp=squeeze(IO(1:3,ci,:));
         % Flip y coordinate.
-        v=diag([1,-1,1])*fp;
-        % Change order to be f, px, py.
-        v=v([3,1,2],:);
+        v=diag([1,1,-1])*fp;
         % Line style and legend strings.
         ls={'-','--','-.'};
         fps={'f','px','py'};
         for i=1:size(v,1)
             % Use individual f, px, py colors if we have only one
             % camera. Otherwise, use a single color per camera.
-            if nnz(s.IOunique)==1
+            if nnz(s.IO.struct.uniq)==1
                 color=cc(i,:);
-                lgs{end+1}=fps{i};
+                lgs{end+1}=fps{i}; %#ok<AGROW>
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('%s-%d',fps{i},ci);
+                lgs{end+1}=sprintf('%s-%d',fps{i},ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
-                           'linestyle',ls{i},'marker','x','color',color);
+                           'linestyle',ls{i},'marker','x','color',color); %#ok<AGROW>
         end
     end
-    legh=legend(hh,lgs,'location','NorthEastOutside');
+    legh=legend(hh,lgs,'location','NorthEastOutside'); %#ok<NASGU>
     title(ax,sprintf('Focal length, principal point (%s)',e.damping.name));
     set(ax,'xtick',0:size(e.trace,2)-1);
     if size(e.trace,2)>1
@@ -104,9 +102,9 @@ if plotIO && any(s.estIO(:))
     % Corresponding line handles.
     hh=[];
     % For each unique camera.
-    for ci=find(s.IOunique)
+    for ci=find(s.IO.struct.uniq)
         % Extract K values for this camera over all iterations.
-        K=squeeze(IO(4:6,ci,:));
+        K=squeeze(IO(5+(1:s.IO.model.nK),ci,:));
         % Determine scale.
         avgScale=floor(median(log10(abs(K)),2));
         % Use scaling of 1 for all-zero values.
@@ -118,15 +116,15 @@ if plotIO && any(s.estIO(:))
             else
                 prefix=sprintf('10^{%d}',-avgScale(i));
             end
-            if nnz(s.IOunique)==1
+            if nnz(s.IO.struct.uniq)==1
                 color=cc(i,:);
-                lgs{end+1}=sprintf('%sK%d',prefix,i);
+                lgs{end+1}=sprintf('%sK%d',prefix,i); %#ok<AGROW>
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('%sK%d-%d',prefix,i,ci);
+                lgs{end+1}=sprintf('%sK%d-%d',prefix,i,ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
-                           'linestyle',ls{i},'marker','x','color',color);
+                           'linestyle',ls{i},'marker','x','color',color); %#ok<AGROW>
         end
         legend(hh,lgs,'location','NorthEastOutside');
     end
@@ -144,9 +142,9 @@ if plotIO && any(s.estIO(:))
     % Corresponding line handles.
     hh=[];
     % For each unique camera.
-    for ci=find(s.IOunique)
+    for ci=find(s.IO.struct.uniq)
         % Extract K values for this camera over all iterations.
-        P=squeeze(IO(7:8,ci,:));
+        P=squeeze(IO(5+s.IO.model.nK+(1:s.IO.model.nP),ci,:));
         % Determine scale.
         avgScale=floor(median(log10(abs(P)),2));
         % Use scaling of 1 for all-zero values.
@@ -158,15 +156,15 @@ if plotIO && any(s.estIO(:))
             else
                 prefix=sprintf('10^{%d}',-avgScale(i));
             end
-            if nnz(s.IOunique)==1
+            if nnz(s.IO.struct.uniq)==1
                 color=cc(i,:);
-                lgs{end+1}=sprintf('%sP%d',prefix,i);
+                lgs{end+1}=sprintf('%sP%d',prefix,i); %#ok<AGROW>
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('%sP%d-%d',prefix,i,ci);
+                lgs{end+1}=sprintf('%sP%d-%d',prefix,i,ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
-                           'linestyle',ls{i},'marker','x','color',color);
+                           'linestyle',ls{i},'marker','x','color',color); %#ok<AGROW>
         end
         legend(hh,lgs,'location','NorthEastOutside');
     end
@@ -184,9 +182,9 @@ if plotIO && any(s.estIO(:))
     % Corresponding line handles.
     hh=[];
     % For each unique camera.
-    for ci=find(s.IOunique)
+    for ci=find(s.IO.struct.uniq)
         % Extract K values for this camera over all iterations.
-        B=squeeze(IO(9:10,ci,:));
+        B=squeeze(IO(4:5,ci,:));
         % Determine scale.
         avgScale=floor(median(log10(abs(B)),2));
         % Use scaling of 1 for all-zero values.
@@ -198,15 +196,15 @@ if plotIO && any(s.estIO(:))
             else
                 prefix=sprintf('10^{%d}',-avgScale(i));
             end
-            if nnz(s.IOunique)==1
+            if nnz(s.IO.struct.uniq)==1
                 color=cc(i,:);
-                lgs{end+1}=sprintf('%sB%d',prefix,i);
+                lgs{end+1}=sprintf('%sB%d',prefix,i); %#ok<AGROW>
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('%sB%d-%d',prefix,i,ci);
+                lgs{end+1}=sprintf('%sB%d-%d',prefix,i,ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
-                           'linestyle',ls{i},'marker','x','color',color);
+                           'linestyle',ls{i},'marker','x','color',color); %#ok<AGROW>
         end
         legend(hh,lgs,'location','NorthEastOutside');
     end
@@ -221,7 +219,7 @@ if plotIO && any(s.estIO(:))
     scalewidth(axH);
 end
 
-if plotEO && any(s.estEO(:))
+if plotEO && any(s.bundle.est.EO(:))
     % EO parameter plot.
     fig=tagfigure(sprintf('paramplot_eo_%s',e.damping.name));
     set(fig,'name','EO parameter iteration trace');
@@ -252,30 +250,29 @@ if plotEO && any(s.estEO(:))
     % (There is a better way, but now this works.)
     for i=1:3
         % For each unique camera position.
-        for ci=find(s.EOunique)
+        for ci=find(s.EO.struct.uniq)
             % Extract camera center coordinates for this camera over all
             % iterations.
             c=squeeze(EO(1:3,ci,:));
             % Line style and legend strings.
             ls={'-','--','-.'};
-            fps={'X0','Y0','Z0'};
             color=cc(rem(ci-1,size(cc,1))+1,:);
             if i==1
-                lgs{end+1}=sprintf('C%d',ci);
+                lgs{end+1}=sprintf('C%d',ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,c(i,:),'parent',ax,...
                            'linestyle',ls{i},'marker','x','color',color,...
                            'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
-                           'userdata',ci,'buttondownfcn',cb);
+                           'userdata',ci,'buttondownfcn',cb); %#ok<AGROW>
         end
         if i==1
-            [legh,objh,outh,outm]=legend(hh,lgs,'location','NorthEastOutside');
+            [legh,objh,outh,outm]=legend(hh,lgs,'location','NorthEastOutside'); %#ok<ASGLU>
             % First comes text handles, then line handles.
-            lineH=reshape(objh(size(s.EO,2)+1:end),2,[]);
+            lineH=reshape(objh(size(s.EO.val,2)+1:end),2,[]);
             % Set lines to highlight when selected.
             set(lineH','selectionhighlight','on');
             if ~isempty(lineH)
-                for j=1:size(s.EO,2)
+                for j=1:size(s.EO.val,2)
                     set(lineH(:,j),'userdata',j,'buttondownfcn', ...
                                    cb,'hittest','on');
                 end
@@ -293,7 +290,7 @@ if plotEO && any(s.estEO(:))
     hh=[];
     
     % For each unique camera position.
-    for ci=find(s.EOunique)
+    for ci=find(s.EO.struct.uniq)
         % Extract camera angles for this camera over all iterations.
         angles=squeeze(EO(4:6,ci,:));
         % Convert to degrees.
@@ -305,7 +302,7 @@ if plotEO && any(s.estEO(:))
                            'linestyle',ls{i}, ... 
                            'marker','x','color',color,...
                            'tag',sprintf('%s-%d',aStrs{i},ci),'userdata',ci,...
-                           'buttondownfcn',cb);
+                           'buttondownfcn',cb); %#ok<AGROW>
 
         end
     end
@@ -317,7 +314,7 @@ if plotEO && any(s.estEO(:))
     scalewidth(axH);
 end
 
-if plotOP && any(s.estOP(:))
+if plotOP && any(s.bundle.est.OP(:))
     % OP parameter plot.
     fig=tagfigure(sprintf('paramplot_op_%s',e.damping.name));
     set(fig,'name','OP iteration trace');
@@ -334,8 +331,6 @@ if plotOP && any(s.estOP(:))
     lgs={};
     % Corresponding line handles.
     hh=[];
-    % Line styles.
-    ls={'-','--','-.'};
 
     % Callback to clear all highlights in figure and highlight lines
     % corresponding to clicked line.
@@ -344,29 +339,28 @@ if plotOP && any(s.estOP(:))
     % Plot each coordinate as the outer loop to get a better legend.
     for i=1:3
         % For each point.
-        for ci=1:size(s.OP,2)
+        for ci=1:size(s.OP.val,2)
             % Extract OP coordinates for this point.
             c=squeeze(OP(:,ci,:));
             % Line style and legend strings.
             ls={'-','--','-.'};
-            fps={'X','Y','Z'};
             color=cc(rem(ci-1,size(cc,1))+1,:);
             if i==1
-                lgs{end+1}=sprintf('P%d',ci);
+                lgs{end+1}=sprintf('P%d',ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,c(i,:),'parent',ax,...
                            'linestyle',ls{i},...
                            'marker','x','color',color,...
                            'tag',sprintf('%c0-%d',abs('X')-1+i,ci),...
-                           'userdata',ci,'buttondownfcn',cb);
+                           'userdata',ci,'buttondownfcn',cb); %#ok<AGROW>
         end
         if i==1
-            [legh,objh,outh,outm]=legend(hh,lgs,'location','NorthEastOutside');
+            [legh,objh,outh,outm]=legend(hh,lgs,'location','NorthEastOutside'); %#ok<ASGLU>
             % First comes text handles, then line handles.
-            lineH=reshape(objh(size(s.OP,2)+1:end),2,[]);
+            lineH=reshape(objh(size(s.OP.val,2)+1:end),2,[]);
             % Set lines to highlight when selected.
             set(lineH','selectionhighlight','on');
-            for j=1:size(s.OP,2)
+            for j=1:size(s.OP.val,2)
                 set(lineH(:,j),'userdata',j,'buttondownfcn',cb,'hittest','on');
             end
         end
@@ -484,7 +478,7 @@ if nargout>0, hh=h; end
 
 
 % Callback function to highlight selected object(s).
-function highlight(obj,event)
+function highlight(obj,event) %#ok<INUSD>
 
 if nargin<1, obj=gcbo; end
 fig=gcbf;

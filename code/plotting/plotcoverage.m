@@ -30,7 +30,7 @@ for i=1:length(varargin)
     end
 end
 
-if strcmp(ix,'all'), ix=1:size(s.EO,2); end
+if strcmp(ix,'all'), ix=1:size(s.EO.val,2); end
 
 h=tagfigure('coverage');
 set(h,'name','Image coverage');
@@ -40,7 +40,7 @@ clf(h);
 ax=gca(h);
 
 cla(ax);
-set(ax,'xlim',[0.5,s.IO(end-3,1)+0.5],'ylim',[0.5,s.IO(end-2,1)+0.5]);
+set(ax,'xlim',[0.5,s.IO.val(end-3,1)+0.5],'ylim',[0.5,s.IO.val(end-2,1)+0.5]);
 axis(ax,'image')
 cc=get(ax,'colororder');
 % Legend strings.
@@ -53,8 +53,8 @@ if plotEach
     for ii=1:length(ix)
         i=ix(ii);
         % Plot observations for this image.
-        j=s.colPos(s.vis(:,i),i);
-        line(s.markPts(1,j),s.markPts(2,j),'marker','x',...
+        j=s.IP.ix(s.IP.vis(:,i),i);
+        line(s.IP.val(1,j),s.IP.val(2,j),'marker','x',...
              'linestyle','none',...
              'color',cc(rem(ii-1,size(cc,1))+1,:),...
              'tag',sprintf('obs%d',i),'userdata',i, ...
@@ -66,8 +66,8 @@ if plotEach
                        'color',cc(rem(ii-1,size(cc,1))+1,:),...
                        'tag',sprintf('chull%d',i),'userdata',i, ...
                        'parent',ax,...
-                       'buttondownfcn',cb);
-        lgs{end+1}=sprintf('Image %d',i);
+                       'buttondownfcn',cb); %#ok<AGROW>
+        lgs{end+1}=sprintf('Image %d',i); %#ok<AGROW>
         % Plot rectangular hull for this image.
         clh=[cl,ch];
         line(clh(1,[1,2,2,1,1]),clh(2,[1,1,2,2,1]),'linestyle','-.',...
@@ -97,10 +97,10 @@ if plotEach
 else
     ii=1;
     % Plot observations for all wanted images.
-    j=s.colPos(:,ix);
+    j=s.IP.ix(:,ix);
     j=j(j~=0);
     % Plot all points.
-    line(s.markPts(1,j),s.markPts(2,j),'linestyle','none','marker','x',...
+    line(s.IP.val(1,j),s.IP.val(2,j),'linestyle','none','marker','x',...
          'color',cc(rem(ii-1,size(cc,1))+1,:),...
          'tag','obsall','userdata',0,...
          'parent',ax,...
@@ -148,9 +148,9 @@ line(cpt(1,:),cpt(2,:),'linestyle','--',...
      'tag','radall','userdata',-1,...
      'parent',ax,...
      'buttondownfcn',cb);
-ii=ii+1;
+ii=ii+1; %#ok<NASGU>
 
-[legh,objh,outh,outm]=legend(ax,lh,lgs{:},'Location','NorthEastOutside');
+[legh,objh,outh,outm]=legend(ax,lh,lgs{:},'Location','NorthEastOutside'); %#ok<ASGLU>
 
 set(objh,'selectionhighlight','off');
 tags=get(objh,'tag');
@@ -163,7 +163,7 @@ for i=1:length(lh)
     end
 end
 
-if length(ix)==size(s.EO,2)
+if length(ix)==size(s.EO.val,2)
     title(ax,'Coverage for all images');
 else
     ss=sprintf('%d,',ix);
@@ -177,7 +177,7 @@ if nargout>0, hh=h; end
 
 
 % Callback function to highlight selected object(s).
-function highlight(obj,event)
+function highlight(obj,event) %#ok<INUSD>
 
 if nargin<1, obj=gcbo; end
 fig=gcbf;

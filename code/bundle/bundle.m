@@ -134,26 +134,26 @@ end
 % Verify a consistent estimation/use observations arrays. If we
 % shouldn't estimate a parameter, we should not use the prior
 % observation of it during the bundle.
-if any(s.useIOobs(~s.estIO))
+if any(s.IO.prior.use(~s.bundle.est.IO))
     warning('DBAT:bundle:badInput',...
             'Some IO parameters are set to both ''fixed'' and ''observed''');
     disp('Setting IO parameters to fixed');
-    s.useIOobs(~s.estIO)=false;
+    s.IO.prior.use(~s.bundle.est.IO)=false;
 end
-if any(s.useEOobs(~s.estEO))
+if any(s.EO.prior.use(~s.bundle.est.EO))
     warning('DBAT:bundle:badInput',...
             'Some EO parameters are set to both ''fixed'' and ''observed''');
     disp('Setting EO parameters to fixed');
-    s.useEOobs(~s.estEO)=false;
+    s.EO.prior.use(~s.bundle.est.EO)=false;
 end
-if any(s.useOPobs(~s.estOP))
+if any(s.OP.prior.use(~s.bundle.est.OP))
     warning('DBAT:bundle:badInput',...
             'Some OP parameters are set to both ''fixed'' and ''observed''');
     disp('Setting OP parameters to fixed');
-    s.useOPobs(~s.estOP)=false;
+    s.OP.prior.use(~s.bundle.est.OP)=false;
 end
 
-if isempty(s.serial) || isempty(s.deserial)
+if isempty(s.bundle.serial) || isempty(s.bundle.deserial)
     % Compute (de-)serialization indices.
     s=buildserialindices(s);
 end
@@ -207,8 +207,9 @@ end
 % 3) x* found at maxIter
 % 4) x* not found at maxIter
 
-distModel=unique(s.IOdistModel);
+distModel=unique(s.IO.model.distModel);
 
+% Display lens distortion models.
 if isscalar(distModel) && distModel>0
     fprintf(['Using Backward Brown (Photogrammetry) lens distortion ' ...
              'model %d for all cameras\n'],distModel);
@@ -219,12 +220,12 @@ else
     disp('Using mix of Forward/Backward Brown lens distortion models');
 end
 
-selfCal=any(s.estIO,1);
-
-strs={'Xp','Yp','f','K1','K2','K3','P1','P2','aspect','skew'};
+% Display any self-calbration parameters.
+selfCal=any(s.bundle.est.IO,1);
+strs=s.IO.type(:,1);
 if all(selfCal)
-    allParamCal=all(s.estIO,2);
-    anyParamCal=any(s.estIO,2);
+    allParamCal=all(s.bundle.est.IO,2);
+    anyParamCal=any(s.bundle.est.IO,2);
     if all(allParamCal==anyParamCal)
         % Any parameters that is estimated in one camera is
         % estimated in all cameras.
@@ -242,17 +243,19 @@ end
 
 % Warn if non-zero aspect/skew is specified for a model that does
 % not support it.
-modelsWithoutB=ismember(s.IOdistModel,1:2);
-usedBadModels=unique(s.IOdistModel(modelsWithoutB));
-if any(s.IO(s.nK+s.nP+3+(1:2),modelsWithoutB))
+modelsWithoutB=ismember(s.IO.model.distModel,1:2);
+usedBadModels=unique(s.IO.model.distModel(modelsWithoutB));
+if any(s.IO.val(4:5,modelsWithoutB)~=0)
     warning(['Non-zero aspect and/or skew specified. This is not ' ...
-             'supported by lens distortion model %d! Results may be inaccurate.'],usedBadModels);
+             'supported by lens distortion model %d! Results may ' ...
+             'be inaccurate.'],usedBadModels);
 end
 % Warn if asked to estimate aspect and/or skew with a model that
 % does not support it.
-if any(s.estIO(s.nK+s.nP+3+(1:2),modelsWithoutB))
+if any(s.bundle.est.IO(4:5,modelsWithoutB))
     warning(['Trying to estimate aspect and/or skew. This is not ' ...
-             'supported by lens distortion model %d! Results will be inaccurate.'],usedBadModels);
+             'supported by lens distortion model %d! Results will ' ...
+             'be inaccurate.'],usedBadModels);
 end
     
 % Version string.
@@ -353,12 +356,12 @@ ok=code==0;
 if ok
     s=deserialize(s,x);
     % Update formats.
-    aspect=ones(2,size(s.IO,2));
-    aspect(1,:)=1+s.IO(3+s.nK+s.nP+1,:);
-    imSz=s.IO(3+s.nK+s.nP+2+2+(1:2),:);
-    imRes=s.IO(3+s.nK+s.nP+2+2+2+(1:2),:);
-    imFormat=imSz./imRes.*aspect;
-    s.IO(3+s.nK+s.nP+2+(1:2),:)=imFormat;
+    aspect=ones(2,size(s.IO.val,2));
+    aspect(1,:)=1+s.IO.val(4,:);
+    s.post.sensor.imSize=s.IO.sensor.imSize;
+    s.post.sensor.pxSize=s.IO.sensor.pxSize.*aspect;
+    imFormat=s.post.sensor.imSize.*s.IO.sensor.pxSize.*aspect;
+    s.post.sensor.ssSize=imFormat;
 end
 
 E.paramTypes=paramTypes;
@@ -442,15 +445,20 @@ if code==-4
 end
 
 % Always update the residuals.
-s.residuals.IP(:)=final.unweighted.r(s.residuals.ix.IP);
+s.post.res.IP=nan(size(s.IP.val));
+s.post.res.IO=nan(size(s.IO.val));
+s.post.res.EO=nan(size(s.EO.val));
+s.post.res.OP=nan(size(s.OP.val));
+
+s.post.res.IP(:)=final.unweighted.r(s.post.res.ix.IP);
 % Mark pt residuals are in mm, scale to pixels.
-ptCols=s.colPos(s.vis);
-s.residuals.IP=s.residuals.IP.*s.IO(end-1:end,s.ptCams(ptCols));
+ptCols=s.IP.ix(s.IP.vis);
+s.post.res.IP=s.post.res.IP./s.IO.sensor.pxSize(:,s.IP.ptCams(ptCols));
 
 % This might be problematic if a block parameter is used as an observation...
-s.residuals.IO(s.useIOobs)=final.unweighted.r(s.residuals.ix.IO);
-s.residuals.EO(s.useEOobs)=final.unweighted.r(s.residuals.ix.EO);
-s.residuals.OP(s.useOPobs)=final.unweighted.r(s.residuals.ix.OP);
+s.post.res.IO(s.IO.prior.use)=final.unweighted.r(s.post.res.ix.IO);
+s.post.res.EO(s.EO.prior.use)=final.unweighted.r(s.post.res.ix.EO);
+s.post.res.OP(s.OP.prior.use)=final.unweighted.r(s.post.res.ix.OP);
 
 % Sigma0 is sqrt(r'*r/(m-n)), where m is the number of
 % observations, and n is the number of unknowns.
@@ -459,7 +467,7 @@ s.residuals.OP(s.useOPobs)=final.unweighted.r(s.residuals.ix.OP);
 % that have been measured, fixed camera stations that have been
 % used).
 if pmDof
-    p=nnz(s.estOP(:,any(s.vis,2))==0)+nnz(s.estEO(1:6,any(s.vis,1))==0);
+    p=nnz(s.bundle.est.OP(:,any(s.IP.vis,2))==0)+nnz(s.bundle.est.EO(1:6,any(s.IP.vis,1))==0);
 else
     p=0;
 end
@@ -472,7 +480,8 @@ if dofVerb
     fprintf('%s: dof=%d+%d-%d=%d.\n',mfilename,lenR,p,lenX,dof);
 end
 s0=sqrt((r'*r)/dof);
-sigmas=s0*s.prior.sigmas;
+sigmas=s0*s.IP.sigmas;
+s.post.sigmas=sigmas;
 
 E.numObs=lenR;
 E.numParams=lenX;

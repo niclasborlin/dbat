@@ -13,21 +13,21 @@ function hh=tagfigure(tag,name)
 
 narginchk(1,2);
 
-if (nargin<2), name=false; end
+if nargin<2, name=false; end
 
 % Search for an already opened figure window.
 h=findobj('type','figure','tag',tag);
-if (isempty(h))
+if isempty(h)
     % Create one if it didn't exist.
     h=figure('tag',tag);
 else
     figure(h)
 end
 
-if (name)
+if name
     set(h,'name',tag);
 end
 
-if (nargout>0)
+if nargout>0
     hh=h;
 end

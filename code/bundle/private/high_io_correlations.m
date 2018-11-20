@@ -29,15 +29,15 @@ if cross
     CIO=bundle_cov(s,e,'CIOF');
     CIOC=tril(corrmat(CIO,true));
     % Remove any high correlations due to parameter blocks.
-    CIOC(~s.IOlead,:)=0;
-    CIOC(:,~s.IOlead)=0;
+    CIOC(~s.IO.struct.leading,:)=0;
+    CIOC(:,~s.IO.struct.leading)=0;
     [i,j]=find(abs(CIOC)>thres);
     % Output parameters are shifted, i.e. k is v, v is CIO.
     k=full(CIOC(sub2ind(size(CIOC),i,j)));
     v=CIO;
     % Convert to row, column within IO.
-    [ri,ci]=ind2sub(size(s.IO),i);
-    [rj,cj]=ind2sub(size(s.IO),j);
+    [ri,ci]=ind2sub(size(s.IO.val),i);
+    [rj,cj]=ind2sub(size(s.IO.val),j);
     i=[ri,ci];
     j=[rj,cj];
 else
@@ -48,11 +48,11 @@ else
     v=full(CIOC(sub2ind(size(CIOC),i,j)));
     % All index pairs will be on the block diagonal. Renumber them to fall
     % within each camera.
-    k=floor((i-1)/size(s.IO,1))+1;
-    i=rem(i-1,size(s.IO,1))+1;
-    j=rem(j-1,size(s.IO,1))+1;
+    k=floor((i-1)/size(s.IO.val,1))+1;
+    i=rem(i-1,size(s.IO.val,1))+1;
+    j=rem(j-1,size(s.IO.val,1))+1;
     % Only keep the correlations that correspond to unique cameras.
-    [~,ia]=unique(s.IOblock','rows');
+    [~,ia]=unique(s.IO.struct.block','rows');
     keep=ismember(k,ia);
     i=i(keep);
     j=j(keep);

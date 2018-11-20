@@ -61,14 +61,14 @@ if isempty(e.final.factorized) || doPrepare
     % Use block column count reordering to reduce fill-in in Cholesky factor.
     
     % IO blocks.
-    [i,j]=ind2sub(size(s.estIO),s.serial.IO.src);
-    bixIO=full(sparse(i,j,s.serial.IO.dest,size(s.estIO,1),size(s.estIO,2)));
+    [i,j]=ind2sub(size(s.bundle.est.IO),s.bundle.serial.IO.src);
+    bixIO=full(sparse(i,j,s.bundle.serial.IO.dest,size(s.bundle.est.IO,1),size(s.bundle.est.IO,2)));
     % EO blocks.
-    [i,j]=ind2sub(size(s.estEO),s.serial.EO.src);
-    bixEO=full(sparse(i,j,s.serial.EO.dest,size(s.estEO,1),size(s.estEO,2)));
+    [i,j]=ind2sub(size(s.bundle.est.EO),s.bundle.serial.EO.src);
+    bixEO=full(sparse(i,j,s.bundle.serial.EO.dest,size(s.bundle.est.EO,1),size(s.bundle.est.EO,2)));
     % OP blocks.
-    [i,j]=ind2sub(size(s.estOP),s.serial.OP.src);
-    bixOP=full(sparse(i,j,s.serial.OP.dest,size(s.estOP,1),size(s.estOP,2)));
+    [i,j]=ind2sub(size(s.bundle.est.OP),s.bundle.serial.OP.src);
+    bixOP=full(sparse(i,j,s.bundle.serial.OP.dest,size(s.bundle.est.OP,1),size(s.bundle.est.OP,2)));
 
     p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
@@ -118,35 +118,31 @@ for i=1:length(varargin)
       case 'ciof' % Whole CIO covariance matrix.
             
         % Pre-allocate matrix with place for nnz(s.estIO)^2 elements.
-        C=spalloc(numel(s.IO),numel(s.IO),nnz(s.estIO)^2);
+        C=spalloc(numel(s.IO.val),numel(s.IO.val),nnz(s.bundle.est.IO)^2);
         
         if fail
-            C(s.deserial.IO.dest,s.deserial.IO.dest)=nan;
+            C(s.bundle.deserial.IO.dest,s.bundle.deserial.IO.dest)=nan;
         else
             % Compute needed part of inverse and put it into the right
             % part of C.
-            C(s.deserial.IO.dest,s.deserial.IO.dest)=...
-                invblock(L,p,s.deserial.IO.src,'sqrt');
+            C(s.bundle.deserial.IO.dest,s.bundle.deserial.IO.dest)=...
+                invblock(L,p,s.bundle.deserial.IO.src,'sqrt');
         end
         
       case 'ceof' % Whole CEO covariance matrix.
         
         start=clock; %#ok<NASGU>
         % Pre-allocate matrix with place for nnz(s.estEO)^2 elements.
-        C=spalloc(numel(s.EO),numel(s.EO),nnz(s.estEO)^2);
+        C=spalloc(numel(s.EO.val),numel(s.EO.val),nnz(s.bundle.est.EO)^2);
         
         if fail
-            C(s.deserial.EO.dest,s.deserial.EO.dest)=nan;
+            C(s.bundle.deserial.EO.dest,s.bundle.deserial.EO.dest)=nan;
         else
             % Compute needed part of inverse and put it into the right
             % part of C.
-            C(s.deserial.EO.dest,s.deserial.EO.dest)=...
-                invblock(L,p,s.deserial.EO.src,'sqrt');
+            C(s.bundle.deserial.EO.dest,s.bundle.deserial.EO.dest)=...
+                invblock(L,p,s.bundle.deserial.EO.src,'sqrt');
         end
-        
-        % Remove axis indicator psuedo-elements.
-        keep=rem(1:size(C,1),7)~=0;
-        C=C(keep,keep);
         
         %etime(clock,start)
         
@@ -154,37 +150,33 @@ for i=1:length(varargin)
         
         start=clock; %#ok<NASGU>
         % Pre-allocate matrix with place for nnz(s.estOP)^2 elements.
-        C=spalloc(numel(s.OP),numel(s.OP),nnz(s.estOP)^2);
+        C=spalloc(numel(s.OP.val),numel(s.OP.val),nnz(s.bundle.est.OP)^2);
         
         if fail
-            C(s.deserial.OP.dest,s.deserial.OP.dest)=nan;
+            C(s.bundle.deserial.OP.dest,s.bundle.deserial.OP.dest)=nan;
         else
             % Compute needed part of inverse and put it into the right
             % part of C.
-            C(s.deserial.OP.dest,s.deserial.OP.dest)=...
-                invblock(L,p,s.deserial.OP.src,'sqrt');
+            C(s.bundle.deserial.OP.dest,s.bundle.deserial.OP.dest)=...
+                invblock(L,p,s.bundle.deserial.OP.src,'sqrt');
         end
         
         %etime(clock,start)
         
       case 'cio' % Block-diagonal CIO
         
-        C=BlockDiagonalC(L,p,s.estIO,s.deserial.IO.src,memLimit,...
-                         'Computing IO covariances');
+        C=BlockDiagonalC(L,p,s.bundle.est.IO,s.bundle.deserial.IO.src,...
+                         memLimit,'Computing IO covariances');
         
       case 'ceo' % Block-diagonal CEO
         
-        C=BlockDiagonalC(L,p,s.estEO,s.deserial.EO.src,memLimit,...
-                         'Computing EO covariances');
+        C=BlockDiagonalC(L,p,s.bundle.est.EO,s.bundle.deserial.EO.src,...
+                         memLimit,'Computing EO covariances');
 
-        % Remove axis indicator psuedo-elements.
-        keep=rem(1:size(C,1),7)~=0;
-        C=C(keep,keep);
-        
       case 'cop' % Block-diagonal COP
         
-        C=BlockDiagonalC(L,p,s.estOP,s.deserial.OP.src,memLimit,...
-                         'Computing OP covariances');
+        C=BlockDiagonalC(L,p,s.bundle.est.OP,s.bundle.deserial.OP.src,...
+                         memLimit,'Computing OP covariances');
         
     end
     varargout{i}=e.s0^2*C; %#ok<*AGROW>

@@ -27,7 +27,7 @@ if (nargout>2)
     JJ=jacapprox(fun,x);
 end
 
-distModel=unique(s.IOdistModel);
+distModel=unique(s.IO.model.distModel);
 if ~isscalar(distModel)
     error('Mixed lens distortion models not implemented.');
 end
@@ -36,20 +36,20 @@ if distModel>0
     if distModel==1 % backward/photogrammetric
         
         % Legacy modifications.
-        s.estIO(:,2:end)=false;
-        s.imCams(:)=1;
-        s.ptCams(:)=1;
+        s.bundle.est.IO(:,2:end)=false;
+        s.EO.cam(:)=1;
+        s.IP.ptCams(:)=1;
         if (nargout<2)
             % Only residual vector requested.
     
             % Project into pinhole camera.
-            xy=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,s.OP,s.vis);
+            xy=multieulerpinhole(s.IO.val,s.IO.model.nK,s.IO.model.nP,s.EO.val,s.EO.cam,s.OP.val,s.IP.vis);
 
             % Convert measured points from pixels to mm and flip y coordinate.
-            m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
+            m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
         
             % Compute lens distortion for all measured point.
-            ld=multilensdist(m,s.IO,s.nK,s.nP,s.ptCams);
+            ld=multilensdist(m,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
         
             % Remove lens distortion from measured points.
             ptCorr=m-ld;
@@ -61,26 +61,26 @@ if distModel>0
             fPre=prior_obs(x,s,true);
             
             % Pre-allocate residual vector.
-            f=nan(s.residuals.ix.n,1);
+            f=nan(s.post.res.ix.n,1);
             % Insert image residuals...
-            f(s.residuals.ix.IP)=fObs(:);
+            f(s.post.res.ix.IP)=fObs(:);
             % ...IO residuals...
-            f(s.residuals.ix.IO)=fPre.IO;
+            f(s.post.res.ix.IO)=fPre.IO;
             % ...EO residuals...
-            f(s.residuals.ix.EO)=fPre.EO;
+            f(s.post.res.ix.EO)=fPre.EO;
             % ...OP residuals...
-            f(s.residuals.ix.OP)=fPre.OP;
+            f(s.post.res.ix.OP)=fPre.OP;
         else
             % Project into pinhole camera.
-            [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,...
-                                                s.OP,s.vis,s.estIO,s.estEO,...
-                                                s.estOP);
+            [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO.val,s.IO.model.nK,s.IO.model.nP,s.EO.val,s.EO.cam,...
+                                                s.OP.val,s.IP.vis,s.bundle.est.IO,s.bundle.est.EO,...
+                                                s.bundle.est.OP);
             
             % Convert measured points from pixels to mm and flip y coordinate.
-            m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
+            m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
 
             % Compute lens distortion for all measured point.
-            [ld,dIO2]=multilensdist(m,s.IO,s.nK,s.nP,s.ptCams,s.estIO);
+            [ld,dIO2]=multilensdist(m,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams,s.bundle.est.IO);
 
             % Remove lens distortion from measured points.
             ptCorr=m-ld;
@@ -92,27 +92,27 @@ if distModel>0
             [fPre,Jpre]=prior_obs(x,s,true);
 
             % Pre-allocate residual vector.
-            f=nan(s.residuals.ix.n,1);
+            f=nan(s.post.res.ix.n,1);
             % Insert image residuals...
-            f(s.residuals.ix.IP)=fObs(:);
+            f(s.post.res.ix.IP)=fObs(:);
             % ...IO residuals...
-            f(s.residuals.ix.IO)=fPre.IO;
+            f(s.post.res.ix.IO)=fPre.IO;
             % ...EO residuals...
-            f(s.residuals.ix.EO)=fPre.EO;
+            f(s.post.res.ix.EO)=fPre.EO;
             % ...OP residuals...
-            f(s.residuals.ix.OP)=fPre.OP;
+            f(s.post.res.ix.OP)=fPre.OP;
 
             J=sparse(length(f),length(x));
             % Insert image point jacobians...
-            J(s.residuals.ix.IP,s.serial.IO.dest)=dIO1+dIO2;
-            J(s.residuals.ix.IP,s.serial.EO.dest)=dEO;
-            J(s.residuals.ix.IP,s.serial.OP.dest)=dOP;
+            J(s.post.res.ix.IP,s.bundle.serial.IO.dest)=dIO1+dIO2;
+            J(s.post.res.ix.IP,s.bundle.serial.EO.dest)=dEO;
+            J(s.post.res.ix.IP,s.bundle.serial.OP.dest)=dOP;
             % ...IO jacobian...
-            J(s.residuals.ix.IO,:)=Jpre.IO;
+            J(s.post.res.ix.IO,:)=Jpre.IO;
             % ...EO jacobian...
-            J(s.residuals.ix.EO,:)=Jpre.EO;
+            J(s.post.res.ix.EO,:)=Jpre.EO;
             % ...OP jacobian...
-            J(s.residuals.ix.OP,:)=Jpre.OP;
+            J(s.post.res.ix.OP,:)=Jpre.OP;
         end
     else
         if distModel>=2 && distModel<=5
@@ -129,15 +129,15 @@ if distModel>0
                 fPre=prior_obs(x,s,true);
             
                 % Pre-allocate residual vector.
-                f=nan(s.residuals.ix.n,1);
+                f=nan(s.post.res.ix.n,1);
                 % Insert image residuals...
-                f(s.residuals.ix.IP)=fObs(:);
+                f(s.post.res.ix.IP)=fObs(:);
                 % ...IO residuals...
-                f(s.residuals.ix.IO)=fPre.IO;
+                f(s.post.res.ix.IO)=fPre.IO;
                 % ...EO residuals...
-                f(s.residuals.ix.EO)=fPre.EO;
+                f(s.post.res.ix.EO)=fPre.EO;
                 % ...OP residuals...
-                f(s.residuals.ix.OP)=fPre.OP;
+                f(s.post.res.ix.OP)=fPre.OP;
             else
                 %fun=@(x)feval(mfilename,x,s);
                 % f=feval(fun,x);
@@ -156,46 +156,46 @@ if distModel>0
                 [fPre,Jpre]=prior_obs(x,s,true);
 
                 % Pre-allocate residual vector.
-                f=nan(s.residuals.ix.n,1);
+                f=nan(s.post.res.ix.n,1);
                 % Insert image residuals...
-                f(s.residuals.ix.IP)=fObs(:);
+                f(s.post.res.ix.IP)=fObs(:);
                 % ...IO residuals...
-                f(s.residuals.ix.IO)=fPre.IO;
+                f(s.post.res.ix.IO)=fPre.IO;
                 % ...EO residuals...
-                f(s.residuals.ix.EO)=fPre.EO;
+                f(s.post.res.ix.EO)=fPre.EO;
                 % ...OP residuals...
-                f(s.residuals.ix.OP)=fPre.OP;
+                f(s.post.res.ix.OP)=fPre.OP;
 
-                J=spalloc(length(f),s.serial.n,nnz(JObs)+nnz(Jpre.IO)+...
+                J=spalloc(length(f),s.bundle.serial.n,nnz(JObs)+nnz(Jpre.IO)+...
                           nnz(Jpre.EO)+nnz(Jpre.OP));
                 % Insert image point jacobians...
-                J(s.residuals.ix.IP,:)=JObs;
+                J(s.post.res.ix.IP,:)=JObs;
                 % ...IO jacobian...
-                J(s.residuals.ix.IO,:)=Jpre.IO;
+                J(s.post.res.ix.IO,:)=Jpre.IO;
                 % ...EO jacobian...
-                J(s.residuals.ix.EO,:)=Jpre.EO;
+                J(s.post.res.ix.EO,:)=Jpre.EO;
                 % ...OP jacobian...
-                J(s.residuals.ix.OP,:)=Jpre.OP;
+                J(s.post.res.ix.OP,:)=Jpre.OP;
             end
         end
     end
-elseif all(s.IOdistModel==-1) % forward/computer vision
+elseif all(s.IO.model.distModel==-1) % forward/computer vision
 
     % Legacy modifications.
-    s.estIO(:,2:end)=false;
-    s.imCams(:)=1;
-    s.ptCams(:)=1;
+    s.bundle.est.IO(:,2:end)=false;
+    s.EO.cam(:)=1;
+    s.IP.ptCams(:)=1;
     if (nargout<2)
         % Only residual vector requested.
     
         % Project into pinhole camera.
-        xy=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,s.OP,s.vis);
+        xy=multieulerpinhole(s.IO.val,s.IO.model.nK,s.IO.model.nP,s.EO.val,s.EO.cam,s.OP.val,s.IP.vis);
 
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
+        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
         
         % Compute lens distortion for projected points.
-        ld=multilensdist(xy,s.IO,s.nK,s.nP,s.ptCams);
+        ld=multilensdist(xy,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
 
         % Add lens distortion to projected points.
         ptDist=xy+ld;
@@ -206,16 +206,16 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         f=[ptDist(:)-m(:);fPre];
     else
         % Project into pinhole camera.
-        [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO,s.nK,s.nP,s.EO,s.imCams,...
-                                            s.OP,s.vis,s.estIO,s.estEO,s.estOP);
+        [xy,dIO1,dEO,dOP]=multieulerpinhole(s.IO.val,s.IO.model.nK,s.IO.model.nP,s.EO.val,s.EO.cam,...
+                                            s.OP.val,s.IP.vis,s.bundle.est.IO,s.bundle.est.EO,s.bundle.est.OP);
         
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.markPts,s.IO,s.nK,s.nP,s.ptCams);
+        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
 
         % Create arrays of columns indices for IO derivatives.
-        [ixpp,ixf,ixK1,ixP1]=createiocolumnindices(s.estIO(:,1),s.nK,s.nP);
+        [ixpp,ixf,ixK1,ixP1]=createiocolumnindices(s.bundle.est.IO(:,1),s.IO.model.nK,s.IO.model.nP);
         % No need to compute the partials w.r.t. pp or f.
-        est=s.estIO(:,1);
+        est=s.bundle.est.IO(:,1);
         if nnz(ixpp)
             est(ixpp)=0;
         end
@@ -223,10 +223,10 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
             est(ixf)=0;
         end
         % Potentially new column indices for lens distortion parameters.
-        [~,~,ixK2,ixP2]=createiocolumnindices(est,s.nK,s.nP);
+        [~,~,ixK2,ixP2]=createiocolumnindices(est,s.IO.model.nK,s.IO.model.nP);
 
         % Compute lens distortion for projected points.
-        [ld,dIO2,dxy]=multilensdist(xy,s.IO(:,1),s.nK,s.nP,s.ptCams,est);
+        [ld,dIO2,dxy]=multilensdist(xy,s.IO.val(:,1),s.IO.model.nK,s.IO.model.nP,s.IP.ptCams,est);
         
         % Add lens distortion to projected points.
         ptDist=xy+ld;
@@ -237,15 +237,15 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         fObs=ptDist(:)-m(:);
 
         % Pre-allocate residual vector.
-        f=nan(s.residuals.ix.n,1);
+        f=nan(s.post.res.ix.n,1);
         % Insert image residuals...
-        f(s.residuals.ix.IP)=fObs(:);
+        f(s.post.res.ix.IP)=fObs(:);
         % ...IO residuals...
-        f(s.residuals.ix.IO)=fPre.IO;
+        f(s.post.res.ix.IO)=fPre.IO;
         % ...EO residuals...
-        f(s.residuals.ix.EO)=fPre.EO;
+        f(s.post.res.ix.EO)=fPre.EO;
         % ...OP residuals...
-        f(s.residuals.ix.OP)=fPre.OP;
+        f(s.post.res.ix.OP)=fPre.OP;
 
         % Combine all lens distortion parameters
         ixLD1=[ixK1;ixP1];
@@ -266,15 +266,15 @@ elseif all(s.IOdistModel==-1) % forward/computer vision
         
         J=sparse(length(f),length(x));
         % Insert image point jacobians...
-        J(s.residuals.ix.IP,s.serial.IO.dest)=dIO1;
-        J(s.residuals.ix.IP,s.serial.EO.dest)=dEO2;
-        J(s.residuals.ix.IP,s.serial.OP.dest)=dOP2;
+        J(s.post.res.ix.IP,s.bundle.serial.IO.dest)=dIO1;
+        J(s.post.res.ix.IP,s.bundle.serial.EO.dest)=dEO2;
+        J(s.post.res.ix.IP,s.bundle.serial.OP.dest)=dOP2;
         % ...IO jacobian...
-        J(s.residuals.ix.IO,:)=Jpre.IO;
+        J(s.post.res.ix.IO,:)=Jpre.IO;
         % ...EO jacobian...
-        J(s.residuals.ix.EO,:)=Jpre.EO;
+        J(s.post.res.ix.EO,:)=Jpre.EO;
         % ...OP jacobian...
-        J(s.residuals.ix.OP,:)=Jpre.OP;
+        J(s.post.res.ix.OP,:)=Jpre.OP;
     end
 else
     error('Mixed lens distortion models not implemented.');

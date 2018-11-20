@@ -63,52 +63,48 @@ prob.ctrlPts=[1001,0,1,0,0,0,0
               1004,1,0,0,0,0,0];
               
 % Convert loaded PhotoModeler data to DBAT struct.
-s0=prob2dbatstruct(prob);
+ss0=prob2dbatstruct(prob);
 
 % Switch to lens distortion model that supports skew/aspect.
-s0.IOdistModel(:)=3;
+ss0.IO.model.distModel(:)=3;
 
-ss0=s0;
+saves0=ss0;
 
 % Set initial IO values. Copy image size, sensor size, etc. from
 % prior values.
-s0.IO=s0.prior.IO;
-s0.IO(1)=s0.IO(11)/2;  % px = center of sensor
-s0.IO(2)=-s0.IO(12)/2; % py = center of sensor (sign is due to camera model)
-s0.IO(3)=7.3;          % c = EXIF value.
-s0.IO(4:10)=0;          % K1-K3, P1-P2, B1-B2 = 0.
-s0.IO=repmat(s0.IO(:,1),1,size(s0.IO,2));
+ss0.IO.val=zeros(size(ss0.IO.val));
+% c = EXIF value.s
+ss0.IO.val(1,:)=7.3;
+% px,py = center of sensor (sign flip is due to camera model).
+ss0.IO.val(2:3,:)=0.5*diag([1,-1])*ss0.IO.sensor.ssSize;
 
 % Don't use any prior estimates of the IO parameters.
-s0.useIOobs=false(size(s0.IO));
-% Estimate px,py,c,K1-K3,P1-P2.
-s0.estIO=false(size(s0.IO));
-s0.estIO(1:8,:)=true;
-% Estimate aspect.
-s0.estIO(9,:)=true;
-% Do not estimate skew.
-s0.estIO(10,:)=false;
+%ss0.IO.prior.use=...
+% Estimate c,px,py,c,aspect,K1-K3,P1-P2, but not skew (row 5).
+ss0.bundle.est.IO=repmat((1:10)'~=5,1,size(ss0.bundle.est.IO,2));
 
 % Don't use any prior EO paramters.
-s0.useEOobs=false(size(s0.EO));
-% Estimate all EO parameters (except for last line which is axis
-% sequence indicator).
-s0.estEO(1:6,:)=true;
-% Clear all EO parameter to NaN to catch any errors.
-s0.EO(1:6,:)=NaN;
+%ss0.EO.prior.use=false(size(ss0.EO.val));
+
+% Estimate all EO parameters.
+% ss0.bundle.est.EO=...
+
+% EO parameters will be computed by resection. Clear all values to NaN
+% to catch any errors.
+ss0.EO.val(:)=NaN;
 
 % Fix the bundle datum by fixing all control points.
-s0.estOP=repmat(~s0.isCtrl(:)',3,1);
-% Clear all object points values to catch any errors.
-s0.OP(s0.estOP)=NaN;
+ss0.bundle.est.OP=repmat(~ss0.OP.prior.isCtrl(:)',3,1);
+% OP are computed by forward intersection. Clear values to catch any errors.
+ss0.OP.val(ss0.bundle.est.OP)=NaN;
 
 % Get initial camera positions by spatial intersection.
-cpId=s0.OPid(s0.isCtrl);
-s1=resect(s0,'all',cpId,1,0,cpId);
+cpId=ss0.OP.id(ss0.OP.prior.isCtrl);
+s1=resect(ss0,'all',cpId,1,0,cpId);
 % Get initial object points positions by forward intersection.
 s2=forwintersect(s1,'all',true);
 
-s2.x0desc='Camera calibration from EXIF value';
+s2.proj.x0desc='Camera calibration from EXIF value';
 
 % Plot initial camera network.
 s=s2;
@@ -122,16 +118,16 @@ fprintf('Running the bundle with damping %s...\n',damping);
     
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
-            iters,sigma0,sigma0*s0.prior.sigmas(1));
+            iters,sigma0,result.post.sigmas(1));
 else
     fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*ss0.IP.sigmas(1));
 end
 
 % Pre-factorize posterior covariance matrix for speed.
 E=bundle_cov(result,E,'prepare');
 
-COP=bundle_result_file(result,E,reportFile);
+[COP,result]=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
@@ -157,31 +153,31 @@ end
 imName='';
 imNo=1;
 % Check if image files exist.
-isAbsPath=~isempty(s0.imDir) && ismember(s0.imDir(1),'\\/') || ...
-          length(s0.imDir)>1 && s0.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s0.imDir),'dir')
+isAbsPath=~isempty(ss0.proj.imDir) && ismember(ss0.proj.imDir(1),'\\/') || ...
+          length(ss0.proj.imDir)>1 && ss0.proj.imDir(2)==':';
+if ~isAbsPath && exist(fullfile(curDir,ss0.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s0.imDir=fullfile(curDir,s0.imDir);
+    ss0.proj.imDir=fullfile(curDir,ss0.proj.imDir);
 end
-if exist(s.imDir,'dir')
+if exist(ss0.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
-    imNames={s.imNames{imNo},lower(s.imNames{imNo}),upper(s.imNames{imNo})};    
-    imNames=fullfile(s.imDir,imNames);
+    imNames={ss0.EO.name{imNo},lower(ss0.EO.name{imNo}),upper(ss0.EO.name{imNo})};    
+    imNames=fullfile(ss0.proj.imDir,imNames);
     imExist=cellfun(@(x)exist(x,'file')==2,imNames);
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
 else
-    warning('Image directory %s does not exist.',s0.imDir);
+    warning('Image directory %s does not exist.',ss0.proj.imDir);
 end
 
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     h=[h;imshow(imName,'parent',gca(imFig))];
-    pts=s.markPts(:,s.colPos(s.vis(:,imNo),imNo));
-    ptsId=s.OPid(s.vis(:,imNo));
-    isCtrl=s.isCtrl(s.vis(:,imNo));
+    pts=ss0.IP.val(:,ss0.IP.ix(ss0.IP.vis(:,imNo),imNo));
+    ptsId=ss0.OP.id(ss0.IP.vis(:,imNo));
+    isCtrl=ss0.OP.prior.isCtrl(ss0.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

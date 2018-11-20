@@ -8,6 +8,10 @@ function ss=buildserialindices(ss,wantedOrder)
 %   default. Use SERIALIZE(S0,ORDER), where ORDER is a cell array with
 %   strings 'IO', 'EO', 'OP' to modify the order.
 %
+%   S0=BUILDSERIALINDICES(S0,TRUE) will only parse the
+%   IO.struct.block and EO.struct.block fields. The serial/deserial
+%   fields will be cleared.
+%
 %   S0.IO.struct.block indicates how IO parameters are blocked, i.e.,
 %   shared between images (columns). S0.bundle.est.IO indicates what
 %   IO parameters should be estimated. The field bundle.serial.IO.src
@@ -54,7 +58,12 @@ function ss=buildserialindices(ss,wantedOrder)
 %   post.res.ix.OP - index into the residual vector for OP observations.
 %   post.res.ix.n  - total number of observations.
 
-if nargin<2, wantedOrder={'IO','EO','OP'}; end
+if nargin<2, wantedOrder={'IO','EO','OP'}; parseOnly=false; end
+
+if islogical(wantedOrder)
+    parseOnly=wantedOrder;
+    wantedOrder={};
+end
 
 % Find unique IOblock and EOblock columns and indicate if columns
 % are simple.
@@ -62,13 +71,20 @@ ss.IO.struct.uniq=false(1,size(ss.IO.struct.block,2));
 [~,ia,ic]=unique(ss.IO.struct.block','rows');
 ss.IO.struct.uniq(ia)=true;
 ss.IO.struct.no=ic';
-ss.IO.struct.simple=all(ss.IO.struct.block==ss.IO.struct.block(ones(end,1),:),1);
+ss.IO.struct.isSimple=all(ss.IO.struct.block==ss.IO.struct.block(ones(end,1),:),1);
 
 ss.EO.struct.uniq=false(1,size(ss.EO.struct.block,2));
 [~,ia,ic]=unique(ss.EO.struct.block','rows');
 ss.EO.struct.uniq(ia)=true;
 ss.EO.struct.no=ic';
-ss.EO.struct.simple=all(ss.EO.struct.block==ss.EO.struct.block(ones(end,1),:),1);
+ss.EO.struct.isSimple=all(ss.EO.struct.block==ss.EO.struct.block(ones(end,1),:),1);
+
+if parseOnly
+    % Create blank serial/deserial structs.
+    ss.bundle.serial=[];
+    ss.bundle.deserial=[];
+    return;
+end
 
 % Serialize each block. All x-related indices are 1-based.
 [IOlead,IOserial,IOdeserial,warn,blockIx]=serializeblock(ss.IO.struct.block,...
@@ -100,6 +116,7 @@ if warn
              'fixed, not a combination. Fixed parameters will be ' ...
              'overwritten.']);
 end
+
 [~,OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(ss.OP.val,2),3,1),...
                                             ss.bundle.est.OP,...
                                             ss.OP.prior.use);
@@ -133,12 +150,11 @@ end
 
 % Store arrays indicating leading parameters, i.e., the first
 % parameter within each block to be estimated.
-ss.IO.struct.lead=IOlead;
-ss.EO.struct.lead=EOlead;
-
+ss.IO.struct.leading=IOlead;
+ss.EO.struct.leading=EOlead;
 % Mask out any useObs that correspond to a repeated parameter.
-ss.IO.prior.use=ss.IO.prior.use & ss.IO.struct.lead;
-ss.EO.prior.use=ss.EO.prior.use & ss.EO.struct.lead;
+ss.IO.prior.use=ss.IO.prior.use & ss.IO.struct.leading;
+ss.EO.prior.use=ss.EO.prior.use & ss.EO.struct.leading;
 
 % Store indices.
 ss.bundle.serial=struct('IO',IOserial,...
@@ -164,7 +180,7 @@ ss.post.res.ix=struct('IP',obsIPix,...
                       'n',nObs);
 
 % Compute serialize indices for one block
-function [lead,serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
+function [leading,serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
 
 % Elements within one parameter block should all be marked as
 % 'estimate' or 'fixed', not a combination.
@@ -181,27 +197,27 @@ end
 block(~est)=0;
 
 % Find the leading elements of each row.
-lead=zeros(size(block));
+leading=zeros(size(block));
 for i=1:size(block,1)
   [~,ia,~]=unique([0,block(i,:)]);
-  lead(i,ia(2:end)-1)=1;
+  leading(i,ia(2:end)-1)=1;
 end
 
 % Return columns corresponding to parameter blocks.
-blockIx=find(any(lead,1));
+blockIx=find(any(leading,1));
 
 % Indices to serialize v (matrix -> vector)
-serial.src=find(lead);
-serial.dest=(1:nnz(lead))';
+serial.src=find(leading);
+serial.dest=(1:nnz(leading))';
 
 % Find subset of serial indices that correspond to parameters with
 % prior observations.
-serial.obs=find(useObs(lead>0));
+serial.obs=find(useObs(leading>0));
 
 % Now create the inverse mapping to distribute x elements to IO.
 % (This can be done quicker.)
-dist=lead;
-dist(lead~=0)=serial.dest;
+dist=leading;
+dist(leading~=0)=serial.dest;
 
 % Expand to all elements that should be equal.
 for k=1:length(serial.dest)

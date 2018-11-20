@@ -11,11 +11,11 @@ function [r,J]=multi_res(s,fun)
 %   See also: RES_EULER_BROWN_0, RES_EULER_BROWN_1, RES_EULER_BROWN_2,
 %   RES_EULER_BROWN_3.
 
-nPhotos=size(s.EO,2);
-nObjs=size(s.OP,2);
+nPhotos=size(s.EO.val,2);
+nObjs=size(s.OP.val,2);
 
 % Total number of projected points.
-nProj=nnz(s.vis);
+nProj=nnz(s.IP.vis);
 
 if nargout<2
     % No partial derivatives at all.
@@ -23,30 +23,30 @@ if nargout<2
     % Preallocate point matrix for speed.
     xy=nan(2,nProj);
 
-    for i=find(any(s.vis))
+    for i=find(any(s.IP.vis))
         % Get camera station.
-        camStation=s.EO(:,i);
+        camStation=s.EO.val(:,i);
         center=camStation(1:3);
         ang=camStation(4:6);
         
         % Get inner orientation.
         camNo=i;
-        [pp,f,K,P,b,sz]=unpackio(s.IO(:,camNo),s.nK,s.nP);
-
+        [pp,f,K,P,b]=unpackio(s.IO.val(:,camNo),s.IO.model.nK,s.IO.model.nP);
+        sz=s.IO.sensor.pxSize(:,camNo);
+        
         % Trim K and P
         K=trimkp(K,false);
         P=trimkp(P,true);
 	
         % Get object points visible in this image
-        v=s.vis(:,i);
-        obj=s.OP(:,v);
+        v=s.IP.vis(:,i);
+        obj=s.OP.val(:,v);
 
         % Get corresponding mark pts.
-        cp=s.colPos(v,i);
-        imPts=s.markPts(:,cp);
+        cp=s.IP.ix(v,i);
+        imPts=s.IP.val(:,cp);
         
         % Compute image residuals
-        sz=1./sz;
         camRes=fun(obj,center,ang,f,imPts,sz(1),pp,K,P,b);
 
         % Find out where to store residuals.
@@ -55,27 +55,27 @@ if nargout<2
     r=xy(:);
 else
     % Create indices into the vector of unknowns = columns of J
-    destIOcols=zeros(size(s.estIO));
-    destIOcols(s.deserial.IO.dest)=s.deserial.IO.src;
-    destEOcols=zeros(size(s.estEO));
-    destEOcols(s.deserial.EO.dest)=s.deserial.EO.src;
-    destOPcols=zeros(size(s.estOP));
-    destOPcols(s.deserial.OP.dest)=s.deserial.OP.src;
+    destIOcols=zeros(size(s.bundle.est.IO));
+    destIOcols(s.bundle.deserial.IO.dest)=s.bundle.deserial.IO.src;
+    destEOcols=zeros(size(s.bundle.est.EO));
+    destEOcols(s.bundle.deserial.EO.dest)=s.bundle.deserial.EO.src;
+    destOPcols=zeros(size(s.bundle.est.OP));
+    destOPcols(s.bundle.deserial.OP.dest)=s.bundle.deserial.OP.src;
     % Preallocate residual vector.
     xy=nan(2*nProj,1);
 
     % Vectors for "sparse" IO: rows, cols, and values.
-    IOrows=nan(numel(xy)*max(sum(s.estIO,1)),1);
+    IOrows=nan(numel(xy)*max(sum(s.bundle.est.IO,1)),1);
     IOcols=IOrows;
     IOvals=IOrows;
     
     % Vectors for "sparse" EO: rows, cols, and values.
-    EOrows=nan(numel(xy)*max(sum(s.estEO,1)),1);
+    EOrows=nan(numel(xy)*max(sum(s.bundle.est.EO,1)),1);
     EOcols=EOrows;
     EOvals=EOrows;
     
     % Vectors for "sparse" OP: rows, cols, and values.
-    OProws=nan(numel(xy)*max(sum(s.estOP,1)),1);
+    OProws=nan(numel(xy)*max(sum(s.bundle.est.OP,1)),1);
     OPcols=OProws;
     OPvals=OProws;
 
@@ -89,16 +89,18 @@ else
     jacLast=0;
 
     % For each camera with observations
-    for i=find(any(s.vis))
+    for i=find(any(s.IP.vis))
         % Get inner orientation.
         camNo=i;
         % Values
-        [pp,f,K,P,b,sz]=unpackio(s.IO(:,camNo),s.nK,s.nP);
+        [pp,f,K,P,b]=unpackio(s.IO.val(:,camNo),s.IO.model.nK,s.IO.model.nP);
+        sz=s.IO.sensor.pxSize(:,camNo);
         % Do we need the partials?
-        cIO=s.estIO(:,camNo);
-        [cpp,cf,cK,cP,cb,csz]=unpackio(s.estIO(:,camNo),s.nK,s.nP);
+        cIO=s.bundle.est.IO(:,camNo);
+        [cpp,cf,cK,cP,cb]=unpackio(cIO,s.IO.model.nK,s.IO.model.nP);
         % Where should we store the partials?
-        [ppIx,fIx,Kix,Pix,bIx,~]=unpackio(destIOcols(:,camNo),s.nK,s.nP);
+        [ppIx,fIx,Kix,Pix,bIx]=unpackio(destIOcols(:,camNo), ...
+                                        s.IO.model.nK,s.IO.model.nP);
         
         % Trim K and/or P unless we need the Jacobians.
         if ~any(cK)
@@ -109,36 +111,30 @@ else
         end
 
         % Get external orientation.
-        camStation=s.EO(:,i);
+        camStation=s.EO.val(:,i);
         center=camStation(1:3);
         ang=camStation(4:6);
         
         % Do we need the partials?
-        cEO=s.estEO(1:6,i);
+        cEO=s.bundle.est.EO(1:6,i);
         cC=cEO(1:3);
         cA=cEO(4:6);
         % Where should we store the partials?
-        EOix=removezeros(destEOcols(1:6,i));
+        EOix=removezeros(destEOcols(:,i));
 	
         % Get object points visible in this image
-        v=s.vis(:,i);
-        obj=s.OP(:,v);
+        v=s.IP.vis(:,i);
+        obj=s.OP.val(:,v);
         % Do we need the partials?
-        cOP=s.estOP(:,v);
+        cOP=s.bundle.est.OP(:,v);
         % Where should we store the partials?
         OPix=removezeros(destOPcols(:,v));
 
         % Get corresponding mark pts.
-        cp=full(s.colPos(v,i));
-        imPts=s.markPts(:,cp);
+        cp=full(s.IP.ix(v,i));
+        imPts=s.IP.val(:,cp);
         
         % Compute image residuals
-        sz=1./sz;
-        
-        if any(csz)
-            warning('Internal error: should not estimate pixel size!');
-        end
-        
         [camRes,camJac]=fun(obj,center,ang,f,imPts,sz(1),pp,K,P,b, ...
                             any(cOP(:)),any(cC),any(cA),cf,false,false, ...
                             any(cpp),any(cK),any(cP),any(cb));
@@ -314,7 +310,7 @@ else
     jj=[IOcols;EOcols(1:EOlast);OPcols]; 
     vv=[IOvals;EOvals(1:EOlast);OPvals];
     
-    J=sparse(ii,jj,vv,2*nProj,s.serial.n);
+    J=sparse(ii,jj,vv,2*nProj,s.bundle.serial.n);
     r=xy(:);
 end
 

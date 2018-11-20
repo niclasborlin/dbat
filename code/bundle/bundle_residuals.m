@@ -8,16 +8,15 @@ function [rms,res]=bundle_residuals(s,e)
 %
 %See also: BUNDLE, BUNDLE_RESULT_FILE.
 
-
-nPts=nnz(s.vis);
+nPts=nnz(s.IP.vis);
 
 % Compute residuals for each point.
-ptRes=sqrt(sum((diag(s.IO(end-1:end))*...
+ptRes=sqrt(sum(((1./s.IO.sensor.pxSize(:,s.IP.ptCams)).*...
                 reshape(e.final.unweighted.r(1:nPts*2),2,[])).^2,1));
 
 % Residual array has same sparsity as vis.
-res=double(s.vis);
-res(s.vis)=ptRes(s.colPos(s.vis));
+res=double(s.IP.vis);
+res(s.IP.vis)=ptRes(s.IP.ix(s.IP.vis));
 
 % RMS over all points.
 rms=sqrt(mean(ptRes.^2));

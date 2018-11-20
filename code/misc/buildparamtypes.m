@@ -12,7 +12,7 @@ function ret=buildparamtypes(s,sel)
 %       cc      - camera constant in camera units.
 %       px,
 %       py      - principal point in camera units (typically mm).
-%       af      - affine parameter. Aspect will be (1+af):1.
+%       as      - affine parameter. Aspect will be (1+af):1.
 %       sk      - skew parameters.
 %       K1,
 %       K2,
@@ -57,25 +57,26 @@ OPtypes={};
 
 if strcmp(sel,'IO') || strcmp(sel,'struct')
     % IO parameter types.
-    Knames=arrayfun(@(x)sprintf('K%d',x),1:s.nK,'uniformoutput',false);
-    Pnames=arrayfun(@(x)sprintf('P%d',x),1:s.nP,'uniformoutput',false);
-    IOtypes={'px','py','cc',Knames{:},Pnames{:},'fa','fs','sw', ...
-             'sh','iw','ih','rx','ry'}';
-    if size(s.IO,2)>1
-        IOtypes=repmat(IOtypes,1,size(s.IO,2));
-        if any(any(s.IOblock~=repmat(1:size(s.IO,2),size(s.IO,1),1)))
-            % At least partly block-invariant.
-            for j=1:size(s.IO,2)
-                for i=1:size(s.IO,1)
-                    IOtypes{i,j}=sprintf('%s-%d(%d)',IOtypes{i,j},j,...
-                                         s.IOblock(i,j));
-                end
-            end
-        else
+    Knames=arrayfun(@(x)sprintf('K%d',x),1:s.IO.model.nK,'uniformoutput',false);
+    Pnames=arrayfun(@(x)sprintf('P%d',x),1:s.IO.model.nP,'uniformoutput',false);
+    IOtypes={'cc','px','py','as','sk',Knames{:},Pnames{:}}';
+    if size(s.IO.val,2)>1
+        IOtypes=repmat(IOtypes,1,size(s.IO.val,2));
+        if isscalar(unique(s.IO.struct.block(:)))
+            % All in one block, do nothing.
+        elseif all(s.IO.struct.isSimple)
             % Purely image-invariant.
-            for i=1:size(s.IO,2)
+            for i=1:size(s.IO.val,2)
                 IOtypes(:,i)=cellfun(@(x)sprintf('%s-%d',x,i),IOtypes(:,i),...
                                      'uniformoutput',false);
+            end
+        else
+            % Mixed-variant.
+            for j=1:size(s.IO.val,2)
+                for i=1:size(s.IO.val,1)
+                    IOtypes{i,j}=sprintf('%s-%d(%d)',IOtypes{i,j},j,...
+                                         s.IO.struct.block(i,j));
+                end
             end
         end
     end
@@ -83,15 +84,15 @@ end
 
 if strcmp(sel,'EO') || strcmp(sel,'struct')
     % Set EO parameter types.
-    EOtypes={'EX','EY','EZ','om','ph','ka','tt'}';
-    if size(s.EO,2)>1
-        EOtypes=repmat(EOtypes,1,size(s.EO,2));
+    EOtypes={'EX','EY','EZ','om','ph','ka'}';
+    if size(s.EO.val,2)>1
+        EOtypes=repmat(EOtypes,1,size(s.EO.val,2));
         % Only specify camera ids if any differ from camera sequence number.
-        useCamIds=any(1:length(s.camIds)~=s.camIds);
-        for i=1:size(s.EO,2)
+        useCamIds=any(1:length(s.EO.id)~=s.EO.id);
+        for i=1:size(s.EO.val,2)
             % Id for this camera.
             if useCamIds
-                camStr=sprintf('-%d(%d)',i,s.camIds(i));
+                camStr=sprintf('-%d(%d)',i,s.EO.id(i));
             else
                 camStr=sprintf('-%d',i);
             end
@@ -103,26 +104,26 @@ end
 
 if strcmp(sel,'OP') || strcmp(sel,'struct')
     OPtypes={'OX','OY','OZ'}';
-    if size(s.OP,2)>1
-        OPtypes=repmat(OPtypes,1,size(s.OP,2));
-        if any(s.isCtrl)
-            OPtypes(:,s.isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(s.isCtrl));
+    if size(s.OP.val,2)>1
+        OPtypes=repmat(OPtypes,1,size(s.OP.val,2));
+        if any(s.OP.prior.isCtrl)
+            OPtypes(:,s.OP.prior.isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(s.OP.prior.isCtrl));
         end
-        if any(s.isCheck)
-            OPtypes(:,s.isCheck)=repmat({'HX','HY','HZ'}',1,nnz(s.isCheck));
+        if any(s.OP.prior.isCheck)
+            OPtypes(:,s.OP.prior.isCheck)=repmat({'HX','HY','HZ'}',1,nnz(s.OP.prior.isCheck));
         end
         
-        for i=1:size(s.OP,2)
+        for i=1:size(s.OP.val,2)
             % Id for this OP.
             OPstr=sprintf('-%d',i);
-            if s.OPid(i)~=i
-                OPstr=[OPstr,sprintf('/%d',s.OPid(i))];
+            if s.OP.id(i)~=i
+                OPstr=[OPstr,sprintf('/%d',s.OP.id(i))];
             end
-            if s.OPrawId(i)~=s.OPid(i)
-                OPstr=[OPstr,sprintf('/%d',s.OPrawId(i))];
+            if s.OP.rawId(i)~=s.OP.id(i)
+                OPstr=[OPstr,sprintf('/%d',s.OP.rawId(i))];
             end
-            if ~isempty(s.OPlabels{i})
-                OPstr=[OPstr,'-',s.OPlabels{i}];
+            if ~isempty(s.OP.label{i})
+                OPstr=[OPstr,'-',s.OP.label{i}];
             end
             OPtypes(:,i)=cellfun(@(x)[x,OPstr],OPtypes(:,i),...
                                  'uniformoutput',false);
@@ -133,7 +134,9 @@ end
 % Determine what parameter(s) to return.
 switch sel
   case 'struct'
-    s.paramTypes=struct('IO',{IOtypes},'EO',{EOtypes},'OP',{OPtypes});
+    s.IO.type=IOtypes;
+    s.EO.type=EOtypes;
+    s.OP.type=OPtypes;
     ret=s;
   case 'IO'
     ret=IOtypes;

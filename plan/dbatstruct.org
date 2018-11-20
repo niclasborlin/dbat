@@ -37,12 +37,12 @@
                values are distinct. Block-variant projects have only
                one unique value. Image-variant projects have all
                values distinct.
-    - lead :: 16-by-nImages logical array indicating what parameters
+    - leading :: 16-by-nImages logical array indicating what parameters
               are leading a block.
     - uniq :: logical nImages-vector indicating which IOblock columns
               are unique.
     - no ::  nImages-vector with unique numbers for IOblock columns.
-    - simple :: logical nImages-vector indicating which IOblock are
+    - isSimple :: logical nImages-vector indicating which IOblock are
                 simple (contain elements from one block only).
 - EO
   - val :: 7-by-nImages array with the external orientation for each
@@ -170,11 +170,10 @@
 | fileName      | proj.fileName        | Filename for data source |
 |---------------+----------------------+--------------------------|
 | IO            | IO.val               |                          |
-| IOstd         | IO.std               |                          |
-|               | IO.cov               |                          |
+| IOstd         |                      |                          |
 | paramTypes.IO | IO.type              |                          |
 |---------------+----------------------+--------------------------|
-| distmodel     | IO.model.distModel   |                          |
+| IOdistModel   | IO.model.distModel   |                          |
 | nK            | IO.model.nK          |                          |
 | nP            | IO.model.nP          |                          |
 | camUnit       | IO.model.camUnit     |                          |
@@ -190,14 +189,13 @@
 | useIOobs      | IO.prior.use         |                          |
 |---------------+----------------------+--------------------------|
 | IOblock       | IO.struct.block      |                          |
-| IOlead        | IO.struct.lead       |                          |
+| IOlead        | IO.struct.leading    |                          |
 | IOunique      | IO.struct.uniq       |                          |
 | IOno          | IO.struct.no         |                          |
-| IOsimple      | IO.struct.simple     |                          |
+| IOsimple      | IO.struct.isSimple   |                          |
 |---------------+----------------------+--------------------------|
 | EO            | EO.val               |                          |
-| EOstd         | EO.std               |                          |
-|               | EO.cov               |                          |
+| EOstd         |                      |                          |
 | imCams        | EO.cam               |                          |
 | imNames       | EO.name              |                          |
 | camIds        | EO.id                |                          |
@@ -211,14 +209,13 @@
 | useEOobs      | EO.prior.use         |                          |
 |---------------+----------------------+--------------------------|
 | EOblock       | EO.struct.block      |                          |
-| EOlead        | EO.struct.lead       |                          |
+| EOlead        | EO.struct.leading    |                          |
 | EOunique      | EO.struct.uniq       |                          |
 | EOno          | EO.struct.no         |                          |
-| EOsimple      | EO.struct.simple     |                          |
+| EOsimple      | EO.struct.isSimple   |                          |
 |---------------+----------------------+--------------------------|
 | OP            | OP.val               |                          |
-| OPstd         | OP.std               |                          |
-|               | OP.cov               |                          |
+| OPstd         |                      |                          |
 | OPid          | OP.id                |                          |
 | OPrawId       | OP.rawId             |                          |
 | OPlabels      | OP.label             |                          |
@@ -257,7 +254,37 @@
 | residuals.ix  | post.res.ix          |                          |
 | residuals     | post.res             |                          |
 | sigmas        | post.sigmas          |                          |
+|               | post.std.IO          |                          |
+|               | post.std.EO          |                          |
+|               | post.std.OP          |                          |
+|               | post.cov.IO          |                          |
+|               | post.cov.EO          |                          |
+|               | post.cov.OP          |                          |
 |---------------+----------------------+--------------------------|
+
+# STOP
+
+| name  | old row | new row |
+|-------+---------+---------|
+| focal |       3 |       1 |
+| px    |       1 |       2 |
+| py    |       2 |       3 |
+| K1    |       4 |       6 |
+| K2    |       5 |       7 |
+| K3    |       6 |       8 |
+| P1    |       7 |       9 |
+| P2    |       8 |      10 |
+| as    |       9 |       4 |
+| sk    |      10 |       5 |
+| sw    |      11 |         |
+| sh    |      12 |         |
+| iw    |      13 |         |
+| ih    |      14 |         |
+| rx    |      15 |         |
+| ry    |      16 |         |
+|-------+---------+---------|
+| ppx   |      17 |         |
+| ppy   |      18 |         |
 
 #+BEGIN_SRC perl
   use strict;
@@ -265,7 +292,7 @@
   use autodie;
 
   my $srcVar='s'; # shift;
-  my $destVar='ss'; # shift;
+  my $destVar='s'; # shift;
 
   open(my $in,"<","./dbatstruct.org");
   open(my $out,">","/tmp/perlscript.pl");
@@ -284,7 +311,13 @@
           # Escape .
           $from =~ s/\./\\./g;
           my $to=$a[2];
+          if ($to eq '') {
+              $to="#BAD#$from";
+          }
           print $out "\ts/\\b$srcVar\\\.$from\\b/$destVar.$to/g;\n";
+      }
+      if (/^\s*#.*STOP/) {
+          break;
       }
   }
   print $out "\tprint;\n";
