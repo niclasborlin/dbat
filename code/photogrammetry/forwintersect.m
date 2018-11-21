@@ -16,6 +16,9 @@ function [s,id,res]=forwintersect(s0,ids,skipPrior)
 %
 %See also: PM_MULTIFORWINTERSECT.
 
+if any(~isfinite(s0.EO.val(:))), error('Bad or uninitialized EO data'); end
+if any(~isfinite(s0.IO.val(:))), error('Bad or uninitialized IO data'); end
+    
 if strcmp(ids,'all'), ids=s0.OP.id; end
    
 if nargin<3, skipPrior=false; end

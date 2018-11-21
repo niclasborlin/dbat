@@ -2,7 +2,7 @@ function [OP,R]=pm_multiforwintersect(IO,EO,ei,colPos,pts,i)
 %PM_MULTIFORWINTERSECT Camera network forward intersection.
 %
 %   OP=PM_MULTIFORWINTERSECT(IO,EO,EI,COLPOS,PTS,I) calculates object points
-%   by forward intersection. The 7-by-N array EO contains the external
+%   by forward intersection. The 6-by-N array EO contains the external
 %   orientation of each camera. The N-array (or scalar) EI contains indices
 %   into the IO array. The M-by-N array COLPOS contains column indices into
 %   the 2-by-P array PTS of observations. The Q-vector I contains the
@@ -12,7 +12,9 @@ function [OP,R]=pm_multiforwintersect(IO,EO,ei,colPos,pts,i)
 %   [OP,R]=... also returns the squared residual in R, normalized by the
 %   number of rays.
 
-
+if any(~isfinite(EO(:))), error('Bad or uninitialized EO data'); end
+if any(~isfinite(IO(:))), error('Bad or uninitialized IO data'); end
+    
 if isscalar(ei)
     ei=repmat(ei,1,size(EO,2));
 end
