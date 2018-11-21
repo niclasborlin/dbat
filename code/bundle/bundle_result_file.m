@@ -248,9 +248,9 @@ sensorTypes={'fw','fh','iw','ih','xr','yr','pw','ph'};
 
 % Array with IO data, std and significance values.
 IOsensorData=[s.post.sensor.ssSize;
-        s.post.sensor.imSize;
-        1./s.post.sensor.pxSize;
-        s.post.sensor.pxSize];
+              s.post.sensor.imSize;
+              s.post.sensor.imSize./s.post.sensor.ssSize;
+              s.post.sensor.pxSize];
 IOdata=s.IO.val;
 IOtype=s.IO.type;
 IOdataStd=s.post.std.IO;
