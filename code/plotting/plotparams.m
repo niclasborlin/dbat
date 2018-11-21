@@ -181,6 +181,7 @@ if plotIO && any(s.bundle.est.IO(:))
     lgs={};
     % Corresponding line handles.
     hh=[];
+    affineLegends={'af','sk'};
     % For each unique camera.
     for ci=find(s.IO.struct.uniq)
         % Extract K values for this camera over all iterations.
@@ -198,10 +199,10 @@ if plotIO && any(s.bundle.est.IO(:))
             end
             if nnz(s.IO.struct.uniq)==1
                 color=cc(i,:);
-                lgs{end+1}=sprintf('%sB%d',prefix,i); %#ok<AGROW>
+                lgs{end+1}=sprintf('%s%s',prefix,affineLegends{i}); %#ok<AGROW>
             else
                 color=cc(rem(ci-1,size(cc,1))+1,:);
-                lgs{end+1}=sprintf('%sB%d-%d',prefix,i,ci); %#ok<AGROW>
+                lgs{end+1}=sprintf('%s%s-%d',prefix,affineLegends{i},ci); %#ok<AGROW>
             end
             hh(end+1)=line(0:size(e.trace,2)-1,v(i,:),'parent',ax,...
                            'linestyle',ls{i},'marker','x','color',color); %#ok<AGROW>
