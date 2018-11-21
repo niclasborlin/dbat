@@ -1,4 +1,4 @@
-function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
+function [s,rms,fail]=resect(s0,cams,cpId,n,v,chkId)
 %RESECT Perform spatial resection on cameras in a project.
 %
 %   S=RESECT(S0,CAMS,CP_ID) uses the 3-point algorithm to performs spatial
@@ -23,7 +23,10 @@ function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
 %   CHK_ID as check points. CP_ID and CHK_ID may contain the same IDs.
 %
 %   [S,RES]=... also returns the rms RES of the residuals of the check
-%   points. A failed resection is indicated by a NaN rms.
+%   points.
+%
+%   [S,RES,FAIL]=... also returns a flag FAIL which is TRUE if any
+%   of the requested resections failed.
 %
 %   References:
 %     Haralick, Lee, Ottenberg, Nölle (1994), "Review and Analysis of Solutions
@@ -41,6 +44,8 @@ if nargin<5, v=0; end
 if nargin<6, chkId=s0.OP.id; end
 
 if strcmp(cams,'all'), cams=1:size(s0.EO.val,2); end
+
+fail=false;
 
 s=s0;
 
@@ -119,6 +124,8 @@ for i=1:length(cams)
         s.EO.val(1:3,camIx)=euclidean(null(bestP));
         s.EO.val(4:6,camIx)=derotmat3d(bestP(:,1:3));
     else
+        % Signal failure.
+        fail=true;
         s.EO.val(1:6,camIx)=nan;
     end
 end
