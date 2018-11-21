@@ -1,4 +1,4 @@
-function [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP);
+function [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP)
 % Create arrays of columns indices for IO derivatives.
 % A zero element means that the partial derivative should not be
 % calculated/stored.
