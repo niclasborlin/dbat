@@ -7,10 +7,10 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:22:24
+      Last Bundle Run:        21-Nov-2018 09:08:14
       DBAT version:           0.8.0.0 (2018-10-26)
-      MATLAB version:         8.6.0.267246 (R2015b)
-      Host system:            GLNXA64
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (L, 281474976710655)
       Host name:              slartibartfast
       Status:                 OK
       Sigma0:                 1.61247
@@ -35,28 +35,28 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 9
-         First error:          30873.8
+         First error:          30873.9
          Last error:           98.4138
-         Execution time (s):   0.91
+         Execution time (s):   1.48
       Lens distortion models:
          Backward (Photogrammetry) model 4
       Cameras:
-         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2 aspect)
+         Calibration: yes (cc px py as K1 K2 K3 P1 P2)
          Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 4
-            Focal Length:
+            Camera Constant:
                Value:        7.45702 mm
                Deviation:    0.00104 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        3.61547 mm
                Deviation:    0.000819 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        2.61338 mm
                Deviation:    0.000979 mm
-            Fw - format width:
+            Format width:
                Value:        7.25308 mm
-            Fh - format height:
+            Format height:
                Value:        5.43764 mm
             K1 - radial distortion 1:
                Value:        0.00458999 mm^(-3)
@@ -82,27 +82,26 @@ Damped Bundle Adjustment Toolbox result file
             P2 - decentering distortion 2:
                Value:        -4.42232e-05 mm^(-3)
                Deviation:    3.93e-06 mm^(-3)
-               Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        0.000399377 
                Deviation:    2.09e-05 
                Significance: p=1.00
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        2272 px
-            Ih - image height:
+            Image height:
                Value:        1704 px
-            Xr - X resolution:
+            X resolution:
+               Value:        313.246 px/mm
+            Y resolution:
                Value:        313.371 px/mm
-            Yr - Y resolution:
-               Value:        313.371 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00319238 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.0031911 mm
          Rated angle of view (h,v,d): (52, 40, 63) deg
-         Largest distortion: 0.37 mm (116.4 px, 8.2% of half-diagonal)
+         Largest distortion: 0.37 mm (116.2 px, 8.2% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
@@ -591,11 +590,11 @@ Damped Bundle Adjustment Toolbox result file
            1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
            1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
          Ctrl point delta
-            Max: 0.000 ou (, pt 1001)
+            Max: 0.000 ou (pt 1001)
             Max X,Y,Z
-               X: 0.000 ou (, pt 1001)
-               Y: 0.000 ou (, pt 1001)
-               Z: 0.000 ou (, pt 1001)
+               X: 0.000 ou (pt 1001)
+               Y: 0.000 ou (pt 1001)
+               Z: 0.000 ou (pt 1001)
             RMS: 0.000 ou (from 4 items)
       Check measurements
          none
