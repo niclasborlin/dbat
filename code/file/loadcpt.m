@@ -7,12 +7,11 @@ function pts=loadcpt(fName)
 %       id   - M-array with id numbers.
 %       name - M-cell array with names.
 %       pos  - N-by-3 array of estimated positions
-%       std  - N-by-3 array with posteriori standard deviations
+%       std  - N-by-3 array with a priori standard deviations
 %
 %   Each line is expected to contain a comma-separated list of an
 %   integer id, a name, X, Y, Z positions, and optionally X, Y, Z standard
 %   devations. Blank lines and lines starting with # are ignored.
-
 
 [fid,msg]=fopen(fName,'rt');
 if fid<0
