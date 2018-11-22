@@ -140,7 +140,7 @@ numObs=sprintf('%d (%d IP, %d IO, %d EO, %d OP)',...
                length(s.post.res.ix.OP));
 
 [comp,mxSize,endian]=computer;
-compStr=sprintf('%s (%s, %d)',comp,endian,mxSize);
+compStr=sprintf('%s (endian=%s, max #elems=%d)',comp,endian,mxSize);
 
 % Values are {name,format string,value}
 values={'Last Bundle Run:','%s',e.dateStamp,

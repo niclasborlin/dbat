@@ -5,151 +5,165 @@ Damped Bundle Adjustment Toolbox result file
          Structural rank: ok.
          Numerical rank: 428 (deficiency: 7)
             Null-space suggest the following parameters are part of the problem:
-               Vector 1 (eigenvalue -6.34443e-18):
-                  (EZ-15, 0.155)
-                  (EZ-13, 0.154)
-                  (EZ-7, 0.148)
-                  (EZ-1, 0.148)
-                  (EZ-5, 0.147)
-                  (EZ-11, 0.145)
-                  (EZ-16, 0.142)
-                  (EZ-14, 0.139)
-                  (EZ-12, 0.138)
-                  (EZ-6, 0.135)
-                  (EZ-9, 0.132)
-                  (EZ-2, 0.129)
-                  (EZ-3, 0.127)
-                  (EZ-10, 0.12)
-                  (EZ-4, 0.119)
-                  (EZ-8, 0.11)
-               Vector 2 (eigenvalue -1.74834e-17):
-                  (EY-7, -0.234)
-                  (EY-8, -0.222)
-                  (EY-5, -0.196)
+               Vector 1 (eigenvalue 1.69115e-17):
+                  (EY-15, -0.213)
+                  (EY-16, -0.204)
+                  (EY-1, -0.195)
+                  (EY-2, -0.178)
+                  (EX-3, 0.165)
+                  (EX-4, 0.161)
+                  (EY-13, -0.158)
+                  (EX-5, 0.149)
+                  (EY-14, -0.148)
+                  (EY-18, -0.142)
+                  (EX-6, 0.14)
+                  (EY-20, -0.135)
+               Vector 2 (eigenvalue 4.50855e-17):
+                  (EZ-3, -0.165)
+                  (EZ-4, -0.155)
+                  (EZ-5, -0.15)
+                  (EZ-6, -0.143)
+                  (EZ-1, -0.142)
+                  (EZ-2, -0.133)
+                  (ph-21, -0.13)
+                  (ph-20, -0.13)
+                  (ph-19, -0.127)
+                  (ph-18, -0.127)
+                  (ph-17, -0.127)
+                  (ph-13, -0.125)
+                  (ph-5, -0.124)
+                  (ph-14, -0.124)
+                  (ph-6, -0.12)
+                  (EZ-7, -0.119)
+                  (om-11, -0.118)
+                  (ph-3, -0.118)
+                  (ph-15, -0.115)
+                  (ph-4, -0.114)
+                  (ph-16, -0.114)
+                  (om-12, -0.112)
+                  (om-4, -0.107)
+                  (ph-1, -0.107)
+               Vector 3 (eigenvalue -4.51629e-17):
+                  (EX-1, 0.152)
+                  (EX-2, 0.133)
+                  (EX-18, 0.125)
+                  (EX-21, 0.123)
+                  (EX-19, 0.121)
+                  (EX-20, 0.12)
+                  (EX-5, 0.117)
+                  (EX-17, 0.117)
+                  (EX-3, 0.116)
+                  (EX-4, 0.112)
+                  (EX-15, 0.111)
+                  (EX-9, 0.11)
+                  (EX-13, 0.109)
+                  (EX-6, 0.105)
+                  (EX-16, 0.104)
+                  (EX-7, 0.102)
+               Vector 4 (eigenvalue -7.54306e-17):
+                  (EX-9, -0.21)
+                  (EX-10, -0.199)
+                  (EY-5, 0.168)
+                  (EY-6, 0.158)
+                  (EX-7, -0.152)
+                  (om-13, 0.152)
+                  (om-14, 0.147)
+                  (EX-11, -0.144)
+                  (EX-12, -0.138)
+                  (EX-8, -0.137)
+                  (EY-7, 0.134)
+                  (ph-9, -0.13)
+               Vector 5 (eigenvalue 9.19113e-17):
                   (EY-9, -0.194)
-                  (EY-10, -0.181)
-                  (EY-6, -0.179)
-                  (EX-11, 0.154)
-                  (EX-12, 0.153)
-               Vector 3 (eigenvalue 2.74621e-17):
-                  (ph-3, 0.124)
-                  (ph-21, 0.123)
-                  (ph-15, 0.123)
-                  (ph-20, 0.122)
-                  (ph-1, 0.122)
-                  (ph-16, 0.121)
-                  (ph-4, 0.121)
-                  (ph-17, 0.12)
-                  (ph-2, 0.12)
-                  (ph-18, 0.119)
-                  (ph-19, 0.118)
-                  (ph-14, 0.113)
-                  (ph-13, 0.113)
-                  (ph-5, 0.109)
-                  (ph-6, 0.107)
-                  (EX-7, -0.106)
-                  (EX-9, -0.0978)
-                  (EX-5, -0.0918)
-                  (EY-5, 0.0905)
-                  (om-11, 0.0872)
-               Vector 4 (eigenvalue 3.15502e-17):
-                  (EY-3, 0.158)
-                  (EX-15, 0.156)
-                  (EY-1, 0.156)
-                  (EY-4, 0.152)
-                  (EX-16, 0.149)
-                  (EX-13, 0.149)
-                  (EY-2, 0.141)
-                  (EX-14, 0.137)
-                  (EY-5, 0.114)
-                  (EX-11, 0.112)
-                  (EY-15, 0.11)
-                  (EY-6, 0.109)
-                  (EX-12, 0.108)
-                  (EY-16, 0.104)
-               Vector 5 (eigenvalue -9.21893e-17):
-                  (om-5, -0.178)
-                  (om-6, -0.165)
-                  (om-7, -0.164)
-                  (om-8, -0.161)
-                  (om-4, -0.152)
-                  (om-3, -0.152)
-                  (EY-11, -0.149)
-                  (EX-15, 0.145)
-                  (EY-12, -0.145)
-                  (EX-16, 0.143)
-                  (ph-2, 0.121)
-                  (ph-1, 0.12)
-                  (EY-3, 0.119)
-                  (EY-4, 0.118)
-                  (EX-2, 0.118)
-                  (om-20, -0.115)
-                  (EX-1, 0.114)
-                  (EY-13, -0.113)
-                  (om-19, -0.113)
-               Vector 6 (eigenvalue -1.2125e-16):
-                  (EX-21, -0.191)
-                  (EX-18, -0.182)
-                  (EX-19, -0.181)
-                  (EX-17, -0.181)
-                  (EX-5, -0.179)
-                  (EX-3, -0.178)
-                  (EX-4, -0.175)
-                  (EX-20, -0.169)
-                  (EX-1, -0.167)
-                  (EX-6, -0.167)
-                  (EX-7, -0.163)
-                  (EX-2, -0.158)
-                  (EX-8, -0.155)
-                  (EX-9, -0.145)
-                  (EX-10, -0.136)
-                  (ph-21, -0.136)
-                  (ph-20, -0.135)
-                  (ph-17, -0.133)
-                  (ph-19, -0.132)
-                  (ph-18, -0.132)
-                  (ph-13, -0.129)
-                  (ph-14, -0.128)
-                  (ph-5, -0.127)
-                  (ph-3, -0.126)
-                  (ph-15, -0.124)
-                  (ph-6, -0.124)
-                  (ph-4, -0.123)
-                  (ph-16, -0.122)
-               Vector 7 (eigenvalue 1.5801e-16):
-                  (EY-13, -0.207)
-                  (EY-14, -0.203)
-                  (om-13, 0.186)
-                  (om-14, 0.18)
-                  (om-15, 0.179)
-                  (EY-15, -0.176)
-                  (om-16, 0.174)
-                  (EY-16, -0.171)
-                  (EY-11, -0.162)
-                  (EY-12, -0.158)
-                  (EY-20, -0.155)
-                  (om-11, 0.154)
-                  (om-12, 0.153)
-                  (EX-9, -0.143)
-                  (EY-18, -0.139)
-                  (EX-10, -0.138)
-                  (EY-19, -0.136)
-                  (EY-17, -0.133)
-                  (ph-9, -0.133)
-                  (ph-10, -0.129)
-                  (om-18, 0.129)
-                  (om-21, 0.129)
+                  (EY-10, -0.182)
+                  (EY-7, -0.176)
+                  (EY-8, -0.164)
+                  (EY-11, -0.161)
+                  (EY-12, -0.156)
+                  (EY-5, -0.124)
+                  (EX-13, 0.123)
+               Vector 6 (eigenvalue 1.12221e-16):
+                  (om-7, -0.15)
+                  (om-8, -0.147)
+                  (om-5, -0.132)
+                  (EY-21, 0.129)
+                  (om-18, -0.129)
+                  (om-20, -0.128)
+                  (om-19, -0.127)
+                  (om-21, -0.126)
+                  (om-17, -0.126)
+                  (EY-17, 0.125)
+                  (ph-21, 0.125)
+                  (om-9, -0.125)
+                  (EY-18, 0.125)
+                  (ph-20, 0.125)
+                  (EY-19, 0.124)
+                  (EY-5, 0.123)
+                  (om-1, -0.123)
+                  (ph-3, 0.123)
+                  (ph-17, 0.122)
+                  (om-2, -0.122)
+                  (ph-15, 0.122)
+                  (om-6, -0.121)
+                  (ph-18, 0.121)
+                  (ph-19, 0.121)
+                  (EY-20, 0.12)
+                  (ph-16, 0.12)
+                  (ph-4, 0.12)
+                  (om-10, -0.119)
+                  (ph-1, 0.119)
+                  (EY-6, 0.118)
+                  (EZ-15, -0.117)
+                  (ph-2, 0.117)
+                  (om-15, -0.117)
+                  (ph-13, 0.116)
+                  (ph-14, 0.116)
+                  (EY-3, 0.115)
+                  (om-16, -0.115)
+                  (EX-20, 0.114)
+                  (EY-4, 0.113)
+                  (EX-18, 0.113)
+                  (ph-5, 0.113)
+                  (EZ-16, -0.112)
+                  (ph-6, 0.111)
+                  (EX-17, 0.11)
+                  (EX-21, 0.109)
+                  (EX-1, 0.108)
+                  (EX-2, 0.107)
+                  (EX-19, 0.107)
+                  (om-3, -0.101)
+               Vector 7 (eigenvalue -1.2627e-16):
+                  (EZ-11, -0.172)
+                  (EZ-12, -0.17)
+                  (EZ-13, -0.155)
+                  (EZ-14, -0.151)
+                  (EY-11, 0.15)
+                  (EZ-9, -0.148)
+                  (EY-12, 0.146)
+                  (EX-15, -0.146)
+                  (EZ-10, -0.142)
+                  (EX-16, -0.14)
+                  (EZ-7, -0.14)
+                  (EZ-15, -0.139)
+                  (EZ-16, -0.133)
+                  (EZ-8, -0.127)
+                  (EZ-5, -0.122)
+                  (EY-9, 0.118)
+                  (EZ-6, -0.115)
+                  (EZ-1, -0.114)
+                  (EX-13, -0.114)
+                  (EY-10, 0.11)
       Problems related to the processing: (1)
          Bundle failed with code -2 (see below for details).
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:22:49
+      Last Bundle Run:        22-Nov-2018 10:48:13
       DBAT version:           0.8.0.0 (2018-10-26)
-      MATLAB version:         8.6.0.267246 (R2015b)
-      Host system:            GLNXA64
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 fail (code -2: Normal matrix is singular)
-      Sigma0:                 251.691
-      Sigma0 (pixels):        25.1691
+      Sigma0:                 258.848
+      Sigma0 (pixels):        25.8848
       Redundancy              3713
       Number of params:       435 (9 IO, 126 EO, 300 OP)
       Number of observations: 4148 (4148 IP, 0 IO, 0 EO, 0 OP)
@@ -166,64 +180,55 @@ Damped Bundle Adjustment Toolbox result file
          Damping:                 gna
          Camera unit (cu):        mm
          Object space unit (ou):  m
-         Initial value comment:   Camera calibration from EXIF value
+         Initial value comment:   
       Total error:
          Number of stages:     1
          Number of iterations: 0
-         First error:          15336.7
-         Last error:           15336.7
-         Execution time (s):   0.1
+         First error:          15772.8
+         Last error:           15772.8
+         Execution time (s):   0.18
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
-         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2 aspect)
+         Calibration: yes (cc px py as K1 K2 K3 P1 P2)
          Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        7.3 mm
-               Deviation:    NaN mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        3.6266 mm
-               Deviation:    NaN mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        2.71882 mm
-               Deviation:    NaN mm
-            Fw - format width:
-               Value:        7.25319 mm
-            Fh - format height:
+            Format width:
+               Value:        7.25019 mm
+            Format height:
                Value:        5.43764 mm
             K1 - radial distortion 1:
-               Value:        0 mm^(-3)
-               Deviation:    NaN mm^(-3)
+               Value:        -0 mm^(-3)
             K2 - radial distortion 2:
-               Value:        0 mm^(-5)
-               Deviation:    NaN mm^(-5)
+               Value:        -0 mm^(-5)
             K3 - radial distortion 3:
-               Value:        0 mm^(-7)
-               Deviation:    NaN mm^(-7)
+               Value:        -0 mm^(-7)
             P1 - decentering distortion 1:
-               Value:        0 mm^(-3)
-               Deviation:    NaN mm^(-3)
+               Value:        -0 mm^(-3)
             P2 - decentering distortion 2:
-               Value:        0 mm^(-3)
-               Deviation:    NaN mm^(-3)
-            B1 - aspect ratio:
-               Value:        0.000414071 
-               Deviation:    NaN 
-            B2 - skew:
+               Value:        -0 mm^(-3)
+            as - aspect parameter:
                Value:        0 
-            Iw - image width:
+            sk - skew:
+               Value:        0 
+            Image width:
                Value:        2272 px
-            Ih - image height:
+            Image height:
                Value:        1704 px
-            Xr - X resolution:
+            X resolution:
                Value:        313.371 px/mm
-            Yr - Y resolution:
+            Y resolution:
                Value:        313.371 px/mm
-            Pw - pixel width:
-               Value:        0.00319242 mm
-            Ph - pixel height:
+            Pixel width:
+               Value:        0.0031911 mm
+            Pixel height:
                Value:        0.0031911 mm
          Rated angle of view (h,v,d): (53, 41, 64) deg
          Largest distortion: 0 mm (0.0 px, 0.0% of half-diagonal)
@@ -231,402 +236,402 @@ Damped Bundle Adjustment Toolbox result file
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
                Omega:
-                  Value:     -38.352895 deg
+                  Value:     -39.420000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -0.882277 deg
+                  Value:     -1.181000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -179.706591 deg
+                  Value:     -179.839000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.462579 ou
+                  Value:     0.455000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     1.793042 ou
+                  Value:     1.794000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.477934 ou
+                  Value:     1.468000 ou
                   Deviation: NaN ou
             Photo 2: P8250022.JPG
                Omega:
-                  Value:     -39.675045 deg
+                  Value:     -39.740000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -1.756260 deg
+                  Value:     -1.818000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -90.081456 deg
+                  Value:     -90.124000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.472480 ou
+                  Value:     0.470000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     2.024875 ou
+                  Value:     2.027000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.641344 ou
+                  Value:     1.640000 ou
                   Deviation: NaN ou
             Photo 3: P8250023.JPG
                Omega:
-                  Value:     -27.060317 deg
+                  Value:     -27.234000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -28.448830 deg
+                  Value:     -28.561000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -141.780146 deg
+                  Value:     -141.842000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     -0.642393 ou
+                  Value:     -0.645000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     1.463073 ou
+                  Value:     1.467000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.585653 ou
+                  Value:     1.581000 ou
                   Deviation: NaN ou
             Photo 4: P8250024.JPG
                Omega:
-                  Value:     -28.520322 deg
+                  Value:     -28.560000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -30.271712 deg
+                  Value:     -30.296000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -49.782842 deg
+                  Value:     -49.788000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     -0.642708 ou
+                  Value:     -0.644000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     1.489386 ou
+                  Value:     1.491000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.639023 ou
+                  Value:     1.638000 ou
                   Deviation: NaN ou
             Photo 5: P8250025.JPG
                Omega:
-                  Value:     4.528033 deg
+                  Value:     4.380000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -34.783414 deg
+                  Value:     -34.665000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -87.111344 deg
+                  Value:     -87.136000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     -0.674491 ou
+                  Value:     -0.671000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.413500 ou
+                  Value:     0.417000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.408149 ou
+                  Value:     1.410000 ou
                   Deviation: NaN ou
             Photo 6: P8250026.JPG
                Omega:
-                  Value:     2.369647 deg
+                  Value:     2.066000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -34.178079 deg
+                  Value:     -33.991000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     1.574430 deg
+                  Value:     1.487000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     -0.717791 ou
+                  Value:     -0.713000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.468156 ou
+                  Value:     0.476000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.463260 ou
+                  Value:     1.466000 ou
                   Deviation: NaN ou
             Photo 7: P8250027.JPG
                Omega:
-                  Value:     27.310962 deg
+                  Value:     27.342000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -28.329670 deg
+                  Value:     -28.297000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -44.219528 deg
+                  Value:     -44.210000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     -0.536563 ou
+                  Value:     -0.535000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     -0.349469 ou
+                  Value:     -0.350000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.404354 ou
+                  Value:     1.403000 ou
                   Deviation: NaN ou
             Photo 8: P8250028.JPG
                Omega:
-                  Value:     27.087499 deg
+                  Value:     26.882000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -28.298897 deg
+                  Value:     -28.129000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     44.940766 deg
+                  Value:     44.843000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     -0.723604 ou
+                  Value:     -0.718000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     -0.470602 ou
+                  Value:     -0.466000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.710227 ou
+                  Value:     1.716000 ou
                   Deviation: NaN ou
             Photo 9: P8250029.JPG
                Omega:
-                  Value:     30.252858 deg
+                  Value:     30.389000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     0.036398 deg
+                  Value:     0.193000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     0.131525 deg
+                  Value:     0.084000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.520431 ou
+                  Value:     0.525000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     -0.540669 ou
+                  Value:     -0.544000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.535764 ou
+                  Value:     1.533000 ou
                   Deviation: NaN ou
             Photo 10: P8250030.JPG
                Omega:
-                  Value:     30.911744 deg
+                  Value:     30.978000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     1.682349 deg
+                  Value:     1.707000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     89.564847 deg
+                  Value:     89.537000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.553744 ou
+                  Value:     0.554000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     -0.590629 ou
+                  Value:     -0.593000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.619566 ou
+                  Value:     1.618000 ou
                   Deviation: NaN ou
             Photo 11: P8250031.JPG
                Omega:
-                  Value:     27.407209 deg
+                  Value:     27.627000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     30.618648 deg
+                  Value:     30.746000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     42.432949 deg
+                  Value:     42.340000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.767894 ou
+                  Value:     1.770000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     -0.420854 ou
+                  Value:     -0.426000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.558000 ou
+                  Value:     1.552000 ou
                   Deviation: NaN ou
             Photo 12: P8250032.JPG
                Omega:
-                  Value:     24.655351 deg
+                  Value:     24.645000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     30.216649 deg
+                  Value:     30.202000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     133.191459 deg
+                  Value:     133.201000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.864785 ou
+                  Value:     1.865000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     -0.480052 ou
+                  Value:     -0.480000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.614330 ou
+                  Value:     1.615000 ou
                   Deviation: NaN ou
             Photo 13: P8250033.JPG
                Omega:
-                  Value:     0.347960 deg
+                  Value:     0.521000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     33.056427 deg
+                  Value:     33.147000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     88.738260 deg
+                  Value:     88.707000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.629122 ou
+                  Value:     1.631000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.502594 ou
+                  Value:     0.498000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.471782 ou
+                  Value:     1.471000 ou
                   Deviation: NaN ou
             Photo 14: P8250034.JPG
                Omega:
-                  Value:     -1.871795 deg
+                  Value:     -1.710000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     33.744887 deg
+                  Value:     33.608000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -179.770479 deg
+                  Value:     -179.818000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.799786 ou
+                  Value:     1.796000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.530174 ou
+                  Value:     0.526000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.596997 ou
+                  Value:     1.599000 ou
                   Deviation: NaN ou
             Photo 15: P8250035.JPG
                Omega:
-                  Value:     -30.759939 deg
+                  Value:     -30.760000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     28.200153 deg
+                  Value:     28.167000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     138.432485 deg
+                  Value:     138.428000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.673479 ou
+                  Value:     1.672000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     1.555264 ou
+                  Value:     1.555000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.500992 ou
+                  Value:     1.500000 ou
                   Deviation: NaN ou
             Photo 16: P8250036.JPG
                Omega:
-                  Value:     -30.053153 deg
+                  Value:     -29.846000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     27.127445 deg
+                  Value:     26.974000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -134.553605 deg
+                  Value:     -134.656000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.697748 ou
+                  Value:     1.693000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     1.623200 ou
+                  Value:     1.619000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.584753 ou
+                  Value:     1.591000 ou
                   Deviation: NaN ou
             Photo 17: P8250037.JPG
                Omega:
-                  Value:     -8.380288 deg
+                  Value:     -8.539000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -0.457934 deg
+                  Value:     -0.516000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     179.390920 deg
+                  Value:     179.396000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.426013 ou
+                  Value:     0.425000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.819011 ou
+                  Value:     0.825000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.972795 ou
+                  Value:     1.972000 ou
                   Deviation: NaN ou
             Photo 18: P8250038.JPG
                Omega:
-                  Value:     -4.801680 deg
+                  Value:     -4.765000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     0.609253 deg
+                  Value:     0.669000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     88.798120 deg
+                  Value:     88.788000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.481016 ou
+                  Value:     0.483000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.927705 ou
+                  Value:     0.926000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.886119 ou
+                  Value:     1.886000 ou
                   Deviation: NaN ou
             Photo 19: P8250039.JPG
                Omega:
-                  Value:     -4.308717 deg
+                  Value:     -4.409000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -0.460114 deg
+                  Value:     -0.415000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     88.229225 deg
+                  Value:     88.246000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.461020 ou
+                  Value:     0.463000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.575470 ou
+                  Value:     0.579000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.875917 ou
+                  Value:     1.875000 ou
                   Deviation: NaN ou
             Photo 20: P8250040.JPG
                Omega:
-                  Value:     -7.482744 deg
+                  Value:     -7.631000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     -1.423299 deg
+                  Value:     -1.569000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     179.946422 deg
+                  Value:     -180.050000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.705814 ou
+                  Value:     0.701000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.779134 ou
+                  Value:     0.784000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.926242 ou
+                  Value:     1.926000 ou
                   Deviation: NaN ou
             Photo 21: P8250041.JPG
                Omega:
-                  Value:     -8.720848 deg
+                  Value:     -8.723000 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     1.349245 deg
+                  Value:     1.063000 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     177.450233 deg
+                  Value:     177.385000 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     0.279057 ou
+                  Value:     0.269000 ou
                   Deviation: NaN ou
                Yc:
-                  Value:     0.822743 ou
+                  Value:     0.823000 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.909643 ou
+                  Value:     1.905000 ou
                   Deviation: NaN ou
    Quality
       Photographs
@@ -640,16 +645,15 @@ Damped Bundle Adjustment Toolbox result file
             Photo point coverage:
                Rectangular: 41%-83% (61% average, 92% union)
                Convex hull: 31%-62% (46% average, 87% union)
-               Radial:      60%-92% (73% average, 92% union)
+               Radial:      58%-92% (73% average, 92% union)
       Photo Coverage
          Reference points outside calibrated region:
             Camera 1: none
       Point Measurements
-         Number of control pts: 4
+         Number of control pts: 0
          Number of check pts: 0
-         Number of object pts: 96
-         CP ray count: 21-21 (21.0 avg)
-            4 points with 21 rays.
+         Number of object pts: 100
+         CP ray count: -
          CCP ray count: -
          OP ray count: 16-21 (20.7 avg)
             1 points with 16 rays.
@@ -657,17 +661,17 @@ Damped Bundle Adjustment Toolbox result file
             2 points with 18 rays.
             3 points with 19 rays.
             5 points with 20 rays.
-            84 points with 21 rays.
+            88 points with 21 rays.
       Point Marking Residuals
-         Overall point RMS: 33.676 pixels
+         Overall point RMS: 34.634 pixels
          Mark point residuals:
-            Maximum: 68.495 pixels (OP 11 on photo 21)
+            Maximum: 69.672 pixels (OP 11 on photo 21)
          Object point residuals (RMS over all images of a point):
-            Minimum: 31.953 pixels (OP 94 over 20 images)
-            Maximum: 39.900 pixels (OP 11 over 18 images)
+            Minimum: 32.863 pixels (OP 94 over 20 images)
+            Maximum: 42.319 pixels (OP 11 over 18 images)
          Photo residuals (RMS over all points in an image):
-            Minimum: 5.314 pixels (photo 1 over 100 points)
-            Maximum: 36.673 pixels (photo 21 over 100 points)
+            Minimum: 33.436 pixels (photo 12 over 97 points)
+            Maximum: 36.645 pixels (photo 20 over 100 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
             Minimum: NaN (OP 2)
@@ -680,47 +684,23 @@ Damped Bundle Adjustment Toolbox result file
             Points with correlation above 99%: 0
       Point Angles
          CP
-            Minimum: 83.3 degrees (CP 1003)
-            Maximum: 86.1 degrees (CP 1002)
-            Average: 84.7 degrees
+            Minimum: -
+            Maximum: -
+            Average: -
          CCP
             Minimum: -
             Maximum: -
             Average: -
          OP
-            Minimum: 79.7 degrees (OP 90)
-            Maximum: 90.0 degrees (OP 36)
-            Average: 86.5 degrees
+            Minimum: 79.6 degrees (OP 90)
+            Maximum: 90.0 degrees (OP 59)
+            Average: 86.4 degrees
             Smallest angles (ID, angle [deg], vis in cameras)
-                   90: 79.71 (   1    2    3    5    8    9   11   13   14   15   16   17   18   19   20   21)
-                    8: 81.03 (   1    2    3    4    5    7    9   10   11   12   13   14   15   17   18   19   20   21)
-                   92: 81.35 (   1    2    3    4    5    7    8    9   10   11   13   14   15   16   17   18   19   20   21)
+                   90: 79.61 (   1    2    3    5    8    9   11   13   14   15   16   17   18   19   20   21)
+                    8: 81.01 (   1    2    3    4    5    7    9   10   11   12   13   14   15   17   18   19   20   21)
+                   92: 81.16 (   1    2    3    4    5    7    8    9   10   11   13   14   15   16   17   18   19   20   21)
       Ctrl measurements
-         Prior
-             id,        x,        y,        z,     stdx,     stdy,     stdz, label
-           1001,    0.000,    1.000,    0.000,        0,        0,        0, 
-           1002,    1.000,    1.000,    0.000,        0,        0,        0, 
-           1003,    0.000,    0.000,    0.000,        0,        0,        0, 
-           1004,    1.000,    0.000,    0.000,        0,        0,        0, 
-         Posterior
-             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,    1.000,   -0.001,      NaN,      NaN,      NaN,   21, 
-           1002,    1.000,    1.000,    0.001,      NaN,      NaN,      NaN,   21, 
-           1003,   -0.000,   -0.000,    0.001,      NaN,      NaN,      NaN,   21, 
-           1004,    1.000,    0.000,   -0.001,      NaN,      NaN,      NaN,   21, 
-         Diff (pos=abs diff, std=rel diff)
-             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,   -0.000,   -0.001,    0.000,    0.001,     NaN%,     NaN%,     NaN%,   21, 
-           1002,    0.000,    0.000,    0.001,    0.000,    0.001,     NaN%,     NaN%,     NaN%,   21, 
-           1003,   -0.000,   -0.000,    0.001,    0.000,    0.001,     NaN%,     NaN%,     NaN%,   21, 
-           1004,   -0.000,    0.000,   -0.001,    0.000,    0.001,     NaN%,     NaN%,     NaN%,   21, 
-         Ctrl point delta
-            Max: 0.001 ou (, pt 1002)
-            Max X,Y,Z
-               X: 0.000 ou (, pt 1004)
-               Y: 0.000 ou (, pt 1003)
-               Z: 0.001 ou (, pt 1002)
-            RMS: 0.001 ou (from 4 items)
+         none
       Check measurements
          none
 End of result file

@@ -10,13 +10,13 @@
     - [X] plytoascii.m
     - [X] unpackpsz.m
     - [ ] writestats.m
-  - [3/19] demo
+  - [6/19] demo
     - [X] camcaldemo.m
     - [X] camcaldemo2.m
-    - [ ] camcaldemo_1ray.m
+    - [X] camcaldemo_1ray.m
     - [X] camcaldemo_allmodels.m
-    - [ ] camcaldemo_missing_obs.m
-    - [ ] camcaldemo_no_datum.m
+    - [X] camcaldemo_missing_obs.m
+    - [X] camcaldemo_no_datum.m
     - [ ] dbatdemos.m
     - [ ] loadplotdemo.m
     - [ ] loadplotpsz.m
