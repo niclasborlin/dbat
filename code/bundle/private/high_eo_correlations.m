@@ -47,9 +47,9 @@ else
     v=full(CEOC(sub2ind(size(CEOC),i,j)));
     % All index pairs will be on the block diagonal. Renumber them to fall
     % within each camera.
-    k=floor((i-1)/(size(s.EO.val,1)-1))+1;
-    i=rem(i-1,size(s.EO.val,1)-1)+1;
-    j=rem(j-1,size(s.EO.val,1)-1)+1;
+    k=floor((i-1)/(size(s.EO.val,1)))+1;
+    i=rem(i-1,size(s.EO.val,1))+1;
+    j=rem(j-1,size(s.EO.val,1))+1;
     % Only keep the correlations that correspond to unique cameras.
     [~,ia]=unique(s.EO.struct.block','rows');
     keep=ismember(k,ia);
