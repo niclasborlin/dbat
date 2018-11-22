@@ -40,7 +40,8 @@ clf(h);
 ax=gca(h);
 
 cla(ax);
-set(ax,'xlim',[0.5,s.IO.val(end-3,1)+0.5],'ylim',[0.5,s.IO.val(end-2,1)+0.5]);
+set(ax,'xlim',[0.5,s.IO.sensor.imSize(1,1)+0.5],...
+       'ylim',[0.5,s.IO.sensor.imSize(2,1)+0.5]);
 axis(ax,'image')
 cc=get(ax,'colororder');
 % Legend strings.

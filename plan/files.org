@@ -10,11 +10,11 @@
     - [X] plytoascii.m
     - [X] unpackpsz.m
     - [ ] writestats.m
-  - [1/19] demo
+  - [2/19] demo
     - [X] camcaldemo.m
     - [ ] camcaldemo2.m
     - [ ] camcaldemo_1ray.m
-    - [ ] camcaldemo_allmodels.m
+    - [X] camcaldemo_allmodels.m
     - [ ] camcaldemo_missing_obs.m
     - [ ] camcaldemo_no_datum.m
     - [ ] dbatdemos.m
@@ -30,7 +30,7 @@
     - [ ] runalldemos.m
     - [ ] stpierrebundledemo_ps.m
     - [ ] stpierrebundledemo_ps_brown.m
-  - [7/19] photogrammetry
+  - [8/19] photogrammetry
     - [X] angles.m
     - [ ] applyhomoxform.m
     - [X] camangles.m
@@ -43,19 +43,19 @@
     - [ ] homogeneous.m
     - [ ] pm_forwintersect1.m
     - [ ] pm_forwintersect3.m
-    - [ ] pm_multialign.m
+    - [X] pm_multialign.m
     - [ ] pm_multidepth.m
     - [X] pm_multiforwintersect.m
     - [ ] pm_multixform.m
     - [X] pm_resect_3pt.m
     - [ ] ptdepth.m
     - [X] resect.m
-  - [4/23] misc
+  - [6/23] misc
     - [ ] abserr.m
     - [ ] analyzepsz.m
     - [X] buildparamtypes.m
     - [X] buildserialindices.m
-    - [ ] buildweightmatrix.m
+    - [X] buildweightmatrix.m
     - [ ] corrmat.m
     - [ ] cumchi2.m
     - [X] deserialize.m
@@ -67,7 +67,7 @@
     - [ ] mkblkdiag.m
     - [ ] msort.m
     - [ ] pm2dtopsmarkertbl.m
-    - [ ] prob2dbatstruct.m
+    - [X] prob2dbatstruct.m
     - [ ] ps2pmstruct.m
     - [ ] relerr.m
     - [ ] rigidalign.m
@@ -75,7 +75,7 @@
     - [ ] spnrank.m
     - [ ] vec.m
   - [4/4] bundle
-    - [1/11] lsa
+    - [2/11] lsa
       - [ ] gauss_markov.m
       - [ ] gauss_newton_armijo.m
       - [ ] gaussn_paper.m
@@ -85,23 +85,23 @@
       - [ ] levenberg_paper.m
       - [ ] pm_eulerbundle1p_v3.m
       - [ ] pm_eulerbundle1p_v3all.m
-      - [ ] pm_preobs.m
+      - [X] pm_preobs.m
       - [X] prior_obs.m
-    - [2/18] cammodel
-      - [1/5] private
-        - [ ] createeocolumnindices.m
-        - [ ] createiocolumnindices.m
-        - [ ] createopcolumnindices.m
-        - [ ] createptcolumnindices.m
+    - [4/18] cammodel
+      - [5/5] private
+        - [X] createeocolumnindices.m
+        - [X] createiocolumnindices.m
+        - [X] createopcolumnindices.m
+        - [X] createptcolumnindices.m
         - [X] unpackio.m
       - [ ] brown_euler_cam.m
       - [ ] brown_euler_cam2.m
       - [ ] browndist.m
       - [ ] decons_EulerRotMat.m
       - [ ] eulerpinhole.m
-      - [ ] multieulerpinhole.m
+      - [X] multieulerpinhole.m
       - [ ] multilensdist.m
-      - [ ] multiscalepts.m
+      - [X] multiscalepts.m
       - [ ] pm_eulerpinhole1.m
       - [ ] pm_eulerrotmat.m
       - [X] pm_lens1.m
@@ -113,14 +113,14 @@
       - [ ] roteuler.m
       - [ ] rotmat.m
     - [2/33] cameramodel
-      - [0/7] private
+      - [5/7] private
         - [ ] compare_jacobian_structs.m
-        - [ ] createeocolumnindices.m
-        - [ ] createiocolumnindices.m
-        - [ ] createopcolumnindices.m
-        - [ ] createptcolumnindices.m
+        - [X] createeocolumnindices.m
+        - [X] createiocolumnindices.m
+        - [X] createopcolumnindices.m
+        - [X] createptcolumnindices.m
         - [ ] full_self_test.m
-        - [ ] unpackio.m
+        - [X] unpackio.m
       - [ ] affine2.m
       - [ ] affine2mat.m
       - [ ] affscale2.m

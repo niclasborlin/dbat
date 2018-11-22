@@ -62,7 +62,7 @@ iters=[];
 ptIters=nan;
 
 if ischar(ims) && strcmp(ims,'all')
-    ims=1:length(s.imNames);
+    ims=1:length(s.EO.name);
 end
     
 while ~isempty(varargin)
@@ -130,7 +130,7 @@ while ~isempty(varargin)
 end
 
 if isempty(ax), ax=gca; end
-if isempty(ptPlot), ptPlot=1:size(s.OP,2); end
+if isempty(ptPlot), ptPlot=1:size(s.OP.val,2); end
 if isempty(iters)
     if isempty(E)
         iters=0;
@@ -139,7 +139,7 @@ if isempty(iters)
     end
 end
 
-[ixIO,ixEO,ixOP]=indvec([nnz(s.estIO),nnz(s.estEO),nnz(s.estOP)]);
+[ixIO,ixEO,ixOP]=indvec([nnz(s.bundle.est.IO),nnz(s.bundle.est.EO),nnz(s.bundle.est.OP)]);
 
 if ~isempty(E)
     % Number of iterations.
@@ -152,11 +152,11 @@ end
 for i=1:length(ims)
     imNo=ims(i);
     % Load image.
-    imName=fullfile(s.imDir,s.imNames{imNo});
+    imName=fullfile(s.proj.imDir,s.EO.name{imNo});
     % Try upper/lower-case version of same name too.
     if ~exist(imName,'file')
-        imNames={s.imNames{imNo},lower(s.imNames{imNo}),upper(s.imNames{imNo})};
-        imDirs={s.imDir,lower(s.imDir),upper(s.imDir)};
+        imNames={s.EO.name{imNo},lower(s.EO.name{imNo}),upper(s.EO.name{imNo})};
+        imDirs={s.proj.imDir,lower(s.proj.imDir),upper(s.proj.imDir)};
         for j=1:length(imDirs)
             for k=1:length(imNames)
                 name=fullfile(imDirs{j},imNames{k});
@@ -170,7 +170,8 @@ for i=1:length(ims)
     if exist(imName,'file')
         im=imread(imName);
     else
-        im=repmat(uint8(127),[s.IO(end-2),s.IO(end-3),3]);
+        im=repmat(uint8(127),[s.IO.sensor.imSize(2,i), ...
+                            s.IO.sensor.imSize(1,i),3]);
     end
     if i<=length(ax)
         imshow(im,'parent',ax(i));
@@ -180,15 +181,15 @@ for i=1:length(ims)
     end
 
     % Points to plot.
-    vis=s.vis(:,imNo) & ismember((1:size(s.vis,1))',ptPlot);
-    pts=s.markPts(:,s.colPos(vis,imNo));
+    vis=s.IP.vis(:,imNo) & ismember((1:size(s.IP.vis,1))',ptPlot);
+    pts=s.IP.val(:,s.IP.ix(vis,imNo));
     
     % Draw control points.
-    line(pts(1,s.isCtrl(vis)),pts(2,s.isCtrl(vis)),'marker','^','color','r',...
+    line(pts(1,s.OP.prior.isCtrl(vis)),pts(2,s.OP.prior.isCtrl(vis)),'marker','^','color','r',...
          'linestyle','none','parent',ax(i),'tag','ctrlpts');
     
     % Draw object points.
-    line(pts(1,~s.isCtrl(vis)),pts(2,~s.isCtrl(vis)),'marker','.',...
+    line(pts(1,~s.OP.prior.isCtrl(vis)),pts(2,~s.OP.prior.isCtrl(vis)),'marker','.',...
          'color','b','linestyle','none','parent',ax(i),'tag','objpts');
     
     % Set title, optionally with iteration number.

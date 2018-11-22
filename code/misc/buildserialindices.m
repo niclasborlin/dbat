@@ -71,13 +71,15 @@ ss.IO.struct.uniq=false(1,size(ss.IO.struct.block,2));
 [~,ia,ic]=unique(ss.IO.struct.block','rows');
 ss.IO.struct.uniq(ia)=true;
 ss.IO.struct.no=ic';
-ss.IO.struct.isSimple=all(ss.IO.struct.block==ss.IO.struct.block(ones(end,1),:),1);
+ss.IO.struct.isSimple=all(ss.IO.struct.block== ...
+                          ss.IO.struct.block(ones(end,1),:),1);
 
 ss.EO.struct.uniq=false(1,size(ss.EO.struct.block,2));
 [~,ia,ic]=unique(ss.EO.struct.block','rows');
 ss.EO.struct.uniq(ia)=true;
 ss.EO.struct.no=ic';
-ss.EO.struct.isSimple=all(ss.EO.struct.block==ss.EO.struct.block(ones(end,1),:),1);
+ss.EO.struct.isSimple=all(ss.EO.struct.block== ...
+                          ss.EO.struct.block(ones(end,1),:),1);
 
 if parseOnly
     % Create blank serial/deserial structs.

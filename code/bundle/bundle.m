@@ -355,14 +355,15 @@ ok=code==0;
 % Update s if optimization converged.
 if ok
     s=deserialize(s,x);
-    % Update formats.
-    aspect=ones(2,size(s.IO.val,2));
-    aspect(1,:)=1+s.IO.val(4,:);
-    s.post.sensor.imSize=s.IO.sensor.imSize;
-    s.post.sensor.pxSize=s.IO.sensor.pxSize.*aspect;
-    imFormat=s.post.sensor.imSize.*s.IO.sensor.pxSize.*aspect;
-    s.post.sensor.ssSize=imFormat;
 end
+   
+% Update formats.
+aspect=ones(2,size(s.IO.val,2));
+aspect(1,:)=1+s.IO.val(4,:);
+s.post.sensor.imSize=s.IO.sensor.imSize;
+s.post.sensor.pxSize=s.IO.sensor.pxSize.*aspect;
+imFormat=s.post.sensor.imSize.*s.IO.sensor.pxSize.*aspect;
+s.post.sensor.ssSize=imFormat;
 
 E.paramTypes=paramTypes;
 
