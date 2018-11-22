@@ -84,7 +84,7 @@ s0.bundle.est.OP(:,ia)=false;
 saves0=s0;
 
 % For each known camera model
-for model=2:5 %  [-1,1:5]
+for model=[-1,1:5]
     % Report file name.
     reportFile=fullfile(inputDir,'dbatexports',...
                         sprintf('camcal-dbatreport-model%d.txt',model));

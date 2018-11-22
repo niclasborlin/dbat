@@ -22,20 +22,20 @@ end
 if nargout<2
     % Only residual vector requested.
     
-    fIO=s.IO(s.useIOobs)-s.prior.IO(s.useIOobs);
-    fEO=s.EO(s.useEOobs)-s.prior.EO(s.useEOobs);
-    fOP=s.OP(s.useOPobs)-s.prior.OP(s.useOPobs);
+    fIO=s.IO.val(s.IO.prior.use)-s.IO.prior.val(s.IO.prior.use);
+    fEO=s.EO.val(s.EO.prior.use)-s.EO.prior.val(s.EO.prior.use);
+    fOP=s.OP.val(s.OP.prior.use)-s.OP.prior.val(s.OP.prior.use);
     
     f=[fIO(:);fEO(:);fOP(:)];
 else
-    fIO=s.IO(s.useIOobs)-s.prior.IO(s.useIOobs);
-    JIO=sparse(1:length(fIO),ixIO(s.useIOobs),1,length(fIO),length(x));
+    fIO=s.IO.val(s.IO.prior.use)-s.IO.prior.val(s.IO.prior.use);
+    JIO=sparse(1:length(fIO),ixIO(s.IO.prior.use),1,length(fIO),length(x));
 
-    fEO=EO(s.useEOobs)-s.prior.EO(s.useEOobs);
-    JEO=sparse(1:length(fEO),ixEO(s.useEOobs),1,length(fEO),length(x));
+    fEO=EO(s.EO.prior.use)-s.EO.prior.val(s.EO.prior.use);
+    JEO=sparse(1:length(fEO),ixEO(s.EO.prior.use),1,length(fEO),length(x));
 
-    fOP=OP(s.useOPobs)-s.prior.OP(s.useOPobs);
-    JOP=sparse(1:length(fOP),ixOP(s.useOPobs),1,length(fOP),length(x));
+    fOP=OP(s.OP.prior.use)-s.OP.prior.val(s.OP.prior.use);
+    JOP=sparse(1:length(fOP),ixOP(s.OP.prior.use),1,length(fOP),length(x));
 
     f=[fIO(:);fEO(:);fOP(:)];
     J=[JIO;JEO;JOP];

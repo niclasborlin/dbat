@@ -317,7 +317,7 @@
           print $out "\ts/\\b$srcVar\\\.$from\\b/$destVar.$to/g;\n";
       }
       if (/^\s*#.*STOP/) {
-          break;
+          last;
       }
   }
   print $out "\tprint;\n";

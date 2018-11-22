@@ -7,11 +7,11 @@ function [ixpp,ixf,ixK,ixP,ixa,ixu]=createiocolumnindices(cIO,nK,nP)
 % How many cameras do we have?
 nCams=size(cIO,2);
 
-ix=reshape(cumsum(cIO(:)),11+nK+nP,nCams).*cIO;
+ix=reshape(cumsum(cIO(:)),5+nK+nP,nCams).*cIO;
 
-ixpp=ix(1:2,:);
-ixf=ix(3,:);
-ixK=ix(3+(1:nK),:);
-ixP=ix(3+nK+(1:nP),:);
-ixa=ix(3+nK+nP+(1:2),:);
-ixu=ix(3+nK+nP+6+(1:2),:);
+ixf=ix(1,:);
+ixpp=ix(2:3,:);
+ixa=ix(4:5,:);
+ixK=ix(5+(1:nK),:);
+ixP=ix(5+nK+(1:nP),:);
+

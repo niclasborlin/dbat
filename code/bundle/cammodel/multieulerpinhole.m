@@ -63,11 +63,7 @@ if (all(~cIO(:)) && all(~cEO(:)) && all(~cOP(:)))
         camStation=EO(:,i);
         center=camStation(1:3);
         ang=camStation(4:6);
-        if (camStation(7)==0)
-            seq='xyz';
-        else
-            seq='zxz';
-        end
+        seq='xyz';
         
         % Get inner orientation.
         camNo=cams(i);
@@ -142,11 +138,7 @@ else
         camStation=EO(:,i);
         center=camStation(1:3);
         ang=camStation(4:6);
-        if (camStation(7)==0)
-            seq='xyz';
-        else
-            seq='zxz';
-        end
+        seq='xyz';
         
         % Which outer orientation parameters are interesting?
         cC=cEO(1:3,i);
