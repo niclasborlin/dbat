@@ -63,17 +63,31 @@ if plotIO && any(s.bundle.est.IO(:))
     % Line styles.
     ls={'-','--','-.'};
 
-    % For each unique camera.
-    for ci=find(s.IO.struct.uniq)
+    % Modify estimated array to plot at least one value of each
+    % parameter.
+    estimated=s.IO.struct.leading;
+    if any(~any(estimated,2))
+        estimated(~any(estimated,2),1)=1;
+    end
+    
+    % Parameter indices for this block.
+    pIx=1:3;
+    
+    % For each camera with estimated parameters.
+    for ci=find(any(estimated(pIx,:),1))
         % Extract focal length, principal point for this camera
         % over all iterations.
-        fp=squeeze(IO(1:3,ci,:));
+        fp=squeeze(IO(pIx,ci,:));
         % Flip y coordinate.
         v=diag([1,1,-1])*fp;
+
+        % What parameters have been individually estimated?
+        est=estimated(pIx,ci);
+        
         % Line style and legend strings.
         ls={'-','--','-.'};
         fps={'f','px','py'};
-        for i=1:size(v,1)
+        for i=find(est')
             % Use individual f, px, py colors if we have only one
             % camera. Otherwise, use a single color per camera.
             if nnz(s.IO.struct.uniq)==1
@@ -101,16 +115,29 @@ if plotIO && any(s.bundle.est.IO(:))
     lgs={};
     % Corresponding line handles.
     hh=[];
-    % For each unique camera.
-    for ci=find(s.IO.struct.uniq)
+    
+    % Parameter indices for this block.
+    pIx=5+(1:s.IO.model.nK);
+
+    % Determine scale for each estimated parameters.
+    avgScale=nan(length(pIx),1);
+    for i=1:length(pIx)
+        est=find(estimated(pIx(i),:));
+        avgScale(i)=floor(median(log10(abs(IO(pIx(i),est,:)))));
+    end
+    % Use scaling of 1 for all-zero values.
+    avgScale(avgScale==-inf)=0;
+    
+    % For each camera with estimated parameters.
+    for ci=find(any(estimated(pIx,:),1))
         % Extract K values for this camera over all iterations.
-        K=squeeze(IO(5+(1:s.IO.model.nK),ci,:));
-        % Determine scale.
-        avgScale=floor(median(log10(abs(K)),2));
-        % Use scaling of 1 for all-zero values.
-        avgScale(avgScale==-inf)=0;
+        K=squeeze(IO(pIx,ci,:));
+
+        % What parameters have been individually estimated?
+        est=estimated(pIx,ci);
+        
         v=repmat(10.^(-avgScale),1,size(K,2)).*K;
-        for i=1:size(v,1)
+        for i=find(est')
             if avgScale(i)==0
                 prefix='';
             else
@@ -141,16 +168,29 @@ if plotIO && any(s.bundle.est.IO(:))
     lgs={};
     % Corresponding line handles.
     hh=[];
-    % For each unique camera.
-    for ci=find(s.IO.struct.uniq)
-        % Extract K values for this camera over all iterations.
+    
+    % Parameter indices for this block.
+    pIx=5+s.IO.model.nK+(1:s.IO.model.nP);
+    
+    % Determine scale for each estimated parameters.
+    avgScale=nan(length(pIx),1);
+    for i=1:length(pIx)
+        est=find(estimated(pIx(i),:));
+        avgScale(i)=floor(median(log10(abs(IO(pIx(i),est,:)))));
+    end
+    % Use scaling of 1 for all-zero values.
+    avgScale(avgScale==-inf)=0;
+    
+    % For each camera with estimated parameters.
+    for ci=find(any(estimated(pIx,:),1))
+        % Extract P values for this camera over all iterations.
         P=squeeze(IO(5+s.IO.model.nK+(1:s.IO.model.nP),ci,:));
-        % Determine scale.
-        avgScale=floor(median(log10(abs(P)),2));
-        % Use scaling of 1 for all-zero values.
-        avgScale(avgScale==-inf)=0;
+        
+        % What parameters have been individually estimated?
+        est=estimated(pIx,ci);
+        
         v=repmat(10.^(-avgScale),1,size(P,2)).*P;
-        for i=1:size(P,1)
+        for i=find(est')
             if avgScale(i)==0
                 prefix='';
             else
@@ -182,16 +222,29 @@ if plotIO && any(s.bundle.est.IO(:))
     % Corresponding line handles.
     hh=[];
     affineLegends={'af','sk'};
-    % For each unique camera.
-    for ci=find(s.IO.struct.uniq)
-        % Extract K values for this camera over all iterations.
+    
+    % Parameter indices for this block.
+    pIx=4:5;
+    
+    % Determine scale for each estimated parameters.
+    avgScale=nan(length(pIx),1);
+    for i=1:length(pIx)
+        est=find(estimated(pIx(i),:));
+        avgScale(i)=floor(median(log10(abs(IO(pIx(i),est,:)))));
+    end
+    % Use scaling of 1 for all-zero values.
+    avgScale(avgScale==-inf)=0;
+    
+    % For each camera with estimated parameters.
+    for ci=find(any(estimated(pIx,:),1))
+        % Extract affine values for this camera over all iterations.
         B=squeeze(IO(4:5,ci,:));
-        % Determine scale.
-        avgScale=floor(median(log10(abs(B)),2));
-        % Use scaling of 1 for all-zero values.
-        avgScale(avgScale==-inf)=0;
+        
+        % What parameters have been individually estimated?
+        est=estimated(pIx,ci);
+        
         v=repmat(10.^(-avgScale),1,size(B,2)).*B;
-        for i=1:size(B,1)
+        for i=find(est')
             if avgScale(i)==0
                 prefix='';
             else
