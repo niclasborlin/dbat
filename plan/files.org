@@ -10,9 +10,9 @@
     - [X] plytoascii.m
     - [X] unpackpsz.m
     - [ ] writestats.m
-  - [2/19] demo
+  - [3/19] demo
     - [X] camcaldemo.m
-    - [ ] camcaldemo2.m
+    - [X] camcaldemo2.m
     - [ ] camcaldemo_1ray.m
     - [X] camcaldemo_allmodels.m
     - [ ] camcaldemo_missing_obs.m
