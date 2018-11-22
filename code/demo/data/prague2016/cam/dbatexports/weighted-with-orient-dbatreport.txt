@@ -7,10 +7,10 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:23:17
+      Last Bundle Run:        22-Nov-2018 17:27:47
       DBAT version:           0.8.0.0 (2018-10-26)
-      MATLAB version:         8.6.0.267246 (R2015b)
-      Host system:            GLNXA64
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 OK
       Sigma0:                 1.60984
@@ -37,7 +37,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 3
          First error:          460.624
          Last error:           98.3715
-         Execution time (s):   0.19
+         Execution time (s):   0.13
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:
@@ -45,15 +45,15 @@ Damped Bundle Adjustment Toolbox result file
          Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 1
-            Focal Length:
+            Camera Constant:
                Value: 7.4693 mm
-            Xp - principal point x:
+            px - principal point x:
                Value: 3.6178 mm
-            Yp - principal point y:
+            py - principal point y:
                Value: 2.6087 mm
-            Fw - format width:
+            Format width:
                Value: 7.2532 mm
-            Fh - format height:
+            Format height:
                Value: 5.4399 mm
             K1 - radial distortion 1:
                Value: 0.004981 mm^(-3)
@@ -65,24 +65,24 @@ Damped Bundle Adjustment Toolbox result file
                Value: -6.587e-05 mm^(-3)
             P2 - decentering distortion 2:
                Value: -2.806e-05 mm^(-3)
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value: 0 
-            B2 - skew:
+            sk - skew:
                Value: 0 
-            Iw - image width:
+            Image width:
                Value: 2272 px
-            Ih - image height:
+            Image height:
                Value: 1704 px
-            Xr - X resolution:
+            X resolution:
                Value: 313.241 px/mm
-            Yr - Y resolution:
+            Y resolution:
                Value: 313.241 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value: 0.00319243 mm
-            Ph - pixel height:
+            Pixel height:
                Value: 0.00319243 mm
          Rated angle of view (h,v,d): (52, 40, 63) deg
-         Largest distortion: 0.4 mm (124.9 px, 8.8% of half-diagonal)
+         Largest distortion: 0.4 mm (124.5 px, 8.8% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG

@@ -9,10 +9,10 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        22-Nov-2018 10:15:59
+      Last Bundle Run:        22-Nov-2018 16:31:44
       DBAT version:           0.8.0.0 (2018-10-26)
       MATLAB version:         9.5.0.944444 (R2018b)
-      Host system:            GLNXA64 (L, 281474976710655)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 OK
       Sigma0:                 2.79867
@@ -39,7 +39,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 6
          First error:          254.75
          Last error:           18.5643
-         Execution time (s):   0.05
+         Execution time (s):   0.06
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:
@@ -147,12 +147,14 @@ Damped Bundle Adjustment Toolbox result file
                Omega:
                   Value:     -27.821991 deg
                   Deviation: 0.212 deg
+                  Correlations over 95%: Kappa:99.4%.
                Phi:
                   Value:     -28.737227 deg
                   Deviation: 0.143 deg
                Kappa:
                   Value:     -142.135573 deg
                   Deviation: 0.105 deg
+                  Correlations over 95%: Omega:99.4%.
                Xc:
                   Value:     -0.644995 ou
                   Deviation: 0.00153 ou
@@ -166,41 +168,41 @@ Damped Bundle Adjustment Toolbox result file
                Omega:
                   Value:     -28.412485 deg
                   Deviation: 0.164 deg
+                  Correlations over 95%: Kappa:98.8%.
                Phi:
                   Value:     -30.861142 deg
                   Deviation: 0.179 deg
                Kappa:
                   Value:     -49.715537 deg
                   Deviation: 0.0837 deg
+                  Correlations over 95%: Omega:98.8%.
                Xc:
                   Value:     -0.643624 ou
                   Deviation: 0.00137 ou
-                  Correlations over 95%: Zc:99.4%.
                Yc:
                   Value:     1.490405 ou
                   Deviation: 0.00148 ou
                Zc:
                   Value:     1.634508 ou
                   Deviation: 0.00221 ou
-                  Correlations over 95%: Xc:99.4%.
             Photo 5: P8250025.JPG
                Omega:
                   Value:     4.084729 deg
                   Deviation: 0.176 deg
-                  Correlations over 95%: Yc:98.8%.
+                  Correlations over 95%: Kappa:99.5%.
                Phi:
                   Value:     -35.146985 deg
                   Deviation: 0.178 deg
                Kappa:
                   Value:     -87.299968 deg
                   Deviation: 0.103 deg
+                  Correlations over 95%: Omega:99.5%.
                Xc:
                   Value:     -0.669765 ou
                   Deviation: 0.00138 ou
                Yc:
                   Value:     0.419340 ou
                   Deviation: 0.000871 ou
-                  Correlations over 95%: Omega:98.8%.
                Zc:
                   Value:     1.409818 ou
                   Deviation: 0.00185 ou

@@ -12,6 +12,8 @@ camcaldemo_no_datum
 ll={'c1','c2','s1','s2','s3','s4'};
 for i=1:length(ll)
     for t=[false,true]
+        ll{i}
+        t
         prague2016_pm(ll{i},t)
     end
 end

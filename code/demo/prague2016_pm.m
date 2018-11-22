@@ -185,27 +185,27 @@ s0=prob2dbatstruct(prob);
 s0raw=s0;
 
 % Warn for non-uniform mark std.
-uniqueSigmas=unique(s0.markStd(:));
+uniqueSigmas=unique(s0.IP.std(:));
 
 if length(uniqueSigmas)~=1
     uniqueSigmas
     warning('Multiple mark point sigmas')
-    s0.markStd(s0.markStd==0)=1;
+    s0.IP.std(s0.IP.std==0)=1;
 end
 
 % Clear EO and OP parameters.
-s0.EO(s0.estEO)=nan;
-s0.OP(s0.estOP)=nan;
+s0.EO.val(s0.bundle.est.EO)=nan;
+s0.OP.val(s0.bundle.est.OP)=nan;
 
 % Insert any prior obs to use.
-s0.EO(s0.useEOobs)=s0.prior.EO(s0.useEOobs);
-s0.OP(s0.useOPobs)=s0.prior.OP(s0.useOPobs);
+s0.EO.val(s0.EO.prior.use)=s0.EO.prior.val(s0.EO.prior.use);
+s0.OP.val(s0.OP.prior.use)=s0.OP.prior.val(s0.OP.prior.use);
 
 % Use specified sigma as first approximation.
-s0.markStd(:)=s0.prior.sigmas(1);
+s0.IP.std(:)=s0.IP.sigmas(1);
 
 % Compute EO parameters by spatial resection.
-cpId=s0.OPid(s0.isCtrl);
+cpId=s0.OP.id(s0.OP.prior.isCtrl);
 s1=resect(s0,'all',cpId,1,0,cpId);
 % Compute OP parameters by forward intersection.
 s2=forwintersect(s1,'all',true);
@@ -226,10 +226,10 @@ fprintf('Running the bundle with damping %s...\n',damping);
     
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
-            iters,sigma0,sigma0*s.prior.sigmas(1));
+            iters,sigma0,result.post.sigmas(1));
 else
     fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.IP.sigmas(1));
 end
 
 % Pre-factorize posterior covariance matrix for speed.
@@ -238,23 +238,21 @@ E=bundle_cov(result,E,'prepare');
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,'dbatexports',[stub,orientStr,'-dbatreport.txt']);
 
-COP=bundle_result_file(result,E,reportFile);
+[COP,result]=bundle_result_file(result,E,reportFile);
 
-OPstd=full(reshape(sqrt(diag(COP)),3,[]));
-CEO=bundle_cov(result,E,'CEO');
-EOstd=reshape(full(sqrt(diag(CEO))),6,[]);
-EOposStd=EOstd(1:3,:);
-EOangStd=EOstd(4:6,:)*180/pi;
+OPstd=result.post.std.OP;
+EOposStd=result.post.std.EO(1:3,:);
+EOangStd=result.post.std.EO(4:6,:);
 
 fprintf('\nBundle report file %s generated.\n',reportFile);
 
 % Input statistics. Number of images, CP, OP, a priori CP sigma,
 % number of observations, number of parameters, redundacy, ray
 % count and angle min+max+avg.
-nImages=size(s.EO,2);
-nCP=nnz(s.isCtrl);
-nOP=nnz(~s.isCtrl);
-sigmaCP=unique(s.prior.OPstd(:,s.isCtrl)','rows')';
+nImages=size(s.EO.val,2);
+nCP=nnz(s.OP.prior.isCtrl);
+nOP=nnz(~s.OP.prior.isCtrl);
+sigmaCP=unique(s.OP.prior.std(:,s.OP.prior.isCtrl)','rows')';
 if all(sigmaCP==0)
     sigmaCPstr='fixed';
 else
@@ -283,39 +281,39 @@ m=E.numObs;
 n=E.numParams;
 r=E.redundancy;
 
-rayCount=full(sum(s.vis,2));
+rayCount=full(sum(s.IP.vis,2));
 rayAng=angles(result,'Computing ray angles')*180/pi;
 
-OPrayCount=rayCount(~s.isCtrl);
-OPrayAng=rayAng(~s.isCtrl);
+OPrayCount=rayCount(~s.OP.prior.isCtrl);
+OPrayAng=rayAng(~s.OP.prior.isCtrl);
 if isempty(OPrayCount), OPrayCount=0; end
 if isempty(OPrayAng), OPrayAng=0; end
 
-CPrayCount=rayCount(s.isCtrl);
-CPrayAng=rayAng(s.isCtrl);
+CPrayCount=rayCount(s.OP.prior.isCtrl);
+CPrayAng=rayAng(s.OP.prior.isCtrl);
 if isempty(CPrayCount), CPrayCount=0; end
 if isempty(CPrayAng), CPrayAng=0; end
 
 % Compute EO max abs differences.
-EOdiff=result.EO(1:6,:)-pmReport.EO(1:6,:);
-EOstdDiff=result.EOstd(1:6,:)-pmReport.EOstd(1:6,:);
+EOdiff=result.EO.val(1:6,:)-pmReport.EO(1:6,:);
+EOstdDiff=result.post.std.EO(1:6,:)-pmReport.EOstd(1:6,:);
 maxEOposDiff=max(max(abs(EOdiff(1:3,:))));
 maxEOangDiff=max(max(abs(EOdiff(4:6,:))))*180/pi;
 maxEOposStdDiff=max(max(abs(EOstdDiff(1:3,:))));
-maxEOangStdDiff=max(max(abs(EOstdDiff(4:6,:))));
+maxEOangStdDiff=max(max(abs(EOstdDiff(4:6,:))))*180/pi;
 
 % Compute OP/CP max abs differences.
-[~,i,j]=intersect(pts3d.id,result.OPid);
+[~,i,j]=intersect(pts3d.id,result.OP.id);
 if length(i)~=length(pts3d.id)
     warning('OP mismatch, disagreeing OP id:');
-    disp(setxor(pts3d.id,result.OPid));
+    disp(setxor(pts3d.id,result.OP.id));
 end
 
-OPisCP=result.isCtrl(j);
+OPisCP=result.OP.prior.isCtrl(j);
 
 pmOP=pts3d.pos(:,i);
 pmOPstd=pts3d.std(:,i);
-dbatOP=result.OP(:,j)-repmat(meanOffset,1,size(pmOP,2));
+dbatOP=result.OP.val(:,j)-repmat(meanOffset,1,size(pmOP,2));
 dbatOPstd=OPstd(:,j);
 OPdiff=abs(dbatOP-pmOP);
 OPstdDiff=abs(dbatOPstd-pmOPstd);
@@ -327,12 +325,12 @@ maxCPstdDiff=max(max(OPstdDiff(:,OPisCP)));
 % Compare 2d residuals.
 
 % Find mapping from pts2d.id to OPid.
-[~,j]=ismember(pts2d.id,result.OPid);
+[~,j]=ismember(pts2d.id,result.OP.id);
 % Find columns in markPts that correspond to pts2d id, imNo.
-cols=result.colPos(sub2ind(size(result.colPos),j,pts2d.imNo));
-res2d=nan(size(result.residuals.IP));
+cols=result.IP.ix(sub2ind(size(result.IP.ix),j,pts2d.imNo));
+res2d=nan(size(result.post.res.IP));
 res2d(:,cols)=pts2d.res;
-maxRes2d=max(max(abs(res2d-result.residuals.IP)));
+maxRes2d=max(max(abs(res2d-result.post.res.IP)));
 
 fprintf(['\nExperiment %s:\n%d images, %d CP, %d OP, sigmaCP=%s, m=%d, ' ...
          'n=%d, r=%d.\n'],l,nImages,nCP,nOP,sigmaCPstr,m,n,r);
@@ -389,31 +387,31 @@ end
 imName='';
 imNo=1;
 % Check if image files exist.
-isAbsPath=~isempty(s0.imDir) && ismember(s0.imDir(1),'\\/') || ...
-          length(s0.imDir)>1 && s0.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s0.imDir),'dir')
+isAbsPath=~isempty(s0.proj.imDir) && ismember(s0.proj.imDir(1),'\\/') || ...
+          length(s0.proj.imDir)>1 && s0.proj.imDir(2)==':';
+if ~isAbsPath && exist(fullfile(curDir,s0.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s0.imDir=fullfile(curDir,s0.imDir);
+    s0.proj.imDir=fullfile(curDir,s0.proj.imDir);
 end
-if exist(s0.imDir,'dir')
+if exist(s0.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
-    imNames={s0.imNames{imNo},lower(s0.imNames{imNo}),upper(s0.imNames{imNo})};    
-    imNames=fullfile(s0.imDir,imNames);
+    imNames={s0.EO.name{imNo},lower(s0.EO.name{imNo}),upper(s0.EO.name{imNo})};    
+    imNames=fullfile(s0.proj.imDir,imNames);
     imExist=cellfun(@(x)exist(x,'file')==2,imNames);
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
 else
-    warning('Image directory %s does not exist.',s0.imDir);
+    warning('Image directory %s does not exist.',s0.proj.imDir);
 end
 
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     h=[h;imshow(imName,'parent',gca(imFig))];
-    pts=s0.markPts(:,s0.colPos(s0.vis(:,imNo),imNo));
-    ptsId=s0.OPid(s0.vis(:,imNo));
-    isCtrl=s0.isCtrl(s0.vis(:,imNo));
+    pts=s0.IP.val(:,s0.IP.ix(s0.IP.vis(:,imNo),imNo));
+    ptsId=s0.OP.id(s0.IP.vis(:,imNo));
+    isCtrl=s0.OP.prior.isCtrl(s0.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

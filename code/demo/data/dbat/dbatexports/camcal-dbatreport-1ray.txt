@@ -9,10 +9,10 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          Bundle failed with code -4 (see below for details).
    Information from last bundle
-      Last Bundle Run:        22-Nov-2018 10:25:09
+      Last Bundle Run:        22-Nov-2018 16:32:08
       DBAT version:           0.8.0.0 (2018-10-26)
       MATLAB version:         9.5.0.944444 (R2018b)
-      Host system:            GLNXA64 (L, 281474976710655)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 fail (code -4: Normal matrix is structurally rank deficient)
       Sigma0:                 NaN
@@ -39,7 +39,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 0
          First error:          NaN
          Last error:           NaN
-         Execution time (s):   0.08
+         Execution time (s):   0.06
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

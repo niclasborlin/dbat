@@ -10,23 +10,23 @@
     - [X] plytoascii.m
     - [X] unpackpsz.m
     - [ ] writestats.m
-  - [6/19] demo
+  - [11/19] demo
     - [X] camcaldemo.m
     - [X] camcaldemo2.m
     - [X] camcaldemo_1ray.m
     - [X] camcaldemo_allmodels.m
     - [X] camcaldemo_missing_obs.m
     - [X] camcaldemo_no_datum.m
-    - [ ] dbatdemos.m
-    - [ ] loadplotdemo.m
+    - [X] dbatdemos.m
+    - [X] loadplotdemo.m
     - [ ] loadplotpsz.m
     - [ ] matcamcal.m
     - [ ] prague2016_pm.m
     - [ ] prague2016_ps.m
     - [ ] ps_postproc.m
-    - [ ] romabundledemo.m
-    - [ ] romabundledemo_imagevariant.m
-    - [ ] romabundledemo_selfcal.m
+    - [X] romabundledemo.m
+    - [X] romabundledemo_imagevariant.m
+    - [X] romabundledemo_selfcal.m
     - [ ] runalldemos.m
     - [ ] stpierrebundledemo_ps.m
     - [ ] stpierrebundledemo_ps_brown.m
