@@ -221,6 +221,7 @@ damping='gna';
 
 fprintf('Running the bundle with damping %s...\n',damping);
 
+
 % Run the bundle.
 [result,ok,iters,sigma0,E]=bundle(s,damping,'trace','dofverb');
     
@@ -244,7 +245,7 @@ OPstd=full(reshape(sqrt(diag(COP)),3,[]));
 CEO=bundle_cov(result,E,'CEO');
 EOstd=reshape(full(sqrt(diag(CEO))),6,[]);
 EOposStd=EOstd(1:3,:);
-EOangStd=EOstd(4:6,:)*180/pi;
+EOangStd=EOstd(4:6,:);
 
 fprintf('\nBundle report file %s generated.\n',reportFile);
 
@@ -298,11 +299,11 @@ if isempty(CPrayAng), CPrayAng=0; end
 
 % Compute EO max abs differences.
 EOdiff=result.EO(1:6,:)-pmReport.EO(1:6,:);
-EOstdDiff=result.EOstd(1:6,:)-pmReport.EOstd(1:6,:);
+EOstdDiff=[EOposStd;EOangStd]-pmReport.EOstd(1:6,:);
 maxEOposDiff=max(max(abs(EOdiff(1:3,:))));
 maxEOangDiff=max(max(abs(EOdiff(4:6,:))))*180/pi;
 maxEOposStdDiff=max(max(abs(EOstdDiff(1:3,:))));
-maxEOangStdDiff=max(max(abs(EOstdDiff(4:6,:))));
+maxEOangStdDiff=max(max(abs(EOstdDiff(4:6,:))))*180/pi;
 
 % Compute OP/CP max abs differences.
 [~,i,j]=intersect(pts3d.id,result.OPid);
