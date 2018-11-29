@@ -191,6 +191,7 @@ if length(uniqueSigmas)~=1
     uniqueSigmas
     warning('Multiple mark point sigmas')
     s0.IP.std(s0.IP.std==0)=1;
+    s0.IP.sigmas(s0.IP.sigmas==0)=1;
 end
 
 % Clear EO and OP parameters.
