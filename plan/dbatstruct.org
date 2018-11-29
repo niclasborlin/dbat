@@ -291,8 +291,8 @@
   use warnings;
   use autodie;
 
-  my $srcVar='s0'; # shift;
-  my $destVar='s0'; # shift;
+  my $srcVar='result'; # shift;
+  my $destVar='result'; # shift;
 
   open(my $in,"<","./dbatstruct.org");
   open(my $out,">","/tmp/perlscript.pl");
