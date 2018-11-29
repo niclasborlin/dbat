@@ -37,22 +37,22 @@ SfmtR=@(n) sprintf('%%%ds',n);
 
 fprintf(fid,'%s\n',desc);
 
-fprintf(fid,'\nProject file: %s\n',s.fileName);
+fprintf(fid,'\nProject file: %s\n',s.proj.fileName);
 
 fprintf(fid,'\nExecution time stamp: %04d-%02d-%02d %02d:%02d:%02d\n', ...
         floor(clock));
 
-nCp=nnz(s.isCtrl);
-fprintf(fid,'\nTotal # OP          : %d\n',size(s.vis,1)-nCp);
+nCp=nnz(s.OP.prior.isCtrl);
+fprintf(fid,'\nTotal # OP          : %d\n',size(s.IP.vis,1)-nCp);
 fprintf(fid,'Total # CP          : %d\n',nCp);
-fprintf(fid,'Total # cams        : %d\n',size(s.vis,2));
-fprintf(fid,'Total # image marks : %d\n',nnz(s.vis));
-fprintf(fid,'Project units       : %s\n',s.objUnit);
+fprintf(fid,'Total # cams        : %d\n',size(s.IP.vis,2));
+fprintf(fid,'Total # image marks : %d\n',nnz(s.IP.vis));
+fprintf(fid,'Project units       : %s\n',s.proj.objUnit);
 
 fprintf(fid,'\nProject images: no (id), shortened label, name:\n');
-camNoDigits=Digits(size(s.vis,2));
-camIdDigits=Digits(max(s.camIds));
-imLabels=s.imLabels;
+camNoDigits=Digits(size(s.IP.vis,2));
+camIdDigits=Digits(max(s.EO.id));
+imLabels=s.EO.label;
 labelLen=max(cellfun(@length,imLabels));
 
 % Generate shorter labels if necessary.
@@ -90,14 +90,14 @@ if labelLen>8
 end
 
 fmt=sprintf('  %s (%s), %s, %%s\n',DfmtL(camNoDigits),DfmtL(camIdDigits),SfmtL(labelLen));
-for i=1:length(s.imNames)
-    fprintf(fid,fmt,i,s.camIds(i),imLabels{i},fullfile(s.imDir,s.imNames{i}));
+for i=1:length(s.EO.name)
+    fprintf(fid,fmt,i,s.EO.id(i),imLabels{i},fullfile(s.proj.imDir,s.EO.name{i}));
 end
 
 fprintf(fid,'\n\nIMAGE STATISTICS\n');
 
 % Image ray count
-camRayCount=full(sum(s.vis,1));
+camRayCount=full(sum(s.IP.vis,1));
 camRayDigits=Digits(max(camRayCount));
 
 fprintf(fid,'\nImage ray count:\n');
@@ -114,7 +114,7 @@ fprintf(fid,'\nImage with lowest ray count: cam no (id), label, count\n');
 [count,i]=sort(camRayCount);
 fmt=sprintf('  %s (%s), %s, %s\n',DfmtR(camNoDigits),DfmtR(camIdDigits),SfmtL(labelLen),DfmtR(countDigits));
 for j=1:nnz(count<count(min(3,end))*1.1+0.1)
-    fprintf(fid,fmt,i(j),s.camIds(i(j)),imLabels{i(j)},count(j));
+    fprintf(fid,fmt,i(j),s.EO.id(i(j)),imLabels{i(j)},count(j));
 end
 
 fprintf(fid,'\nImage ray count histogram: nRays, nCams\n');
@@ -142,7 +142,7 @@ fmt=sprintf('  %s (%s), %s, %s, %%4.1f\n',DfmtR(camNoDigits),...
             DfmtR(camIdDigits),SfmtL(labelLen),DfmtR(countDigits));
 [ang,i]=sort(camRayAng);
 for j=1:nnz(ang<ang(min(3,end))*1.1+0.1)
-    fprintf(fid,fmt,i(j),s.camIds(i(j)),imLabels{i(j)},camRayCount(i(j)),...
+    fprintf(fid,fmt,i(j),s.EO.id(i(j)),imLabels{i(j)},camRayCount(i(j)),...
             ang(j));
 end
 
@@ -154,9 +154,9 @@ fmt=sprintf('  %%2d, %s\n',DfmtR(cDigits));
 fprintf(fid,fmt,[aa(:),aHist(:)]');
 
 % Compute ray count for CP + OP.
-nRays=full(sum(s.vis,2));
-CPix=find(s.isCtrl);
-OPix=find(~s.isCtrl);
+nRays=full(sum(s.IP.vis,2));
+CPix=find(s.OP.prior.isCtrl);
+OPix=find(~s.OP.prior.isCtrl);
 
 % CP/OP ray angles
 if isfield(s,'rayAng') && ~isempty(s.rayAng)
@@ -198,30 +198,30 @@ for ii=1:length(ixx)
     
     [rays,i]=sort(nRays(ix));
     cut=nnz(rays<rays(min(3,end))*1.1+0.1);
-    labelLen=max(cellfun(@length,s.OPlabels(ix(i(1:cut)))));
+    labelLen=max(cellfun(@length,s.OP.label(ix(i(1:cut)))));
     if labelLen==0
         sTitle='';
         fmt=sprintf('  %s (%s), %s, (%%s)\n',...
                     DfmtR(Digits(max(ix(i(1:cut))))),...
-                    DfmtR(Digits(max(s.OPrawId(ix(i(1:cut)))))),...
+                    DfmtR(Digits(max(s.OP.rawId(ix(i(1:cut)))))),...
                     DfmtR(Digits(rays(cut))));
     else
         sTitle='label, ';
         fmt=sprintf('  %s (%s), %s, %s, (%%s)\n',...
                     DfmtR(Digits(max(ix(i(1:cut))))),...
-                    DfmtR(Digits(max(s.OPrawId(ix(i(1:cut)))))),...
+                    DfmtR(Digits(max(s.OP.rawId(ix(i(1:cut)))))),...
                     SfmtL(labelLen),DfmtR(Digits(rays(cut))));
     end
     fprintf(fid,['\n%s with lowest ray count: %s no (id), %snRays, ' ...
                  '(images with rays)\n'],strs{ii},strs{ii},sTitle);
     for j=1:cut
-        imNo=find(s.vis(ix(i(j)),:));
+        imNo=find(s.IP.vis(ix(i(j)),:));
         imStr=strjoin(imLabels(imNo),', ');
         if labelLen==0
-            fprintf(fid,fmt,ix(i(j)),s.OPrawId(ix(i(j))),rays(j),imStr);
+            fprintf(fid,fmt,ix(i(j)),s.OP.rawId(ix(i(j))),rays(j),imStr);
         else
-            fprintf(fid,fmt,ix(i(j)),s.OPrawId(ix(i(j))),...
-                    s.OPlabels{ix(i(j))},rays(j),imStr);
+            fprintf(fid,fmt,ix(i(j)),s.OP.rawId(ix(i(j))),...
+                    s.OP.label{ix(i(j))},rays(j),imStr);
         end
     end
     
@@ -232,31 +232,31 @@ for ii=1:length(ixx)
 
     [ang,i]=sort(rayAng(ix));
     cut=nnz(ang<ang(min(3,end))*1.1+0.1);
-    labelLen=max(cellfun(@length,s.OPlabels(ix(i(1:cut)))));
+    labelLen=max(cellfun(@length,s.OP.label(ix(i(1:cut)))));
     if labelLen==0
         sTitle='';
         fmt=sprintf('  %s (%s), %s, %%4.1f, (%%s)\n',...
                     DfmtR(Digits(max(ix(i(1:cut))))),...
-                    DfmtR(Digits(max(s.OPrawId(ix(i(1:cut)))))),...
+                    DfmtR(Digits(max(s.OP.rawId(ix(i(1:cut)))))),...
                     DfmtR(Digits(max(nRays(ix(i(1:cut)))))));
     else
         sTitle='label, ';
         fmt=sprintf('  %s (%s), %s, %s, %%4.1f, (%%s)\n',...
                     DfmtR(Digits(max(ix(i(1:cut))))),...
-                    DfmtR(Digits(max(s.OPrawId(ix(i(1:cut)))))),...
+                    DfmtR(Digits(max(s.OP.rawId(ix(i(1:cut)))))),...
                     SfmtL(labelLen),DfmtR(Digits(max(nRays(ix(i(1:cut)))))));
     end
     fprintf(fid,['\nSmallest %s ray angles: %s no (id), %snRays, ' ...
                  'angle, (images with rays)\n'],strs{ii},strs{ii},sTitle);
     for j=1:cut
-        imNo=find(s.vis(ix(i(j)),:));
+        imNo=find(s.IP.vis(ix(i(j)),:));
         imStr=strjoin(imLabels(imNo),', ');
         if labelLen==0
-            fprintf(fid,fmt,ix(i(j)),s.OPrawId(ix(i(j))),...
+            fprintf(fid,fmt,ix(i(j)),s.OP.rawId(ix(i(j))),...
                     nRays(ix(i(j))),ang(j),imStr);
         else
-            fprintf(fid,fmt,ix(i(j)),s.OPrawId(ix(i(j))),...
-                    s.OPlabels{ix(i(j))},nRays(ix(i(j))),...
+            fprintf(fid,fmt,ix(i(j)),s.OP.rawId(ix(i(j))),...
+                    s.OP.label{ix(i(j))},nRays(ix(i(j))),...
                     ang(j),imStr);
         end
     end
