@@ -29,7 +29,7 @@ function [c,cr,crr,cc,cl,ch,crp]=coverage(s,varargin)
 %See also: PROB2DBATSTRUCT, CONVHULL.
 
 
-ix=1:length(s.imNames);
+ix=1:length(s.EO.name);
 union=false;
 
 for i=1:length(varargin)
@@ -42,34 +42,34 @@ for i=1:length(varargin)
     end
 end
 
-if strcmp(ix,'all'), ix=1:length(s.imNames); end
+if strcmp(ix,'all'), ix=1:length(s.EO.name); end
 
 if union
     % Compute the union of the coverage.
     
     % Assume identical image sizes.
-    totArea=prod(s.IO(end-3:end-2,ix(1)),1);
+    totArea=prod(s.IO.sensor.imSize(:,ix(1)));
 
     % Set up for computation of radial distance.
     
     % Scaling matrix from mm to pixels.
-    S=diag([1,-1,1])*diag([s.IO(end-1:end,ix(1));1]);
+    S=diag([1,-1,1])*diag(1./[s.IO.sensor.pxSize(:,ix(1));1]);
     % Subtract principal point.
     PP=eye(3);
-    PP(1:2,3)=s.IO(1:2,ix(1));
+    PP(1:2,3)=s.IO.val(2:3,ix(1));
     % Principal point in pixels.
     pp=euclidean(S*PP*homogeneous(zeros(2,1)));
 
     % Determine maximum radial distance.
-    xx=[1,s.IO(end-3,ix(1))]+0.5*[-1,1];
-    yy=[1,s.IO(end-2,ix(1))]+0.5*[-1,1];
+    xx=[1,s.IO.sensor.imSize(1,i)]+0.5*[-1,1];
+    yy=[1,s.IO.sensor.imSize(2,i)]+0.5*[-1,1];
     corners=[xx([1,1,2,2]);yy([1,2,2,1])];
     radCorner=sqrt(sum(euclidean(PP\(S\homogeneous(corners))).^2,1));
     maxRad=max(radCorner);
     
     % Extract all points from the requested images.
-    i=s.colPos(:,ix);
-    pts=s.markPts(:,i(i~=0));
+    i=s.IP.ix(:,ix);
+    pts=s.IP.val(:,i(i~=0));
 
     if isempty(pts)
         cl=nan(2,1);
@@ -113,7 +113,7 @@ else
     % Compute individual coverage for each image.
     
     % Image areas.
-    totArea=prod(s.IO(end-3:end-2,ix),1);
+    totArea=prod(s.IO.sensor.imSize(:,ix),1);
 
     % Pre-allocate return variables.
     cc=cell(size(ix));
@@ -130,24 +130,24 @@ else
         % for image ix(i).
     
         % Scaling matrix from mm to pixels.
-        S=diag([1,-1,1])*diag([s.IO(end-1:end,ix(i));1]);
+        S=diag([1,-1,1])*diag(1./[s.IO.sensor.pxSize(:,ix(i));1]);
         % Subtract principal point.
         PP=eye(3);
-        PP(1:2,3)=s.IO(1:2,ix(i));
+        PP(1:2,3)=s.IO.val(2:3,ix(i));
         % Principal point in pixels.
         pp=euclidean(S*PP*homogeneous(zeros(2,1)));
 
         % Determine maximum radial distance. With the center of the
         % pixels at [1,w] x [1,h], the outermost coordinates in the image
         % becomes [0.5,w+0.5] x [0.5,h+0.5].
-        xx=[1,s.IO(end-3,ix(i))]+0.5*[-1,1];
-        yy=[1,s.IO(end-2,ix(i))]+0.5*[-1,1];
+        xx=[1,s.IO.sensor.imSize(1,i)]+0.5*[-1,1];
+        yy=[1,s.IO.sensor.imSize(2,i)]+0.5*[-1,1];
         corners=[xx([1,1,2,2]);yy([1,2,2,1])];
         radCorner=sqrt(sum(euclidean(PP\(S\homogeneous(corners))).^2,1));
         maxRad=max(radCorner);
         
         % Extract points measured in this image.
-        pts=s.markPts(:,s.colPos(s.vis(:,ix(i)),ix(i)));
+        pts=s.IP.val(:,s.IP.ix(s.IP.vis(:,ix(i)),ix(i)));
         
         if ~isempty(pts)
             % Radial extent.
@@ -161,7 +161,7 @@ else
             ch(:,i)=max(pts,[],2);
         
             % Convex hull.
-            if nnz(s.vis(:,ix(i)))<3
+            if nnz(s.IP.vis(:,ix(i)))<3
                 % Less that 3 points gives empty convex hull.
                 hullArea(i)=0;
                 if nargout>2

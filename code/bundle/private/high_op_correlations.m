@@ -58,7 +58,7 @@ if cross
 else
     % All index pairs will be on the block diagonal. Renumber them to be
     % within each camera.
-    k=floor((i-1)/size(s.OP,1))+1;
-    i=rem(i-1,size(s.OP,1))+1;
-    j=rem(j-1,size(s.OP,1))+1;
+    k=floor((i-1)/size(s.OP.val,1))+1;
+    i=rem(i-1,size(s.OP.val,1))+1;
+    j=rem(j-1,size(s.OP.val,1))+1;
 end

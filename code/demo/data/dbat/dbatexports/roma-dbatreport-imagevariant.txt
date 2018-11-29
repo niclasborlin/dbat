@@ -9,10 +9,10 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the object point coordinates has a high correlation.
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:20:59
+      Last Bundle Run:        22-Nov-2018 16:30:54
       DBAT version:           0.8.0.0 (2018-10-26)
-      MATLAB version:         8.6.0.267246 (R2015b)
-      Host system:            GLNXA64
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 OK
       Sigma0:                 0.502538
@@ -37,28 +37,28 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 5
-         First error:          8608.56
+         First error:          8608.51
          Last error:           160.245
-         Execution time (s):   12.52
+         Execution time (s):   12.8
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
-         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2 aspect)
+         Calibration: yes (cc px py as K1 K2 K3 P1 P2)
          Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0226 mm
                Deviation:    0.0078 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1203 mm
                Deviation:    0.0105 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -85,41 +85,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.6 px, 9.2% of half-diagonal)
          Camera2 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0061 mm
                Deviation:    0.0112 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9786 mm
                Deviation:    0.01 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -144,41 +144,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
-         Largest distortion: 2 mm (312.0 px, 9.2% of half-diagonal)
+         Rated angle of view (h,v,d): (72, 52, 83) deg
+         Largest distortion: 2 mm (312.0 px, 9.3% of half-diagonal)
          Camera3 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0823 mm
                Deviation:    0.0112 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0908 mm
                Deviation:    0.00969 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -203,41 +203,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.0 px, 9.2% of half-diagonal)
          Camera4 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0194 mm
                Deviation:    0.0124 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9878 mm
                Deviation:    0.0112 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -262,41 +262,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.6 px, 9.2% of half-diagonal)
          Camera5 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0854 mm
                Deviation:    0.0137 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9709 mm
                Deviation:    0.0126 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -321,41 +321,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.7 px, 9.2% of half-diagonal)
          Camera6 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0131 mm
                Deviation:    0.0133 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0322 mm
                Deviation:    0.0129 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -380,41 +380,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.1 px, 9.2% of half-diagonal)
          Camera7 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9991 mm
                Deviation:    0.0121 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0582 mm
                Deviation:    0.0127 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -439,41 +439,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.9 px, 9.2% of half-diagonal)
          Camera8 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.038 mm
                Deviation:    0.0113 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9039 mm
                Deviation:    0.0126 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -498,41 +498,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (312.5 px, 9.3% of half-diagonal)
          Camera9 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0926 mm
                Deviation:    0.0105 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1118 mm
                Deviation:    0.0128 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -557,41 +557,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (308.5 px, 9.1% of half-diagonal)
          Camera10 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0295 mm
                Deviation:    0.0106 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0697 mm
                Deviation:    0.0133 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -616,41 +616,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.2 px, 9.2% of half-diagonal)
          Camera11 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0398 mm
                Deviation:    0.0103 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0847 mm
                Deviation:    0.0137 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -675,41 +675,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.8 px, 9.2% of half-diagonal)
          Camera12 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0093 mm
                Deviation:    0.0102 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1475 mm
                Deviation:    0.0134 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -734,41 +734,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.4 px, 9.2% of half-diagonal)
          Camera13 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0543 mm
                Deviation:    0.0104 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9884 mm
                Deviation:    0.0131 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -793,41 +793,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.0 px, 9.2% of half-diagonal)
          Camera14 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9763 mm
                Deviation:    0.0115 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1128 mm
                Deviation:    0.0137 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -852,41 +852,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.5 px, 9.2% of half-diagonal)
          Camera15 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0841 mm
                Deviation:    0.0128 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1104 mm
                Deviation:    0.0139 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -911,41 +911,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
-         Largest distortion: 2 mm (308.7 px, 9.1% of half-diagonal)
+         Rated angle of view (h,v,d): (72, 52, 83) deg
+         Largest distortion: 2 mm (308.7 px, 9.2% of half-diagonal)
          Camera16 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0001 mm
                Deviation:    0.0139 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.8775 mm
                Deviation:    0.0155 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -970,41 +970,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (313.6 px, 9.3% of half-diagonal)
          Camera17 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0466 mm
                Deviation:    0.0134 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9614 mm
                Deviation:    0.0157 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1029,41 +1029,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.5 px, 9.2% of half-diagonal)
          Camera18 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0637 mm
                Deviation:    0.0107 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.8876 mm
                Deviation:    0.0137 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1088,41 +1088,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (312.3 px, 9.3% of half-diagonal)
          Camera19 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0966 mm
                Deviation:    0.0111 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0671 mm
                Deviation:    0.0139 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1147,41 +1147,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.1 px, 9.2% of half-diagonal)
          Camera20 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0845 mm
                Deviation:    0.00985 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0867 mm
                Deviation:    0.0124 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1206,41 +1206,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.0 px, 9.2% of half-diagonal)
          Camera21 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0193 mm
                Deviation:    0.009 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0028 mm
                Deviation:    0.011 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1265,41 +1265,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.4 px, 9.2% of half-diagonal)
          Camera22 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.1296 mm
                Deviation:    0.00878 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0959 mm
                Deviation:    0.0105 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1324,41 +1324,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (308.1 px, 9.1% of half-diagonal)
          Camera23 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.918 mm
                Deviation:    0.0082 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.8667 mm
                Deviation:    0.0093 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1383,41 +1383,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (315.1 px, 9.3% of half-diagonal)
          Camera24 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0295 mm
                Deviation:    0.0083 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0692 mm
                Deviation:    0.00864 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1442,41 +1442,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.2 px, 9.2% of half-diagonal)
          Camera25 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0778 mm
                Deviation:    0.00824 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9717 mm
                Deviation:    0.00813 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1501,41 +1501,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.8 px, 9.2% of half-diagonal)
          Camera26 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9763 mm
                Deviation:    0.00748 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1233 mm
                Deviation:    0.00748 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1560,41 +1560,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.3 px, 9.2% of half-diagonal)
          Camera27 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.994 mm
                Deviation:    0.00754 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0092 mm
                Deviation:    0.00788 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1619,41 +1619,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.7 px, 9.2% of half-diagonal)
          Camera28 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9093 mm
                Deviation:    0.00734 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9075 mm
                Deviation:    0.00803 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1678,41 +1678,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (314.7 px, 9.3% of half-diagonal)
          Camera29 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0234 mm
                Deviation:    0.00721 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.943 mm
                Deviation:    0.00825 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1737,41 +1737,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (312.2 px, 9.3% of half-diagonal)
          Camera30 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0782 mm
                Deviation:    0.00721 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0602 mm
                Deviation:    0.0076 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1796,41 +1796,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.5 px, 9.2% of half-diagonal)
          Camera31 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9116 mm
                Deviation:    0.00728 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0298 mm
                Deviation:    0.00707 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1855,41 +1855,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (312.8 px, 9.3% of half-diagonal)
          Camera32 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0295 mm
                Deviation:    0.00775 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9928 mm
                Deviation:    0.00726 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1914,41 +1914,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.4 px, 9.2% of half-diagonal)
          Camera33 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9786 mm
                Deviation:    0.00772 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9809 mm
                Deviation:    0.00782 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -1973,41 +1973,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (312.4 px, 9.3% of half-diagonal)
          Camera34 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0549 mm
                Deviation:    0.00775 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0524 mm
                Deviation:    0.00824 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2032,41 +2032,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.0 px, 9.2% of half-diagonal)
          Camera35 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9843 mm
                Deviation:    0.00783 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0001 mm
                Deviation:    0.00845 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2091,41 +2091,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
-         Largest distortion: 2 mm (312.0 px, 9.2% of half-diagonal)
+         Rated angle of view (h,v,d): (72, 52, 83) deg
+         Largest distortion: 2 mm (312.0 px, 9.3% of half-diagonal)
          Camera36 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0153 mm
                Deviation:    0.00823 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.17 mm
                Deviation:    0.009 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2150,41 +2150,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.0 px, 9.2% of half-diagonal)
          Camera37 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0466 mm
                Deviation:    0.00829 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.106 mm
                Deviation:    0.00889 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2209,41 +2209,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.4 px, 9.2% of half-diagonal)
          Camera38 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0071 mm
                Deviation:    0.00828 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0714 mm
                Deviation:    0.00917 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2268,41 +2268,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.6 px, 9.2% of half-diagonal)
          Camera39 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9706 mm
                Deviation:    0.00994 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1147 mm
                Deviation:    0.0091 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2327,41 +2327,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.6 px, 9.2% of half-diagonal)
          Camera40 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9757 mm
                Deviation:    0.0093 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.2153 mm
                Deviation:    0.0102 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2386,41 +2386,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.0 px, 9.2% of half-diagonal)
          Camera41 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9983 mm
                Deviation:    0.00844 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0235 mm
                Deviation:    0.00988 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2445,41 +2445,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.4 px, 9.2% of half-diagonal)
          Camera42 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0703 mm
                Deviation:    0.00822 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9892 mm
                Deviation:    0.00932 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2504,41 +2504,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.7 px, 9.2% of half-diagonal)
          Camera43 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0525 mm
                Deviation:    0.00817 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0652 mm
                Deviation:    0.00857 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2563,41 +2563,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.9 px, 9.2% of half-diagonal)
          Camera44 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0554 mm
                Deviation:    0.00862 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0153 mm
                Deviation:    0.00842 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2622,41 +2622,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.6 px, 9.2% of half-diagonal)
          Camera45 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0478 mm
                Deviation:    0.00901 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1005 mm
                Deviation:    0.00852 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2681,41 +2681,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.4 px, 9.2% of half-diagonal)
          Camera46 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.126 mm
                Deviation:    0.00927 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.8803 mm
                Deviation:    0.00882 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2740,41 +2740,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.4 px, 9.2% of half-diagonal)
          Camera47 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0534 mm
                Deviation:    0.00912 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1406 mm
                Deviation:    0.00916 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2799,41 +2799,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
-         Largest distortion: 2 mm (308.7 px, 9.1% of half-diagonal)
+         Rated angle of view (h,v,d): (72, 52, 83) deg
+         Largest distortion: 2 mm (308.7 px, 9.2% of half-diagonal)
          Camera48 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.1299 mm
                Deviation:    0.00844 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1168 mm
                Deviation:    0.00977 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2858,41 +2858,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (307.8 px, 9.1% of half-diagonal)
          Camera49 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0391 mm
                Deviation:    0.00874 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1445 mm
                Deviation:    0.0103 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2917,41 +2917,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (308.9 px, 9.2% of half-diagonal)
          Camera50 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0239 mm
                Deviation:    0.00896 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0722 mm
                Deviation:    0.0103 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -2976,41 +2976,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.3 px, 9.2% of half-diagonal)
          Camera51 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.049 mm
                Deviation:    0.00889 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1064 mm
                Deviation:    0.00992 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3035,41 +3035,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.3 px, 9.2% of half-diagonal)
          Camera52 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9608 mm
                Deviation:    0.0094 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9645 mm
                Deviation:    0.00894 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3094,41 +3094,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (313.0 px, 9.3% of half-diagonal)
          Camera53 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0527 mm
                Deviation:    0.00955 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0973 mm
                Deviation:    0.00846 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3153,41 +3153,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.4 px, 9.2% of half-diagonal)
          Camera54 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0248 mm
                Deviation:    0.0094 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.014 mm
                Deviation:    0.00794 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3212,41 +3212,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.1 px, 9.2% of half-diagonal)
          Camera55 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0522 mm
                Deviation:    0.00988 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0126 mm
                Deviation:    0.00836 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3271,41 +3271,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (310.7 px, 9.2% of half-diagonal)
          Camera56 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0164 mm
                Deviation:    0.0106 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9831 mm
                Deviation:    0.00884 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3330,41 +3330,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.7 px, 9.2% of half-diagonal)
          Camera57 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0797 mm
                Deviation:    0.0105 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9364 mm
                Deviation:    0.00885 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3389,41 +3389,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.3 px, 9.2% of half-diagonal)
          Camera58 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        17.9896 mm
                Deviation:    0.00912 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.0009 mm
                Deviation:    0.00744 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3448,41 +3448,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.9 px, 9.2% of half-diagonal)
          Camera59 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.073 mm
                Deviation:    0.00977 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        11.9671 mm
                Deviation:    0.00816 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3507,41 +3507,41 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (311.0 px, 9.2% of half-diagonal)
          Camera60 (mixed)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        24.5442 mm
                Deviation:    0.00381 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        18.0142 mm
                Deviation:    0.00839 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        12.1457 mm
                Deviation:    0.0115 mm
-            Fw - format width:
+            Format width:
                Value:        36.001 mm
-            Fh - format height:
+            Format height:
                Value:        24 mm
             K1 - radial distortion 1:
                Value:        0.000225489 mm^(-3)
@@ -3566,25 +3566,25 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            B1 - aspect ratio:
+            as - aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        5616 px
-            Ih - image height:
+            Image height:
                Value:        3744 px
-            Xr - X resolution:
+            X resolution:
+               Value:        155.995 px/mm
+            Y resolution:
                Value:        156 px/mm
-            Yr - Y resolution:
-               Value:        156 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00641044 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.00641026 mm
-         Rated angle of view (h,v,d): (73, 52, 83) deg
+         Rated angle of view (h,v,d): (72, 52, 83) deg
          Largest distortion: 2 mm (309.4 px, 9.2% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
@@ -3720,7 +3720,7 @@ Damped Bundle Adjustment Toolbox result file
                   Value:     16.284879 deg
                   Deviation: 0.0227 deg
                Phi:
-                  Value:     -1.709190 deg
+                  Value:     -1.709189 deg
                   Deviation: 0.0176 deg
                Kappa:
                   Value:     3.133664 deg

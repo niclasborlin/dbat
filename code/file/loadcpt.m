@@ -54,7 +54,7 @@ while ~feof(fid)
     if hasId
         % Parse id if present.
         [i,~,msg,ni]=sscanf(s,'%d,',1); %#ok<ASGLU>
-        s=s(ni:end);
+    s=s(ni:end);
     else
         i=nan;
     end

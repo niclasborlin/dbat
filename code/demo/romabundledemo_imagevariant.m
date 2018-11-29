@@ -42,26 +42,16 @@ disp('done.')
 s0=prob2dbatstruct(prob);
 ss0=s0;
 
-% Don't estimate IO data, i.e. treat it as exact.  This block is not
-% really necessary, but may serve as a starting point if IO
-% parameters are to be estimated.
-s0.IO=s0.prior.IO;
-s0.estIO=false(size(s0.IO));
-s0.useIOobs=false(size(s0.IO));
-
-% Add self-calibration for all non-zero parameters...
-%s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
-% ...or for pp, f, and all lens distortion parameters...
-s0.estIO(1:3+s0.nK+s0.nP,:)=true;
-% ...and aspect (but not skew).
-s0.estIO(4+s0.nK+s0.nP,:)=true;
+% Estimate f, pp, aspect and lens distortion parameters.
+s0.IO.val=s0.IO.prior.val;
+s0.bundle.est.IO(repmat(~ismember((1:10)',5),1,size(s0.IO.val,2)))=true;
 
 % Default distortion model is now 3: With aspect/skew.
-s0.IOdistModel(:)=3;
+s0.IO.model.distModel(:)=3;
 
 % Specify that the principal points in image-variant, i.e. each pp
 % is its own block.
-s0.IOblock(1:2,:)=repmat(1:size(s0.IOblock,2),2,1);
+s0.IO.struct.block(2:3,:)=repmat(1:size(s0.IO.struct.block,2),2,1);
 
 % Noise sigma [m].
 noiseLevel=0.1;
@@ -69,24 +59,15 @@ noiseLevel=0.1;
 % Reset random number generator.
 rng('default');
 
-% Use supplied EO data as initial values. Again, this block is not
-% really necessary but may serve as a starting point for modifications.
-s0.EO=s0.prior.EO;
-s0.estEO(1:6,:)=true; % 7th element is just the axis convention.
-s0.useEOobs=false(size(s0.EO));
-s0.EO(1:3,:)=s0.EO(1:3,:)+randn(3,size(s0.EO,2))*noiseLevel;
+% Perturb supplied EO data and use as initial values.
+s0.EO.val=s0.EO.prior.val;
+s0.EO.val(1:3,:)=s0.EO.val(1:3,:)+randn(3,size(s0.EO.val,2))*noiseLevel;
 
-% Copy CP values and treat them as fixed.
-s0.OP(:,s0.isCtrl)=s0.prior.OP(:,s0.isCtrl);
-s0.estOP=repmat(~s0.isCtrl(:)',3,1);
-s0.useOPobs=repmat(s0.isCtrl(:)',3,1);
 % Compute initial OP values by forward intersection.
-correctedPt=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,3,2,...
-                                      s0.ptCams,size(s0.IO,2)),2,[]);
-s0.OP(:,~s0.isCtrl)=pm_multiforwintersect(s0.IO,s0.EO,1:size(s0.IO,2),s0.colPos,correctedPt,find(~s0.isCtrl));
+s1=forwintersect(s0,'all',true);
 
 % Warn for non-uniform mark std.
-uniqueSigmas=unique(s0.markStd(:));
+uniqueSigmas=unique(s1.IP.std(:));
 
 if length(uniqueSigmas)~=1
     uniqueSigmas
@@ -95,34 +76,34 @@ end
 
 if all(uniqueSigmas==0)
     warning('All mark point sigmas==0. Using sigma==1 instead.');
-    s0.prior.sigmas=1;
-    s0.markStd(:)=1;
+    s1.IP.sigmas=1;
+    s1.IP.std(:)=1;
 end
 
 % Fix the datum by fixing camera 1...
-s0.estEO(:,1)=false;
+s1.bundle.est.EO(:,1)=false;
 % ...and the largest other absolute camera coordinate.
-camDiff=abs(s0.EO(1:3,:)-repmat(s0.EO(1:3,1),1,size(s0.EO,2)));
+camDiff=abs(s1.EO.val(1:3,:)-repmat(s1.EO.val(1:3,1),1,size(s1.EO.val,2)));
 [i,j]=find(camDiff==max(camDiff(:)));
-s0.estEO(i,j)=false;
+s1.bundle.est.EO(i,j)=false;
 
 fprintf('Running the bundle with damping %s...\n',damping);
 
 % Run the bundle.
-[result,ok,iters,sigma0,E]=bundle(s0,damping,'trace');
+[result,ok,iters,sigma0,E]=bundle(s1,damping,'trace');
     
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
-            iters,sigma0,sigma0*s0.prior.sigmas(1));
+            iters,sigma0,sigma0*s1.IP.sigmas(1));
 else
     fprintf(['Bundle failed after %d iterations. Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,sigma0,sigma0*s0.prior.sigmas(1));
+             '(%.2f pixels)\n'],iters,sigma0,sigma0*s1.IP.sigmas(1));
 end
 
 % Pre-factorize posterior covariance matrix for speed.
 E=bundle_cov(result,E,'prepare');
 
-COP=bundle_result_file(result,E,reportFile);
+[COP,result]=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
@@ -149,31 +130,31 @@ end
 imName='';
 imNo=1;
 % Check if image files exist.
-isAbsPath=~isempty(s0.imDir) && ismember(s0.imDir(1),'\\/') || ...
-          length(s0.imDir)>1 && s0.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s0.imDir),'dir')
+isAbsPath=~isempty(s1.proj.imDir) && ismember(s1.proj.imDir(1),'\\/') || ...
+          length(s1.proj.imDir)>1 && s1.proj.imDir(2)==':';
+if ~isAbsPath && exist(fullfile(curDir,s1.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s0.imDir=fullfile(curDir,s0.imDir);
+    s1.proj.imDir=fullfile(curDir,s1.proj.imDir);
 end
-if exist(s0.imDir,'dir')
+if exist(s1.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
-    imNames={s0.imNames{imNo},lower(s0.imNames{imNo}),upper(s0.imNames{imNo})};    
-    imNames=fullfile(s0.imDir,imNames);
+    imNames={s1.EO.name{imNo},lower(s1.EO.name{imNo}),upper(s1.EO.name{imNo})};    
+    imNames=fullfile(s1.proj.imDir,imNames);
     imExist=cellfun(@(x)exist(x,'file')==2,imNames);
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
 else
-    warning('Image directory %s does not exist.',s0.imDir);
+    warning('Image directory %s does not exist.',s1.proj.imDir);
 end
 
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     h=[h;imshow(imName,'parent',gca(imFig))];
-    pts=s0.markPts(:,s0.colPos(s0.vis(:,imNo),imNo));
-    ptsId=s0.OPid(s0.vis(:,imNo));
-    isCtrl=s0.isCtrl(s0.vis(:,imNo));
+    pts=s1.IP.val(:,s1.IP.ix(s1.IP.vis(:,imNo),imNo));
+    ptsId=s1.OP.id(s1.IP.vis(:,imNo));
+    isCtrl=s1.OP.prior.isCtrl(s1.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

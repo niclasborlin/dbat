@@ -1,4 +1,4 @@
-function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
+function [s,rms,fail]=resect(s0,cams,cpId,n,v,chkId)
 %RESECT Perform spatial resection on cameras in a project.
 %
 %   S=RESECT(S0,CAMS,CP_ID) uses the 3-point algorithm to performs spatial
@@ -23,7 +23,10 @@ function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
 %   CHK_ID as check points. CP_ID and CHK_ID may contain the same IDs.
 %
 %   [S,RES]=... also returns the rms RES of the residuals of the check
-%   points. A failed resection is indicated by a NaN rms.
+%   points.
+%
+%   [S,RES,FAIL]=... also returns a flag FAIL which is TRUE if any
+%   of the requested resections failed.
 %
 %   References:
 %     Haralick, Lee, Ottenberg, Nölle (1994), "Review and Analysis of Solutions
@@ -38,15 +41,17 @@ function [s,rms]=resect(s0,cams,cpId,n,v,chkId)
 % Handle defaults.
 if nargin<4, n=1; end
 if nargin<5, v=0; end
-if nargin<6, chkId=s0.OPid; end
+if nargin<6, chkId=s0.OP.id; end
 
-if strcmp(cams,'all'), cams=1:size(s0.EO,2); end
+if strcmp(cams,'all'), cams=1:size(s0.EO.val,2); end
+
+fail=false;
 
 s=s0;
 
 % Remove lens distortion from measured coordinates.
-xy=reshape(pm_multilenscorr1(diag([1,-1])*s0.markPts,s0.IO,s0.nK,s0.nP, ...
-                             s0.ptCams,size(s0.IO,2)),2,[]);
+xy=reshape(pm_multilenscorr1(diag([1,-1])*s0.IP.val,s0.IO.val,s0.IO.model, ...
+                             s0.IO.sensor,s0.IP.ptCams,size(s0.IO.val,2)),2,[]);
 
 rms=nan(size(cams));
 % For each camera.
@@ -54,24 +59,24 @@ for i=1:length(cams)
     camIx=cams(i);
 
     % Create camera calibration matrix.
-    IO=s0.IO(:,camIx);
-    K=diag([-IO(3),-IO(3),1]);
-    K(1:2,3)=IO(1:2);
+    IO=s0.IO.val(:,camIx);
+    K=diag([-IO(1),-IO(1),1]);
+    K(1:2,3)=IO(2:3);
     
     % What control points are visible in this camera?
-    vis=find(ismember(cpId,s0.OPid(s0.vis(:,camIx))));
+    vis=find(ismember(cpId,s0.OP.id(s0.IP.vis(:,camIx))));
 
     % If we have more than 3 points, pick the ones covering the largest
     % measured area.
     if length(vis)>3
         % Visible measured points.
-        meaIx=find(s0.vis(:,camIx) & ismember(s0.OPid,cpId));
-        mea=xy(:,s0.colPos(meaIx,camIx));
+        meaIx=find(s0.IP.vis(:,camIx) & ismember(s0.OP.id,cpId)');
+        mea=xy(:,s0.IP.ix(meaIx,camIx));
         [~,~,T,A]=largesttriangle(mea);
         % Try triangles among N best and above v times highest area.
         tryPt=T((1:end)'<=n & A>=v*A(1),:);
         % Ids of points to try.
-        tryId=s0.OPid(meaIx(tryPt));
+        tryId=s0.OP.id(meaIx(tryPt));
     elseif length(vis)==3
         % We have max 3, use all.
         tryId=cpId(vis);
@@ -93,12 +98,12 @@ for i=1:length(cams)
         useId=tryId(j,:);
         
         % Normalize all measured coordinates visible in this image.
-        pt2=xy(:,s0.colPos(s0.vis(:,camIx),camIx));
+        pt2=xy(:,s0.IP.ix(s0.IP.vis(:,camIx),camIx));
         pt2N=K\homogeneous(pt2);
     
         % Corresponding object pts.
-        pt3=s0.OP(:,s0.vis(:,camIx));
-        visId=s0.OPid(s0.vis(:,camIx));
+        pt3=s0.OP.val(:,s0.IP.vis(:,camIx));
+        visId=s0.OP.id(s0.IP.vis(:,camIx));
         
         % Only keep check points.
         keep=ismember(visId,union(cpId,chkId));
@@ -116,9 +121,11 @@ for i=1:length(cams)
     rms(i)=bestRes;
 
     if ~isempty(bestP)
-        s.EO(1:3,camIx)=euclidean(null(bestP));
-        s.EO(4:6,camIx)=derotmat3d(bestP(:,1:3));
+        s.EO.val(1:3,camIx)=euclidean(null(bestP));
+        s.EO.val(4:6,camIx)=derotmat3d(bestP(:,1:3));
     else
-        s.EO(1:6,camIx)=nan;
+        % Signal failure.
+        fail=true;
+        s.EO.val(1:6,camIx)=nan;
     end
 end

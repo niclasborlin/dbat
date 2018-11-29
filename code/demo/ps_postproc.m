@@ -67,7 +67,7 @@ end
 % Load project file.
 [psz,prob,s0,s0PreFilt]=loadplotpsz(psz,sLocal,[minRays,minAngle]);
 % Set the Forward Brown lens distortion model for all cameras.
-s0.IOdistModel(:)=-1;
+s0.IO.model.distModel(:)=-1;
 
 resultFile1=fullfile(inputDir,[inputName,'-psstats-prefilt.txt']);
 fprintf('Writing report file %s...',resultFile1);
@@ -85,11 +85,11 @@ fprintf('done.\n');
 % Should the camera be self-calibrated?
 if psz.camera.isAdjusted
     % Auto-calibration
-    s0.estIO(3)=psz.camera.givenParams.f | psz.camera.optimizedParams.f;
-    s0.estIO(1:2)=psz.camera.givenParams.cxcy | psz.camera.optimizedParams.cxcy;
-    s0.estIO(4:6)=psz.camera.givenParams.k(1:3) | ...
+    s0.bundle.est.IO(3)=psz.camera.givenParams.f | psz.camera.optimizedParams.f;
+    s0.bundle.est.IO(1:2)=psz.camera.givenParams.cxcy | psz.camera.optimizedParams.cxcy;
+    s0.bundle.est.IO(4:6)=psz.camera.givenParams.k(1:3) | ...
         psz.camera.optimizedParams.k(1:3);
-    s0.estIO(7:8)=psz.camera.givenParams.p(1:2) | ...
+    s0.bundle.est.IO(7:8)=psz.camera.givenParams.p(1:2) | ...
         psz.camera.optimizedParams.p(1:2);
 end
 
@@ -97,14 +97,14 @@ end
 %meanOffset=zeros(3,1);
 
 % Warn for non-uniform mark std.
-uniqueSigmas=unique(s0.markStd(:));
+uniqueSigmas=unique(s0.IP.std(:));
 
 % Warn for multiple sigmas for PhotoScan projects only if
 % some sigma is zero.
-if length(uniqueSigmas)~=1 && any(s0.markStd(:)==0)
+if length(uniqueSigmas)~=1 && any(s0.IP.std(:)==0)
     uniqueSigmas %#ok<NOPRT>
     warning('Multiple mark point sigmas')
-    s0.markStd(s0.markStd==0)=1;
+    s0.IP.std(s0.IP.std==0)=1;
 end
 
 s=s0;
@@ -122,10 +122,10 @@ fprintf('Running the bundle with damping %s...\n',damping);
     
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
-            iters,sigma0,sigma0*s.prior.sigmas(1));
+            iters,sigma0,sigma0*s.IP.sigmas(1));
 else
     fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.IP.sigmas(1));
 end
 
 % Pre-factorize posterior covariance matrix for speed.
@@ -134,7 +134,7 @@ E=bundle_cov(result,E,'prepare');
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,[inputName,'-dbatreport.txt']);
 
-COP=bundle_result_file(result,E,reportFile);
+[COP,result]=bundle_result_file(result,E,reportFile);
 
 OPstd=full(reshape(sqrt(diag(COP)),3,[])); %#ok<NASGU>
 CEO=bundle_cov(result,E,'CEO');
@@ -147,10 +147,10 @@ fprintf('\nBundle report file %s generated.\n',reportFile);
 % Input statistics. Number of images, CP, OP, a priori CP sigma,
 % number of observations, number of parameters, redundacy, ray
 % count and angle min+max+avg.
-nImages=size(s.EO,2);
-nCP=nnz(s.isCtrl);
-nOP=nnz(~s.isCtrl);
-sigmaCP=unique(s.prior.OPstd(:,s.isCtrl)','rows')';
+nImages=size(s.EO.val,2);
+nCP=nnz(s.OP.prior.isCtrl);
+nOP=nnz(~s.OP.prior.isCtrl);
+sigmaCP=unique(s.OP.prior.std(:,s.OP.prior.isCtrl)','rows')';
 if all(sigmaCP==0)
     sigmaCPstr='fixed';
 else
@@ -179,16 +179,16 @@ m=E.numObs;
 n=E.numParams;
 r=E.redundancy;
 
-rayCount=full(sum(s.vis,2));
+rayCount=full(sum(s.IP.vis,2));
 rayAng=angles(result,'Computing ray angles')*180/pi;
 
-OPrayCount=rayCount(~s.isCtrl);
-OPrayAng=rayAng(~s.isCtrl);
+OPrayCount=rayCount(~s.OP.prior.isCtrl);
+OPrayAng=rayAng(~s.OP.prior.isCtrl);
 if isempty(OPrayCount), OPrayCount=0; end
 if isempty(OPrayAng), OPrayAng=0; end
 
-CPrayCount=rayCount(s.isCtrl);
-CPrayAng=rayAng(s.isCtrl);
+CPrayCount=rayCount(s.OP.prior.isCtrl);
+CPrayAng=rayAng(s.OP.prior.isCtrl);
 if isempty(CPrayCount), CPrayCount=0; end
 if isempty(CPrayAng), CPrayAng=0; end
 
@@ -232,25 +232,25 @@ end
 imName='';
 imNo=1;
 % Check if image files exist.
-if exist(s0.imDir,'dir')
+if exist(s0.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
-    imNames={s0.imNames{imNo},lower(s0.imNames{imNo}),upper(s0.imNames{imNo})};    
-    imNames=fullfile(s0.imDir,imNames);
+    imNames={s0.EO.name{imNo},lower(s0.EO.name{imNo}),upper(s0.EO.name{imNo})};    
+    imNames=fullfile(s0.proj.imDir,imNames);
     imExist=cellfun(@(x)exist(x,'file')==2,imNames);
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
 else
-    warning('Image directory %s does not exist.',s0.imDir);
+    warning('Image directory %s does not exist.',s0.proj.imDir);
 end
 
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     h=[h;imshow(imName,'parent',gca(imFig))]; %#ok<NASGU>
-    pts=s0.markPts(:,s0.colPos(s0.vis(:,imNo),imNo));
-    ptsId=s0.OPid(s0.vis(:,imNo));
-    isCtrl=s0.isCtrl(s0.vis(:,imNo));
+    pts=s0.IP.val(:,s0.IP.ix(s0.IP.vis(:,imNo),imNo));
+    ptsId=s0.OP.id(s0.IP.vis(:,imNo));
+    isCtrl=s0.OP.prior.isCtrl(s0.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

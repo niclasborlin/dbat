@@ -173,40 +173,22 @@ prob.OPlabels(ia)=ctrlPts.name(ib);
 s0=prob2dbatstruct(prob);
 ss0=s0;
 
-% Don't estimate IO data, i.e. treat it as exact.  This block is not
-% really necessary, but may serve as a starting point if IO
-% parameters are to be estimated.
-s0.IO=s0.prior.IO;
-s0.estIO=false(size(s0.IO));
-s0.useIOobs=false(size(s0.IO));
-
-% Add self-calibration for all non-zero parameters...
-%s0.estIO(1:3+s0.nK+s0.nP)=s0.IO(1:3+s0.nK+s0.nP)~=0;
-
 % Estimate f, pp, K1-K3, P1-P2
-selfCal=true(8,1);
-%selfCal(7:8)=false;
+selfCal=ismember(1:size(s0.IO.val,1),[1:3,6:10]);
 % Indicate that we want to estimate these parameters.
-s0.estIO(find(selfCal),:)=true;
+s0.bundle.est.IO(find(selfCal),:)=true;
 % Zero any unused lens distortion parameters.
-s0.IO(find(~selfCal),:)=0;
-
-% ...or for all lens distortion parameters.
-%s0.estIO(1:8)=true;
+s0.IO.val(find(~selfCal),:)=0;
 
 % Switch to Forward/Computer Vision lens distortion model for all cameras.
-s0.IOdistModel(:)=-1;
+s0.IO.model.distModel(:)=-1;
 
-% Use supplied EO data as initial values. Again, this block is not
-% really necessary but may serve as a starting point for modifications.
-s0.EO=s0.prior.EO;
-s0.estEO(1:6,:)=true; % 7th element is just the axis convention.
-s0.useEOobs=false(size(s0.EO));
+% Use supplied EO data as initial values.
 
 % Use estimated OP values as initial.
 
 % Warn for non-uniform mark std.
-uniqueSigmas=unique(s0.markStd(:));
+uniqueSigmas=unique(s0.IP.std(:));
 
 if length(uniqueSigmas)~=1
     uniqueSigmas
@@ -215,8 +197,8 @@ end
 
 if all(uniqueSigmas==0)
     warning('All mark point sigmas==0. Using sigma==1 instead.');
-    s0.prior.sigmas=1;
-    s0.markStd(:)=1;
+    s0.IP.sigmas=1;
+    s0.IP.std(:)=1;
 end
 
 % Datum is given by CPs.
@@ -229,16 +211,16 @@ fprintf('\nRunning the bundle with damping %s...\n',damping);
     
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...
-            iters,sigma0,sigma0*s0.prior.sigmas(1));
+            iters,sigma0,sigma0*s0.IP.sigmas(1));
 else
     fprintf(['Bundle failed after %d iterations (code=%d). Last sigma0 estimate=%.2f ' ...
-             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.prior.sigmas(1));
+             '(%.2f pixels)\n'],iters,E.code,sigma0,sigma0*s0.IP.sigmas(1));
 end
 
 % Pre-factorize posterior covariance matrix for speed.
 E=bundle_cov(result,E,'prepare');
 
-COP=bundle_result_file(result,E,reportFile);
+[COP,result]=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
@@ -265,25 +247,25 @@ end
 imName='';
 imNo=1;
 % Check if image files exist.
-if exist(s0.imDir,'dir')
+if exist(s0.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
-    imNames={s0.imNames{imNo},lower(s0.imNames{imNo}),upper(s0.imNames{imNo})};    
-    imNames=fullfile(s0.imDir,imNames);
+    imNames={s0.EO.name{imNo},lower(s0.EO.name{imNo}),upper(s0.EO.name{imNo})};    
+    imNames=fullfile(s0.proj.imDir,imNames);
     imExist=cellfun(@(x)exist(x,'file')==2,imNames);
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
 else
-    warning('Image directory %s does not exist.',s0.imDir);
+    warning('Image directory %s does not exist.',s0.proj.imDir);
 end
 
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     h=[h;imshow(imName,'parent',gca(imFig))];
-    pts=s0.markPts(:,s0.colPos(s0.vis(:,imNo),imNo));
-    ptsId=s0.OPid(s0.vis(:,imNo));
-    isCtrl=s0.isCtrl(s0.vis(:,imNo));
+    pts=s0.IP.val(:,s0.IP.ix(s0.IP.vis(:,imNo),imNo));
+    ptsId=s0.OP.id(s0.IP.vis(:,imNo));
+    isCtrl=s0.OP.prior.isCtrl(s0.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

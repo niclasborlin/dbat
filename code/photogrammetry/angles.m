@@ -16,18 +16,18 @@ function a=angles(s,msg)
 
 if nargin<2, msg=''; end
 
-a=nan(size(s.OPid));
+a=nan(size(s.OP.id));
 
 % Delayed progress dialog.
 start=clock;
 lapTime=start;
 h=[];
 
-for i=1:length(s.OPid)
+for i=1:length(s.OP.id)
     % Point
-    p=s.OP(:,i);
+    p=s.OP.val(:,i);
     % Camera centers.
-    cc=s.EO(1:3,s.vis(i,:));
+    cc=s.EO.val(1:3,s.IP.vis(i,:));
     % How many rays?
     switch size(cc,2)
       case 0
@@ -47,15 +47,15 @@ for i=1:length(s.OPid)
     
     if ~isempty(msg)
         % Use waitbar only if we have a message.
-        if isempty(h) && etime(clock,start)>1 && i~=length(s.OPid)
+        if isempty(h) && etime(clock,start)>1 && i~=length(s.OP.id)
             % Only create dialog if execution takes more than 1s and this
             % iteration is not the last.
-            h=waitbar(i/length(s.OPid),msg);
+            h=waitbar(i/length(s.OP.id),msg);
             lapTime=clock;
         elseif etime(clock,lapTime)>1
             % Update dialog every 1 s.
             if ishandle(h) % Guard against window close.
-                waitbar(i/length(s.OPid),h);
+                waitbar(i/length(s.OP.id),h);
                 pause(0.01);
             end
             lapTime=clock;

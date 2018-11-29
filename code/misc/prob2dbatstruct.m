@@ -159,24 +159,17 @@ function s=prob2dbatstruct(prob,individualCameras)
 %
 %   PARAMETER TYPES:
 %
-%   Each IO column stores the parameters below. Only the first 10
-%   may be estimated by the bundle.
+%   Each IO column stores the parameters below.
+%       cc      - camera constant in camera units (typically mm).
 %       px,
-%       py      - principal point in camera units (typically mm).
-%       cc      - camera constant in camera units.
+%       py      - principal point in camera units.
+%       af      - affine parameter. Aspect will be (1+af):1.
+%       sk      - skew parameter.
 %       K1,
 %       K2,
 %       K3      - radial distortion parameters of Brown (1971).
 %       P1,
 %       P2      - tangential distortion parameters of Brown (1971).
-%       fa      - affine parameter. Aspect will be (1+fa):1.
-%       fs      - skew parameters.
-%       sw,
-%       sh      - sensor width and height in camera units.
-%       iw,
-%       ih      - image width in pixels.
-%       rx,
-%       ry      - image resolution.
 %
 %   The names above are stored in the paramTypes.IO field. If
 %   multiple IO columns are present, the column number is appended.
@@ -189,8 +182,6 @@ function s=prob2dbatstruct(prob,individualCameras)
 %       omega,
 %       phi,
 %       kappa   - Euler angles for the camera orientation in radians.
-%       tt      - parameter indicating which Euler convention is
-%                 used. Currently only t=0 (omega, phi,kappa) is supported.
 %
 %   The first two letters of the names above are stored in the
 %   paramTypes.EO field. If multiple EO columns are present, a camera
@@ -219,8 +210,14 @@ end
 nImages=length(prob.images);
 nOP=length(unique([prob.ctrlPts(:,1);prob.objPts(:,1)]));
 
+% Number of lens distortion coefficients.
+nK=3;
+nP=2;
+ixK=5+(1:nK);
+ixP=5+nK+(1:nP);
+
 % Internal orientation.
-IO=nan(16,nImages);
+IO=nan(5+nK+nP,nImages);
 IOstd=nan(size(IO));
 IOcov=[];
 
@@ -229,57 +226,47 @@ if individualCameras
     inner=cat(1,prob.images.inner)';
     innerStd=cat(1,prob.images.innerStd)';
     imSz=reshape(cat(1,prob.images.imSz),2,[]);
-    IOblock=repmat(1:nImages,1,16);
+    IOblock=repmat(1:nImages,5+nK+nP,1);
 else
     % Block-invariant
     inner=repmat(prob.job.defCam,1,nImages);
     innerStd=repmat(prob.job.defCamStd,1,nImages);
     imSz=repmat(prob.job.imSz(:),1,nImages);
-    IOblock=ones(16,nImages);
+    IOblock=ones(5+nK+nP,nImages);
 end
-IOlead=[];
 
 % Principal point. Flip y coordinate.
-IO(1:2,:)=diag([1,-1])*inner(2:3,:);
-IOstd(1:2,:)=innerStd(2:3,:);
+IO(2:3,:)=diag([1,-1])*inner(2:3,:);
+IOstd(2:3,:)=innerStd(2:3,:);
 % Camera constant.
-IO(3,:)=inner(1,:);
-IOstd(3,:)=innerStd(1,:);
+IO(1,:)=inner(1,:);
+IOstd(1,:)=innerStd(1,:);
 % Radial distortion coefficients K1, K2, K3.
-nK=3;
-IO(3+(1:nK),:)=-inner(5+(1:nK),:);
-IOstd(3+(1:nK),:)=innerStd(5+(1:nK),:);
+IO(ixK,:)=-inner(5+(1:nK),:);
+IOstd(ixK,:)=innerStd(5+(1:nK),:);
 % Tangential distortion coefficients P1, P2.
-nP=2;
-IO(3+nK+(1:nP),:)=-inner(5+nK+(1:nP),:);
-IOstd(3+nK+(1:nP),:)=innerStd(5+nK+(1:nP),:);
+IO(ixP,:)=-inner(5+nK+(1:nP),:);
+IOstd(ixP,:)=innerStd(5+nK+(1:nP),:);
+
 % Sensor size in camera units.
-IO(3+nK+nP+2+(1:2),:)=inner(4:5,:);
-IOstd(3+nK+nP+2+(1:2),:)=innerStd(4:5,:);
-% Image size in pixels.
-IO(3+nK+nP+4+(1:2),:)=imSz;
-IOstd(3+nK+nP+4+(1:2),:)=0;
-% Sensor resolution.
-IO(3+nK+nP+6+(1:2),:)=IO(3+nK+nP+4+(1:2),:)./IO(3+nK+nP+2+(1:2),:);
+sensorSize=inner(4:5,:);
+
+% Pixel size
+pixelSize=sensorSize./imSz;
+
 % Use y as the pixel size. Store diff as aspect.
-pixelSize=IO(3+nK+nP+6+(1:2),:);
-IO(3+nK+nP+6+(1:2),:)=pixelSize([2,2],:);
-% Aspect
-IO(3+nK+nP+1,:)=1-pixelSize(1,:)./pixelSize(2,:);
-IOstd(3+nK+nP+1,:)=0; % TODO: Fix this estimate.
-% Skew.
-IO(3+nK+nP+2,:)=0;
-IOstd(3+nK+nP+2,:)=0;
+aspect=1-pixelSize(1,:)./pixelSize(2,:);
+pixelSize=pixelSize([2,2],:);
+samePxSize=isscalar(unique(pixelSize));
 
-% First-order error propagation.
-% C=A/B; std(C) = abs(A/B^2)*std(B).
-IOstd(3+nK+nP+6+(1:2),:)=...
-    abs(IO(3+nK+nP+4+(1:2),:)./...
-        IO(3+nK+nP+2+(1:2),:).^2).*IOstd(3+nK+nP+2+(1:2),:);
+% No skew.
+skew=0;
 
+IO(4,:)=aspect;
+IO(5,:)=skew;
 
 % External orientation.    
-EO=nan(7,nImages);
+EO=nan(6,nImages);
 EOcov=[];
 
 outer=cat(1,prob.images.outer)';
@@ -290,8 +277,6 @@ EOstd(1:3,:)=outerStd(1:3,:);
 % Euler angles, stored as kappa, phi, omega in PM file.
 EO(4:6,:)=outer([6,5,4],:)/180*pi;
 EOstd(4:6,:)=outerStd([6,5,4],:)/180*pi;
-EO(7,:)=0;
-EOstd(7,:)=0;
 
 imNames=cellfun(@(x)strrep(x,'\','/'),{prob.images.imName},...
                 'uniformoutput',false);
@@ -302,8 +287,7 @@ imLabels=cellfun(@(x)strrep(x,'\','/'),{prob.images.label},...
 camIds=cell2mat({prob.images.id});
 
 % Default to no common cam stations.
-EOblock=repmat(1:nImages,7,1);
-EOlead=[];
+EOblock=repmat(1:nImages,6,1);
 
 % Find shortest common dir prefix.
 imDirs=unique(cellfun(@fileparts,imNames,'uniformoutput',false));
@@ -335,59 +319,29 @@ imNames=cellfun(@(x)x(length(imDir)+1:end),imNames,'uniformoutput',false);
 % Object and control points.
 OP=nan(3,nOP);
 OPstd=nan(3,nOP);
-CP=nan(3,nOP);
-CPstd=nan(3,nOP);
-CPcov=[];
-CCP=nan(3,nOP);
-CCPstd=nan(3,nOP);
-CCPcov=[];
-[OPid,i]=sort(prob.objPts(:,1),'ascend');
-OPrawId=prob.rawOPids(i);
-OPlabels=prob.OPlabels(i);
+priorCP=nan(size(OP));
+priorCPstd=nan(size(OP));
+[OPid,i]=sort(prob.objPts(:,1)','ascend'); %#ok<UDIM>
+OPrawId=prob.rawOPids(i)';
+OPlabels=prob.OPlabels(i)';
 
-isCtrl=ismember(OPid,prob.ctrlPts(:,1));
-isCheck=ismember(OPid,prob.checkPts(:,1));
+isCtrl=ismember(OPid,prob.ctrlPts(:,1)');
+isCheck=ismember(OPid,prob.checkPts(:,1)');
 
-% Copy object point coordinates...
+% Copy current object point coordinates...
 [~,ia,ib]=intersect(OPid,prob.objPts(:,1));
 OP(:,ia)=prob.objPts(ib,2:4)';
 OPstd(:,ia)=prob.objPts(ib,5:7)';
 
 % ...and control point coordinates...
 [~,ia,ib]=intersect(OPid,prob.ctrlPts(:,1));
-CP(:,ia)=prob.ctrlPts(ib,2:4)';
-CPstd(:,ia)=prob.ctrlPts(ib,5:7)';
+priorCP(:,ia)=prob.ctrlPts(ib,2:4)';
+priorCPstd(:,ia)=prob.ctrlPts(ib,5:7)';
 
 % ...and check point coordinates...
 [~,ia,ib]=intersect(OPid,prob.checkPts(:,1));
-CCP(:,ia)=prob.checkPts(ib,2:4)';
-CCPstd(:,ia)=prob.checkPts(ib,5:7)';
-
-OPtypes={'OX','OY','OZ'}';
-if size(OP,2)>1
-    OPtypes=repmat(OPtypes,1,size(OP,2));
-    if any(isCtrl)
-        OPtypes(:,isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(isCtrl));
-    end
-    if any(isCheck)
-        OPtypes(:,isCheck)=repmat({'HX','HY','HZ'}',1,nnz(isCheck));
-    end
-
-    for i=1:size(OP,2)
-        % Id for this OP.
-        OPstr=sprintf('-%d',i);
-        if OPid(i)~=i
-            OPstr=[OPstr,sprintf('/%d',OPid(i))]; %#ok<AGROW>
-        end
-        if OPrawId(i)~=OPid(i)
-            OPstr=[OPstr,sprintf('/%d',OPrawId(i))]; %#ok<AGROW>
-        end
-        if ~isempty(OPlabels{i})
-            OPstr=[OPstr,'-',OPlabels{i}]; %#ok<AGROW>
-        end
-        OPtypes(:,i)=cellfun(@(x)[x,OPstr],OPtypes(:,i),'uniformoutput',false);
-    end
-end
+priorCP(:,ia)=prob.checkPts(ib,2:4)';
+priorCPstd(:,ia)=prob.checkPts(ib,5:7)';
 
 % Find out how many mark points have corresponding object/control points.
 imId=unique(prob.markPts(:,1:2),'rows');
@@ -396,6 +350,7 @@ nMarkPts=nnz(ismember(imId(:,2),OPid));
 % Measured coordinates and visibility matrix.
 markPts=nan(2,nMarkPts);
 markStd=nan(2,nMarkPts);
+IPid=nan(1,nMarkPts);
 % Visibility matrix.
 vis=logical(spalloc(nOP,nImages,nMarkPts));
 % Column "pointer".
@@ -411,11 +366,12 @@ for i=1:nImages
     [~,k]=sort(measured(:,2));
     measured=measured(k,:);
     % Find out which measured points correspond to object/control points.
-    valid=ismember(measured(:,2),OPid);
+    valid=ismember(measured(:,2)',OPid);
+    IPid(ii+(1:nnz(valid)))=measured(valid,2)';
     markPts(:,ii+(1:nnz(valid)))=measured(valid,3:4)';
     markStd(:,ii+(1:nnz(valid)))=measured(valid,5:6)';
     % Update visibility column and pointers.
-    vis(:,i)=ismember(OPid,measured(:,2));
+    vis(:,i)=ismember(OPid,measured(:,2)')';
     colPos(vis(:,i),i)=ii+(1:nnz(valid)); %#ok<SPRIX> % Consider replacing indexing for speed
     ii=ii+nnz(valid);
 end
@@ -427,38 +383,26 @@ if isscalar(priorSigmas)
         priorSigmas=1;
         markStd(:)=priorSigmas;
     end
-    priorSigma=priorSigmas;
 else
     warning('Multiple prior sigmas detected. Using prior sigma==1.');
     priorSigmas %#ok<NOPRT>
-    priorSigma=1;
 end
     
 % Pre-calculate which camera corresponds to each point.
 [~,j]=find(vis);
 ptCams=j';
 
-prior=struct('IO',IO,'IOstd',IOstd,'IOcov',IOcov,...
-             'EO',EO,'EOstd',EOstd,'EOcov',EOcov,...
-             'OP',CP,'OPstd',CPstd,'OPcov',CPcov,...
-             'CCP',CCP,'CCPstd',CCPstd,'CCPcov',CCPcov,...
-             'sigmas',priorSigma);
-
-residuals=struct('IP',nan(2,nMarkPts), 'IO',nan(size(IO)), 'EO', ...
-                 nan(size(EO)), 'OP',nan(size(OP)));
-
 % Treat IO as fixed.
 estIO=false(size(IO));
 useIOobs=false(size(IO));
 % Treat EO as free.
 estEO=true(size(EO));
-estEO(end,:)=false;
 useEOobs=false(size(EO));
 % Estimate all non-fixed OP.
-estOP=~(prior.OPstd==0);
+estOP=~(priorCPstd==0);
 % Use all non-fixed CP observations. For fixed CP, we only need the
 % current "observation".
-useOPobs=~isnan(prior.OP) & ~(prior.OPstd==0);
+useOPobs=repmat(isCtrl,3,1);
 
 % Default camera and object space units.
 camUnit='mm';
@@ -467,24 +411,152 @@ objUnit='m';
 % Default to model 1 - backward Brown.
 IOdistModel=ones(1,size(IO,2));
 
-s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,...
-         'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds,...
-         'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,'IOblock',IOblock,...
-         'IOlead',IOlead,'imCams',[],'IOunique',[],'IOno',[],'IOsimple',[],...
-         'EO',EO,'EOstd',EOstd,'EOblock',EOblock,'EOunique',[],'EOno',[],...
-         'EOsimple',[],'EOlead',EOlead,...
-         'OP',OP,'OPstd',OPstd,'OPid',OPid,...
-         'OPrawId',OPrawId,'OPlabels',{OPlabels},...
-         'isCtrl',isCtrl,'isCheck',isCheck,...
-         'markPts',markPts,'markStd',markStd,'ptCams',ptCams,...
-         'vis',vis,'colPos',colPos,...
-         'prior',prior,...
-         'residuals',residuals,...
-         'estIO',estIO,'estEO',estEO,'estOP',estOP,...
-         'serial',[],'deserial',[],...
-         'useIOobs',useIOobs,'useEOobs',useEOobs,'useOPobs',useOPobs,...
-         'paramTypes',[],...
-         'nK',nK,'nP',nP,'camUnit',camUnit,...
-         'objUnit',objUnit,'x0desc','');
+% Create project structure.
+proj=struct('objUnit',objUnit,...
+            'x0desc','',...
+            'title',prob.job.title,...
+            'imDir',imDir,...
+            'fileName',prob.job.fileName);
 
+% Create structure for sensor data.
+IOsensor=struct('ssSize',sensorSize,...
+                'imSize',imSz,...
+                'pxSize',pixelSize,...
+                'samePxSize',samePxSize);
+
+% Create structure for inner orientation model.
+IOmodel=struct('distModel',IOdistModel,...
+               'nK',nK,...
+               'nP',nP,...
+               'camUnit',camUnit);
+
+% Create structure for prior IO data.
+priorIO=struct('val',IO,...
+               'std',IOstd,...
+               'cov',IOcov,...
+               'use',useIOobs);
+
+% Create structure for IO data structure.
+IOstruct=struct('block',IOblock,...
+                'leading',[],...
+                'uniq',[],...
+                'no',[],...
+                'isSimple',[]);
+
+% Create struct with internal orientation data.
+IOstr=struct('val',IO,...
+             'model',IOmodel,...
+             'sensor',IOsensor,...
+             'type',[],...
+             'prior',priorIO,...
+             'struct',IOstruct);
+
+% Create structure for prior EO data.
+priorEO=struct('val',EO,...
+               'std',EOstd,...
+               'cov',EOcov,...
+               'use',useEOobs);
+
+% Create structure for EO data structure.
+EOstruct=struct('block',EOblock,...
+                'leading',[],...
+                'uniq',[],...
+                'no',[],...
+                'isSimple',[]);
+
+% Create structure with external orientation data.
+EOstr=struct('val',EO,...
+             'model',zeros(1,size(EO,2)),...
+             'type',[],...
+             'cam',[],...
+             'name',{imNames},...
+             'id',camIds,...
+             'label',{imLabels},...
+             'prior',priorEO,...
+             'struct',EOstruct);
+
+% Create structure for prior OP data.
+priorOP=struct('val',priorCP,...
+               'std',priorCPstd,...
+               'cov',[],...
+               'use',useOPobs,...
+               'isCtrl',isCtrl,...
+               'isCheck',isCheck);
+
+% Create structure with object point data.
+OPstr=struct('val',OP,...
+             'type',[],...
+             'id',OPid,...
+             'rawId',OPrawId,...
+             'label',{OPlabels},...
+             'prior',priorOP);
+
+% Create structure with image point data.
+IPstr=struct('val',markPts,...
+             'std',markStd,...
+             'cov',[],...
+             'use',[],...
+             'type',[],...
+             'id',IPid,...
+             'ptCams',ptCams,...
+             'vis',vis,...
+             'ix',colPos,...
+             'sigmas',priorSigmas);
+
+% Create struct with bundle estimation data.
+bundle=struct(...
+    'est',struct(...
+        'IO',estIO,...
+        'EO',estEO,...
+        'OP',estOP),...
+    'serial',[],...
+    'deserial',[]);
+
+% Create struct with posterior bundle data.
+post=struct(...
+    'res',struct(...
+        'IP',[],...
+        'IO',[],...
+        'EO',[],...
+        'OP',[],...
+        'ix',[]),...
+    'sigmas',[],...
+    'std',struct(...
+        'IO',[],...
+        'EO',[],...
+        'OP',[]),...
+    'sensor',struct(...
+        'ssSize',[],...
+        'imSize',[],...
+        'pxSize',[]));
+
+s=struct('proj',proj,...
+         'IO',IOstr,...
+         'EO',EOstr,...
+         'OP',OPstr,...
+         'IP',IPstr,...
+         'bundle',bundle,...
+         'post',post);
+
+% s=struct('fileName',prob.job.fileName,'title',prob.job.title,'imDir',imDir,...
+%          'imNames',{imNames},'imLabels',{imLabels},'camIds',camIds,...
+%          'IO',IO,'IOstd',IOstd,'IOdistModel',IOdistModel,'IOblock',IOblock,...
+%          'IOlead',IOlead,'imCams',[],'IOunique',[],'IOno',[],'IOsimple',[],...
+%          'EO',EO,'EOstd',EOstd,'EOblock',EOblock,'EOunique',[],'EOno',[],...
+%          'EOsimple',[],'EOlead',EOlead,...
+%          'OP',OP,'OPstd',OPstd,'OPid',OPid,...
+%          'OPrawId',OPrawId,'OPlabels',{OPlabels},...
+%          'isCtrl',isCtrl,'isCheck',isCheck,...
+%          'markPts',markPts,'markStd',markStd,'ptCams',ptCams,...
+%          'vis',vis,'colPos',colPos,...
+%          'prior',prior,...
+%          'residuals',residuals,...
+%          'estIO',estIO,'estEO',estEO,'estOP',estOP,...
+%          'serial',[],'deserial',[],...
+%          'useIOobs',useIOobs,'useEOobs',useEOobs,'useOPobs',useOPobs,...
+%          'paramTypes',[],...
+%          'nK',nK,'nP',nP,'camUnit',camUnit,...
+%          'objUnit',objUnit,'x0desc','');
+
+s=buildserialindices(s,true);
 s=buildparamtypes(s);

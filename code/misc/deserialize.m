@@ -25,9 +25,9 @@ switch nargin
     % DESERIALIZE(S,X).
     
     % Copy elements to pre-calculated selection and ordering.
-    s.IO(s.deserial.IO.dest)=x(s.deserial.IO.src);
-    s.EO(s.deserial.EO.dest)=x(s.deserial.EO.src);
-    s.OP(s.deserial.OP.dest)=x(s.deserial.OP.src);
+    s.IO.val(s.bundle.deserial.IO.dest)=x(s.bundle.deserial.IO.src);
+    s.EO.val(s.bundle.deserial.EO.dest)=x(s.bundle.deserial.EO.src);
+    s.OP.val(s.bundle.deserial.OP.dest)=x(s.bundle.deserial.OP.src);
   case 3
     % DESERIALIZE(S,E,I).
     E=x;
@@ -41,9 +41,9 @@ switch nargin
         i=size(E.trace,2)-1;
     end
     % Copy elements to pre-calculated selection and ordering.
-    s.IO(s.deserial.IO.dest)=E.trace(s.deserial.IO.src,i+1);
-    s.EO(s.deserial.EO.dest)=E.trace(s.deserial.EO.src,i+1);
-    s.OP(s.deserial.OP.dest)=E.trace(s.deserial.OP.src,i+1);
+    s.IO.val(s.bundle.deserial.IO.dest)=E.trace(s.bundle.deserial.IO.src,i+1);
+    s.EO.val(s.bundle.deserial.EO.dest)=E.trace(s.bundle.deserial.EO.src,i+1);
+    s.OP.val(s.bundle.deserial.OP.dest)=E.trace(s.bundle.deserial.OP.src,i+1);
   case 4
     % DESERIALIZE(S,E,V,'IO'/'EO'/'OP')
     E=x;
@@ -64,12 +64,12 @@ switch nargin
     switch what
       case 'IO'
         % Replicate IO values.
-        IO=repmat(s.IO,[1,1,length(v)]);
+        IO=repmat(s.IO.val,[1,1,length(v)]);
         if ~isempty(v)
-            destIx=s.deserial.IO.dest;
-            srcIx=s.deserial.IO.src;
+            destIx=s.bundle.deserial.IO.dest;
+            srcIx=s.bundle.deserial.IO.src;
             % Convert destination indices to row, column.
-            [ii,jj]=ind2sub(size(s.IO),destIx);
+            [ii,jj]=ind2sub(size(s.IO.val),destIx);
             for i=1:length(v)
                 % Update layer i.
                 IO(sub2ind(size(IO),ii,jj,repmat(i,size(ii))))=...
@@ -79,12 +79,12 @@ switch nargin
         s=IO;
       case 'EO'
         % Replicate EO values.
-        EO=repmat(s.EO,[1,1,length(v)]);
+        EO=repmat(s.EO.val,[1,1,length(v)]);
         if ~isempty(v)
-            destIx=s.deserial.EO.dest;
-            srcIx=s.deserial.EO.src;
+            destIx=s.bundle.deserial.EO.dest;
+            srcIx=s.bundle.deserial.EO.src;
             % Convert destination indices to row, column.
-            [ii,jj]=ind2sub(size(s.EO),destIx);
+            [ii,jj]=ind2sub(size(s.EO.val),destIx);
             for i=1:length(v)
                 % Update layer i.
                 EO(sub2ind(size(EO),ii,jj,repmat(i,size(ii))))=...
@@ -94,12 +94,12 @@ switch nargin
         s=EO;
       case 'OP'
         % Replicate OP values.
-        OP=repmat(s.OP,[1,1,length(v)]);
+        OP=repmat(s.OP.val,[1,1,length(v)]);
         if ~isempty(v)
-            destIx=s.deserial.OP.dest;
-            srcIx=s.deserial.OP.src;
+            destIx=s.bundle.deserial.OP.dest;
+            srcIx=s.bundle.deserial.OP.src;
             % Convert destination indices to row, column.
-            [ii,jj]=ind2sub(size(s.OP),destIx);
+            [ii,jj]=ind2sub(size(s.OP.val),destIx);
             for i=1:length(v)
                 % Update layer i.
                 OP(sub2ind(size(OP),ii,jj,repmat(i,size(ii))))=...

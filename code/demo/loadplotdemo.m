@@ -81,31 +81,31 @@ hh=plotnetwork(s,'title',titleStr,alignCmd{:},'camsize',camSize,...
 imName='';
 imNo=1;
 % Check if image files exist.
-isAbsPath=~isempty(s.imDir) && ismember(s.imDir(1),'\\/') || ...
-          length(s.imDir)>1 && s.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s.imDir),'dir')
+isAbsPath=~isempty(s.proj.imDir) && ismember(s.proj.imDir(1),'\\/') || ...
+          length(s.proj.imDir)>1 && s.proj.imDir(2)==':';
+if ~isAbsPath && exist(fullfile(curDir,s.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s.imDir=fullfile(curDir,s.imDir);
+    s.proj.imDir=fullfile(curDir,s.proj.imDir);
 end
-if exist(s.imDir,'dir')
+if exist(s.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
-    imNames={s.imNames{imNo},lower(s.imNames{imNo}),upper(s.imNames{imNo})};    
-    imNames=fullfile(s.imDir,imNames);
+    imNames={s.EO.name{imNo},lower(s.EO.name{imNo}),upper(s.EO.name{imNo})};    
+    imNames=fullfile(s.proj.imDir,imNames);
     imExist=cellfun(@(x)exist(x,'file')==2,imNames);
     if any(imExist)
         imName=imNames{find(imExist,1,'first')};
     end
 else
-    warning('Image directory %s does not exist.',s.imDir);
+    warning('Image directory %s does not exist.',s.proj.imDir);
 end
 
 if exist(imName,'file')
     fprintf('Plotting measurements on image %d.\n',imNo);
     imFig=tagfigure('image');
     hh=[hh;imshow(imName,'parent',gca(imFig))];
-    pts=s.markPts(:,s.colPos(s.vis(:,imNo),imNo));
-    ptsId=s.OPid(s.vis(:,imNo));
-    isCtrl=s.isCtrl(s.vis(:,imNo));
+    pts=s.IP.val(:,s.IP.ix(s.IP.vis(:,imNo),imNo));
+    ptsId=s.OP.id(s.IP.vis(:,imNo));
+    isCtrl=s.OP.prior.isCtrl(s.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

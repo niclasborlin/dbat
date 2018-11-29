@@ -1,26 +1,35 @@
-function s=buildserialindices(s,wantedOrder)
+function ss=buildserialindices(ss,wantedOrder)
 %BUILDSERIALINDICES Compute serialize and deserialize indices.
 %
-%   S0=BUILDSERIALINDICES(S0) populates the serial/deserial fields of
-%   the DBAT struct S0 based on the information in the IOblock,
-%   EOblock, and estIO, estEO, estOP fields, as described below. The
-%   order of the elements are IO, EO, and OP as default. Use
-%   SERIALIZE(S0,ORDER), where ORDER is a cell array with strings
-%   'IO', 'EO', 'OP' to modify the order.
+%   S0=BUILDSERIALINDICES(S0) populates the serial/deserial and
+%   post.res.ix fields of the DBAT struct S0 based on the information in
+%   the IO.struct.block, EO.struct.block, and bundle.est.* fields, as
+%   described below. The order of the elements are IO, EO, and OP as
+%   default. Use SERIALIZE(S0,ORDER), where ORDER is a cell array with
+%   strings 'IO', 'EO', 'OP' to modify the order.
 %
-%   S0.IOblock indicates how IO parameters are blocked, i.e., shared
-%   between images (columns). S0.estIO indicates what IO parameters
-%   should be estimated. The field serial.IO.src will indicate what IO
-%   elements should be inserted into the vector x of unknowns. The
-%   field serial.IO.dest will indicate where in x the elements should
-%   be put. Only the first element from each block will be copied.
+%   S0=BUILDSERIALINDICES(S0,TRUE) will only parse the
+%   IO.struct.block and EO.struct.block fields. The serial/deserial
+%   fields will be cleared.
 %
-%   Correspondingly, the deserial.IO.src indicate what estimated
-%   elements in x should be copied and deserial.IO.dest indicate where
-%   in IO the elements should be put.
+%   S0.IO.struct.block indicates how IO parameters are blocked, i.e.,
+%   shared between images (columns). S0.bundle.est.IO indicates what
+%   IO parameters should be estimated. The field bundle.serial.IO.src
+%   will indicate what IO elements should be inserted into the vector
+%   x of unknowns. The field bundle.serial.IO.dest will indicate where
+%   in x the elements should be put. Only the first element from each
+%   block will be copied.
+%
+%   Correspondingly, the bundle.deserial.IO.src indicate what
+%   estimated elements in x should be copied and
+%   bundle.deserial.IO.dest indicate where in IO the elements should
+%   be put.
 %
 %   Similar reason applies to EO and OP, except the OP parameters
 %   are all assumed to be distinct.
+%
+%   The post.res.ix struct contains subfields IP, IO, EO, OP with
+%   indices into the bundle residual vector.
 
 % Serialization:
 %
@@ -43,31 +52,46 @@ function s=buildserialindices(s,wantedOrder)
 %   deserial.OP.dest is index into OP.
 %
 % Observation ordering
-%   residuals.ix.IP - index into the residual vector for image observations.
-%   residuals.ix.IO - index into the residual vector for IO observations.
-%   residuals.ix.EO - index into the residual vector for EO observations.
-%   residuals.ix.OP - index into the residual vector for OP observations.
-%   residuals.ix.n  - total number of observations.
+%   post.res.ix.IP - index into the residual vector for image observations.
+%   post.res.ix.IO - index into the residual vector for IO observations.
+%   post.res.ix.EO - index into the residual vector for EO observations.
+%   post.res.ix.OP - index into the residual vector for OP observations.
+%   post.res.ix.n  - total number of observations.
 
-if nargin<2, wantedOrder={'IO','EO','OP'}; end
+if nargin<2, wantedOrder={'IO','EO','OP'}; parseOnly=false; end
+
+if islogical(wantedOrder)
+    parseOnly=wantedOrder;
+    wantedOrder={};
+end
 
 % Find unique IOblock and EOblock columns and indicate if columns
 % are simple.
-s.IOunique=false(1,size(s.IOblock,2));
-[~,ia,ic]=unique(s.IOblock','rows');
-s.IOunique(ia)=true;
-s.IOno=ic';
-s.IOsimple=all(s.IOblock==s.IOblock(ones(end,1),:),1);
+ss.IO.struct.uniq=false(1,size(ss.IO.struct.block,2));
+[~,ia,ic]=unique(ss.IO.struct.block','rows');
+ss.IO.struct.uniq(ia)=true;
+ss.IO.struct.no=ic';
+ss.IO.struct.isSimple=all(ss.IO.struct.block== ...
+                          ss.IO.struct.block(ones(end,1),:),1);
 
-s.EOunique=false(1,size(s.EOblock,2));
-[~,ia,ic]=unique(s.EOblock','rows');
-s.EOunique(ia)=true;
-s.EOno=ic';
-s.EOsimple=all(s.EOblock==s.EOblock(ones(end,1),:),1);
+ss.EO.struct.uniq=false(1,size(ss.EO.struct.block,2));
+[~,ia,ic]=unique(ss.EO.struct.block','rows');
+ss.EO.struct.uniq(ia)=true;
+ss.EO.struct.no=ic';
+ss.EO.struct.isSimple=all(ss.EO.struct.block== ...
+                          ss.EO.struct.block(ones(end,1),:),1);
+
+if parseOnly
+    % Create blank serial/deserial structs.
+    ss.bundle.serial=[];
+    ss.bundle.deserial=[];
+    return;
+end
 
 % Serialize each block. All x-related indices are 1-based.
-[IOlead,IOserial,IOdeserial,warn,blockIx]=serializeblock(s.IOblock,s.estIO,...
-                                                  s.useIOobs);
+[IOlead,IOserial,IOdeserial,warn,blockIx]=serializeblock(ss.IO.struct.block,...
+                                                  ss.bundle.est.IO, ...
+                                                  ss.IO.prior.use);
 if warn
     warning(['All IO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -76,24 +100,28 @@ end
 switch length(blockIx)
   case 0
     % No IO blocks. Legacy models will work with one IO column per
-    % image.
-    s.imCams=1:size(s.EO,2);
+    % image. FIXME
+    ss.EO.cam=1:size(ss.EO.val,2);
   case 1
     % One IO block. Legacy models require column indices to the
     % block. WARNING: Untested for blockIx!=1.
-    s.imCams=repmat(blockIx,1,size(s.EO,2));
+    ss.EO.cam=repmat(blockIx,1,size(ss.EO.val,2));
   otherwise
     % More than one code block => signal incompatibility with NaN's.
-    s.imCams=nan(1,size(s.EO,2));
+    ss.EO.cam=nan(1,size(ss.EO.val,2));
 end    
-[EOlead,EOserial,EOdeserial,warn]=serializeblock(s.EOblock,s.estEO,s.useEOobs);
+[EOlead,EOserial,EOdeserial,warn]=serializeblock(ss.EO.struct.block,...
+                                                 ss.bundle.est.EO,...
+                                                 ss.EO.prior.use);
 if warn
     warning(['All EO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
              'overwritten.']);
 end
-[~,OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(s.OP,2),3,1),s.estOP,...
-                                          s.useOPobs);
+
+[~,OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(ss.OP.val,2),3,1),...
+                                            ss.bundle.est.OP,...
+                                            ss.OP.prior.use);
 if warn
     warning(['All OP parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -124,32 +152,37 @@ end
 
 % Store arrays indicating leading parameters, i.e., the first
 % parameter within each block to be estimated.
-s.IOlead=IOlead;
-s.EOlead=EOlead;
-
+ss.IO.struct.leading=IOlead;
+ss.EO.struct.leading=EOlead;
 % Mask out any useObs that correspond to a repeated parameter.
-s.useIOobs=s.useIOobs & s.IOlead;
-s.useEOobs=s.useEOobs & s.EOlead;
+ss.IO.prior.use=ss.IO.prior.use & ss.IO.struct.leading;
+ss.EO.prior.use=ss.EO.prior.use & ss.EO.struct.leading;
 
 % Store indices.
-s.serial=struct('IO',IOserial,'EO',EOserial,'OP',OPserial,'n',n);
-s.deserial=struct('IO',IOdeserial,'EO',EOdeserial,'OP',OPdeserial,'n',n);
+ss.bundle.serial=struct('IO',IOserial,...
+                        'EO',EOserial,...
+                        'OP',OPserial,...
+                        'n',n);
+ss.bundle.deserial=struct('IO',IOdeserial,...
+                          'EO',EOdeserial,...
+                          'OP',OPdeserial,...
+                          'n',n);
 
 % Indices for observations.
 % Create indices into the residual vector. nObs is the total number
 % of observations.
-numObs=[nnz(s.vis)*2,length(IOserial.obs),length(EOserial.obs),...
+numObs=[nnz(ss.IP.vis)*2,length(IOserial.obs),length(EOserial.obs),...
         length(OPserial.obs)];
 [obsIPix,obsIOix,obsEOix,obsOPix,nObs]=indvec(numObs);
 
-s.residuals.ix=struct('IP',obsIPix,...
+ss.post.res.ix=struct('IP',obsIPix,...
                       'IO',obsIOix,...
                       'EO',obsEOix,...
                       'OP',obsOPix,...
                       'n',nObs);
 
 % Compute serialize indices for one block
-function [lead,serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
+function [leading,serial,deserial,warn,blockIx]=serializeblock(block,est,useObs)
 
 % Elements within one parameter block should all be marked as
 % 'estimate' or 'fixed', not a combination.
@@ -166,27 +199,27 @@ end
 block(~est)=0;
 
 % Find the leading elements of each row.
-lead=zeros(size(block));
+leading=zeros(size(block));
 for i=1:size(block,1)
   [~,ia,~]=unique([0,block(i,:)]);
-  lead(i,ia(2:end)-1)=1;
+  leading(i,ia(2:end)-1)=1;
 end
 
 % Return columns corresponding to parameter blocks.
-blockIx=find(any(lead,1));
+blockIx=find(any(leading,1));
 
 % Indices to serialize v (matrix -> vector)
-serial.src=find(lead);
-serial.dest=(1:nnz(lead))';
+serial.src=find(leading);
+serial.dest=(1:nnz(leading))';
 
 % Find subset of serial indices that correspond to parameters with
 % prior observations.
-serial.obs=find(useObs(lead>0));
+serial.obs=find(useObs(leading>0));
 
 % Now create the inverse mapping to distribute x elements to IO.
 % (This can be done quicker.)
-dist=lead;
-dist(lead~=0)=serial.dest;
+dist=leading;
+dist(leading~=0)=serial.dest;
 
 % Expand to all elements that should be equal.
 for k=1:length(serial.dest)

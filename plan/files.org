@@ -1,0 +1,181 @@
+- [3/3] code
+  - [10/10] file
+    - [X] loadcpt.m
+    - [X] loadlnz.m
+    - [X] loadpm.m
+    - [X] loadpm2dtbl.m
+    - [X] loadpm3dtbl.m
+    - [X] loadpmreport.m
+    - [X] loadpsz.m
+    - [X] plytoascii.m
+    - [X] unpackpsz.m
+    - [X] writestats.m
+  - [18/18] demo
+    - [X] camcaldemo.m
+    - [X] camcaldemo2.m
+    - [X] camcaldemo_1ray.m
+    - [X] camcaldemo_allmodels.m
+    - [X] camcaldemo_missing_obs.m
+    - [X] camcaldemo_no_datum.m
+    - [X] dbatdemos.m
+    - [X] loadplotdemo.m
+    - [X] loadplotpsz.m
+    - [X] prague2016_pm.m
+    - [X] prague2016_ps.m
+    - [X] ps_postproc.m
+    - [X] romabundledemo.m
+    - [X] romabundledemo_imagevariant.m
+    - [X] romabundledemo_selfcal.m
+    - [X] runalldemos.m
+    - [X] stpierrebundledemo_ps.m
+    - [X] stpierrebundledemo_ps_brown.m
+  - [19/19] photogrammetry
+    - [X] angles.m
+    - [X] applyhomoxform.m
+    - [X] camangles.m
+    - [X] camsfrome.m
+    - [X] coverage.m
+    - [X] derotmat3d.m
+    - [X] essmat5.m
+    - [X] euclidean.m
+    - [X] forwintersect.m
+    - [X] homogeneous.m
+    - [X] pm_forwintersect1.m
+    - [X] pm_forwintersect3.m
+    - [X] pm_multialign.m
+    - [X] pm_multidepth.m
+    - [X] pm_multiforwintersect.m
+    - [X] pm_multixform.m
+    - [X] pm_resect_3pt.m
+    - [X] ptdepth.m
+    - [X] resect.m
+  - [23/23] misc
+    - [X] abserr.m
+    - [X] analyzepsz.m
+    - [X] buildparamtypes.m
+    - [X] buildserialindices.m
+    - [X] buildweightmatrix.m
+    - [X] corrmat.m
+    - [X] cumchi2.m
+    - [X] deserialize.m
+    - [X] ihist.m
+    - [X] indvec.m
+    - [X] isblkdiag.m
+    - [X] jacapprox.m
+    - [X] largesttriangle.m
+    - [X] mkblkdiag.m
+    - [X] msort.m
+    - [X] pm2dtopsmarkertbl.m
+    - [X] prob2dbatstruct.m
+    - [X] ps2pmstruct.m
+    - [X] relerr.m
+    - [X] rigidalign.m
+    - [X] serialize.m
+    - [X] spnrank.m
+    - [X] vec.m
+  - [4/4] bundle
+    - [2/11] lsa
+      - [ ] gauss_markov.m
+      - [ ] gauss_newton_armijo.m
+      - [ ] gaussn_paper.m
+      - [ ] levenberg_algebraic_paper.m
+      - [ ] levenberg_marquardt.m
+      - [ ] levenberg_marquardt_powell.m
+      - [ ] levenberg_paper.m
+      - [ ] pm_eulerbundle1p_v3.m
+      - [ ] pm_eulerbundle1p_v3all.m
+      - [X] pm_preobs.m
+      - [X] prior_obs.m
+    - [4/18] cammodel
+      - [5/5] private
+        - [X] createeocolumnindices.m
+        - [X] createiocolumnindices.m
+        - [X] createopcolumnindices.m
+        - [X] createptcolumnindices.m
+        - [X] unpackio.m
+      - [ ] brown_euler_cam.m
+      - [ ] brown_euler_cam2.m
+      - [ ] browndist.m
+      - [ ] decons_EulerRotMat.m
+      - [ ] eulerpinhole.m
+      - [X] multieulerpinhole.m
+      - [ ] multilensdist.m
+      - [X] multiscalepts.m
+      - [ ] pm_eulerpinhole1.m
+      - [ ] pm_eulerrotmat.m
+      - [X] pm_lens1.m
+      - [ ] pm_multieulerpinhole1.m
+      - [X] pm_multilenscorr1.m
+      - [ ] pm_proj1.m
+      - [ ] pm_roteuler1.m
+      - [ ] proj.m
+      - [ ] roteuler.m
+      - [ ] rotmat.m
+    - [2/33] cameramodel
+      - [5/7] private
+        - [ ] compare_jacobian_structs.m
+        - [X] createeocolumnindices.m
+        - [X] createiocolumnindices.m
+        - [X] createopcolumnindices.m
+        - [X] createptcolumnindices.m
+        - [ ] full_self_test.m
+        - [X] unpackio.m
+      - [ ] affine2.m
+      - [ ] affine2mat.m
+      - [ ] affscale2.m
+      - [ ] aniscale2.m
+      - [ ] aniscale2b.m
+      - [ ] brown_affine.m
+      - [ ] brown_dist.m
+      - [ ] brown_dist_rel.m
+      - [X] brown_euler_cam4.m
+      - [ ] brown_rad.m
+      - [ ] brown_tang.m
+      - [ ] dbat_bundle_functions.m
+      - [ ] eulerpinhole2.m
+      - [ ] eulerrotmat.m
+      - [ ] lens_rad2.m
+      - [ ] lin2.m
+      - [ ] lin3.m
+      - [X] multi_res.m
+      - [ ] pinhole.m
+      - [ ] power_vec.m
+      - [ ] rad_scale.m
+      - [ ] res_euler_brown_0.m
+      - [ ] res_euler_brown_1.m
+      - [ ] res_euler_brown_2.m
+      - [ ] res_euler_brown_3.m
+      - [ ] scale2.m
+      - [ ] scale3.m
+      - [ ] skew.m
+      - [ ] tang_scale.m
+      - [ ] test_all.m
+      - [ ] world2cam.m
+      - [ ] xlat2.m
+      - [ ] xlat3.m
+    - [4/6] private
+      - [ ] blkcolperm.m
+      - [X] high_eo_correlations.m
+      - [X] high_io_correlations.m
+      - [X] high_op_correlations.m
+      - [ ] invblock.m
+      - [X] test_distortion_params.m
+    - [X] bundle.m
+    - [X] bundle_cov.m
+    - [X] bundle_residuals.m
+    - [X] bundle_result_file.m
+  - [9/9] plotting
+    - [1/1] private
+      - [X] scalewidth.m
+    - [X] cameraicon.m
+    - [X] plotcoverage.m
+    - [X] plotimages.m
+    - [X] plotimagestats.m
+    - [X] plotnetwork.m
+    - [X] plotopstats.m
+    - [X] plotparams.m
+    - [X] pm_plotmulti.m
+    - [X] tagfigure.m
+  - [X] dbatroot.m
+  - [X] dbatSetup.m
+  - [X] dbatversion.m

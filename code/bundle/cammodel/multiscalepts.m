@@ -1,16 +1,9 @@
-function [q,ui]=multiscalepts(p,IO,nK,nP,cams)
+function q=multiscalepts(p,ui,cams)
 %MULTISCALESCALEPTS Scale points in many cameras from pixels to mm.
 %
-%   Q=SCALEPTS(P,IO,nK,nP,CAMS) scales the 2-by-N points P from pixels
-%   to mm using the scaling constants in IO. nK and nP indicates the
-%   number of lens distortion coefficients. The N-vector or scalar
+%   Q=SCALEPTS(P,UI,CAMS) scales the 2-by-N points P from pixels
+%   to mm using the scaling constants in UI. The N-vector or scalar
 %   CAMS indicate which camera was used for each point.
-%
-%   [Q,UI]=... also returns the scaling constants as the 2-by-NCAMS
-%   array UI.
-
-[~,~,~,~,~,u]=unpackio(IO,nK,nP);
-ui=1./u;
 
 if isscalar(cams)
     D=diag(ui(:,cams));

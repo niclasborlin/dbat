@@ -9,17 +9,17 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:21:55
+      Last Bundle Run:        22-Nov-2018 16:31:44
       DBAT version:           0.8.0.0 (2018-10-26)
-      MATLAB version:         8.6.0.267246 (R2015b)
-      Host system:            GLNXA64
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 OK
-      Sigma0:                 0.495675
-      Sigma0 (pixels):        0.0495675
+      Sigma0:                 2.79867
+      Sigma0 (pixels):        0.279867
       Redundancy              44
-      Number of params:       68 (8 IO, 30 EO, 30 OP)
-      Number of observations: 112 (100 IP, 0 IO, 0 EO, 12 OP)
+      Number of params:       56 (8 IO, 30 EO, 18 OP)
+      Number of observations: 100 (100 IP, 0 IO, 0 EO, 0 OP)
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -36,175 +36,176 @@ Damped Bundle Adjustment Toolbox result file
          Initial value comment:   Camera calibration from EXIF value
       Total error:
          Number of stages:     1
-         Number of iterations: 5
+         Number of iterations: 6
          First error:          254.75
-         Last error:           3.28793
-         Execution time (s):   0.22
+         Last error:           18.5643
+         Execution time (s):   0.06
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:
-         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2)
+         Calibration: yes (cc px py K1 K2 K3 P1 P2)
          Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 1
-            Focal Length:
-               Value:        7.45322 mm
-               Deviation:    0.00551 mm
-            Xp - principal point x:
-               Value:        3.59732 mm
-               Deviation:    0.00389 mm
-            Yp - principal point y:
-               Value:        2.58364 mm
-               Deviation:    0.00416 mm
-            Fw - format width:
+            Camera Constant:
+               Value:        7.45023 mm
+               Deviation:    0.0201 mm
+            px - principal point x:
+               Value:        3.64279 mm
+               Deviation:    0.0185 mm
+            py - principal point y:
+               Value:        2.54871 mm
+               Deviation:    0.0222 mm
+            Format width:
                Value:        7.25019 mm
-            Fh - format height:
+            Format height:
                Value:        5.43764 mm
             K1 - radial distortion 1:
-               Value:        0.00409758 mm^(-3)
-               Deviation:    0.000202 mm^(-3)
+               Value:        0.00437996 mm^(-3)
+               Deviation:    0.00111 mm^(-3)
                Significance: p=1.00
                Cumulative significance:p=1.00
-               Correlations over 95%: K2:-97.9%, K3:95.3%.
+               Correlations over 95%: K2:-98.8%, K3:97.3%.
             K2 - radial distortion 2:
-               Value:        3.13601e-05 mm^(-5)
-               Deviation:    3.42e-05 mm^(-5)
-               Significance: p=0.64
-               Cumulative significance:p=1.00
-               Correlations over 95%: K1:-97.9%, K3:-99.3%.
+               Value:        -1.35578e-05 mm^(-5)
+               Deviation:    0.000182 mm^(-5)
+               Significance: p=0.06
+               Cumulative significance:p=0.06
+               Correlations over 95%: K1:-98.8%, K3:-99.5%.
             K3 - radial distortion 3:
-               Value:        -5.4879e-06 mm^(-7)
-               Deviation:    1.84e-06 mm^(-7)
-               Significance: p=1.00
-               Cumulative significance:p=1.00
-               Correlations over 95%: K1:95.3%, K2:-99.3%.
+               Value:        -3.34951e-06 mm^(-7)
+               Deviation:    9.51e-06 mm^(-7)
+               Significance: p=0.28
+               Cumulative significance:p=0.28
+               Correlations over 95%: K1:97.3%, K2:-99.5%.
             P1 - decentering distortion 1:
-               Value:        -5.7397e-05 mm^(-3)
-               Deviation:    1.86e-05 mm^(-3)
-               Significance: p=1.00
+               Value:        -0.000160209 mm^(-3)
+               Deviation:    9.69e-05 mm^(-3)
+               Significance: p=0.99
             P2 - decentering distortion 2:
-               Value:        -0.000104966 mm^(-3)
-               Deviation:    2.17e-05 mm^(-3)
-               Significance: p=1.00
-            B1 - aspect ratio:
+               Value:        -0.000318166 mm^(-3)
+               Deviation:    0.000114 mm^(-3)
+            as - aspect parameter:
                Value:        0 
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        2272 px
-            Ih - image height:
+            Image height:
                Value:        1704 px
-            Xr - X resolution:
+            X resolution:
                Value:        313.371 px/mm
-            Yr - Y resolution:
+            Y resolution:
                Value:        313.371 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.0031911 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.0031911 mm
          Rated angle of view (h,v,d): (52, 40, 63) deg
-         Largest distortion: 0.32 mm (101.7 px, 7.2% of half-diagonal)
+         Largest distortion: 0.37 mm (115.8 px, 8.2% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
                Omega:
-                  Value:     -39.548973 deg
-                  Deviation: 0.286 deg
+                  Value:     -39.851702 deg
+                  Deviation: 0.17 deg
                Phi:
-                  Value:     -1.373975 deg
-                  Deviation: 0.256 deg
-                  Correlations over 95%: Xc:95.4%.
+                  Value:     -1.019684 deg
+                  Deviation: 0.148 deg
                Kappa:
-                  Value:     -179.854897 deg
-                  Deviation: 0.238 deg
+                  Value:     -179.844474 deg
+                  Deviation: 0.0127 deg
                Xc:
-                  Value:     0.452988 ou
-                  Deviation: 0.00897 ou
-                  Correlations over 95%: Phi:95.4%.
+                  Value:     0.453142 ou
+                  Deviation: 0.000841 ou
                Yc:
-                  Value:     1.792732 ou
-                  Deviation: 0.00898 ou
+                  Value:     1.791656 ou
+                  Deviation: 0.00153 ou
                Zc:
-                  Value:     1.472117 ou
-                  Deviation: 0.00864 ou
+                  Value:     1.469744 ou
+                  Deviation: 0.00191 ou
             Photo 2: P8250022.JPG
                Omega:
-                  Value:     -39.568921 deg
-                  Deviation: 0.286 deg
+                  Value:     -39.946775 deg
+                  Deviation: 0.152 deg
                Phi:
-                  Value:     -2.089364 deg
-                  Deviation: 0.257 deg
-                  Correlations over 95%: Xc:96.0%.
+                  Value:     -2.370446 deg
+                  Deviation: 0.177 deg
                Kappa:
-                  Value:     -90.125835 deg
-                  Deviation: 0.238 deg
+                  Value:     -90.135630 deg
+                  Deviation: 0.0135 deg
                Xc:
-                  Value:     0.468364 ou
-                  Deviation: 0.0101 ou
-                  Correlations over 95%: Phi:96.0%.
+                  Value:     0.468429 ou
+                  Deviation: 0.000997 ou
                Yc:
-                  Value:     2.026816 ou
-                  Deviation: 0.0101 ou
+                  Value:     2.025695 ou
+                  Deviation: 0.00199 ou
                Zc:
-                  Value:     1.641441 ou
-                  Deviation: 0.00988 ou
+                  Value:     1.638656 ou
+                  Deviation: 0.00185 ou
             Photo 3: P8250023.JPG
                Omega:
-                  Value:     -27.309698 deg
-                  Deviation: 0.314 deg
+                  Value:     -27.821991 deg
+                  Deviation: 0.212 deg
+                  Correlations over 95%: Kappa:99.4%.
                Phi:
-                  Value:     -28.868553 deg
-                  Deviation: 0.27 deg
+                  Value:     -28.737227 deg
+                  Deviation: 0.143 deg
                Kappa:
-                  Value:     -141.883556 deg
-                  Deviation: 0.253 deg
+                  Value:     -142.135573 deg
+                  Deviation: 0.105 deg
+                  Correlations over 95%: Omega:99.4%.
                Xc:
-                  Value:     -0.646791 ou
-                  Deviation: 0.00976 ou
+                  Value:     -0.644995 ou
+                  Deviation: 0.00153 ou
                Yc:
-                  Value:     1.465510 ou
-                  Deviation: 0.00977 ou
+                  Value:     1.465307 ou
+                  Deviation: 0.00131 ou
                Zc:
-                  Value:     1.580200 ou
-                  Deviation: 0.00972 ou
+                  Value:     1.578940 ou
+                  Deviation: 0.00213 ou
             Photo 4: P8250024.JPG
                Omega:
-                  Value:     -28.280175 deg
-                  Deviation: 0.315 deg
+                  Value:     -28.412485 deg
+                  Deviation: 0.164 deg
+                  Correlations over 95%: Kappa:98.8%.
                Phi:
-                  Value:     -30.464620 deg
-                  Deviation: 0.27 deg
+                  Value:     -30.861142 deg
+                  Deviation: 0.179 deg
                Kappa:
-                  Value:     -49.655285 deg
-                  Deviation: 0.258 deg
+                  Value:     -49.715537 deg
+                  Deviation: 0.0837 deg
+                  Correlations over 95%: Omega:98.8%.
                Xc:
-                  Value:     -0.646350 ou
-                  Deviation: 0.01 ou
+                  Value:     -0.643624 ou
+                  Deviation: 0.00137 ou
                Yc:
-                  Value:     1.489954 ou
-                  Deviation: 0.01 ou
+                  Value:     1.490405 ou
+                  Deviation: 0.00148 ou
                Zc:
-                  Value:     1.635752 ou
-                  Deviation: 0.0099 ou
+                  Value:     1.634508 ou
+                  Deviation: 0.00221 ou
             Photo 5: P8250025.JPG
                Omega:
-                  Value:     4.494858 deg
-                  Deviation: 0.32 deg
+                  Value:     4.084729 deg
+                  Deviation: 0.176 deg
+                  Correlations over 95%: Kappa:99.5%.
                Phi:
-                  Value:     -34.897261 deg
-                  Deviation: 0.285 deg
+                  Value:     -35.146985 deg
+                  Deviation: 0.178 deg
                Kappa:
-                  Value:     -87.045989 deg
-                  Deviation: 0.247 deg
+                  Value:     -87.299968 deg
+                  Deviation: 0.103 deg
+                  Correlations over 95%: Omega:99.5%.
                Xc:
-                  Value:     -0.671788 ou
-                  Deviation: 0.0085 ou
+                  Value:     -0.669765 ou
+                  Deviation: 0.00138 ou
                Yc:
-                  Value:     0.419514 ou
-                  Deviation: 0.00853 ou
+                  Value:     0.419340 ou
+                  Deviation: 0.000871 ou
                Zc:
-                  Value:     1.409684 ou
-                  Deviation: 0.00808 ou
+                  Value:     1.409818 ou
+                  Deviation: 0.00185 ou
    Quality
       Photographs
          Total number: 5
@@ -217,7 +218,7 @@ Damped Bundle Adjustment Toolbox result file
             Photo point coverage:
                Rectangular: 30%-53% (43% average, 67% union)
                Convex hull: 25%-37% (30% average, 55% union)
-               Radial:      54%-67% (60% average, 67% union)
+               Radial:      55%-68% (61% average, 68% union)
       Photo Coverage
          Reference points outside calibrated region:
             Camera 1: none
@@ -231,22 +232,22 @@ Damped Bundle Adjustment Toolbox result file
          OP ray count: 5-5 (5.0 avg)
             6 points with 5 rays.
       Point Marking Residuals
-         Overall point RMS: 0.046 pixels
+         Overall point RMS: 0.263 pixels
          Mark point residuals:
-            Maximum: 0.095 pixels (OP 1001 on photo 4)
+            Maximum: 0.768 pixels (OP 1003 on photo 1)
          Object point residuals (RMS over all images of a point):
-            Minimum: 0.031 pixels (OP 5 over 5 images)
-            Maximum: 0.067 pixels (OP 1001 over 5 images)
+            Minimum: 0.053 pixels (OP 2 over 5 images)
+            Maximum: 0.485 pixels (OP 1003 over 5 images)
          Photo residuals (RMS over all points in an image):
-            Minimum: 0.035 pixels (photo 3 over 10 points)
-            Maximum: 0.051 pixels (photo 5 over 10 points)
+            Minimum: 0.179 pixels (photo 2 over 10 points)
+            Maximum: 0.338 pixels (photo 5 over 10 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
-            Minimum: 0.0062 (OP 3)
-            Maximum: 0.0071 (OP 10)
-         Maximum X standard deviation: 0.0038 (OP 10)
-         Maximum Y standard deviation: 0.0038 (OP 6)
-         Maximum Z standard deviation: 0.0047 (OP 10)
+            Minimum: 0.00036 (OP 4)
+            Maximum: 0.00056 (OP 10)
+         Maximum X standard deviation: 0.00031 (OP 10)
+         Maximum Y standard deviation: 0.00023 (OP 10)
+         Maximum Z standard deviation: 0.0004 (OP 10)
          Points with high correlations
             Points with correlation above 95%: 0
             Points with correlation above 99%: 0
@@ -262,40 +263,40 @@ Damped Bundle Adjustment Toolbox result file
          OP
             Minimum: 54.9 degrees (OP 10)
             Maximum: 65.7 degrees (OP 6)
-            Average: 62.5 degrees
+            Average: 62.4 degrees
             Smallest angles (ID, angle [deg], vis in cameras)
-                   10: 54.93 (   1    2    3    4    5)
+                   10: 54.92 (   1    2    3    4    5)
                     5: 61.38 (   1    2    3    4    5)
                     3: 63.05 (   1    2    3    4    5)
-                    2: 64.36 (   1    2    3    4    5)
-                    4: 65.28 (   1    2    3    4    5)
-                    6: 65.71 (   1    2    3    4    5)
+                    2: 64.35 (   1    2    3    4    5)
+                    4: 65.27 (   1    2    3    4    5)
+                    6: 65.70 (   1    2    3    4    5)
       Ctrl measurements
          Prior
              id,        x,        y,        z,     stdx,     stdy,     stdz, label
-           1001,    0.000,    1.000,    0.000,     0.01,     0.01,     0.01, 
-           1002,    1.000,    1.000,    0.000,     0.01,     0.01,     0.01, 
-           1003,    0.000,    0.000,    0.000,     0.01,     0.01,     0.01, 
-           1004,    1.000,    0.000,    0.000,     0.01,     0.01,     0.01, 
+           1001,    0.000,    1.000,    0.000,        0,        0,        0, 
+           1002,    1.000,    1.000,    0.000,        0,        0,        0, 
+           1003,    0.000,    0.000,    0.000,        0,        0,        0, 
+           1004,    1.000,    0.000,    0.000,        0,        0,        0, 
          Posterior
              id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
-           1001,   -0.001,    1.000,   -0.000,  0.00351,  0.00351,  0.00429,    5, 
-           1002,    1.000,    1.000,    0.000,  0.00351,  0.00351,  0.00429,    5, 
-           1003,    0.000,    0.000,    0.000,   0.0035,  0.00351,  0.00429,    5, 
-           1004,    1.000,   -0.000,   -0.000,  0.00351,  0.00351,  0.00429,    5, 
+           1001,    0.000,    1.000,    0.000,        0,        0,        0,    5, 
+           1002,    1.000,    1.000,    0.000,        0,        0,        0,    5, 
+           1003,    0.000,    0.000,    0.000,        0,        0,        0,    5, 
+           1004,    1.000,    0.000,    0.000,        0,        0,        0,    5, 
          Diff (pos=abs diff, std=rel diff)
              id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
-           1001,   -0.001,   -0.000,   -0.000,    0.001,    0.001,   -64.9%,   -64.9%,   -57.1%,    5, 
-           1002,    0.000,    0.000,    0.000,    0.000,    0.000,   -64.9%,   -64.9%,   -57.1%,    5, 
-           1003,    0.000,    0.000,    0.000,    0.001,    0.001,   -65.0%,   -64.9%,   -57.1%,    5, 
-           1004,   -0.000,   -0.000,   -0.000,    0.000,    0.001,   -64.9%,   -64.9%,   -57.1%,    5, 
+           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    5, 
+           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    5, 
+           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    5, 
+           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,    5, 
          Ctrl point delta
-            Max: 0.001 ou (, pt 1003)
+            Max: 0.000 ou (pt 1001)
             Max X,Y,Z
-               X: 0.001 ou (, pt 1001)
-               Y: 0.000 ou (, pt 1003)
-               Z: 0.000 ou (, pt 1001)
-            RMS: 0.001 ou (from 4 items)
+               X: 0.000 ou (pt 1001)
+               Y: 0.000 ou (pt 1001)
+               Z: 0.000 ou (pt 1001)
+            RMS: 0.000 ou (from 4 items)
       Check measurements
          none
 End of result file
