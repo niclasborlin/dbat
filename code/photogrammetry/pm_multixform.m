@@ -2,7 +2,7 @@ function [EO,OP,fail]=pm_multixform(EO,OP,T)
 %PM_MULTIXFORM Transform a network.
 %
 %   [EO,OP,fail]=pm_multixform(EO,OP,T)
-%   EO - 7-by-M array with EO camera parameters.
+%   EO - 6-by-M array with EO camera parameters.
 %   OP - 3-by-N array with object point coordinates.
 %   T  - 4x4 homogeneous array with point transformation.
 

@@ -1,5 +1,5 @@
 - [3/3] code
-  - [9/10] file
+  - [10/10] file
     - [X] loadcpt.m
     - [X] loadlnz.m
     - [X] loadpm.m
@@ -9,8 +9,8 @@
     - [X] loadpsz.m
     - [X] plytoascii.m
     - [X] unpackpsz.m
-    - [ ] writestats.m
-  - [11/19] demo
+    - [X] writestats.m
+  - [18/18] demo
     - [X] camcaldemo.m
     - [X] camcaldemo2.m
     - [X] camcaldemo_1ray.m
@@ -19,61 +19,60 @@
     - [X] camcaldemo_no_datum.m
     - [X] dbatdemos.m
     - [X] loadplotdemo.m
-    - [ ] loadplotpsz.m
-    - [ ] matcamcal.m
-    - [ ] prague2016_pm.m
-    - [ ] prague2016_ps.m
-    - [ ] ps_postproc.m
+    - [X] loadplotpsz.m
+    - [X] prague2016_pm.m
+    - [X] prague2016_ps.m
+    - [X] ps_postproc.m
     - [X] romabundledemo.m
     - [X] romabundledemo_imagevariant.m
     - [X] romabundledemo_selfcal.m
-    - [ ] runalldemos.m
-    - [ ] stpierrebundledemo_ps.m
-    - [ ] stpierrebundledemo_ps_brown.m
-  - [8/19] photogrammetry
+    - [X] runalldemos.m
+    - [X] stpierrebundledemo_ps.m
+    - [X] stpierrebundledemo_ps_brown.m
+  - [19/19] photogrammetry
     - [X] angles.m
-    - [ ] applyhomoxform.m
+    - [X] applyhomoxform.m
     - [X] camangles.m
-    - [ ] camsfrome.m
+    - [X] camsfrome.m
     - [X] coverage.m
-    - [ ] derotmat3d.m
-    - [ ] essmat5.m
-    - [ ] euclidean.m
+    - [X] derotmat3d.m
+    - [X] essmat5.m
+    - [X] euclidean.m
     - [X] forwintersect.m
-    - [ ] homogeneous.m
-    - [ ] pm_forwintersect1.m
-    - [ ] pm_forwintersect3.m
+    - [X] homogeneous.m
+    - [X] pm_forwintersect1.m
+    - [X] pm_forwintersect3.m
     - [X] pm_multialign.m
-    - [ ] pm_multidepth.m
+    - [X] pm_multidepth.m
     - [X] pm_multiforwintersect.m
-    - [ ] pm_multixform.m
+    - [X] pm_multixform.m
     - [X] pm_resect_3pt.m
-    - [ ] ptdepth.m
+    - [X] ptdepth.m
     - [X] resect.m
-  - [6/23] misc
-    - [ ] abserr.m
-    - [ ] analyzepsz.m
+  - [23/23] misc
+    - [X] abserr.m
+    - [X] analyzepsz.m
     - [X] buildparamtypes.m
     - [X] buildserialindices.m
     - [X] buildweightmatrix.m
-    - [ ] corrmat.m
-    - [ ] cumchi2.m
+    - [X] corrmat.m
+    - [X] cumchi2.m
     - [X] deserialize.m
-    - [ ] ihist.m
-    - [ ] indvec.m
-    - [ ] isblkdiag.m
-    - [ ] jacapprox.m
-    - [ ] largesttriangle.m
-    - [ ] mkblkdiag.m
-    - [ ] msort.m
-    - [ ] pm2dtopsmarkertbl.m
+    - [X] ihist.m
+    - [X] indvec.m
+    - [X] isblkdiag.m
+    - [X] jacapprox.m
+    - [X] largesttriangle.m
+    - [X] mkblkdiag.m
+    - [X] msort.m
+    - [X] pm2dtopsmarkertbl.m
     - [X] prob2dbatstruct.m
-    - [ ] ps2pmstruct.m
-    - [ ] relerr.m
-    - [ ] rigidalign.m
+    - [X] ps2pmstruct.m
+    - [X] relerr.m
+    - [X] rigidalign.m
     - [X] serialize.m
-    - [ ] spnrank.m
-    - [ ] vec.m
+    - [X] spnrank.m
+    - [X] vec.m
   - [4/4] bundle
     - [2/11] lsa
       - [ ] gauss_markov.m
@@ -165,17 +164,17 @@
     - [X] bundle_cov.m
     - [X] bundle_residuals.m
     - [X] bundle_result_file.m
-  - [7/9] plotting
+  - [9/9] plotting
     - [1/1] private
       - [X] scalewidth.m
     - [X] cameraicon.m
     - [X] plotcoverage.m
-    - [ ] plotimages.m
+    - [X] plotimages.m
     - [X] plotimagestats.m
     - [X] plotnetwork.m
     - [X] plotopstats.m
     - [X] plotparams.m
-    - [ ] pm_plotmulti.m
+    - [X] pm_plotmulti.m
     - [X] tagfigure.m
   - [X] dbatroot.m
   - [X] dbatSetup.m
