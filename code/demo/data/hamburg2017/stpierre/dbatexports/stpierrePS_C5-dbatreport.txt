@@ -8,10 +8,10 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera parameter has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run:        26-Oct-2018 16:25:17
+      Last Bundle Run:        30-Nov-2018 00:35:08
       DBAT version:           0.8.0.0 (2018-10-26)
-      MATLAB version:         8.6.0.267246 (R2015b)
-      Host system:            GLNXA64
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
       Status:                 OK
       Sigma0:                 1.29552
@@ -38,26 +38,26 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 2
          First error:          754.082
          Last error:           753.214
-         Execution time (s):   10.53
+         Execution time (s):   10.66
       Lens distortion models:
          Forward (Computer Vision) model 1
       Cameras:
-         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2)
+         Calibration: yes (cc px py K1 K2 K3 P1 P2)
          Camera1 (simple)
             Lens distortion model:
                Forward (Computer Vision) model 1
-            Focal Length:
+            Camera Constant:
                Value:        7.92378 mm
                Deviation:    0.000147 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        5.05656 mm
                Deviation:    0.000255 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        3.79756 mm
                Deviation:    0.000249 mm
-            Fw - format width:
+            Format width:
                Value:        10.0128 mm
-            Fh - format height:
+            Format height:
                Value:        7.5152 mm
             K1 - radial distortion 1:
                Value:        -0.00387225 mm^(-3)
@@ -84,22 +84,21 @@ Damped Bundle Adjustment Toolbox result file
             P2 - decentering distortion 2:
                Value:        -1.68215e-05 mm^(-3)
                Deviation:    1.08e-06 mm^(-3)
-               Significance: p=1.00
-            B1 - aspect ratio:
+            as - off-unit aspect parameter:
                Value:        0 
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        7152 px
-            Ih - image height:
+            Image height:
                Value:        5368 px
-            Xr - X resolution:
+            X resolution:
                Value:        714.286 px/mm
-            Yr - Y resolution:
+            Y resolution:
                Value:        714.286 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.0014 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.0014 mm
          Rated angle of view (h,v,d): (65, 51, 77) deg
          Largest distortion: 0.21 mm (152.3 px, 3.4% of half-diagonal)
