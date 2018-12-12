@@ -270,22 +270,22 @@ checkPts=zeros(0,7);
 objPts=zeros(0,7);
 nObjPts=0;
 while ~feof(fid)
-	s=fgetl(fid);
-	if ~ishandle(h)
-		% Waitbar closed, abort.
-		fclose(fid);
-		err='Aborted by user';
-		if nargout<2, error(err); else return; end
-	elseif rem(nObjPts+1,100)==0
+    s=fgetl(fid);
+    if ~ishandle(h)
+        % Waitbar closed, abort.
+        fclose(fid);
+        err='Aborted by user';
+        if nargout<2, error(err); else return; end
+    elseif rem(nObjPts+1,100)==0
         % Update progressbar every 100 object points.
-		waitbar(ftell(fid)/sz,h);
-	end
-	% Get object point data [id,x,y,z,sx,sy,sz].
-	op=sscanf(s,'%g')';
-	if isempty(op)
+        waitbar(ftell(fid)/sz,h);
+    end
+    % Get object point data [id,x,y,z,sx,sy,sz].
+    op=sscanf(s,'%g')';
+    if isempty(op)
         % End of object point list.
-		break;
-	end
+        break;
+    end
     nObjPts=nObjPts+1;
     if size(objPts,1)<nObjPts
         % Expand by 10000 points at a time to avoid memory fragmentation.
@@ -304,22 +304,22 @@ isCtrl=ismember(objPts(:,1),ctrlPts(:,1));
 markPts=zeros(0,6);
 nMarkPts=0;
 while ~feof(fid)
-	s=fgetl(fid);
-	if ~ishandle(h)
-		% Waitbar closed, abort.
-		fclose(fid);
-		err='Aborted by user';
-		if nargout<2, error(err); else return; end
-	elseif rem(nMarkPts+1,1000)==0
+    s=fgetl(fid);
+    if ~ishandle(h)
+        % Waitbar closed, abort.
+        fclose(fid);
+        err='Aborted by user';
+        if nargout<2, error(err); else return; end
+    elseif rem(nMarkPts+1,1000)==0
         % Update progressbar every 1000 mark points.
-		waitbar(ftell(fid)/sz,h);
-	end
-	% Get marked point info [ph,mp,x,y,sx,sy].
-	mp=sscanf(s,'%g')';
-	if isempty(mp)
+        waitbar(ftell(fid)/sz,h);
+    end
+    % Get marked point info [ph,mp,x,y,sx,sy].
+    mp=sscanf(s,'%g')';
+    if isempty(mp)
         % End of mark points list.
-		break;
-	end
+        break;
+    end
     nMarkPts=nMarkPts+1;
     if size(markPts,1)<nMarkPts
         % Expand by 10000 points at a time to avoid memory fragmentation.
@@ -379,23 +379,41 @@ rawOPids=objPts(:,1);
 OPlabels=cell(size(rawOPids));
 OPlabels(isCtrl)=arrayfun(@int2str,rawOPids(isCtrl),'uniformoutput',false);
 
-% Check for overlapping ids for smartpoints and others.
-if ~isempty(objPts)
+% Check if we have both normal and smart points.
+haveSmartMarkPts=any(any(markPts(:,5:6)==0)) && any(any(markPts(:,5:6)~=0));
+haveSmartObjPts=nnz(diff(objPts(:,1))<0)>0;
+haveSmartPts=haveSmartMarkPts | haveSmartObjPts;
+
+if (haveSmartPts)
+    warning('Found smart points and normal points, renumbering assumed smartpoints');
+
+    isSmartMarkPt=all(markPts(:,5:6)==0,2);
+    normMarkId=unique(markPts(~isSmartMarkPt,2));
+    smartMarkId=unique(markPts(isSmartMarkPt,2));
+
+    isSmartObjPt=false(size(objPts,1),1);
+
     % Are all object point ids increasing?
     split=find(diff(objPts(:,1))<0);
     if length(split)==1
         warning('Found non-increasing OP id, renumbering assumed smartpoints');
         % If not, first sequence is object point ids, second sequence is
         % smart point ids.
-        objId=objPts(1:split,1);
-        smartObjId=objPts(split+1:end,1);
-        % Shift all smart point ids to fall above normal object ids.
-        shift=max(objId)+1-min(smartObjId);
-        objPts(split+1:end,1)=objPts(split+1:end,1)+shift;
-        % Smart mark points have zeros in columns 5-6.
-        smartMarkPts=all(markPts(:,5:6)==0,2);
-        markPts(smartMarkPts,2)=markPts(smartMarkPts,2)+shift;
+        isSmartObjPt(split+1:end)=true;
+    else
+        error('Object point ids have more than one jump.');
     end
+
+    normObjId=objPts(~isSmartObjPt,1);
+    smartObjId=objPts(isSmartObjPt,1);
+
+    maxNormalId=max([normMarkId;normObjId]);
+    minSmartId=min([smartMarkId;smartObjId]);
+
+    % Shift all smart point ids to fall above normal object ids.
+    shift=10^ceil(log10(maxNormalId+1-minSmartId)+eps);
+    objPts(isSmartObjPt,1)=objPts(isSmartObjPt,1)+shift;
+    markPts(isSmartMarkPt,2)=markPts(isSmartMarkPt,2)+shift;
 end
 
 prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
