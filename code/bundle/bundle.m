@@ -251,7 +251,7 @@ if any(s.IO.val(4:5,modelsWithoutB)~=0)
              'be inaccurate.'],usedBadModels);
 end
 % Warn if asked to estimate aspect and/or skew with a model that
-% does not support it.
+% does not suppos.Irt it.
 if any(s.bundle.est.IO(4:5,modelsWithoutB))
     warning(['Trying to estimate aspect and/or skew. This is not ' ...
              'supported by lens distortion model %d! Results will ' ...

@@ -10,12 +10,142 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   S=PROB2DBATSTRUCT(PROB,TRUE) forces each image to have its own camera.
 %
 %   The struct S has the following fields:
-%       IO       - 16-by-nImages array with estimates of the internal
-%                  orientation for each camera.
-%       IOblock  - 16-by-nImages array with numbering indicating
-%                  what IO values are distinct. Block-variant
-%                  projects have only one unique value.
-%                  Image-variant projects have all values distinct.
+%   - IO     - struct with internal orientation (IO) data.
+%   - EO     - struct with external orientation (EO) data.
+%   - OP     - struct with object points (OP) data.
+%   - IP     - struct with image points (IP) data.
+%   - prior  - struct with prior observations of IO, EO, and OP parameters.
+%   - bundle - struct with data related to the bundle process.
+%   - post   - struct with post-bundle data.
+%   - proj   - struct with global project information.
+%
+%   The IO structure contains the following fields:
+%   - model 
+%     - distModel  - 1-by-nImages with the used lens distortion model.
+%     - nK         - number of radial distortion coefficients.
+%     - nP         - number of tangential distortion coefficients.
+%     - camUnit    - string with the unit of the physical camera parameters.
+%   - val          - NC-by-nImages array with estimates of the internal
+%                    orientation for each camera, where NC=5+nK+nP.
+%   - type         - NC-by-nImages cell array with strings indicating the
+%                    type of parameter, e.g. cc, px, K1, etc.
+%   - struct       - struct indicating the block structure of the IO
+%                    parameters. See below.
+%   - sensor
+%     - imSize     - 2-by-nImages array with image [w;h] size in pixels.
+%     - ssSize     - 2-by-nImages array with sensor [w;h] in physical units.
+%     - pxSize     - 2-by-nImages array with pixel [w;h] in physical units.
+%     - samePxSize - logical, true if all pixel sizes are equal.
+%
+%   The EO structure contains the following fields:
+%   - cam    - 1-by-nImages array with physical camera number in IO.
+%   - model  - 1-by-nImages array with rotation matrix model. 0=Euler x-y-z.
+%   - val    - 6-by-nImages array with EO parameters [X;Y;Z;omega;phi;kappa].
+%   - type   - 6-by-nImages cell array of strings indicating parameter type;
+%              EX, EY, EZ, om, ph, or, ka.
+%   - name   - 1-by-nImages cell array with image names. See also proj.imDir.
+%   - id     - 1-by-nImages array with positive integer image ids.
+%   - label  - 1-by-nImages cell array with image labels.
+%   - struct - struct indicating the block structure of the EO parameters.
+%              See below.
+%
+%   The OP structure contains the following fields:
+%   - val   - 3-by-nOPs array with object point coordinates.
+%   - type  - 3-by-nOPs cell array with strings indicating
+%             parameter type, e.g. OX, OY, OZ for object points,
+%             CX, CY, CZ for control points, HX, HY, HZ for check points.
+%   - id    - 1-by-nOPs array with positive integer point ids.
+%   - rawId - 1-by-nOPs array with native integer ids (depends on source).
+%   - label - 1-by-nOPs cell array of strings with point labels.
+%      
+%   The IP structure contains the following fields:
+%   - val    - 2-by-nIPs array with image measurents.
+%   - std    - 2-by-nIPs array with assumed standard deviation of the
+%              image measurements.
+%   - cov    - empty or 2-by-2-by-nIPs with individual covariance
+%              for each IP measurement.
+%   - use    - 1-by-nIPs logical array indicating if a point will
+%              be used by the bundle.
+%   - type   - 1-by-nIPs cell array of strings with marker types. (Unused).
+%   - id     - 1-by-nIPs array with positive integer id for each IP.
+%   - cams   - 1-by-nIPs array with camera number (index into IO) for each IP.
+%   - vis    - sparse nOPs-by-nImages logical array indicating
+%              which IPs are measurements of which OPs.
+%              vis(i,j)=true if OP number i was measured in image j
+%   - ix     - sparse nOPs-by-nImages array indicating which IP
+%              corresponds to a certain measurement. If
+%              vis(i,j)=true, then ix(i,j) is the IP number for the
+%              measurement of OP i in image j.
+%   - sigmas - vector with used sigma values for the IPs.
+%
+%   The IO.struct and EO.struct fields contain the IO/EO block
+%   structure and has the following fields:
+%   - block    - NS-by-nImages array, NS=NC (IO) or NS=6 (EO), with
+%                numbering indicating what IO/EO parameter valeus are
+%                distinct. Block-variant projects have only one unique
+%                value. Image-variant projects have all values distinct.
+%   - uniq     - 1-by-nImages logical array indicating if the camera/station
+%                is unique.
+%   - no       - 1-by-nImages array indicating camera/station number among
+%                of the unique numbers.
+%   - isSimple - 1-by-nImages logical array indicating if the camera/station
+%                is simple, i.e. contain parameters from one block only.
+%   - leading  - NS-by-nImages logical array indicating which parameters 
+%                are leading a block, i.e. are the first parameter
+%                in each row that are to be estimated.
+%   The block field should be populated by the user. The uniq, no, and
+%   isSimple fields are populated by PARSEBLOCKVARIANT from the block field.
+%   The leading field is populated by BUILDSERIALINDICES based on the block
+%   info and the corresponding bundle.est.XX and prior.XX.use fields.
+%
+%   The prior field contain the fields IO, EO, and OP fields with prior
+%   observations information, each with subfields:
+%   - use - NS-by-nObs logical array indicating whether the corresponding
+%           parameter has a prior observation. NS=NC (IO), 6 (EO), or 3
+%           (OP). nObs=nImages (IO or EO) or nOPs (OP).
+%   - val - NS-by-nObs array with prior values, or NaN if no prior value.
+%   - std - NS-by-nObs array with prior standard deviations, or NaN if no
+%           prior value. Exact observations are indicated by std=0.
+%   - cov - Empty or NS-by-NS-by-nObs array with prior covariance for
+%           each columns of val. If empty, the std values are used instead.
+%
+%   The prior.OP furthermore has two fields:
+%   - isCtrl  - 1-by-nOP logical array indicating whether the OP is a
+%               control point.
+%   - isCheck - 1-by-nOP logical array indicating whether the OP is a
+%               check point.
+%
+%   The bundle field contains information related to the bundle
+%   adjustment, with fields
+%   - est       - struct with logical subfields IO, EO, OP indating which
+%                 parameters should be estimated by the bundle.
+%   - serial    - struct with indices describing how to serialize the
+%                 bundle data, i.e. generate an x vector.
+%     - IO.src  - where from in IO should the values be copied?
+%     - IO.dest - where in x should the values end up?
+%     - IO.obs  - what IO values should be used as observations?
+%     - EO.src  - where from in EO should the values be copied?
+%     - EO.dest - where in x should the values end up?
+%     - EO.obs  - what EO values should be used as observations?
+%     - OP.src  - where from in OP should the values be copied?
+%     - OP.dest - where in x should the values end up?
+%     - OP.obs  - what OP values should be used as observations?
+%     - n       - total number of unknowns.
+%   - deserial  - struct with indices describing how to deserialize the x
+%                 vector, i.e. update the IO, EO, OP values from x.
+%     - IO.src  - where from in x should the IO values be copied?
+%     - IO.dest - where in IO should the elements end up?
+%     - EO.src  - where from in x should the EO values be copied?
+%     - EO.dest - where in EO should the elements end up?
+%     - OP.src  - where from in x should the OP values be copied?
+%     - OP.dest - where in OP should the elements end up?
+%     - n       - total number of unknowns.
+%   - resIx     - struct with fields IP, IO, EO, OP, indicating the
+%                 corresponding indices in the residual vector.
+%
+%   The post field contain
+
+
 %       IOlead   - 16-by-nImages logical array indicating what
 %                  parameters are leading a block.
 %       IOunique - logical nImages-vector indicating which IOblock
@@ -558,5 +688,5 @@ s=struct('proj',proj,...
 %          'nK',nK,'nP',nP,'camUnit',camUnit,...
 %          'objUnit',objUnit,'x0desc','');
 
-s=buildserialindices(s,true);
+s=parseblockvariant(s);
 s=buildparamtypes(s);
