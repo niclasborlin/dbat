@@ -147,20 +147,24 @@ function s=prob2dbatstruct(prob,individualCameras)
 %     - OP      - 3-by-nImages with residual indices for OP obs.
 %
 %   The post field contains information computed by the bundle.
-%   - sigma0 - estimated standard deviation of unit weight.
-%   - res    - computed unweighted residual for each observation
-%     - IP
-%     - IO
-%     - EO
-%     - OP
-%   - res    - computed weighted residual for each observation
-%     - IP
-%     - IO
-%     - EO
-%     - OP
-%   - sigmas - posterior standard deviations
-%   - std
-%   - cov
+%   - sigma0    - estimated standard deviation of unit weight.
+%   - res, wres - computed unweighted/weighted residuals for each observation,
+%                 or NaN if not used as observation
+%     - IP      - 2-by-nIPs with IP residuals.
+%     - IO      - NC-by-nImages with IO residuals.
+%     - EO      - 6-by-nImages with EO residuals.
+%     - OP      - 3-by-nImages with OP residuals.
+%   - wres      - computed weighted residual for each observation,
+%   - sigmas    - rescaled prior standard deviations (IP.sigmas*sigma0).
+%   - std       - posterior standard deviations
+%     - IO      - NC-by-nImages with IO posterior std.
+%     - EO      - 6-by-nImages with EO posterior std.
+%     - OP      - 3-by-nImages with OP posterior std.
+%   - cov       - posterior covariances
+%     - IO      - NC-by-NC-by-nImages with posterior IO covariance.
+%     - EO      - 6-by-6-by-nImages with posterior EO covariance.
+%     - OP      - 3-by-3-by-nOPs with posterior OP covariance.
+%   - fullcov   
 %   - sensor
 
 fields IP, IO, EO, OP, indicating the
