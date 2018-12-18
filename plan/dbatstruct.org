@@ -148,7 +148,17 @@
   - resIx :: struct with fields IP, IO, EO, OP, indicating the
              corresponding residual vector indices.
 - post
+  - sigma0 :: estimated standard deviation of unit weight.
   - res :: posterior residuals after the bundle
+    - IP :: 2-by-nIPs array with image point residuals in pixels.
+            Filled in by the bundle.
+    - IO :: 16-by-nImages array with IO residuals if prior IO
+            observations were used in the bundle.
+    - EO :: 6-by-nImages array with EO residuals if prior EO
+            observations were used in the bundle.
+    - OP :: 3-by-nOP array with OP and CP residuals if prior OP/CP
+            observations were used in the bundle.
+  - wres :: posterior weighted residuals
     - IP :: 2-by-nIPs array with image point residuals in pixels.
             Filled in by the bundle.
     - IO :: 16-by-nImages array with IO residuals if prior IO
@@ -167,6 +177,7 @@
     - IO :: (NC*nImages)-by-(NC*nImages) with IO std, or NaN if not estimated.
     - EO :: 6-by-6-by-nImages with EO cov, or NaN if not estimated.
     - OP :: 3-by-3-by-nOPs with OP cov, or NaN if not estimated.
+  - sensor :: 
 - proj
   - objUnit :: string with the object space unit.
   - x0desc :: comment string on the initial values used by bundle.

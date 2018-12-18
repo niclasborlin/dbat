@@ -140,8 +140,31 @@ function s=prob2dbatstruct(prob,individualCameras)
 %     - OP.src  - where from in x should the OP values be copied?
 %     - OP.dest - where in OP should the elements end up?
 %     - n       - total number of unknowns.
-%   - resIx     - struct with fields IP, IO, EO, OP, indicating the
-%                 corresponding indices in the residual vector.
+%   - resIx     - struct with indices into the residual vector, or 0 if unused.
+%     - IP      - 2-by-nIPs with indices for IP residuals
+%     - IO      - NC-by-nImages with residual indices for IO obs.
+%     - EO      - 6-by-nImages with residual indices for EO obs.
+%     - OP      - 3-by-nImages with residual indices for OP obs.
+%
+%   The post field contains information computed by the bundle.
+%   - sigma0 - estimated standard deviation of unit weight.
+%   - res    - computed unweighted residual for each observation
+%     - IP
+%     - IO
+%     - EO
+%     - OP
+%   - res    - computed weighted residual for each observation
+%     - IP
+%     - IO
+%     - EO
+%     - OP
+%   - sigmas - posterior standard deviations
+%   - std
+%   - cov
+%   - sensor
+
+fields IP, IO, EO, OP, indicating the
+%                 corresponding 
 %
 %   The post field contain
 
