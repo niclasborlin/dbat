@@ -185,11 +185,11 @@ for i=1:length(ims)
     pts=s.IP.val(:,s.IP.ix(vis,imNo));
     
     % Draw control points.
-    line(pts(1,s.OP.prior.isCtrl(vis)),pts(2,s.OP.prior.isCtrl(vis)),'marker','^','color','r',...
+    line(pts(1,s.prior.OP.isCtrl(vis)),pts(2,s.prior.OP.isCtrl(vis)),'marker','^','color','r',...
          'linestyle','none','parent',ax(i),'tag','ctrlpts');
     
     % Draw object points.
-    line(pts(1,~s.OP.prior.isCtrl(vis)),pts(2,~s.OP.prior.isCtrl(vis)),'marker','.',...
+    line(pts(1,~s.prior.OP.isCtrl(vis)),pts(2,~s.prior.OP.isCtrl(vis)),'marker','.',...
          'color','b','linestyle','none','parent',ax(i),'tag','objpts');
     
     % Set title, optionally with iteration number.

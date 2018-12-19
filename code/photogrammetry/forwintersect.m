@@ -29,7 +29,7 @@ xy=reshape(pm_multilenscorr1(diag([1,-1])*s0.IP.val,s0.IO.val,s0.IO.model,...
 
 % Extract wanted points.
 if skipPrior
-    doEst=all(s0.bundle.est.OP,1)' & ~any(s0.OP.prior.use,1)';
+    doEst=all(s0.bundle.est.OP,1)' & ~any(s0.prior.OP.use,1)';
 else
     doEst=true;
 end

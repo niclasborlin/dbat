@@ -42,7 +42,7 @@ fprintf(fid,'\nProject file: %s\n',s.proj.fileName);
 fprintf(fid,'\nExecution time stamp: %04d-%02d-%02d %02d:%02d:%02d\n', ...
         floor(clock));
 
-nCp=nnz(s.OP.prior.isCtrl);
+nCp=nnz(s.prior.OP.isCtrl);
 fprintf(fid,'\nTotal # OP          : %d\n',size(s.IP.vis,1)-nCp);
 fprintf(fid,'Total # CP          : %d\n',nCp);
 fprintf(fid,'Total # cams        : %d\n',size(s.IP.vis,2));
@@ -155,8 +155,8 @@ fprintf(fid,fmt,[aa(:),aHist(:)]');
 
 % Compute ray count for CP + OP.
 nRays=full(sum(s.IP.vis,2));
-CPix=find(s.OP.prior.isCtrl);
-OPix=find(~s.OP.prior.isCtrl);
+CPix=find(s.prior.OP.isCtrl);
+OPix=find(~s.prior.OP.isCtrl);
 
 % CP/OP ray angles
 if isfield(s,'rayAng') && ~isempty(s.rayAng)

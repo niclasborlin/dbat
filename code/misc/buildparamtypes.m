@@ -100,11 +100,11 @@ if strcmp(sel,'OP') || strcmp(sel,'struct')
     OPtypes={'OX','OY','OZ'}';
     if size(s.OP.val,2)>1
         OPtypes=repmat(OPtypes,1,size(s.OP.val,2));
-        if any(s.OP.prior.isCtrl)
-            OPtypes(:,s.OP.prior.isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(s.OP.prior.isCtrl));
+        if any(s.prior.OP.isCtrl)
+            OPtypes(:,s.prior.OP.isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(s.prior.OP.isCtrl));
         end
-        if any(s.OP.prior.isCheck)
-            OPtypes(:,s.OP.prior.isCheck)=repmat({'HX','HY','HZ'}',1,nnz(s.OP.prior.isCheck));
+        if any(s.prior.OP.isCheck)
+            OPtypes(:,s.prior.OP.isCheck)=repmat({'HX','HY','HZ'}',1,nnz(s.prior.OP.isCheck));
         end
         
         for i=1:size(s.OP.val,2)

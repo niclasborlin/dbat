@@ -479,12 +479,12 @@ for i=find(s.IO.struct.uniq)
 end
 
 fprintf(fid,[p2,'Point Measurements\n']);
-fprintf(fid,[p3,'Number of control pts: %d\n'],nnz(s.OP.prior.isCtrl));
-fprintf(fid,[p3,'Number of check pts: %d\n'],nnz(s.OP.prior.isCheck));
-fprintf(fid,[p3,'Number of object pts: %d\n'],nnz(~s.OP.prior.isCtrl & ~s.OP.prior.isCheck));
+fprintf(fid,[p3,'Number of control pts: %d\n'],nnz(s.prior.OP.isCtrl));
+fprintf(fid,[p3,'Number of check pts: %d\n'],nnz(s.prior.OP.isCheck));
+fprintf(fid,[p3,'Number of object pts: %d\n'],nnz(~s.prior.OP.isCtrl & ~s.prior.OP.isCheck));
 
-if any(s.OP.prior.isCtrl)
-    CPrays=full(sum(s.IP.vis(s.OP.prior.isCtrl,:),2));
+if any(s.prior.OP.isCtrl)
+    CPrays=full(sum(s.IP.vis(s.prior.OP.isCtrl,:),2));
     n0=nnz(CPrays==0);
     CPrays=CPrays(CPrays~=0);
     mn=min(CPrays);
@@ -497,7 +497,7 @@ if any(s.OP.prior.isCtrl)
     end
     
     % Ray count histogram.
-    cpRayHist=ihist(sum(s.IP.vis(s.OP.prior.isCtrl,:),2)+1);
+    cpRayHist=ihist(sum(s.IP.vis(s.prior.OP.isCtrl,:),2)+1);
     i=find(cpRayHist);
     for j=1:length(i)
         fprintf(fid,[p4,'%d points with %d rays.\n'],...
@@ -507,15 +507,15 @@ else
     fprintf(fid,[p3,'CP ray count: -\n']);
 end
 
-if any(s.OP.prior.isCheck)
-    CCPrays=full(sum(s.IP.vis(s.OP.prior.isCheck,:),2));
+if any(s.prior.OP.isCheck)
+    CCPrays=full(sum(s.IP.vis(s.prior.OP.isCheck,:),2));
     mn=min(CCPrays);
     mx=max(CCPrays);
     avg=mean(CCPrays);
     fprintf(fid,[p3,'CCP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
 
     % Ray count histogram.
-    cpRayHist=ihist(sum(s.IP.vis(s.OP.prior.isCheck,:),2)+1);
+    cpRayHist=ihist(sum(s.IP.vis(s.prior.OP.isCheck,:),2)+1);
     i=find(cpRayHist);
     for j=1:length(i)
         fprintf(fid,[p4,'%d points with %d rays.\n'],...
@@ -525,14 +525,14 @@ else
     fprintf(fid,[p3,'CCP ray count: -\n']);
 end
 
-if any(~s.OP.prior.isCtrl)
-    OPrays=full(sum(s.IP.vis(~s.OP.prior.isCtrl,:),2));
+if any(~s.prior.OP.isCtrl)
+    OPrays=full(sum(s.IP.vis(~s.prior.OP.isCtrl,:),2));
     mn=min(OPrays);
     mx=max(OPrays);
     avg=mean(OPrays);
     fprintf(fid,[p3,'OP ray count: %d-%d (%.1f avg)\n'],mn,mx,avg);
     % Ray count histogram.
-    opRayHist=ihist(sum(s.IP.vis(~s.OP.prior.isCtrl,:),2)+1);
+    opRayHist=ihist(sum(s.IP.vis(~s.prior.OP.isCtrl,:),2)+1);
     i=find(opRayHist);
     for j=1:length(i)
         fprintf(fid,[p4,'%d points with %d rays.\n'],...
@@ -641,16 +641,16 @@ a=angles(s,'Computing angles')*180/pi;
 fprintf(fid,[p3,'CP\n']);
 
 % Ctrl pts with >0 rays
-cpIx=find(s.OP.prior.isCtrl);
+cpIx=find(s.prior.OP.isCtrl);
 cpRays=sum(s.IP.vis(cpIx,:),2);
 if any(cpRays==0)
     fprintf(fid,[p4,'Ignoring %d CP with 0 rays.\n'],nnz(cpRays==0));
 end
 % If we have any ctrl pts with rays.
 if any(cpIx(cpRays>0))
-    aCP=a(s.OP.prior.isCtrl);
-    idCP=s.OP.id(s.OP.prior.isCtrl);
-    labelCP=s.OP.label(s.OP.prior.isCtrl);
+    aCP=a(s.prior.OP.isCtrl);
+    idCP=s.OP.id(s.prior.OP.isCtrl);
+    labelCP=s.OP.label(s.prior.OP.isCtrl);
     [mn,mni]=min(aCP);
     [mx,mxi]=max(aCP);
     if isempty(labelCP{mni})
@@ -673,10 +673,10 @@ else
 end
 
 fprintf(fid,[p3,'CCP\n']);
-if any(s.OP.prior.isCheck)
-    aCCP=a(s.OP.prior.isCheck);
-    idCCP=s.OP.id(s.OP.prior.isCheck);
-    labelCCP=s.OP.label(s.OP.prior.isCheck);
+if any(s.prior.OP.isCheck)
+    aCCP=a(s.prior.OP.isCheck);
+    idCCP=s.OP.id(s.prior.OP.isCheck);
+    labelCCP=s.OP.label(s.prior.OP.isCheck);
     [mn,mni]=min(aCCP);
     [mx,mxi]=max(aCCP);
     if isempty(labelCCP{mni})
@@ -699,7 +699,7 @@ else
 end
 
 fprintf(fid,[p3,'OP\n']);
-isOP=~s.OP.prior.isCtrl & ~s.OP.prior.isCheck;
+isOP=~s.prior.OP.isCtrl & ~s.prior.OP.isCheck;
 if any(isOP)
     aOP=a(isOP);
     idOP=s.OP.id(isOP);
@@ -729,17 +729,17 @@ else
 end
 
 fprintf(fid,[p2,'Ctrl measurements\n']);
-if ~any(s.OP.prior.isCtrl)
+if ~any(s.prior.OP.isCtrl)
     fprintf(fid,[p3,'none\n']);
 else
-    cIx=find(s.OP.prior.isCtrl);
+    cIx=find(s.prior.OP.isCtrl);
     CPid=s.OP.id(cIx);
 
     fprintf(fid,[p3,'Prior\n']);
     fprintf(fid,[p3,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %s\n'],...
             'id','x','y','z','stdx','stdy','stdz','label');
-    pos0=s.OP.prior.val(:,cIx);
-    std0=s.OP.prior.std(:,cIx);
+    pos0=s.prior.OP.val(:,cIx);
+    std0=s.prior.OP.std(:,cIx);
     for i=1:length(cIx)
         fprintf(fid,[p3,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
                      '%8.3g, %8.3g, %s\n'],CPid(i),pos0(:,i),std0(:,i),...
@@ -790,17 +790,17 @@ else
 end
 
 fprintf(fid,[p2,'Check measurements\n']);
-if ~any(s.OP.prior.isCheck)
+if ~any(s.prior.OP.isCheck)
     fprintf(fid,[p3,'none\n']);
 else
-    cIx=find(s.OP.prior.isCheck);
+    cIx=find(s.prior.OP.isCheck);
     CPid=s.OP.id(cIx);
 
     fprintf(fid,[p3,'Prior\n']);
     fprintf(fid,[p3,'%6s, %8s, %8s, %8s, %8s, %8s, %8s, %s\n'],...
             'id','x','y','z','stdx','stdy','stdz','label');
-    pos0=s.OP.prior.val(:,cIx);
-    std0=s.OP.prior.std(:,cIx);
+    pos0=s.prior.OP.val(:,cIx);
+    std0=s.prior.OP.std(:,cIx);
     for i=1:length(cIx)
         fprintf(fid,[p3,'%6d, %8.3f, %8.3f, %8.3f, %8.3g, ' ...
                      '%8.3g, %8.3g, %s\n'],CPid(i),pos0(:,i),std0(:,i),...

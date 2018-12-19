@@ -263,7 +263,7 @@ for iter=iters
     end
     
     % Plot points.
-    isCtrl=s.OP.prior.isCtrl;
+    isCtrl=s.prior.OP.isCtrl;
     plot3(ax,OP(1,~isCtrl),OP(2,~isCtrl),OP(3,~isCtrl),'b.','tag','OP');
     hold(ax,'on');
     plot3(ax,OP(1,isCtrl),OP(2,isCtrl),OP(3,isCtrl),'r^','tag','CP');
