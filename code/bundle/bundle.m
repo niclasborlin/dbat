@@ -454,7 +454,7 @@ s.post.res.OP=nan(size(s.OP.val));
 s.post.res.IP(:)=final.unweighted.r(s.post.res.ix.IP);
 % Mark pt residuals are in mm, scale to pixels.
 ptCols=s.IP.ix(s.IP.vis);
-s.post.res.IP=s.post.res.IP./s.IO.sensor.pxSize(:,s.IP.ptCams(ptCols));
+s.post.res.IP=s.post.res.IP./s.IO.sensor.pxSize(:,s.IP.cam(ptCols));
 
 % This might be problematic if a block parameter is used as an observation...
 s.post.res.IO(s.prior.IO.use)=final.unweighted.r(s.post.res.ix.IO);

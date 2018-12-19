@@ -105,7 +105,7 @@ if exist(imName,'file')
     hh=[hh;imshow(imName,'parent',gca(imFig))];
     pts=s.IP.val(:,s.IP.ix(s.IP.vis(:,imNo),imNo));
     ptsId=s.OP.id(s.IP.vis(:,imNo));
-    isCtrl=s.OP.prior.isCtrl(s.IP.vis(:,imNo));
+    isCtrl=s.prior.OP.isCtrl(s.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

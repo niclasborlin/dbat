@@ -11,7 +11,7 @@ function [rms,res]=bundle_residuals(s,e)
 nPts=nnz(s.IP.vis);
 
 % Compute residuals for each point.
-ptRes=sqrt(sum(((1./s.IO.sensor.pxSize(:,s.IP.ptCams)).*...
+ptRes=sqrt(sum(((1./s.IO.sensor.pxSize(:,s.IP.cam)).*...
                 reshape(e.final.unweighted.r(1:nPts*2),2,[])).^2,1));
 
 % Residual array has same sparsity as vis.

@@ -25,7 +25,7 @@ if nargin<3, skipPrior=false; end
 
 % Remove lens distortion from measured coordinates and convert to mm.
 xy=reshape(pm_multilenscorr1(diag([1,-1])*s0.IP.val,s0.IO.val,s0.IO.model,...
-                             s0.IO.sensor,s0.IP.ptCams,size(s0.IO.val,2)),2,[]);
+                             s0.IO.sensor,s0.IP.cam,size(s0.IO.val,2)),2,[]);
 
 % Extract wanted points.
 if skipPrior

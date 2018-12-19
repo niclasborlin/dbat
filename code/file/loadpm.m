@@ -384,22 +384,19 @@ isSmartMarkPt=all(markPts(:,5:6)==0,2);
 normMarkId=unique(markPts(~isSmartMarkPt,2));
 smartMarkId=unique(markPts(isSmartMarkPt,2));
 
-if ~isempty(normMarkId) && ~isempty(smartMarkId)
+% Are all object point ids increasing?
+split=find(diff(objPts(:,1))<0);
+
+if ~isempty(split) && ~isempty(normMarkId) && ~isempty(smartMarkId)
     warning('Found smart points and normal points, renumbering assumed smartpoints');
 
     maxNormId=max([-inf;normMarkId]);
     minSmartId=min([inf;smartMarkId]);
 
-    % Are all object point ids increasing?
-    split=find(diff(objPts(:,1))<0);
-    if isempty(split)
-        split=0;
-    end
-
     % Shift all smart point ids to fall above normal object ids.
     shift=maxNormId+1-minSmartId;
     % Adjust to start on next power of 10.
-    shift=10^ceil(log10(minSmartId+shift)+eps)-minSmartId+1;
+    %shift=10^ceil(log10(minSmartId+shift)+eps)-minSmartId+1;
     
     % Adjust mark ids
     markPts(isSmartMarkPt,2)=markPts(isSmartMarkPt,2)+shift;

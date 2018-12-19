@@ -67,7 +67,7 @@ s0.IO.val(1,:)=7.3;
 s0.IO.val(2:3,:)=0.5*diag([1,-1])*s0.IO.sensor.ssSize;
 
 % Don't use any prior estimates of the IO parameters.
-%s0.IO.prior.use=...
+%s0.prior.IO.use=...
 % Estimate c,px,py,c,aspect,K1-K3,P1-P2, but not skew (row 5).
 s0.bundle.est.IO=repmat((1:10)'~=5,1,size(s0.bundle.est.IO,2));
 

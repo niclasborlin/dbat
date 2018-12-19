@@ -60,7 +60,7 @@ s0=prob2dbatstruct(prob);
 ss0=s0;
 
 % Don't estimate IO data.
-s0.IO.val=s0.IO.prior.val;
+s0.IO.val=s0.prior.IO.val;
 
 % Default distortion model is now 3: With aspect/skew.
 s0.IO.model.distModel(:)=3;
@@ -72,7 +72,7 @@ noiseLevel=0.1;
 rng('default');
 
 % Perturb supplied EO data and use as initial values.
-s0.EO.val=s0.EO.prior.val;
+s0.EO.val=s0.prior.EO.val;
 s0.EO.val(1:3,:)=s0.EO.val(1:3,:)+randn(3,size(s0.EO.val,2))*noiseLevel;
 
 % Compute initial OP values by forward intersection.
@@ -166,7 +166,7 @@ if exist(imName,'file')
     h=[h;imshow(imName,'parent',gca(imFig))];
     pts=s1.IP.val(:,s1.IP.ix(s1.IP.vis(:,imNo),imNo));
     ptsId=s1.OP.id(s1.IP.vis(:,imNo));
-    isCtrl=s1.OP.prior.isCtrl(s1.IP.vis(:,imNo));
+    isCtrl=s1.prior.OP.isCtrl(s1.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

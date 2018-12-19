@@ -51,7 +51,7 @@ s=s0;
 
 % Remove lens distortion from measured coordinates.
 xy=reshape(pm_multilenscorr1(diag([1,-1])*s0.IP.val,s0.IO.val,s0.IO.model, ...
-                             s0.IO.sensor,s0.IP.ptCams,size(s0.IO.val,2)),2,[]);
+                             s0.IO.sensor,s0.IP.cam,size(s0.IO.val,2)),2,[]);
 
 rms=nan(size(cams));
 % For each camera.

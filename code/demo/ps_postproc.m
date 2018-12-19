@@ -148,9 +148,9 @@ fprintf('\nBundle report file %s generated.\n',reportFile);
 % number of observations, number of parameters, redundacy, ray
 % count and angle min+max+avg.
 nImages=size(s.EO.val,2);
-nCP=nnz(s.OP.prior.isCtrl);
-nOP=nnz(~s.OP.prior.isCtrl);
-sigmaCP=unique(s.OP.prior.std(:,s.OP.prior.isCtrl)','rows')';
+nCP=nnz(s.prior.OP.isCtrl);
+nOP=nnz(~s.prior.OP.isCtrl);
+sigmaCP=unique(s.prior.OP.std(:,s.prior.OP.isCtrl)','rows')';
 if all(sigmaCP==0)
     sigmaCPstr='fixed';
 else
@@ -182,13 +182,13 @@ r=E.redundancy;
 rayCount=full(sum(s.IP.vis,2));
 rayAng=angles(result,'Computing ray angles')*180/pi;
 
-OPrayCount=rayCount(~s.OP.prior.isCtrl);
-OPrayAng=rayAng(~s.OP.prior.isCtrl);
+OPrayCount=rayCount(~s.prior.OP.isCtrl);
+OPrayAng=rayAng(~s.prior.OP.isCtrl);
 if isempty(OPrayCount), OPrayCount=0; end
 if isempty(OPrayAng), OPrayAng=0; end
 
-CPrayCount=rayCount(s.OP.prior.isCtrl);
-CPrayAng=rayAng(s.OP.prior.isCtrl);
+CPrayCount=rayCount(s.prior.OP.isCtrl);
+CPrayAng=rayAng(s.prior.OP.isCtrl);
 if isempty(CPrayCount), CPrayCount=0; end
 if isempty(CPrayAng), CPrayAng=0; end
 
@@ -250,7 +250,7 @@ if exist(imName,'file')
     h=[h;imshow(imName,'parent',gca(imFig))]; %#ok<NASGU>
     pts=s0.IP.val(:,s0.IP.ix(s0.IP.vis(:,imNo),imNo));
     ptsId=s0.OP.id(s0.IP.vis(:,imNo));
-    isCtrl=s0.OP.prior.isCtrl(s0.IP.vis(:,imNo));
+    isCtrl=s0.prior.OP.isCtrl(s0.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

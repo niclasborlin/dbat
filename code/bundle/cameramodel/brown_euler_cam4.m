@@ -38,7 +38,7 @@ switch distModel
     % Legacy modifications.
     s.bundle.est.IO(:,2:end)=false;
     s.EO.cam(:)=1;
-    s.IP.ptCams(:)=1;
+    s.IP.cam(:)=1;
     if (nargout<2)
         % Only residual vector requested.
         
@@ -47,10 +47,10 @@ switch distModel
                              s.EO.val,s.EO.cam,s.OP.val,s.IP.vis);
 
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.ptCams);
+        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.cam);
         
         % Compute lens distortion for all measured point.
-        ld=multilensdist(m,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
+        ld=multilensdist(m,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.cam);
         
         % Remove lens distortion from measured points.
         ptCorr=m-ld;
@@ -81,11 +81,11 @@ switch distModel
                                             s.bundle.est.EO, s.bundle.est.OP);
         
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.ptCams);
+        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.cam);
 
         % Compute lens distortion for all measured point.
         [ld,dIO2]=multilensdist(m,s.IO.val,s.IO.model.nK, ...
-                                s.IO.model.nP,s.IP.ptCams,s.bundle.est.IO);
+                                s.IO.model.nP,s.IP.cam,s.bundle.est.IO);
 
         % Remove lens distortion from measured points.
         ptCorr=m-ld;
@@ -185,7 +185,7 @@ switch distModel
     % Legacy modifications.
     s.bundle.est.IO(:,2:end)=false;
     s.EO.cam(:)=1;
-    s.IP.ptCams(:)=1;
+    s.IP.cam(:)=1;
     if (nargout<2)
         % Only residual vector requested.
         
@@ -194,10 +194,10 @@ switch distModel
                              s.EO.val,s.EO.cam,s.OP.val,s.IP.vis);
 
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.ptCams);
+        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.cam);
         
         % Compute lens distortion for projected points.
-        ld=multilensdist(xy,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.ptCams);
+        ld=multilensdist(xy,s.IO.val,s.IO.model.nK,s.IO.model.nP,s.IP.cam);
 
         % Add lens distortion to projected points.
         ptDist=xy+ld;
@@ -216,7 +216,7 @@ switch distModel
                                             s.bundle.est.EO,s.bundle.est.OP);
         
         % Convert measured points from pixels to mm and flip y coordinate.
-        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.ptCams);
+        m=diag([1,-1])*multiscalepts(s.IP.val,s.IO.sensor.pxSize,s.IP.cam);
 
         % Create arrays of columns indices for IO derivatives.
         [ixpp,ixf,ixK1,ixP1]= ...
@@ -236,7 +236,7 @@ switch distModel
 
         % Compute lens distortion for projected points.
         [ld,dIO2,dxy]=multilensdist(xy,s.IO.val(:,1),s.IO.model.nK, ...
-                                    s.IO.model.nP,s.IP.ptCams,est);
+                                    s.IO.model.nP,s.IP.cam,est);
         
         % Add lens distortion to projected points.
         ptDist=xy+ld;

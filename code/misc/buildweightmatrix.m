@@ -17,7 +17,7 @@ stdIPpx=s.IP.std(:,ptCols);
 
 % Standard deviations are given in pixels. The residuals are in mm, so
 % scale the variance.
-stdIPmm=stdIPpx.*s.IO.sensor.pxSize(:,s.IP.ptCams(ptCols));
+stdIPmm=stdIPpx.*s.IO.sensor.pxSize(:,s.IP.cam(ptCols));
 
 % Convert to variance.
 varIP=stdIPmm(:).^2;
