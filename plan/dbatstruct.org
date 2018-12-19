@@ -185,6 +185,14 @@
   - imDir :: string with the image directory.
   - fileName :: name of the original project file.
 
+| New      | Newer    |   |
+|----------+----------+---|
+| IO.prior | prior.IO |   |
+| EO.prior | prior.EO |   |
+| OP.prior | prior.OP |   |
+
+# STOP
+
 | Old           | New                  |                          |
 |---------------+----------------------+--------------------------|
 | objUnit       | proj.objUnit         | Object space unit        |
