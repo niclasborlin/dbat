@@ -73,15 +73,15 @@ ctrlPos=[0,1,0
 [~,ia,ib]=intersect(s0.OP.id,ctrlId);
 
 % Update control & check point status.
-s0.OP.prior.isCtrl=ismember(s0.OP.id,ctrlId);
-s0.OP.prior.isCheck(s0.OP.prior.isCtrl)=false;
+s0.prior.OP.isCtrl=ismember(s0.OP.id,ctrlId);
+s0.prior.OP.isCheck(s0.prior.OP.isCtrl)=false;
 
 % Set coordinates.
-s0.OP.prior.val(:,ia)=ctrlPos(:,ib);
+s0.prior.OP.val(:,ia)=ctrlPos(:,ib);
 % Assume points are exact.
-s0.OP.prior.std(:,ia)=0;
+s0.prior.OP.std(:,ia)=0;
 % Do not use control points as observations (they are assumed exact).
-s0.OP.prior.use(:,ia)=false;
+s0.prior.OP.use(:,ia)=false;
 % Do not estimate control points (assumed exact).
 s0.bundle.est.OP(:,ia)=false;
 
@@ -95,12 +95,12 @@ s0.IO.val(1,:)=7.3;
 s0.IO.val(2:3,:)=0.5*diag([1,-1])*s0.IO.sensor.ssSize;
 
 % Don't use any prior estimates of the IO parameters.
-%s0.IO.prior.use=...
+%s0.prior.IO.use=...
 % Estimate c,px,py,c,K1-K3,P1-P2, but not aspect or skew (rows 4-5).
 s0.bundle.est.IO=repmat(~ismember((1:10)',4:5),1,size(s0.bundle.est.IO,2));
 
 % Don't use any prior EO paramters.
-%s0.EO.prior.use=false(size(s0.EO.val));
+%s0.prior.EO.use=false(size(s0.EO.val));
 
 % Estimate all EO parameters.
 % s0.bundle.est.EO=...
@@ -113,7 +113,7 @@ s0.EO.val(:)=NaN;
 s0.OP.val(s0.bundle.est.OP)=NaN;
 
 % Get initial camera positions by spatial intersection.
-cpId=s0.OP.id(s0.OP.prior.isCtrl);
+cpId=s0.OP.id(s0.prior.OP.isCtrl);
 [s1,~,fail]=resect(s0,'all',cpId,1,0,cpId);
 if fail
     error('Resection failed.');
@@ -194,7 +194,7 @@ if exist(imName,'file')
     h=[h;imshow(imName,'parent',gca(imFig))];
     pts=s0.IP.val(:,s0.IP.ix(s0.IP.vis(:,imNo),imNo));
     ptsId=s0.OP.id(s0.IP.vis(:,imNo));
-    isCtrl=s0.OP.prior.isCtrl(s0.IP.vis(:,imNo));
+    isCtrl=s0.prior.OP.isCtrl(s0.IP.vis(:,imNo));
     % Plot non-control points as red crosses.
     if any(~isCtrl)
         line(pts(1,~isCtrl),pts(2,~isCtrl),'marker','x','color','r',...

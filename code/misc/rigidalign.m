@@ -1,24 +1,29 @@
-function [T,R,d]=rigidalign(X,Y)
+function [T,R,d,alpha]=rigidalign(X,Y,scale)
 %RIGIDALIGN Compute rigid-body transformation between two point sets.
 %
-%   [T,R,d]=RIGIDALIGN(X,Y), where X and Y are M-by-N arrays of M-D
-%   points, computes the rigid-body transformation that minimizes
+%   [T,R,d,ALPHA]=RIGIDALIGN(X,Y,TRUE), where X and Y are M-by-N
+%   arrays of M-D points, computes the rigid-body transformation that
+%   minimizes
 %
-%      sum  norm( R * X(:,i) + d - Y(:,i) )^2,
+%      sum  norm( alpha * R * X(:,i) + d - Y(:,i) )^2,
 %       i
 %
-%   where R is an M-by-M rotation matrix and d is an M-by-1
-%   translation vector. The M+1-by-M+1 matrix T is the homogeneous
-%   transformation matrix
+%   where R is an M-by-M rotation matrix, d is an M-by-1 translation
+%   vector and alpha is a scale factor. The M+1-by-M+1 matrix T is the
+%   homogeneous transformation matrix
 %
-%       T=[ R  d
-%           0  1 ]
+%       T=[ alpha * R  d
+%                   0  1 ]
 %
 %   that transforms X to Y.
+%
+%   RIGIDALIGN(X,Y) or RIGIDALIGN(X,Y,FALSE) assumes ALPHA=1.
 %
 %   References: Soderkvist and Wedin, (1993), Determining the
 %   movement of the skeleton using well-configured markers. Journal
 %   of Biomechanics 26(12):1473-7.
+
+if nargin<3, scale=false; end
 
 % Verify sizes.
 if any(size(X)~=size(Y))
@@ -43,7 +48,14 @@ C=B*A';
 % Compute optimal rotation matrix.
 R=P*diag([ones(1,m-1),det(P*Q')])*Q';
 
+% Compute scaling factor.
+if scale
+    gamma=trace((R*A)'*B);
+    alpha=gamma/trace(A'*A);
+else
+    alpha=1;
+end
 % Compute optimal shift.
-d=ym-R*xm;
+d=ym-alpha*R*xm;
 
-T=[R,d;zeros(1,m),1];
+T=[alpha*R,d;zeros(1,m),1];

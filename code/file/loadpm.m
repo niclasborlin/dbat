@@ -380,40 +380,31 @@ OPlabels=cell(size(rawOPids));
 OPlabels(isCtrl)=arrayfun(@int2str,rawOPids(isCtrl),'uniformoutput',false);
 
 % Check if we have both normal and smart points.
-haveSmartMarkPts=any(any(markPts(:,5:6)==0)) && any(any(markPts(:,5:6)~=0));
-haveSmartObjPts=nnz(diff(objPts(:,1))<0)>0;
-haveSmartPts=haveSmartMarkPts | haveSmartObjPts;
+isSmartMarkPt=all(markPts(:,5:6)==0,2);
+normMarkId=unique(markPts(~isSmartMarkPt,2));
+smartMarkId=unique(markPts(isSmartMarkPt,2));
 
-if (haveSmartPts)
+% Are all object point ids increasing?
+split=find(diff(objPts(:,1))<0);
+
+if ~isempty(split) && ~isempty(normMarkId) && ~isempty(smartMarkId)
     warning('Found smart points and normal points, renumbering assumed smartpoints');
 
-    isSmartMarkPt=all(markPts(:,5:6)==0,2);
-    normMarkId=unique(markPts(~isSmartMarkPt,2));
-    smartMarkId=unique(markPts(isSmartMarkPt,2));
-
-    isSmartObjPt=false(size(objPts,1),1);
-
-    % Are all object point ids increasing?
-    split=find(diff(objPts(:,1))<0);
-    if length(split)==1
-        warning('Found non-increasing OP id, renumbering assumed smartpoints');
-        % If not, first sequence is object point ids, second sequence is
-        % smart point ids.
-        isSmartObjPt(split+1:end)=true;
-    else
-        error('Object point ids have more than one jump.');
-    end
-
-    normObjId=objPts(~isSmartObjPt,1);
-    smartObjId=objPts(isSmartObjPt,1);
-
-    maxNormalId=max([normMarkId;normObjId]);
-    minSmartId=min([smartMarkId;smartObjId]);
+    maxNormId=max([-inf;normMarkId]);
+    minSmartId=min([inf;smartMarkId]);
 
     % Shift all smart point ids to fall above normal object ids.
-    shift=10^ceil(log10(maxNormalId+1-minSmartId)+eps);
-    objPts(isSmartObjPt,1)=objPts(isSmartObjPt,1)+shift;
+    shift=maxNormId+1-minSmartId;
+    % Adjust to start on next power of 10.
+    %shift=10^ceil(log10(minSmartId+shift)+eps)-minSmartId+1;
+    
+    % Adjust mark ids
     markPts(isSmartMarkPt,2)=markPts(isSmartMarkPt,2)+shift;
+    
+    % Adjust obj ids
+    isSmartObjPt=ismember(objPts(:,1),smartMarkId);
+    isSmartObjPt(1:split)=false;
+    objPts(isSmartObjPt,1)=objPts(isSmartObjPt,1)+shift;
 end
 
 prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...

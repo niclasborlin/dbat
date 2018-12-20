@@ -8,10 +8,6 @@ function ss=buildserialindices(ss,wantedOrder)
 %   default. Use SERIALIZE(S0,ORDER), where ORDER is a cell array with
 %   strings 'IO', 'EO', 'OP' to modify the order.
 %
-%   S0=BUILDSERIALINDICES(S0,TRUE) will only parse the
-%   IO.struct.block and EO.struct.block fields. The serial/deserial
-%   fields will be cleared.
-%
 %   S0.IO.struct.block indicates how IO parameters are blocked, i.e.,
 %   shared between images (columns). S0.bundle.est.IO indicates what
 %   IO parameters should be estimated. The field bundle.serial.IO.src
@@ -65,33 +61,14 @@ if islogical(wantedOrder)
     wantedOrder={};
 end
 
-% Find unique IOblock and EOblock columns and indicate if columns
-% are simple.
-ss.IO.struct.uniq=false(1,size(ss.IO.struct.block,2));
-[~,ia,ic]=unique(ss.IO.struct.block','rows');
-ss.IO.struct.uniq(ia)=true;
-ss.IO.struct.no=ic';
-ss.IO.struct.isSimple=all(ss.IO.struct.block== ...
-                          ss.IO.struct.block(ones(end,1),:),1);
-
-ss.EO.struct.uniq=false(1,size(ss.EO.struct.block,2));
-[~,ia,ic]=unique(ss.EO.struct.block','rows');
-ss.EO.struct.uniq(ia)=true;
-ss.EO.struct.no=ic';
-ss.EO.struct.isSimple=all(ss.EO.struct.block== ...
-                          ss.EO.struct.block(ones(end,1),:),1);
-
-if parseOnly
-    % Create blank serial/deserial structs.
-    ss.bundle.serial=[];
-    ss.bundle.deserial=[];
-    return;
+if isempty(ss.IO.struct.uniq) || isempty(ss.EO.struct.uniq)
+    ss=parseblockvariant(ss);
 end
 
 % Serialize each block. All x-related indices are 1-based.
 [IOlead,IOserial,IOdeserial,warn,blockIx]=serializeblock(ss.IO.struct.block,...
                                                   ss.bundle.est.IO, ...
-                                                  ss.IO.prior.use);
+                                                  ss.prior.IO.use);
 if warn
     warning(['All IO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -104,7 +81,7 @@ switch length(blockIx)
     ss.EO.cam=1:size(ss.EO.val,2);
   case 1
     % One IO block. Legacy models require column indices to the
-    % block. WARNING: Untested for blockIx!=1.
+    % block. WARNING: Untested for blockIx~=1.
     ss.EO.cam=repmat(blockIx,1,size(ss.EO.val,2));
   otherwise
     % More than one code block => signal incompatibility with NaN's.
@@ -112,7 +89,7 @@ switch length(blockIx)
 end    
 [EOlead,EOserial,EOdeserial,warn]=serializeblock(ss.EO.struct.block,...
                                                  ss.bundle.est.EO,...
-                                                 ss.EO.prior.use);
+                                                 ss.prior.EO.use);
 if warn
     warning(['All EO parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -121,7 +98,7 @@ end
 
 [~,OPserial,OPdeserial,warn]=serializeblock(repmat(1:size(ss.OP.val,2),3,1),...
                                             ss.bundle.est.OP,...
-                                            ss.OP.prior.use);
+                                            ss.prior.OP.use);
 if warn
     warning(['All OP parameters in a block should be estimated or ' ...
              'fixed, not a combination. Fixed parameters will be ' ...
@@ -155,8 +132,8 @@ end
 ss.IO.struct.leading=IOlead;
 ss.EO.struct.leading=EOlead;
 % Mask out any useObs that correspond to a repeated parameter.
-ss.IO.prior.use=ss.IO.prior.use & ss.IO.struct.leading;
-ss.EO.prior.use=ss.EO.prior.use & ss.EO.struct.leading;
+ss.prior.IO.use=ss.prior.IO.use & ss.IO.struct.leading;
+ss.prior.EO.use=ss.prior.EO.use & ss.EO.struct.leading;
 
 % Store indices.
 ss.bundle.serial=struct('IO',IOserial,...

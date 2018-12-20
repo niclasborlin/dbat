@@ -134,23 +134,23 @@ end
 % Verify a consistent estimation/use observations arrays. If we
 % shouldn't estimate a parameter, we should not use the prior
 % observation of it during the bundle.
-if any(s.IO.prior.use(~s.bundle.est.IO))
+if any(s.prior.IO.use(~s.bundle.est.IO))
     warning('DBAT:bundle:badInput',...
             'Some IO parameters are set to both ''fixed'' and ''observed''');
     disp('Setting IO parameters to fixed');
-    s.IO.prior.use(~s.bundle.est.IO)=false;
+    s.prior.IO.use(~s.bundle.est.IO)=false;
 end
-if any(s.EO.prior.use(~s.bundle.est.EO))
+if any(s.prior.EO.use(~s.bundle.est.EO))
     warning('DBAT:bundle:badInput',...
             'Some EO parameters are set to both ''fixed'' and ''observed''');
     disp('Setting EO parameters to fixed');
-    s.EO.prior.use(~s.bundle.est.EO)=false;
+    s.prior.EO.use(~s.bundle.est.EO)=false;
 end
-if any(s.OP.prior.use(~s.bundle.est.OP))
+if any(s.prior.OP.use(~s.bundle.est.OP))
     warning('DBAT:bundle:badInput',...
             'Some OP parameters are set to both ''fixed'' and ''observed''');
     disp('Setting OP parameters to fixed');
-    s.OP.prior.use(~s.bundle.est.OP)=false;
+    s.prior.OP.use(~s.bundle.est.OP)=false;
 end
 
 if isempty(s.bundle.serial) || isempty(s.bundle.deserial)
@@ -251,7 +251,7 @@ if any(s.IO.val(4:5,modelsWithoutB)~=0)
              'be inaccurate.'],usedBadModels);
 end
 % Warn if asked to estimate aspect and/or skew with a model that
-% does not support it.
+% does not suppos.Irt it.
 if any(s.bundle.est.IO(4:5,modelsWithoutB))
     warning(['Trying to estimate aspect and/or skew. This is not ' ...
              'supported by lens distortion model %d! Results will ' ...
@@ -454,12 +454,12 @@ s.post.res.OP=nan(size(s.OP.val));
 s.post.res.IP(:)=final.unweighted.r(s.post.res.ix.IP);
 % Mark pt residuals are in mm, scale to pixels.
 ptCols=s.IP.ix(s.IP.vis);
-s.post.res.IP=s.post.res.IP./s.IO.sensor.pxSize(:,s.IP.ptCams(ptCols));
+s.post.res.IP=s.post.res.IP./s.IO.sensor.pxSize(:,s.IP.cam(ptCols));
 
 % This might be problematic if a block parameter is used as an observation...
-s.post.res.IO(s.IO.prior.use)=final.unweighted.r(s.post.res.ix.IO);
-s.post.res.EO(s.EO.prior.use)=final.unweighted.r(s.post.res.ix.EO);
-s.post.res.OP(s.OP.prior.use)=final.unweighted.r(s.post.res.ix.OP);
+s.post.res.IO(s.prior.IO.use)=final.unweighted.r(s.post.res.ix.IO);
+s.post.res.EO(s.prior.EO.use)=final.unweighted.r(s.post.res.ix.EO);
+s.post.res.OP(s.prior.OP.use)=final.unweighted.r(s.post.res.ix.OP);
 
 % Sigma0 is sqrt(r'*r/(m-n)), where m is the number of
 % observations, and n is the number of unknowns.

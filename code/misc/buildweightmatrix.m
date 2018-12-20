@@ -17,16 +17,16 @@ stdIPpx=s.IP.std(:,ptCols);
 
 % Standard deviations are given in pixels. The residuals are in mm, so
 % scale the variance.
-stdIPmm=stdIPpx.*s.IO.sensor.pxSize(:,s.IP.ptCams(ptCols));
+stdIPmm=stdIPpx.*s.IO.sensor.pxSize(:,s.IP.cam(ptCols));
 
 % Convert to variance.
 varIP=stdIPmm(:).^2;
 % Variance of prior IO observations.
-varIO=s.IO.prior.std(s.IO.prior.use).^2;
+varIO=s.prior.IO.std(s.prior.IO.use).^2;
 % Prior EO observations.
-varEO=s.EO.prior.std(s.EO.prior.use).^2;
+varEO=s.prior.EO.std(s.prior.EO.use).^2;
 % Prior OP observations.
-varOP=s.OP.prior.std(s.OP.prior.use).^2;
+varOP=s.prior.OP.std(s.prior.OP.use).^2;
 
 % Covariance matrix is currently diagonal. Pre-allocate diagonal and
 % put variances in correct places.

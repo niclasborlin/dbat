@@ -1,16 +1,4 @@
-- proj
-  - objUnit :: string with the object space unit.
-  - x0desc :: comment string on the initial values used by bundle.
-  - title :: title string.
-  - imDir :: string with the image directory.
-  - fileName :: name of the original project file.
 - IO
-  - val :: 16-by-nImages array with estimates of the internal
-           orientation for each camera.
-  - std :: 16-by-nImages array with estimates of the posterior
-           standard deviation of IO.val.
-  - type :: val-sized struct indicate what type of parameter is stored
-            at the respective position. See PARAMETER TYPES below.
   - model :: struct with fields
     - distModel :: nImages array distortion number for each image.
     - nK :: scalar indicating how many (potentially zero) K values are
@@ -22,50 +10,37 @@
       - 35mm :: '35 mm equivalent' units, i.e. sensor height=24mm,
       - pixels :: pixels,
       - unity :: sensor height=1.
-  - prior :: struct with prior observations in fields
-    - val :: IO.val-sized array with prior observations, or NaN if no
-             observation.
-    - std :: IO.std-sized array with prior standard deviations for the
-             IO parameters, 0 if exact, NaN if none.
-    - cov :: 16--by-16--by-nImages array with prior covariance
-             matrices for the IO parameters, or empty if none.
-    - use :: val-sized logical array indicating whether the
-             corresponding IO entry should be used an observation in
-             the bundle. Default is all-false.
+  - val :: 16-by-nImages array with estimates of the internal
+           orientation for each camera.
+  - type :: val-sized struct indicate what type of parameter is stored
+            at the respective position. See PARAMETER TYPES below.
   - struct :: struct with fields
     - block :: 16-by-nImages array with numbering indicating what IO
                values are distinct. Block-variant projects have only
                one unique value. Image-variant projects have all
                values distinct.
     - leading :: 16-by-nImages logical array indicating what parameters
-              are leading a block.
+              are leading a block, i.e. first and to be estimated.
     - uniq :: logical nImages-vector indicating which IOblock columns
               are unique.
     - no ::  nImages-vector with unique numbers for IOblock columns.
     - isSimple :: logical nImages-vector indicating which IOblock are
                 simple (contain elements from one block only).
+  - sensor :: struct with fields
+    - ssSize :: sensor size [w,h] in camera units
+    - imSize :: image size [w,h] in pixels
+    - pxSize :: pixel size [w,h] in camera units
+    - samePxSize :: true if all pixel sizes are identical
 - EO
-  - val :: 7-by-nImages array with the external orientation for each
+  - cam :: Index into IO for each image
+  - model :: Rotation model. 0=Euler x-y-z.
+  - val :: 6-by-nImages array with the external orientation for each
            image.
-  - std :: 7-by-nImages array with estimates of the posterior standard
-           deviation of EO.val.
-  - cams :: Index into IO for each image (legacy distortion models
-            +/-1 only).
-  - names :: nEO-cell array with image names.
-  - id :: nEO-vector with camera ids.
-  - labels :: nEO-cell array with image labels.
   - type :: val-sized struct indicate what type of parameter is stored
             at the respective position. See PARAMETER TYPES below.
-  - prior :: struct with prior observations in fields
-    - val :: EO.val-sized array with prior observations, or NaN if no
-             observation.
-    - std :: EO.std-sized array with prior standard deviations for the
-             EO parameters, 0 if exact, NaN if none.
-    - cov :: 7-by-7-by-nImages array with prior covariance
-             matrices for the EO parameters, or empty if none.
-    - use :: val-sized logical array indicating whether the
-             corresponding EO entry should be used an observation in
-             the bundle. Default is all-false.
+  - name :: nEO-cell array with image names.
+  - id :: nEO-vector with camera ids.
+  - labels :: nEO-cell array with image labels.
   - struct :: struct with fields
     - block :: 7-by-nImages array with numbering indicating what EO
                values are distinct.
@@ -77,15 +52,54 @@
     - simple :: logical nImages-vector indicating which EOblock are
                 simple (contain elements from one block only).
 - OP
-  - val :: 3-by-nOP array with object and control points.
-  - std :: 3-by-nOP array with estimates of the posterior standard
-           deviation of OP.val.
+  - val :: 3-by-nOP array with object and control point coordinates.
+  - type :: val-sized struct indicate what type of parameter is stored
+            at the respective position. See PARAMETER TYPES below.
   - id :: 1-by-nOP array with object points ids.
   - rawId :: 1-by-nOP array with original object point ids.
   - labels :: 1-by-nOP cell array with labels of the original ctrl pts.
-  - type :: val-sized struct indicate what type of parameter is stored
-            at the respective position. See PARAMETER TYPES below.
-  - prior :: struct with prior IO information in fields
+- IP
+  - val :: 2-by-nIPs array with measured image coordinates in
+           pixels, stored in image-major order.
+  - std :: 2-by-nIPs array with standard deviations for the
+           markPts coordinates.
+  - cov :: empty or 2-by-2-by-nIPs with individual covariance for each IP.
+  - use :: 1-by-nIPs logical array indicating which IPs are to be used
+           by the bundle.
+  - type :: 1-by-nIPs with IP type (unused).
+  - id :: 1-by-nIPs with integer id for each IP.
+  - cams :: 1-by-nIPs array indicating which IO column
+              correspond to which measured point.
+  - vis :: nOP-by-nImage sparse logical array indicating in which
+           image(s) each OP is visible. vis(I,J)==true if object point
+           I has a measured coordinate in image J.
+  - ix :: nOP-by-nImage numerical array indicating which column in
+              markPts the corresponding measurement is stored.
+              colPos(I,J)==K indicates the the measurement of object
+              point I in image J is stored in column K of markPts.
+  - sigmas :: single or multiple prior sigmas for different IP types
+- prior
+  - IO :: struct with prior IO observations in fields
+    - val :: IO.val-sized array with prior observations, or NaN if no
+             observation.
+    - std :: IO.std-sized array with prior standard deviations for the
+             IO parameters, 0 if exact, NaN if none.
+    - cov :: 16--by-16--by-nImages array with prior covariance
+             matrices for the IO parameters, or empty if none.
+    - use :: val-sized logical array indicating whether the
+             corresponding IO entry should be used an observation in
+             the bundle. Default is all-false.
+  - EO :: struct with prior observations in fields
+    - val :: EO.val-sized array with prior observations, or NaN if no
+             observation.
+    - std :: EO.std-sized array with prior standard deviations for the
+             EO parameters, 0 if exact, NaN if none.
+    - cov :: 7-by-7-by-nImages array with prior covariance
+             matrices for the EO parameters, or empty if none.
+    - use :: val-sized logical array indicating whether the
+             corresponding EO entry should be used an observation in
+             the bundle. Default is all-false.
+  - OP :: struct with prior IO information in fields
     - val :: 3-by-nOP array, with prior observations of the OP
              parameters, or NaN if no observation.
     - std :: val-sized array with prior standard deviations for the IO
@@ -99,21 +113,6 @@
                 control points.
     - isCheck :: 1-by-nOP logical vector indicating which OP are
                  control points. Currently set to ???
-- IP
-  - val :: 2-by-nMarkPts array with measured image coordinates in
-           pixels, stored in image-major order.
-  - std :: 2-by-nMarkPts array with standard deviations for the
-           markPts coordinates.
-  - ptCams :: 1-by-nMarkPts array indicating which IO column
-              correspond to which measured point.
-  - vis :: nOP-by-nImage sparse logical array indicating in which
-           image(s) each OP is visible. vis(I,J)==true if object point
-           I has a measured coordinate in image J.
-  - colPos :: nOP-by-nImage numerical array indicating which column in
-              markPts the corresponding measurement is stored.
-              colPos(I,J)==K indicates the the measurement of object
-              point I in image J is stored in column K of markPts.
-  - sigmas :: single or multiple prior sigmas for different IP types
 - bundle
   - est :: struct with fields
     - IO :: 16-by-nImages logical array indicating what internal
@@ -146,20 +145,54 @@
     - OP.src :: where from in x should the OP values be copied?
     - OP.dest :: where in OP should the elements end up?
     - n :: total number of unknowns.
+  - resIx :: struct with fields IP, IO, EO, OP, indicating the
+             corresponding residual vector indices.
 - post
+  - sigma0 :: estimated standard deviation of unit weight.
   - res :: posterior residuals after the bundle
-    - IP :: 2-by-nMarkPts array with image point residuals in pixels.
+    - IP :: 2-by-nIPs array with image point residuals in pixels.
             Filled in by the bundle.
     - IO :: 16-by-nImages array with IO residuals if prior IO
             observations were used in the bundle.
-    - EO :: 7-by-nImages array with EO residuals if prior EO
+    - EO :: 6-by-nImages array with EO residuals if prior EO
             observations were used in the bundle.
     - OP :: 3-by-nOP array with OP and CP residuals if prior OP/CP
             observations were used in the bundle.
-    - ix :: struct with fields IP, IO, EO, OP, indicating the
-            corresponding residual vector indices.
+  - wres :: posterior weighted residuals
+    - IP :: 2-by-nIPs array with image point residuals in pixels.
+            Filled in by the bundle.
+    - IO :: 16-by-nImages array with IO residuals if prior IO
+            observations were used in the bundle.
+    - EO :: 6-by-nImages array with EO residuals if prior EO
+            observations were used in the bundle.
+    - OP :: 3-by-nOP array with OP and CP residuals if prior OP/CP
+            observations were used in the bundle.
   - sigmas :: vector with a posteriori standard deviations
               (prior.sigmas scaled by estimated sigma0).
+  - std :: posterior standard deviations after the bundle
+    - IO :: NC-by-nImages with IO std, or NaN if not estimated.
+    - EO :: 6-by-nImages with EO std, or NaN if not estimated.
+    - OP :: 3-by-nOPs with OP std, or NaN if not estimated.
+  - cov :: posterior covariance after the bundle. Empty if usused, otherwise
+    - IO :: (NC*nImages)-by-(NC*nImages) with IO std, or NaN if not estimated.
+    - EO :: 6-by-6-by-nImages with EO cov, or NaN if not estimated.
+    - OP :: 3-by-3-by-nOPs with OP cov, or NaN if not estimated.
+  - sensor :: 
+- proj
+  - objUnit :: string with the object space unit.
+  - x0desc :: comment string on the initial values used by bundle.
+  - title :: title string.
+  - imDir :: string with the image directory.
+  - fileName :: name of the original project file.
+
+| New       | Newer    |   |
+|-----------+----------+---|
+| IO.prior  | prior.IO |   |
+| EO.prior  | prior.EO |   |
+| OP.prior  | prior.OP |   |
+| IP.ptCams | IP.cam   |   |
+
+# STOP
 
 | Old           | New                  |                          |
 |---------------+----------------------+--------------------------|
