@@ -138,6 +138,10 @@ end
 % Initialize waitbar to delay for 1s and update every 1s.
 DelayedWaitBar('init',1,1,'Loading Photoscan project file...');
 
+if ~exist(psFile,'file')
+    error('File %s does not exists',psFile);
+end
+
 [psDir,psName,~]=fileparts(psFile);
 if unpackLocal
     % Unpack to 'unpacked' subdir.
