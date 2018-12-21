@@ -376,7 +376,7 @@ end
 rawOPids=objPts(:,1);
 
 % Create labels from CP ids.
-OPlabels=cell(size(rawOPids));
+OPlabels=repmat({''},size(rawOPids));
 OPlabels(isCtrl)=arrayfun(@int2str,rawOPids(isCtrl),'uniformoutput',false);
 
 % Check if we have both normal and smart points.

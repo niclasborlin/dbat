@@ -1,0 +1,7 @@
+# Control point coordinates for Photomodeler camera calibration sheet,
+# fixed version.
+# Id,X,Y,Z
+1001,CP1,0,1,0,1e-3
+1002,CP2,1,1,0,1e-3
+1003,CP3,0,0,0,1e-3
+1004,CP4,1,0,0,1e-3

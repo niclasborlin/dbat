@@ -42,6 +42,9 @@ std=zeros(3,0);
 cov=zeros(3,3,0);
 name=cell(1,0);
 
+% True if any full covariance matrix is specified.
+anyCov=false;
+
 while ~feof(fid)
     % Read one line.
     s=fgets(fid);
@@ -88,6 +91,7 @@ while ~feof(fid)
       case 12
         cc(:)=a(4:end);
         st=sqrt(diag(cc));
+        anyCov=true;
       otherwise
         error('Bad number of items on CP line.');
     end
@@ -99,5 +103,9 @@ while ~feof(fid)
 end
 
 fclose(fid);
+
+if ~anyCov
+    cov=[];
+end
 
 pts=struct('id',id,'name',{name},'pos',pos,'std',std,'cov',cov);
