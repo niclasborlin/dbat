@@ -36,6 +36,8 @@ inputDir=fullfile(curDir,'data','dbat');
 inputFile=fullfile(inputDir,'pmexports','camcal-pmexport-missing-obs.txt');
 % Report file name.
 reportFile=fullfile(inputDir,'dbatexports','camcal-dbatreport-missing-obs.txt');;
+% Control point file
+cptFile=fullfile(inputDir,'ref','camcal-fixed.txt');
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
@@ -55,28 +57,14 @@ s0=prob2dbatstruct(prob);
 % Switch to lens distortion model that supports skew/aspect.
 s0.IO.model.distModel(:)=3;
 
-% Set control points to nominal coordinates.
-ctrlId=1001:1004;
-ctrlPos=[0,1,0
-         1,1,0
-         0,0,0
-         1,0,0]';
+% Load control points
+pts=loadcpt(cptFile);
 
-% Find where to put the data.
-[~,ia,ib]=intersect(s0.OP.id,ctrlId);
+% Match control points with loaded info.
+[i,j]=matchcpt(s0,pts);
 
-% Update control & check point status.
-s0.prior.OP.isCtrl=ismember(s0.OP.id,ctrlId);
-s0.prior.OP.isCheck(s0.prior.OP.isCtrl)=false;
-
-% Set coordinates.
-s0.prior.OP.val(:,ia)=ctrlPos(:,ib);
-% Assume points are exact.
-s0.prior.OP.std(:,ia)=0;
-% Do not use control points as observations (they are assumed exact).
-s0.prior.OP.use(:,ia)=false;
-% Do not estimate control points (assumed exact).
-s0.bundle.est.OP(:,ia)=false;
+% Set control points.
+s0=setcpt(s0,pts,i,j);
 
 saves0=s0;
 
@@ -102,8 +90,9 @@ s0.bundle.est.IO=repmat((1:10)'~=5,1,size(s0.bundle.est.IO,2));
 % to catch any errors.
 s0.EO.val(:)=NaN;
 
-% OP are computed by forward intersection. Clear values to catch any errors.
-s0.OP.val(s0.bundle.est.OP)=NaN;
+% Non-ctrl pts are computed by forward intersection. Clear values to
+% catch any errors.
+s0.OP.val(:,~s0.prior.OP.isCtrl)=NaN;
 
 % Get initial camera positions by spatial intersection.
 cpId=s0.OP.id(s0.prior.OP.isCtrl);

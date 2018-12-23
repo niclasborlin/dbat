@@ -73,6 +73,7 @@ pts=loadcpt(cptFile);
 % Set control points.
 s0=setcpt(s0,pts,i,j);
 
+% Save original structure.
 saves0=s0;
 
 % Set initial IO values to EXIF sensor, pp at center of censor.

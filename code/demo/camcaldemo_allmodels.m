@@ -41,6 +41,8 @@ inputDir=fullfile(curDir,'data','dbat');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','camcal-pmexport.txt');
+% Control point file
+cptFile=fullfile(inputDir,'ref','camcal-fixed.txt');
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
@@ -57,28 +59,17 @@ disp('done.')
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
 
-% Set control points to nominal coordinates.
-ctrlId=1001:1004;
-ctrlPos=[0,1,0
-         1,1,0
-         0,0,0
-         1,0,0]';
+% Switch to lens distortion model that supports skew/aspect.
+s0.IO.model.distModel(:)=3;
 
-% Find where to put the data.
-[~,ia,ib]=intersect(s0.OP.id,ctrlId);
+% Load control points
+pts=loadcpt(cptFile);
 
-% Update control & check point status.
-s0.prior.OP.isCtrl=ismember(s0.OP.id,ctrlId);
-s0.prior.OP.isCheck(s0.prior.OP.isCtrl)=false;
+% Match control points with loaded info.
+[i,j]=matchcpt(s0,pts);
 
-% Set coordinates.
-s0.prior.OP.val(:,ia)=ctrlPos(:,ib);
-% Assume points are exact.
-s0.prior.OP.std(:,ia)=0;
-% Do not use control points as observations (they are assumed exact).
-s0.prior.OP.use(:,ia)=false;
-% Do not estimate control points (assumed exact).
-s0.bundle.est.OP(:,ia)=false;
+% Set control points.
+s0=setcpt(s0,pts,i,j);
 
 % Save original structure.
 saves0=s0;
@@ -118,8 +109,9 @@ for model=[-1,1:5]
     % to catch any errors.
     s0.EO.val(:)=NaN;
 
-    % OP are computed by forward intersection. Clear values to catch any errors.
-    s0.OP.val(s0.bundle.est.OP)=NaN;
+    % Non-ctrl pts are computed by forward intersection. Clear values to
+    % catch any errors.
+    s0.OP.val(:,~s0.prior.OP.isCtrl)=NaN;
 
     % Get initial camera positions by spatial intersection.
     cpId=s0.OP.id(s0.prior.OP.isCtrl);

@@ -36,6 +36,8 @@ inputDir=fullfile(curDir,'data','dbat');
 inputFile=fullfile(inputDir,'pmexports','camcal-pmexport.txt');
 % Report file name.
 reportFile=fullfile(inputDir,'dbatexports','camcal-dbatreport-no-datum.txt');;
+% Control point file
+cptFile=fullfile(inputDir,'ref','camcal-fixed.txt');
 
 fprintf('Loading data file %s...',inputFile);
 prob=loadpm(inputFile);
