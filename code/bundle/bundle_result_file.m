@@ -34,8 +34,23 @@ p4=repmat(p,1,4);
 p5=repmat(p,1,5);
 p6=repmat(p,1,6);
 
-fprintf(fid,[p,'Project Name: %s\n'],s.proj.title);
+fprintf(fid,[p,'Project\n']);
 
+fprintf(fid,[p2,'Name        : %s\n'],s.proj.title);
+
+if ~isempty(s.proj.fileName)
+    fprintf(fid,[p2,'File name   : %s\n'],s.proj.fileName);
+end
+
+if ~isempty(s.proj.cptFile)
+    fprintf(fid,[p2,'Ctrl pt file: %s\n'],s.proj.cptFile);
+end
+
+if ~isempty(s.proj.EOfile)
+    fprintf(fid,[p2,'EO file     : %s\n'],s.proj.EOfile);
+end
+    
+    
 fprintf(fid,[p,'Problems and suggestions:\n']);
 fprintf(fid,[p2,'Project Problems:\n']);
 if isempty(e.weakness.structural)

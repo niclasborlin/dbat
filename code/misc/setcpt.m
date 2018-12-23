@@ -10,13 +10,15 @@ function s=setcpt(s,pts,i,j,isCtrl)
 %   SETCPT copies the prior pos, std, and/or cov to S. Furthermore,
 %   the isCtrl and isCheck properties are set. The prior.use and
 %   bundle.est fields are set depending on whether the control
-%   points are fixed or not.
+%   points are fixed or not. The pts.fileName is recorded in s.proj.
 %
 %   Blank labels in S are overwritten by labels in PTS.
 %
 %See also: LOADCPT, MATCHCPT.
 
 if nargin<5, isCtrl=true; end
+
+s.proj.cptFile=pts.fileName;
 
 % Copy positions.
 s.prior.OP.val(:,i)=pts.pos(:,j);

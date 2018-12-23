@@ -172,12 +172,14 @@ function s=prob2dbatstruct(prob,individualCameras)
 %     - ssSize  - 2-by-nImages array with sensor [w;h] in physical units.
 %     - pxSize  - 2-by-nImages array with pixel [w;h] in physical units.
 %
-%   The project field contains global information about the project.
+%   The proj field contains global information about the project.
 %   - objUnit  - string with the object space unit.
 %   - x0desc   - comment string on the initial values used by bundle.
 %   - title    - title string.
 %   - imDir    - string with the image directory.
 %   - fileName - name of the original project file.
+%   - cptFile  - name of the control point file.
+%   - EOfile   - name of prior EO observations.
 %
 %See also: LOADPM, BUILDPARAMTYPES, BUILDSERIALINDICES.
 
@@ -395,7 +397,9 @@ proj=struct('objUnit',objUnit,...
             'x0desc','',...
             'title',prob.job.title,...
             'imDir',imDir,...
-            'fileName',prob.job.fileName);
+            'fileName',prob.job.fileName,...
+            'cptFile','',...
+            'EOfile','');
 
 % Create structure for sensor data.
 IOsensor=struct('ssSize',sensorSize,...
