@@ -49,17 +49,17 @@ if length(varargin)>=i && ischar(varargin{i}) && strcmp(varargin{i},'default')
         s.IO.val(4:end,ix)=0;
         i=i+1;
     else
-        error('Bad parameter %d: CC must be numeric',i)
+        error('SETCAMVALS: Bad parameter %d: CC must be numeric',i)
     end
 end
 
 % Parse individual parameter assignments
 while length(varargin)>=i
     if length(varargin)<i+1
-        error('Trailing arguments must come in pairs');
+        error('SETCAMVALS: Trailing arguments must come in pairs');
     end
     if ~ischar(varargin{i})
-        error('Parameter name (arg %d) must be a char array',i);
+        error('SETCAMVALS: Parameter name (arg %d) must be a char array',i);
     end
     % Check for simple arg.
     ii=find(strcmp(varargin{i},{'cc','px','py','as','sk'}));
@@ -69,24 +69,24 @@ while length(varargin)>=i
           case 'K'
             n=str2double(varargin{i}(2:end));
             if n<1 || n>s.IO.model.nK
-                error('K number out of range');
+                error('SETCAMVALS: K number out of range');
             end
             ii=5+n;
           case 'P'
             n=str2double(varargin{i}(2:end));
             if n<1 || n>s.IO.model.nP
-                error('P number out of range');
+                error('SETCAMVALS: P number out of range');
             end
             ii=5+s.IO.model.nK+n;
         end
     end
     if isempty(ii)
-        error('Bad parameter %d: %s',i,varargin{i});
+        error('SETCAMVALS: Bad parameter %d: %s',i,varargin{i});
     end
     i=i+1;
     % Verify next parameter is numeric.
     if ~isnumeric(varargin{i})
-        error('Parameter value (arg %d) must be numeric',i);
+        error('SETCAMVALS: Parameter value (arg %d) must be numeric',i);
     end
     s.IO.val(ii,ix)=varargin{i};
     i=i+1;
