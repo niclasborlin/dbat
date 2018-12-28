@@ -58,22 +58,30 @@ while length(varargin)>=i
     if length(varargin)<i+1
         error('SETCAMVALS: Trailing arguments must come in pairs');
     end
-    if ~ischar(varargin{i})
+    param=varargin{i};
+    arg=varargin{i+1};
+    % Verify parameter is char and argument is numeric.
+    if ~ischar(param)
         error('SETCAMVALS: Parameter name (arg %d) must be a char array',i);
     end
+    if ~isnumeric(arg)
+        error('SETCAMVALS: Parameter value (arg %d) must be numeric',i+1);
+    end
     % Check for simple arg.
-    ii=find(strcmp(varargin{i},{'cc','px','py','as','sk'}));
-    % Not found, check Ki, Pi
-    if isempty(ii) && ~isempty(varargin{i})
+    ii=find(strcmp(param,{'cc','px','py','as','sk'}));
+    % Aspect, skew not defined for some models: Argument must be zero.
+    mustBeZero=any(ismember(ii,[4,5])) && any(abs(s.IO.model.distModel(ix))<3);
+    if isempty(ii) && ~isempty(param)
+        % Not found, check Ki, Pi
         switch varargin{i}(1)
           case 'K'
-            n=str2double(varargin{i}(2:end));
+            n=str2double(param(2:end));
             if n<1 || n>s.IO.model.nK
                 error('SETCAMVALS: K number out of range');
             end
             ii=5+n;
           case 'P'
-            n=str2double(varargin{i}(2:end));
+            n=str2double(param(2:end));
             if n<1 || n>s.IO.model.nP
                 error('SETCAMVALS: P number out of range');
             end
@@ -81,13 +89,14 @@ while length(varargin)>=i
         end
     end
     if isempty(ii)
-        error('SETCAMVALS: Bad parameter %d: %s',i,varargin{i});
+        error('SETCAMVALS: Bad parameter %d: ''%s''',i,param);
     end
-    i=i+1;
-    % Verify next parameter is numeric.
-    if ~isnumeric(varargin{i})
-        error('SETCAMVALS: Parameter value (arg %d) must be numeric',i);
+    if mustBeZero && any(arg~=0)
+        models=s.IO.model.distModel(ix);
+        badModel=models(abs(models)<3);
+        error('SETCAMVALS: Camera model %d only supports zero %s', ...
+              badModel(1),param);
     end
-    s.IO.val(ii,ix)=varargin{i};
-    i=i+1;
+    s.IO.val(ii,ix)=arg;
+    i=i+2;
 end

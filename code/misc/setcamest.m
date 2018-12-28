@@ -2,12 +2,14 @@ function s=setcamest(s,varargin)
 %SETCAMEST Set which camera parameters should be estimated by the bundle.
 %
 %   S=SETCAMEST(S,'all') modifies the S.bundle.est.IO field to indicate that
-%   all camera parameters should be estimated in the bundle. Use
+%   all camera parameters supported by the camera distortion model should be
+%   estimated in the bundle. Use
 %   S=SETCAMEST(S,'all','not',<param1>,<param2>,...) to specify that all
 %   parameters except the specified should be estimated. See BUILDPARAMTYPES
-%   for valid parameter names. Additionally, 'af' means all affine parameters
-%   ('cc', 'px', 'py', 'as', 'sk'), and 'K' and 'P' parameter means all K and
-%   P parameters, respectively.
+%   for valid parameter names. Additionally, 'K' and 'P' means all K and P
+%   parameters, respectively. The string 'af' means all affine parameters
+%   ('cc', 'px', 'py', and optionally 'as', 'sk'), supported by the current
+%   distortion model for the camera.
 %
 %   S=SETCAMEST(S,'none') modifies the S.bundle.est.IO field to indicate that
 %   no camera parameters should be estimated in the bundle. Use
@@ -16,6 +18,9 @@ function s=setcamest(s,varargin)
 %
 %   S=SETCAMEST(S,<param1>,...) or S=SETCAMEST(S,'not',<param1>,...) leaves
 %   the estimation status for the unlisted parameters unchanged.
+%
+%   When parameters are specified individually, an error is thrown if an
+%   parameter unsupported by the distortion model is to be estimated.
 %
 %   For the K lens distortion parameters, the first parameters of the sequence
 %   K1, ..., KN must be estimated together. Thus, specifying that 'K2'
@@ -43,19 +48,27 @@ end
 % Have we found a 'not' argument?
 notFound=false;
 
+% Does the model support aspect and skew?
+models=s.IO.model.distModel(camIx);
+supportsSkewAspect=abs(models)>=3;
+
 for i=1:length(varargin)
     ii=[];
     val=nan;
     switch varargin{i}
       case 'all'
         ii=1:size(s.bundle.est.IO,1);
-        val=true;
+        % Mask out skew and aspect for models that do not support it.
+        val=repmat(true,length(ii),nnz(camIx));
+        val(4:5,:)=val(4:5,:) & repmat(supportsSkewAspect,2,1);
       case 'none'
         ii=1:size(s.bundle.est.IO,1);
         val=false;
       case 'af'
         ii=1:5;
-        val=~notFound;
+        % Mask out skew and aspect for models that do not support it.
+        val=repmat(~notFound,length(ii),nnz(camIx));
+        val(4:5,:)=val(4:5,:) & repmat(supportsSkewAspect,2,1);
       case 'not'
         if notFound==true
             error('SETCAMEST: Cannot specify not twice');
@@ -69,6 +82,11 @@ for i=1:length(varargin)
         val=~notFound;
       otherwise
         ii=find(strcmp(varargin{i},{'cc','px','py','as','sk'}));
+        if ~notFound && any(ismember(ii,[4,5])) && any(~supportsSkewAspect)
+            badModels=models(~supportsSkewAspect);
+            error('SETCAMEST: Model %d does not support skew, aspect.',...
+                  badModels(1));
+        end
         % Not found, check Ki, Pi
         if isempty(ii) && ~isempty(varargin{i})
             switch varargin{i}(1)
