@@ -1,7 +1,7 @@
 function s=setcamvals(s,varargin)
 %SETCAMVALS Set initial camera values in DBAT struct.
 %
-%   S=SETCAMVALS(S,'prior') sets the initial IO values for all cameras
+%   S=SETCAMVALS(S,'loaded') sets the initial IO values for all cameras
 %   to their loaded prior values.
 %
 %   S=SETCAMVALS(S,'default',CC) sets the initial IO values to their
@@ -34,8 +34,8 @@ if length(varargin)>=i
     end
 end
 
-% Check for 'prior' argument.
-if length(varargin)>=i && ischar(varargin{i}) && strcmp(varargin{i},'prior')
+% Check for 'loaded' argument.
+if length(varargin)>=i && ischar(varargin{i}) && strcmp(varargin{i},'loaded')
     i=i+1;
     s.IO.val(:,ix)=s.prior.IO.val(:,ix);
 end

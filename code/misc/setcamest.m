@@ -1,9 +1,8 @@
 function s=setcamest(s,varargin)
-%SETCAMEST Set which camera parameters should be estimated by the bundle.
+%SETCAMEST Set camera parameters to be estimated by the bundle.
 %
 %   S=SETCAMEST(S,'all') modifies the S.bundle.est.IO field to indicate that
-%   all camera parameters supported by the camera distortion model should be
-%   estimated in the bundle. Use
+%   all camera parameters should be estimated by the bundle. Use
 %   S=SETCAMEST(S,'all','not',<param1>,<param2>,...) to specify that all
 %   parameters except the specified should be estimated. See BUILDPARAMTYPES
 %   for valid parameter names. Additionally, 'K' and 'P' means all K and P
@@ -45,8 +44,8 @@ if ~isempty(varargin) && isnumeric(varargin{1}) && isvector(varargin{1})
     varargin(1)=[];
 end
 
-% Have we found a 'not' argument?
-notFound=false;
+% Initially, set to estimate parameters.
+doEst=true;
 
 % Does the model support aspect and skew?
 models=s.IO.model.distModel(camIx);
@@ -67,22 +66,22 @@ for i=1:length(varargin)
       case 'af'
         ii=1:5;
         % Mask out skew and aspect for models that do not support it.
-        val=repmat(~notFound,length(ii),nnz(camIx));
+        val=repmat(doEst,length(ii),nnz(camIx));
         val(4:5,:)=val(4:5,:) & repmat(supportsSkewAspect,2,1);
       case 'not'
-        if notFound==true
+        if doEst==false
             error('SETCAMEST: Cannot specify not twice');
         end
-        notFound=true;
+        doEst=false;
       case 'K'
         ii=5+(1:s.IO.model.nK);
-        val=~notFound;
+        val=doEst;
       case 'P'
         ii=5+s.IO.model.nK+(1:s.IO.model.nP);
-        val=~notFound;
+        val=doEst;
       otherwise
         ii=find(strcmp(varargin{i},{'cc','px','py','as','sk'}));
-        if ~notFound && any(ismember(ii,[4,5])) && any(~supportsSkewAspect)
+        if doEst && any(ismember(ii,[4,5])) && any(~supportsSkewAspect)
             badModels=models(~supportsSkewAspect);
             error('SETCAMEST: Model %d does not support skew, aspect.',...
                   badModels(1));
@@ -95,39 +94,37 @@ for i=1:length(varargin)
                 if n<1 || n>s.IO.model.nK
                     error('SETCAMEST: K number out of range');
                 end
-                if notFound
-                    % Clear from Kn onwards
-                    ii=5+(n:s.IO.model.nK);
-                else
+                if doEst
                     % Set K1..Kn
                     ii=5+(1:n);
+                else
+                    % Clear from Kn onwards
+                    ii=5+(n:s.IO.model.nK);
                 end
               case 'P'
                 n=str2double(varargin{i}(2:end));
                 if n<1 || n>s.IO.model.nP
                     error('SETCAMEST: P number out of range');
                 end
-                if notFound
-                    % Include P1 if P2 was specified.
-                    if n==2, n=1; end
-                    % Clear from Pn onwards
-                    ii=5+s.IO.model.nK+(n:s.IO.model.nP);
-                else
+                if doEst
                     % Include P2 if P1 was specified.
                     if n==1, n=2; end
                     % Set P1..Pn
                     ii=5+s.IO.model.nK+(1:n);
+                else
+                    % Include P1 if P2 was specified.
+                    if n==2, n=1; end
+                    % Clear from Pn onwards
+                    ii=5+s.IO.model.nK+(n:s.IO.model.nP);
                 end
             end
         end
         if isempty(ii)
             error('SETCAMEST: Bad parameter ''%s''',varargin{i});
         end
-        val=~notFound;
+        val=doEst;
     end
     if ~isempty(ii)
         s.bundle.est.IO(ii,camIx)=val;
     end
 end
-
-s.bundle.est.IO

@@ -59,9 +59,6 @@ disp('done.')
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
 
-% Switch to lens distortion model that supports skew/aspect.
-s0.IO.model.distModel(:)=3;
-
 % Load control points
 pts=loadcpt(cptFile);
 
@@ -86,32 +83,17 @@ for model=[-1,1:5]
     s0.IO.model.distModel(:)=model;
 
     % Set initial IO values to EXIF sensor, pp at center of censor.
-    s0.IO.val=zeros(size(s0.IO.val));
-    % c = EXIF value.s
-    s0.IO.val(1,:)=7.3;
-    % px,py = center of sensor (sign flip is due to camera model).
-    s0.IO.val(2:3,:)=0.5*diag([1,-1])*s0.IO.sensor.ssSize;
-    
-    % Don't use any prior estimates of the IO parameters.
-    %s0.prior.IO.use=...
-    % Estimate c,px,py,c,aspect,K1-K3,P1-P2, but not skew (row 5).
-    s0.bundle.est.IO=repmat((1:10)'~=5,1,size(s0.bundle.est.IO,2));
-    % Estimate aspect if model supports it.
-    s0.bundle.est.IO(4,:)=ismember(model,3:5);
+    s0=setcamvals(s0,'default',7.3);
 
-    % Don't use any prior EO paramters.
-    %s0.prior.EO.use=false(size(s0.EO.val));
+    % Estimate everything supported by the distortion model, except skew.
+    s0=setcamest(s0,'all','not','sk');
 
     % Estimate all EO parameters.
-    % s0.bundle.est.EO=...
+    s0=seteoest(s0,'all');
 
-    % EO parameters will be computed by resection. Clear all values to NaN
-    % to catch any errors.
-    s0.EO.val(:)=NaN;
-
-    % Non-ctrl pts are computed by forward intersection. Clear values to
-    % catch any errors.
-    s0.OP.val(:,~s0.prior.OP.isCtrl)=NaN;
+    % EO parameters will be computed by resection. Clear all values (set
+    % to NaN) to catch any errors.
+    s0=cleareo(s0);
 
     % Get initial camera positions by spatial intersection.
     cpId=s0.OP.id(s0.prior.OP.isCtrl);

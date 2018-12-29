@@ -59,45 +59,31 @@ disp('done.')
 s0=prob2dbatstruct(prob);
 ss0=s0;
 
-% Don't estimate IO data.
-s0.IO.val=s0.prior.IO.val;
-
 % Default distortion model is now 3: With aspect/skew.
 s0.IO.model.distModel(:)=3;
 
-% Noise sigma [m].
-noiseLevel=0.1;
+% Fixed camera parameters.
+s0=setcamvals(s0,'loaded');
+s0=setcamest(s0,'none');
 
 % Reset random number generator.
 rng('default');
+
+% Noise sigma [m] for EO positions.
+noiseLevel=0.1;
 
 % Perturb supplied EO data and use as initial values.
 s0.EO.val=s0.prior.EO.val;
 s0.EO.val(1:3,:)=s0.EO.val(1:3,:)+randn(3,size(s0.EO.val,2))*noiseLevel;
 
+% Clear all non-control OP.
+s0=clearop(s0);
+
 % Compute initial OP values by forward intersection.
 s1=forwintersect(s0,'all',true);
 
-% Warn for non-uniform mark std.
-uniqueSigmas=unique(s1.IP.std(:));
-
-if length(uniqueSigmas)~=1
-    uniqueSigmas
-    error('Multiple mark point sigmas')
-end
-
-if all(uniqueSigmas==0)
-    warning('All mark point sigmas==0. Using sigma==1 instead.');
-    s1.IP.sigmas=1;
-    s1.IP.std(:)=1;
-end
-
-% Fix the datum by fixing camera 1...
-s1.bundle.est.EO(:,1)=false;
-% ...and the largest other absolute camera coordinate.
-camDiff=abs(s1.EO.val(1:3,:)-repmat(s1.EO.val(1:3,1),1,size(s1.EO.val,2)));
-[i,j]=find(camDiff==max(camDiff(:)));
-s1.bundle.est.EO(i,j)=false;
+% Set up for dependent relative orientation with base camera 1.
+s1=seteoest(s1,'depend',1);
 
 fprintf('Running the bundle with damping %s...\n',damping);
 
