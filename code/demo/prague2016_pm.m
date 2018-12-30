@@ -90,50 +90,6 @@ if any(isnan(cat(2,prob.images.imSz)))
     error('Image sizes unknown!');
 end
 disp('done.')
-fprintf('Loading control point file %s...',cpName);
-ctrlPts=loadcpt(cpName);
-fprintf('done.\n');
-
-% Verify all CPs used by PM are given in CP file.
-if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
-    pmCtrlPtsId=prob.ctrlPts(:,1)'
-    cpFileId=ctrlPts.id
-    error('Control point id mismatch.');
-end
-
-% Estimate the offset between the world coordinate system and the PM
-% bundle coordinate system. The offset range for fixed control points
-% should be as small as the difference between the number of digits
-% used, typically 1e-3 object units. For weighted control points we
-% can also expect a deviation between the a posteriori CP positions
-% from the PM export file and the a priori CP positions in the CP
-% file.
-
-% Compute the actual offset between CP coordinates from PM and the
-% CP file.
-[~,ia,ib]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
-offset=prob.ctrlPts(ia,2:4)'-ctrlPts.pos(:,ib);
-meanOffset=mean(offset,2);
-offsetRange=max(offset,[],2)-min(offset,[],2);
-
-% Compute average a priori and a posteriori CP stdev.
-avgPreCPStd=mean(ctrlPts.std(:,ib),2);
-avgPostCPStd=mean(max(0,prob.ctrlPts(ia,5:7))',2);
-avgCPStd=(avgPostCPStd+avgPreCPStd)/2;
-
-% Warn if offset range is above 1e-3 + 2*average CP std.
-if max(offsetRange)>1e-3 + 2*(avgPostCPStd+avgPreCPStd)/2
-    warning('Large offset range:')
-    offsetRange
-end
-
-% Adjust a priori control point positions by the offset.
-ctrlPts.pos=ctrlPts.pos+repmat(meanOffset,1,size(ctrlPts.pos,2));
-
-% Replace a posteriori ctrl positions and std by a priori values.
-prob.ctrlPts(ia,2:4)=ctrlPts.pos(:,ib)';
-prob.ctrlPts(ia,5:7)=ctrlPts.std(:,ib)';
-
 fprintf('Loading 3D point table %s...',input3dFile);
 pts3dNormal=loadpm3dtbl(input3dFile);
 fprintf('done.\n');
@@ -184,26 +140,59 @@ s0=prob2dbatstruct(prob);
 % Store raw version of the struct.
 s0raw=s0;
 
-% Warn for non-uniform mark std.
-uniqueSigmas=unique(s0.IP.std(:));
+% Fixed camera parameters.
+s0=setcamvals(s0,'loaded');
+s0=setcamest(s0,'none');
 
-if length(uniqueSigmas)~=1
-    uniqueSigmas
-    warning('Multiple mark point sigmas')
-    s0.IP.std(s0.IP.std==0)=1;
-    s0.IP.sigmas(s0.IP.sigmas==0)=1;
+fprintf('Loading control point file %s...',cpName);
+ctrlPts=loadcpt(cpName);
+fprintf('done.\n');
+
+% Verify all CPs used by PM are given in CP file.
+if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
+    pmCtrlPtsId=prob.ctrlPts(:,1)'
+    cpFileId=ctrlPts.id
+    error('Control point id mismatch.');
 end
 
-% Clear EO and OP parameters.
-s0.EO.val(s0.bundle.est.EO)=nan;
-s0.OP.val(s0.bundle.est.OP)=nan;
+% Estimate the offset between the world coordinate system and the PM
+% bundle coordinate system. The offset range for fixed control points
+% should be as small as the difference between the number of digits
+% used, typically 1e-3 object units. For weighted control points we
+% can also expect a deviation between the a posteriori CP positions
+% from the PM export file and the a priori CP positions in the CP
+% file.
 
-% Insert any prior obs to use.
-s0.EO.val(s0.prior.EO.use)=s0.prior.EO.val(s0.prior.EO.use);
-s0.OP.val(s0.prior.OP.use)=s0.prior.OP.val(s0.prior.OP.use);
+% Compute the actual offset between CP coordinates from PM and the
+% CP file.
+[~,ia,ib]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
+offset=prob.ctrlPts(ia,2:4)'-ctrlPts.pos(:,ib);
+meanOffset=mean(offset,2);
+offsetRange=max(offset,[],2)-min(offset,[],2);
 
-% Use specified sigma as first approximation.
-s0.IP.std(:)=s0.IP.sigmas(1);
+% Compute average a priori and a posteriori CP stdev.
+avgPreCPStd=mean(ctrlPts.std(:,ib),2);
+avgPostCPStd=mean(max(0,prob.ctrlPts(ia,5:7))',2);
+avgCPStd=(avgPostCPStd+avgPreCPStd)/2;
+
+% Warn if offset range is above 1e-3 + 2*average CP std.
+if max(offsetRange)>1e-3 + 2*(avgPostCPStd+avgPreCPStd)/2
+    warning('Large offset range:')
+    offsetRange
+end
+
+% Adjust a priori control point positions by the offset.
+ctrlPts.pos=ctrlPts.pos+repmat(meanOffset,1,size(ctrlPts.pos,2));
+
+% Match control points with loaded info. Overwrite loaded CP names.
+[i,j]=matchcpt(s0,ctrlPts,'id');
+
+% Set control points.
+s0=setcpt(s0,ctrlPts,i,j);
+
+% Clear any non-control EO and OP parameters.
+s0=cleareo(s0);
+s0=clearop(s0);
 
 % Compute EO parameters by spatial resection.
 cpId=s0.OP.id(s0.prior.OP.isCtrl);
