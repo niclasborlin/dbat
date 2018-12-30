@@ -12,7 +12,7 @@ function s=setcpt(s,pts,i,j,isCtrl)
 %   bundle.est fields are set depending on whether the control
 %   points are fixed or not. The pts.fileName is recorded in s.proj.
 %
-%   Blank labels in S are overwritten by labels in PTS.
+%   Labels in S are overwritten by non-blank labels in PTS.
 %
 %See also: LOADCPT, MATCHCPT.
 
@@ -30,9 +30,9 @@ else
     error('Individual ctrl pt covariances not yet supported.');
 end
 
-% Copy labels 
+% Copy non-blank labels.
 for k=1:length(i)
-    if isempty(s.OP.label{i(k)}) && ~isempty(pts.name{j(k)})
+    if ~isempty(pts.name{j(k)})
         s.OP.label{i(k)}=pts.name{j(k)};
     end
 end
