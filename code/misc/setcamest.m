@@ -8,7 +8,7 @@ function s=setcamest(s,varargin)
 %   for valid parameter names. Additionally, 'K' and 'P' means all K and P
 %   parameters, respectively. The string 'af' means all affine parameters
 %   ('cc', 'px', 'py', and optionally 'as', 'sk'), supported by the current
-%   distortion model for the camera.
+%   distortion model for the camera. The string 'pp' means 'px' and 'py'.
 %
 %   S=SETCAMEST(S,'none') modifies the S.bundle.est.IO field to indicate that
 %   no camera parameters should be estimated in the bundle. Use
@@ -78,6 +78,9 @@ for i=1:length(varargin)
         val=doEst;
       case 'P'
         ii=5+s.IO.model.nK+(1:s.IO.model.nP);
+        val=doEst;
+      case 'pp'
+        ii=2:3;
         val=doEst;
       otherwise
         ii=find(strcmp(varargin{i},{'cc','px','py','as','sk'}));
