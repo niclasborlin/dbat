@@ -4,7 +4,7 @@ function [rr,s0,prob,psz]=prague2016_ps(l,doPause)
 %   PRAGUE2016_PS(LABEL), where LABEL is 'S5', runs the PhotScan
 %   experiment of [1].
 %
-%   PRAGUE2016_PM(LABEL,PAUSE) runs the demo with pause mode
+%   PRAGUE2016_PS(LABEL,PAUSE) runs the demo with pause mode
 %   PAUSE. See PLOTNETWORK for pause modes.
 %
 %   References:
@@ -48,6 +48,13 @@ fprintf('Loading PhotoScan project file %s...',inputFile);
 psz=loadpsz(inputFile);
 fprintf('done.\n');
 
+% Control point file.
+cpName=fullfile(inputDir,'ref','ctrlpts-weighted-raw.txt');
+
+fprintf('Loading control point file %s...',cpName);
+ctrlPts=loadcpt(cpName);
+fprintf('done.\n');
+
 [prob,pmReport,pts3d,pts2d]=ps2pmstruct(psz);
 
 s0=prob2dbatstruct(prob);
@@ -66,13 +73,19 @@ if length(uniqueSigmas)~=1 && any(s0.IP.std(:)==0)
     s0.IP.std(s0.IP.std==0)=1;
 end
 
-% Clear EO and OP parameters.
-s0.EO.val(s0.bundle.est.EO)=nan;
-s0.OP.val(s0.bundle.est.OP)=nan;
+% Fixed camera parameters.
+s0=setcamvals(s0,'loaded');
+s0=setcamest(s0,'none');
 
-% Insert any prior obs to use.
-s0.EO.val(s0.prior.EO.use)=s0.prior.EO.val(s0.prior.EO.use);
-s0.OP.val(s0.prior.OP.use)=s0.prior.OP.val(s0.prior.OP.use);
+% Match control points with loaded info.
+[i,j]=matchcpt(s0,ctrlPts);
+
+% Set control points.
+s0=setcpt(s0,ctrlPts,i,j);
+
+% Clear EO and OP parameters.
+s0=cleareo(s0);
+s0=clearop(s0);
 
 % Compute EO parameters by spatial resection.
 cpId=s0.OP.id(s0.prior.OP.isCtrl);

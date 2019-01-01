@@ -78,9 +78,9 @@ input2dSmartFile=fullfile(inputDir,'pmexports',[stub,orientStr,'-2dsmartpts.txt'
 
 % Control point file.
 if cpWeighted
-    cpName=fullfile(inputDir,'ctrlpts-weighted.txt');
+    cpName=fullfile(inputDir,'ref','ctrlpts-weighted.txt');
 else
-    cpName=fullfile(inputDir,'ctrlpts-fixed.txt');
+    cpName=fullfile(inputDir,'ref','ctrlpts-fixed.txt');
 end
 
 fprintf('Loading data file %s...',inputFile);
