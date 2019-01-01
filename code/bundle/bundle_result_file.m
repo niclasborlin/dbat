@@ -39,15 +39,21 @@ fprintf(fid,[p,'Project\n']);
 fprintf(fid,[p2,'Name        : %s\n'],s.proj.title);
 
 if ~isempty(s.proj.fileName)
-    fprintf(fid,[p2,'File name   : %s\n'],s.proj.fileName);
+    str=s.proj.fileName;
+    str=strrep(str,[dbatroot,filesep],['$DBATROOT',filesep]);
+    fprintf(fid,[p2,'File name   : %s\n'],str);
 end
 
 if ~isempty(s.proj.cptFile)
-    fprintf(fid,[p2,'Ctrl pt file: %s\n'],s.proj.cptFile);
+    str=s.proj.cptFile;
+    str=strrep(str,[dbatroot,filesep],['$DBATROOT',filesep]);
+    fprintf(fid,[p2,'Ctrl pt file: %s\n'],str);
 end
 
 if ~isempty(s.proj.EOfile)
-    fprintf(fid,[p2,'EO file     : %s\n'],s.proj.EOfile);
+    str=s.proj.EOfile;
+    str=strrep(str,[dbatroot,filesep],['$DBATROOT',filesep]);
+    fprintf(fid,[p2,'EO file     : %s\n'],str);
 end
     
     
