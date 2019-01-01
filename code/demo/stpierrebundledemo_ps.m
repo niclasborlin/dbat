@@ -63,143 +63,52 @@ fprintf('Loading control point file %s...',cpName);
 ctrlPts=loadcpt(cpName);
 fprintf('done.\n');
 
-% Remap ctrl ids from PM to PS using the labels.
-for i=1:length(ctrlPts.id)
-    n=ctrlPts.name{i};
-    if isempty(n)
-        error('Cannot remap unlabelled control/check point');
-    end
-    % Where is it among the PM points?
-    ix=find(strcmp(n,prob.OPlabels));
-    if isscalar(ix)
-        % Found exactly one match. Copy its id.
-        ctrlPts.id(i)=prob.objPts(ix,1);
-    elseif isempty(ix)
-        % Found none - remove it.
-        warning('Control point ''%s'' not found in PSZ file. Removing it.',n);
-        % Mark point for removal.
-        ctrlPts.id(i)=nan;
-    elseif length(ix)>1
-        % Found more than one - cannot handle this.
-        error('Duplicate matches for control point ''%s'' in PSZ file.',n);
-    end
-end
+% Convert loaded PhotoModeler data to DBAT struct.
+s0=prob2dbatstruct(prob);
+ss0=s0;
 
-% Remove any missing ctrl pts.
-if any(isnan(ctrlPts.id))
-    i=~isnan(ctrlPts.id);
-    ctrlPts.id=ctrlPts.id(i);
-    ctrlPts.name=ctrlPts.name(i);
-    ctrlPts.pos=ctrlPts.pos(:,i);
-    ctrlPts.std=ctrlPts.std(:,i);
-end
-
-% Verify all CPs used by PM are given in CP file.
-if ~all(ismember(prob.ctrlPts(:,1),ctrlPts.id))
-    pmCtrlPtsId=prob.ctrlPts(:,1)' %#ok<NOPRT,NASGU>
-    cpFileId=ctrlPts.id %#ok<NOPRT,NASGU>
-    error('Control point id mismatch.');
-end
-
-% Determine check point allocation among control points.
-[ctrlIds,~,ibCP]=intersect(prob.ctrlPts(:,1),ctrlPts.id);
-% Assume that PM object points that are not among the PM control
-% points but are listed in the control point file are check points.
-checkIds=setdiff(intersect(prob.objPts(:,1),ctrlPts.id),ctrlIds);
-[~,~,ibCC]=intersect(checkIds,ctrlPts.id);
-
-% Original coordinates.
-refCtrlData=[ctrlPts.id(ibCP);ctrlPts.pos(:,ibCP);ctrlPts.std(:,ibCP)]';
-refCheckData=[ctrlPts.id(ibCC);ctrlPts.pos(:,ibCC);ctrlPts.std(:,ibCC)]';
-
-% Expand with 0 stdev for fixed points.
-if ~isempty(refCtrlData) && size(refCtrlData,2)<7
-    refCtrlData(1,7)=0;
-end
-
-if ~isempty(refCheckData) && size(refCheckData,2)<7
-    refCheckData(1,7)=0;
-end
-
-% Coordinates from PM/PS.
-[~,ia]=intersect(prob.objPts(:,1),ctrlIds);
-pmCtrlData=prob.objPts(ia,:);
-[~,ia]=intersect(prob.objPts(:,1),checkIds);
-pmCheckData=prob.objPts(ia,:);
+[i1,j1,i2,j2,j3]=matchcpt(s0,ctrlPts,'label');
 
 % Compute rigid-body transformation for control points.
-TCP=rigidalign(pmCtrlData(:,2:4)',refCtrlData(:,2:4)');
-if length(checkIds)>=3
-    TCC=rigidalign(pmCheckData(:,2:4)',refCheckData(:,2:4)');
+TCP=rigidalign(s0.prior.OP.val(:,i1),ctrlPts.pos(:,j1));
+if length(i2)>=3
+    TCC=rigidalign(s0.prior.OP.val(:,i2),ctrlPts.pos(:,j2));
 else
     TCC=[];
 end
 
 % Display info about CPT
-fprintf('\nFound %d control points:\n',length(ctrlIds))
-disp(refCtrlData(:,1)')
-disp(ctrlPts.name(ismember(ctrlPts.id,ctrlIds)));
+fprintf('\nFound %d control points:\n',length(i1))
+disp(ctrlPts.pos(:,j1))
+disp(ctrlPts.name(j1))
 angCP=acosd(min(max((trace(TCP(1:3,1:3))-1)/2,0),1));
 fprintf('Rotation %.1f degress, translation %.1f object units.\n',...
         angCP,norm(TCP(1:3,4)));
-fprintf('Max abs pos diff=%g\n',max(max(abs(refCtrlData(:,2:4)-pmCtrlData(:,2:4)))));
-fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(pmCtrlData(:,5:7))-log(refCtrlData(:,5:7))))))-1)*100)
+fprintf('Max abs pos diff=%g\n',max(max(abs(s0.prior.OP.val(:,i1)-ctrlPts.pos(:,j1)))));
+fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(s0.prior.OP.val(:,i1))-log(ctrlPts.pos(:,j1))))))-1)*100);
 
 % Display info about CC
-fprintf('\nFound %d check points:\n',length(checkIds))
-disp(refCheckData(:,1)')
-disp(ctrlPts.name(ismember(ctrlPts.id,checkIds)));
+fprintf('\nFound %d check points:\n',length(i2))
+disp(ctrlPts.pos(:,j2))
+disp(ctrlPts.name(j2))
 if ~isempty(TCC)
-    angCC=acosd(min(max((trace(TCC(1:3,1:3))-1)/2,0),1));
+    angCP=acosd(min(max((trace(TCC(1:3,1:3))-1)/2,0),1));
     fprintf('Rotation %.1f degress, translation %.1f object units.\n',...
-            angCC,norm(TCC(1:3,4)));
+            angCP,norm(TCC(1:3,4)));
 end
-fprintf('Max abs pos diff=%g\n',max(max(abs(refCheckData(:,2:4)-pmCheckData(:,2:4)))));
-fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(pmCheckData(:,5:7))-log(refCheckData(:,5:7))))))-1)*100)
-
-% Replace PM/PS ctrl pt with prior.
-prob.ctrlPts=refCtrlData;
-
-% Insert check points.
-prob.checkPts=refCheckData;
-
-% Set OP labels to original CP or CCP names.
-[~,ia,ib]=intersect(prob.objPts(:,1),ctrlPts.id);
-% Clear first.
-prob.OPlabels=cell(size(prob.OPlabels));
-prob.OPlabels(ia)=ctrlPts.name(ib);
-
-% Convert loaded PhotoModeler data to DBAT struct.
-s0=prob2dbatstruct(prob);
-ss0=s0;
-
-% Estimate f, pp, K1-K3, P1-P2
-selfCal=ismember(1:size(s0.IO.val,1),[1:3,6:10]);
-% Indicate that we want to estimate these parameters.
-s0.bundle.est.IO(find(selfCal),:)=true;
-% Zero any unused lens distortion parameters.
-s0.IO.val(find(~selfCal),:)=0;
+fprintf('Max abs pos diff=%g\n',max(max(abs(s0.prior.OP.val(:,i2)-ctrlPts.pos(:,j2)))));
+fprintf('Max rel std diff=%.1f%%\n',(exp(max(max(abs(log(s0.prior.OP.val(:,i2))-log(ctrlPts.pos(:,j2))))))-1)*100);
 
 % Switch to Forward/Computer Vision lens distortion model for all cameras.
 s0.IO.model.distModel(:)=-1;
 
+% Self-calibration of all camera parameters except skew.
+s0=setcamvals(s0,'loaded');
+s0=setcamest(s0,'all','not','sk','as');
+
 % Use supplied EO data as initial values.
 
 % Use estimated OP values as initial.
-
-% Warn for non-uniform mark std.
-uniqueSigmas=unique(s0.IP.std(:));
-
-if length(uniqueSigmas)~=1
-    uniqueSigmas
-    %error('Multiple mark point sigmas')
-end
-
-if all(uniqueSigmas==0)
-    warning('All mark point sigmas==0. Using sigma==1 instead.');
-    s0.IP.sigmas=1;
-    s0.IP.std(:)=1;
-end
 
 % Datum is given by CPs.
 % Do nothing.
