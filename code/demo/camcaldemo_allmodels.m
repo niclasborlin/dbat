@@ -59,6 +59,12 @@ disp('done.')
 % Convert loaded PhotoModeler data to DBAT struct.
 s0=prob2dbatstruct(prob);
 
+if ~any(s0.prior.OP.isCtrl)
+    % No control points specified in PM file, but we know that CPs
+    % have ID>1000.
+    s0.prior.OP.isCtrl=s0.OP.id>1000;
+end
+
 % Load control points
 pts=loadcpt(cptFile);
 
