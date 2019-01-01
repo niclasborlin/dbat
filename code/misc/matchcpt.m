@@ -1,15 +1,19 @@
-function [i,j]=matchcpt(s,pts,match)
+function [i1,j1,i2,j2,j3]=matchcpt(s,pts,match)
 %MATCHCPT Loaded control point table with DBAT struct.
 %
 %   [I,J]=MATCHCPT(S,PTS,MATCH) matches the control point table PTS with the
-%   information in the DBAT structure S. Points can be matched using id and/or
-%   label, depending on the MATCH parameter. If MATCH=='id', S.OP.rawId(I)
-%   corresponds to PTS.id(J). If MATCH=='label', S.OP.label(I) corresponds to
-%   PTS.name(J). If MATCH=='both', both will be true. If MATCH=='auto'
-%   (default), points are matched by id if pts.id are non-NaN. Points are
-%   matched by label if pts.name are non-empty. If both conditions are true,
-%   points are matched using both criteria. An error is issued if the matchings
-%   are inconsistent.
+%   control points stored in the DBAT structure S, i.e., among points with
+%   s.prior.OP.isCtrl set. Points can be matched using id and/or label,
+%   depending on the MATCH parameter. If MATCH=='id', S.OP.rawId(I) corresponds
+%   to PTS.id(J). If MATCH=='label', S.OP.label(I) corresponds to PTS.name(J).
+%   If MATCH=='both', both will be true. If MATCH=='auto' (default), points are
+%   matched by id if pts.id are non-NaN. Points are matched by label if
+%   pts.name are non-empty. If both conditions are true, points are matched
+%   using both criteria. An error is issued if the matchings are inconsistent.
+%
+%   [I1,J1,I2,J2,J3]=... returns control point matches in I1,J1 and check point
+%   matches in I2,J2, i.e. among points with s.prior.OP.isCheck set. The
+%   index vector J3 returns the indices for unmatched points in PTS.
 %
 %See also: LOADCPT, SETCPT.
 
@@ -36,14 +40,35 @@ switch match
     error('MATCHCPT: Bad match string');
 end
 
+% Keep track of matched points.
+matchedPts=false(size(pts.id));
+
+% Match among control points.
+[i1,j1]=domatch(s,pts,s.prior.OP.isCtrl,matchByLabel,matchById);
+matchedPts(j1)=true;
+
+if nargout>2
+    [i2,j2]=domatch(s,pts,s.prior.OP.isCheck,matchByLabel,matchById);
+    matchedPts(j2)=true;
+    j3=find(~matchedPts);
+end
+
+% Match among points with sel==true.
+function [i,j]=domatch(s,pts,sel,matchByLabel,matchById)
+
 il=[]; jl=[]; ii=[]; ji=[];
 
+% Only match among selected points.
+ci=find(sel)';
+
 if matchByLabel
-    [~,il,jl]=intersect(s.OP.label,pts.name);
+    [~,iii,jl]=intersect(s.OP.label(ci),pts.name);
+    il=ci(iii);
 end
 
 if matchById
-    [~,ii,ji]=intersect(s.OP.rawId,pts.id);
+    [~,iii,ji]=intersect(s.OP.rawId(ci),pts.id);
+    ii=ci(iii);
 end
 
 switch double(matchByLabel)*2+double(matchById)
@@ -59,9 +84,6 @@ switch double(matchByLabel)*2+double(matchById)
         % Use id match. Verify that all destination labels were empty.
         i=ii;
         j=ji;
-        if any(~cellfun(@isempty,s.OP.label(i)))
-            error('Inconsistent match');
-        end
     end
   case 2 % match-by-label only
     i=il;
@@ -72,4 +94,5 @@ switch double(matchByLabel)*2+double(matchById)
   case 0
     error('Neither match-by-id nor match-by-label possible.');
 end
+
 
