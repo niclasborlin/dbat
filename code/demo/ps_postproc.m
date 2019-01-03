@@ -85,19 +85,25 @@ fprintf('done.\n');
 % Should the camera be self-calibrated?
 if psz.camera.isAdjusted
     % Self-calibration.
-    s0=setcamest(...
-        s0,...
-        'cc',psz.camera.givenParams.f | psz.camera.optimizedParams.f,...
-        'pp',psz.camera.givenParams.cxcy | psz.camera.optimizedParams.cxcy);
+    s0=setcamest(s0,'none');
+    if psz.camera.givenParams.f || psz.camera.optimizedParams.f
+        s0=setcamest(s0,'cc');
+    end
+    if psz.camera.givenParams.cxcy(1) || psz.camera.optimizedParams.cxcy(1)
+        s0=setcamest(s0,'px');
+    end
+    if psz.camera.givenParams.cxcy(2) || psz.camera.optimizedParams.cxcy(2)
+        s0=setcamest(s0,'py');
+    end
     for i=1:3
-        s0=setcamest(s0,sprintf('K%d',i),...
-                        psz.camera.givenParams.k(i) | ...
-                        psz.camera.optimizedParams.k(i));
+        if psz.camera.givenParams.k(i) || psz.camera.optimizedParams.k(i) 
+            s0=setcamest(s0,sprintf('K%d',i));
+        end
     end
     for i=1:2
-        s0=setcamest(s0,sprintf('P%d',i),...
-                        psz.camera.givenParams.p(i) | ...
-                        psz.camera.optimizedParams.p(i));
+        if psz.camera.givenParams.p(i) || psz.camera.optimizedParams.p(i)
+            s0=setcamest(s0,sprintf('P%d',i));
+        end
     end
 end
 
