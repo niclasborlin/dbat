@@ -20,4 +20,6 @@ end
 prague2016_ps('s5')
 ps_postproc('')
 stpierrebundledemo_ps
+sxb_prior_eo(false)
+sxb_prior_eo(true)
 disp('Done.');
