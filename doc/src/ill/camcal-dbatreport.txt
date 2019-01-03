@@ -1,5 +1,8 @@
 Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Project
+      Name        : Bundle Soln PhotoModeler Calibration Project
+      File name   : $DBATROOT/demo/data/dbat/pmexports/camcal-pmexport.txt
+      Ctrl pt file: $DBATROOT/demo/data/dbat/ref/camcal-fixed.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -7,14 +10,17 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run: 25-Oct-2018 20:55:37
-      DBAT version:    0.7.6.1 (2018-10-25)
-      MATLAB version:  8.6.0.267246 (R2015b)
-      Host system:     GLNXA64
-      Host name:       slartibartfast
-      Status:          OK
-      Sigma0:          1.6148
-      Sigma0 (pixels): 0.16148
+      Last Bundle Run:        03-Jan-2019 01:49:51
+      DBAT version:           0.8.5.0 (2019-01-03)
+      MATLAB version:         9.5.0.944444 (R2018b)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
+      Host name:              slartibartfast
+      Status:                 OK
+      Sigma0:                 1.6148
+      Sigma0 (pixels):        0.16148
+      Redundancy              3725
+      Number of params:       423 (9 IO, 126 EO, 288 OP)
+      Number of observations: 4148 (4148 IP, 0 IO, 0 EO, 0 OP)
       Processing options:
          Orientation:             on
          Global optimization:     on
@@ -32,42 +38,45 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 9
-         First error:          30882.3
+         First error:          30873.9
          Last error:           98.556
-         Execution time (s):   0.78
+         Execution time (s):   1.89
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
-         Calibration: yes (Xp Yp f K1 K2 K3 P1 P2 aspect)
-         Camera1
+         Calibration: yes (cc px py as K1 K2 K3 P1 P2)
+         Camera1 (simple)
             Lens distortion model:
                Backward (Photogrammetry) model 3
-            Focal Length:
+            Camera Constant:
                Value:        7.457 mm
                Deviation:    0.00105 mm
-            Xp - principal point x:
+            px - principal point x:
                Value:        3.61546 mm
                Deviation:    0.00082 mm
-            Yp - principal point y:
+            py - principal point y:
                Value:        2.61329 mm
                Deviation:    0.00098 mm
-            Fw - format width:
+            Format width:
                Value:        7.25301 mm
-            Fh - format height:
+            Format height:
                Value:        5.43764 mm
             K1 - radial distortion 1:
                Value:        0.00458861 mm^(-3)
                Deviation:    2.21e-05 mm^(-3)
                Significance: p=1.00
+               Cumulative significance:p=1.00
             K2 - radial distortion 2:
                Value:        -4.51351e-05 mm^(-5)
                Deviation:    2.65e-06 mm^(-5)
                Significance: p=1.00
+               Cumulative significance:p=1.00
                Correlations over 95%: K3:-97.9%.
             K3 - radial distortion 3:
                Value:        -2.05253e-06 mm^(-7)
                Deviation:    1.01e-07 mm^(-7)
                Significance: p=1.00
+               Cumulative significance:p=1.00
                Correlations over 95%: K2:-97.9%.
             P1 - decentering distortion 1:
                Value:        -6.12803e-05 mm^(-3)
@@ -76,27 +85,26 @@ Damped Bundle Adjustment Toolbox result file
             P2 - decentering distortion 2:
                Value:        -4.41172e-05 mm^(-3)
                Deviation:    3.94e-06 mm^(-3)
-               Significance: p=1.00
-            B1 - aspect ratio:
+            as - off-unit aspect parameter:
                Value:        0.000389598 
                Deviation:    2.08e-05 
                Significance: p=1.00
-            B2 - skew:
+            sk - skew:
                Value:        0 
-            Iw - image width:
+            Image width:
                Value:        2272 px
-            Ih - image height:
+            Image height:
                Value:        1704 px
-            Xr - X resolution:
+            X resolution:
+               Value:        313.249 px/mm
+            Y resolution:
                Value:        313.371 px/mm
-            Yr - Y resolution:
-               Value:        313.371 px/mm
-            Pw - pixel width:
+            Pixel width:
                Value:        0.00319235 mm
-            Ph - pixel height:
+            Pixel height:
                Value:        0.0031911 mm
          Rated angle of view (h,v,d): (52, 40, 63) deg
-         Largest distortion: 0.37 mm (116.4 px, 8.2% of half-diagonal)
+         Largest distortion: 0.37 mm (116.2 px, 8.2% of half-diagonal)
       Precisions / Standard Deviations:
          Photograph Standard Deviations:
             Photo 1: P8250021.JPG
@@ -503,7 +511,7 @@ Damped Bundle Adjustment Toolbox result file
          Total number: 21
          Numbers used: 21
       Cameras
-         Total number: 1
+         Total number: 1 (1 simple, 0 mixed)
          Camera1:
             Calibration:                   yes
             Number of photos using camera: 21
@@ -512,8 +520,8 @@ Damped Bundle Adjustment Toolbox result file
                Convex hull: 31%-62% (46% average, 87% union)
                Radial:      60%-92% (73% average, 92% union)
       Photo Coverage
-         References points outside calibrated region:
-            none
+         Reference points outside calibrated region:
+            Camera 1: none
       Point Measurements
          Number of control pts: 4
          Number of check pts: 0
@@ -550,8 +558,8 @@ Damped Bundle Adjustment Toolbox result file
             Points with correlation above 99%: 0
       Point Angles
          CP
-            Minimum: 83.4 degrees (CP 1003)
-            Maximum: 85.8 degrees (CP 1002)
+            Minimum: 83.4 degrees (CP 1003, label CP3)
+            Maximum: 85.8 degrees (CP 1002, label CP2)
             Average: 84.7 degrees
          CCP
             Minimum: -
@@ -568,28 +576,29 @@ Damped Bundle Adjustment Toolbox result file
       Ctrl measurements
          Prior
              id,        x,        y,        z,     stdx,     stdy,     stdz, label
-           1001,    0.000,    1.000,    0.000,        0,        0,        0, 
-           1002,    1.000,    1.000,    0.000,        0,        0,        0, 
-           1003,    0.000,    0.000,    0.000,        0,        0,        0, 
-           1004,    1.000,    0.000,    0.000,        0,        0,        0, 
+           1001,    0.000,    1.000,    0.000,        0,        0,        0, CP1
+           1002,    1.000,    1.000,    0.000,        0,        0,        0, CP2
+           1003,    0.000,    0.000,    0.000,        0,        0,        0, CP3
+           1004,    1.000,    0.000,    0.000,        0,        0,        0, CP4
          Posterior
              id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,    1.000,    0.000,        0,        0,        0,   21, 
-           1002,    1.000,    1.000,    0.000,        0,        0,        0,   21, 
-           1003,    0.000,    0.000,    0.000,        0,        0,        0,   21, 
-           1004,    1.000,    0.000,    0.000,        0,        0,        0,   21, 
+           1001,    0.000,    1.000,    0.000,        0,        0,        0,   21, CP1
+           1002,    1.000,    1.000,    0.000,        0,        0,        0,   21, CP2
+           1003,    0.000,    0.000,    0.000,        0,        0,        0,   21, CP3
+           1004,    1.000,    0.000,    0.000,        0,        0,        0,   21, CP4
          Diff (pos=abs diff, std=rel diff)
              id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
-           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
-           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
-           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
+           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP1
+           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP2
+           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP3
+           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP4
          Ctrl point delta
-            Max: 0.000 ou (, pt 1001)
+            Max: 0.000 ou (CP1, pt 1001)
             Max X,Y,Z
-               X: 0.000 ou (, pt 1001)
-               Y: 0.000 ou (, pt 1001)
-               Z: 0.000 ou (, pt 1001)
+               X: 0.000 ou (CP1, pt 1001)
+               Y: 0.000 ou (CP1, pt 1001)
+               Z: 0.000 ou (CP1, pt 1001)
             RMS: 0.000 ou (from 4 items)
       Check measurements
          none
+End of result file

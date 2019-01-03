@@ -1,5 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln 
+   Project
+      Name        : Bundle Soln 
+      File name   : $DBATROOT/demo/data/dbat/pmexports/roma-pmexport.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -9,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the object point coordinates has a high correlation.
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        22-Nov-2018 16:30:54
-      DBAT version:           0.8.0.0 (2018-10-26)
+      Last Bundle Run:        03-Jan-2019 01:49:13
+      DBAT version:           0.8.5.0 (2019-01-03)
       MATLAB version:         9.5.0.944444 (R2018b)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -39,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 5
          First error:          8608.51
          Last error:           160.245
-         Execution time (s):   12.8
+         Execution time (s):   13.21
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -85,7 +87,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -144,7 +146,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -203,7 +205,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -262,7 +264,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -321,7 +323,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -380,7 +382,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -439,7 +441,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -498,7 +500,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -557,7 +559,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -616,7 +618,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -675,7 +677,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -734,7 +736,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -793,7 +795,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -852,7 +854,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -911,7 +913,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -970,7 +972,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1029,7 +1031,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1088,7 +1090,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1147,7 +1149,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1206,7 +1208,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1265,7 +1267,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1324,7 +1326,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1383,7 +1385,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1442,7 +1444,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1501,7 +1503,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1560,7 +1562,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1619,7 +1621,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1678,7 +1680,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1737,7 +1739,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1796,7 +1798,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1855,7 +1857,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1914,7 +1916,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -1973,7 +1975,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2032,7 +2034,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2091,7 +2093,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2150,7 +2152,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2209,7 +2211,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2268,7 +2270,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2327,7 +2329,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2386,7 +2388,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2445,7 +2447,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2504,7 +2506,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2563,7 +2565,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2622,7 +2624,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2681,7 +2683,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2740,7 +2742,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2799,7 +2801,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2858,7 +2860,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2917,7 +2919,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -2976,7 +2978,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3035,7 +3037,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3094,7 +3096,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3153,7 +3155,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3212,7 +3214,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3271,7 +3273,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3330,7 +3332,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3389,7 +3391,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3448,7 +3450,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3507,7 +3509,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79
@@ -3566,7 +3568,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        4.28076e-05 mm^(-3)
                Deviation:    1.15e-06 mm^(-3)
                Significance: p=1.00
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        2.91149e-05 
                Deviation:    2.32e-05 
                Significance: p=0.79

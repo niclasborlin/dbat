@@ -1,5 +1,8 @@
 Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Project
+      Name        : Bundle Soln PhotoModeler Calibration Project
+      File name   : $DBATROOT/demo/data/dbat/pmexports/camcal-pmexport.txt
+      Ctrl pt file: $DBATROOT/demo/data/dbat/ref/camcal-fixed.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -7,8 +10,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        22-Nov-2018 16:31:49
-      DBAT version:           0.8.0.0 (2018-10-26)
+      Last Bundle Run:        03-Jan-2019 01:50:05
+      DBAT version:           0.8.5.0 (2019-01-03)
       MATLAB version:         9.5.0.944444 (R2018b)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -37,7 +40,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 9
          First error:          30873.9
          Last error:           98.989
-         Execution time (s):   0.49
+         Execution time (s):   0.66
       Lens distortion models:
          Forward (Computer Vision) model 1
       Cameras:
@@ -82,7 +85,7 @@ Damped Bundle Adjustment Toolbox result file
             P2 - decentering distortion 2:
                Value:        -2.75179e-05 mm^(-3)
                Deviation:    3.5e-06 mm^(-3)
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        0 
             sk - skew:
                Value:        0 
@@ -553,8 +556,8 @@ Damped Bundle Adjustment Toolbox result file
             Points with correlation above 99%: 0
       Point Angles
          CP
-            Minimum: 83.4 degrees (CP 1003)
-            Maximum: 85.8 degrees (CP 1002)
+            Minimum: 83.4 degrees (CP 1003, label CP3)
+            Maximum: 85.8 degrees (CP 1002, label CP2)
             Average: 84.7 degrees
          CCP
             Minimum: -
@@ -571,28 +574,28 @@ Damped Bundle Adjustment Toolbox result file
       Ctrl measurements
          Prior
              id,        x,        y,        z,     stdx,     stdy,     stdz, label
-           1001,    0.000,    1.000,    0.000,        0,        0,        0, 
-           1002,    1.000,    1.000,    0.000,        0,        0,        0, 
-           1003,    0.000,    0.000,    0.000,        0,        0,        0, 
-           1004,    1.000,    0.000,    0.000,        0,        0,        0, 
+           1001,    0.000,    1.000,    0.000,        0,        0,        0, CP1
+           1002,    1.000,    1.000,    0.000,        0,        0,        0, CP2
+           1003,    0.000,    0.000,    0.000,        0,        0,        0, CP3
+           1004,    1.000,    0.000,    0.000,        0,        0,        0, CP4
          Posterior
              id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,    1.000,    0.000,        0,        0,        0,   21, 
-           1002,    1.000,    1.000,    0.000,        0,        0,        0,   21, 
-           1003,    0.000,    0.000,    0.000,        0,        0,        0,   21, 
-           1004,    1.000,    0.000,    0.000,        0,        0,        0,   21, 
+           1001,    0.000,    1.000,    0.000,        0,        0,        0,   21, CP1
+           1002,    1.000,    1.000,    0.000,        0,        0,        0,   21, CP2
+           1003,    0.000,    0.000,    0.000,        0,        0,        0,   21, CP3
+           1004,    1.000,    0.000,    0.000,        0,        0,        0,   21, CP4
          Diff (pos=abs diff, std=rel diff)
              id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
-           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
-           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
-           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, 
+           1001,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP1
+           1002,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP2
+           1003,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP3
+           1004,    0.000,    0.000,    0.000,    0.000,    0.000,     0.0%,     0.0%,     0.0%,   21, CP4
          Ctrl point delta
-            Max: 0.000 ou (pt 1001)
+            Max: 0.000 ou (CP1, pt 1001)
             Max X,Y,Z
-               X: 0.000 ou (pt 1001)
-               Y: 0.000 ou (pt 1001)
-               Z: 0.000 ou (pt 1001)
+               X: 0.000 ou (CP1, pt 1001)
+               Y: 0.000 ou (CP1, pt 1001)
+               Z: 0.000 ou (CP1, pt 1001)
             RMS: 0.000 ou (from 4 items)
       Check measurements
          none

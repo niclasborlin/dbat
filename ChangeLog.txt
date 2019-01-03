@@ -1,5 +1,17 @@
 Summary changelog file for release.
 
+Release 0.8.5.0, Jan 03, 2019.
+- Major restructuring of the main data structure.
+- Added support for prior observations of camera positions.
+- Added high-level functions to refer to camera parameters by name
+  rather than by row number.
+- Added high-level functions to set up EO/OP parameters for the bundle.
+- Added more information about computer system to report file.
+- Added information about control files to report file.
+- Cleaned up naming scheme of camera parameters.
+- Various bugfixed, including handling of overlapping normal and
+  smartpoint ids in PM export file.
+
 Release 0.8.0.0, Oct 26, 2018.
 - Parameter handling in bundle rewritten to allow parameters to be
   estimated to be block-invariant (common to all images),

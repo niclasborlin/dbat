@@ -1,5 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln 
+   Project
+      Name        : Bundle Soln 
+      File name   : $DBATROOT/demo/data/dbat/pmexports/roma-pmexport.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -8,8 +10,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run:        22-Nov-2018 16:29:11
-      DBAT version:           0.8.0.0 (2018-10-26)
+      Last Bundle Run:        03-Jan-2019 01:47:36
+      DBAT version:           0.8.5.0 (2019-01-03)
       MATLAB version:         9.5.0.944444 (R2018b)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -38,7 +40,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 5
          First error:          8608.51
          Last error:           198.805
-         Execution time (s):   4.4
+         Execution time (s):   4.84
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -66,7 +68,7 @@ Damped Bundle Adjustment Toolbox result file
                Value: 0 mm^(-3)
             P2 - decentering distortion 2:
                Value: 0 mm^(-3)
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value: 0.000998889 
             sk - skew:
                Value: 0 

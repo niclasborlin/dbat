@@ -1,5 +1,8 @@
 Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Project
+      Name        : Bundle Soln PhotoModeler Calibration Project
+      File name   : $DBATROOT/demo/data/prague2016/cam/pmexports/weighted-with-orient-pmexport.txt
+      Ctrl pt file: $DBATROOT/demo/data/prague2016/cam/ref/ctrlpts-weighted.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -7,8 +10,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        29-Nov-2018 23:18:09
-      DBAT version:           0.8.0.0 (2018-10-26)
+      Last Bundle Run:        03-Jan-2019 01:50:49
+      DBAT version:           0.8.5.0 (2019-01-03)
       MATLAB version:         9.5.0.944444 (R2018b)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -37,7 +40,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 3
          First error:          460.624
          Last error:           98.3715
-         Execution time (s):   0.22
+         Execution time (s):   0.17
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:
@@ -572,8 +575,8 @@ Damped Bundle Adjustment Toolbox result file
             Points with correlation above 99%: 0
       Point Angles
          CP
-            Minimum: 83.5 degrees (CP 1003, label 1003)
-            Maximum: 85.9 degrees (CP 1002, label 1002)
+            Minimum: 83.5 degrees (CP 1003, label CP3)
+            Maximum: 85.9 degrees (CP 1002, label CP2)
             Average: 84.7 degrees
          CCP
             Minimum: -
@@ -590,28 +593,28 @@ Damped Bundle Adjustment Toolbox result file
       Ctrl measurements
          Prior
              id,        x,        y,        z,     stdx,     stdy,     stdz, label
-           1001,   -0.500,    0.500,    0.000,    0.001,    0.001,    0.001, 1001
-           1002,    0.500,    0.500,    0.000,    0.001,    0.001,    0.001, 1002
-           1003,   -0.500,   -0.500,    0.000,    0.001,    0.001,    0.001, 1003
-           1004,    0.500,   -0.500,    0.000,    0.001,    0.001,    0.001, 1004
+           1001,   -0.500,    0.500,    0.000,    0.001,    0.001,    0.001, CP1
+           1002,    0.500,    0.500,    0.000,    0.001,    0.001,    0.001, CP2
+           1003,   -0.500,   -0.500,    0.000,    0.001,    0.001,    0.001, CP3
+           1004,    0.500,   -0.500,    0.000,    0.001,    0.001,    0.001, CP4
          Posterior
              id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
-           1001,   -0.500,    0.500,   -0.001,  0.00114,  0.00114,  0.00139,   21, 1001
-           1002,    0.500,    0.500,    0.001,  0.00114,  0.00114,  0.00139,   21, 1002
-           1003,   -0.500,   -0.500,    0.001,  0.00114,  0.00114,  0.00139,   21, 1003
-           1004,    0.500,   -0.500,   -0.001,  0.00114,  0.00114,  0.00139,   21, 1004
+           1001,   -0.500,    0.500,   -0.001,  0.00114,  0.00114,  0.00139,   21, CP1
+           1002,    0.500,    0.500,    0.001,  0.00114,  0.00114,  0.00139,   21, CP2
+           1003,   -0.500,   -0.500,    0.001,  0.00114,  0.00114,  0.00139,   21, CP3
+           1004,    0.500,   -0.500,   -0.001,  0.00114,  0.00114,  0.00139,   21, CP4
          Diff (pos=abs diff, std=rel diff)
              id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
-           1001,    0.000,    0.000,   -0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, 1001
-           1002,   -0.000,    0.000,    0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, 1002
-           1003,    0.000,   -0.000,    0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, 1003
-           1004,   -0.000,   -0.000,   -0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, 1004
+           1001,    0.000,    0.000,   -0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, CP1
+           1002,   -0.000,    0.000,    0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, CP2
+           1003,    0.000,   -0.000,    0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, CP3
+           1004,   -0.000,   -0.000,   -0.001,    0.000,    0.001,    13.9%,    13.9%,    39.4%,   21, CP4
          Ctrl point delta
-            Max: 0.001 ou (1004, pt 1004)
+            Max: 0.001 ou (CP4, pt 1004)
             Max X,Y,Z
-               X: 0.000 ou (1003, pt 1003)
-               Y: 0.000 ou (1004, pt 1004)
-               Z: 0.001 ou (1002, pt 1002)
+               X: 0.000 ou (CP3, pt 1003)
+               Y: 0.000 ou (CP4, pt 1004)
+               Z: 0.001 ou (CP2, pt 1002)
             RMS: 0.001 ou (from 4 items)
       Check measurements
          none

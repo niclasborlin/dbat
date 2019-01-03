@@ -224,8 +224,8 @@ Damped Bundle Adjustment Toolbox result file
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.8.0.0}
-\newcommand{\dbatdate}{Oct 26, 2018}
+\newcommand{\dbatversion}{0.8.5.0}
+\newcommand{\dbatdate}{Jan 03, 2019}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -264,8 +264,8 @@ This purpose of the Damped Bundle Adjustment toolbox is to be a
 high-level toolbox for photogrammetry in general and bundle adjustment
 in particular. It is the hope of the authors that the high-level
 nature of the code will inspire algorithm development. The code is
-written in Matlab and is verified to work with Matlab version 8.6
-(release R2015b). The intention is that at least the computation
+written in Matlab and is verified to work with Matlab version 9.5
+(release R2018b). The intention is that at least the computation
 routines will be Octave-compatible. This has however not been tested
 yet.
 
@@ -305,6 +305,7 @@ The toolbox currently includes routines for (Matlab function names within parent
   \item With or without self-calibration.
   \item Works with fixed or weighted prior observations, e.g., control
     points.
+  \item Works with prior observations of camera positions.
   \item Supports check points.
   \item What parameters that should be estimated are selectable at the
     parameter level, e.g. down to the coordinate level for 3D points.
@@ -645,11 +646,15 @@ conclusions remain valid.
 The \texttt{stpierrebundledemo\_ps} function runs a self-calibration
 bundle on a Photoscan project included in the StPierre data set.
 
+\paragraph{\sc Prior camera observations}
+The \texttt{sxb\_prior\_eo} demo shows how to include prior
+observations of the camera positions in the bundle.
+
 \subsubsection{Error detection}
 
 Three demos are included to illustrate the error detection
 capabilities of \texttt{sprank} (\texttt{dmperm}) and
-\texttt{spnrank}. All are modelled from =camcaldemo=.
+\texttt{spnrank}. All are modelled from \texttt{camcaldemo}.
 
 \paragraph{Missing observations}
 
@@ -724,6 +729,8 @@ Demo & Description & Datum & Self-calibration\\
 \texttt{ps\_postproc('')} & Photoscan post-processing & Weighted ctrl pts from psz file & no\\
 \hline
 \texttt{stpierrebundledemo\_ps} & Photoscan post-processing & Weighted ctrl pts from psz file & yes\\
+\hline
+\texttt{sxb\_prior\_eo} & Use of prior camera positions in bundle & Weighted ctrl pts, cam pos from text file & no\\
 \end{tabular}
 \captionof{table}{Summary of demos.}
 \label{tab:demos}
@@ -745,7 +752,9 @@ version v1.4.4 as well as a pre-release v1.5.0 of Metashape.
 
 The \verb+ps_postproc+ function can be used to post-process a
 Photoscan project. \verb+loadplotpsz+ may be useful to visualize the
-project, as computed by Photoscan.
+project, as computed by Photoscan. As of DBAT version 0.8.5.0, prior
+observations of the camera positions are acknowledged and used in the
+bundle.
 
 \paragraph{Known limitations}
 
@@ -842,10 +851,10 @@ PhotoModeler Scanner 2012:
 \end{enumerate}
 
 
-\subsection{Camera model}
+\subsection{Rotation model}
 
-Currently, the only supported camera model is the omega-phi-kappa
-Euler angle camera model \citep[Ch.~2.1.2.3]{McGlone2004:Manual}.
+Currently, the only supported rotation model is the omega-phi-kappa
+Euler angle rotation model \citep[Ch.~2.1.2.3]{McGlone2004:Manual}.
 
 \subsection{Result file with missing observations}
 \label{sec:missingObsResultFile}

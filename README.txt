@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.8.0.0 for Matlab (R), below called the Toolbox.
+# v0.8.5.0 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -103,7 +103,7 @@
 #
 # == LICENSE ==
 #
-# Copyright (C) 2013-2018, Niclas Börlin, niclas.borlin@cs.umu.se (*),
+# Copyright (C) 2013-2019, Niclas Börlin, niclas.borlin@cs.umu.se (*),
 # and Pierre Grussenmeyer, pierre.grussenmeyer@insa-strasbourg.fr (**).
 # All rights reserved.
 #
@@ -188,6 +188,7 @@
 # == TRADEMARKS ==
 #
 # Matlab is a registered trademark by The Mathworks, Inc., Natick MA,
-# USA. PhotoModeler is a trademark owned by Eos System, Inc., Vancouver,
-# Canada. PhotoScan is a trademark owned by Agisoft LLC, St. Petersburg,
-# Russia. Other trademarks are owned by their respective owners.
+# USA. PhotoModeler is a trademark owned by Eos System, Inc.,
+# Vancouver, Canada. PhotoScan and Metashape are trademarks owned by
+# Agisoft LLC, St. Petersburg, Russia. Other trademarks are owned by
+# their respective owners.

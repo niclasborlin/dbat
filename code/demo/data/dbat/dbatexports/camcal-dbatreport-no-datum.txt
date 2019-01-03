@@ -1,5 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
-   Project Name: Bundle Soln PhotoModeler Calibration Project
+   Project
+      Name        : Bundle Soln PhotoModeler Calibration Project
+      File name   : $DBATROOT/demo/data/dbat/pmexports/camcal-pmexport.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -156,8 +158,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          Bundle failed with code -2 (see below for details).
    Information from last bundle
-      Last Bundle Run:        22-Nov-2018 16:32:09
-      DBAT version:           0.8.0.0 (2018-10-26)
+      Last Bundle Run:        03-Jan-2019 01:50:23
+      DBAT version:           0.8.5.0 (2019-01-03)
       MATLAB version:         9.5.0.944444 (R2018b)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -186,7 +188,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 0
          First error:          15772.8
          Last error:           15772.8
-         Execution time (s):   0.07
+         Execution time (s):   0.06
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -214,7 +216,7 @@ Damped Bundle Adjustment Toolbox result file
                Value:        -0 mm^(-3)
             P2 - decentering distortion 2:
                Value:        -0 mm^(-3)
-            as - aspect parameter:
+            as - off-unit aspect parameter:
                Value:        0 
             sk - skew:
                Value:        0 
