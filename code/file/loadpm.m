@@ -48,6 +48,8 @@ function [prob,err]=loadpm(name,varargin)
 %       checkPts - array of check points [id,pos x,y,z (m),stdev x,y,z (m)]. 
 %                  Will always be empty on loading, but can be set later.
 %       objPts   - array of object points [id,pos x,y,z (m),stdev x,y,z (m)].
+%       priorCamPos - array of prior camera positions
+%                     [id,pos x,y,z (m),stdev x,y,z (m)].
 %       markPts  - array of marked points [photo#,id,pos x,y(px),std x,y(mm)].
 %       features - cell array of vectors with points numbers in each
 %                  feature (optional).
@@ -407,9 +409,12 @@ if ~isempty(split) && ~isempty(normMarkId) && ~isempty(smartMarkId)
     objPts(isSmartObjPt,1)=objPts(isSmartObjPt,1)+shift;
 end
 
-prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
-            'objPts',objPts,'rawOPids',rawOPids,'OPlabels',{OPlabels},...
-            'markPts',markPts,'features',{features},'featVis',featVis);
+priorCamPos=zeros(0,7);
+
+prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts, ...
+            'objPts',objPts,'priorCamPos',priorCamPos,'rawOPids',rawOPids, ...
+            'OPlabels',{OPlabels}, 'markPts',markPts,'features',{features}, ...
+            'featVis',featVis);
 
 fclose(fid);
 if ishandle(h), close(h); end

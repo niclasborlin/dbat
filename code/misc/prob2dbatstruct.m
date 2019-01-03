@@ -458,6 +458,14 @@ EOdata=struct('val',EO,...
              'label',{imLabels},...
              'struct',EOstruct);
 
+% Insert prior camera positions.
+if ~isempty(prob.priorCamPos)
+    [~,i,j]=intersect(EOdata.id,prob.priorCamPos(:,1)');
+    priorEO.val(1:3,i)=prob.priorCamPos(j,2:4)';
+    priorEO.std(1:3,i)=prob.priorCamPos(j,5:7)';
+    priorEO.use(1:3,i)=true;
+end
+
 % Create structure for prior OP data.
 priorOP=struct('val',priorCP,...
                'std',priorCPstd,...

@@ -89,6 +89,12 @@ for i=1:size(checkPts,1)
 end
 checkPts=checkPts(ok,:);
 
+% Create prior camera positions.
+hasPriorCamPos=~any(isnan(pos.priorCamPos.pos),1);
+priorCamPos=[s.cameraIds(hasPriorCamPos);
+             pos.priorCamPos.pos(:,hasPriorCamPos);
+             pos.priorCamPos.std(:,hasPriorCamPos)]';
+
 % Track original ids and labels.
 rawCPids=s.PSCPid(ctrlPts(:,1));
 CPlabels=pos.controlPts.labels(enabled);
@@ -133,9 +139,9 @@ if ~isempty(markPts)
 end
 
 % Construct PM structure.
-prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts',checkPts,...
-            'objPts',objPts,'rawOPids',rawOPids,'OPlabels',{OPlabels},...
-            'markPts',markPts);
+prob=struct('job',job,'images',images,'ctrlPts',ctrlPts,'checkPts', checkPts, ...
+            'objPts',objPts,'priorCamPos',priorCamPos, 'rawOPids',rawOPids, ...
+            'OPlabels',{OPlabels}, 'markPts',markPts);
 
 EO=[CC;ang;zeros(1,size(CC,2))];
 EOstd=nan(size(EO));
