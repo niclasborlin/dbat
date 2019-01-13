@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.8.5.1, Jan 13, 2019.
+- Fix to do some lengthy pre-bundle computations only when they were
+  needed.
+
 Release 0.8.5.0, Jan 03, 2019.
 - Major restructuring of the main data structure.
 - Added support for prior observations of camera positions.
