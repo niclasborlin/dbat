@@ -175,10 +175,16 @@ end
 % Do not touch fixed elements.
 block(~est)=0;
 
-% Find the leading elements of each row.
+% Find the leading elements of each row. Check if the block is
+% simple as well, i.e., does not have any repeated non-zeros.
+blockIsSimple=true;
 leading=zeros(size(block));
 for i=1:size(block,1)
-  [~,ia,~]=unique([0,block(i,:)]);
+  [ix,ia,~]=unique([0,block(i,:)]);
+  if nnz(ix)~=nnz(block(i,:))
+      % If we have at least one repeated index, the block is not simple.
+      blockIsSimple=false;
+  end
   leading(i,ia(2:end)-1)=1;
 end
 
@@ -198,12 +204,15 @@ serial.obs=find(useObs(leading>0));
 dist=leading;
 dist(leading~=0)=serial.dest;
 
-% Expand to all elements that should be equal.
-for k=1:length(serial.dest)
-    [i,j]=find(dist==k);
-    % Distribute over the block.
-    inBlock=block(i,:)==block(i,j);
-    dist(i,inBlock)=k;
+% If we have repeated indices in the block, we must update multiple elements.
+if ~blockIsSimple
+    % Expand to all elements that should be equal.
+    for k=1:length(serial.dest)
+        [i,j]=find(dist==k);
+        % Distribute over the block.
+        inBlock=block(i,:)==block(i,j);
+        dist(i,inBlock)=k;
+    end
 end
 
 % Extract indices.
