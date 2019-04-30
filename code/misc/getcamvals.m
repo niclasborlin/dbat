@@ -25,6 +25,11 @@ function v=getcamvals(s,cams,varargin)
 %   arbitrary combination of values. Successive PARAM values will
 %   be appended to the bottom of V.
 %
+%   The special PARAM string 'KCAM' may be used to return a
+%   3-by-3-by-N array with the affine camera calibration matrices for
+%   each camera. 'KCAM' cannot be combined with any other PARAM
+%   string.
+%
 %See also: BUILDPARAMTYPES, SETCAMVALS, SETCAMEST.
 
 if ischar(cams)
@@ -35,50 +40,64 @@ if ischar(cams)
     end
 end
 
-ix=zeros(0,1);
+% Check for 'KCAM'
+if any(strcmp('KCAM',varargin))
+    % 'KCAM' must be by itself.
+    if length(varargin)>1
+        error('''KCAM'' must appear as solitary PARAM string');
+    end
+    v=nan(3,3,length(cams));
+    for i=1:length(cams)
+        cc=s.IO.val(1,cams(i));
+        pp=s.IO.val(2:3,cams(i));
+        v(:,:,i)=[-cc*eye(2),pp;0,0,1];
+    end
+else
+    ix=zeros(0,1);
 
-for i=1:length(varargin)
-    j=[];
-    switch varargin{i}
-      case 'cc'
-        j=1;
-      case 'px'
-        j=2;
-      case 'py'
-        j=3;
-      case 'as'
-        j=4;
-      case 'sk'
-        j=5;
-      case 'pp'
-        j=(2:3)';
-      case 'af'
-        j=(1:5)';
-      case 'K'
-        j=5+(1:s.IO.model.nK)';
-      case 'P'
-        j=5+s.IO.model.nK+(1:s.IO.model.nP)';
-      otherwise
-        ss=[varargin{i},' '];
-        switch ss(1)
+    for i=1:length(varargin)
+        j=[];
+        switch varargin{i}
+          case 'cc'
+            j=1;
+          case 'px'
+            j=2;
+          case 'py'
+            j=3;
+          case 'as'
+            j=4;
+          case 'sk'
+            j=5;
+          case 'pp'
+            j=(2:3)';
+          case 'af'
+            j=(1:5)';
           case 'K'
-            k=str2double(ss(2:end));
-            if k<1 || k>s.IO.model.nK
-                error('Bad K parameter');
-            end
-            j=5+k;
+            j=5+(1:s.IO.model.nK)';
           case 'P'
-            k=str2double(ss(2:end));
-            if k<1 || k>s.IO.model.nP
-                error('Bad P parameter');
+            j=5+s.IO.model.nK+(1:s.IO.model.nP)';
+          otherwise
+            ss=[varargin{i},' '];
+            switch ss(1)
+              case 'K'
+                k=str2double(ss(2:end));
+                if k<1 || k>s.IO.model.nK
+                    error('Bad K parameter');
+                end
+                j=5+k;
+              case 'P'
+                k=str2double(ss(2:end));
+                if k<1 || k>s.IO.model.nP
+                    error('Bad P parameter');
+                end
+                j=5+s.IO.model.nK+k;
             end
-            j=5+s.IO.model.nK+k;
         end
+        if isempty(j)
+            error('Bad PARAM ''%s''',varargin{i});
+        end
+        ix=[ix;j];
     end
-    if isempty(j)
-        error('Bad PARAM ''%s''',varargin{i});
-    end
-    ix=[ix;j];
+    
+    v=s.IO.val(ix,cams);
 end
-
-v=s.IO.val(ix,cams);
