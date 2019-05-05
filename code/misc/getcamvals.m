@@ -14,21 +14,31 @@ function v=getcamvals(s,cams,varargin)
 %   - 'sk' - skew parameter.
 %   - 'Ki' - radial lens distortion coefficient number i.
 %   - 'Pi' - tangential lens distortion coefficient number i.
+%   - 'iw' - image width (pixels).
+%   - 'ih' - image height (pixels).
+%   - 'sw' - sensor width (mm).
+%   - 'sh' - sensor height (mm).
 %
 %   For groups of values, the following PARAM strings may be used:
 %   - 'pp' - principal point [px;py], M=2.
 %   - 'af' - affine; [cc;px;py;as;sk], M=5.
 %   - 'K'  - all radial coefficients, M=s.IO.model.nK.
 %   - 'P'  - all tangential coefficients, M=s.IO.model.nP.
+%   - 'cam' - all camera parameters, 'cc' to 'Pi'.
+%   - 'isz' - image size [iw;ih].
+%   - 'ssz' - sensor size [sw;sh].
 %
 %   V=GETCAMVALS(S,CAMS,PARAM1,PARAM2,...) can be used to return
 %   arbitrary combination of values. Successive PARAM values will
 %   be appended to the bottom of V.
 %
+%   V=GETCAMVALS(S,CAMS,'std',PARAM1,PARAM2,...) will instead return
+%   the posterior standard deviation(s) of PARAM1, PARAM2, etc.
+%
 %   The special PARAM string 'KCAM' may be used to return a
 %   3-by-3-by-N array with the affine camera calibration matrices for
 %   each camera. 'KCAM' cannot be combined with any other PARAM
-%   string.
+%   string nor with 'std'.
 %
 %See also: BUILDPARAMTYPES, SETCAMVALS, SETCAMEST.
 
@@ -54,6 +64,17 @@ if any(strcmp('KCAM',varargin))
     end
 else
     ix=zeros(0,1);
+    if ~isempty(varargin) && strcmp(varargin{1},'std')
+        % Read posterior standard deviations.
+        varargin(1)=[];
+        val=[s.post.std.IO;
+             zeros(4,size(s.post.std.IO,2))];
+    else
+        % Read values.
+        val=[s.IO.val;
+             s.IO.sensor.imSize;
+             s.IO.sensor.ssSize];
+    end
 
     for i=1:length(varargin)
         j=[];
@@ -76,6 +97,20 @@ else
             j=5+(1:s.IO.model.nK)';
           case 'P'
             j=5+s.IO.model.nK+(1:s.IO.model.nP)';
+          case 'cam'
+            j=(1:5+s.IO.model.nK+s.IO.model.nP)';
+          case 'iw'
+            j=5+s.IO.model.nK+s.IO.model.nP+1;
+          case 'ih'
+            j=5+s.IO.model.nK+s.IO.model.nP+2;
+          case 'isz'
+            j=5+s.IO.model.nK+s.IO.model.nP+(1:2)';
+          case 'sw'
+            j=5+s.IO.model.nK+s.IO.model.nP+3;
+          case 'sh'
+            j=5+s.IO.model.nK+s.IO.model.nP+4;
+          case 'ssz'
+            j=5+s.IO.model.nK+s.IO.model.nP+(3:4)';
           otherwise
             ss=[varargin{i},' '];
             switch ss(1)
@@ -99,5 +134,5 @@ else
         ix=[ix;j];
     end
     
-    v=s.IO.val(ix,cams);
+    v=val(ix,cams);
 end
