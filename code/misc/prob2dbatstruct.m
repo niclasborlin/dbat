@@ -383,7 +383,7 @@ useEOobs=false(size(EO));
 estOP=~(priorCPstd==0);
 % Use all non-fixed CP observations. For fixed CP, we only need the
 % current "observation".
-useOPobs=repmat(isCtrl,3,1);
+useOPobs=repmat(isCtrl & ~all(priorCPstd==0,1),3,1);
 
 % Default camera and object space units.
 camUnit='mm';
