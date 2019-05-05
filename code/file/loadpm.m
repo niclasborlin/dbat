@@ -85,7 +85,7 @@ prob=[];
 fid=fopen(name,'rt');
 if fid<0
 	err=['Failed to open file ',name];
-	if (nargout<2), error(err); else return; end
+	if nargout<2, error(err); else return; end
 end
 
 % Get file size for progress bar.
