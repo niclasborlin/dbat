@@ -13,10 +13,14 @@ function v=geteovals(s,cams,varargin)
 %   For groups of values, the following PARAM strings may be used:
 %   - 'pos'    - camera station coordinates [X;Y;Z], M=3.
 %   - 'angles' - camera station euler angles [omega;phi;kappa], M=3.
+%   - 'all'    - all parameters [pos;angles], M=6.
 %   
 %   V=GETEOVALS(S,CAMS,PARAM1,PARAM2,...) can be used to return
 %   arbitrary combination of values. Successive PARAM values will be
 %   appended to the bottom of V.
+%
+%   V=GETCAMVALS(S,CAMS,'std',PARAM1,PARAM2,...) will instead return
+%   the posterior standard deviation(s) of PARAM1, PARAM2, etc.
 %
 %   The special PARAM string 'R' may be used to return a 3-by-3-by-N
 %   array with rotation matrices corresponding to the world-to-camera
@@ -58,6 +62,15 @@ elseif any(strcmp('P',varargin)) % Check for 'P'
 else
     ix=zeros(0,1);
 
+    if ~isempty(varargin) && strcmp(varargin{1},'std')
+        % Read posterior standard deviations.
+        varargin(1)=[];
+        val=s.post.std.EO;
+    else
+        % Read values.
+        val=s.EO.val;
+    end
+
     for i=1:length(varargin)
         j=[];
         switch varargin{i}
@@ -77,11 +90,13 @@ else
             j=(1:3)';
           case 'angles'
             j=(4:6)';
+          case 'all'
+            j=(1:6)';
         end
         if isempty(j)
             error('Bad PARAM ''%s''',varargin{i});
         end
         ix=[ix;j];
     end
-    v=s.EO.val(ix,cams);
+    v=val(ix,cams);
 end
