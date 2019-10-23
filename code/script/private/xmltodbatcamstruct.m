@@ -1,12 +1,15 @@
 function cams=xmltodbatcamstruct(s)
 %XMLTODBATCAMSTRUCT Convert DBAT XML camera structure to DBAT camera structure
 %
-%   CAMS=XMLTODBATCAMSTRUCT(S) converts the N-cell array S with XML
-%   camera information to a DBAT camera structure N-array CAMS. Each
-%   element E in S should contain a structure in DBAT camera XML file
-%   format, i.e., with field names listed below with a Text field
-%   holding a string. The string is converted to a same-named field in
-%   the corresponding element in CAMS.
+%   CAMS=XMLTODBATCAMSTRUCT(S) converts the DBAT camera XML structure
+%   S to a DBAT camera structure CAMS. The structure S should have
+%   fields with field names listed below with a Text field holding a
+%   string. The string is converted to a same-named field in the
+%   corresponding element in CAMS.
+%
+%   CAMS=XMLTODBATCAMSTRUCT(S), where S is an N-cell array of DBAT
+%   DBAT camera XML structures, converts multiple cameras and
+%   returns an N-array with camera data.
 %
 %   The field names are:
 %       id     - integer camera id.
@@ -35,6 +38,12 @@ function cams=xmltodbatcamstruct(s)
 %
 %   The returned K and P fields are standardized to have the same
 %   length for all elements in CAM.
+
+narginchk(1,1),
+
+if ~iscell(s)
+    s={s};
+end
 
 % Create blank camera struct.
 fieldNames={'id','name','unit','sensor','image','aspect','focal', ...
