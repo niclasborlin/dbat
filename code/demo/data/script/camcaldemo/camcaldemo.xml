@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document dbat_script_version="1.0.0">
+  <c>
+    NOTE: XML comments <!-- --> is not supported. Use a c (comment)
+    block instead.
+  </c>
+  <meta>
+    <c>
+      Note: The meta section section is optional and can contain anything.
+      One possible use is for bookkeeping purposes.
+    </c>
+    <name>Camcaldemo</name>
+    <date>2019-10-23</date>
+    <author>Niclas Börlin</author>
+    <version>1.0</version>
+    <version_history>
+      <version>1.0, 2019-10-23: Stub.</version>
+    </version_history>
+    <project>Here can be the name of a project this file belongs to.</project>
+    <purpose>
+      Demonstrate camera calibration using the scripting feature of DBAT.
+      See also camcaldemo.m in the demo folder.
+    </purpose>
+  </meta>
+
+  <input base_dir='$HERE'>
+    <c>
+      The base_dir will be prepended to all relative paths in the
+      input section. An absolute path is defined to start with slash,
+      backslash, or 'X:', where X is any letter.
+      
+      The special string $DBAT will be replaced by the DBAT
+      installation directory. The special string $HOME will be
+      replaced by the user home directory. The special string $HERE
+      will be replaced by the directory in which this XML file
+      resides.
+    </c>
+    
+    <ctrl_pts>
+      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
+    </ctrl_pts>
+
+    <images>
+      <file format="id,label,path">images/images.txt</file>
+    </images>
+
+    <image_pts>
+      <file format="im,id,x,y,sxy">measurements/markpts.txt</file>
+    </image_pts>
+
+    <cameras>
+      <camera>
+        <name>Olympus Camedia C4040Z</name>
+        <unit>mm</unit>
+        <sensor>7.25301,5.43764</sensor>
+        <image>1704,2272</image>
+        <focal>7.5</focal>
+      </camera>
+    </cameras>
+  </input>
+
+  <operations>
+    <set_camera_values>
+      <cc>focal</cc>
+      <model>3</model>
+      <others>default</others>
+    </set_camera_values>
+    <run_spatial_resection />
+    <run_forward_intersection />
+    <set_bundle_estimate_params>
+      <io>
+        <all>true</all>
+        <skew>false</skew>
+      </io>
+      <eo>
+        <all>true</all>
+      </eo>
+      <op>
+        <all>true</all>
+      </op>
+    </set_bundle_estimate_params>
+    <run_bundle_adjustment />
+  </operations>
+  
+  <output>
+    <plots>
+      <plot>params</plot>
+      <plot convex_hull="true">coverage</plot>
+      <plot>image_stats</plot>
+      <plot max_op="1000">op_stats</plot>
+      <plot cam_size="0.1">iteration_trace</plot>
+      <plot id="1">image</plot>
+    </plots>
+    <files base_dir="/home/niclas/dbat/code/demo/data/dbat">
+      <report_file>
+        <name>result/report.txt</name>
+      </report_file>
+      <top_residuals>
+        <name>result/top_residuals.txt</name>
+      </top_residuals>
+      <io>
+        <name>result/c4040z.xml</name>
+      </io>
+      <op format="x,y,z,sx,sy,sz">
+        <name>result/op.txt</name>
+      </op>
+      <eo>
+        <name>result/eo.txt</name>
+      </eo>
+    </files>
+  </output>
+</document>
