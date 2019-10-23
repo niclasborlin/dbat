@@ -52,9 +52,12 @@
       <camera>
         <name>Olympus Camedia C4040Z</name>
         <unit>mm</unit>
-        <sensor>7.25301,5.43764</sensor>
-        <image>1704,2272</image>
+        <sensor>auto,5.43764</sensor>
+        <image>2272,1704</image>
+        <aspect>1</aspect>
         <focal>7.5</focal>
+        <nK>3</nK>
+        <nP>2</nP>
       </camera>
     </cameras>
   </input>

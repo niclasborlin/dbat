@@ -4,7 +4,8 @@ function ims=loadimagetable(fName,fmt,sep,cmt)
 %   IMS=LOADIMAGETABLE(FNAME,FORMAT) loads image information from the
 %   text file FNAME. The format of the text lines are given by FORMAT,
 %   see below. The data is returned in a struct IMS with fields
-%       id       - 1-by-M array with id numbers.
+%       id       - 1-by-M array with image id numbers.
+%       cam      - 1-by-M array with camera id numbers.
 %       name     - 1-by-M cell array with names.
 %       path     - 1-by-M cell array with file paths.
 %       fileName - string with FNAME.
@@ -15,9 +16,10 @@ function ims=loadimagetable(fName,fmt,sep,cmt)
 %   The string FORMAT contain the specification for the information on
 %   each line in FNAME. FORMAT can contain any number of the following
 %   strings, separated by commas:
-%       id         - integer id for the control point,
-%       label      - string with the name of the control point,
-%       path       - string with the name of the control point,
+%       id         - integer id for the image.
+%       cam        - integer id for the used camera.
+%       label      - string with the label to be used for the image.
+%       path       - string with the path name of the image.
 %       dummy      - string/numerical field to be ignored,
 %   Whitespaces in the format string is ignored.
 %
@@ -46,7 +48,7 @@ end
 fmtParts=strip(strsplit(fmt,sep));
 
 % Verify all parts are known.
-knownParts={'id','label','path','dummy'};
+knownParts={'id','cam','label','path','dummy'};
 
 if ~isempty(setdiff(fmtParts,knownParts))
     bad=join(setdiff(fmtParts,knownParts),', ');
@@ -54,6 +56,7 @@ if ~isempty(setdiff(fmtParts,knownParts))
 end
 
 id=zeros(1,0);
+cam=zeros(1,0);
 name=cell(1,0);
 path=cell(1,0);
 
@@ -82,10 +85,13 @@ while ~feof(fid)
     ii=nan;
     n='';
     p='';
+    cc=nan;
     for i=1:length(fmtParts)
         switch fmtParts{i}
           case 'id'
             ii=sscanf(parts{i},'%d');
+          case 'cam'
+            cc=sscanf(parts{i},'%d');
           case 'label'
             n=parts{i};
           case 'path'
@@ -102,10 +108,11 @@ while ~feof(fid)
         end
     end
     id(end+1)=ii;
+    cam(end+1)=cc;
     name{end+1}=n;
     path{end+1}=p;
 end
 
 fclose(fid);
 
-ims=struct('id',id,'name',{name},'path',{path},'fileName',fName);
+ims=struct('id',id,'cam',cam,'name',{name},'path',{path},'fileName',fName);

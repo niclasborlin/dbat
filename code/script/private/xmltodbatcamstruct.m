@@ -26,6 +26,10 @@ function cams=xmltodbatcamstruct(s)
 %       pp     - comma-separated (x,y) with principal point in
 %                camera units. The special string 'default' will
 %                return pp as the center of the sensor.
+%       nK     - number of radial coefficients for lens distortion.
+%                Defaults to zero.
+%       nP     - number of tangential coefficients for lens distortion.
+%                Defaults to zero.
 %       K      - nK-vector with radial lens distortion
 %                coefficients. Defaults to the empty vector.
 %       P      - nP-vector with tangential lens distortion
@@ -35,9 +39,6 @@ function cams=xmltodbatcamstruct(s)
 %
 %   Any missing field without a listed default above is returned as
 %   blank strings or NaN vectors of appropriate sizes, depending on type.
-%
-%   The returned K and P fields are standardized to have the same
-%   length for all elements in CAM.
 
 narginchk(1,1),
 
@@ -46,15 +47,12 @@ if ~iscell(s)
 end
 
 % Create blank camera struct.
-fieldNames={'id','name','unit','sensor','image','aspect','focal', ...
-            'model','cc','pp',    'K',       'P',       'skew'};
-defaults  ={nan, '',    '',    nan(1,2),nan(1,2),nan,    nan, ...
-            nan,    nan, nan(1,2),zeros(1,0),zeros(1,0),nan}; 
+fieldNames={'id','name','unit','sensor','image','aspect','nK','nP',...
+            'focal','model','cc','pp',    'K',       'P',       'skew'};
+defaults  ={nan, '',    '',    nan(1,2),nan(1,2),nan,    nan, nan,...
+            nan,    nan,    nan, nan(1,2),zeros(1,0),zeros(1,0),nan}; 
 
 blankCamera=cell2struct(defaults,fieldNames,2);
-
-longestK=0;
-longestP=0;
 
 % Pre-allocate return array.
 cams=repmat(blankCamera,1,length(s));
@@ -131,17 +129,17 @@ for i=1:length(s)
                    'values: %s'],e.pp.Text);
         end
     end
+    if isfield(e,'nK')
+        cam.nK=sscanf(e.nK.Text,'%d')';
+    end
+    if isfield(e,'nP')
+        cam.nP=sscanf(e.nP.Text,'%d')';
+    end
     if isfield(e,'K')
         cam.K=sscanf(e.K.Text,'%f,')';
-        if length(cam.K)>longestK
-            longestK=length(cam.K);
-        end
     end
     if isfield(e,'P')
         cam.P=sscanf(e.P.Text,'%f,')';
-        if length(cam.P)>longestP
-            longestP=length(cam.P);
-        end
     end
     if isfield(e,'model')
         cam.model=sscanf(e.model.Text,'%d');
@@ -160,21 +158,35 @@ for i=1:length(s)
         % Compute sensor width
         cam.sensor(1)=cam.aspect*cam.sensor(2)*cam.image(1)/cam.image(2);
     end
-    
+
+    % Clean up K and P fields to match nK and nP.
+    if ~(cam.nK==length(cam.K))
+        if isnan(cam.nK)
+            % K specified but not nK => set nK to length of K.
+            cam.nK=length(cam.K);
+        elseif isempty(cam.K)
+            % nK specified but not K => set K to zero vector of length nK.
+            cam.K=zeros(1,cam.nK);
+        end
+        if cam.nK~=length(cam.K)
+            error('DBAT camera XML error: K length mismatch');
+        end
+    end
+    if ~(cam.nP==length(cam.P))
+        if isnan(cam.nP)
+            % P specified but not nP => set nP to length of P.
+            cam.nP=length(cam.P);
+        elseif isempty(cam.P)
+            % nP specified but not P => set P to zero vector of length nP.
+            cam.P=zeros(1,cam.nP);
+        end
+        if cam.nP~=length(cam.P)
+            error('DBAT camera XML error: P length mismatch');
+        end
+        if cam.nP==1
+            error('DBAT camera XML error: P cannot be one');
+        end
+    end
+
     cams(i)=cam;
-end
-
-% Cannot have only P1.
-if longestP==1
-    longestP=2;
-end
-
-% Normalize lengths of K and P vectors.
-for i=1:length(cams)
-    if length(cams(i).K)<longestK
-        cams(i).K(longestK)=0;
-    end
-    if length(cams(i).P)<longestP
-        cams(i).P(longestP)=0;
-    end
 end

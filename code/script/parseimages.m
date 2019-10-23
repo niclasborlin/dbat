@@ -46,3 +46,9 @@ end
 format=file.Attributes.format;
 
 ims=loadimagetable(fileName,format);
+
+% If all camera numbers are unspecified, use camera id=1 for all
+% images.
+if all(isnan(ims.cam))
+    ims.cam(:)=1;
+end

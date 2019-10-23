@@ -9,7 +9,7 @@ function cams=parsecameras(cameras,baseDir)
 %   CAMERAS or in a DBAT camera XML file specified by the FILE
 %   field.
 %
-%See also: LOADCAMERAS
+%See also: LOADCAMERAS.
 
 narginchk(2,2)
  
@@ -47,6 +47,7 @@ else
     error('Missing camera data');
 end
 
+% Set id of single camera without id to 1.
 if length(cams)==1 && isnan(cams.id)
     cams.id=1;
 end
