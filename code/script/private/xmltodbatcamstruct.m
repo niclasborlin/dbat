@@ -112,7 +112,11 @@ for i=1:length(s)
         cam.cc=sscanf(e.cc.Text,'%f');
     end
     if isfield(e,'pp')
-        cam.pp=sscanf(e.pp.Text,'%f,')';
+        if strcmp(strip(e.pp.Text),'default')
+            cam.pp=cam.sensor/2;
+        else
+            cam.pp=sscanf(e.pp.Text,'%f,')';
+        end
         if length(cam.pp)~=2
             error(['DBAT camera XML error: Wrong number of principal point ' ...
                    'values: %s'],e.pp.Text);
