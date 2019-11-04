@@ -1,4 +1,4 @@
-camcaldir=fullfile(dbatroot,'/demo/data/script/camcaldemo');
+camcaldir=fullfile(fileparts(dbatroot),'/data/script/camcaldemo');
 
 f=fullfile(camcaldir,'camcaldemo.xml');
 
@@ -13,12 +13,11 @@ c2=fullfile(camcaldir,'reference/camcal-weighted.txt');
 
 pts1=loadctrlpts(c1,'id,label,x,y,z');
 pts2=loadctrlpts(c2,'id,label,x,y,z,sx,sy,sz');
-pts3=loadctrlpts(c2,'id,label,x,y,z,sxy,dummy,sz');
-pts4=loadctrlpts(c2,'id,label,x,y,z,sxyz,dummy,dummy');
+pts3=loadctrlpts(c2,'id,label,x,y,z,sxy,ignored,sz');
+pts4=loadctrlpts(c2,'id,label,x,y,z,sxyz,ignored,ignored');
 
 i1=fullfile(camcaldir,'images/images.txt');
-ims1=loadimagetable(i1,'id,label,path');
-ims2=loadimagetable(i1,'id,dummy,path');
+ims1=loadimagetable(i1,'id,path');
 
 imp1=fullfile(camcaldir,'measurements/markpts.txt');
 mark1=loadimagepts(imp1,'im,id,x,y,sxy');
