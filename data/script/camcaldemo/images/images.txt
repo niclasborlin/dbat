@@ -1,23 +1,23 @@
 # Image paths for DBAT camera calibration demo
-# Format: id, label, path
- 1, P8250021.JPG, data/dbat/images/cam/P8250021.JPG
- 2, P8250022.JPG, data/dbat/images/cam/P8250022.JPG
- 3, P8250023.JPG, data/dbat/images/cam/P8250023.JPG
- 4, P8250024.JPG, data/dbat/images/cam/P8250024.JPG
- 5, P8250025.JPG, data/dbat/images/cam/P8250025.JPG
- 6, P8250026.JPG, data/dbat/images/cam/P8250026.JPG
- 7, P8250027.JPG, data/dbat/images/cam/P8250027.JPG
- 8, P8250028.JPG, data/dbat/images/cam/P8250028.JPG
- 9, P8250029.JPG, data/dbat/images/cam/P8250029.JPG
-10, P8250030.JPG, data/dbat/images/cam/P8250030.JPG
-11, P8250031.JPG, data/dbat/images/cam/P8250031.JPG
-12, P8250032.JPG, data/dbat/images/cam/P8250032.JPG
-13, P8250033.JPG, data/dbat/images/cam/P8250033.JPG
-14, P8250034.JPG, data/dbat/images/cam/P8250034.JPG
-15, P8250035.JPG, data/dbat/images/cam/P8250035.JPG
-16, P8250036.JPG, data/dbat/images/cam/P8250036.JPG
-17, P8250037.JPG, data/dbat/images/cam/P8250037.JPG
-18, P8250038.JPG, data/dbat/images/cam/P8250038.JPG
-19, P8250039.JPG, data/dbat/images/cam/P8250039.JPG
-20, P8250040.JPG, data/dbat/images/cam/P8250040.JPG
-21, P8250041.JPG, data/dbat/images/cam/P8250041.JPG
+# Format: id, path
+ 1, data/dbat/images/cam/P8250021.JPG
+ 2, data/dbat/images/cam/P8250022.JPG
+ 3, data/dbat/images/cam/P8250023.JPG
+ 4, data/dbat/images/cam/P8250024.JPG
+ 5, data/dbat/images/cam/P8250025.JPG
+ 6, data/dbat/images/cam/P8250026.JPG
+ 7, data/dbat/images/cam/P8250027.JPG
+ 8, data/dbat/images/cam/P8250028.JPG
+ 9, data/dbat/images/cam/P8250029.JPG
+10, data/dbat/images/cam/P8250030.JPG
+11, data/dbat/images/cam/P8250031.JPG
+12, data/dbat/images/cam/P8250032.JPG
+13, data/dbat/images/cam/P8250033.JPG
+14, data/dbat/images/cam/P8250034.JPG
+15, data/dbat/images/cam/P8250035.JPG
+16, data/dbat/images/cam/P8250036.JPG
+17, data/dbat/images/cam/P8250037.JPG
+18, data/dbat/images/cam/P8250038.JPG
+19, data/dbat/images/cam/P8250039.JPG
+20, data/dbat/images/cam/P8250040.JPG
+21, data/dbat/images/cam/P8250041.JPG
