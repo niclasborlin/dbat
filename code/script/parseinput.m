@@ -1,15 +1,16 @@
 function s=parseinput(input,docFile)
 %PARSEINPUT Parse input section of a DBAT XML file.
 %
-%    S=PARSEINPUT(INPUT) parses the input XML block INPUT from a
-%    DBAT XML script file. The result is returned in the DBAT
-%    structure S.
+%    S=PARSEINPUT(INPUT,DOCFILE) parses the input XML block INPUT from
+%    a DBAT XML script file. The result is returned in the DBAT
+%    structure S. The string DOCFILE should contain the path name
+%    of the XML file and is used to determine base directories.
 %
 %    INPUT must contain the fields 'cameras', 'images',
 %    'image_pts' and may contain the fields 'Attributes','
 %    'ctrl_pts', 'check_pts'.
 %
-%See also: EMPTYDBATSTRUCT, PROB2DBATSTRUCT.
+%See also: PARSECAMERAS, PARSEIMAGES, GETATTRBASEDIR.
 
 narginchk(2,2);
 
@@ -29,8 +30,13 @@ end
 % Parse cameras.
 cams=parsecameras(input.cameras,baseDir);
 
+camModels=cat(1,cams.model);
+if ~all(isnan(camModels)) && ~isscalar(unique(camModels))
+    error('Multiple camera models not supported');
+end
+
 % Parse images.
-ims=parseimages(input.images,baseDir);
+ims=parseimages(input.images,baseDir,docFile);
 
 % Parse image points.
 pts=parseimagepts(input.image_pts,baseDir);
@@ -56,6 +62,8 @@ nMarkPts=length(pts.id);
 nOP=length(unique([pts.id,ctrlPts.id,checkPts.id]));
 
 s=emptydbatstruct(nImages,nOP,nMarkPts);
+
+s=setcamsandimages(s,cams,ims);
 
 s.zz.cams=cams;
 s.zz.ims=ims;

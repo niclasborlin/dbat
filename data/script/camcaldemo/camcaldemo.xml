@@ -16,14 +16,21 @@
     <version_history>
       <version>1.0, 2019-10-23: Stub.</version>
     </version_history>
-    <project>Here can be the name of a project this file belongs to.</project>
+    <project>DBAT</project>
     <purpose>
       Demonstrate camera calibration using the scripting feature of DBAT.
       See also camcaldemo.m in the demo folder.
     </purpose>
+    <software>
+      Software used to generate the data files, e.g., the image
+      measurements.
+    </software>
+    <control_points>
+      Information about how the control points were measured...
+    </control_points>
   </meta>
 
-  <input base_dir='$HERE'>
+  <input base_dir="$HERE">
     <c>
       The base_dir will be prepended to all relative paths in the
       input section. An absolute path is defined to start with slash,
@@ -40,8 +47,8 @@
       <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
     </ctrl_pts>
 
-    <images>
-      <file format="id,label,path">images/images.txt</file>
+    <images image_base_dir="$DBAT">
+      <file format="id,path">images/images.txt</file>
     </images>
 
     <image_pts>
@@ -50,6 +57,7 @@
 
     <cameras>
       <camera>
+        <id>1</id>
         <name>Olympus Camedia C4040Z</name>
         <unit>mm</unit>
         <sensor>auto,5.43764</sensor>
