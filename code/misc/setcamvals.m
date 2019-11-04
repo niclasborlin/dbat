@@ -10,12 +10,15 @@ function s=setcamvals(s,varargin)
 %   the sensor.
 %
 %   S=SETCAMVALS(...,<param1>,<val1>,...) specifies invidual initial
-%   values for each parameter. For acceptable parameter strings, see
-%   BUILDPARAMTYPES.
+%   values for each parameter. Acceptable parameter strings are
+%   specified in BUILDPARAMTYPES, in addition to 'lin', 'K', and 'P',
+%   that corresponds the linear parameters, the K, and P values,
+%   respectively. The linear parameters comprise the camera constant,
+%   the principal point, skew, and aspect.
 %
-%   S=SETCAMVALS(S,IX,...) sets the camera parameters for the
-%   cameras specified in the index vector IX only. IX='all'
-%   corresponds to the default: all cameras.
+%   S=SETCAMVALS(S,IX,...) sets the camera parameters for the cameras
+%   specified in the index vector IX only. A value of IX='all'
+%   corresponds to all cameras.
 %
 %See also: BUILDPARAMTYPES.
 
@@ -71,6 +74,17 @@ while length(varargin)>=i
     ii=find(strcmp(param,{'cc','px','py','as','sk'}));
     % Aspect, skew not defined for some models: Argument must be zero.
     mustBeZero=any(ismember(ii,[4,5])) && any(abs(s.IO.model.distModel(ix))<3);
+    if isempty(ii)
+        % Look for grouped parameters.
+        switch param
+          case 'lin'
+            ii=1:5;
+          case 'K'
+            ii=5+(1:s.IO.model.nK);
+          case 'P'
+            ii=5+s.IO.model.nK+(1:s.IO.model.nP);
+        end
+    end
     if isempty(ii) && ~isempty(param)
         % Not found, check Ki, Pi
         switch varargin{i}(1)
