@@ -38,7 +38,11 @@ function cams=xmltodbatcamstruct(s)
 %       model  - scalar with camera model number.
 %
 %   Any missing field without a listed default above is returned as
-%   blank strings or NaN vectors of appropriate sizes, depending on type.
+%   blank strings or NaN vectors of appropriate sizes, depending on
+%   type.
+%
+%   If multiple cameras are present, the nK and nP values will be
+%   adjusted upwards to match if necessary.
 
 narginchk(1,1),
 
@@ -189,4 +193,25 @@ for i=1:length(s)
     end
 
     cams(i)=cam;
+end
+
+nK=cat(1,cams.nK);
+nP=cat(1,cams.nP);
+
+if min(nK)~=max(nK)
+    % Upgrade all cameras with short K vectors.
+    mK=max(nK);
+    for i=find(nK<mK)'
+        cams(i).nK=mK;
+        cams(i).K(mK)=0;
+    end
+end
+
+if min(nP)~=max(nP)
+    % Upgrade all cameras with short P vectors.
+    mP=max(nP);
+    for i=find(nP<mP)'
+        cams(i).nP=mP;
+        cams(i).P(mK)=0;
+    end
 end
