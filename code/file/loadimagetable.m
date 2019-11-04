@@ -20,21 +20,24 @@ function ims=loadimagetable(fName,fmt,sep,cmt)
 %       cam        - integer id for the used camera.
 %       label      - string with the label to be used for the image.
 %       path       - string with the path name of the image.
-%       dummy      - string/numerical field to be ignored,
+%       ignored    - string/numerical field to be ignored,
 %   Whitespaces in the format string is ignored.
+%
+%   If the format string does not contain any label, the final path
+%   component is used as the label.
 %
 %   Blank lines and lines starting with a first non-whitespace
 %   character '#' are treated as comments and are ignored. All other
 %   lines are expected to match the format string, i.e., to contain
 %   the data in the expected format.
 %
-%   Note that any string fields cannot contain the separator
-%   character. Use IMS=LOADIMAGETABLE(FNAME,FORMAT,SEP) to specify
-%   that another separator character. The separator character should
-%   be used both in the FORMAT string and the text file.
+%   Note that string field cannot contain the separator character. Use
+%   IMS=LOADIMAGETABLE(FNAME,FORMAT,SEP) to specify that another
+%   separator character. The separator character should be used both
+%   in the FORMAT string and the text file.
 %
 %   Use IMS=LOADIMAGETABLE(FNAME,FORMAT,SEP,CMT) to specify another
-%   comment character.
+%   comment character CMT.
 
 if nargin<3, sep=','; end
 if nargin<4, cmt='#'; end
@@ -47,8 +50,11 @@ end
 % Parse the format string.
 fmtParts=strip(strsplit(fmt,sep));
 
+% Determine if default labels should be used.
+defaultLabel=~ismember('label',fmtParts);
+
 % Verify all parts are known.
-knownParts={'id','cam','label','path','dummy'};
+knownParts={'id','cam','label','path','ignored'};
 
 if ~isempty(setdiff(fmtParts,knownParts))
     bad=join(setdiff(fmtParts,knownParts),', ');
@@ -79,9 +85,6 @@ while ~feof(fid)
               length(parts), length(fmtParts));
     end
 
-    % Determine if default labels should be used.
-    defaultLabel=~ismember('label',fmtParts);
-        
     ii=nan;
     n='';
     p='';
@@ -100,7 +103,7 @@ while ~feof(fid)
                 [~,n1,n2]=fileparts(p);
                 n=[n1,n2];
             end
-          case 'dummy'
+          case 'ignored'
             % Do nothing
           otherwise
             % Should never happen

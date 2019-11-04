@@ -19,7 +19,7 @@ function pts=loadctrlpts(fName,fmt,sep,cmt)
 %   strings, separated by commas:
 %       id         - integer id for the control point,
 %       label      - string with the name of the control point,
-%       dummy      - string/numerical field to be ignored,
+%       ignored    - string/numerical field to be ignored,
 %       x, y, z    - numeric fields with the x, y, or, z
 %                    coordinates of the control point,
 %       sx, sy, sz - numeric fields with the standard deviations of
@@ -53,8 +53,7 @@ end
 fmtParts=strip(strsplit(fmt,sep));
 
 % Verify all parts are known.
-knownParts={'id','label','dummy','x','y','z','sx','sy','sz','sxy', ...
-            'sxyz'};
+knownParts={'id','label','ignored','x','y','z','sx','sy','sz','sxy', 'sxyz'};
 
 if ~isempty(setdiff(fmtParts,knownParts))
     bad=join(setdiff(fmtParts,knownParts),', ');
@@ -103,7 +102,7 @@ while ~feof(fid)
             s(1:2)=sscanf(parts{i},'%f');
           case 'sxyz'
             s(:)=sscanf(parts{i},'%f');
-          case 'dummy'
+          case 'ignored'
             % Do nothing
           otherwise
             % Should never happen
