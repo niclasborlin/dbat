@@ -1,4 +1,4 @@
-function [dir,rawDir]=getattrbasedir(s,docFile)
+function [dir,rawDir]=getattrbasedir(s,docFile,attrName)
 %GETBASEDIR Get base_dir attribute if present.
 %
 %   GETATTRBASEDIR(S,DOCFILE), where S is a sub-structure loaded from
@@ -7,20 +7,26 @@ function [dir,rawDir]=getattrbasedir(s,docFile)
 %
 %   If base_dir starts with any of the special strings $DBAT, $HOME,
 %   or $HERE, it is replaced by the DBAT installation directory, the
-%   user home directory, or the directory containing DOCFILE.
+%   user home directory, or the directory containing DOCFILE,
+%   respectively.
 % 
 %   [DIR,RAWDIR]=GETATTRBASEDIR(S,DOCFILE) also returns the
 %   unprocessed base_dir string in RAWDIR.
+%
+%   Use GETATTRBASEDIR(S,DOCFILE,ATTRNAME) to specify another
+%   attribute name ATTRNAME than 'base_dir'.
 %
 %   NOTE: The user home directory is returned by
 %   java.lang.System.getProperty('user.home') and is typically
 %   C:\Users\username on Windows, /Users/username on Mac/OS X, and
 %   /home/username on Linux, where 'username' is the current user name.
     
-narginchk(2,2)
+narginchk(2,3)
 
-if isfield(s,'Attributes') && isfield(s.Attributes,'base_dir')
-    rawDir=s.Attributes.base_dir;
+if nargin<3, attrName='base_dir'; end
+
+if isfield(s,'Attributes') && isfield(s.Attributes,attrName)
+    rawDir=s.Attributes.(attrName);
     dir=rawDir;
     % Check for  special strings.
     if isprefixed(dir,'$DBAT')
