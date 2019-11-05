@@ -17,6 +17,7 @@
       <version>1.0, 2019-10-23: Stub.</version>
     </version_history>
     <project>DBAT</project>
+    <project_unit>m</project_unit>
     <purpose>
       Demonstrate camera calibration using the scripting feature of DBAT.
       See also camcaldemo.m in the demo folder.
