@@ -5,8 +5,16 @@ function ims=parseimages(images,baseDir,docFile)
 %   the INPUT section of a DBAT XML script file. The result is
 %   returned in the struct IMS. The BASEDIR is used as the image base
 %   dir unless it is overridden by an image_base_dir attribute in
-%   images. The string DOCFILE should contain the path name of the
+%   IMAGES. The string DOCFILE should contain the path name of the
 %   source XML file.
+%
+%   The data is returned in a struct IMS with fields
+%       id       - 1-by-M array with image id numbers.
+%       cam      - 1-by-M array with camera id numbers.
+%       name     - 1-by-M cell array with names.
+%       imDir    - string with the longest common prefix of image paths.
+%       path     - 1-by-M cell array with file paths relative to imDir.
+%       fileName - string with FNAME.
 %
 %   The image data is loaded from the file specified in the
 %   IMAGES.file.Text field and with the format specified by
@@ -64,6 +72,35 @@ if ~isempty(imageBaseDir)
         ims.path{i}=parsepath(ims.path{i},imageBaseDir);
     end
 end
+
+% Find shortest common dir prefix.
+imDirs=unique(cellfun(@fileparts,ims.path,'uniformoutput',false));
+
+while length(imDirs)>1
+    % More than one, check if shortest is prefix to others.
+    [~,i]=min(cellfun(@length,imDirs));
+    testDir=fullfile(imDirs{i},filesep);
+    isPrefixed=strncmp(testDir,ims.path,length(testDir));
+    if all(isPrefixed)
+        % Yes.
+        imDirs=imDirs{i};
+    else
+        % No, trim again.
+        imDirs=unique(cellfun(@fileparts,imDirs,'uniformoutput',false));
+    end
+end
+
+if isempty(imDirs)
+    imDir='';
+else
+    % Pick remaining dir and append / safely.
+    imDir=fullfile(imDirs{:},filesep);
+end
+
+ims.imDir=imDir;
+
+% Remove image directory from image names.
+ims.path=cellfun(@(x)x(length(imDir)+1:end),ims.path,'uniformoutput',false);
 
 % If all camera numbers are unspecified, use camera id=1 for all
 % images.
