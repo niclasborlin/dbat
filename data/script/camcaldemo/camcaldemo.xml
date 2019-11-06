@@ -65,6 +65,7 @@
         <image>2272,1704</image>
         <aspect>1</aspect>
         <focal>7.5</focal>
+        <model>3</model>
         <nK>3</nK>
         <nP>2</nP>
       </camera>
@@ -74,7 +75,6 @@
   <operations>
     <set_camera_values>
       <cc>focal</cc>
-      <model>3</model>
       <others>default</others>
     </set_camera_values>
     <run_spatial_resection />

@@ -1,4 +1,4 @@
-function s=parseinput(input,docFile)
+function [s,imDir,cptFile,EOfile]=parseinput(input,docFile)
 %PARSEINPUT Parse input section of a DBAT XML file.
 %
 %    S=PARSEINPUT(INPUT,DOCFILE) parses the input XML block INPUT from
@@ -38,19 +38,25 @@ end
 % Parse images.
 ims=parseimages(input.images,baseDir,docFile);
 
+imDir=ims.imDir;
+
 % Parse image points.
 pts=parseimagepts(input.image_pts,baseDir);
 
 % Load control and check points, if any.
-ctrlPts=struct('id',zeros(1,0));
+ctrlPts=struct('id',zeros(1,0),'fileName','');
 if isfield(input,'ctrl_pts')
     ctrlPts=parsectrlpts(input.ctrl_pts,baseDir);
 end
+cptFile=ctrlPts.fileName;
 
 checkPts=struct('id',zeros(1,0));
 if isfield(input,'check_pts')
     checkPts=parsectrlpts(input.check_pts,baseDir);
 end
+
+% No support yet for prior EO values.
+EOfile='';
 
 % Number of images.
 nImages=length(ims.id);
