@@ -11,10 +11,11 @@ function s=setcamvals(s,varargin)
 %
 %   S=SETCAMVALS(...,<param1>,<val1>,...) specifies invidual initial
 %   values for each parameter. Acceptable parameter strings are
-%   specified in BUILDPARAMTYPES, in addition to 'lin', 'K', and 'P',
-%   that corresponds the linear parameters, the K, and P values,
-%   respectively. The linear parameters comprise the camera constant,
-%   the principal point, skew, and aspect.
+%   specified in BUILDPARAMTYPES, in addition to 'pp', 'lin', 'K', and
+%   'P', that corresponds to the principal point, the linear
+%   parameters, the K values, and the P values, respectively. The
+%   linear parameters comprise the camera constant, the principal
+%   point, skew, and aspect.
 %
 %   S=SETCAMVALS(S,IX,...) sets the camera parameters for the cameras
 %   specified in the index vector IX only. A value of IX='all'
@@ -79,6 +80,8 @@ while length(varargin)>=i
         switch param
           case 'lin'
             ii=1:5;
+          case 'pp'
+            ii=2:3;
           case 'K'
             ii=5+(1:s.IO.model.nK);
           case 'P'

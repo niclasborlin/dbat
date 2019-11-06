@@ -6,10 +6,10 @@ function v=getcamvals(s,param,ix)
 %   return the values for the cameras specified by the index vector
 %   IX. A value of IX='all' corresponds to all cameras. The allowed
 %   parameter string values are specified in BUILDPARAMTYPES, in
-%   addition to 'lin', 'K', and 'P', that corresponds the linear
-%   parameters, the K, and P values, respectively. The linear
-%   parameters comprise the camera constant, the principal point,
-%   skew, and aspect.
+%   addition to 'pp', 'lin', 'K', and 'P', that corresponds to the
+%   principal point, the linear parameters, the K values, and the P
+%   values, respectively. The linear parameters comprise the camera
+%   constant, the principal point, skew, and aspect.
 %
 %See also: BUILDPARAMTYPES.
 
@@ -26,6 +26,8 @@ if isempty(ii)
     switch param
       case 'lin'
         ii=1:5;
+      case 'pp'
+        ii=2:3;
       case 'K'
         ii=5+(1:s.IO.model.nK);
       case 'P'
