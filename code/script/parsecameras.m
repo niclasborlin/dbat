@@ -52,4 +52,9 @@ if length(cams)==1 && isnan(cams.id)
     cams.id=1;
 end
 
-    
+% Currently no support for multiple cameras with different camera
+% units.
+if length(unique({cams.unit}))>1
+    error('Multiple cameras must have the same camera unit');
+end
+
