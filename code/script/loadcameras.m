@@ -5,7 +5,7 @@ function [cam,xml]=loadcameras(fName)
 %   XML camera file CAMFILE. The camera information is returned in the
 %   structure array CAM.
 %
-%
+%See also: XMLTODBATCAMSTRUCT.
 
 cam=[];
 
