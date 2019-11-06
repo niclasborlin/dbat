@@ -69,7 +69,9 @@ nOP=length(unique([pts.id,ctrlPts.id,checkPts.id]));
 
 s=emptydbatstruct(nImages,nOP,nMarkPts);
 
-s=setcamsandimages(s,cams,ims);
+s=setdbatcamsandimages(s,cams,ims);
+
+s=setdbatpts(s,ctrlPts,checkPts,pts);
 
 s.zz.cams=cams;
 s.zz.ims=ims;
