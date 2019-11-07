@@ -1,10 +1,10 @@
-function s=setcamsandimages(s,cams,ims)
+function s=setdbatcamsandimages(s,cams,ims)
 %SETCAMSANDIMAGES Set camera and image info in a DBAT structure
 %
-%   S=SETIMAGES(S,CAMS,IMS) sets the camera and image info in the DBAT
-%   structure S from the DBAT camera structure array CAMS and the DBAT
-%   image struct IMS. S should have been initialized to its proper
-%   size.
+%   S=SETDBATCAMSANDIMAGES(S,CAMS,IMS) sets the camera and image info
+%   in the DBAT structure S from the DBAT camera structure array CAMS
+%   and the DBAT image struct IMS. S should have been initialized to
+%   its proper size.
 
 nIms=length(ims.id);
 nK=cams(1).nK;
