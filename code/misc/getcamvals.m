@@ -1,22 +1,50 @@
-function v=getcamvals(s,param,ix)
+function v=getcamvals(s,varargin)
 %GETCAMVALS Get camera values from DBAT struct.
 %
-%   GETCAMVALS(S,PARAM) returns the camera value specified by the
-%   string PARAM for all cameras in S. Use GETCAMVALS(S,PARAM,IX) to
-%   return the values for the cameras specified by the index vector
-%   IX. A value of IX='all' corresponds to all cameras. The allowed
-%   parameter string values are specified in BUILDPARAMTYPES, in
-%   addition to 'pp', 'lin', 'K', and 'P', that corresponds to the
-%   principal point, the linear parameters, the K values, and the P
-%   values, respectively. The linear parameters comprise the camera
-%   constant, the principal point, skew, and aspect.
+%   GETCAMVALS(S,PARAM) returns the current camera value specified by
+%   the string PARAM for all cameras in S. GETCAMVALS(S,PARAM,IX)
+%   returns the values for the cameras specified by the index vector
+%   IX. A value of IX='all' corresponds to all cameras.
+% 
+%   GETCAMVALS(S,'prior',...) returns values from the prior IO
+%   parameters instead of the current.  
 %
-%See also: BUILDPARAMTYPES.
+%   The allowed parameter string values are specified in
+%   BUILDPARAMTYPES, in addition to 'pp', 'lin', 'K', and 'P', that
+%   corresponds to the principal point, the linear parameters, the K
+%   values, and the P values, respectively. The linear parameters
+%   comprise the camera constant, the principal point, skew, and
+%   aspect.
+%
+%See also: SETCAMVALS, BUILDPARAMTYPES.
 
-if nargin<3, ix='all'; end
+% Check if first argument is 'prior'.
+getPriorValues=false;
+if ~isempty(varargin) && strcmp(varargin{1},'prior')
+    getPriorValues=true;
+    varargin(1)=[];
+end
+
+switch length(varargin)
+  case 1
+    param=varargin{1};
+    ix='all';
+  case 2
+    param=varargin{1};
+    ix=varargin{2};
+  otherwise
+    error('GETCAMVALS: Illegal number of arguments');
+end
+
+% Extract correct IO parameter set.
+if getPriorValues
+    IO=s.IO;
+else
+    IO=s.prior.IO;
+end
 
 if ischar(ix)
-    ix=1:size(s.IO.val,2);
+    ix=1:size(IO.val,2);
 end
 
 % Check for simple arg.
@@ -55,4 +83,4 @@ if isempty(ii)
     error('GETCAMVALS: Bad parameter %d: ''%s''',i,param);
 end
 
-v=s.IO.val(ii,ix);
+v=IO.val(ii,ix);

@@ -21,9 +21,26 @@ function s=setcamvals(s,varargin)
 %   specified in the index vector IX only. A value of IX='all'
 %   corresponds to all cameras.
 %
-%See also: BUILDPARAMTYPES.
+%   S=SETCAMVALS(S,'prior',...) sets the prior IO values instead of
+%   the current.
+%
+%See also: GETCAMVALS, BUILDPARAMTYPES.
 
-ix=1:size(s.IO.val,2);
+% Check if first argument is 'prior'.
+setPriorValues=false;
+if ~isempty(varargin) && strcmp(varargin{1},'prior')
+    setPriorValues=true;
+    varargin(1)=[];
+end
+
+% Extract the correct structure.
+if setPriorValues
+    IO=s.prior.IO;
+else
+    IO=s.IO;
+end
+
+ix=1:size(IO.val,2);
 
 % Next argument.
 i=1;
@@ -34,23 +51,23 @@ if length(varargin)>=i
         i=i+1;
     elseif ischar(varargin{i}) && strcmp(varargin{i},'all')
         i=i+1;
-        ix=1:size(s.IO,val,2);
+        ix=1:size(IO.val,2);
     end
 end
 
 % Check for 'loaded' argument.
 if length(varargin)>=i && ischar(varargin{i}) && strcmp(varargin{i},'loaded')
     i=i+1;
-    s.IO.val(:,ix)=s.prior.IO.val(:,ix);
+    IO.val(:,ix)=s.prior.IO.val(:,ix);
 end
 
 % Check for 'default' argument.
 if length(varargin)>=i && ischar(varargin{i}) && strcmp(varargin{i},'default')
     i=i+1;
     if length(varargin)>=i && isnumeric(varargin{i})
-        s.IO.val(1,ix)=varargin{i};
-        s.IO.val(2:3,ix)=0.5*diag([1,-1])*s.IO.sensor.ssSize(:,ix);
-        s.IO.val(4:end,ix)=0;
+        IO.val(1,ix)=varargin{i};
+        IO.val(2:3,ix)=0.5*diag([1,-1])*s.IO.sensor.ssSize(:,ix);
+        IO.val(4:end,ix)=0;
         i=i+1;
     else
         error('SETCAMVALS: Bad parameter %d: CC must be numeric',i)
@@ -114,6 +131,13 @@ while length(varargin)>=i
         error('SETCAMVALS: Camera model %d only supports zero %s', ...
               badModel(1),param);
     end
-    s.IO.val(ii,ix)=arg;
+    IO.val(ii,ix)=arg;
     i=i+2;
+end
+
+% Re-install IO structure.
+if setPriorValues
+    s.prior.IO=IO;
+else
+    s.IO=IO;
 end
