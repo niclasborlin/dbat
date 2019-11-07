@@ -1,5 +1,5 @@
 function s=setdbatcamsandimages(s,cams,ims)
-%SETCAMSANDIMAGES Set camera and image info in a DBAT structure
+%SETDBATCAMSANDIMAGES Set camera and image info in a DBAT structure
 %
 %   S=SETDBATCAMSANDIMAGES(S,CAMS,IMS) sets the camera and image info
 %   in the DBAT structure S from the DBAT camera structure array CAMS
@@ -38,8 +38,8 @@ aspectDiff=cat(1,cams.aspectDiff)';
 K=cat(1,cams.K)';
 P=cat(1,cams.P)';
 
-s=setcamvals(s,'cc',cc(:,camNo),'pp',pp(:,camNo), ...
-               'as',aspectDiff(:,camNo),'sk',skew(:,camNo), ...
+s=setcamvals(s,'prior','cc',cc(:,camNo),'pp',pp(:,camNo), ...
+               'as', aspectDiff(:,camNo),'sk',skew(:,camNo), ...
                'K',K(:,camNo),'P',P(:,camNo));
 
 s=parseblockvariant(s);
