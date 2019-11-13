@@ -55,6 +55,10 @@ if isfield(input,'check_pts')
     checkPts=parsectrlpts(input.check_pts,baseDir);
 end
 
+if ~isempty(intersect(ctrlPts.id,checkPts.id))
+    error('Point cannot be both control and check points');
+end
+    
 % No support yet for prior EO values.
 EOfile='';
 
@@ -73,8 +77,11 @@ s=setdbatcamsandimages(s,cams,ims);
 
 s=setdbatpts(s,ctrlPts,checkPts,pts);
 
-s.zz.cams=cams;
-s.zz.ims=ims;
-s.zz.pts=pts;
-s.zz.ctrlPts=ctrlPts;
-s.zz.checkPts=checkPts;
+s=parseblockvariant(s);
+s=buildparamtypes(s);
+
+% s.zz.cams=cams;
+% s.zz.ims=ims;
+% s.zz.pts=pts;
+% s.zz.ctrlPts=ctrlPts;
+% s.zz.checkPts=checkPts;
