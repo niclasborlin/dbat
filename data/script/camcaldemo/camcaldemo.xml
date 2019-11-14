@@ -73,25 +73,34 @@
   </input>
 
   <operations>
-    <set_camera_values>
-      <cc>focal</cc>
-      <others>default</others>
-    </set_camera_values>
-    <run_spatial_resection />
-    <run_forward_intersection />
-    <set_bundle_estimate_params>
-      <io>
-        <all>true</all>
-        <skew>false</skew>
-      </io>
-      <eo>
-        <all>true</all>
-      </eo>
-      <op>
-        <all>true</all>
-      </op>
-    </set_bundle_estimate_params>
-    <run_bundle_adjustment />
+    <operation min_rays="2">check_ray_count</operation>
+    <operation>
+      <set_initial_values>
+        <io>
+          <all>default</all>
+        </io>
+        <op>
+          <cp>loaded</cp>
+        </op>
+      </set_initial_values>
+    </operation>
+    <operation>spatial_resection</operation>
+    <operation>forward_intersection</operation>
+    <operation>
+      <set_bundle_estimate_params>
+        <io>
+          <all>true</all>
+          <skew>false</skew>
+        </io>
+        <eo>
+          <all>true</all>
+        </eo>
+        <op>
+          <all>true</all>
+        </op>
+      </set_bundle_estimate_params>
+    </operation>
+    <operation>bundle_adjustment</operation>
   </operations>
   
   <output>

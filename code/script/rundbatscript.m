@@ -44,9 +44,11 @@ if ~ok, error('DBAT script error: %s',msg); end
 % Parse the meta block.
 [name,projUnit]=parsemeta(doc);
 
-% Parse input
+% Parse input.
 [s,imDir,cptFile,EOfile]=parseinput(doc.input,f);
 
 % Set project info in the DBAT struct.
 s=setprojinfo(s,f,name,projUnit,imDir,cptFile,EOfile);
 
+% Parse and execute the loaded operations.
+s=parseops(s,doc.operations);
