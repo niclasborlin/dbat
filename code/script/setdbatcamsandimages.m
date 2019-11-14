@@ -14,6 +14,9 @@ camNo=ims.cam;
 
 s.IO.model.camUnit=cams(1).unit;
 
+s.IO.cam=struct('name',cams(1).name,...
+                'focal',cams(1).focal);
+
 s.IO.sensor.ssSize(:)=cat(1,cams(ims.cam).sensor)';
 s.IO.sensor.imSize(:)=cat(1,cams(ims.cam).image)';
 s.IO.sensor.pxSize(:)=s.IO.sensor.ssSize./s.IO.sensor.imSize;
