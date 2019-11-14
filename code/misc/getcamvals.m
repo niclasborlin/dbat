@@ -38,9 +38,9 @@ end
 
 % Extract correct IO parameter set.
 if getPriorValues
-    IO=s.IO;
-else
     IO=s.prior.IO;
+else
+    IO=s.IO;
 end
 
 if ischar(ix)
