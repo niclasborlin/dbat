@@ -45,7 +45,7 @@
     </c>
     
     <ctrl_pts>
-      <file format="id,label,x,y,z,ignored,ignored,sz">reference/camcal-weighted.txt</file>
+      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
     </ctrl_pts>
 
     <images image_base_dir="$DBAT">
@@ -84,8 +84,6 @@
         </op>
       </set_initial_values>
     </operation>
-    <operation>spatial_resection</operation>
-    <operation>forward_intersection</operation>
     <operation>
       <set_bundle_estimate_params>
         <io>
@@ -100,6 +98,8 @@
         </op>
       </set_bundle_estimate_params>
     </operation>
+    <operation>spatial_resection</operation>
+    <operation>forward_intersection</operation>
     <operation>bundle_adjustment</operation>
   </operations>
   

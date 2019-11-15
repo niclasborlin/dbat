@@ -8,7 +8,7 @@ function s=parseops(s,operations)
 %See also: PARSEINPUT, RUNDBATSCRIPT.
     
 % Known operations
-opsFields={'operation'};
+opsFields={'operation','c'};
 
 % All fields are optional.
 [ok,msg]=checkxmlfields(operations,opsFields,false(size(opsFields)));
@@ -34,11 +34,25 @@ for i=1:length(ops)
           case 'check_ray_count'
             warning('%s not implemented yet',op.Text)
           case 'spatial_resection'
-            warning('%s not implemented yet',op.Text)
+            cpId=s.OP.id(s.prior.OP.isCtrl);
+            [s,~,fail]=resect(s,'all',cpId,1,0,cpId);
+            if fail
+                error('Resection failed.');
+            end
           case 'forward_intersection'
-            warning('%s not implemented yet',op.Text)
+            s=forwintersect(s,'all',true);
           case 'bundle_adjustment'
-            warning('%s not implemented yet',op.Text)
+            s0=s;
+            [s,ok,iters,sigma0,E]=bundle(s0);
+            if ok
+                fprintf(['Bundle ok after %d iterations with sigma0=%.2f ' ...
+                         '(%.2f pixels)\n'],iters,sigma0,s.post.sigmas(1));
+            else
+                fprintf(['Bundle failed after %d iterations (code=%d). ' ...
+                         'Last sigma0 estimate=%.2f (%.2f pixels)\' ...
+                         'n'],iters,E.code,sigma0,sigma0*s0.IP.sigmas(1));
+            end
+            s.bundle.info=E;
           otherwise
             error('DBAT XML script operations error: Unknown operation %s',...
                   op.Text)
