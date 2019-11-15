@@ -20,7 +20,7 @@ narginchk(2,2);
 
 knownFields={'Text','all','x','y','z','pos','angles'};
 [ok,msg]=checkxmlfields(xml,knownFields,false(size(knownFields)));
-if ~ok, error('DBAT XML script set_initial_values/EO error: %s',msg); end
+if ~ok, error('DBAT XML script set_bundle_estimate_params/EO error: %s',msg); end
 
 % Check for abbreviated block
 if isfield(xml,'Text')

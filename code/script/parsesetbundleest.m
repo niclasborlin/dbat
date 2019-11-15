@@ -12,7 +12,7 @@ knownFields={'io','eo','op'};
 if ~ok, error('DBAT XML script set_initial_values error: %s',msg); end
 
 if isfield(xml,'io')
-    %    s=parsesetbundleestio(s,xml.io);
+    s=parsesetbundleestio(s,xml.io);
 end
 
 if isfield(xml,'eo')
