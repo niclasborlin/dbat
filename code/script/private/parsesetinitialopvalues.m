@@ -5,17 +5,16 @@ function s=parsesetinitialopvalues(s,xml)
 %   SET_INITIAL_VALUES block of a DBAT script operation. The DBAT
 %   structure S is updated with the new initial values.
 %
-%   The OP subblock can contain the fields 'all' and 'cp', each of
-%   which can only contain the string 'loaded'. The field 'all' sets
-%   all loaded OP coordinates as initial values. The 'cp' field sets
-%   the loaded CP coordinates only. 
+%   The OP subblock can contain the field 'all', which can only
+%   contain the string 'loaded'. The field 'all' sets all loaded OP
+%   coordinates as initial values.
 %   
 %   An abbrivated OP subblock with the string 'loaded' is equivalent
 %   to 'all'/'loaded'.
 
 narginchk(2,2);
 
-knownFields={'Text','all','cp'};
+knownFields={'Text','all'};
 [ok,msg]=checkxmlfields(xml,knownFields,false(size(knownFields)));
 if ~ok, error('DBAT XML script set_initial_values/OP error: %s',msg); end
 
@@ -47,19 +46,6 @@ for i=1:length(fn)
             s.OP.val=s.prior.OP.val;
           otherwise
             error(['DBAT XML set initial values/OP/all error: Unknown ' ...
-                   'string ''%s'''],field.Text);
-        end
-      case 'cp'
-        [ok,msg]=checkxmlfields(field,'Text');
-        if ~ok
-            error('DBAT XML script set_initial_values/OP/cp error: %s',msg);
-        end
-        switch field.Text
-          case 'loaded'
-            % Copy only loaded prior CP values.
-            s.OP.val(:,s.prior.OP.isCtrl)=s.prior.OP.val(:,s.prior.OP.isCtrl);
-          otherwise
-            error(['DBAT XML set initial values/OP/cp error: Unknown ' ...
                    'string ''%s'''],field.Text);
         end
       otherwise
