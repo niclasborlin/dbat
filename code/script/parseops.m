@@ -59,7 +59,7 @@ for i=1:length(ops)
           case 'set_initial_values'
             s=parsesetinitialvalues(s,op.(fn{1}));
           case 'set_bundle_estimate_params'
-            warning('%s not implemented yet',fn{1})
+            s=parsesetbundleest(s,op.(fn{1}));
           otherwise
             error('DBAT XML script operations error: Unknown operation %s',...
                   fn{1})

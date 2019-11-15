@@ -45,7 +45,7 @@
     </c>
     
     <ctrl_pts>
-      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
+      <file format="id,label,x,y,z,ignored,ignored,sz">reference/camcal-weighted.txt</file>
     </ctrl_pts>
 
     <images image_base_dir="$DBAT">
@@ -80,7 +80,7 @@
           <all>default</all>
         </io>
         <op>
-          <cp>loaded</cp>
+          <all>loaded</all>
         </op>
       </set_initial_values>
     </operation>
@@ -96,7 +96,7 @@
           <all>true</all>
         </eo>
         <op>
-          <all>true</all>
+          <all>default</all>
         </op>
       </set_bundle_estimate_params>
     </operation>
