@@ -105,29 +105,23 @@
   
   <output>
     <plots>
-      <plot>params</plot>
-      <plot convex_hull="true">coverage</plot>
+      <plot id="1">image</plot>
       <plot>image_stats</plot>
       <plot max_op="1000">op_stats</plot>
+      <plot convex_hull="true">coverage</plot>
+      <plot>params</plot>
       <plot cam_size="0.1">iteration_trace</plot>
-      <plot id="1">image</plot>
     </plots>
-    <files base_dir="/home/niclas/dbat/code/demo/data/dbat">
-      <report_file>
-        <name>result/report.txt</name>
-      </report_file>
-      <top_residuals>
-        <name>result/top_residuals.txt</name>
-      </top_residuals>
+    <files base_dir="$HERE">
+      <report>
+        <file>result/report.txt</file>
+      </report>
       <io>
-        <name>result/c4040z.xml</name>
+        <file>result/c4040z.xml</file>
       </io>
-      <op format="x,y,z,sx,sy,sz">
-        <name>result/op.txt</name>
-      </op>
-      <eo>
-        <name>result/eo.txt</name>
-      </eo>
+      <image_residuals top_count="50">
+        <file>result/top_residuals.txt</file>
+      </image_residuals>
     </files>
   </output>
 </document>

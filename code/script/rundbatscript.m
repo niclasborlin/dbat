@@ -52,3 +52,6 @@ s=setprojinfo(s,f,name,projUnit,imDir,cptFile,EOfile);
 
 % Parse and execute the loaded operations.
 s=parseops(s,doc.operations);
+
+% Parse and execute the loaded output operations.
+s=parseoutput(s,doc.output);
