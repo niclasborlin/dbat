@@ -40,7 +40,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 8
          First error:          28805.9
          Last error:           98.556
-         Execution time (s):   0.85
+         Execution time (s):   0.86
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
