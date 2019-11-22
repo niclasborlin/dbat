@@ -1,5 +1,12 @@
 Summary changelog file for release.
 
+Release 0.9.0.1, Nov 22, 2019.
+- Internal release with full plotting support.
+
+Release 0.9.0.0, Nov 16, 2019.
+- Internal release with nominal support for DBAT XML scripts.
+- Scripting support for input (full), operations (most), output (minor).
+
 Release 0.8.5.1, Jan 13, 2019.
 - Fix to avoid some lengthy pre-bundle computations unless they are needed.
 
