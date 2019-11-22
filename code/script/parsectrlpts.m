@@ -13,7 +13,6 @@ function pts=parsectrlpts(ctrlPts,baseDir)
 
 narginchk(2,2)
 
-% Image list must be in a file.
 [ok,msg]=checkxmlfields(ctrlPts,{'file','filter','c'},[true,false,false]);
 if ~ok
     allFields=join(fieldnames(ctrlPts),', ');

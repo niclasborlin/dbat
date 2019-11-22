@@ -45,7 +45,9 @@
     </c>
     
     <ctrl_pts>
-      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
+      <file format="id,label,x,y,z">
+        reference/camcal-fixed.txt
+      </file>
     </ctrl_pts>
 
     <images image_base_dir="$DBAT">

@@ -1,4 +1,4 @@
-function [hh,COP]=plotopstats(s,e,varargin)
+function hh=plotopstats(s,e,varargin)
 %PLOTOPSTATS Plot object point statistics after a bundle.
 %
 %   PLOTOPSTATS(S,E), where S and E are struct given to and returned by
@@ -8,26 +8,19 @@ function [hh,COP]=plotopstats(s,e,varargin)
 %   - RMS residual,
 %   - X/Y/Z/total variance.
 %
-%   PLOTOPSTATS(...,COP) supplies a pre-computed OP covariance matrix COP.
-%
 %   PLOTOPSTATS(...,ID) plots the stats for the OPs with ids in ID only.
 %   ID='all' plots for all OPs.
 %
 %   H=... returns the handle to the plot figure.
 %
-%   [H,COP]=... also returns the computed OP covariance matrix COP.
-%
 %See also: BUNDLE, COVERAGE, PLOTIMAGESTATS.
 
 
 id='all';
-COP=[];
 
 for i=1:length(varargin)
     if isvector(varargin{i})
         id=varargin{i};
-    else
-        COP=varargin{i};
     end
 end
 
@@ -87,10 +80,17 @@ axH(3)=ax;
 
 
 % Variance
-if isempty(COP)
+if ~isempty(s.post.std.OP)
+    var=s.post.std.OP.^2;
+elseif ~isempty(s.post.cov.OP)
+    % Extract diagonals from stored covariance blocks.
+    ii=repmat((1:3)',1,size(s.post.cov.OP,3));
+    kk=repmat(1:size(s.post.cov.OP,3),3,1);
+    var=reshape(s.post.cov.OP(sub2ind(size(s.post.cov.OP),ii,ii,kk)),3,[]);
+else
     COP=bundle_cov(s,e,'COP');
+    var=reshape(diag(COP),3,[]);
 end
-var=reshape(diag(COP),3,[]);
 
 ax=subplot(4,1,4,'parent',fig);
 bar(ax,ix,sqrt([var(1:3,ix);sum(var(1:3,ix),1)]'));

@@ -1,16 +1,15 @@
-function [COP,s]=bundle_result_file(s,e,f,COP)
+function s=bundle_result_file(s,e,f,COP)
 %BUNDLE_RESULT_FILE Generate result file of bundle run.
 %
-%   BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return structs
+%   S=BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return structs
 %   and F is a string, writes a text result file to the file F. The
 %   text result file contain information about the project, the status
 %   of the estimation process, and the quality of the result.
+%   Returns the structure S updated with posterior standard
+%   deviations and covariances.
 %
-%   BUNDLE_RESULT_FILE(S,E,F,COP) supplies a pre-computed OP covariance
+%   S=BUNDLE_RESULT_FILE(S,E,F,COP) supplies a pre-computed OP covariance
 %   matrix COP.
-%
-%   [COP,S]=... returns the computed OP covariance matrix and the
-%   updated DBAT structure.
 %
 %See also: BUNDLE, BUNDLE_COV. 
 
@@ -94,14 +93,52 @@ end
 [iio,jio,vio,CIO]=high_io_correlations(s,e,corrThreshold,true);
 [ieo,jeo,keo,veo,CEO]=high_eo_correlations(s,e,corrThreshold);
 if nargin<4
-    COP=bundle_cov(s,e,'COP');
+    if ~isempty(s.post.cov.COP)
+        COP=s.post.cov.COP;
+    else
+        COP=bundle_cov(s,e,'COP');
+    end
 end
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
+
+if isempty(s.post.cov.CIO)
+    s.post.cov.CIO=CIO;
+end
+if isempty(s.post.cov.CEO)
+    s.post.cov.CEO=CEO;
+end
+if isempty(s.post.cov.COP)
+    s.post.cov.COP=COP;
+end
 
 % Compute posterior standard devaitions.
 s.post.std.IO=sqrt(reshape(full(diag(CIO)),size(s.IO.val)));
 s.post.std.EO=sqrt(reshape(full(diag(CEO)),size(s.EO.val)));
 s.post.std.OP=sqrt(reshape(full(diag(COP)),size(s.OP.val)));
+
+% Store posterior covariance matrices.
+
+% Convert nm-by-nm block-diagonal to m-by-m-by-n.
+[mIO,nIO]=size(s.IO.val);
+s.post.cov.IO=nan(mIO,mIO,nIO);
+for i=1:nIO
+    ix=(i-1)*mIO+(1:mIO);
+    s.post.cov.IO(:,:,i)=CIO(ix,ix);
+end
+
+[mEO,nEO]=size(s.EO.val);
+s.post.cov.EO=nan(mEO,mEO,nEO);
+for i=1:nEO
+    ix=(i-1)*mEO+(1:mEO);
+    s.post.cov.EO(:,:,i)=CEO(ix,ix);
+end
+
+[mOP,nOP]=size(s.OP.val);
+s.post.cov.OP=nan(mOP,mOP,nOP);
+for i=1:nOP
+    ix=(i-1)*mOP+(1:mOP);
+    s.post.cov.OP(:,:,i)=COP(ix,ix);
+end
 
 % Compute p values for distortion parameters.
 [pk,pp,pb,pkc]=test_distortion_params(s,e);
@@ -147,6 +184,12 @@ else
     end
 end
 hostname=getenv('HOST');
+if isempty(hostname) && ~ispc
+    [hostStatus,hostResult]=system('hostname');
+    if hostStatus==0
+        hostname=strip(hostResult);
+    end
+end
 if isempty(hostname)
     hostname='<unknown>';
 end
