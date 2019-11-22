@@ -54,6 +54,12 @@ for i=1:length(varargin)
     end
 end
 
+if doPrepare && ~isempty(e.final.factorized)
+    % Preparation already done, return.
+    varargout{1}=e;
+    return;
+end
+
 if isempty(e.final.factorized) || doPrepare
     % We may need J'*J many times. Precalculate and prefactor.
     JTJ=e.final.weighted.J'*e.final.weighted.J;
@@ -170,14 +176,19 @@ for i=1:length(varargin)
         
       case 'ceo' % Block-diagonal CEO
         
-        C=BlockDiagonalC(L,p,s.bundle.est.EO,s.bundle.deserial.EO.src,...
-                         memLimit,'Computing EO covariances');
-
+        if ~isempty(s.post.cov.CEO)
+            C=s.post.cov.CEO;
+        else
+            C=BlockDiagonalC(L,p,s.bundle.est.EO,s.bundle.deserial.EO.src,...
+                             memLimit,'Computing EO covariances');
+        end
       case 'cop' % Block-diagonal COP
-        
-        C=BlockDiagonalC(L,p,s.bundle.est.OP,s.bundle.deserial.OP.src,...
-                         memLimit,'Computing OP covariances');
-        
+        if ~isempty(s.post.cov.COP)
+            C=s.post.cov.COP;
+        else
+            C=BlockDiagonalC(L,p,s.bundle.est.OP,s.bundle.deserial.OP.src,...
+                             memLimit,'Computing OP covariances');
+        end
     end
     varargout{i}=e.s0^2*C; %#ok<*AGROW>
 end
