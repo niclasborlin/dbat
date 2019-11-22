@@ -107,12 +107,14 @@
   
   <output>
     <plots>
+      <c>
       <plot id="1">image</plot>
       <plot>image_stats</plot>
       <plot max_op="1000">op_stats</plot>
       <plot convex_hull="true">coverage</plot>
       <plot>params</plot>
       <plot cam_size="0.1">iteration_trace</plot>
+      </c>
     </plots>
     <files base_dir="$HERE">
       <report>

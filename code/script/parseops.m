@@ -32,7 +32,7 @@ for i=1:length(ops)
         % Operation without structure
         switch op.Text
           case 'check_ray_count'
-            warning('%s not implemented yet',op.Text)
+            CheckRayCount(s,op);
           case 'spatial_resection'
             cpId=s.OP.id(s.prior.OP.isCtrl);
             [s,~,fail]=resect(s,'all',cpId,1,0,cpId);
@@ -79,4 +79,30 @@ for i=1:length(ops)
                   fn{1})
         end
     end
+end
+
+
+
+function CheckRayCount(s,op)
+% Check the object point ray count in the loaded DBAT structure s. Use
+% threshold from attribute min_rays if present.
+
+minRays=2;
+
+if isfield(op,'Attributes')
+    if isfield(op.Attributes,'min_rays')
+        minRays=sscanf(op.Attributes.min_rays,'%d');
+    end
+end
+
+rays=full(sum(s.IP.vis,2));
+
+if any(rays<minRays & ~s.prior.OP.isCtrl(:))
+    badOP=find(rays<minRays);
+    for i=1:length(badOP)
+        ix=badOP(i);
+        fprintf(['Object point number %d (id %d, raw id %d) has too ' ...
+                 'few rays: %d.\n'],ix,s.OP.id(ix),s.OP.rawId(ix),rays(ix));
+    end
+    error('DBAT XML error: Ray count test failed. See above for details.');
 end
