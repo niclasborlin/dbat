@@ -14,8 +14,10 @@ function [s,imDir,cptFile,EOfile]=parseinput(input,docFile)
 
 narginchk(2,2);
 
-inputFields={'Attributes','ctrl_pts','check_pts','images','image_pts','cameras','c'};
-[ok,msg]=checkxmlfields(input,inputFields,[false,false,false,true,true,true,false]);
+inputFields={'Attributes','ctrl_pts','check_pts','images', ...
+             'image_pts','cameras','c'};
+[ok,msg]=checkxmlfields(input,inputFields,[false,false,false,true, ...
+                    true,true,false]);
 if ~ok, error('DBAT XML script input error: %s',msg); end
 
 % Check if a base directory was specified.

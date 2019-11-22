@@ -1,11 +1,15 @@
-function s=parseoutput(s,output)
+function s=parseoutput(s,output,docFile)
 %PARSEOUTPUT Parse and execute output section of a DBAT XML file.
 %
-%    S=PARSEOUTPUT(S,OUTPUT) parses the OUTPUT XML block from a DBAT
-%    XML script file and generates the requested plots and files.
+%    S=PARSEOUTPUT(S,OUTPUT,DOCFILE) parses the OUTPUT XML block from
+%    a DBAT XML script file and generates the requested plots and
+%    files. The string DOCFILE should contain the path name of the XML
+%    file and is used to determine base directories.
 %
-%See also: PARSEINPUT, PARSEOPS, RUNDBATSCRIPT.
+%See also: PARSEINPUT, PARSEOPS, PARSEOUTPUTFILES, RUNDBATSCRIPT.
     
+narginchk(3,3);
+
 % Known operations
 knownFields={'plots','files','c'};
 
@@ -24,16 +28,6 @@ else
     plots={};
 end
 
-if isfield(output,'files') && isfield(output.files,'file')
-    files=output.files;
-    if ~iscell(files)
-        % Single file
-        files={files};
-    end
-else
-    files={};
-end
-
 % For each plot...
 for i=1:length(plots)
     plot=plots{i};
@@ -44,20 +38,26 @@ for i=1:length(plots)
       case 'image'
         PlotImage(s,plot)
       case 'image_stats'
-        warning('%s plot not implemented yet',plot.Text)
+        PlotImageStats(s,plot)
       case 'op_stats'
-        warning('%s plot not implemented yet',plot.Text)
+        PlotOPStats(s,plot);
       case 'coverage'
-        warning('%s plot not implemented yet',plot.Text)
+        PlotCoverage(s,plot);
       case 'params'
-        warning('%s plot not implemented yet',plot.Text)
+        PlotParams(s,plot);
       case 'iteration_trace'
-        warning('%s plot not implemented yet',plot.Text)
+        PlotIterationTrace(s,plot);
       otherwise
         error('DBAT XML script operations error: Unknown operation %s',...
               plot.Text)
     end
 end
+
+% Parse and generate output files.
+if isfield(output,'files')
+    s=parseoutputfiles(s,output.files,docFile);
+end
+
 
 function PlotImage(s,op)
 %Show image specified by the id attribute of op and plot
@@ -118,3 +118,92 @@ if exist(imName,'file')
              'vertical','top','color','c','parent',gca(imFig));
     end
 end
+
+
+function PlotParams(s,op)
+%Show evolution of parameter estimates.
+
+h=plotparams(s,s.bundle.info);
+
+
+function PlotImageStats(s,op)
+%Show image statistics.
+
+if isempty(s.post.std.EO)
+    CEO=bundle_cov(s,s.bundle.info,'CEO');
+    s.post.std.EO=sqrt(reshape(diag(CEO),size(s.EO.val,1),[]));
+    
+    [mEO,nEO]=size(s.EO.val);
+    s.post.cov.EO=nan(mEO,mEO,nEO);
+    for i=1:nEO
+        ix=(i-1)*mEO+(1:mEO);
+        s.post.cov.EO(:,:,i)=CEO(ix,ix);
+    end
+end
+
+h=plotimagestats(s,s.bundle.info);
+
+
+function PlotOPStats(s,op)
+% Plot object point statistics.
+
+maxOP=inf;
+
+if isfield(op,'Attributes')
+    if isfield(op.Attributes,'max_op')
+        maxOP=sscanf(op.Attributes.max_op,'%d');
+    end
+end
+
+if size(s.OP.val,2)>maxOP
+    warning('Number of OP (%d) exceed op_stats limit of %d. Not plotting.',...
+            size(s.OP.val,2),maxOP);
+else
+    if isempty(s.post.std.OP)
+        COP=bundle_cov(s,s.bundle.info,'COP');
+        s.post.std.OP=sqrt(reshape(diag(COP),size(s.OP.val,1),[]));
+    
+        [mOP,nOP]=size(s.OP.val);
+        s.post.cov.OP=nan(mOP,mOP,nOP);
+        for i=1:nOP
+            ix=(i-1)*mOP+(1:mOP);
+            s.post.cov.OP(:,:,i)=COP(ix,ix);
+        end
+    end
+
+    h=plotopstats(s,s.bundle.info);
+end
+
+function PlotIterationTrace(s,op)
+% Plot iteration trace.
+
+doPause='on';
+camSize=nan;
+
+if isfield(op,'Attributes')
+    if isfield(op.Attributes,'can_size')
+        camSize=sscanf(op.Attributes.cam_size,'%f');
+    end
+end
+
+fig=tagfigure('trace');
+damping=s.bundle.info.damping.name;
+fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
+        damping,double(fig));
+h=plotnetwork(s,s.bundle.info,'title',...
+              ['Damping: ',damping,'. Iteration %d of %d'], ...
+              'axes',fig,'pause',doPause,'camsize',0.1); 
+
+
+function PlotCoverage(s,op)
+% Plot image coverage.
+
+convexHull=false;
+
+if isfield(op,'Attributes')
+    if isfield(op.Attributes,'convex_hull')
+        convexHull=strcmp(strip(op.Attributes.convex_hull),'true');
+    end
+end
+
+h=plotcoverage(s,convexHull);
