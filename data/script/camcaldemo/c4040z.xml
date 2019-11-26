@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<document dbat_camera_version="1.0">
+  <cameras>
+    <camera>
+      <id>1</id>
+      <name>Olympus Camedia C4040Z</name>
+      <unit>mm</unit>
+      <sensor>auto,5.43764</sensor>
+      <image>2272,1704</image>
+      <aspect>1</aspect>
+      <focal>7.5</focal>
+      <model>3</model>
+      <nK>3</nK>
+      <nP>2</nP>
+      <cc>0,0</cc>
+      <pp>0,0</pp>
+      <skew>0</skew>
+      <K>0,0,0</K>
+      <P>0,0</P>
+      <calibrated>yes</calibrated>
+      <calibration_info>
+        <calibration_date>2019-11-13T12:12:00</calibration_date>
+        <software>DBAT</software>
+        <software_version>0.9.0.1</software_version>
+        <std>
+          <cc>1.5e-5</cc>
+          <pp>1.5e-5,2e-6</pp>
+          <aspect>1e-8</aspect>
+          <skew>0</skew>
+          <K>1e-6,1e-8,1e-10</K>
+          <P>1e-6,1e-8</P>
+        </std>
+        <high_corr thres="0.95">K1,K2,0.98</high_corr>
+        <calibrated_area type="convex_hull">2018.12,1212.12;2018.12,1212.12;2018.12,1212.12</calibrated_area>
+        <cov order="cc,pp,aspect,skew,K,P">
+          6,4,-1.74841e-11
+          7,4,2.72496e-12
+          8,4,-1.19882e-13
+          9,4,-4.8404e-12
+          10,4,1.59049e-11
+          7,6,-5.45684e-11
+          8,6,1.92733e-12
+          9,6,1.56905e-12
+          10,6,8.07584e-12
+          8,7,-2.60494e-13
+          9,7,-8.33696e-15
+        </cov>
+      </calibration_info>
+    </camera>
+  </cameras>
+</document>
