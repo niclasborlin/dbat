@@ -36,7 +36,7 @@ function cams=xmltodbatcamstruct(s)
 %       P          - nP-vector with tangential lens distortion
 %                    coefficients. Defaults to the empty vector. 
 %       skew       - scalar with skew. Defaults to 0.
-%       model      - scalar with camera model number.
+%       model      - scalar with projection model number.
 %
 %   Additionally, the XML field 'all' may be used with the string
 %   'default' to set all parameters are set to their default values,
@@ -49,6 +49,8 @@ function cams=xmltodbatcamstruct(s)
 %
 %   If multiple cameras are present, the nK and nP values will be
 %   adjusted upwards to match if necessary.
+%
+%See also: BLANKCAMSTRUCT.
 
 narginchk(1,1),
 
@@ -56,19 +58,12 @@ if ~iscell(s)
     s={s};
 end
 
-% Create blank camera struct. Struct field names are the same as
-% the XML field names.
-fieldNames={'id','name','unit','sensor','image','aspectDiff','nK','nP',...
-            'focal','model','cc','pp',    'K',       'P',       'skew'};
-defaults  ={nan, '',    '',    nan(1,2),nan(1,2),nan,        nan, nan,...
-            nan,    nan,    nan, nan(1,2),zeros(1,0),zeros(1,0),nan}; 
+% Initialize a blank camera struct.
+blankCamera=blankdbatcamstruct;
+
+% Allow 'all' as an extra XML field name.
 XMLfieldNames={'id','name','unit','sensor','image','aspect','nK','nP',...
                'focal','model','cc','pp',    'K',       'P',       'skew'};
-
-blankCamera=cell2struct(defaults,fieldNames,2);
-
-% Allow 'all' as an extra field name.
-
 extraFields={'all'};
 allFields=cat(2,XMLfieldNames,extraFields);
 
