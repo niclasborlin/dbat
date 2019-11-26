@@ -7,6 +7,7 @@ if nargin<1, dev=false; end
 baseDir=fileparts(mfilename('fullpath'));
 
 % Add selected subdirectories.
+addpath(fullfile(baseDir,'classes'),'-end')
 addpath(fullfile(baseDir,'plotting'),'-end')
 addpath(fullfile(baseDir,'file'),'-end')
 addpath(fullfile(baseDir,'script'),'-end')
