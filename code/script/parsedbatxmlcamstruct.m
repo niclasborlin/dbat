@@ -1,17 +1,16 @@
-function cams=xmltodbatcamstruct(s)
-%XMLTODBATCAMSTRUCT Convert DBAT XML camera structure to DBAT camera structure
+function cams=parsedbatxmlcamstruct(s)
+%PARSEDBATXMLCAMSTRUCT Convert DBAT XML camera structure to DBAT camera structure
 %
-%   CAMS=XMLTODBATCAMSTRUCT(S) converts the DBAT camera XML structure
-%   S to a DBAT camera structure CAMS. The structure S should have
-%   fields with field names listed below with a Text field holding a
-%   string. The string is converted to a same-named field in the
-%   corresponding element in CAMS.
+%   CAMS=PARSEDBATXMLCAMSTRUCT(S) parses the DBAT camera XML structure
+%   S and returns a 1-cell array CAMS with a DBATCamera object. The
+%   structure S should have fields with field names listed below with
+%   a Text field holding a string.
 %
-%   CAMS=XMLTODBATCAMSTRUCT(S), where S is an N-cell array of DBAT
-%   DBAT camera XML structures, converts multiple cameras and
-%   returns an N-array with camera data.
+%   TODO: CAMS=PARSEDBATXMLCAMSTRUCT(S), where S is an N-cell array of
+%   DBAT camera XML structures, converts multiple cameras and returns
+%   an N-cell array with DBATCameras.
 %
-%   The field names are:
+%   The XML field names are:
 %       id         - integer camera id.
 %       name       - string with camera name.
 %       unit       - string with camera unit.
@@ -43,39 +42,28 @@ function cams=xmltodbatcamstruct(s)
 %   i.e., cc to the focal length, pp to the center of the sensor, zero
 %   aspectDiff (unit aspect), zero skew, and zero lens distortion.
 %
-%   Any missing field without a listed default above is returned as
-%   blank strings or NaN vectors of appropriate sizes, depending on
-%   type.
-%
-%   If multiple cameras are present, the nK and nP values will be
-%   adjusted upwards to match if necessary.
-%
-%See also: BLANKCAMSTRUCT.
+%See also: DBATCamera.
 
-narginchk(1,1),
+narginchk(1,1);
 
 if ~iscell(s)
     s={s};
 end
 
-% Initialize a blank camera struct.
-blankCamera=blankdbatcamstruct;
-
 % Allow 'all' as an extra XML field name.
-XMLfieldNames={'id','name','unit','sensor','image','aspect','nK','nP',...
-               'focal','model','cc','pp',    'K',       'P',       'skew'};
-extraFields={'all'};
-allFields=cat(2,XMLfieldNames,extraFields);
+XMLfieldNames={'id', 'name', 'unit', 'sensor', 'image', 'aspect', ...
+               'nK', 'nP', 'focal', 'model', 'cc', 'pp', 'K', 'P', ...
+               'skew', 'all'};
 
 % Pre-allocate return array.
-cams=repmat(blankCamera,1,length(s));
+cams=cell(1,length(s));
 
 % For each XML camera...
 for i=1:length(s)
     % Interpret the camera element.
     e=s{i};
     % Check that only expected field names are present.
-    [ok,msg]=checkxmlfields(e,allFields,false(size(allFields)));
+    [ok,msg]=checkxmlfields(e,XMLfieldNames,false(size(XMLfieldNames)));
     if ~ok
         error('DBAT camera XML error: %s',msg);
     end
@@ -87,82 +75,80 @@ for i=1:length(s)
                    'in %s'],fn(j));
         end
     end
-    % Parse each field.
-    cam=blankCamera;
 
+    % Initialize the camera.
+    cam=DBATCamera;
+
+    % Parse each field.
     for j=1:length(fn)
         field=fn{j};
         switch field
-            case 'id'
-              cam.id=sscanf(e.id.Text,'%d');
+          case 'id'
+            cam.Id=sscanf(e.id.Text,'%d');
           case 'name'
-            cam.name=e.name.Text;
+            cam.Name=e.name.Text;
           case 'unit'
-            cam.unit=e.unit.Text;
+            cam.Unit=e.unit.Text;
           case 'sensor'
             ss=strip(split(e.sensor.Text,','));
             if length(ss)~=2
                 error(['DBAT camera XML error: Wrong number of sensor ' ...
                        'values: %s'],e.sensor.Text);
             end
+            sensorVal=nan(1,2);
             if strcmp(ss{1},'auto')
-                cam.sensor(1)=nan;
-                sensorAuto=true;
+                % Do nothing, first value is already nan.
             else
-                cam.sensor(1)=sscanf(ss{1},'%f');
+                sensorVal(1)=sscanf(ss{1},'%f');
             end
-            cam.sensor(2)=sscanf(ss{2},'%f');
+            sensorVal(2)=sscanf(ss{2},'%f');
+            cam.SensorSize=sensorVal;
           case 'image'
-            cam.image=sscanf(e.image.Text,'%d,')';
-            if length(cam.image)~=2
+            imageVal=sscanf(e.image.Text,'%d,')';
+            if length(imageVal)~=2
                 error(['DBAT camera XML error: Wrong number of image size ' ...
                        'values: %s'],e.image.Text);
             end
+            cam.ImageSize=imageVal;
           case 'aspect'
             if strcmp(strip(e.aspect.Text),'auto')
-                cam.aspectDiff=nan;
+                aspectVal=nan;
             else
-                aspect=sscanf(e.aspect.Text,'%f');
-                cam.aspectDiff=1-aspect;
+                aspectVal=sscanf(e.aspect.Text,'%f');
             end
+            cam.AspectRatio=aspectVal;
           case 'focal'
-            cam.focal=sscanf(e.focal.Text,'%f');
+            cam.FocalLength=sscanf(e.focal.Text,'%f');
           case 'cc'
             if strcmp(e.cc.Text,'focal')
-                cam.cc=cam.focal;
+                cam.CameraConstant=cam.FocalLength;
             else
-                cam.cc=sscanf(e.cc.Text,'%f');
+                cam.CameraConstant=sscanf(e.cc.Text,'%f');
             end
           case 'nK'
-            cam.nK=sscanf(e.nK.Text,'%d')';
-            if isempty(cam.K)
-                cam.K=nan(1,cam.nK);
+            nK=sscanf(e.nK.Text,'%d')';
+            if length(cam.K)>nK
+                cam.K=cam.K(1:nK);
+            elseif length(cam.K)<nK
+                cam.K(end+1:nK)=nan;
             end
           case 'K'
-            cam.K=sscanf(e.K.Text,'%f,')';
-            if isnan(cam.nK)
-                cam.nK=length(cam.K);
-            elseif cam.nK~=length(cam.K)
-                error(['DBAT camera XML error: Wrong number of K ' ...
-                       'values: %s'],e.image.Text); 
-            end
+            K=sscanf(e.K.Text,'%f,')';
+            cam.K=K;
           case 'nP'
-            cam.nP=sscanf(e.nP.Text,'%d')';
-            if isempty(cam.P)
-                cam.P=nan(1,cam.nP);
+            nP=sscanf(e.nP.Text,'%d')';
+            if length(cam.P)>nP
+                cam.P=cam.P(1:nP);
+            elseif length(cam.P)<nP
+                cam.P(end+1:nP)=nan;
             end
           case 'P'
-            cam.P=sscanf(e.P.Text,'%f,')';
-            if isnan(cam.nP)
-                cam.nP=length(cam.P);
-            elseif cam.nP~=length(cam.P)
-                error(['DBAT camera XML error: Wrong number of P ' ...
-                       'values: %s'],e.image.Text); 
-            end
+            P=sscanf(e.P.Text,'%f,')';
+            cam.P=P;
           case 'model'
-            cam.model=sscanf(e.model.Text,'%d');
+            cam.Model=sscanf(e.model.Text,'%d');
           case 'skew'
-            cam.skew=sscanf(e.skew.Text,'%f');
+            cam.Skew=sscanf(e.skew.Text,'%f');
           case 'pp'
             if strcmp(strip(e.pp.Text),'default')
                 cam.pp=evalsensor(cam)/2;
@@ -189,27 +175,28 @@ for i=1:length(s)
         end
     end
     
-    if isnan(cam.aspectDiff)
-        cam.aspectDiff=1-evalaspect(cam);
-    elseif isnan(cam.sensor(1))
-        cam.sensor=evalsensor(cam);
+    if isnan(cam.AspectRatio)
+        cam.AspectRatio=evalaspect(cam);
+    elseif isnan(cam.SensorSize(1))
+        cam.SensorSize=evalsensor(cam);
     else
         error(['DBAT camera XML error: Either aspect or sensor ' ...
                'height must be auto']);
     end
     
-    cams(i)=cam;
+    cams{i}=cam;
 end
 
-nK=cat(1,cams.nK);
-nP=cat(1,cams.nP);
+nK=cellfun(@(x)length(x.K),cams);
+np=cellfun(@(x)length(x.P),cams);
 
 if min(nK)~=max(nK)
     % Upgrade all cameras with short K vectors.
     mK=max(nK);
     for i=find(nK<mK)'
-        cams(i).nK=mK;
-        cams(i).K(mK)=0;
+        K=cams{i}.K;
+        K(end+1:mK)=nan;
+        cams{i}.K=K;
     end
 end
 
@@ -217,8 +204,9 @@ if min(nP)~=max(nP)
     % Upgrade all cameras with short P vectors.
     mP=max(nP);
     for i=find(nP<mP)'
-        cams(i).nP=mP;
-        cams(i).P(mK)=0;
+        P=cams{i}.P;
+        P(end+1:mP)=nan;
+        cams{i}.P=P;
     end
 end
 
@@ -227,22 +215,25 @@ function aspect=evalaspect(cam)
 %Return the aspect ratio, either as specified or computed from the
 %sensor and image sizes.
 
-if isnan(cam.aspectDiff)
+if isnan(cam.Aspect)
     % Compute aspect
-    pixelSize=cam.sensor./cam.image;
+    pixelSize=PixelSize(cam);
     aspect=pixelSize(1)/pixelSize(2);
 else
-    aspect=1-cam.aspectDiff;
+    aspect=cam.AspectRatio;
 end
 
 function sensor=evalsensor(cam)
 %Return the sensor size, either as specified or computed from the
 %sensor width, aspect ratio, and image size.
 
-if isnan(cam.sensor(1))
+sensor=cam.SensorSize;
+
+if isnan(sensor(1))
     % Compute sensor width
-    cam.sensor(1)=(1-cam.aspectDiff)*cam.sensor(2)*cam.image(1)/cam.image(2);
+    imageSize=cam.ImageSize;
+    sensor(1)=cam.AspectRatio*sensor(2)*imageSize(1)/imageSize(2);
 end
 
-sensor=cam.sensor;
+
 

@@ -2,28 +2,27 @@ function s=setdbatcamsandimages(s,cams,ims)
 %SETDBATCAMSANDIMAGES Set camera and image info in a DBAT structure
 %
 %   S=SETDBATCAMSANDIMAGES(S,CAMS,IMS) sets the camera and image info
-%   in the DBAT structure S from the DBAT camera structure array CAMS
-%   and the DBAT image struct IMS. S should have been initialized to
-%   its proper size.
+%   in the DBAT structure S from the DBATCamera cell array CAMS and
+%   the DBAT image struct IMS. S should have been initialized to its
+%   proper size.
 
-nIms=length(ims.id);
-nK=cams(1).nK;
-nP=cams(1).nP;
 % Camera that was used for each image
 camNo=ims.cam;
 
-s.IO.model.camUnit=cams(1).unit;
+s.IO.model.camUnit=cams{1}.Unit;
 
-s.IO.cam=struct('name',cams(1).name,...
-                'focal',cams(1).focal);
+s.IO.cam=cams;
 
-s.IO.sensor.ssSize(:)=cat(1,cams(ims.cam).sensor)';
-s.IO.sensor.imSize(:)=cat(1,cams(ims.cam).image)';
-s.IO.sensor.pxSize(:)=s.IO.sensor.ssSize./s.IO.sensor.imSize;
+s.IO.sensor.ssSize(:)=cell2mat(cellfun(@(x)x.SensorSize', ...
+                                       cams(ims.cam),'UniformOutput',false));
+s.IO.sensor.imSize(:)=cell2mat(cellfun(@(x)x.ImageSize', ...
+                                       cams(ims.cam),'UniformOutput',false));
+s.IO.sensor.pxSize(:)=cell2mat(cellfun(@(x)PixelSize(x)', ...
+                                       cams(ims.cam),'UniformOutput',false));
 s.IO.sensor.samePxSize=isscalar(unique(s.IO.sensor.pxSize));
 
-s=setcamlenscoeff(s,cams(1).nK,cams(1).nP);
-s=setcammodel(s,cams(1).model);
+s=setcamlenscoeff(s,nK(cams{1}),nP(cams{1}));
+s=setcammodel(s,cams{1}.Model);
 
 s.IO.struct.block=repmat(camNo,size(s.IO.val,1),1);
 
@@ -34,12 +33,12 @@ s.EO.id=ims.id;
 
 % Extract camera values from structure.
 
-cc=cat(1,cams.cc)';
-pp=cat(1,cams.pp)';
-skew=cat(1,cams.skew)';
-aspectDiff=cat(1,cams.aspectDiff)';
-K=cat(1,cams.K)';
-P=cat(1,cams.P)';
+cc=cellfun(@(x)x.CameraConstant,cams);
+pp=cell2mat(cellfun(@(x)x.PrincipalPoint',cams,'UniformOutput',false));
+skew=cellfun(@(x)x.Skew,cams);
+aspectDiff=cellfun(@(x)AspectDiff(x),cams);
+K=cell2mat(cellfun(@(x)x.K',cams,'UniformOutput',false));
+P=cell2mat(cellfun(@(x)x.P',cams,'UniformOutput',false));
 
 s=setcamvals(s,'prior','cc',cc(:,camNo),'pp',pp(:,camNo), ...
                'as', aspectDiff(:,camNo),'sk',skew(:,camNo), ...

@@ -45,4 +45,4 @@ if ~ok
 end
 
 % Extract and return camera list.
-cam=xmltodbatcamstruct(doc.cameras.camera);
+cam=parsedbatxmlcamstruct(doc.cameras.camera);

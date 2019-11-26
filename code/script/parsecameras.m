@@ -41,20 +41,20 @@ if isfield(cameras,'file')
     cams=loadcameras(fileName);
 elseif isfield(cameras,'camera')
     % Camera data is hardcoded in the XML file.
-    cams=xmltodbatcamstruct(cameras.camera);
+    cams=parsedbatxmlcamstruct(cameras.camera);
 else
     % No camera data present.
     error('Missing camera data');
 end
 
 % Set id of single camera without id to 1.
-if length(cams)==1 && isnan(cams.id)
-    cams.id=1;
+if length(cams)==1 && isnan(cams{1}.Id)
+    cams{1}.Id=1;
 end
 
 % Currently no support for multiple cameras with different camera
 % units.
-if length(unique({cams.unit}))>1
+if length(unique(cellfun(@(x)x.Unit,cams,'UniformOutput',false)))>1
     error('Multiple cameras must have the same camera unit');
 end
 

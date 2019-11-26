@@ -32,7 +32,7 @@ end
 % Parse cameras.
 cams=parsecameras(input.cameras,baseDir);
 
-camModels=cat(1,cams.model);
+camModels=cellfun(@(x)x.Model,cams);
 if ~all(isnan(camModels)) && ~isscalar(unique(camModels))
     error('Multiple camera models not supported');
 end

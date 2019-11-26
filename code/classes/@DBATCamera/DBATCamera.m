@@ -3,10 +3,10 @@ classdef DBATCamera
         Id {mustBeNumericScalar} = nan
         Name {mustBeSingleString} = ''
         Unit {mustBeSingleString} = ''
-        Sensor {mustBe2Vector} = nan(1,2)
-        Image {mustBe2Vector} = nan(1,2)
-        Focal {mustBeNumericScalar} = nan
-        Aspect {mustBeNumericScalar} = nan
+        SensorSize {mustBe2Vector} = nan(1,2)
+        ImageSize {mustBe2Vector} = nan(1,2)
+        FocalLength {mustBeNumericScalar} = nan
+        AspectRatio {mustBeNumericScalar} = nan
         Skew {mustBeNumericScalar} = nan
         CameraConstant {mustBeNumericScalar} = nan
         PrincipalPoint {mustBe2Vector} = nan(1,2)
@@ -22,10 +22,11 @@ classdef DBATCamera
             fprintf('%20s: %d\n','Id',obj.Id);
             fprintf('%20s: ''%s''\n','Name',obj.Name);
             fprintf('%20s: ''%s''\n','Unit',obj.Unit);
-            fprintf('%20s: [%g %g] %s\n','Sensor',obj.Sensor,obj.Unit);
-            fprintf('%20s: [%g %g] px\n','Image',obj.Image);
-            fprintf('%20s: %g %s\n','Focal',obj.Focal,obj.Unit);
-            fprintf('%20s: %g (diff=%g)\n','Aspect',obj.Aspect,AspectDiff(obj));
+            fprintf('%20s: [%g %g] %s\n','Sensor size',obj.SensorSize,obj.Unit);
+            fprintf('%20s: [%g %g] px\n','Image size',obj.ImageSize);
+            fprintf('%20s: %g %s\n','Focal length',obj.FocalLength,obj.Unit);
+            fprintf('%20s: %g (diff=%g)\n','Aspect ratio',obj.AspectRatio,...
+                    AspectDiff(obj));
             fprintf('%20s: %g\n','Skew',obj.Skew);
             fprintf('%20s: %g %s\n','Camera constant', ...
                     obj.CameraConstant,obj.Unit);
@@ -52,12 +53,32 @@ classdef DBATCamera
         
         % Return the aspect difference, i.e., one minus the aspect.
         function v=AspectDiff(obj)
-            v=1-obj.Aspect;
+            v=1-obj.AspectRatio;
         end
         
         function value=asVector(obj)
             value=[obj.CameraConstant,obj.PrincipalPoint, ...
                    AspectDiff(obj),obj.Skew,obj.K,obj.P]';
+        end
+
+        % Compute the pixel size in camera units per pixel.
+        function value=PixelSize(obj)
+            value=obj.SensorSize./obj.ImageSize;
+        end
+        
+        % Compute the image resolution in pixels per camera unit.
+        function value=ImageResolution(obj)
+            value=obj.ImageSize./obj.SensorSize;
+        end
+        
+        % Return the length of K
+        function value=nK(obj)
+            value=length(obj.K);
+        end
+        
+        % Return the length of P
+        function value=nP(obj)
+            value=length(obj.P);
         end
         
     end
@@ -98,3 +119,4 @@ function mustBeStruct(s)
         error('Value must be a struct');
     end
 end
+
