@@ -11,7 +11,8 @@ camNo=ims.cam;
 
 s.IO.model.camUnit=cams{1}.Unit;
 
-s.IO.cam=cams;
+% Store loaded cameras.
+s.prior.IO.cams=cams;
 
 s.IO.sensor.ssSize(:)=cell2mat(cellfun(@(x)x.SensorSize', ...
                                        cams(ims.cam),'UniformOutput',false));

@@ -81,6 +81,64 @@ classdef DBATCamera
             value=length(obj.P);
         end
         
+        % Return an XML struct to be saved to file.
+        function xml=XMLStruct(obj)
+            if isempty(obj.K)
+                Kstring='';
+            else
+                Kstring=sprintf('%.18g,',obj.K);
+                Kstring(end)=[];
+            end
+            if isempty(obj.P)
+                Pstring='';
+            else
+                Pstring=sprintf('%.18g,',obj.P);
+                Pstring(end)=[];
+            end
+            
+            cam=struct('id',XMLText('%d',obj.Id),...
+                       'name',XMLText(obj.Name),...
+                       'unit',XMLText(obj.Unit),...
+                       'sensor',XMLText('%.18g,%.18g',obj.SensorSize),...
+                       'image',XMLText('%d,%d',obj.ImageSize),...
+                       'aspect',XMLText('%.18g',obj.AspectRatio),...
+                       'focal',XMLText('%.18g',obj.FocalLength),...
+                       'model',XMLText('%d',obj.Model),...
+                       'nK',XMLText('%d',nK(obj)),...
+                       'nP',XMLText('%d',nP(obj)),...
+                       'cc',XMLText('%.18g',obj.CameraConstant),...
+                       'pp',XMLText('%.18g,%.18g',obj.PrincipalPoint),...
+                       'skew',XMLText('%.18g',obj.Skew),...
+                       'K',XMLText(Kstring),...
+                       'P',XMLText(Pstring));
+
+            xml=struct('camera',cam);
+        end
+
+        function cam=updatefrombundleresult(cam,s,ix)
+        % Set estimated parameters after a successful bundle adjustment.
+            cam.SensorSize=s.post.sensor.ssSize(:,ix)';
+            cam.AspectRatio=1-getcamvals(s,'as',ix);
+            cam.Model=s.IO.model.distModel(ix);
+            cam.CameraConstant=getcamvals(s,'cc',ix);
+            cam.PrincipalPoint=getcamvals(s,'pp',ix)';
+            cam.Skew=getcamvals(s,'sk',ix);
+            cam.K=getcamvals(s,'K',ix)';
+            cam.P=getcamvals(s,'P',ix)';
+        end
+    
+    end
+end
+
+% Create an structure with a single Text field. If given a single
+% argument, the argument is treated as literal string. If given two
+% arguments, the first is treated as a ssprintf format string with
+% the second as the value parameter.
+function s=XMLText(fmt,val)
+    if nargin<2
+        s=struct('Text',NotEmptyString(fmt));
+    else
+        s=struct('Text',sprintf(fmt,val));
     end
 end
 
@@ -120,3 +178,9 @@ function mustBeStruct(s)
     end
 end
 
+% Return a single blank if the input string is empty.
+function s=NotEmptyString(s)
+    if isempty(s)
+        s=' ';
+    end
+end

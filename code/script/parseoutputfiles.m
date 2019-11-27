@@ -33,7 +33,7 @@ for i=1:length(files)
       case 'report'
         WriteReportFile(s,outputFiles.report,baseDir);
       case 'io'
-        warning('%s output file not implemented yet',file)
+        WritePostIOFile(s,outputFiles.io,baseDir);
       case 'image_residuals'
         WriteImageResidualsFile(s,outputFiles.image_residuals,baseDir,docFile);
       otherwise
@@ -129,3 +129,34 @@ end
 fclose(fid);
 
 
+function WritePostIOFile(s,io,baseDir)
+% Write a DBAT camera XML file.
+
+[ok,msg]=checkxmlfields(io,'file');
+if ~ok, error('DBAT XML script output/files/io error: %s',msg); end
+
+file=io.file;
+
+% File name should be in the 'Text' field.
+[ok,msg]=checkxmlfields(file,'Text');
+if ~ok, error('DBAT XML script output/files/io/file error: %s',msg); end
+
+% Get filename.
+fileName=parsepath(file.Text,baseDir);
+
+% Verify that directory exists.
+if ~exist(fileparts(fileName),'dir')
+    error('DBAT XML error: Output dir %s does not exist',fileparts(fileName));
+end
+
+% Get a single-camera XML struct for camera 1.
+if isfield(s.post,'cams')
+    cam=XMLStruct(s.post.cams{1});
+    xml=struct('document',struct('Attributes', ...
+                                 struct('dbat_camera_version','1.0'),...
+                                 'cameras',cam));
+    struct2xml(xml,fileName);
+else
+    warning(['No posterior camera present. Bundle may have failed. ' ...
+             'Not writing IO file.']);
+end

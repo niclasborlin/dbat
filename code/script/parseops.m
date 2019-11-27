@@ -53,6 +53,12 @@ for i=1:length(ops)
                          'n'],iters,E.code,sigma0,sigma0*s0.IP.sigmas(1));
             end
             s.bundle.info=E;
+            if ok
+                % Copy prior cameras and update.
+                s.post.cams=s.prior.IO.cams;
+                s.post.cams{1}=updatefrombundleresult(s.post.cams{1},s,1);
+            end
+            
           otherwise
             error('DBAT XML script operations error: Unknown operation %s',...
                   op.Text)

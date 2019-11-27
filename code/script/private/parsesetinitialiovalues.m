@@ -63,7 +63,7 @@ for i=1:length(fn)
             s=setcamvals(s,'loaded');
           case 'default'
             % Set all values as default.
-            s=setcamvals(s,'default',s.IO.cam{1}.FocalLength);
+            s=setcamvals(s,'default',s.prior.IO.cams{1}.FocalLength);
           otherwise
             error(['DBAT XML set initial values/IO error: Unknown ' ...
                    '''all'' string ''%s'''],sub.Text);
@@ -71,7 +71,7 @@ for i=1:length(fn)
       case 'cc'
         switch sub.Text
           case {'focal','default'}
-            s=setcamvals(s,'cc',s.IO.cam.FocalLength);
+            s=setcamvals(s,'cc',s.prior.IO.cams{1}.FocalLength);
           case 'loaded'
             % Copy prior cc values.
             s=setcamvals(s,'cc',getcamvals(s,'prior','cc'));
@@ -110,6 +110,7 @@ for i=1:length(fn)
           otherwise
             aspect=sscanf(sub.Text,'%f');
             if isscalar(aspect)
+                % Use DBATCamera to convert aspect ratios.
                 c=DBATCamera;
                 c.AspectRatio=aspect;
                 s=setcamvals(s,'as',AspectDiff(c));

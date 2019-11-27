@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document dbat_camera_version="1.0">
+   <cameras>
+      <camera>
+         <id>1</id>
+         <name>Olympus Camedia C4040Z</name>
+         <unit>mm</unit>
+         <sensor>7.25301132255482273,5.43764000000000003</sensor>
+         <image>2272,1704</image>
+         <aspect>0.999610402322309688</aspect>
+         <focal>7.5</focal>
+         <model>3</model>
+         <nK>3</nK>
+         <nP>2</nP>
+         <cc>7.45699532273933929</cc>
+         <pp>3.61546239970889083,-2.6132927984826777</pp>
+         <skew>0</skew>
+         <K>-0.00458860662755812988,4.51350997187045943e-05,2.05253370760754436e-06</K>
+         <P>6.12803065099454589e-05,4.41170561685088136e-05</P>
+      </camera>
+   </cameras>
+</document>
