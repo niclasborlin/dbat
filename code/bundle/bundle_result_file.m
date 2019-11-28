@@ -35,24 +35,25 @@ p6=repmat(p,1,6);
 
 fprintf(fid,[p,'Project\n']);
 
-fprintf(fid,[p2,'Name        : %s\n'],s.proj.title);
+fprintf(fid,[p2,'Name             : %s\n'],s.proj.title);
+fprintf(fid,[p2,'Computation UUID : %s\n'],s.proj.UUID);
 
 if ~isempty(s.proj.fileName)
     str=s.proj.fileName;
     str=strrep(str,[dbatroot,filesep],['$DBATROOT',filesep]);
-    fprintf(fid,[p2,'File name   : %s\n'],str);
+    fprintf(fid,[p2,'Input file name  : %s\n'],str);
 end
 
 if ~isempty(s.proj.cptFile)
     str=s.proj.cptFile;
     str=strrep(str,[dbatroot,filesep],['$DBATROOT',filesep]);
-    fprintf(fid,[p2,'Ctrl pt file: %s\n'],str);
+    fprintf(fid,[p2,'Ctrl pt file     : %s\n'],str);
 end
 
 if ~isempty(s.proj.EOfile)
     str=s.proj.EOfile;
     str=strrep(str,[dbatroot,filesep],['$DBATROOT',filesep]);
-    fprintf(fid,[p2,'EO file     : %s\n'],str);
+    fprintf(fid,[p2,'EO file          : %s\n'],str);
 end
     
     

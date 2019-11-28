@@ -179,8 +179,9 @@ function s=emptydbatstruct(nImages,nOP,nIP)
 %   - fileName - name of the original project file.
 %   - cptFile  - name of the control point file.
 %   - EOfile   - name of prior EO observations.
+%   - UUID     - Random unique UUID of this computation.
 %
-%See also: LOADPM, BUILDPARAMTYPES, BUILDSERIALINDICES.
+%See also: PROB2DBATSTRUCT, RUNDBATSCRIPT, BUILDPARAMTYPES, BUILDSERIALINDICES.
 
 % Default number of lens distortion coefficients.
 nK=3;
@@ -190,6 +191,8 @@ nP=2;
 objUnit='<unknown>';
 camUnit='<unknown>';
 
+uuid=char(java.util.UUID.randomUUID());
+
 % Create project structure.
 proj=struct('objUnit',objUnit,...
             'x0desc','',...
@@ -197,7 +200,8 @@ proj=struct('objUnit',objUnit,...
             'imDir','',...
             'fileName','',...
             'cptFile','',...
-            'EOfile','');
+            'EOfile','',...
+            'UUID',uuid);
 
 % Create default structure for sensor data.
 sensorSize=nan(2,nImages);

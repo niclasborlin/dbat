@@ -183,8 +183,9 @@ function s=prob2dbatstruct(prob,individualCameras)
 %   - fileName - name of the original project file.
 %   - cptFile  - name of the control point file.
 %   - EOfile   - name of prior EO observations.
+%   - UUID     - Random unique UUID of this computation.
 %
-%See also: LOADPM, BUILDPARAMTYPES, BUILDSERIALINDICES.
+%See also: EMPTYDBATSTRUCT, LOADPM, BUILDPARAMTYPES, BUILDSERIALINDICES.
 
 
 if nargin<2, individualCameras=false; end
@@ -395,6 +396,8 @@ objUnit='m';
 % Default to model 1 - backward Brown.
 IOdistModel=ones(1,size(IO,2));
 
+uuid=char(java.util.UUID.randomUUID());
+
 % Create project structure.
 proj=struct('objUnit',objUnit,...
             'x0desc','',...
@@ -402,7 +405,8 @@ proj=struct('objUnit',objUnit,...
             'imDir',imDir,...
             'fileName',prob.job.fileName,...
             'cptFile',prob.cptFile,...
-            'EOfile','');
+            'EOfile','',...
+            'UUID',uuid);
 
 % Create structure for sensor data.
 IOsensor=struct('ssSize',sensorSize,...
