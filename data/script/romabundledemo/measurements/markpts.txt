@@ -1,0 +1,5 @@
+# Image measurements for the Roma bundle demos in DBAT.
+# Format: Image id, OP id, x, y
+ 1,    1,1880.1284,2570.5688
+ 1,    2,3568.2600,1866.7021
+ 1,    5,3652.3281,2144.8281

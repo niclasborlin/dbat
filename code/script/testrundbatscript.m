@@ -1,4 +1,4 @@
-switch 1
+switch 2
   case 1
     srcDir=fullfile(fileparts(dbatroot),'/data/script/camcaldemo');
 

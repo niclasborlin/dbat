@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document dbat_script_version="1.0.0">
+  <input base_dir="$HERE">
+
+    <c>No control points</c>
+         
+    <images image_base_dir="$DBAT">
+      <file format="id,path">images/images.txt</file>
+    </images>
+
+    <prior_eo>
+      <file format="id,x,y,z,omega,phi,kappa" units="degrees">prior/initial_eo.txt</file>
+    </prior_eo>
+
+    <image_pts>
+      <file format="im,id,x,y" sxy="1">measurements/markpts.txt</file>
+    </image_pts>
+
+    <cameras>
+      <file>cameras/EOS5DMarkII.xml</file>
+    </cameras>
+  </input>
+
+  <operations>
+    <set_initial_values>
+      <io>loaded</io>
+      <eo>loaded</eo>
+    </set_initial_values>
+    <run_forward_intersection />
+    <set_datum ref_cam="1">depend</set_datum>
+    <set_bundle_estimate_params>
+      <io>
+        <none>true</none>
+      </io>
+      <eo>
+        <all>true</all>
+      </eo>
+      <op>
+        <all>true</all>
+      </op>
+    </set_bundle_estimate_params>
+    <run_bundle_adjustment />
+  </operations>
+  
+  <output>
+    <plots>
+      <plot>params</plot>
+      <plot convex_hull="true">coverage</plot>
+      <plot>image_stats</plot>
+      <plot max_op="1000">op_stats</plot>
+      <plot cam_size="0.1">iteration_trace</plot>
+      <plot id="1">image</plot>
+    </plots>
+    <files base_dir="/home/niclas/dbat/code/demo/data/dbat">
+      <report_file>
+        <name>result/report.txt</name>
+      </report_file>
+      <top_residuals>
+        <name>result/top_residuals.txt</name>
+      </top_residuals>
+      <op format="x,y,z,sx,sy,sz">
+        <name>result/op.txt</name>
+      </op>
+      <eo>
+        <name>result/eo.txt</name>
+      </eo>
+    </files>
+  </output>
+</document>

@@ -17,14 +17,14 @@ function pts=loadimagepts(fName,fmt,sep,cmt)
 %   The string FORMAT contain the specification for the information on
 %   each line in FNAME. FORMAT can contain any number of the following
 %   strings, separated by commas:
-%       id     - integer id for the point,
-%       im     - integer id for the image number,
-%       dummy  - string/numerical field to be ignored,
-%       x, y   - numeric fields with the x or y coordinates of the
-%                image point,
-%       sx, sy - numeric fields with the standard deviations of the
-%                individual coordinates, 
-%       sxy    - numeric fields with the XY deviation.
+%       id      - integer id for the point,
+%       im      - integer id for the image number,
+%       ignored - string/numerical field to be ignored,
+%       x, y    - numeric fields with the x or y coordinates of the
+%                 image point,
+%       sx, sy  - numeric fields with the standard deviations of the
+%                 individual coordinates, 
+%       sxy     - numeric fields with the XY deviation.
 %   Whitespaces in the format string is ignored.
 %
 %   Blank lines and lines starting with a first non-whitespace
@@ -51,7 +51,7 @@ end
 fmtParts=strip(strsplit(fmt,sep));
 
 % Verify all parts are known.
-knownParts={'id','im','dummy','x','y','sx','sy','sxy'};
+knownParts={'id','im','ignored','x','y','sx','sy','sxy'};
 
 if ~isempty(setdiff(fmtParts,knownParts))
     bad=join(setdiff(fmtParts,knownParts),', ');
@@ -98,7 +98,7 @@ while ~feof(fid)
             s(abs(fmtParts{i}(2))-abs('x')+1)=sscanf(parts{i},'%f');
           case 'sxy'
             s(:)=sscanf(parts{i},'%f');
-          case 'dummy'
+          case 'ignored'
             % Do nothing
           otherwise
             % Should never happen

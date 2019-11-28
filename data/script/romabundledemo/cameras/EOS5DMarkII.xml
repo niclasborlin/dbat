@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<document dbat_camera_version="1.0">
+   <cameras>
+      <camera>
+         <id>1</id>
+         <name>Canon EOS 5D Mark II</name>
+         <unit>mm</unit>
+         <calibrated>yes</calibrated>
+         <sensor>35.96404,24</sensor>
+         <image>5616,3744</image>
+         <aspect>auto</aspect>
+         <focal>7.5</focal>
+         <model>3</model>
+         <nK>3</nK>
+         <nP>0</nP>
+         <cc>24.3581</cc>
+         <pp>18.1143,-12</pp>
+         <skew>0</skew>
+         <K>2.174e-4,-1.518e-7,0</K>
+      </camera>
+   </cameras>
+</document>

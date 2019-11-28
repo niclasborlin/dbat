@@ -214,7 +214,7 @@ function aspect=evalaspect(cam)
 %Return the aspect ratio, either as specified or computed from the
 %sensor and image sizes.
 
-if isnan(cam.Aspect)
+if isnan(cam.AspectRatio)
     % Compute aspect
     pixelSize=PixelSize(cam);
     aspect=pixelSize(1)/pixelSize(2);

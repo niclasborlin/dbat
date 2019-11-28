@@ -15,7 +15,7 @@ function [s,imDir,cptFile,EOfile]=parseinput(input,docFile)
 narginchk(2,2);
 
 inputFields={'Attributes','ctrl_pts','check_pts','images', ...
-             'image_pts','cameras','c'};
+             'prior_eo','image_pts','cameras','c'};
 [ok,msg]=checkxmlfields(input,inputFields,[false,false,false,true, ...
                     true,true,false]);
 if ~ok, error('DBAT XML script input error: %s',msg); end
@@ -61,9 +61,6 @@ if ~isempty(intersect(ctrlPts.id,checkPts.id))
     error('Point cannot be both control and check points');
 end
     
-% No support yet for prior EO values.
-EOfile='';
-
 % Number of images.
 nImages=length(ims.id);
 
@@ -78,6 +75,17 @@ s=emptydbatstruct(nImages,nOP,nMarkPts);
 s=setdbatcamsandimages(s,cams,ims);
 
 s=setdbatpts(s,ctrlPts,checkPts,pts);
+
+% Parse and load prior EO value, if any.
+EOfile='';
+if isfield(input,'prior_eo')
+    priorEO=parseprioreo(input.prior_eo,baseDir);
+    EOfile=priorEO.fileName;
+    s.prior.EO.val(1:3,:)=priorEO.pos;
+    s.prior.EO.val(4:6,:)=priorEO.ang;
+    s.prior.EO.std(1:3,:)=priorEO.std;
+    s.prior.EO.std(4:6,:)=priorEO.angStd;
+end
 
 s=parseblockvariant(s);
 s=buildparamtypes(s);

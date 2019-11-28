@@ -40,7 +40,7 @@ end
 curDir=fileparts(mfilename('fullpath'));
 
 % Base dir with input files.
-inputDir=fullfile(curDir,'data','dbat');
+inputDir=fullfile(fileparts(dbatroot),'data','dbat');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','roma-pmexport.txt');
