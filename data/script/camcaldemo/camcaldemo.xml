@@ -123,6 +123,9 @@
       <io>
         <file>result/c4040z.xml</file>
       </io>
+      <eo>
+        <file>result/camera_stations.txt</file>
+      </eo>
       <image_residuals top_count="50">
         <file>result/top_residuals.txt</file>
       </image_residuals>
