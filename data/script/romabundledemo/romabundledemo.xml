@@ -22,24 +22,35 @@
   </input>
 
   <operations>
-    <set_initial_values>
-      <io>loaded</io>
-      <eo>loaded</eo>
-    </set_initial_values>
-    <run_forward_intersection />
-    <set_datum ref_cam="1">depend</set_datum>
-    <set_bundle_estimate_params>
-      <io>
-        <none>true</none>
-      </io>
-      <eo>
-        <all>true</all>
-      </eo>
-      <op>
-        <all>true</all>
-      </op>
-    </set_bundle_estimate_params>
-    <run_bundle_adjustment />
+    <operation min_rays="2">check_ray_count</operation>
+    <operation>
+      <set_initial_values>
+        <io>
+          <all>loaded</all>
+        </io>
+        <eo>
+          <all>loaded</all>
+        </eo>
+      </set_initial_values>
+    </operation>
+    <operation>
+      <set_bundle_estimate_params>
+        <io>
+          <all>false</all>
+        </io>
+        <eo>
+          <all>true</all>
+        </eo>
+        <op>
+          <all>true</all>
+        </op>
+      </set_bundle_estimate_params>
+    </operation>
+    <operation>forward_intersection</operation>
+    <operation>
+      <set_datum ref_cam="1">depend</set_datum>
+    </operation>
+    <operation>bundle_adjustment></operation>
   </operations>
   
   <output>
