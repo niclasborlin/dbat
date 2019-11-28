@@ -10,11 +10,6 @@ function s=setcamest(s,varargin)
 %   ('cc', 'px', 'py', and optionally 'as', 'sk'), supported by the current
 %   distortion model for the camera. The string 'pp' means 'px' and 'py'.
 %
-%   S=SETCAMEST(S,'none') modifies the S.bundle.est.IO field to indicate that
-%   no camera parameters should be estimated in the bundle. Use
-%   S=SETCAMEST(S,'none',<param1>,<param2>,...) to specify that only the
-%   listed parameters should be estimated.
-%
 %   S=SETCAMEST(S,<param1>,...) or S=SETCAMEST(S,'not',<param1>,...) leaves
 %   the estimation status for the unlisted parameters unchanged.
 %
@@ -58,11 +53,8 @@ for i=1:length(varargin)
       case 'all'
         ii=1:size(s.bundle.est.IO,1);
         % Mask out skew and aspect for models that do not support it.
-        val=repmat(true,length(ii),nnz(camIx));
+        val=repmat(doEst,length(ii),nnz(camIx));
         val(4:5,:)=val(4:5,:) & repmat(supportsSkewAspect,2,1);
-      case 'none'
-        ii=1:size(s.bundle.est.IO,1);
-        val=false;
       case 'af'
         ii=1:5;
         % Mask out skew and aspect for models that do not support it.
