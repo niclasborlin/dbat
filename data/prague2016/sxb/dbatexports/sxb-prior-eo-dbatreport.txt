@@ -1,9 +1,10 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name        : Bundle Soln 
-      File name   : $DBATROOT/demo/data/prague2016/sxb/pmexports/wsmart-with-orient-pmexport.txt
-      Ctrl pt file: $DBATROOT/demo/data/prague2016/sxb/ref/ctrlpts-weighted.txt
-      EO file     : $DBATROOT/demo/data/prague2016/sxb/ref/fake-camera-positions.txt
+      Name             : Bundle Soln 
+      Computation UUID : 8e80b98d-f784-4136-8bdc-810186d660db
+      Input file name  : /home/niclas/dbat/data/prague2016/sxb/pmexports/wsmart-with-orient-pmexport.txt
+      Ctrl pt file     : /home/niclas/dbat/data/prague2016/sxb/ref/ctrlpts-weighted.txt
+      EO file          : /home/niclas/dbat/data/prague2016/sxb/ref/fake-camera-positions.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -11,11 +12,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        13-Jan-2019 15:41:58
-      DBAT version:           0.8.5.1 (2019-01-13)
-      MATLAB version:         9.5.0.944444 (R2018b)
+      Last Bundle Run:        28-Nov-2019 11:52:39
+      DBAT version:           0.9.0.1 (2019-11-22)
+      MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              slartibartfast
+      Host name:              trillian
       Status:                 OK
       Sigma0:                 1.06942
       Sigma0 (pixels):        1.06942
@@ -39,9 +40,9 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 3
-         First error:          86.8008
+         First error:          86.8007
          Last error:           38.2458
-         Execution time (s):   0.05
+         Execution time (s):   0.07
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:

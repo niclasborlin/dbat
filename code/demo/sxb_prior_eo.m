@@ -17,7 +17,7 @@ if nargin==0, help(mfilename), return, end
 curDir=fileparts(mfilename('fullpath'));
 
 % Base dir with input files for these projects.
-inputDir=fullfile(curDir,'data','prague2016','sxb');
+inputDir=fullfile(fileparts(dbatroot),'data','prague2016','sxb');
 
 cpWeighted=true;
 stub='wsmart';
@@ -71,7 +71,7 @@ s0=setcpt(s0,ctrlPts,i,j);
 % Load, match and set prior EO observations.
 if usePriorEO
     fprintf('Loading EO file %s...',EOname);
-    EOtbl=loadeotable(EOname,[false,true]);
+    EOtbl=legacyloadeotable(EOname,[false,true]);
     fprintf('done.\n');
 
     [i,j]=matcheo(s0,EOtbl);
@@ -115,7 +115,7 @@ end
 E=bundle_cov(result,E,'prepare');
 
 % Write report file.
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle report file %s generated.\n',reportFile);
 
@@ -125,7 +125,7 @@ h=plotcoverage(result,true);
 
 h=plotimagestats(result,E);
 
-h=plotopstats(result,E,COP);
+h=plotopstats(result,E);
 
 fig=tagfigure('networkplayback');
 
@@ -144,9 +144,9 @@ imNo=1;
 % Check if image files exist.
 isAbsPath=~isempty(s0.proj.imDir) && ismember(s0.proj.imDir(1),'\\/') || ...
           length(s0.proj.imDir)>1 && s0.proj.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s0.proj.imDir),'dir')
+if ~isAbsPath && exist(fullfile(fileparts(dbatroot),s0.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s0.proj.imDir=fullfile(curDir,s0.proj.imDir);
+    s0.proj.imDir=fullfile(fileparts(dbatroot),s0.proj.imDir);
 end
 if exist(s0.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.

@@ -1,8 +1,9 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name        : Bundle Soln 
-      File name   : $DBATROOT/demo/data/prague2016/sxb/pmexports/wsmart-with-orient-pmexport.txt
-      Ctrl pt file: $DBATROOT/demo/data/prague2016/sxb/ref/ctrlpts-weighted.txt
+      Name             : Bundle Soln 
+      Computation UUID : 8502960f-d23c-4780-aebf-0e77b37faf0c
+      Input file name  : /home/niclas/dbat/data/prague2016/sxb/pmexports/wsmart-with-orient-pmexport.txt
+      Ctrl pt file     : /home/niclas/dbat/data/prague2016/sxb/ref/ctrlpts-weighted.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -10,11 +11,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        13-Jan-2019 15:41:41
-      DBAT version:           0.8.5.1 (2019-01-13)
-      MATLAB version:         9.5.0.944444 (R2018b)
+      Last Bundle Run:        28-Nov-2019 11:52:04
+      DBAT version:           0.9.0.1 (2019-11-22)
+      MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              slartibartfast
+      Host name:              trillian
       Status:                 OK
       Sigma0:                 1.07447
       Sigma0 (pixels):        1.07447
@@ -38,9 +39,9 @@ Damped Bundle Adjustment Toolbox result file
       Total error:
          Number of stages:     1
          Number of iterations: 4
-         First error:          60.1122
+         First error:          60.1116
          Last error:           38.2456
-         Execution time (s):   0.05
+         Execution time (s):   0.31
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:
