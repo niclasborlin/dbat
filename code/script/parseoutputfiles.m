@@ -128,6 +128,7 @@ end
 
 fclose(fid);
 
+fprintf('Top residual file %s generated.\n',fileName);
 
 function WritePostIOFile(s,io,baseDir)
 % Write a DBAT camera XML file.
@@ -156,6 +157,7 @@ if isfield(s.post,'cams')
                                  struct('dbat_camera_version','1.0'),...
                                  'cameras',cam));
     struct2xml(xml,fileName);
+    fprintf('IO result file %s generated.\n',fileName);
 else
     warning(['No posterior camera present. Bundle may have failed. ' ...
              'Not writing IO file.']);
