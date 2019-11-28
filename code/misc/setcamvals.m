@@ -90,9 +90,14 @@ while length(varargin)>=i
     end
     % Check for simple arg.
     ii=find(strcmp(param,{'cc','px','py','as','sk'}));
+    if isempty(ii)
+        % Use nan to signal 'not found', since [] may be acceptable
+        % for K or P.
+        ii=nan;
+    end
     % Aspect, skew not defined for some models: Argument must be zero.
     mustBeZero=any(ismember(ii,[4,5])) && any(abs(s.IO.model.distModel(ix))<3);
-    if isempty(ii)
+    if any(isnan(ii))
         % Look for grouped parameters.
         switch param
           case 'lin'
@@ -105,10 +110,10 @@ while length(varargin)>=i
             ii=5+s.IO.model.nK+(1:s.IO.model.nP);
         end
     end
-    if isempty(ii) && ~isempty(param)
+    if any(isnan(ii)) && ~isempty(param)
         % Not found, check Ki, Pi
         switch varargin{i}(1)
-          case 'K'
+          case 'K' 
             n=str2double(param(2:end));
             if n<1 || n>s.IO.model.nK
                 error('SETCAMVALS: K number out of range');
@@ -122,7 +127,7 @@ while length(varargin)>=i
             ii=5+s.IO.model.nK+n;
         end
     end
-    if isempty(ii)
+    if any(isnan(ii))
         error('SETCAMVALS: Bad parameter %d: ''%s''',i,param);
     end
     if mustBeZero && any(arg~=0)
