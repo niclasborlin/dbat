@@ -53,7 +53,7 @@ end
 % Allow 'all' as an extra XML field name.
 XMLfieldNames={'id', 'name', 'unit', 'sensor', 'image', 'aspect', ...
                'nK', 'nP', 'focal', 'model', 'cc', 'pp', 'K', 'P', ...
-               'skew', 'all'};
+               'skew', 'all','calibrated'};
 
 % Pre-allocate return array.
 cams=cell(1,length(s));
@@ -151,37 +151,36 @@ for i=1:length(s)
             cam.Skew=sscanf(e.skew.Text,'%f');
           case 'pp'
             if strcmp(strip(e.pp.Text),'default')
-                cam.pp=evalsensor(cam)/2;
+                cam.PrincipalPoint=evalsensor(cam)/2;
             else
-                cam.pp=sscanf(e.pp.Text,'%f,')';
+                cam.PrincipalPoint=sscanf(e.pp.Text,'%f,')';
             end
-            if length(cam.pp)~=2
+            if length(cam.PrincipalPoint)~=2
                 error(['DBAT camera XML error: Wrong number of principal ' ...
                        'point values: %s'],e.pp.Text);
             end
           case 'all'
             if strcmp(strip(e.all.Text),'default')
                 % Use default for all parameters
-                cam.cc=cam.focal;
-                cam.pp=evalsensor(cam)/2;
-                cam.aspectDiff=0;
-                cam.skew=0;
-                cam.K=zeros(1,cam.nK);
-                cam.P=zeros(1,cam.nP);
+                cam.CameraConstant=cam.FocalLength;
+                cam.PrincipalPoint=evalsensor(cam)/2;
+                cam.AspectRatio=1;
+                cam.Skew=0;
+                cam.K=zeros(size(cam.K));
+                cam.P=zeros(size(cam.P));
             else
                 error(['DBAT camera XML error: Bad string for ''all''' ...
                        'directive: %s'],e.all.Text);
             end
+          case 'calibrated'
+            cam.Calibrated=strcmp(strip(e.calibrated.Text),'yes');
         end
     end
     
     if isnan(cam.AspectRatio)
         cam.AspectRatio=evalaspect(cam);
-    elseif isnan(cam.SensorSize(1))
-        cam.SensorSize=evalsensor(cam);
     else
-        error(['DBAT camera XML error: Either aspect or sensor ' ...
-               'height must be auto']);
+        cam.SensorSize=evalsensor(cam);
     end
     
     cams{i}=cam;

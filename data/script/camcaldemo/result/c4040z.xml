@@ -5,6 +5,7 @@
          <id>1</id>
          <name>Olympus Camedia C4040Z</name>
          <unit>mm</unit>
+         <calibrated>yes</calibrated>
          <sensor>7.25301132255482273,5.43764000000000003</sensor>
          <image>2272,1704</image>
          <aspect>0.999610402322309688</aspect>
