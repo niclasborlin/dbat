@@ -34,7 +34,7 @@ for i=1:length(plots)
     if ~isfield(plot,'Text')
         error('DBAT XML script operations error: Malformed plot no %d',i);
     end
-    switch plot.Text
+    switch strip(plot.Text)
       case 'image'
         PlotImage(s,plot)
       case 'image_stats'

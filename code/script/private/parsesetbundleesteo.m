@@ -24,7 +24,7 @@ if ~ok, error('DBAT XML script set_bundle_estimate_params/EO error: %s',msg); en
 
 % Check for abbreviated block
 if isfield(xml,'Text')
-    switch xml.Text
+    switch strip(xml.Text)
       case {'true','false','default'}
         % Translate to <all>loaded</all>
         xml=struct('all',struct('Text',xml.Text));
@@ -53,7 +53,7 @@ for i=1:length(fn)
         error(['DBAT XML script set_bundle_estimate_params/EO/%s ' ...
                'error: %s'],fn{i},msg);
     end
-    switch field.Text
+    switch strip(field.Text)
       case {'true','false'}
         % Estimate all or nothing.
         est=strcmp(field.Text,'true');

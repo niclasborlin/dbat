@@ -20,7 +20,7 @@ if ~ok, error('DBAT XML script set_initial_values/OP error: %s',msg); end
 
 % Check for abbreviated block
 if isfield(xml,'Text')
-    switch xml.Text
+    switch strip(xml.Text)
       case 'loaded'
         % Translate to <all>loaded</all>
         xml=struct('all',struct('Text','loaded'));
@@ -33,14 +33,14 @@ end
 % Parse each subblock
 fn=fieldnames(xml);
 for i=1:length(fn)
-    field=xml.(fn{i});
+    % Every field should have a Text subfield and nothing else
+    sub=xml.(fn{i});
+    [ok,msg]=checkxmlfields(sub,'Text');
+    if ~ok, error('DBAT XML script set_initial_values/EO error: %s',msg); end
+    
     switch fn{i}
       case 'all'
-        [ok,msg]=checkxmlfields(field,'Text');
-        if ~ok
-            error('DBAT XML script set_initial_values/OP/all error: %s',msg);
-        end
-        switch field.Text
+        switch strip(sub.Text)
           case 'loaded'
             % Copy all loaded prior OP values.
             s.OP.val=s.prior.OP.val;

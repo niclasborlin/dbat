@@ -30,7 +30,7 @@ for i=1:length(ops)
     op=ops{i};
     if isfield(op,'Text')
         % Operation without structure
-        switch op.Text
+        switch strip(op.Text)
           case 'check_ray_count'
             CheckRayCount(s,op);
           case 'spatial_resection'

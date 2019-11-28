@@ -37,7 +37,7 @@ if ~ok, error('DBAT XML script set_initial_values/IO error: %s',msg); end
 
 % Check for abbreviated block
 if isfield(xml,'Text')
-    switch xml.Text
+    switch strip(xml.Text)
       case {'loaded','default'}
         % Translate to <all>loaded</all>
         xml=struct('all',struct('Text',xml.Text));
@@ -57,7 +57,7 @@ for i=1:length(fn)
     
     switch fn{i}
       case 'all'
-        switch sub.Text
+        switch strip(sub.Text)
           case 'loaded'
             % Copy all loaded prior IO values.
             s=setcamvals(s,'loaded');
@@ -69,7 +69,7 @@ for i=1:length(fn)
                    '''all'' string ''%s'''],sub.Text);
         end
       case 'cc'
-        switch sub.Text
+        switch strip(sub.Text)
           case {'focal','default'}
             s=setcamvals(s,'cc',s.prior.IO.cams{1}.FocalLength);
           case 'loaded'
@@ -85,7 +85,7 @@ for i=1:length(fn)
             end
         end
       case 'pp'
-        switch sub.Text
+        switch strip(sub.Text)
           case 'default'
             s=setcamvals(s,'pp',0.5*diag([1,-1])*s.IO.sensor.ssSize);
           case 'loaded'
@@ -101,7 +101,7 @@ for i=1:length(fn)
             end
         end
       case 'aspect'
-        switch sub.Text
+        switch strip(sub.Text)
           case 'default'
             s=setcamvals(s,'as',0);
           case 'loaded'
@@ -120,7 +120,7 @@ for i=1:length(fn)
             end
         end
       case 'skew'
-        switch sub.Text
+        switch strip(sub.Text)
           case 'default'
             s=setcamvals(s,'sk',0);
           case 'loaded'
@@ -136,7 +136,7 @@ for i=1:length(fn)
             end
         end
       case 'K'
-        switch sub.Text
+        switch strip(sub.Text)
           case 'default'
             s=setcamvals(s,'K',0);
           case 'loaded'
@@ -152,7 +152,7 @@ for i=1:length(fn)
             end
         end
       case 'P'
-        switch sub.Text
+        switch strip(sub.Text)
           case 'default'
             s=setcamvals(s,'P',0);
           case 'loaded'

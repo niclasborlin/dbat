@@ -29,7 +29,7 @@ if ~ok, error('DBAT XML script set_bundle_estimate_params/IO error: %s',msg); en
 
 % Check for abbreviated block
 if isfield(xml,'Text')
-    switch xml.Text
+    switch strip(xml.Text)
       case {'true','false'}
         % Translate to <all>true/false</all>
         xml=struct('all',struct('Text',xml.Text));
@@ -49,7 +49,7 @@ for i=1:length(fn)
         error('DBAT XML script set_bundle_estimate_params/IO error: %s',msg);
     end
     
-    switch field.Text
+    switch strip(field.Text)
       case 'true'
         val=true;
       case 'false'
