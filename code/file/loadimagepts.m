@@ -47,6 +47,15 @@ if fid<0
     error('%s: Could not open %s for reading: %s.',mfilename,fName,msg);
 end
 
+% Get file size for progress bar.
+if fseek(fid,0,'eof')~=0
+	err='Failed to get file size';
+	if nargout<2, error(err); else return; end
+end
+sz=ftell(fid);
+% Rewind.
+fseek(fid,0,'bof');
+
 % Parse the format string.
 fmtParts=strip(strsplit(fmt,sep));
 
@@ -65,6 +74,9 @@ std=zeros(2,0);
 
 lineNo=0;
 
+% Initialize progress bar.
+h=waitbar(0,'Loading image points');
+
 while ~feof(fid)
     % Read one line and clean from whitespace.
     s=strip(fgets(fid));
@@ -82,6 +94,16 @@ while ~feof(fid)
               length(parts), length(fmtParts));
     end
 
+    if ~ishandle(h)
+        % Waitbar closed, abort.
+        fclose(fid);
+        err='Aborted by user';
+        if nargout<2, error(err); else return; end
+    elseif rem(lineNo+1,1000)==0
+        % Update progressbar every 1000 input lines.
+        waitbar(ftell(fid)/sz,h);
+    end
+    
     ii=nan;
     mm=nan;
     p=nan(2,1);
@@ -111,6 +133,10 @@ while ~feof(fid)
     std(:,end+1)=s;
 end
 
+if ishandle(h), waitbar(ftell(fid)/sz,h); end
+
 fclose(fid);
 
 pts=struct('id',id,'im',im,'pos',pos,'std',std,'fileName',fName);
+
+if ishandle(h), close(h); end
