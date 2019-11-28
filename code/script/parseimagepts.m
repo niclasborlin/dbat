@@ -35,7 +35,8 @@ if ~exist(fileName,'file')
     warning('image_pts file %s does not exist',fileName);
 end
 
-[ok,msg]=checkxmlfields(file.Attributes,'format');
+[ok,msg]=checkxmlfields(file.Attributes,{'format','sxy','sx','sy'}, ...
+                        [true,false(1,3)]);
 if ~ok
     allFields=join(fieldnames(file),', ');
     error('DBAT XML input/image_pts/file attribute error: %s. Read fields are: %s.', ...
@@ -46,3 +47,19 @@ end
 format=file.Attributes.format;
 
 pts=loadimagepts(fileName,format);
+
+% Apply standard deviations supplied via Attributes.
+if isfield(file.Attributes,'sxy')
+    sxy=sscanf(file.Attributes.sxy,'%f');
+    pts.std(1:2,:)=sxy;
+end
+
+if isfield(file.Attributes,'sx')
+    sx=sscanf(file.Attributes.sx,'%f');
+    pts.std(1,:)=sx;
+end
+
+if isfield(file.Attributes,'sy')
+    sy=sscanf(file.Attributes.sy,'%f');
+    pts.std(2,:)=sy;
+end
