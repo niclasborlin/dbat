@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document dbat_script_version="1.0.0">
+<document dbat_script_version="1.0">
   <input base_dir="$HERE">
 
     <c>No control points</c>
@@ -27,6 +27,8 @@
       <set_initial_values>
         <io>
           <all>loaded</all>
+          <aspect>1</aspect>
+          <skew>0</skew>
         </io>
         <eo>
           <all>loaded</all>
@@ -36,7 +38,11 @@
     <operation>
       <set_bundle_estimate_params>
         <io>
-          <all>false</all>
+          <all>true</all>
+          <aspect>false</aspect>
+          <skew>false</skew>
+          <P>false</P>
+          <K3>false</K3>
         </io>
         <eo>
           <all>true</all>
@@ -48,33 +54,23 @@
     </operation>
     <operation>forward_intersection</operation>
     <operation>
-      <set_datum ref_cam="1">depend</set_datum>
+      <set_datum ref_cam="1" ref_base="longest">depend</set_datum>
     </operation>
-    <operation>bundle_adjustment></operation>
+    <operation>bundle_adjustment</operation>
   </operations>
   
   <output>
     <plots>
-      <plot>params</plot>
-      <plot convex_hull="true">coverage</plot>
-      <plot>image_stats</plot>
-      <plot max_op="1000">op_stats</plot>
-      <plot cam_size="0.1">iteration_trace</plot>
       <plot id="1">image</plot>
+      <plot cam_size="0.1">iteration_trace</plot>
     </plots>
-    <files base_dir="/home/niclas/dbat/code/demo/data/dbat">
-      <report_file>
-        <name>result/report.txt</name>
-      </report_file>
-      <top_residuals>
-        <name>result/top_residuals.txt</name>
-      </top_residuals>
-      <op format="x,y,z,sx,sy,sz">
-        <name>result/op.txt</name>
-      </op>
-      <eo>
-        <name>result/eo.txt</name>
-      </eo>
+    <files base_dir="$HERE">
+      <report>
+        <file>result/report.txt</file>
+      </report>
+      <io>
+        <file>result/EOS5DMarkII.xml</file>
+      </io>
     </files>
   </output>
 </document>

@@ -6,17 +6,18 @@
          <name>Canon EOS 5D Mark II</name>
          <unit>mm</unit>
          <calibrated>yes</calibrated>
-         <sensor>35.96404,24</sensor>
+         <sensor>auto,24</sensor>
          <image>5616,3744</image>
-         <aspect>auto</aspect>
+         <aspect>1</aspect>
          <focal>7.5</focal>
          <model>3</model>
          <nK>3</nK>
-         <nP>0</nP>
+         <nP>2</nP>
          <cc>24.3581</cc>
          <pp>18.1143,-12</pp>
          <skew>0</skew>
-         <K>2.174e-4,-1.518e-7,0</K>
+         <K>-2.174e-4,1.518e-7,0</K>
+         <P>0,0</P>
       </camera>
    </cameras>
 </document>
