@@ -16,7 +16,6 @@ oldPix=5+s.IO.model.nK+(1:s.IO.model.nP);
 
 newKix=5+(1:nK);
 newPix=5+nK+(1:nP);
-newN=5+nK+nP;
 
 s.IO.model.nK=nK;
 s.IO.model.nP=nP;
@@ -36,10 +35,6 @@ end
 oldIx=[1:5,oldKix,oldPix];
 newIx=[1:5,newKix,newPix];
 
-oldVal=s.IO.val;
-newVal=nan(newN,size(oldVal,2));
-newVal(newIx,:)=oldVal(oldIx,:);
-
 s.IO.val=setfield(s.IO.val,oldIx,newIx,nan);
 s.IO.type=setfield(s.IO.type,oldIx,newIx,{''});
 s.IO.struct.block=setfield(s.IO.struct.block,oldIx,newIx,nan);
@@ -48,6 +43,7 @@ s.prior.IO.val=setfield(s.prior.IO.val,oldIx,newIx,nan);
 s.prior.IO.std=setfield(s.prior.IO.std,oldIx,newIx,nan);
 s.prior.IO.use=setfield(s.prior.IO.use,oldIx,newIx,false);
 
+s.bundle.est.IO=setfield(s.bundle.est.IO,oldIx,newIx,false);
 
 function newVal=setfield(oldVal,oldIx,newIx,defVal)
 %Adjust size and copy values in oldVal to newVal. Copy rows oldIx from
