@@ -17,7 +17,7 @@ narginchk(2,2);
 inputFields={'Attributes','ctrl_pts','check_pts','images', ...
              'prior_eo','image_pts','cameras','c'};
 [ok,msg]=checkxmlfields(input,inputFields,[false,false,false,true, ...
-                    true,true,false]);
+                    false,true,true,false]);
 if ~ok, error('DBAT XML script input error: %s',msg); end
 
 % Check if a base directory was specified.
@@ -43,7 +43,15 @@ ims=parseimages(input.images,baseDir,docFile);
 imDir=ims.imDir;
 
 % Parse image points.
-pts=parseimagepts(input.image_pts,baseDir);
+allPts=parseimagepts(input.image_pts,baseDir);
+% Merge all measured points.
+pts=allPts{1};
+for i=2:length(allPts)
+    pts.id=cat(2,pts.id,allPts{i}.id);
+    pts.im=cat(2,pts.im,allPts{i}.im);
+    pts.pos=cat(2,pts.pos,allPts{i}.pos);
+    pts.std=cat(2,pts.std,allPts{i}.std);
+end
 
 % Load control and check points, if any.
 ctrlPts=struct('id',zeros(1,0),'fileName','');
