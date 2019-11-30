@@ -50,6 +50,11 @@ end
 % Check for simple arg.
 ii=find(strcmp(param,{'cc','px','py','as','sk'}));
 if isempty(ii)
+    % Use nan to signal 'not found', since [] may be acceptable for K or P.
+    ii=nan;
+end
+
+if any(isnan(ii))
     % Look for grouped parameters.
     switch param
       case 'lin'
@@ -62,7 +67,7 @@ if isempty(ii)
         ii=5+s.IO.model.nK+(1:s.IO.model.nP);
     end
 end
-if isempty(ii)
+if any(isnan(ii))
     % Not found, check Ki, Pi
     switch param(1)
       case 'K'
@@ -79,7 +84,7 @@ if isempty(ii)
         ii=5+s.IO.model.nK+n;
     end
 end
-if isempty(ii)
+if any(isnan(ii))
     error('GETCAMVALS: Bad parameter %d: ''%s''',i,param);
 end
 
