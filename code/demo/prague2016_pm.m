@@ -29,10 +29,10 @@ curDir=fileparts(mfilename('fullpath'));
 switch lower(l(1))
   case 'c'
     % Base dir with input files for these projects.
-    inputDir=fullfile(curDir,'data','prague2016','cam');
+    inputDir=fullfile(fileparts(dbatroot),'data','prague2016','cam');
   case 's'
     % Base dir with input files for these projects.
-    inputDir=fullfile(curDir,'data','prague2016','sxb');
+    inputDir=fullfile(fileparts(dbatroot),'data','prague2016','sxb');
   otherwise
     error('Bad experiment label');
 end
@@ -142,7 +142,7 @@ s0raw=s0;
 
 % Fixed camera parameters.
 s0=setcamvals(s0,'loaded');
-s0=setcamest(s0,'none');
+s0=setcamest(s0,'not','all');
 
 fprintf('Loading control point file %s...',cpName);
 ctrlPts=loadcpt(cpName);
@@ -228,7 +228,7 @@ E=bundle_cov(result,E,'prepare');
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,'dbatexports',[stub,orientStr,'-dbatreport.txt']);
 
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
 
 OPstd=result.post.std.OP;
 EOposStd=result.post.std.EO(1:3,:);
@@ -360,7 +360,7 @@ h=plotcoverage(result,true);
 
 h=plotimagestats(result,E);
 
-h=plotopstats(result,E,COP);
+h=plotopstats(result,E);
 
 fig=tagfigure('networkplayback');
 
@@ -379,9 +379,9 @@ imNo=1;
 % Check if image files exist.
 isAbsPath=~isempty(s0.proj.imDir) && ismember(s0.proj.imDir(1),'\\/') || ...
           length(s0.proj.imDir)>1 && s0.proj.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s0.proj.imDir),'dir')
+if ~isAbsPath && exist(fullfile(fileparts(dbatroot),s0.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s0.proj.imDir=fullfile(curDir,s0.proj.imDir);
+    s0.proj.imDir=fullfile(fileparts(dbatroot),s0.proj.imDir);
 end
 if exist(s0.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.
