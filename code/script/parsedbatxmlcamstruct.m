@@ -187,7 +187,7 @@ for i=1:length(s)
 end
 
 nK=cellfun(@(x)length(x.K),cams);
-np=cellfun(@(x)length(x.P),cams);
+nP=cellfun(@(x)length(x.P),cams);
 
 if min(nK)~=max(nK)
     % Upgrade all cameras with short K vectors.
