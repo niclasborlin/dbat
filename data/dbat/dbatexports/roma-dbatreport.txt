@@ -1,7 +1,8 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name        : Bundle Soln 
-      File name   : $DBATROOT/demo/data/dbat/pmexports/roma-pmexport.txt
+      Name             : Bundle Soln 
+      Computation UUID : 5de53d15-f4d3-4f57-b439-3c2f198d630f
+      Input file name  : /home/niclas/dbat/data/dbat/pmexports/roma-pmexport.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -10,11 +11,11 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run:        13-Jan-2019 15:35:00
-      DBAT version:           0.8.5.1 (2019-01-13)
-      MATLAB version:         9.5.0.944444 (R2018b)
+      Last Bundle Run:        29-Nov-2019 22:51:11
+      DBAT version:           0.9.0.1 (2019-11-22)
+      MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              slartibartfast
+      Host name:              trillian
       Status:                 OK
       Sigma0:                 0.623075
       Sigma0 (pixels):        0.623075
@@ -40,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 5
          First error:          8608.51
          Last error:           198.805
-         Execution time (s):   4.76
+         Execution time (s):   6.48
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
