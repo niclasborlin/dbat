@@ -38,6 +38,8 @@ for i=1:length(files)
         WritePostEOFile(s,outputFiles.eo,baseDir,docFile);
       case 'image_residuals'
         WriteImageResidualsFile(s,outputFiles.image_residuals,baseDir,docFile);
+      case 'c'
+        % Do nothing
       otherwise
         error('DBAT XML script output/file error: Unknown file %s',file);
     end
