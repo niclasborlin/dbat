@@ -45,3 +45,47 @@ end
 format=file.Attributes.format;
 
 pts=loadctrlpts(fileName,format);
+
+% Parse and execute any filtering commands
+if isfield(ctrlPts,'filter')
+    filters=ctrlPts.filter;
+    if ~iscell(filters)
+        filters={filters};
+    end
+    for i=1:length(filters)
+        filter=filters{i};
+
+        [ok,msg]=checkxmlfields(filter,{'Text','Attributes'},[true,true]);
+        if ~ok
+            allFields=join(fieldnames(filter),', ');
+            error(['DBAT XML input/ctrl_pts/filter error: %s. Read ' ...
+                   'fields are: %s.'], msg,allFields{1});
+        end
+       
+        [ok,msg]=checkxmlfields(filter.Attributes,'id');
+        if ~ok
+            allFields=join(fieldnames(filter.Atrributes),', ');
+            error(['DBAT XML input/ctrl_pts/filter/Attributes error: %s. Read ' ...
+                   'fields are: %s.'], msg,allFields{1});
+        end
+        
+        % TODO: Improve parsing to allow ranges
+        id=sscanf(filter.Attributes.id,'%d,');
+        
+        switch strip(filter.Text)
+          case 'remove'
+            keep=~ismember(pts.id,id);
+          case 'keep'
+            keep=ismember(pts.id,id);
+          otherwise
+            error(['DBAT XML input/ctrl_pts/filter error: Unknown ' ...
+                   'filter %s'],strip(filter.Text));
+        end
+        
+        % Apply the actual filtering
+        pts.id=pts.id(keep);
+        pts.name=pts.name(keep);
+        pts.pos=pts.pos(:,keep);
+        pts.std=pts.std(:,keep);
+    end
+end
