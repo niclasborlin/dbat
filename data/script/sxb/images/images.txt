@@ -1,0 +1,6 @@
+# id, path
+1, data/prague2016/sxb/images/8811.jpg
+2, data/prague2016/sxb/images/8936.jpg
+3, data/prague2016/sxb/images/8937.jpg
+4, data/prague2016/sxb/images/8938.jpg
+5, data/prague2016/sxb/images/9111.jpg

@@ -1,0 +1,472 @@
+Damped Bundle Adjustment Toolbox result file
+   Project
+      Name             : 
+      Computation UUID : 4f3f7c65-55eb-45a6-9716-d132b5da3507
+      Input file name  : /home/niclas/dbat/data/script/sxb/sxb.xml
+      Ctrl pt file     : /home/niclas/dbat/data/script/sxb/reference/sxb-control.txt
+   Problems and suggestions:
+      Project Problems:
+         Structural rank: ok.
+         Numerical rank: ok.
+      Problems related to the processing: (1)
+         One or more of the camera station parameters has a high correlation (see below).
+   Information from last bundle
+      Last Bundle Run:        30-Nov-2019 09:44:48
+      DBAT version:           0.9.0.1 (2019-11-22)
+      MATLAB version:         9.4.0.813654 (R2018a)
+      Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
+      Host name:              trillian
+      Status:                 OK
+      Sigma0:                 1.1786
+      Sigma0 (pixels):        0.589299
+      Redundancy              1261
+      Number of params:       1173 (0 IO, 30 EO, 1143 OP)
+      Number of observations: 2434 (2392 IP, 0 IO, 0 EO, 42 OP)
+      Processing options:
+         Orientation:             on
+         Global optimization:     on
+         Calibration:             off
+         Constraints:             off
+         Maximum # of iterations: 20
+         Convergence tolerance:   1e-06
+         Termination criteria:    relative
+         Singular test:           on
+         Chirality veto:          off
+         Damping:                 gna
+         Camera unit (cu):        mm
+         Object space unit (ou):  
+         Initial value comment:   
+      Total error:
+         Number of stages:     1
+         Number of iterations: 4
+         First error:          61.0871
+         Last error:           41.8527
+         Execution time (s):   0.38
+      Lens distortion models:
+         Backward (Photogrammetry) model 3
+      Cameras:
+         Calibration: no
+         Camera1 (simple)
+            Lens distortion model:
+               Backward (Photogrammetry) model 3
+            Camera Constant:
+               Value: 123.939 mm
+            px - principal point x:
+               Value: 26.577 mm
+            py - principal point y:
+               Value: 38.811 mm
+            Format width:
+               Value: 53.148 mm
+            Format height:
+               Value: 77.976 mm
+            K1 - radial distortion 1:
+               Value: -0 mm^(-3)
+            K2 - radial distortion 2:
+               Value: -0 mm^(-5)
+            K3 - radial distortion 3:
+               Value: -0 mm^(-7)
+            P1 - decentering distortion 1:
+               Value: -0 mm^(-3)
+            P2 - decentering distortion 2:
+               Value: -0 mm^(-3)
+            as - off-unit aspect parameter:
+               Value: 0 
+            sk - skew:
+               Value: 0 
+            Image width:
+               Value: 8858 px
+            Image height:
+               Value: 12996 px
+            X resolution:
+               Value: 166.667 px/mm
+            Y resolution:
+               Value: 166.667 px/mm
+            Pixel width:
+               Value: 0.006 mm
+            Pixel height:
+               Value: 0.006 mm
+         Rated angle of view (h,v,d): (24, 35, 42) deg
+         Largest distortion: 0 mm (0.0 px, 0.0% of half-diagonal)
+      Precisions / Standard Deviations:
+         Photograph Standard Deviations:
+            Photo 1: 8811.jpg
+               Omega:
+                  Value:     0.829772 deg
+                  Deviation: 0.0209 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.417236 deg
+                  Deviation: 0.0146 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     -89.914549 deg
+                  Deviation: 0.00234 deg
+               Xc:
+                  Value:     999660.940086 ou
+                  Deviation: 0.465 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     112368.368648 ou
+                  Deviation: 0.657 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1916.563176 ou
+                  Deviation: 0.097 ou
+            Photo 2: 8936.jpg
+               Omega:
+                  Value:     -0.124396 deg
+                  Deviation: 0.0238 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     0.007180 deg
+                  Deviation: 0.0124 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     92.621856 deg
+                  Deviation: 0.00215 deg
+               Xc:
+                  Value:     1000062.186284 ou
+                  Deviation: 0.397 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     112625.534228 ou
+                  Deviation: 0.743 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1916.417372 ou
+                  Deviation: 0.0935 ou
+            Photo 3: 8937.jpg
+               Omega:
+                  Value:     -0.159645 deg
+                  Deviation: 0.0181 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     0.006196 deg
+                  Deviation: 0.0108 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     94.400652 deg
+                  Deviation: 0.00166 deg
+               Xc:
+                  Value:     1000077.371177 ou
+                  Deviation: 0.343 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     112417.544493 ou
+                  Deviation: 0.565 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1910.362078 ou
+                  Deviation: 0.0567 ou
+            Photo 4: 8938.jpg
+               Omega:
+                  Value:     -0.202540 deg
+                  Deviation: 0.028 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     0.134993 deg
+                  Deviation: 0.0118 deg
+                  Correlations over 95%: Xc:99.9%.
+               Kappa:
+                  Value:     96.145997 deg
+                  Deviation: 0.00214 deg
+               Xc:
+                  Value:     1000094.134327 ou
+                  Deviation: 0.376 ou
+                  Correlations over 95%: Phi:99.9%.
+               Yc:
+                  Value:     112202.936957 ou
+                  Deviation: 0.869 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1906.983111 ou
+                  Deviation: 0.103 ou
+            Photo 5: 9111.jpg
+               Omega:
+                  Value:     0.521419 deg
+                  Deviation: 0.0206 deg
+                  Correlations over 95%: Yc:-100.0%.
+               Phi:
+                  Value:     -0.220515 deg
+                  Deviation: 0.0252 deg
+                  Correlations over 95%: Xc:100.0%.
+               Kappa:
+                  Value:     -92.540800 deg
+                  Deviation: 0.00267 deg
+               Xc:
+                  Value:     1000482.579395 ou
+                  Deviation: 0.797 ou
+                  Correlations over 95%: Phi:100.0%.
+               Yc:
+                  Value:     112370.473450 ou
+                  Deviation: 0.655 ou
+                  Correlations over 95%: Omega:-100.0%.
+               Zc:
+                  Value:     1937.066185 ou
+                  Deviation: 0.161 ou
+   Quality
+      Photographs
+         Total number: 5
+         Numbers used: 5
+      Cameras
+         Total number: 1 (1 simple, 0 mixed)
+         Camera1:
+            Calibration:                   <not available>
+            Number of photos using camera: 5
+            Photo point coverage:
+               Rectangular: 49%-82% (64% average, 88% union)
+               Convex hull: 43%-72% (55% average, 83% union)
+               Radial:      79%-91% (86% average, 91% union)
+      Photo Coverage
+         Reference points outside calibrated region:
+            Camera 1: <not available>
+      Point Measurements
+         Number of control pts: 14
+         Number of check pts: 2
+         Number of object pts: 365
+         CP ray count: 1-4 (2.9 avg)
+            1 points with 1 rays.
+            3 points with 2 rays.
+            7 points with 3 rays.
+            3 points with 4 rays.
+         CCP ray count: 3-4 (3.5 avg)
+            1 points with 3 rays.
+            1 points with 4 rays.
+         OP ray count: 3-4 (3.1 avg)
+            312 points with 3 rays.
+            55 points with 4 rays.
+      Point Marking Residuals
+         Overall point RMS: 1.101 pixels
+         Mark point residuals:
+            Maximum: 2.729 pixels (OP 563 on photo 5)
+         Object point residuals (RMS over all images of a point):
+            Minimum: 0.160 pixels (OP 67445 over 3 images)
+            Maximum: 1.956 pixels (OP 590 over 2 images)
+         Photo residuals (RMS over all points in an image):
+            Minimum: 1.028 pixels (photo 2 over 262 points)
+            Maximum: 1.152 pixels (photo 5 over 189 points)
+      Point Precision
+         Total standard deviation (RMS of X/Y/Z std):
+            Minimum: 0.052 (OP 422)
+            Maximum: 0.64 (OP 65265)
+         Maximum X standard deviation: 0.18 (OP 65265)
+         Maximum Y standard deviation: 0.095 (OP 65297)
+         Maximum Z standard deviation: 0.61 (OP 65561)
+         Points with high correlations
+            Points with correlation above 95%: 0
+            Points with correlation above 99%: 0
+      Point Angles
+         CP
+            Minimum: 0.0 degrees (CP 403, label B3.09)
+            Maximum: 25.7 degrees (CP 422, label B3.13)
+            Average: 13.9 degrees
+         CCP
+            Minimum: 15.2 degrees (CCP 351, label B4.6)
+            Maximum: 25.8 degrees (CCP 410, label B3.11)
+            Average: 20.5 degrees
+         OP
+            Minimum: 12.8 degrees (OP 65696)
+            Maximum: 26.2 degrees (OP 66544)
+            Average: 15.5 degrees
+            Smallest angles (ID, angle [deg], vis in cameras)
+                65696: 12.84 (   2    3    4)
+                67415: 13.00 (   2    3    5)
+                65297: 13.12 (   2    3    4    5)
+                65265: 13.15 (   1    4    5)
+                67395: 13.17 (   2    3    5)
+                67471: 13.20 (   3    4    5)
+                65561: 13.22 (   2    3    4)
+                66097: 13.23 (   1    2    3    4)
+                66260: 13.24 (   1    2    5)
+                65694: 13.25 (   1    3    4)
+                65602: 13.27 (   2    3    4)
+                65683: 13.27 (   1    3    4)
+                65322: 13.27 (   2    3    4    5)
+                65508: 13.27 (   2    3    4    5)
+                65298: 13.29 (   3    4    5)
+                65509: 13.29 (   1    3    4)
+                66434: 13.30 (   2    3    4    5)
+                66182: 13.31 (   1    2    3)
+                65490: 13.31 (   3    4    5)
+                65388: 13.31 (   3    4    5)
+                65627: 13.32 (   2    3    4)
+                65462: 13.33 (   2    3    4)
+                67416: 13.35 (   2    3    5)
+                65582: 13.35 (   2    3    4)
+                67407: 13.35 (   2    3    5)
+                65492: 13.36 (   1    3    4)
+                65384: 13.37 (   3    4    5)
+                65299: 13.37 (   2    3    4    5)
+                65584: 13.37 (   1    3    4)
+                67466: 13.37 (   3    4    5)
+                67475: 13.38 (   3    4    5)
+                65620: 13.39 (   2    3    4)
+                67401: 13.39 (   2    3    5)
+                65395: 13.39 (   2    3    4)
+                65312: 13.39 (   3    4    5)
+                67421: 13.40 (   2    3    5)
+                66435: 13.40 (   1    2    3    5)
+                66451: 13.41 (   2    4    5)
+                65231: 13.41 (   1    2    3    4)
+                65239: 13.41 (   2    3    4    5)
+                65554: 13.41 (   2    3    4)
+                66189: 13.42 (   1    2    4)
+                65452: 13.42 (   3    4    5)
+                65269: 13.42 (   2    3    4)
+                65393: 13.43 (   1    3    4)
+                67388: 13.43 (   2    3    5)
+                65573: 13.43 (   3    4    5)
+                65411: 13.43 (   1    3    4)
+                65727: 13.43 (   1    3    4)
+                65609: 13.44 (   3    4    5)
+                67435: 13.44 (   3    4    5)
+                65253: 13.44 (   1    4    5)
+                65235: 13.44 (   2    3)
+                67362: 13.44 (   2    3    5)
+                67323: 13.45 (   2    3    5)
+                67357: 13.45 (   2    3    5)
+                65278: 13.45 (   2    3    5)
+                65432: 13.45 (   2    3    4    5)
+                66249: 13.46 (   1    2    3)
+                65521: 13.46 (   3    4    5)
+                65354: 13.46 (   2    3    4    5)
+                65541: 13.47 (   3    4    5)
+                65587: 13.47 (   1    2    3    4)
+                65619: 13.47 (   2    3    4)
+                65339: 13.47 (   3    4    5)
+                67353: 13.47 (   2    3    5)
+                65376: 13.47 (   2    3    4)
+                65246: 13.47 (   1)
+                65406: 13.47 (   2    3    4)
+                65332: 13.47 (   2    3    4)
+                65331: 13.47 (   1    3    4)
+                65276: 13.48 (   3    4    5)
+                65454: 13.48 (   1    3    4)
+                65507: 13.49 (   3    4    5)
+                65580: 13.49 (   2    3    4)
+                66240: 13.50 (   1    2    3    5)
+                67338: 13.50 (   2    3    5)
+                65338: 13.50 (   3    4    5)
+                66213: 13.50 (   1    2    3    4)
+                65606: 13.50 (   2    3    4)
+                66262: 13.50 (   1    2    4)
+                65748: 13.51 (   2    3    4    5)
+                65499: 13.51 (   1    3    4)
+                65550: 13.52 (   2    3    4)
+                65325: 13.52 (   3    4    5)
+                65477: 13.52 (   2    3    4    5)
+                65665: 13.52 (   1    3    4)
+                67361: 13.52 (   2    3    5)
+                65461: 13.52 (   1    3    4)
+                67403: 13.53 (   2    3    5)
+                65539: 13.53 (   3    4    5)
+                65415: 13.53 (   1    3    4)
+                65304: 13.53 (   3    4    5)
+                67408: 13.53 (   2    3    5)
+                66404: 13.53 (   2    3    4    5)
+                67389: 13.54 (   2    3    5)
+                65478: 13.54 (   2    3    4)
+                65546: 13.54 (   3    4    5)
+                65744: 13.54 (   3    4    5)
+                65688: 13.56 (   3    4    5)
+                65675: 13.56 (   2    3    4)
+                65367: 13.56 (   2    3    4)
+                65936: 13.58 (   2    3    4)
+                65700: 13.59 (   2    3    4)
+                65489: 13.59 (   3    4    5)
+                66186: 13.59 (   1    2    4)
+                65873: 13.61 (   1    2    3)
+                67445: 13.62 (   3    4    5)
+                65875: 13.63 (   1    2    3    4)
+                65716: 13.63 (   3    4    5)
+                66378: 13.63 (   2    3    4)
+                65380: 13.63 (   3    4    5)
+                65999: 13.64 (   1    2    3)
+                67474: 13.65 (   3    4    5)
+                65449: 13.67 (   3    4    5)
+                65382: 13.68 (   3    4    5)
+                66229: 13.68 (   1    2    4)
+                65558: 13.75 (   3    4    5)
+                65666: 13.78 (   1    3    4)
+                66520: 14.40 (   1    2    4    5)
+                65416: 14.42 (   3    4    5)
+                65257: 14.48 (   1    3    4    5)
+                65608: 14.52 (   2    3    4)
+                65533: 14.53 (   1    3    4    5)
+      Ctrl measurements
+         Prior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, label
+            317, 999604.580, 112344.443,  139.453,     0.02,     0.02,     0.04, B2.16
+            333, 1000134.500, 112591.160,  138.010,     0.02,     0.02,     0.04, B4.1
+            347, 1000460.330, 112765.820,  139.450,     0.02,     0.02,     0.04, B4.5
+            375, 999619.041, 112370.818,  138.970,     0.02,     0.02,     0.04, B3.05
+            403, 999170.674, 112692.548,  139.640,     0.02,     0.02,     0.04, B3.09
+            422, 1000126.748, 112179.093,  138.540,     0.02,     0.02,     0.04, B3.13
+            428, 999971.948, 112044.540,  139.550,     0.02,     0.02,     0.04, B3.14
+            492, 999606.930, 112342.350,  139.100,     0.02,     0.02,     0.04, B4.13
+            552, 1000575.072, 112258.195,  139.643,     0.02,     0.02,     0.04, B5.8
+            563, 1000166.790, 112674.298,  138.761,     0.02,     0.02,     0.04, B5.11
+            590, 999980.997, 112051.062,  139.395,     0.02,     0.02,     0.04, B5.15
+            607, 1000502.467, 112625.887,  139.644,     0.02,     0.02,     0.04, B5.212
+            634, 1000441.906, 112677.087,  139.757,     0.02,     0.02,     0.04, B6.9
+            651, 1000359.462, 112429.749,  139.156,     0.02,     0.02,     0.04, B6.10
+         Posterior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
+            317, 999604.591, 112344.411,  139.434,   0.0195,   0.0189,   0.0451,    4, B2.16
+            333, 1000134.491, 112591.198,  138.004,   0.0197,   0.0191,   0.0462,    3, B4.1
+            347, 1000460.333, 112765.833,  139.462,   0.0211,   0.0207,   0.0459,    2, B4.5
+            375, 999619.070, 112370.845,  138.951,   0.0199,   0.0194,   0.0456,    3, B3.05
+            403, 999170.661, 112692.523,  139.636,    0.023,   0.0227,   0.0469,    1, B3.09
+            422, 1000126.775, 112179.084,  138.556,   0.0188,   0.0184,   0.0453,    4, B3.13
+            428, 999971.967, 112044.548,  139.529,   0.0198,   0.0198,   0.0455,    3, B3.14
+            492, 999606.884, 112342.389,  139.140,   0.0204,   0.0196,   0.0451,    3, B4.13
+            552, 1000575.046, 112258.182,  139.628,   0.0209,     0.02,   0.0461,    3, B5.8
+            563, 1000166.799, 112674.258,  138.758,   0.0196,   0.0193,   0.0462,    3, B5.11
+            590, 999980.983, 112051.064,  139.411,   0.0208,   0.0205,    0.046,    2, B5.15
+            607, 1000502.483, 112625.886,  139.637,   0.0198,   0.0196,   0.0456,    3, B5.212
+            634, 1000441.910, 112677.079,  139.757,   0.0207,   0.0204,   0.0459,    2, B6.9
+            651, 1000359.451, 112429.750,  139.165,   0.0186,   0.0184,   0.0457,    4, B6.10
+         Diff (pos=abs diff, std=rel diff)
+             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
+            317,    0.011,   -0.032,   -0.019,    0.034,    0.038,    -2.3%,    -5.4%,    12.7%,    4, B2.16
+            333,   -0.009,    0.038,   -0.006,    0.039,    0.040,    -1.7%,    -4.4%,    15.4%,    3, B4.1
+            347,    0.003,    0.013,    0.012,    0.013,    0.018,     5.3%,     3.6%,    14.8%,    2, B4.5
+            375,    0.029,    0.027,   -0.019,    0.040,    0.044,    -0.6%,    -2.8%,    13.9%,    3, B3.05
+            403,   -0.013,   -0.025,   -0.004,    0.028,    0.028,    15.1%,    13.3%,    17.3%,    1, B3.09
+            422,    0.027,   -0.009,    0.016,    0.028,    0.032,    -6.0%,    -8.1%,    13.3%,    4, B3.13
+            428,    0.019,    0.008,   -0.021,    0.021,    0.029,    -0.8%,    -1.0%,    13.7%,    3, B3.14
+            492,   -0.046,    0.039,    0.040,    0.061,    0.073,     1.8%,    -1.8%,    12.8%,    3, B4.13
+            552,   -0.026,   -0.013,   -0.015,    0.029,    0.032,     4.3%,     0.1%,    15.2%,    3, B5.8
+            563,    0.009,   -0.040,   -0.003,    0.041,    0.042,    -1.8%,    -3.5%,    15.4%,    3, B5.11
+            590,   -0.014,    0.002,    0.016,    0.014,    0.021,     3.9%,     2.7%,    15.0%,    2, B5.15
+            607,    0.016,   -0.001,   -0.007,    0.016,    0.017,    -1.2%,    -1.8%,    13.9%,    3, B5.212
+            634,    0.004,   -0.008,   -0.000,    0.009,    0.009,     3.3%,     1.8%,    14.8%,    2, B6.9
+            651,   -0.011,    0.001,    0.009,    0.011,    0.014,    -7.2%,    -8.1%,    14.3%,    4, B6.10
+         Ctrl point delta
+            Max: 0.073 ou (B4.13, pt 492)
+            Max X,Y,Z
+               X: 0.046 ou (B4.13, pt 492)
+               Y: 0.040 ou (B5.11, pt 563)
+               Z: 0.040 ou (B4.13, pt 492)
+            RMS: 0.035 ou (from 14 items)
+      Check measurements
+         Prior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, label
+            351, 1000551.270, 112275.280,  139.860,     0.02,     0.02,     0.04, B4.6
+            410, 999974.432, 112476.893,  139.720,     0.02,     0.02,     0.04, B3.11
+         Posterior
+             id,        x,        y,        z,     stdx,     stdy,     stdz, rays, label
+            351, 1000551.437, 112275.288,  139.401,   0.0551,   0.0347,     0.24,    4, B4.6
+            410, 999974.528, 112476.597,  139.856,   0.0345,   0.0356,     0.18,    3, B3.11
+         Diff (pos=abs diff, std=rel diff)
+             id,        x,        y,        z,       xy,      xyz,     stdx,     stdy,     stdz, rays, label
+            351,    0.167,    0.008,   -0.459,    0.167,    0.488,   175.5%,    73.7%,   501.0%,    4, B4.6
+            410,    0.096,   -0.296,    0.136,    0.312,    0.340,    72.6%,    77.9%,   349.3%,    3, B3.11
+         Check point delta
+            Max: 0.488 ou (B4.6, pt 351)
+            Max X,Y,Z
+               X: 0.167 ou (B4.6, pt 351)
+               Y: 0.296 ou (B3.11, pt 410)
+               Z: 0.459 ou (B4.6, pt 351)
+            RMS: 0.421 ou (from 2 items)
+End of result file

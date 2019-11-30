@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document dbat_script_version="1.0">
+  <input base_dir="$HERE">
+
+    <ctrl_pts>
+      <file format="id,label,x,y,z,sx,sy,sz">reference/sxb-control.txt</file>
+      <filter id="351,410">remove</filter>
+    </ctrl_pts>
+
+    <c> Use a subset of the control points as check points </c>
+    <check_pts>
+      <file format="id,label,x,y,z,sx,sy,sz">reference/sxb-control.txt</file>
+      <filter id="351,410">keep</filter>
+    </check_pts>
+         
+    <images>
+      <file format="id,path">images/images.txt</file>
+    </images>
+
+    <image_pts>
+      <file format="id,im,x,y" sxy="0.5">measurements/markpts.txt</file>
+      <file format="id,im,x,y" sxy="1.0">measurements/smartpts.txt</file>
+    </image_pts>
+
+    <cameras>
+      <camera>
+        <name>Aerial camera</name>
+        <unit>mm</unit>
+        <sensor>53.14800,77.97600</sensor>
+        <image>8858,12996</image>
+        <focal>123</focal>
+        <cc>123.9392</cc>
+        <pp>26.5770,-38.8110</pp>
+        <K>0,0,0</K>
+        <P>0,0</P>
+        <model>3</model>
+        <skew>0</skew>
+        <aspect>1</aspect>
+      </camera>
+    </cameras>
+  </input>
+
+  <operations>
+    <operation min_rays="2">check_ray_count</operation>
+    <operation>
+      <set_initial_values>
+        <io>loaded</io>
+        <op>loaded</op>
+      </set_initial_values>
+    </operation>
+    <operation>
+      <set_bundle_estimate_params>
+        <io>
+          <all>false</all>
+        </io>
+        <eo>
+          <all>true</all>
+        </eo>
+        <op>
+          <all>default</all>
+        </op>
+      </set_bundle_estimate_params>
+    </operation>
+    <operation>spatial_resection</operation>
+    <operation>forward_intersection</operation>
+    <operation>bundle_adjustment</operation>
+  </operations>
+  
+  <output>
+    <c>
+      <plots>
+        <plot>params</plot>
+        <plot convex_hull="true">coverage</plot>
+        <plot>image_stats</plot>
+        <plot max_op="1000">op_stats</plot>
+        <plot cam_size="0.1">iteration_trace</plot>
+        <plot id="1">image</plot>
+      </plots>
+    </c>
+    <files base_dir="$HERE">
+      <report>
+        <file>result/report.txt</file>
+      </report>
+      <c>
+        <top_residuals>
+          <name>result/top_residuals.txt</name>
+        </top_residuals>
+        <op format="x,y,z,sx,sy,sz">
+          <name>result/op.txt</name>
+        </op>
+        <eo>
+          <name>result/eo.txt</name>
+        </eo>
+      </c>
+    </files>
+  </output>
+</document>
