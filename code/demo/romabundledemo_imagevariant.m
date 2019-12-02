@@ -19,11 +19,8 @@ switch damping
     error('Bad damping');
 end
 
-% Extract name of current directory.
-curDir=fileparts(mfilename('fullpath'));
-
 % Base dir with input files.
-inputDir=fullfile(curDir,'data','dbat');
+inputDir=fullfile(fileparts(dbatroot),'data','dbat');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','roma-pmexport.txt');
@@ -91,7 +88,7 @@ end
 % Pre-factorize posterior covariance matrix for speed.
 E=bundle_cov(result,E,'prepare');
 
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
@@ -102,7 +99,7 @@ h=plotcoverage(result,true);
 
 h=plotimagestats(result,E);
 
-h=plotopstats(result,E,COP);
+h=plotopstats(result,E);
 
 fig=tagfigure(sprintf('damping=%s',damping));
 fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
@@ -120,9 +117,9 @@ imNo=1;
 % Check if image files exist.
 isAbsPath=~isempty(s1.proj.imDir) && ismember(s1.proj.imDir(1),'\\/') || ...
           length(s1.proj.imDir)>1 && s1.proj.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s1.proj.imDir),'dir')
+if ~isAbsPath && exist(fullfile(fileparts(dbatroot),s1.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s1.proj.imDir=fullfile(curDir,s1.proj.imDir);
+    s1.proj.imDir=fullfile(fileparts(dbatroot),s1.proj.imDir);
 end
 if exist(s1.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.

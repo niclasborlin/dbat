@@ -1,8 +1,9 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name        : Bundle Soln PhotoModeler Calibration Project
-      File name   : $DBATROOT/demo/data/prague2016/cam/pmexports/fixed-with-orient-pmexport.txt
-      Ctrl pt file: $DBATROOT/demo/data/prague2016/cam/ref/ctrlpts-fixed.txt
+      Name             : Bundle Soln PhotoModeler Calibration Project
+      Computation UUID : ad3f99c3-06a6-4c79-990b-ec1c14e55f9d
+      Input file name  : /home/niclas/dbat/data/prague2016/cam/pmexports/fixed-with-orient-pmexport.txt
+      Ctrl pt file     : /home/niclas/dbat/data/prague2016/cam/ref/ctrlpts-fixed.txt
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -10,11 +11,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        13-Jan-2019 15:37:45
-      DBAT version:           0.8.5.1 (2019-01-13)
-      MATLAB version:         9.5.0.944444 (R2018b)
+      Last Bundle Run:        02-Dec-2019 15:46:41
+      DBAT version:           0.9.1.0 (2019-12-02)
+      MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              slartibartfast
+      Host name:              trillian
       Status:                 OK
       Sigma0:                 1.78095
       Sigma0 (pixels):        0.178095

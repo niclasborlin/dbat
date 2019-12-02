@@ -1,7 +1,8 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name        : Photoscan import
-      File name   : $DBATROOT/demo/data/prague2016/sxb/psprojects/sxb.psz
+      Name             : Photoscan import
+      Computation UUID : 541a6d2d-e10e-4255-a5d5-76e4421f9d5c
+      Input file name  : /home/niclas/dbat/data/prague2016/sxb/psprojects/sxb.psz
    Problems and suggestions:
       Project Problems:
          Structural rank: ok.
@@ -9,11 +10,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        13-Jan-2019 15:39:47
-      DBAT version:           0.8.5.1 (2019-01-13)
-      MATLAB version:         9.5.0.944444 (R2018b)
+      Last Bundle Run:        02-Dec-2019 15:49:29
+      DBAT version:           0.9.1.0 (2019-12-02)
+      MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              slartibartfast
+      Host name:              trillian
       Status:                 OK
       Sigma0:                 0.710294
       Sigma0 (pixels):        0.0710294
@@ -39,7 +40,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 3
          First error:          93.8342
          Last error:           48.1954
-         Execution time (s):   0.29
+         Execution time (s):   0.42
       Lens distortion models:
          Forward (Computer Vision) model 1
       Cameras:

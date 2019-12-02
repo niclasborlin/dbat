@@ -49,8 +49,7 @@ if isstruct(fileName)
     psz=fileName;
     fileName=psz.fileName;
 elseif isempty(fileName)
-    curDir=fileparts(mfilename('fullpath'));
-    inputDir=fullfile(curDir,'data','prague2016','sxb');
+    inputDir=fullfile(fileparts(dbatroot),'data','prague2016','sxb');
     fileName=fullfile(inputDir,'psprojects','sxb.psz');
     fprintf('Loading PhotoScan project file %s...',fileName);
     psz=loadpsz(fileName);
@@ -148,7 +147,8 @@ E=bundle_cov(result,E,'prepare');
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,[inputName,'-dbatreport.txt']);
 
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
+COP=bundle_cov(result,E,'COP');
 
 OPstd=full(reshape(sqrt(diag(COP)),3,[])); %#ok<NASGU>
 CEO=bundle_cov(result,E,'CEO');

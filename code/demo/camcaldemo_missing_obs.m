@@ -26,11 +26,8 @@ switch damping
     error('Bad damping');
 end
 
-% Extract name of current directory.
-curDir=fileparts(mfilename('fullpath'));
-
 % Base dir with input files.
-inputDir=fullfile(curDir,'data','dbat');
+inputDir=fullfile(fileparts(dbatroot),'data','dbat');
 
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','camcal-pmexport-missing-obs.txt');
@@ -125,6 +122,6 @@ end
 % Pre-factorize posterior covariance matrix for speed.
 E=bundle_cov(result,E,'prepare');
 
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);

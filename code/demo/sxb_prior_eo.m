@@ -56,7 +56,7 @@ s0raw=s0;
 
 % Fixed camera parameters.
 s0=setcamvals(s0,'loaded');
-s0=setcamest(s0,'none');
+s0=setcamest(s0,'not','all');
 
 fprintf('Loading control point file %s...',cpName);
 ctrlPts=loadcpt(cpName);

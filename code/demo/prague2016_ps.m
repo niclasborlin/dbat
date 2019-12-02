@@ -22,13 +22,10 @@ if nargin==0, help(mfilename), return, end
 
 if nargin<2, doPause='off'; end
 
-% Extract name of current directory.
-curDir=fileparts(mfilename('fullpath'));
-
 switch lower(l(1))
   case 's'
     % Base dir with input files for these projects.
-    inputDir=fullfile(curDir,'data','prague2016','sxb');
+    inputDir=fullfile(fileparts(dbatroot),'data','prague2016','sxb');
   otherwise
     error('Bad experiment label');
 end
@@ -75,7 +72,7 @@ end
 
 % Fixed camera parameters.
 s0=setcamvals(s0,'loaded');
-s0=setcamest(s0,'none');
+s0=setcamest(s0,'not','all');
 
 % Match control points with loaded info.
 [i,j]=matchcpt(s0,ctrlPts);
@@ -118,7 +115,8 @@ end
 % Write report file and store computed OP covariances.
 reportFile=fullfile(inputDir,'dbatexports',[stub,'-dbatreport.txt']);
 
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
+COP=bundle_cov(result,E,'COP');
 
 OPstd=full(reshape(sqrt(diag(COP)),3,[]));
 CEO=bundle_cov(result,E,'CEO');

@@ -20,8 +20,8 @@ function [h,s,prob]=loadplotdemo(fName,alignCam,camSize)
 
 if nargin<1, fName='roma'; end
 
-% Extract name of current directory.
-curDir=fileparts(mfilename('fullpath'));
+% Base dir with input files.
+inputDir=fullfile(fileparts(dbatroot),'data','dbat');
 
 % Default cameras size.
 defCamSize=1;
@@ -31,12 +31,12 @@ defAlignCam=0;
 
 switch lower(fName)
   case 'roma'
-    fName=fullfile(curDir,'data','dbat','pmexports','roma-pmexport.txt');
+    fName=fullfile(inputDir,'pmexports','roma-pmexport.txt');
     titleStr='Roma data (computed by PhotoModeler)';
     msg='Plotting the Roma camera network.';
     defAlignCam=1;
   case 'cam'
-    fName=fullfile(curDir,'data','dbat','pmexports','camcal-pmexport.txt');
+    fName=fullfile(inputDir,'pmexports','camcal-pmexport.txt');
     titleStr='Camera calibration data set (computed by Photomodeler)';
     msg='Plotting the camera calibration network.';
     defCamSize=0.15;
@@ -83,9 +83,9 @@ imNo=1;
 % Check if image files exist.
 isAbsPath=~isempty(s.proj.imDir) && ismember(s.proj.imDir(1),'\\/') || ...
           length(s.proj.imDir)>1 && s.proj.imDir(2)==':';
-if ~isAbsPath && exist(fullfile(curDir,s.proj.imDir),'dir')
+if ~isAbsPath && exist(fullfile(fileparts(dbatroot),s.proj.imDir),'dir')
     % Expand path relative to current dir for this file.
-    s.proj.imDir=fullfile(curDir,s.proj.imDir);
+    s.proj.imDir=fullfile(fileparts(dbatroot),s.proj.imDir);
 end
 if exist(s.proj.imDir,'dir')
     % Handle both original-case and lower-case file names.

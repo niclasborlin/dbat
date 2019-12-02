@@ -22,11 +22,8 @@ function [rr,s0,psz]=stpierrebundledemo_ps
 
 damping='gna';
 
-% Extract name of current directory.
-curDir=fileparts(mfilename('fullpath'));
-
 % Base dir with input files.
-inputDir=fullfile(curDir,'data','hamburg2017','stpierre');
+inputDir=fullfile(fileparts(dbatroot),'data','hamburg2017','stpierre');
 
 % Name of control point file.
 cpName=fullfile(inputDir,'ctrl_StPierre_weighted.txt');
@@ -129,7 +126,7 @@ end
 % Pre-factorize posterior covariance matrix for speed.
 E=bundle_cov(result,E,'prepare');
 
-[COP,result]=bundle_result_file(result,E,reportFile);
+result=bundle_result_file(result,E,reportFile);
 
 fprintf('\nBundle result file %s generated.\n',reportFile);
 
@@ -140,7 +137,7 @@ h=plotcoverage(result,true);
 
 h=plotimagestats(result,E);
 
-h=plotopstats(result,E,COP);
+h=plotopstats(result,E);
 
 fig=tagfigure(sprintf('damping=%s',damping));
 fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...

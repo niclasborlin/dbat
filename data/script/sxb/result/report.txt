@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : 
-      Computation UUID : 4f3f7c65-55eb-45a6-9716-d132b5da3507
+      Computation UUID : 6d6bad36-c261-46d9-8b34-e22787bc6d36
       Input file name  : /home/niclas/dbat/data/script/sxb/sxb.xml
       Ctrl pt file     : /home/niclas/dbat/data/script/sxb/reference/sxb-control.txt
    Problems and suggestions:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        30-Nov-2019 09:44:48
-      DBAT version:           0.9.0.1 (2019-11-22)
+      Last Bundle Run:        02-Dec-2019 15:54:26
+      DBAT version:           0.9.1.0 (2019-12-02)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -41,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 4
          First error:          61.0871
          Last error:           41.8527
-         Execution time (s):   0.38
+         Execution time (s):   0.11
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

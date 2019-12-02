@@ -22,4 +22,9 @@ ps_postproc('')
 stpierrebundledemo_ps
 sxb_prior_eo(false)
 sxb_prior_eo(true)
+rundbatscript(fullfile(fileparts(dbatroot),'data','script', ...
+                       'camcaldemo','camcaldemo.xml'))
+rundbatscript(fullfile(fileparts(dbatroot),'data','script', ...
+                       'romabundledemo','romabundledemo.xml'))
+rundbatscript(fullfile(fileparts(dbatroot),'data','script','sxb','sxb.xml'))
 disp('Done.');
