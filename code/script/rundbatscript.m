@@ -11,6 +11,12 @@ function [s,xml]=rundbatscript(f,verbose)
 
 if nargin<2, verbose=false; end
 
+if nargin<1
+    % Ask for main xml file.
+    [f,p]=uigetfile(fullfile(fileparts(dbatroot),'data','script','*.xml'));
+    f=fullfile(p,f);
+end
+
 if verbose, fprintf('Loading xml file %s...',f); end
 xml=dbatxml2struct(f);
 if verbose, fprintf('done.\n'); end
