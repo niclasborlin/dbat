@@ -407,3 +407,84 @@ keywords = {close range, UAV, bundle adjustment, quality control,
   year =         2009
 }
 
+@Article{Borlin2019:Flexible,
+seqno = 1004,
+  author =       {Niclas B{\"o}rlin and Arnadi Murtiyoso and Pierre Grussenmeyer and Fabio Menna and Erica Nocerino},
+  title =        {Flexible Photogrammetric Computations using Modular
+                  Bundle Adjustment},
+  journal =      {Photogrammetric Engineering and Remote Sensing},
+  volume =       85,
+  number =       5,
+  pages =        {361-368},
+  month =        may,
+  year =         2019,
+  doi = {10.14358/PERS.85.5.361},
+  abstract = {The main purpose of this paper is to show that
+                  photogrammetric bundle adjustment computations can
+                  be sequentially organized into modules. Furthermore,
+                  the chain rule can be used to simplify the
+                  computation of the analytical Jacobians needed by
+                  the adjustment. Novel projection models can be
+                  flexibly evaluated by inserting, modifying, or
+                  swapping the order of selected modules. As a proof
+                  of concept, two variants of the pin-hole projection
+                  model with Brown lens distortion were implemented in
+                  the open-source Damped Bundle Adjustment Toolbox
+                  (DBAT) and applied to simulated and calibration data
+                  for a non-conventional lens system. The results show
+                  a significant difference for the simulated,
+                  error-free, data but not for the real calibration
+                  data. The current flexible implementation incurs a
+                  performance loss. However, in cases where
+                  flexibility is more important, the modular
+                  formulation should be a useful tool to investigate
+                  novel sensors, data processing techniques, and
+                  refractive models.}
+}
+
+@Article{Borlin2019:Implementing,
+  author =       {N. B{\"o}rlin and A. Murtiyoso and P. Grussenmeyer},
+  title =        {Implementing Functional Modularity for Processing of
+                  General Photogrammetric Data with the Damped Bundle
+                  Adjustment Toolbox (DBAT)},
+  journal =      iaprs,
+  year =         2019,
+  volume =       {XLII},
+  number =       {2/W17},
+  pages =        {69-75},
+  month =        dec,
+  doi = {10.5194/isprs-archives-XLII-2-W17-69-2019},
+  keywords = {open-source software, bundle adjustment, flexible
+                  computations, photogrammetry},
+  abstract = {The Damped Bundle Adjustment Toolbox (DBAT) is a free,
+                  open-source, toolbox for bundle adjustment. The
+                  purpose of DBAT is to provide an independent,
+                  open-source toolkit for statistically rigorous
+                  bundle adjustment computations. The capabilities
+                  include bundle adjustment, network analysis, point
+                  filtering, forward intersection, spatial
+                  intersection, plotting functions, and computations
+                  of quality indicators such as posterior covariance
+                  estimates and parameter correlations. DBAT is
+                  written in the high-level Matlab language and
+                  includes several processing example files. The input
+                  formats have so far been restricted to PhotoModeler
+                  export files and Photoscan (Metashape) native files.
+                  Fine-tuning of the processing has so far required
+                  knowledge of the Matlab language. This paper
+                  describes the development of a scripting language
+                  based on the XML (eXtensible Markup Language)
+                  language that allow the user a fine-grained control
+                  over what operations are applied to the input data,
+                  while keeping the needed programming skills at a
+                  minimum. Furthermore, the scripting language allows
+                  a wide range of input formats. Additionally, the XML
+                  format allows simple extension of the script file
+                  format both in terms of adding new operations, file
+                  formats, or adding parameters to existing
+                  operations. Overall, the script files will in
+                  principle allow DBAT to process any kind of
+                  photogrammetric input and should extend the
+                  usability of DBAT as a scientific and teaching tool
+                  for photogrammetric computations.}
+}

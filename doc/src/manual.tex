@@ -13,6 +13,9 @@
 \usepackage{hyperref}
 \usepackage{capt-of}
 \usepackage{filecontents}
+\usepackage[cachedir=/tmp/minted]{minted}
+
+\newmintinline{xml}{fontsize=\scriptsize}
 
 \begin{filecontents*}{missing-observations.txt}
 Damped Bundle Adjustment Toolbox result file
@@ -224,8 +227,8 @@ Damped Bundle Adjustment Toolbox result file
 
 \bibliographystyle{abbrvnat}
 
-\newcommand{\dbatversion}{0.8.5.1}
-\newcommand{\dbatdate}{Jan 13, 2019}
+\newcommand{\dbatversion}{0.9.1.0}
+\newcommand{\dbatdate}{Dec 02, 2019}
 
 \title{DBAT --- The Damped Bundle Adjustment Toolbox for Matlab\\\Large v\dbatversion{}}
 
@@ -348,13 +351,15 @@ The toolbox currently includes routines for (Matlab function names within parent
   \end{itemize}
 \item Demo functions using the above functions. The demo functions are
   detailed in Section~\ref{sec:demos}. The available demos are listed
-  by executing the command \texttt{help dbatdemos}.
+  by executing the command \texttt{help dbatdemos}. This manual does
+  not contain detailed information about how to use each function.
+  More information may be found by typing \texttt{help <function
+    name>} at the Matlab prompt, studying the source code of the demo
+  functions, and reading the source code of each file directly.
+\item XML scripts that allow a user to tailor the computation without
+  writing any Matlab code (\texttt{rundbatscript}), see
+  Section~\ref{sec:xml}.
 \end{itemize}
-
-This manual does not contain detailed information about how to use
-each function. More information may be found by typing \texttt{help
-  <function name>} at the Matlab prompt, studying the source code of
-the demo functions, and reading the source code of each file directly.
 
 \subsubsection{Data}
 
@@ -371,7 +376,8 @@ The toolbox contains several datasets, including datasets for the
   directories.
 \end{itemize}
 The simplest way to access the data sets is through the demos,
-described in Section~\ref{sec:demos}.
+described in Section~\ref{sec:demos}, or through the scripts,
+described in Section~\ref{sec:xml}.
 
 \subsection{Legal}
 
@@ -383,7 +389,9 @@ included in the distribution. In summary:
   long as you give due credit. Specifically, if you use the code, or
   derivatives thereof, for scientific publications, you should refer
   to on or more of the papers
-  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External,Borlin2018:Modular}
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,
+    Borlin2016:External,Borlin2018:Modular,Borlin2019:Implementing,
+    Borlin2019:Flexible}
   that the code is based on.
 \item You may modify and redistribute the code as long as the
   licensing details are also redistributed.
@@ -826,7 +834,17 @@ you run into any problems, send us an email. The interesting results
 may either be in the plots or in the result file.
 
 \newpage
+\subsection{XML scripts}
+\label{sec:xml}
 
+The scripting language is not yet described in this manual. The
+supplied scripts are presented in Appendix~\ref{sec:XMLdemoScripts}.
+To run one of the supplied scripts, start \texttt{rundbatscript}
+without any arguement. You will be asked about the location of the
+script to run.
+
+\newpage
+ 
 \bibliography{ref}
 
 \newpage
@@ -883,4 +901,328 @@ Euler angle rotation model \citep[Ch.~2.1.2.3]{McGlone2004:Manual}.
 \scriptsize
 \verbatiminput{ill/camcal-dbatreport.txt}
 
+\newpage
+\subsection{XML demo scripts}
+\label{sec:XMLdemoScripts}
+
+\subsubsection{camcaldemo.xml}
+
+\begin{minted}[autogobble]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<document dbat_script_version="1.0">
+  <c>
+    NOTE: XML comments <!-- --> is not supported. Use a c (comment)
+    block instead.
+  </c>
+  <meta>
+    <c>
+      Note: The meta section section is optional and can contain anything.
+      One possible use is for bookkeeping purposes.
+    </c>
+    <name>Camcaldemo</name>
+    <date>2019-10-23</date>
+    <author>Niclas Börlin</author>
+    <version>1.0</version>
+    <version_history>
+      <version>1.0, 2019-10-23: Stub.</version>
+    </version_history>
+    <project>DBAT</project>
+    <project_unit>m</project_unit>
+    <purpose>
+      Demonstrate camera calibration using the scripting feature of DBAT.
+      See also camcaldemo.m in the demo folder.
+    </purpose>
+    <software>
+      Software used to generate the data files, e.g., the image
+      measurements.
+    </software>
+    <control_points>
+      Information about how the control points were measured...
+    </control_points>
+  </meta>
+
+  <input base_dir="$HERE">
+    <c>
+      The base_dir will be prepended to all relative paths in the
+      input section. An absolute path is defined to start with slash,
+      backslash, or 'X:', where X is any letter.
+      
+      The special string $DBAT will be replaced by the DBAT
+      installation directory. The special string $HOME will be
+      replaced by the user home directory. The special string $HERE
+      will be replaced by the directory in which this XML file
+      resides.
+    </c>
+    
+    <ctrl_pts>
+      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
+    </ctrl_pts>
+
+    <images image_base_dir="$DBAT">
+      <file format="id,path">images/images.txt</file>
+    </images>
+
+    <image_pts>
+      <file format="im,id,x,y,sxy">measurements/markpts.txt</file>
+    </image_pts>
+
+    <cameras>
+      <camera>
+        <id>1</id>
+        <name>Olympus Camedia C4040Z</name>
+        <unit>mm</unit>
+        <sensor>auto,5.43764</sensor>
+        <image>2272,1704</image>
+        <aspect>1</aspect>
+        <focal>7.5</focal>
+        <model>3</model>
+        <nK>3</nK>
+        <nP>2</nP>
+      </camera>
+    </cameras>
+  </input>
+
+  <operations>
+    <operation min_rays="2">check_ray_count</operation>
+    <operation>
+      <set_initial_values>
+        <io>
+          <all>default</all>
+        </io>
+        <op>
+          <all>loaded</all>
+        </op>
+      </set_initial_values>
+    </operation>
+    <operation>
+      <set_bundle_estimate_params>
+        <io>
+          <all>true</all>
+          <skew>false</skew>
+        </io>
+        <eo>
+          <all>true</all>
+        </eo>
+        <op>
+          <all>default</all>
+        </op>
+      </set_bundle_estimate_params>
+    </operation>
+    <operation>spatial_resection</operation>
+    <operation>forward_intersection</operation>
+    <operation>bundle_adjustment</operation>
+  </operations>
+  
+  <output>
+    <plots>
+      <c>
+      <plot id="1">image</plot>
+      <plot>image_stats</plot>
+      <plot max_op="1000">op_stats</plot>
+      <plot convex_hull="true">coverage</plot>
+      <plot>params</plot>
+      <plot cam_size="0.1">iteration_trace</plot>
+      </c>
+    </plots>
+    <files base_dir="$HERE">
+      <report>
+        <file>result/report.txt</file>
+      </report>
+      <io>
+        <file>result/c4040z.xml</file>
+      </io>
+      <eo>
+        <file>result/camera_stations.txt</file>
+      </eo>
+      <image_residuals top_count="50">
+        <file>result/top_residuals.txt</file>
+      </image_residuals>
+    </files>
+  </output>
+</document>
+\end{minted}
+
+\subsubsection{romabundledemo.xml}
+
+\begin{minted}[autogobble]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<document dbat_script_version="1.0">
+  <input base_dir="$HERE">
+
+    <c>No control points</c>
+         
+    <images image_base_dir="$DBAT">
+      <file format="id,path">images/images.txt</file>
+    </images>
+
+    <prior_eo>
+      <file format="id,x,y,z,omega,phi,kappa" units="degrees">prior/initial_eo.txt</file>
+    </prior_eo>
+
+    <image_pts>
+      <file format="im,id,x,y" sxy="1">measurements/markpts.txt</file>
+    </image_pts>
+
+    <cameras>
+      <file>cameras/EOS5DMarkII.xml</file>
+    </cameras>
+  </input>
+
+  <operations>
+    <operation min_rays="2">check_ray_count</operation>
+    <operation>
+      <set_initial_values>
+        <io>
+          <all>loaded</all>
+          <aspect>1</aspect>
+          <skew>0</skew>
+        </io>
+        <eo>
+          <all>loaded</all>
+        </eo>
+      </set_initial_values>
+    </operation>
+    <operation>
+      <set_bundle_estimate_params>
+        <io>
+          <all>true</all>
+          <aspect>false</aspect>
+          <skew>false</skew>
+          <P>false</P>
+          <K3>false</K3>
+        </io>
+        <eo>
+          <all>true</all>
+        </eo>
+        <op>
+          <all>true</all>
+        </op>
+      </set_bundle_estimate_params>
+    </operation>
+    <operation>forward_intersection</operation>
+    <operation>
+      <set_datum ref_cam="1" ref_base="longest">depend</set_datum>
+    </operation>
+    <operation>bundle_adjustment</operation>
+  </operations>
+  
+  <output>
+    <plots>
+      <plot id="1">image</plot>
+      <plot cam_size="0.1">iteration_trace</plot>
+    </plots>
+    <files base_dir="$HERE">
+      <report>
+        <file>result/report.txt</file>
+      </report>
+      <io>
+        <file>result/EOS5DMarkII.xml</file>
+      </io>
+    </files>
+  </output>
+</document>
+\end{minted}
+
+\subsubsection{sxb.xml}
+
+\begin{minted}[autogobble]{xml}
+<?xml version="1.0" encoding="UTF-8"?>
+<document dbat_script_version="1.0">
+  <input base_dir="$HERE">
+
+    <ctrl_pts>
+      <file format="id,label,x,y,z,sx,sy,sz">reference/sxb-control.txt</file>
+      <filter id="351,410">remove</filter>
+    </ctrl_pts>
+
+    <c> Use a subset of the control points as check points </c>
+    <check_pts>
+      <file format="id,label,x,y,z,sx,sy,sz">reference/sxb-control.txt</file>
+      <filter id="351,410">keep</filter>
+    </check_pts>
+         
+    <images>
+      <file format="id,path">images/images.txt</file>
+    </images>
+
+    <image_pts>
+      <file format="id,im,x,y" sxy="0.5">measurements/markpts.txt</file>
+      <file format="id,im,x,y" sxy="1.0">measurements/smartpts.txt</file>
+    </image_pts>
+
+    <cameras>
+      <camera>
+        <name>Aerial camera</name>
+        <unit>mm</unit>
+        <sensor>53.14800,77.97600</sensor>
+        <image>8858,12996</image>
+        <focal>123</focal>
+        <cc>123.9392</cc>
+        <pp>26.5770,-38.8110</pp>
+        <K>0,0,0</K>
+        <P>0,0</P>
+        <model>3</model>
+        <skew>0</skew>
+        <aspect>1</aspect>
+      </camera>
+    </cameras>
+  </input>
+
+  <operations>
+    <operation min_rays="2">check_ray_count</operation>
+    <operation>
+      <set_initial_values>
+        <io>loaded</io>
+        <op>loaded</op>
+      </set_initial_values>
+    </operation>
+    <operation>
+      <set_bundle_estimate_params>
+        <io>
+          <all>false</all>
+        </io>
+        <eo>
+          <all>true</all>
+        </eo>
+        <op>
+          <all>default</all>
+        </op>
+      </set_bundle_estimate_params>
+    </operation>
+    <operation>spatial_resection</operation>
+    <operation>forward_intersection</operation>
+    <operation>bundle_adjustment</operation>
+  </operations>
+  
+  <output>
+    <c>
+      <plots>
+        <plot>params</plot>
+        <plot convex_hull="true">coverage</plot>
+        <plot>image_stats</plot>
+        <plot max_op="1000">op_stats</plot>
+        <plot cam_size="0.1">iteration_trace</plot>
+        <plot id="1">image</plot>
+      </plots>
+    </c>
+    <files base_dir="$HERE">
+      <report>
+        <file>result/report.txt</file>
+      </report>
+      <c>
+        <top_residuals>
+          <name>result/top_residuals.txt</name>
+        </top_residuals>
+        <op format="x,y,z,sx,sy,sz">
+          <name>result/op.txt</name>
+        </op>
+        <eo>
+          <name>result/eo.txt</name>
+        </eo>
+      </c>
+    </files>
+  </output>
+</document>
+
+\end{minted}
 \end{document}
