@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.9.1.0, Dec 02, 2019.
+- First public support for DBAT XML scripts.
+- Reorganization of data files.
+
 Release 0.9.0.1, Nov 22, 2019.
 - Internal release with full operations and plotting support and file output
   except IO.
