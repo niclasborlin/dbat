@@ -1,0 +1,14 @@
+- Fix xml camera model
+- Fix binary formats
+- Fix image-variant stuff
+- Fix Image observation weights
+  - At input?
+  - As an operation
+  - prior EO, OP => compute weight from gsd
+  - prior IO, compute weight from radial distance
+  - in mesurement file, include quality parameter(s), use function to compute wieght
+
+
+- IDeas:
+  - Given IO, EO, simulate observations, estimate post cov
+
