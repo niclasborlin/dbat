@@ -22,7 +22,7 @@
 #    dbat-x.y.z.w.zip/dbat-x.y.z.w.tar.gz (from the releases page) of
 #    https://github.com/niclasborlin/dbat/
 #
-# 2) Unpack the file into a directory, e.g. c:\dbat or ~/dbat.
+# 2) Unpack the file into a directory, e.g., c:\dbat or ~/dbat.
 #
 # === Clone ===
 #
@@ -79,7 +79,7 @@
 # If you downloaded the code, repeat the download process under
 # INSTALLATION. Most of the time it should be ok to unzip the new
 # version on top of the old. However, we suggest you unzip the new
-# version into a new directory, e.g. dbat-x-y-z-w, where x-y-z-w is
+# version into a new directory, e.g., dbat-x-y-z-w, where x-y-z-w is
 # the version number.
 #
 #

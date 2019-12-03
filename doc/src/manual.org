@@ -1,0 +1,664 @@
+#+options: ':nil *:t -:t ::t <:t H:4 \n:nil ^:t arch:headline
+#+options: author:t broken-links:nil c:nil creator:nil
+#+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
+#+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
+#+options: timestamp:t title:t toc:t todo:t |:t
+#+title: DBAT --- The Damped Bundle Adjustment Toolbox for Matlab
+#+email: niclas.borlin@cs.umu.se
+#+author:
+#+language: en
+#+select_tags: export
+#+exclude_tags: noexport
+#+creator: Emacs 25.2.2 (Org mode 9.2.6)
+#+latex_class: article
+#+latex_class_options:
+#+latex_header:
+#+latex_header_extra:
+#+description:
+#+keywords:
+#+subtitle: v\dbatversion
+#+latex_compiler: pdflatex
+#+date: \dbatdate
+
+#+latex_header: \usepackage[round]{natbib}
+#+latex_header: \bibliographystyle{abbrvnat}
+
+#+latex_header: \newcommand{\dbatversion}{0.9.1.0}
+#+latex_header: \newcommand{\dbatdate}{Dec 02, 2019}
+
+#+latex_header: \usepackage{authblk}
+#+latex_header: \author[1]{Niclas Börlin}
+#+latex_header: \author[2]{Pierre Grussenmeyer}
+#+latex_header: \affil[1]{Department of Computing Science, Ume{\aa} University, Sweden, \texttt{niclas.borlin@cs.umu.se}}
+#+latex_header: \affil[2]{ICube Laboratory UMR 7357, Photogrammetry and Geomatics Group, INSA Strasbourg, France, \texttt{pierre.grussenmeyer@insa-strasbourg.fr}}
+
+#+latex_header: \input{preamble.tex}
+
+* lisp                                                             :noexport:
+#+begin_src emacs-lisp
+  (require 'ox-latex)
+  (add-to-list 'org-latex-packages-alist '("cachedir=/tmp/minted" "minted"))
+
+  (unless (file-exists-p "/tmp/minted")
+    (mkdir "/tmp/minted"))
+
+  (setq org-latex-listings 'minted)
+
+  (setq org-latex-minted-options
+        '(("autogobble,fontsize=\\tiny,frame=single")))
+
+  (setq org-latex-pdf-process
+        (mapcar
+         (lambda (s)
+           (replace-regexp-in-string "%latex -interaction" "%latex -shell-escape -interaction" s))
+         org-latex-pdf-process))
+
+  (setq org-latex-toc-command "\\contributions \\newpage \\tableofcontents \\clearpage")
+#+end_src
+
+#+RESULTS:
+: \contributions \newpage \tableofcontents \clearpage
+* Introduction
+** Purpose
+The purpose of the Damped Bundle Adjustment toolbox is to be a
+high-level toolbox for photogrammetry in general and bundle adjustment
+in particular. It is the hope of the authors that the high-level
+nature of the code will inspire algorithm development. The code is
+written in Matlab and is verified to work with Matlab version 9.5
+(release R2018b). The intention is that at least the computation
+routines will be Octave-compatible. This has however not been tested
+yet.
+
+** Contents
+*** Code
+The toolbox currently includes routines for (Matlab function names in
+parentheses):
+- XML scripts that allow a user to tailor the computation without
+  writing any Matlab code (=rundbatscript=), see
+  Section \ref{sec:xml} and \citet{Borlin2019:Implementing}.
+- File handling:
+  - Reading PhotoModeler-style text export files (=loadpm=), and 2D/3D
+    point table exports files (=loadpm2dtbl= and =loadpm3dtbl=,
+    respectively).
+  - Reading PhotoScan native (.psz) files (=loadpsz=).
+  - Writing PhotoModeler-style text result files
+    (=bundle_result_file=).
+- Post-processing:
+  - Post-processing of PhotoScan projects (=ps_postproc=). Includes
+    object point filtering on low ray count and low intersection
+    angles. For self-calibration post-processing, see the help text
+    for =ps_postproc=.
+  - As of version 0.7.0.0, DBAT supports both lens distortion models
+    used by Photomodeler and Photoscan.
+- Photogrammetric calculations, including:
+  - Spatial resection (=resect=).
+  - Forward intersection (=forwintersect=).
+  - Absolute orientation (=rigidbody=).
+  - Relative orientation based on the Nistér 5-point algorithm
+    \citep{Stewenius2006:Recent} will be added in the future.
+- Bundle adjustment proper (=bundle=):
+  - With or without self-calibration.
+  - Works with fixed or weighted prior observations, e.g., control
+    points.
+  - Works with prior observations of camera positions.
+  - Supports check points.
+  - What parameters that should be estimated are selectable at the
+    parameter level, e.g. down to the coordinate level for 3D points.
+  - Estimated parameters can be block-invariant (the same for a whole
+    block), image-variant (individual for each image), or anything
+    inbetween. Parameter sets may be split-variant, e.g., with some IO
+    parameters block-invariant and some IO parameters image-variant
+    \citep{Borlin2019:Flexible}.
+  - Uses either Classical Gauss-Markov, Gauss-Newton-Armijo,
+    Levenberg-Marquardt, or Levenberg-Marquardt-Powell damping schemes
+    \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
+  - Posterior covariance calculations (=bundle_cov=) from the bundle
+    result, including correlations and significance levels, point and
+    image quality statistics.
+- Analysis of camera networks, including:
+  - Detection of structural rank deficiency (Matlab's =dmperm=,
+    =sprank=). Useful as a sanity check on input data. Structural rank
+    deficiency is typically caused by trying to estimate a parameter
+    with too few direct observations.
+  - Null-space analysis if the normal matrix is singular using
+    =spnrank= \citep{Foster2009:Calculating}. This might, e.g., be
+    caused by insufficient datum specification.
+  The result of the analysis, including suggestions for what
+  parameters may be impossible to estimate are written to the report
+  file by =bundle_result_file=.
+- Various plotting functions, including:
+  - Plot image covered by measurements (=plotcoverage=).
+  - Plot camera network (=plotnetwork=), either static (as-loaded) or
+    as an illustration of the bundle iterations.
+  - Plot .psz project (=loadplotpsz=).
+  - Plot of the iteration trace of parameters estimated by bundle
+    (=plotparams=).
+  - Plots of quality statistics from the bundle result
+    (=plotimagestats, plotopstats=).
+- Demo functions using the above functions. The demo functions are
+  detailed in Section \ref{sec:demos}. The available demos are listed
+  by executing the command =help dbatdemos=. This manual does
+  not contain detailed information about how to use each function.
+  More information may be found by typing =help <function
+    name>= at the Matlab prompt, studying the source code of the demo
+  functions, and reading the source code of each file directly.
+
+*** Data
+The toolbox contains several datasets, including datasets for the
+\citet{Borlin2016:External,Murtiyoso2017:Reprocessing} papers.
+
+- PhotoModeler export files or PhotoScan projects.
+- Images. To reduce the size of the distribution package, only low
+  resolution images are included in the package [fn:stpierre]. The
+  corresponding high resolution images can be downloaded from
+  \url{http://people.cs.umu.se/niclas/dbat_images}. Further instructions
+  are found in =README.txt= files in the respective image directories.
+
+[fn:stpierre] No images are included in the StPierre data set.
+
+
+The simplest way to access the data sets is through the demos,
+described in Section\nbsp{}\ref{sec:demos}, or through the scripts,
+described in Section\nbsp{}\ref{sec:xml}.
+
+** Legal
+
+The licence detail are described in the =LICENSE.txt= file included in
+the distribution and in Appendix \ref{sec:license}. In summary:
+
+- You use the code at your own risk.
+- You may use the code for any purpose, including commercial, as
+  long as you give due credit. Specifically, if you use the code, or
+  derivatives thereof, for scientific publications, you should refer
+  to on or more of the papers
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External,Borlin2018:Modular,Borlin2019:Implementing,Borlin2019:Flexible}
+  that the code is based on.
+- You may modify and redistribute the code as long as the
+  licensing details are also redistributed.
+
+\newpage
+* Installation (from the file INSTALL.txt)
+  :PROPERTIES:
+  :ALT_TITLE: Installation
+  :CUSTOM_ID: sec:install
+  :END:
+
+#+ATTR_LATEX: :options fontsize=\small,frame=none
+#+INCLUDE: "../../INSTALL.txt" src text
+
+\newpage
+* Usage
+** Demos
+   :PROPERTIES:
+   :CUSTOM_ID: sec:demos
+   :END:
+
+A summary of the demos is found in Table\nbsp{}\ref{tab:demos}.
+*Hint: You may wish to use the command =close all= between the demos to close
+all windows.*
+
+*** Plotting
+   :PROPERTIES:
+   :CUSTOM_ID: sec:loadplotdemo
+   :END:
+
+The =loadplotdemo= function load and plots the content of a
+PhotoModeler text export file. Two examples are included in the
+toolbox: =Roma= and =Cam=.
+
+**** =Roma=
+
+=loadplotdemo('roma')= loads a modified PhotoModeler text export file
+of the 60-camera, 26000-point project used
+in\nbsp{}\citet{Borlin2013:Bundle}. The camera network, as computed by
+PhotoModeler, is plotted with camera 1 aligned to the cardinal axes.
+The result should look like Figure\nbsp{}\ref{fig:roma}. The figure is
+a standard Matlab 3D figure and may, e.g., be rotated or zoomed using
+the camera toolbar.
+
+**** =Cam=
+     :PROPERTIES:
+     :CUSTOM_ID: sec:camcaldata
+     :END:
+
+=loadplotdemo('cam')= demo loads a modified PhotoModeler text export
+file of a 21-camera, 100-point camera calibration project. The camera
+network, as computed by PhotoModeler, is plotted and should look like
+Figure\nbsp{}\ref{fig:camcalib}. The figure is a standard Matlab 3D
+figure and may, e.g., be rotated or zoomed using the camera toolbar.
+
+
+#+ATTR_LATEX: :placement [tbp] :float multicolumn :width 0.6\textwidth
+#+CAPTION: The figure generated by the =loadplotdemo= demo.
+#+NAME: fig:roma
+[[./ill/roma.pdf]]
+
+#+ATTR_LATEX: :placement [tbp] :float multicolumn :width 0.6\textwidth
+#+CAPTION: The figure generated by the =loadplotdemo('cam')= demo.
+#+NAME: fig:camcalib
+[[./ill/ccam.pdf]]
+
+*** Camera calibration
+
+The =camcaldemo= demo loads the camera calibration export file from
+Section\nbsp{}\ref{sec:camcaldata} and runs a camera calibration. The
+EXIF focal length is used as the initial value. The other values are
+set to ``default'' values, e.g., the principal point at the center of
+the sensor and all lens distortion parameters equal to zero. The
+initial value for the EO parameters are computed by spatial
+resection\nbsp{}\citep[Chap.~11.1.3.4]{Haralick1994:Review,McGlone2004:Manual}
+using the control points defined for the PhotoModeler calibration
+sheet. The initial OP coordinates are subsequently computed by forward
+intersection.
+
+The bundle adjustment is run with Gauss-Newton-Armijo damping
+\citep{Borlin2013:Bundle}. The result is given in a number of plot
+windows and a Photo-modeler-style result text file. The result plots
+are of two kinds: Plots that show the evolution of the iterations and
+plots that show the quality of the input or output data. The former
+plots may be useful to understand how the bundle adjustment works but
+also to ``debug'' a difficult network that has convergence
+difficulties. The latter plots give information about the quality of
+the result and may also provide clues on how to improve a network when
+the bundle did converge.
+
+**** Evolution plots
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Initial network configuration for the 3D network. Only the EO and OP parameters are illustrated.
+#+NAME: fig:camx0
+[[./ill/ccamx0.pdf]]
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Network configuration after convergence, with camera center trace lines. In this example, the variation of the OP coordinates is barely visible.
+#+NAME: fig:camxfinal
+[[./ill/ccamxfinal.pdf]]
+
+The evolution plots are collected in
+figures\nbsp{}\ref{fig:camx0}--\ref{fig:gnatrace}.
+Figures\nbsp{}\ref{fig:camx0}--\ref{fig:camxfinal} shows a snapshot of
+the 3D trace figure at the beginning and end of the iterations. As
+default, the evolution is presented iteration by iteration with
+intervening presses of the return key. The figure window is
+interactive and may be rotated, zoomed, etc. In this example, it is
+clear in Figure\nbsp{}\ref{fig:camxfinal} that one camera station had
+poorer initial values than the rest.
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Evolution of IO parameters during the iteration sequence.
+#+NAME: fig:IOtrace
+[[./ill/ccamiotrace.pdf]]
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Evolution of EO parameters during the iteration sequence.
+#+NAME: fig:EOtrace
+[[./ill/ccameotrace.pdf]]
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Evolution of OP parameters during the iteration sequence.
+#+NAME: fig:OPtrace
+[[./ill/ccamoptrace.pdf]]
+
+Figures\nbsp{}\ref{fig:IOtrace}--\ref{fig:OPtrace} contain three plots
+showing the evolution of the internal orientation (IO), external
+orientation (EO), and object point (OP), respectively, during the
+iterations. The IO plot is split into a focal/principal point panel
+and a radial and tangential distortion panel, where the radial
+distortion parameters are scaled to provide more information. The EO
+plot contains a camera center panel and an \omega-\phi-\kappa Euler
+angle panel. The EO and OP plots are interactive. Lines in the plots
+or legends may be selected and all corresponding lines will be
+highlighted. In the top panel of Figure\nbsp{}\ref{fig:EOtrace}, the
+motion of one camera stands out. Clicking that line reveals that it
+belongs to camera station\nbsp{}21, which can be further investigated
+to decide if it should be excluded from the calibration.
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Residual evolution and damping behaviour during the iterations.
+#+NAME: fig:gnatrace
+[[./ill/ccamgnatrace.pdf]]
+
+The final evolution plot, shown in Figure\nbsp{}\ref{fig:gnatrace},
+illustrates the evolution of the norm of the total residual and the
+damping behaviour, if any, during the bundle iterations. In this
+example, the Gauss-Newton-Armijo linesearch damping is active during
+the first two iterations. For further details on the damping,
+see\nbsp{}\citet{Borlin2013:Bundle}.
+
+**** Quality plots
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Plots of input/output statistics: Image coverage.
+#+NAME: fig:ccamCoverage
+[[./ill/ccamcoverage.pdf]]
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Plots of input/output statistics: Image statistics.
+#+NAME: fig:ccamImstats
+[[./ill/ccamimstats.pdf]]
+
+#+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
+#+CAPTION: Plots of input/output statistics: Object point statistics.
+#+NAME: fig:ccamOPstats
+[[./ill/ccamopstats.pdf]]
+
+The quality plots are gathered in
+figures\nbsp{}\ref{fig:ccamCoverage}--\ref{fig:ccamOPstats}. Per-image
+quality statistics is shown in Figure\nbsp{}\ref{fig:ccamImstats}. The
+statistics presented for each image are the image coverage
+(rectangular coverage, convex hull coverage, and radial coverage); the
+number of measured points; the average (RMS) point residual; and the
+standard deviations for the EO parameters for the camera stations. In
+this example, the data does not give any obvious support to exclude
+the suspected image\nbsp{}21 from the calibration.
+
+The image coverage is detailed in a separate
+Figure\nbsp{}\ref{fig:ccamCoverage}. The plotted data is selectable.
+All observations from a specific image, including their convex hull,
+will be highlighted when a point or line is selected.
+
+Finally, the per-OP quality statistics in
+Figure\nbsp{}\ref{fig:ccamOPstats} show the number of observations per
+OP; the maximum ray intersection angle; the average (RMS) point
+residual; and the OP coordinate standard deviation. The presentation
+may be zoomed to show only a subset of the OPs by activating the
+``zoom'' function of the figure window.
+
+**** Result file
+
+The result file is modelled after the PhotoModeler result file.
+The result file is listed in Appendix\nbsp{}\ref{sec:resultFile}.
+
+*** Lens distortion models
+
+The =camcaldemo_allmodels= demo calibrates the camera using
+each of the available lens distortion models. A result file is
+generate for each model.
+
+*** Bundle adjustment
+
+**** =Roma=
+The =romabundledemo= function loads the project from
+Section\nbsp{}\ref{sec:loadplotdemo} and present essentially the same plots and
+the =camcaldemo=. This demo uses the PhotoModeler file as input
+to the bundle adjustment that runs a few iterations until convergence.
+The same result file and result plots as =camcaldemo= are
+essentially generated. Since the project is larger (60 cams/26\nbsp{}000
+points) than the previous example (20 cams/100 points), the
+computation will take a bit longer. Computation time was around one
+minute running on a HP compaq dc7800 with an Intel Core2 Quad CPU
+Q9300 @ 2.50GHz under 64-bit Ubuntu 12.04 (kernel 3.5.0-45). Two
+variants with self-calibration (=romabundledemo_selfcal=) and
+image-variant self-calibration (=romabundledemo_imagevariant=)
+are also included. In the latter, the principal point is image-variant
+whereas the other IO parameters are block-invariant.
+
+**** =Prague'16=
+The =prague2016_pm= function displays six projects that
+compare the result of the bundle adjustment procedure in DBAT and the
+results of PhotoModeler \citep{Borlin2016:External}. Similarily, the
+=prague2016_ps= function displays the results of a comparison
+between DBAT and PhotoScan.
+
+The v0.5.1.6 release includes a fix to a bug the distributed the image
+observation weights incorrectly. The result is slightly different
+estimation results than in \citet{Borlin2016:External}. However, the
+conclusions remain valid.
+
+**** =Hamburg'17=
+The =stpierrebundledemo_ps= function runs a self-calibration
+bundle on a Photoscan project included in the StPierre data set.
+
+**** =Prior camera observations=
+The =sxb_prior_eo= demo shows how to include prior
+observations of the camera positions in the bundle.
+
+*** Error detection
+
+Three demos are included to illustrate the error detection
+capabilities of =sprank= (=dmperm=) and
+=spnrank=. All are modelled from =camcaldemo=.
+
+**** Missing observations
+
+The =camcaldemo_missing_obs= demo contains a data file where the image
+observations of two object points (id 13 and 60, respectively) have
+been deleted. With no observations of either point, the rank
+deficiency detected by =sprank= is six. In the generated result file
+(Section\nbsp{}\ref{sec:missingObsResultFile}), the X/Y/Z coordinates
+of both points number 12 and 59 (with id 13 and 60, respectively) are
+indeed listed as suspicious.
+
+**** Single-ray observations
+
+The =camcaldemo_1ray= demo contains a data file that contains
+only one observation of object point with id 88. Since two
+observations (one 2D point) is present but three parameter (one 3D
+point) is to be estimated, the rank deficiency is one, the rank
+deficiency detected by =sprank= is one. The generated result
+file (Section\nbsp{}\ref{sec:singleRayResultFile}) lists one coordinate of
+point 87 (with id 88) as suspicious.
+
+**** Missing datum
+
+The =camcaldemo_no_datum= demo contains a demo where no datum
+has been specified. As in the previous problems, the result is a
+numerical problem with a singular (rank deficient) normal matrix.
+However, in this case the problem is manifested by that many or all
+parameters are linearly dependent of each other. This will not be
+detected by =sprank=. In such a case, the null-space of the
+normal matrix will carry information about what parameters are
+linearly dependent, i.e. what parameters are part of the problem.
+However, when the normal matrix is large, computing the null-space of
+the normal matrix in the conventional way using the Matlab function
+=null= will be intractable. Instead, the =spnrank=
+\citep{Foster2009:Calculating} function is used to estimate the rank
+deficiency of the normal matrix, i.e. the dimension of the null-space.
+Given the dimension of the null-space, a basis for the null-space is
+found using Matlab's =eigs= function. For this demo, the
+generated result file (Section\nbsp{}\ref{sec:missingDatumResultFile}) lists
+many EO parameters as suspicious. The cause of the problem is less
+straight-forward to determine from the list. However, the listed rank
+deficiency of seven should be a strong hint of a datum problem.
+
+#+ATTR_LATEX: :placement [tbp] :width 0.7\textwidth :float sidewaystable
+#+CAPTION: Summary of demos.
+#+NAME: tab:demos
+| Demo                          | Description                                  | Datum                                     | Self-calibration |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =loadplotdemo=                | Load and plot                                | -                                         | -                |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =romabundledemo=              | Bundle adjustment                            | Relative dependent orientation            | no               |
+| =romabundledemo_selfcal=      | Bundle adjustment                            | Relative dependent orientation            | yes              |
+| =romabundledemo_imagevariant= | Bundle adjustment                            | Relative dependent orientation            | split-variant    |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =camcaldemo=                  | Camera calibration                           | Synthetic control pts                     | yes              |
+| =camcaldemo_allmodels=        | Camera calibration, varying distorion models | Synthetic control pts                     | yes              |
+| =camcaldemo_missing_obs=      | Exact singular normal matrix                 | Synthetic control pts                     | yes              |
+| =camcaldemo_1ray=             | Exact singular normal matrix                 | Synthetic control pts                     | yes              |
+| =camcaldemo_no_datum=         | Numerically singular normal matrix           | Missing                                   | yes              |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =prague2016_pm('c1')=         | Camera calibration                           | Synthetic fixed control points            | yes              |
+| =prague2016_pm('c2')=         | Camera calibration                           | Synthetic weighted control points         | yes              |
+| =prague2016_pm('s1')=         | Bundle adjustment                            | Fixed ctrl pts from text file             | no               |
+| =prague2016_pm('s2')=         | Bundle adjustment                            | Weighted ctrl pts from text file          | no               |
+| =prague2016_pm('s4')=         | Bundle adjustment                            | Weighted ctrl pts from text file          | no               |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =prague2016_ps('s5')=         | Photoscan post-processing                    | Weighted ctrl pts from psz file           | no               |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =ps_postproc('')=             | Photoscan post-processing                    | Weighted ctrl pts from psz file           | no               |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =stpierrebundledemo_ps=       | Photoscan post-processing                    | Weighted ctrl pts from psz file           | yes              |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =sxb_prior_eo=                | Use of prior camera positions in bundle      | Weighted ctrl pts, cam pos from text file | no               |
+
+** Using your own data
+
+*** Photoscan/Metashape
+
+DBAT can read native Photoscan Archive (=.psz=) files. DBAT
+cannot read Photoscan Project (=.psx=) files. If you have a
+=.psx= project, use the /Save as.../ menu in Photoscan and
+save the project as a Photoscan Archive (=.psz=). DBAT has been
+tested with Photoscan file versions up to v1.4.0, Photoscan program
+version v1.4.4 as well as a pre-release v1.5.0 of Metashape.
+
+The =ps_postproc= function can be used to post-process a
+Photoscan project. =loadplotpsz= may be useful to visualize the
+project, as computed by Photoscan. As of DBAT version 0.8.5.0, prior
+observations of the camera positions are acknowledged and used in the
+bundle.
+
+**** Known limitations
+
+DBAT cannot handle all Photoscan coordinate systems. If you get
+strange results, you may have to convert to Local Coordinates.
+=loadplotpsz= may be useful for debugging the input.
+
+*** PhotoModeler
+
+This section describes how to import you own data using PhotoModeler
+text export files. If you have another type of input file, you may be
+able to write your own loader. Otherwise, if you have a text file you
+wish to import, feel free to mail the file to the the toolbox authors
+and request an import function. Althought we cannot guarantee
+anything, we may adhere to the request, time permitting.
+
+**** Export from PhotoModeler
+
+To import a PhotoModeler project into the toolbox, the following steps
+are valid in PhotoModeler Scanner 2012:
+
+- Export the project using the /Export Text File/ menu command. If the
+  command is not available, follow the instructions in
+  Appendix\nbsp{}\ref{sec:enableTextExport}.
+- After export, open the /Project/Cameras.../ dialog and select the
+  camera that was used in your project.
+- Open the generated text file in a text editor.
+  - On the 2nd line (usually reading =0.00005 20=), append the width
+    and height in pixels of your images, e.g., to =0.000500 20 5616
+    3744=.
+  - Inspect the 4th line. For instance, the original data in
+    =roma.txt= was (some trailing zeros removed):
+
+    =24.3581 18.1143 12.0 35.96404 24.0 0.00022 -0.0 0.0 0.0 0.0=
+
+    The values correspond to the following camera parameters:
+
+    =focal pp_x pp_y format_w format_h K1 K2 K3 P1 P2=.
+
+    Notice that most of the significant digits of K1--K3 were lost in
+    the text export.
+  - Update the parameter values on the 4th line with values from the
+    camera dialog /for each parameter with a larger number of
+    significant digits in the dialog/. This usually means all
+    parameters except =format_w=. In the =roma.txt= test case, the 4th
+    line was modified to:
+
+    =24.3581 18.1143 12 35.96404 24 2.174e-4 -1.518e-7 0 0 0=.
+
+**** Loading into Matlab
+
+- In Matlab, run steps 1.1-1.2 under =TESTING THE INSTALLATION= from
+  Section\nbsp{}\ref{sec:install} if not already done.
+- Call =loadplotdemo= with the name of your text export file as first
+  parameter. A figure with your camera network, aligned with the first
+  camera and rotated to have +Z 'up', should now have been generated.
+
+**** Using the bundle adjustment of DBAT
+
+Modify either of the demo functions or the demo XML files to match
+what you want to do. The interesting results may either be in the
+plots or in the result file.
+
+** XML scripts
+  :PROPERTIES:
+  :CUSTOM_ID: sec:xml
+  :END:
+
+The scripting language is not yet described in this manual. The
+supplied scripts are presented in
+Appendix\nbsp{}\ref{sec:XMLdemoScripts}. To run one of the supplied
+scripts, start =rundbatscript= without any argument. You will be asked
+about the location of the script to run.
+
+\newpage
+\bibliography{ref}
+
+\newpage
+\appendix
+
+* Appendices
+
+** License
+  :PROPERTIES:
+  :CUSTOM_ID: sec:license
+  :END:
+
+#+INCLUDE: "../../LICENSE.txt" src text
+
+** Enabling text export from PhotoModeler
+  :PROPERTIES:
+  :CUSTOM_ID: sec:enableTextExport
+  :END:
+
+Some versions of PhotoModeler do not have the text file export option
+enabled by default. In that case, the following steps worked in
+PhotoModeler Scanner 2012:
+
+- Right-click on the main window toolbar, select /Customize
+  toolbar.../.
+- In the /Commands/ tab, select the /File/ category.
+- Drag the /Export Text File.../ command to a toolbar of your choice.
+- Now you should be able to export your project as a text file by
+  clicking on the /Export Text File/ button.
+
+** Rotation model
+
+Currently, the only supported rotation model is the omega-phi-kappa
+Euler angle rotation model \citep[Ch. 2.1.2.3]{McGlone2004:Manual}.
+
+** Result file with missing observations
+   :PROPERTIES:
+   :CUSTOM_ID: sec:missingObsResultFile
+   :END:
+
+#+INCLUDE: "./missing-observations.txt" src text
+
+** Result file with single-ray observations
+   :PROPERTIES:
+   :CUSTOM_ID: sec:singleRayResultFile
+   :END:
+
+#+INCLUDE: "./1ray.txt" src text
+
+** Result file with missing datum
+   :PROPERTIES:
+   :CUSTOM_ID: sec:missingDatumResultFile
+   :END:
+
+#+INCLUDE: "./missing-datum.txt" src text
+
+** Successful result file example
+   :PROPERTIES:
+   :CUSTOM_ID: sec:resultFile
+   :END:
+
+#+INCLUDE: "./ill/camcal-dbatreport.txt" src text
+
+** XML demo scripts
+   :PROPERTIES:
+   :CUSTOM_ID: sec:XMLdemoScripts
+   :END:
+
+*** =camcaldemo.xml=
+
+#+INCLUDE: "../../data/script/camcaldemo/camcaldemo.xml" src xml
+
+*** =romabundledemo.xml=
+
+#+INCLUDE: "../../data/script/romabundledemo/romabundledemo.xml" src xml
+
+*** =sxb.xml=
+
+#+INCLUDE: "../../data/script/sxb/sxb.xml" src xml
