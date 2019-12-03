@@ -5,7 +5,8 @@ function [s,xml]=rundbatscript(f,verbose)
 %   in the xml file XMLFILE. The result is returned in the DBAT
 %   structure S. Other files and/or plots may be generated, depending
 %   on the content of the script file. See the manual for a further
-%   description of the script language.
+%   description of the script language. A call S=RUNDBATSCRIPT will
+%   ask the user to locate the script.
 %
 %   Use S=RUNDBATSCRIPT(XMLFILE,TRUE) to turn on verbose output.
 
