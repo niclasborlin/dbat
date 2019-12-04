@@ -191,8 +191,6 @@ nP=2;
 objUnit='<unknown>';
 camUnit='<unknown>';
 
-uuid=char(java.util.UUID.randomUUID());
-
 % Create project structure.
 proj=struct('objUnit',objUnit,...
             'x0desc','',...

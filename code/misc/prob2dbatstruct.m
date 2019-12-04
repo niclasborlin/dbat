@@ -396,8 +396,6 @@ objUnit='m';
 % Default to model 1 - backward Brown.
 IOdistModel=ones(1,size(IO,2));
 
-uuid=char(java.util.UUID.randomUUID());
-
 % Create project structure.
 proj=struct('objUnit',objUnit,...
             'x0desc','',...
