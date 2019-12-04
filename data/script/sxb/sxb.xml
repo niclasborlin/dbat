@@ -1,5 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document dbat_script_version="1.0">
+  <c>
+    NOTE: XML comments <!-- --> is not supported. Use a c (comment)
+    block instead.
+  </c>
+  <meta>
+    <c>
+      Note: The meta section section is optional and can contain anything.
+      One possible use is for bookkeeping purposes.
+    </c>
+
+    <name>Romabundledemo</name>
+    <date>2019-12-04</date>
+    <author>Niclas Börlin</author>
+    <version>1.1</version>
+    <version_history>
+      <version>
+        1.0, 2019-10-02: Version presented at LC3D 2019 in Strasbourg.
+      </version>
+      <version>
+        1.1, 2019-12-04: Added metadata section.
+      </version>
+    </version_history>
+
+    <c>
+      Note: The UUID should be unique for each script! The DBAT
+      function uuid may be used to generate a new UUID.
+    </c>
+    <uuid>71de6bef-a46d-451e-b9b2-6919b73b8a1f</uuid>
+    
+    <project>DBAT</project>
+    <project_unit>m</project_unit>
+    <purpose>
+      Demonstrate bundle adjustment on a small aerial project over the
+      city of Strasbourg (SXB) with control and check points using the
+      scripting feature of DBAT. Illustrates that the same file can be
+      used for control points and check points. Also illustrates that
+      multiple image measurement files may be specified and that the
+      standard deviation of the image observations can be overridden
+      in the XML file.
+    </purpose>
+    <datum>
+      Measured control points.
+    </datum>
+  </meta>
+
   <input base_dir="$HERE">
 
     <ctrl_pts>

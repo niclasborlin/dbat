@@ -1,5 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document dbat_script_version="1.0">
+  <c>
+    NOTE: XML comments <!-- --> is not supported. Use a c (comment)
+    block instead.
+  </c>
+  <meta>
+    <c>
+      Note: The meta section section is optional and can contain anything.
+      One possible use is for bookkeeping purposes.
+    </c>
+    
+    <name>Romabundledemo</name>
+    <date>2019-12-04</date>
+    <author>Niclas Börlin</author>
+    <version>1.1</version>
+    <version_history>
+      <version>
+        1.0, 2019-10-02: Version presented at LC3D 2019 in Strasbourg.
+      </version>
+      <version>
+        1.1, 2019-12-04: Added metadata section.
+      </version>
+    </version_history>
+    
+    <c>
+      Note: The UUID should be unique for each script! The DBAT
+      function uuid may be used to generate a new UUID.
+    </c>
+    <uuid>899cf814-70df-4a60-8485-f9d01155037a</uuid>
+    
+    <project>DBAT</project>
+    <project_unit>m</project_unit>
+    <purpose>
+      Demonstrate self-calibration bundle adjustment without control
+      points using the scripting feature of DBAT. See also
+      romabundledemo_selfcal.m in the demo folder.
+    </purpose>
+    <datum>
+      The project contains no control points. Instead, dependent
+      relative orientation is used as the datum for the bundle.
+    </datum>
+  </meta>
+
   <input base_dir="$HERE">
 
     <c>No control points</c>

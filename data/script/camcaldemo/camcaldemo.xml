@@ -9,13 +9,26 @@
       Note: The meta section section is optional and can contain anything.
       One possible use is for bookkeeping purposes.
     </c>
+
     <name>Camcaldemo</name>
-    <date>2019-10-23</date>
+    <date>2019-12-04</date>
     <author>Niclas Börlin</author>
-    <version>1.0</version>
+    <version>1.1</version>
     <version_history>
-      <version>1.0, 2019-10-23: Stub.</version>
+      <version>
+        1.0, 2019-10-02: Version presented at LC3D 2019 in Strasbourg.
+      </version>
+      <version>
+        1.1, 2019-12-04: Updated metadata with UUID, datum, control points.
+      </version>
     </version_history>
+
+    <c>
+      Note: The UUID should be unique for each script! The DBAT
+      function uuid may be used to generate a new UUID.
+    </c>
+    <uuid>9401c56c-d102-4363-8791-589a7af8ec6a</uuid>
+
     <project>DBAT</project>
     <project_unit>m</project_unit>
     <purpose>
@@ -26,8 +39,14 @@
       Software used to generate the data files, e.g., the image
       measurements.
     </software>
+    <datum>
+      This project uses fixed control points. To use weighted control
+      points, load the file reference/camcal-weighted with format
+      string "id,label,x,y,z,sxyz" instead.
+    </datum>
     <control_points>
-      Information about how the control points were measured...
+      The control points in this project are synthetic, i.e., they are
+      assumed to have specific coordinates.
     </control_points>
   </meta>
 
@@ -45,8 +64,7 @@
     </c>
     
     <ctrl_pts>
-      <file format="id,label,x,y,z">reference/camcal-fixed.txt
-      </file>
+      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
     </ctrl_pts>
 
     <images image_base_dir="$DBAT">
