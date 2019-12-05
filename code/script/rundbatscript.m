@@ -8,6 +8,10 @@ function [s,xml]=rundbatscript(f,verbose)
 %   description of the script language. A call S=RUNDBATSCRIPT will
 %   ask the user to locate the script.
 %
+%   The calls S=RUNDBATSCRIPT('camcaldemo'),
+%   S=RUNDBATSCRIPT('romabundledemo'), and S=RUNDBATSCRIPT('sxb') will
+%   run either of the named demo script files.
+%
 %   Use S=RUNDBATSCRIPT(XMLFILE,TRUE) to turn on verbose output.
 
 if nargin<2, verbose=false; end
@@ -16,6 +20,12 @@ if nargin<1
     % Ask for main xml file.
     [f,p]=uigetfile(fullfile(fileparts(dbatroot),'data','script','*.xml'));
     f=fullfile(p,f);
+end
+
+% Handle demo scripts.
+if any(strcmp(f,{'camcaldemo','romabundledemo','sxb'}))
+    f=fullfile(fileparts(dbatroot),'data','script',f,[f,'.xml']);
+    fprintf('Running demo script %s.\n',f);
 end
 
 if verbose, fprintf('Loading xml file %s...',f); end
