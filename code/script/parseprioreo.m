@@ -33,7 +33,7 @@ if ~exist(fileName,'file')
     warning('prior_eo file %s does not exist',fileName);
 end
 
-[ok,msg]=checkxmlfields(file.Attributes,{'format','units'});
+[ok,msg]=checkxmlfields(file.Attributes,{'format','units'},[true,false]);
 if ~ok
     allFields=join(fieldnames(file),', ');
     error('DBAT XML input/eo/file attribute error: %s. Read fields are: %s.', ...
@@ -45,17 +45,28 @@ format=file.Attributes.format;
 
 camStations=loadeotable(fileName,format);
 
-switch (file.Attributes.units)
-  case 'radian'
-    scaling=1;
-  case 'degrees'
-    scaling=pi/180;
-  case 'gon'
-    scaling=pi/200;
-  otherwise
-    error('DBAT XML input/eo/file attribute error: Unknown unit %s.',...
-          file.Attributes.units);
+scaling=nan;
+if isfield(file.Attributes,'units')
+    switch (file.Attributes.units)
+      case 'radian'
+        scaling=1;
+      case 'degrees'
+        scaling=pi/180;
+      case 'gon'
+        scaling=pi/200;
+      otherwise
+        error('DBAT XML input/eo/file attribute error: Unknown unit %s.',...
+              file.Attributes.units);
+    end
 end
 
-camStations.ang=camStations.ang*scaling;
-camStations.angStd=camStations.angStd*scaling;
+if any(any(~isnan(camStations.ang)))
+    % Angle information was specified. Verify that angle units were
+    % specified.
+    if ~isnan(scaling)
+        camStations.ang=camStations.ang*scaling;
+        camStations.angStd=camStations.angStd*scaling;
+    else
+        error('DBAT XML input/eo error: Angles read but no unit specified');
+    end
+end
