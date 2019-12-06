@@ -58,7 +58,7 @@ fmtParts=strip(strsplit(fmt,sep));
 
 % Verify all parts are known.
 knownParts={'id','ignored','x','y','z','sx','sy','sz','sxy', ...
-            'sxyz','omega','phi','kappa','so','sp','sk'};
+            'sxyz','omega','phi','kappa','so','sp','sk','sang'};
 
 if ~isempty(setdiff(fmtParts,knownParts))
     bad=join(setdiff(fmtParts,knownParts),', ');
@@ -122,6 +122,8 @@ while ~feof(fid)
             as(2)=sscanf(parts{i},'%f');
           case 'sk'
             as(3)=sscanf(parts{i},'%f');
+          case 'sang'
+            as(:)=sscanf(parts{i},'%f');
           case 'ignored'
             % Do nothing
           otherwise
