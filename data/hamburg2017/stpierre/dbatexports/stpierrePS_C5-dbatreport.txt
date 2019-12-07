@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Photoscan import
-      Computation UUID : 1d8b94a5-f069-4870-b841-aa48eb53e474
+      Computation UUID : 9ecec4ec-07c2-4669-a500-18b4b784695f
       Input file name  : /home/niclas/dbat/data/hamburg2017/stpierre/psprojects/C5.psz
    Problems and suggestions:
       Project Problems:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera parameter has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run:        02-Dec-2019 15:50:01
-      DBAT version:           0.9.1.0 (2019-12-02)
+      Last Bundle Run:        07-Dec-2019 03:00:50
+      DBAT version:           0.9.1.1 (2019-12-07)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -41,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 2
          First error:          792.55
          Last error:           791.723
-         Execution time (s):   12.18
+         Execution time (s):   24.6
       Lens distortion models:
          Forward (Computer Vision) model 1
       Cameras:

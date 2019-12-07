@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln PhotoModeler Calibration Project
-      Computation UUID : 5d0ca60a-3e3d-4224-8ce0-c9dd436d0a10
+      Computation UUID : fb1d504a-6110-4bc7-9e40-c96c43a354b5
       Input file name  : /home/niclas/dbat/data/dbat/pmexports/camcal-pmexport-1ray.txt
       Ctrl pt file     : /home/niclas/dbat/data/dbat/ref/camcal-fixed.txt
    Problems and suggestions:
@@ -13,8 +13,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          Bundle failed with code -4 (see below for details).
    Information from last bundle
-      Last Bundle Run:        02-Dec-2019 15:46:22
-      DBAT version:           0.9.1.0 (2019-12-02)
+      Last Bundle Run:        07-Dec-2019 02:55:15
+      DBAT version:           0.9.1.1 (2019-12-07)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -43,7 +43,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 0
          First error:          NaN
          Last error:           NaN
-         Execution time (s):   0.05
+         Execution time (s):   0.06
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name             : 
-      Computation UUID : 6d6bad36-c261-46d9-8b34-e22787bc6d36
+      Name             : Romabundledemo
+      Computation UUID : 35b72dd1-4424-45ca-8a8f-ffa9889e9550
       Input file name  : /home/niclas/dbat/data/script/sxb/sxb.xml
       Ctrl pt file     : /home/niclas/dbat/data/script/sxb/reference/sxb-control.txt
    Problems and suggestions:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        02-Dec-2019 15:54:26
-      DBAT version:           0.9.1.0 (2019-12-02)
+      Last Bundle Run:        07-Dec-2019 03:06:33
+      DBAT version:           0.9.1.1 (2019-12-07)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -34,14 +34,14 @@ Damped Bundle Adjustment Toolbox result file
          Chirality veto:          off
          Damping:                 gna
          Camera unit (cu):        mm
-         Object space unit (ou):  
+         Object space unit (ou):  m
          Initial value comment:   
       Total error:
          Number of stages:     1
          Number of iterations: 4
          First error:          61.0871
          Last error:           41.8527
-         Execution time (s):   0.11
+         Execution time (s):   0.88
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

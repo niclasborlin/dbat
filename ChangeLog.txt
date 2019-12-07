@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.9.1.1, Dec 07, 2019.
+- Updated manual to include DBAT XML scripts.
+- Added UUID tags.
+
 Release 0.9.1.0, Dec 02, 2019.
 - First public support for DBAT XML scripts.
 - Reorganization of data files.

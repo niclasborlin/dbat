@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
-      Name             : 
-      Computation UUID : 4090977f-b55c-4bc4-9341-0ba8460a75a7
+      Name             : Romabundledemo
+      Computation UUID : c20f3169-45a5-4666-adf1-fa9b84ea7eb4
       Input file name  : /home/niclas/dbat/data/script/romabundledemo/romabundledemo.xml
       EO file          : /home/niclas/dbat/data/script/romabundledemo/prior/initial_eo.txt
    Problems and suggestions:
@@ -12,8 +12,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more of the object point coordinates has a high correlation.
    Information from last bundle
-      Last Bundle Run:        02-Dec-2019 15:53:51
-      DBAT version:           0.9.1.0 (2019-12-02)
+      Last Bundle Run:        07-Dec-2019 03:05:44
+      DBAT version:           0.9.1.1 (2019-12-07)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -35,14 +35,14 @@ Damped Bundle Adjustment Toolbox result file
          Chirality veto:          off
          Damping:                 gna
          Camera unit (cu):        mm
-         Object space unit (ou):  
+         Object space unit (ou):  m
          Initial value comment:   
       Total error:
          Number of stages:     1
          Number of iterations: 5
          First error:          8641.39
          Last error:           185.94
-         Execution time (s):   10.36
+         Execution time (s):   9.75
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
