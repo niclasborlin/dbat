@@ -2,7 +2,7 @@
 #+options: author:t broken-links:nil c:nil creator:nil
 #+options: d:(not "LOGBOOK") date:t e:t email:nil f:t inline:t num:t
 #+options: p:nil pri:nil prop:nil stat:t tags:t tasks:t tex:t
-#+options: timestamp:t title:t toc:t todo:t |:t
+#+options: timestamp:t title:t toc:4 todo:t |:t
 #+title: DBAT --- The Damped Bundle Adjustment Toolbox for Matlab
 #+email: niclas.borlin@cs.umu.se
 #+author:
@@ -23,8 +23,10 @@
 #+latex_header: \usepackage[round]{natbib}
 #+latex_header: \bibliographystyle{abbrvnat}
 
-#+latex_header: \newcommand{\dbatversion}{0.9.1.0}
-#+latex_header: \newcommand{\dbatdate}{Dec 02, 2019}
+#+latex_header: \newcommand{\dbatversion}{0.9.1.1}
+#+latex_header: \newcommand{\dbatdate}{Dec 07, 2019}
+
+#+latex_header: \setcounter{secnumdepth}{4}
 
 #+latex_header: \usepackage{authblk}
 #+latex_header: \author[1]{Niclas Börlin}
@@ -70,12 +72,16 @@ routines will be Octave-compatible. This has however not been tested
 yet.
 
 ** Contents
-*** Code
+*** XML scripts
+
+As of DBAT version 0.9, DBAT can be used via an XML interface or a
+direct Matlab interface. The XML interface allows usage without much
+Matlab knowledge, see Section\nbsp[[#sec:xml]] and
+\citet{Borlin2019:Implementing}.
+
+*** Matlab code
 The toolbox currently includes routines for (Matlab function names in
 parentheses):
-- XML scripts that allow a user to tailor the computation without
-  writing any Matlab code (=rundbatscript=), see
-  Section \ref{sec:xml} and \citet{Borlin2019:Implementing}.
 - File handling:
   - Reading PhotoModeler-style text export files (=loadpm=), and 2D/3D
     point table exports files (=loadpm2dtbl= and =loadpm3dtbl=,
@@ -109,7 +115,7 @@ parentheses):
     inbetween. Parameter sets may be split-variant, e.g., with some IO
     parameters block-invariant and some IO parameters image-variant
     \citep{Borlin2019:Flexible}.
-  - Uses either Classical Gauss-Markov, Gauss-Newton-Armijo,
+  - \sloppy Uses either Classical Gauss-Markov, Gauss-Newton-Armijo,
     Levenberg-Marquardt, or Levenberg-Marquardt-Powell damping schemes
     \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
   - Posterior covariance calculations (=bundle_cov=) from the bundle
@@ -123,7 +129,7 @@ parentheses):
   - Null-space analysis if the normal matrix is singular using
     =spnrank= \citep{Foster2009:Calculating}. This might, e.g., be
     caused by insufficient datum specification.
-  The result of the analysis, including suggestions for what
+  \sloppy The result of the analysis, including suggestions for what
   parameters may be impossible to estimate are written to the report
   file by =bundle_result_file=.
 - Various plotting functions, including:
@@ -136,12 +142,15 @@ parentheses):
   - Plots of quality statistics from the bundle result
     (=plotimagestats, plotopstats=).
 - Demo functions using the above functions. The demo functions are
-  detailed in Section \ref{sec:demos}. The available demos are listed
-  by executing the command =help dbatdemos=. This manual does
-  not contain detailed information about how to use each function.
-  More information may be found by typing =help <function
-    name>= at the Matlab prompt, studying the source code of the demo
-  functions, and reading the source code of each file directly.
+  detailed in Section\nbsp[[#sec:demos]]. The available demos are listed
+  by executing the command =help dbatdemos=. This manual does not
+  contain detailed information about how to use each function. More
+  information may be found by typing =help <function name>= at the
+  Matlab prompt, studying the source code of the demo functions, and
+  reading the source code of each file directly.
+- XML scripts that allow a user to tailor the computation without
+  writing any Matlab code (=rundbatscript=), see
+  Section\nbsp[[#sec:xml]] and \citet{Borlin2019:Implementing}.
 
 *** Data
 The toolbox contains several datasets, including datasets for the
@@ -157,14 +166,14 @@ The toolbox contains several datasets, including datasets for the
 [fn:stpierre] No images are included in the StPierre data set.
 
 
-The simplest way to access the data sets is through the demos,
-described in Section\nbsp{}\ref{sec:demos}, or through the scripts,
-described in Section\nbsp{}\ref{sec:xml}.
+The simplest way to access the data sets is through the XML scripts,
+described in Section\nbsp[[#sec:xml]], or through the demos, described in
+Section\nbsp[[#sec:demos]].
 
 ** Legal
 
 The licence detail are described in the =LICENSE.txt= file included in
-the distribution and in Appendix \ref{sec:license}. In summary:
+the distribution and in Appendix\nbsp[[#sec:license]]. In summary:
 
 - You use the code at your own risk.
 - You may use the code for any purpose, including commercial, as
@@ -193,7 +202,7 @@ the distribution and in Appendix \ref{sec:license}. In summary:
    :CUSTOM_ID: sec:demos
    :END:
 
-A summary of the demos is found in Table\nbsp{}\ref{tab:demos}.
+A summary of the demos is found in Table\nbsp[[tab:demos]].
 *Hint: You may wish to use the command =close all= between the demos to close
 all windows.*
 
@@ -212,8 +221,8 @@ toolbox: =Roma= and =Cam=.
 of the 60-camera, 26000-point project used
 in\nbsp{}\citet{Borlin2013:Bundle}. The camera network, as computed by
 PhotoModeler, is plotted with camera 1 aligned to the cardinal axes.
-The result should look like Figure\nbsp{}\ref{fig:roma}. The figure is
-a standard Matlab 3D figure and may, e.g., be rotated or zoomed using
+The result should look like Figure\nbsp[[fig:roma]]. The figure is a
+standard Matlab 3D figure and may, e.g., be rotated or zoomed using
 the camera toolbar.
 
 **** =Cam=
@@ -224,8 +233,8 @@ the camera toolbar.
 =loadplotdemo('cam')= demo loads a modified PhotoModeler text export
 file of a 21-camera, 100-point camera calibration project. The camera
 network, as computed by PhotoModeler, is plotted and should look like
-Figure\nbsp{}\ref{fig:camcalib}. The figure is a standard Matlab 3D
-figure and may, e.g., be rotated or zoomed using the camera toolbar.
+Figure\nbsp[[fig:camcalib]]. The figure is a standard Matlab 3D figure and
+may, e.g., be rotated or zoomed using the camera toolbar.
 
 
 #+ATTR_LATEX: :placement [tbp] :float multicolumn :width 0.6\textwidth
@@ -241,7 +250,7 @@ figure and may, e.g., be rotated or zoomed using the camera toolbar.
 *** Camera calibration
 
 The =camcaldemo= demo loads the camera calibration export file from
-Section\nbsp{}\ref{sec:camcaldata} and runs a camera calibration. The
+Section\nbsp[[#sec:camcaldata]] and runs a camera calibration. The
 EXIF focal length is used as the initial value. The other values are
 set to ``default'' values, e.g., the principal point at the center of
 the sensor and all lens distortion parameters equal to zero. The
@@ -275,14 +284,14 @@ the bundle did converge.
 [[./ill/ccamxfinal.pdf]]
 
 The evolution plots are collected in
-figures\nbsp{}\ref{fig:camx0}--\ref{fig:gnatrace}.
-Figures\nbsp{}\ref{fig:camx0}--\ref{fig:camxfinal} shows a snapshot of
-the 3D trace figure at the beginning and end of the iterations. As
-default, the evolution is presented iteration by iteration with
-intervening presses of the return key. The figure window is
-interactive and may be rotated, zoomed, etc. In this example, it is
-clear in Figure\nbsp{}\ref{fig:camxfinal} that one camera station had
-poorer initial values than the rest.
+figures\nbsp[[fig:camx0]]--[[fig:gnatrace]].
+Figures\nbsp[[fig:camx0]]--[[fig:camxfinal]] shows a snapshot of the 3D trace
+figure at the beginning and end of the iterations. As default, the
+evolution is presented iteration by iteration with intervening presses
+of the return key. The figure window is interactive and may be
+rotated, zoomed, etc. In this example, it is clear in
+Figure\nbsp[[fig:camxfinal]] that one camera station had poorer initial
+values than the rest.
 
 #+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
 #+CAPTION: Evolution of IO parameters during the iteration sequence.
@@ -299,26 +308,26 @@ poorer initial values than the rest.
 #+NAME: fig:OPtrace
 [[./ill/ccamoptrace.pdf]]
 
-Figures\nbsp{}\ref{fig:IOtrace}--\ref{fig:OPtrace} contain three plots
-showing the evolution of the internal orientation (IO), external
-orientation (EO), and object point (OP), respectively, during the
-iterations. The IO plot is split into a focal/principal point panel
-and a radial and tangential distortion panel, where the radial
-distortion parameters are scaled to provide more information. The EO
-plot contains a camera center panel and an \omega-\phi-\kappa Euler
-angle panel. The EO and OP plots are interactive. Lines in the plots
-or legends may be selected and all corresponding lines will be
-highlighted. In the top panel of Figure\nbsp{}\ref{fig:EOtrace}, the
-motion of one camera stands out. Clicking that line reveals that it
-belongs to camera station\nbsp{}21, which can be further investigated
-to decide if it should be excluded from the calibration.
+Figures\nbsp[[fig:IOtrace]]--[[fig:OPtrace]] contain three plots showing the
+evolution of the internal orientation (IO), external orientation (EO),
+and object point (OP), respectively, during the iterations. The IO
+plot is split into a focal/principal point panel and a radial and
+tangential distortion panel, where the radial distortion parameters
+are scaled to provide more information. The EO plot contains a camera
+center panel and an \omega-\phi-\kappa Euler angle panel. The EO and
+OP plots are interactive. Lines in the plots or legends may be
+selected and all corresponding lines will be highlighted. In the top
+panel of Figure\nbsp[[fig:EOtrace]], the motion of one camera stands out.
+Clicking that line reveals that it belongs to camera station\nbsp{}21,
+which can be further investigated to decide if it should be excluded
+from the calibration.
 
 #+ATTR_LATEX: :placement [tbp] :width 0.6\textwidth
 #+CAPTION: Residual evolution and damping behaviour during the iterations.
 #+NAME: fig:gnatrace
 [[./ill/ccamgnatrace.pdf]]
 
-The final evolution plot, shown in Figure\nbsp{}\ref{fig:gnatrace},
+The final evolution plot, shown in Figure\nbsp[[fig:gnatrace]],
 illustrates the evolution of the norm of the total residual and the
 damping behaviour, if any, during the bundle iterations. In this
 example, the Gauss-Newton-Armijo linesearch damping is active during
@@ -343,31 +352,32 @@ see\nbsp{}\citet{Borlin2013:Bundle}.
 [[./ill/ccamopstats.pdf]]
 
 The quality plots are gathered in
-figures\nbsp{}\ref{fig:ccamCoverage}--\ref{fig:ccamOPstats}. Per-image
-quality statistics is shown in Figure\nbsp{}\ref{fig:ccamImstats}. The
-statistics presented for each image are the image coverage
-(rectangular coverage, convex hull coverage, and radial coverage); the
-number of measured points; the average (RMS) point residual; and the
-standard deviations for the EO parameters for the camera stations. In
-this example, the data does not give any obvious support to exclude
-the suspected image\nbsp{}21 from the calibration.
+figures\nbsp{}[[fig:ccamCoverage]]--[[fig:ccamOPstats]]. Per-image quality
+statistics is shown in Figure\nbsp{}[[fig:ccamImstats]]. The statistics
+presented for each image are the image coverage (rectangular coverage,
+convex hull coverage, and radial coverage); the number of measured
+points; the average (RMS) point residual; and the standard deviations
+for the EO parameters for the camera stations. In this example, the
+data does not give any obvious support to exclude the suspected
+image\nbsp{}21 from the calibration.
 
 The image coverage is detailed in a separate
-Figure\nbsp{}\ref{fig:ccamCoverage}. The plotted data is selectable.
-All observations from a specific image, including their convex hull,
-will be highlighted when a point or line is selected.
+Figure\nbsp{}[[fig:ccamCoverage]]. The plotted data is selectable. All
+observations from a specific image, including their convex hull, will
+be highlighted when a point or line is selected.
 
-Finally, the per-OP quality statistics in
-Figure\nbsp{}\ref{fig:ccamOPstats} show the number of observations per
-OP; the maximum ray intersection angle; the average (RMS) point
-residual; and the OP coordinate standard deviation. The presentation
-may be zoomed to show only a subset of the OPs by activating the
-``zoom'' function of the figure window.
+Finally, the per-OP quality statistics in Figure\nbsp{}[[fig:ccamOPstats]]
+show the number of observations per OP; the maximum ray intersection
+angle; the average (RMS) point residual; and the OP coordinate
+standard deviation. The presentation may be zoomed to show only a
+subset of the OPs by activating the ``zoom'' function of the figure
+window.
 
 **** Result file
 
-The result file is modelled after the PhotoModeler result file.
-The result file is listed in Appendix\nbsp{}\ref{sec:resultFile}.
+The result file is modelled after the PhotoModeler result file. The
+result file of a successful run is listed in
+Appendix\nbsp{}[[#sec:resultFile]].
 
 *** Lens distortion models
 
@@ -378,8 +388,8 @@ generate for each model.
 *** Bundle adjustment
 
 **** =Roma=
-The =romabundledemo= function loads the project from
-Section\nbsp{}\ref{sec:loadplotdemo} and present essentially the same plots and
+\sloppy The =romabundledemo= function loads the project from
+Section\nbsp[[#sec:loadplotdemo]] and present essentially the same plots and
 the =camcaldemo=. This demo uses the PhotoModeler file as input
 to the bundle adjustment that runs a few iterations until convergence.
 The same result file and result plots as =camcaldemo= are
@@ -425,7 +435,7 @@ The =camcaldemo_missing_obs= demo contains a data file where the image
 observations of two object points (id 13 and 60, respectively) have
 been deleted. With no observations of either point, the rank
 deficiency detected by =sprank= is six. In the generated result file
-(Section\nbsp{}\ref{sec:missingObsResultFile}), the X/Y/Z coordinates
+(Section\nbsp[[#sec:missingObsResultFile]]), the X/Y/Z coordinates
 of both points number 12 and 59 (with id 13 and 60, respectively) are
 indeed listed as suspicious.
 
@@ -436,7 +446,7 @@ only one observation of object point with id 88. Since two
 observations (one 2D point) is present but three parameter (one 3D
 point) is to be estimated, the rank deficiency is one, the rank
 deficiency detected by =sprank= is one. The generated result
-file (Section\nbsp{}\ref{sec:singleRayResultFile}) lists one coordinate of
+file (Section\nbsp[[#sec:singleRayResultFile]]) lists one coordinate of
 point 87 (with id 88) as suspicious.
 
 **** Missing datum
@@ -456,7 +466,7 @@ the normal matrix in the conventional way using the Matlab function
 deficiency of the normal matrix, i.e. the dimension of the null-space.
 Given the dimension of the null-space, a basis for the null-space is
 found using Matlab's =eigs= function. For this demo, the
-generated result file (Section\nbsp{}\ref{sec:missingDatumResultFile}) lists
+generated result file (Section\nbsp[[#sec:missingDatumResultFile]]) lists
 many EO parameters as suspicious. The cause of the problem is less
 straight-forward to determine from the list. However, the listed rank
 deficiency of seven should be a strong hint of a datum problem.
@@ -491,7 +501,10 @@ deficiency of seven should be a strong hint of a datum problem.
 | =stpierrebundledemo_ps=       | Photoscan post-processing                    | Weighted ctrl pts from psz file           | yes              |
 |-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
 | =sxb_prior_eo=                | Use of prior camera positions in bundle      | Weighted ctrl pts, cam pos from text file | no               |
+|-------------------------------+----------------------------------------------+-------------------------------------------+------------------|
+| =rundbatdemos=                | XML scripts                                  | Varies                                    | varies           |
 
+\newpage
 ** Using your own data
 
 *** Photoscan/Metashape
@@ -531,7 +544,7 @@ are valid in PhotoModeler Scanner 2012:
 
 - Export the project using the /Export Text File/ menu command. If the
   command is not available, follow the instructions in
-  Appendix\nbsp{}\ref{sec:enableTextExport}.
+  Appendix\nbsp[[#sec:enableTextExport]].
 - After export, open the /Project/Cameras.../ dialog and select the
   camera that was used in your project.
 - Open the generated text file in a text editor.
@@ -560,7 +573,7 @@ are valid in PhotoModeler Scanner 2012:
 **** Loading into Matlab
 
 - In Matlab, run steps 1.1-1.2 under =TESTING THE INSTALLATION= from
-  Section\nbsp{}\ref{sec:install} if not already done.
+  Section\nbsp{}[[#sec:install]] if not already done.
 - Call =loadplotdemo= with the name of your text export file as first
   parameter. A figure with your camera network, aligned with the first
   camera and rotated to have +Z 'up', should now have been generated.
@@ -572,32 +585,446 @@ what you want to do. The interesting results may either be in the
 plots or in the result file.
 
 ** XML scripts
-  :PROPERTIES:
-  :CUSTOM_ID: sec:xml
-  :END:
+   :PROPERTIES:
+   :CUSTOM_ID: sec:xml
+   :END:
+The XML scripting language allow the user to use most of the features
+of DBAT without writing or modifying any Matlab code. The processing
+is controlled via scripts written in the XML language.
+*** The XML language
+The XML (eXtensible Markup Language) language [fn:xml] is a structured,
+text-based, markup language. The data components are called /elements/
+that contain /content/ delineated by /tags/. Elements may have
+/attributes/ that consist of name-value pairs within the opening tag.
+For instance, the element
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <operation min_rays="2">check_ray_count</operation>
+#+END_SRC
+has the content =check_ray_count=, is surrounded by the tag
+=operation= and has an argument named =min_rays= with a value of =2=.
+In DBAT, the argument =min_rays= with value =2= will be passed on to
+the operation =check_ray_count=. 
 
-The scripting language is not yet described in this manual. The
-supplied scripts are presented in
-Appendix\nbsp{}\ref{sec:XMLdemoScripts}. To run one of the supplied
-scripts, start =rundbatscript= without any argument. You will be asked
-about the location of the script to run.
+[fn:xml] https://en.wikipedia.org/wiki/XML
+
+
+The content of one element may be one or more other elements. Thus,
+elements may be grouped recursively. For instance, in
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <operations>
+    <operation>spatial_resection</operation>
+    <operation>forward_intersection</operation>
+    <operation>bundle_adjustment</operation>
+  </operations>
+#+END_SRC
+the element =operations= contain three elements =operation=, that have
+the content =spatial_resection=, =forward_intersection=, and
+=bundle_adjustment=, respectively. This is used in DBAT XML files to
+organize group similar elements together.
+
+*** The DBAT XML file
+
+The DBAT function =rundbatscript= processes a main XML script. The
+script is organized into four major parts: metadata, input,
+processing, and output.
+
+**** XML comments
+The XML language supports comments on the form
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+<!-- Your comment goes here. -->
+#+END_SRC
+As of Matlab Version: 9.4.0.813654 (R2018a), the Matlab XML parser (or
+rather, the Java XML parser used by Matlab), has a bug in the comment
+parser. As a workaround, surround comments with the =<c>= tag instead,
+as in
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <c>
+    Your comment goes here.
+  </c>
+#+END_SRC
+**** Metadata
+The metadata section has the tag =<meta>=. As the name suggests, it is
+intended to be used for project metadata. However, the data is not
+processed by DBAT and any data may be stored there. Thus, the metadata
+section can be extended with any tag. Since the XML language is
+standardized, other software may interact with the DBAT XML files for
+e.g. storage or searching.
+
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <meta>
+    <name>Camcaldemo</name>
+    <date>2019-10-23</date>
+    <author>Niclas Börlin</author>
+    <version>1.0</version>
+    <project>DBAT</project>
+    <project_unit>m</project_unit>
+    <purpose>
+      Demonstrate camera calibration using the scripting feature of
+      DBAT. See also camcaldemo.m in the demo folder.
+    </purpose>
+    ...
+  </meta>
+#+END_SRC
+
+For more examples of metadata blocks, see the example scripts in
+Appendix\nbsp[[#sec:XMLdemoScripts]].
+**** Input
+The input section uses the =<input>= tag and specifies what data to
+use for the processing, including camera specifications, control
+information, other prior observations, image lists and image
+observations. The camera information, image list and image
+observations are mandatory. Some information may be stored in separate
+XML or text files. See Section\nbsp[[#sec:fileOrganisation]] for a
+discussion of path names. For a general discussion on text file
+formats, see Section\nbsp[[#sec:textFormat]].
+
+- Cameras :: The camera section uses the =<cameras>= tag. The camera
+             information may be specified directly in the main XML
+             file, as in
+             #+ATTR_LATEX: :options fontsize=\small
+             #+BEGIN_SRC xml
+               <cameras>
+                 <camera>
+                   <c>Camera specification goes here</c>
+                 </camera>
+                 <camera>
+                   <c>Another specification goes here</c>
+                 </camera>
+               </cameras>
+             #+END_SRC
+             or in a separate camera file, as in
+             #+ATTR_LATEX: :options fontsize=\small
+             #+BEGIN_SRC xml
+               <cameras>
+                 <file>cameras/camera.xml</file>
+               </cameras>
+             #+END_SRC
+             For a list of all camera parameters, consult
+             Appendix\nbsp[[#sec:camSpec]]. For an example of a camera file, see
+             Appendix\nbsp[[#sec:camFileExample]].
+- Control points :: The control point section uses the =<ctrl_pts>=
+                    tag. Control points are stored in
+                    ''comma-separated'' text files. The parsing of the
+                    text files are controlled via a =format=
+                    attribute. Furthermore, the control points may be
+                    filtered to remove unused control points or points
+                    used as check points. In the example below, the
+                    control points with id 351 and 410 are removed
+                    from the control point list. For a full list of
+                    the supported format components, see
+                    Appendix\nbsp[[#sec:ctrlFormat]]. For an example
+                    control point file, see
+                    Appendix\nbsp[[#sec:ctrlExample]].
+                    #+ATTR_LATEX: :options fontsize=\small
+                    #+BEGIN_SRC xml
+                      <ctrl_pts>
+                        <file format="id,label,x,y,z,sx,sy,sz">
+                          reference/sxb-control.txt
+                        </file>
+                        <filter id="351,410">remove</filter>
+                      </ctrl_pts>
+                    #+END_SRC
+- Check points :: The check point section uses the =<check_pts>= tag
+                  and uses the same format as the control point
+                  section. If any point is used as both control and
+                  check point, an error is signalled. In the example
+                  below, the points excluded as control points above
+                  are used as check points.
+                  #+ATTR_LATEX: :options fontsize=\small
+                  #+BEGIN_SRC xml
+                    <check_pts>
+                      <file format="id,label,x,y,z,sx,sy,sz">
+                        reference/sxb-control.txt
+                      </file>
+                      <filter id="351,410">keep</filter>
+                    </check_pts>
+                  #+END_SRC
+- Images :: The image list section uses the =<images>= tag. The
+            information is stored in a comma-separated text file. The
+            supported format components are listed in
+            Appendix\nbsp[[#sec:imageFormat]]. For an example image list
+            file, see Appendix\nbsp[[#sec:imageExample]]. In the example
+            below, any relative path name in the =images.txt= file is
+            relative to the DBAT installation directory (see
+            Section\nbsp[[#sec:fileOrganisation]]).
+            #+ATTR_LATEX: :options fontsize=\small
+            #+BEGIN_SRC xml
+              <images image_base_dir="$DBAT">
+                <file format="id,path">images/images.txt</file>
+              </images>
+            #+END_SRC
+            The image files are not needed for DBAT computations.
+            Thus, a non-present image file will only trigger an error
+            if the image is needed for plotting of, e.g., image
+            observations.
+- Prior EO observations :: The prior EO observations section uses the
+     =<prior_eo>= tag. The data is stored in a comma-separated text
+     file. In addition to the camera position, camera angles can be
+     specified, in which case angle units must be specified. The
+     supported format components are listed in
+     Appendix\nbsp[[#sec:eoFormat]]. An example EO file is presented in
+     see Appendix\nbsp[[#sec:eoExample]].
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <prior_eo>
+         <file format="id,x,y,z,omega,phi,kappa" units="degrees">
+           prior/initial_eo.txt
+         </file>
+       </prior_eo>
+     #+END_SRC
+     Prior EO observations may be used as prior observations and/or as
+     initial values for the bundle.
+- Image observations :: The image observations section uses the
+     =<image_pts>= tag. The image observations are stored in
+     comma-separated text files. Multiple files may be specified, as
+     in the example below. The standard deviations may be read from
+     the text files or specified via attributes to the =file= tag. The
+     supported format components are listed in
+     Appendix\nbsp[[#sec:imagePtsFormat]].
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <image_pts>
+         <file format="id,im,x,y" sxy="0.5">
+           measurements/markpts.txt
+         </file>
+         <file format="id,im,x,y" sxy="1.0">
+           measurements/smartpts.txt
+         </file>
+       </image_pts>
+     #+END_SRC
+**** Processing
+
+The processing section uses a single =<operations>= tag containing one
+or more =<operation>= tags. The listed operations will be executed in
+sequence. The operations are of seven types: Sanity checks, filtering,
+set initial values, specify parameters to estimate, set the datum,
+pre-bundle computation, and execute the bundle proper.
+
+- Sanity checks :: The sanity check operations include:
+  - Check ray count. Verify that no object point has too few rays. The
+    minimum number of rays is specified via an attribute, as in
+    #+ATTR_LATEX: :options fontsize=\small
+    #+BEGIN_SRC xml
+      <operation min_rays="2">check_ray_count</operation>
+    #+END_SRC
+    An error will be thrown if an object point has fewer than the
+    specified number of rays. A control point may have one fewer ray
+    without triggering an error.
+  - Future sanity checks include check ray angles, check object point
+    projections, check structural rank and check numerical rank.
+- Filtering :: Future filtering operations include:
+  - Filter on ray count. Remove any object points
+    and associated image observations that have too few rays.
+  - Filter on intersection angle. Remove any object points that have
+    too low intersection angle. For this filtering to be applied,
+    camera and object point positions must have been estimated.
+- Specify parameters to estimate :: The =<set_bundle_estimate_params>=
+     section specifies what parameters should be estimated by the
+     bundle. The section is structured into IO, EO, and OP
+     subsections. Within each subsection, the specifications are
+     parsed in sequence. In the example below, all EO and OP
+     parameters are estimated, as are all camera parameters except
+     skew. See Appendix\nbsp[[#sec:setBundleEstimateParams]] for a
+     complete specification of the section.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <set_bundle_estimate_params>
+         <io>
+           <all>true</all>
+           <skew>false</skew>
+         </io>
+         <eo>true</eo>
+         <op>true</op>
+       </set_bundle_estimate_params>
+     #+END_SRC
+- Set initial values :: The =<set_initial_values>= operation specifies
+     initial values for the bundle. This should be used if the initial
+     values are not computed by other means, e.g., by spatial
+     intersection or forward intersection. Often, the initial values
+     may be set to values loaded in the =input= section. In the
+     example below, the IO and OP parameters are set to their
+     pre-loaded values. No values are specified for the EO parameters,
+     and they must be estimated by, e.g., spatial intersection. See
+     Appendix\nbsp[[#sec:setInitialValues]] for a complete specification.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+      <set_initial_values>
+        <io>loaded</io>
+        <op>loaded</op>
+      </set_initial_values>
+     #+END_SRC
+- Set datum :: Usually, the datum is set via control points. For a
+               control-point-free project, it is possible to set up
+               the project for dependent relative orientation instead.
+               In that case, the EO parameters of one camera is fixed
+               together with a position coordinate of another camera.
+               In the example below, camera number 1 is used as the
+               reference camera. The coordinate of the second camera
+               is set to make the baseline as long as possible. If the
+               baseline parameter is =x=, =y=, or =z=, the coordinate
+               selection for the second camera is restricted to that
+               coordinate.
+               #+ATTR_LATEX: :options fontsize=\small
+               #+BEGIN_SRC xml
+                 <operation>
+                   <set_datum ref_cam="1" ref_base="longest">depend</set_datum>
+                 </operation>
+               #+END_SRC
+- Pre-bundle computations :: The pre-bundle computations include
+  - Spatial resection :: Estimate external orientation parameters by
+       spatial resection. The operation will fail if IO parameters are
+       unset or too few control points are visible in some image.
+       #+ATTR_LATEX: :options fontsize=\small
+       #+BEGIN_SRC xml
+         <operation>spatial_resection</operation>
+       #+END_SRC
+  - Forward intersection :: Compute OP coordinates using forward
+       intersection. Only the object points that are to be estimated
+       by the bundle are computed. The operation will fail unless the
+       IO and EO parameters are set and that at least two image points
+       are present for every object point.
+       #+ATTR_LATEX: :options fontsize=\small
+       #+BEGIN_SRC xml
+         <operation>forward_intersection</operation>
+       #+END_SRC
+- The bundle proper :: Execute the bundle adjustment procedure. All
+     parameters must have initial values and the parameters to
+     estimate must have been set.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <operation>bundle_adjustment</operation>
+     #+END_SRC
+**** Output
+The output section specifies what plots (=<plots>=) and files
+(=<files>=) should be produced after the completion of the processing.
+A complete list of the plots that can be produced is given in
+Appendix\nbsp[[#sec:plots]]. A list of the output files that can be
+generated is presented in Appendix\nbsp[[#sec:outputFiles]].
+**** File organisation
+     :PROPERTIES:
+     :CUSTOM_ID: sec:fileOrganisation
+     :END:
+\sloppy
+The =<input>= and output =<files>= tags support the attribute
+=base_dir= that is used to simplify the organisation of files that
+belong to the same project. If the =base_dir= attribute is specified,
+any relative path name [fn:relativePath] in the subblock is assumed to
+be rooted in =base_dir=. For instance, the block
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <input base_dir="C:/projects/sxb">
+    ...
+    <ctrl_pts>
+      <file format="id,label,x,y,z,sx,sy,sz">
+        reference/sxb-control.txt
+      </file>
+    </ctrl_pts>
+    ...
+  </input>
+#+END_SRC
+will load the control points from the file
+=C:/projects/sxb/reference/sxb-control.txt=. The =base_dir= attribute
+can be any path. Furthermore, =base_dir= can be specified to be
+relative to the special directories listed below.
+
+[fn:relativePath] Path names can be absolute or relative. An absolute
+path name starts with a root symbol (backslash =\= on Windows, slash
+=/= on other operating systems) or or a drive letter followed by a
+colon, e.g. =C:\=. A relative path starts with something else.
+
+
+\sloppy
+- =$DBAT= :: The root of the DBAT installation, i.e., the directory
+             that contains the =README.txt= file.
+- =$HOME= :: The home directory of the user, as known to Matlab via
+             the =user.home= Java property [fn:userHome]. This
+             is typically =C:\Users\username= on Windows,
+             =/Users/username= on Mac/OS X, and =/home/username= on
+             Linux, where 'username' is the current user name.
+- =$HERE= :: The directory containing the XML file in use.
+
+[fn:userHome] The Matlab command is
+=char(java.lang.System.getProperty('user.home'))=.
+
+
+\sloppy
+Furthermore, the =images= tag supports another tag =image_base_dir=
+that can be used to specify a root directory for the images. For instance,
+the block
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <input base_dir="C:/projects/sxb">
+    ...
+    <images image_base_dir="Z:/server/project_images/sxb">
+      <file format="id,path">images/images.txt</file>
+    </images>
+    ...
+  </input>
+#+END_SRC
+specifies that any relative path name loaded from =images.txt= is
+relative to the path =Z:/server/project_images/sxb=. Note that the
+path =images/images.txt= is relative to the input =base_dir=, i.e.,
+the full path name is =C:/projects/sxb/images/images.txt=.
+
+**** Text files and format strings
+     :PROPERTIES:
+     :CUSTOM_ID: sec:textFormat
+     :END:
+Several types of data is stored in ''comma-separated'' text files.
+DBAT uses format strings to indicate what data is to be read or
+written to each file. As default, the text files may include comment
+lines starting with the hash (=#=) character. The non-comment lines
+contain the specified information, separated by commas [fn:csv]. The
+elements of the format are numeric or strings. Please note that any
+string cannot contain the separator character, i.e. a comma.
+
+[fn:csv] The DBAT back-end supports other separators and comment
+characters. This support is not yet implemented in the DBAT front-end
+XML parser.
+
+
+To avoid processing incorrect data, DBAT will require that each data
+line conforms to the format. If too few or too many elements are
+present on a data line, DBAT will signal an error. To allow some
+flexibility of what data to use, the format keyword =ignored= may be
+used to indicate that a data item is present, but should be ignored.
+For instance, if the data stored in a control point file corresponds
+to the format ="id,label,x,y,z,sx,sy,sz"=, but the standard deviations
+should be ignored, the format string
+="id,label,x,y,z,ignored,ignored,ignored"= should be used.
+
+*** Example scripts
+
+\sloppy 
+The supplied scripts are presented in
+Appendix\nbsp[[#sec:XMLdemoScripts]]. To run one of the supplied scripts,
+call =rundbatscript= with either of the strings =camcaldemo=,
+=romabundledemo=, or =sxb= as arguments. If you wish to locate a
+script yourself, start =rundbatscript= without any argument and you
+will be asked about the location of the script to run.
 
 \newpage
+
+* References
+
 \bibliography{ref}
 
 \newpage
 \appendix
 
-* Appendices
-
-** License
+* License
   :PROPERTIES:
   :CUSTOM_ID: sec:license
   :END:
 
 #+INCLUDE: "../../LICENSE.txt" src text
 
-** Enabling text export from PhotoModeler
+* Enabling text export from PhotoModeler
   :PROPERTIES:
   :CUSTOM_ID: sec:enableTextExport
   :END:
@@ -613,52 +1040,400 @@ PhotoModeler Scanner 2012:
 - Now you should be able to export your project as a text file by
   clicking on the /Export Text File/ button.
 
-** Rotation model
+* Rotation model
 
 Currently, the only supported rotation model is the omega-phi-kappa
 Euler angle rotation model \citep[Ch. 2.1.2.3]{McGlone2004:Manual}.
 
+* Result files
 ** Result file with missing observations
    :PROPERTIES:
    :CUSTOM_ID: sec:missingObsResultFile
    :END:
 
-#+INCLUDE: "./missing-observations.txt" src text
+ #+INCLUDE: "./missing-observations.txt" src text
 
 ** Result file with single-ray observations
    :PROPERTIES:
    :CUSTOM_ID: sec:singleRayResultFile
    :END:
 
-#+INCLUDE: "./1ray.txt" src text
+ #+INCLUDE: "./1ray.txt" src text
 
 ** Result file with missing datum
    :PROPERTIES:
    :CUSTOM_ID: sec:missingDatumResultFile
    :END:
 
-#+INCLUDE: "./missing-datum.txt" src text
+ #+INCLUDE: "./missing-datum.txt" src text
 
+\newpage
 ** Successful result file example
    :PROPERTIES:
    :CUSTOM_ID: sec:resultFile
    :END:
 
-#+INCLUDE: "./ill/camcal-dbatreport.txt" src text
+ #+INCLUDE: "./ill/camcal-dbatreport.txt" src text
 
+\newpage
+* XML
+** XML input section
+*** Camera specification
+    :PROPERTIES:
+    :CUSTOM_ID: sec:camSpec
+    :END:
+ The tags below are used to specify camera information. 
+**** Descriptive parameters 
+The following parameters describe the camera type and projection
+model:
+ - id :: Integer. The camera number used if multiple cameras are used.
+         Not currently supported.
+ - name :: A string describing the camera.
+ - unit :: A string with the unit used to describe the camera
+           parameters. Currently, only =mm= is supported.
+ - image :: The width and height of the image, in pixels, separated by
+            a comma.
+ - sensor :: The sensor width and height, in camera units, separated by
+             a comma. The special string =auto= may be used for the
+             sensor width, in which case the sensor width is computed
+             to match the =aspect=. See also =aspect=.
+ - focal :: The nominal focal length in camera units.
+ - nK :: The number of radial lens distortion coefficients. Can also be
+         specified implicitly via the =K= tag.
+ - nP :: The number of tangential lens distortion coefficients. Can
+         also be specified implicitly via the =P= tag.
+ - calibrated :: String =yes= or =no=, indicating whether the camera
+                 is calibrated.
+ - model :: Integer denoting the  projection model to be used by DBAT.
+**** Calibration parameters 
+The following parameters can be estimated by the bundle:
+ - cc :: The camera constant.
+ - pp :: The principal point coordinates, separated by a comma. The
+         special string =default= will set the principal point to the
+         center of the image.
+ - aspect :: The pixel aspect ratio, i.e., width/height. The special
+             string =auto= can be used to compute the aspect ratio from
+             the sensor and image sizes. See also =sensor=.
+ - skew :: The skew, i.e., the non-orthogonality of the image axis.
+ - K :: The radial lens distortion coefficients values, separated by
+        commas.
+ - P :: The tangential lens distortion coefficients values, separated
+        by commas.
+*** Camera file example
+    :PROPERTIES:
+    :CUSTOM_ID: sec:camFileExample
+    :END:
+The following file is an example of a file with a calibrated camera.
+#+ATTR_LATEX: :options fontsize=\small
+#+INCLUDE: "../../data/script/romabundledemo/cameras/EOS5DMarkII.xml" src xml
+*** Control point format
+    :PROPERTIES:
+    :CUSTOM_ID: sec:ctrlFormat
+    :END:
+ The following strings are supported in control/check point format
+ strings:
+ | Name             | Description                                                       |
+ | /                | <                                                                 |
+ |------------------+-------------------------------------------------------------------|
+ | =id=             | integer id for the control point                                  |
+ | =label=          | string with the name of the control point                         |
+ | =ignored=        | field to be ignored                                               |
+ | =x=, =y=, =z=    | numeric fields with x, y, or, z coordinates of the control point  |
+ | =sx=, =sy=, =sz= | numeric fields with standard deviations of individual coordinates |
+ | =sxy=            | numeric field with the planimetric standard deviation             |
+ | =sxyz=           | numeric field with the standard deviation for all coordinates     |
+ Please note that any string component cannot contain the separator
+ character (comma as default).
+*** Control point file example
+    :PROPERTIES:
+    :CUSTOM_ID: sec:ctrlExample
+    :END:
+ The following file is an example of a control point file.
+ #+ATTR_LATEX: :options fontsize=\small
+ #+INCLUDE: "../../data/script/sxb/reference/sxb-control.txt" src text :lines "-10"
+*** Image list format
+    :PROPERTIES:
+    :CUSTOM_ID: sec:imageFormat
+    :END:
+ The following strings are supported in the image list format strings:
+ | Name      | Description                                |
+ | /         | <                                          |
+ |-----------+--------------------------------------------|
+ | =id=      | integer id for the image id                |
+ | =path=    | string with the path to the image file     |
+ | =label=   | string with the label to use for the image |
+ | =ignored= | field to be ignored                        |
+ If no label is specified in the format string, the last path component
+ is used. Please note that any string components cannot contain the
+ separator character (comma as default).
+*** Image list file example
+    :PROPERTIES:
+    :CUSTOM_ID: sec:imageExample
+    :END:
+ The following file is an example of a image list file.
+ #+ATTR_LATEX: :options fontsize=\small
+ #+INCLUDE: "../../data/script/sxb/images/images.txt" src text
+
+ \newpage
+*** Prior EO observation format
+    :PROPERTIES:
+    :CUSTOM_ID: sec:eoFormat
+    :END:
+ The following strings are supported in the prior EO observation format
+ strings:
+ | Name                    | Description                                                       |
+ | /                       | <                                                                 |
+ |-------------------------+-------------------------------------------------------------------|
+ | =id=                    | integer id corresponding to the image id                          |
+ | =ignored=               | field to be ignored                                               |
+ | =x=, =y=, =z=           | numeric fields with x, y, or, z coordinates of the control point  |
+ | =sx=, =sy=, =sz=        | numeric fields with standard deviations of individual coordinates |
+ | =sxy=                   | numeric field with the planimetric standard deviation             |
+ | =sxyz=                  | numeric field with the standard deviation for all coordinates     |
+ | =omega=, =phi=, =kappa= | numeric fields with camera angles                                 |
+ | =so=, =sp=, =sk=        | numeric fields with individual angle standard deviations          |
+ | =sang=                  | numeric field with common angle standard deviation                |
+
+ If any angles are specified in the format string, angle units must be
+ specified via the =units= attribute. Supported angle units are
+ =degrees=, =radians=, and =gon=.
+*** Prior EO observation file example
+    :PROPERTIES:
+    :CUSTOM_ID: sec:eoExample
+    :END:
+ The following file is part of a file with prior EO observations.
+ #+ATTR_LATEX: :options fontsize=\small
+ #+INCLUDE: "../../data/script/romabundledemo/prior/initial_eo.txt" src text :lines "-10"
+*** Image observation format
+    :PROPERTIES:
+    :CUSTOM_ID: sec:imagePtsFormat
+    :END:
+ The following strings are supported in the image observation format
+ strings:
+ | Name       | Description                                                       |
+ | /          | <                                                                 |
+ |------------+-------------------------------------------------------------------|
+ | =id=       | integer corresponding to the point id                             |
+ | =im=       | integer corresponding to the image id                             |
+ | =ignored=  | field to be ignored                                               |
+ | =x=, =y=   | numeric fields with x, y, or, z coordinates of the control point  |
+ | =sx=, =sy= | numeric fields with standard deviations of individual coordinates |
+ | =sxy=      | numeric field with the planimetric standard deviation             |
+** Operations
+*** Specify parameters to estimate
+    :PROPERTIES:
+    :CUSTOM_ID: sec:setBundleEstimateParams
+    :END:
+The =<set_bundle_estimate_params>= section has =<io>=, =<eo>=, and
+=<op>= subsections. Within each subsection, parameter names,
+individual or groups, are listed with a =true= or =false= string as
+content. For the EO and OP parameters, the string =default= may be
+used to indicate that all parameters except parameters with fixed
+prior observations, including control points, should be estimated.
+The tags within the subsections are parsed and executed in
+sequence. Thus, in the example below, all camera parameters are
+estimated except skew.
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <set_bundle_estimate_params>
+    <io>
+      <all>true</all>
+      <skew>false</skew>
+    </io>
+    <eo>
+      <all>true</all>
+    </eo>
+    <op>
+      <all>true</all>
+    </op>
+  </set_bundle_estimate_params>
+#+END_SRC
+If the same string applies to all parameters in a subblock, the block
+may be abbreviated. In the example below, none of the IO parameters,
+all of the EO parameters, and all non-fixed OP parameters are
+estimated.
+#+ATTR_LATEX: :options fontsize=\small
+#+BEGIN_SRC xml
+  <set_bundle_estimate_params>
+    <io>false</io>
+    <eo>true</eo>
+    <op>default</op>
+  </set_bundle_estimate_params>
+#+END_SRC
+The table below contains all tags that may be used to specify what
+parameters to estimate.
+| IO  parameters   |                                                    |
+| /                | <                                                  |
+|------------------+----------------------------------------------------|
+| =cc=             | The camera constant                                |
+| =pp=             | The principal point                                |
+| =px=, =py=       | The x- and y- components of the principal point    |
+| =aspect=         | The pixel aspect ratio                             |
+| =skew=           | The image axis off-orthogonal parameter            |
+| =K=              | All radial lens distortion coefficients            |
+| =K1=, =K2=, =K3= | Individual radial lens distortion coefficients     |
+| =P=              | All tangential lens distortion coefficients        |
+| =P1=, =P2=       | Individual tangential lens distortion coefficients |
+| =all=            | All camera parameters                              |
+|------------------+----------------------------------------------------|
+| EO parameters    |                                                    |
+|------------------+----------------------------------------------------|
+| =x=, =y=, =z=    | Individual coordinates                             |
+| =pos=            | All coordinates                                    |
+| =angles=         | All angles                                         |
+| =all=            | All external orientation parameters                |
+|------------------+----------------------------------------------------|
+| OP parameters    |                                                    |
+|------------------+----------------------------------------------------|
+| =x=, =y=, =z=    | Individual coordinates                             |
+| =all=            | All coordinates                                    |
+
+If parameter $K_i$ is set to be estimated, so is $K_1$, ...,
+$K_{i-1}$. Similarly, if parameter $K_i$ is set to not be estimated,
+so is $K_{i+1}$, ... The same is true for the $P$ parameters, except
+that $P_1$ and $P_2$ are always estimated together.
+
+*** Specify initial values
+    :PROPERTIES:
+    :CUSTOM_ID: sec:setInitialValues
+    :END:
+The =<set_initial_values>= section is similarly organized as the
+=<set_bundle_estimate_params>=. Thus, it has =<io>=, =<eo>=, and
+=<op>= subsections and the tags within each subsection are parsed and
+executed in sequence.
+
+The only content for the EO and OP sections is the string =loaded=,
+which means that prior observations loaded by the input section are
+used as initial values. The =loaded= string may also be used for the
+IO parameters. Otherwise, IO parameters may be set to specified
+constant values or default values. For the principal point, radial,
+and tangential distortion coefficients, multiple values (2, =nK=, and
+=nP=, respectively) should be entered separated by commas. The string
+=focal= can be used for the camera constant to use the nominal focal
+length as an initial value. The string =default= can be used for all
+parameters with meanings in the table below:
+
+| Parameter | Default value           |
+|-----------+-------------------------|
+| /         | <                       |
+| =cc=      | =focal=                 |
+| =pp=      | The center of the image |
+| =aspect=  | 1                       |
+| =skew=    | 0                       |
+| =K=       | List of =nK= zeros      |
+| =P=       | List of =nP= zeros      |
+| =all=     | All values above        |
+
+** XML output section
+*** Plots
+    :PROPERTIES:
+    :CUSTOM_ID: sec:plots
+    :END:
+The plots that may be generated by DBAT include
+- Images with observations :: Plot an image together with any image
+     observations. The image to plot must be specified with the =id= attribute.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <plot id="1">image</plot>
+     #+END_SRC
+- Image statistics :: Statistics for each image, including image
+     coverage, point count, camera ray angles, point residuals and
+     posterior standard deviations. See Figure\nbsp[[fig:ccamImstats]] for
+     an example.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+      <plot>image_stats</plot>
+     #+END_SRC
+- Object point statistics :: Statistics for each object point,
+     including the ray count, the maximum ray intersection angle, the
+     image residuals, and the posterior standard deviations. The
+     attribute =max_op= specifies the maximum number of object points
+     to be plotted. See Figure\nbsp[[fig:ccamOPstats]] for an example.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+      <plot max_op="1000">op_stats</plot>
+     #+END_SRC
+- Image coverage :: How much of each image is covered by the image
+                    point measurements. The attribute =convex_hull=
+                    specifies whether the convex hull of the image
+                    coverage should be plotted. See
+                    Figure\nbsp[[fig:ccamCoverage]] for an example.
+                    #+ATTR_LATEX: :options fontsize=\small
+                    #+BEGIN_SRC xml
+                      <plot convex_hull="true">coverage</plot>
+                    #+END_SRC
+- Parameter evolution (1D) :: The evolution of the estimated
+     parameters during the bundle iterations. See
+     figures\nbsp[[fig:IOtrace]]--[[fig:OPtrace]] for examples.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <plot>params</plot>
+     #+END_SRC
+- Camera network evolution (3D) :: The evolution of the EO and OP
+     parameters during the bundle iterations. The attribute =cam_size=
+     is used to specify the camera size in object units. See
+     Figure\nbsp[[fig:camxfinal]] for an example.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+     <plot cam_size="0.1">iteration_trace</plot>
+     #+END_SRC
+*** Files
+    :PROPERTIES:
+    :CUSTOM_ID: sec:outputFiles
+    :END:
+The output files to be generated are listed inside the =<files>= tag.
+The =<files>= tag may include a =base_dir= specification, see
+Section\nbsp[[#sec:fileOrganisation]]. The output files include:
+- Report file :: A Photomodeler-style text report file. See
+                 Appendix\nbsp[[#sec:resultFile]] for an example.
+                 #+ATTR_LATEX: :options fontsize=\small
+                 #+BEGIN_SRC xml
+                   <report>
+                     <file>result/report.txt</file>
+                   </report>
+                 #+END_SRC
+- Posterior camera file :: A camera file (see appendices\nbsp[[#sec:camSpec]]
+     and\nbsp[[#sec:camFileExample]]) with the post-bundle estimated parameters.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+      <io>
+        <file>result/c4040z.xml</file>
+      </io>
+     #+END_SRC
+- Posterior EO file :: A text file with the estimated EO parameters,
+     including posterior standard deviations.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <eo>
+         <file>result/camera_stations.txt</file>
+       </eo>
+     #+END_SRC
+- List of largest residuals :: A text file with the image observations
+     with the highest post-bundle image residuals. The attribute
+     =top_count= determine how many residuals are written.
+     #+ATTR_LATEX: :options fontsize=\small
+     #+BEGIN_SRC xml
+       <image_residuals top_count="50">
+         <file>result/top_residuals.txt</file>
+       </image_residuals>
+     #+END_SRC
+\newpage
 ** XML demo scripts
    :PROPERTIES:
    :CUSTOM_ID: sec:XMLdemoScripts
    :END:
 
 *** =camcaldemo.xml=
-
+The file below is an example of a camera calibration project.
 #+INCLUDE: "../../data/script/camcaldemo/camcaldemo.xml" src xml
 
 *** =romabundledemo.xml=
-
+The file below is an example of a control-point-free bundle adjustment
+project with self-calibration and listed EO parameters as initial
+values.
 #+INCLUDE: "../../data/script/romabundledemo/romabundledemo.xml" src xml
 
 *** =sxb.xml=
-
+The file below is an example of a small aerial bundle adjustment
+project with check points and multiple image measurement files.
 #+INCLUDE: "../../data/script/sxb/sxb.xml" src xml

@@ -1,4 +1,4 @@
-% Created 2019-12-03 Tue 17:53
+% Created 2019-12-07 Sat 02:38
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 \usepackage[utf8]{inputenc}
@@ -14,10 +14,12 @@
 \usepackage{amssymb}
 \usepackage{capt-of}
 \usepackage{hyperref}
+\usepackage[cachedir=/tmp/minted]{minted}
 \usepackage[round]{natbib}
 \bibliographystyle{abbrvnat}
-\newcommand{\dbatversion}{0.9.1.0}
-\newcommand{\dbatdate}{Dec 02, 2019}
+\newcommand{\dbatversion}{0.9.1.1}
+\newcommand{\dbatdate}{Dec 07, 2019}
+\setcounter{secnumdepth}{4}
 \usepackage{authblk}
 \author[1]{Niclas Börlin}
 \author[2]{Pierre Grussenmeyer}
@@ -37,13 +39,12 @@
 \begin{document}
 
 \maketitle
-\tableofcontents
-
-
+\setcounter{tocdepth}{4}
+\contributions \newpage \tableofcontents \clearpage
 \section{Introduction}
-\label{sec:org1821cad}
+\label{sec:org1f80281}
 \subsection{Purpose}
-\label{sec:org6bd51dc}
+\label{sec:org6c38fa6}
 The purpose of the Damped Bundle Adjustment toolbox is to be a
 high-level toolbox for photogrammetry in general and bundle adjustment
 in particular. It is the hope of the authors that the high-level
@@ -54,15 +55,20 @@ routines will be Octave-compatible. This has however not been tested
 yet.
 
 \subsection{Contents}
-\label{sec:orgcd8eb50}
-\subsubsection{Code}
-\label{sec:orgef29e6b}
+\label{sec:org8f19694}
+\subsubsection{XML scripts}
+\label{sec:orga641fc3}
+
+As of DBAT version 0.9, DBAT can be used via an XML interface or a
+direct Matlab interface. The XML interface allows usage without much
+Matlab knowledge, see Section~\ref{sec:xml} and
+\citet{Borlin2019:Implementing}.
+
+\subsubsection{Matlab code}
+\label{sec:org27f5f85}
 The toolbox currently includes routines for (Matlab function names in
 parentheses):
 \begin{itemize}
-\item XML scripts that allow a user to tailor the computation without
-writing any Matlab code (\texttt{rundbatscript}), see
-Section \ref{sec:xml} and \citet{Borlin2019:Implementing}.
 \item File handling:
 \begin{itemize}
 \item Reading PhotoModeler-style text export files (\texttt{loadpm}), and 2D/3D
@@ -103,7 +109,7 @@ block), image-variant (individual for each image), or anything
 inbetween. Parameter sets may be split-variant, e.g., with some IO
 parameters block-invariant and some IO parameters image-variant
 \citep{Borlin2019:Flexible}.
-\item Uses either Classical Gauss-Markov, Gauss-Newton-Armijo,
+\item \sloppy Uses either Classical Gauss-Markov, Gauss-Newton-Armijo,
 Levenberg-Marquardt, or Levenberg-Marquardt-Powell damping schemes
 \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
 \item Posterior covariance calculations (\texttt{bundle\_cov}) from the bundle
@@ -120,7 +126,7 @@ with too few direct observations.
 \texttt{spnrank} \citep{Foster2009:Calculating}. This might, e.g., be
 caused by insufficient datum specification.
 \end{itemize}
-The result of the analysis, including suggestions for what
+\sloppy The result of the analysis, including suggestions for what
 parameters may be impossible to estimate are written to the report
 file by \texttt{bundle\_result\_file}.
 \item Various plotting functions, including:
@@ -135,16 +141,19 @@ as an illustration of the bundle iterations.
 (\texttt{plotimagestats, plotopstats}).
 \end{itemize}
 \item Demo functions using the above functions. The demo functions are
-detailed in Section \ref{sec:demos}. The available demos are listed
-by executing the command \texttt{help dbatdemos}. This manual does
-not contain detailed information about how to use each function.
-More information may be found by typing \texttt{help <function
-    name>} at the Matlab prompt, studying the source code of the demo
-functions, and reading the source code of each file directly.
+detailed in Section~\ref{sec:demos}. The available demos are listed
+by executing the command \texttt{help dbatdemos}. This manual does not
+contain detailed information about how to use each function. More
+information may be found by typing \texttt{help <function name>} at the
+Matlab prompt, studying the source code of the demo functions, and
+reading the source code of each file directly.
+\item XML scripts that allow a user to tailor the computation without
+writing any Matlab code (\texttt{rundbatscript}), see
+Section~\ref{sec:xml} and \citet{Borlin2019:Implementing}.
 \end{itemize}
 
 \subsubsection{Data}
-\label{sec:org473bcb4}
+\label{sec:orge707b58}
 The toolbox contains several datasets, including datasets for the
 \citet{Borlin2016:External,Murtiyoso2017:Reprocessing} papers.
 
@@ -157,15 +166,15 @@ corresponding high resolution images can be downloaded from
 are found in \texttt{README.txt} files in the respective image directories.
 \end{itemize}
 
-The simplest way to access the data sets is through the demos,
-described in Section~\ref{sec:demos}, or through the scripts,
-described in Section~\ref{sec:xml}.
+The simplest way to access the data sets is through the XML scripts,
+described in Section~\ref{sec:xml}, or through the demos, described in
+Section~\ref{sec:demos}.
 
 \subsection{Legal}
-\label{sec:org87fad0e}
+\label{sec:org1bd771a}
 
 The licence detail are described in the \texttt{LICENSE.txt} file included in
-the distribution and in Appendix \ref{sec:license}. In summary:
+the distribution and in Appendix~\ref{sec:license}. In summary:
 
 \begin{itemize}
 \item You use the code at your own risk.
@@ -182,7 +191,7 @@ licensing details are also redistributed.
 \newpage
 \section[Installation]{Installation (from the file INSTALL.txt)}
 \label{sec:install}
-\begin{verbatim}
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small,frame=none]{text}
 # == INSTALLATION ==
 #
 # You can either install DBAT by downloading the source code or (if
@@ -218,7 +227,7 @@ licensing details are also redistributed.
 #
 # To reduce the size of the repository and hence download times, only
 # low-resolution images are included in the repository. High-resolution 
-# images can be downloaded from http://www.cs.umu.se/~niclas/dbat_images/.
+# images can be downloaded from http://people.cs.umu.se/niclas/dbat_images/.
 # For further details, consult the README.txt files in the respective
 # image directories.
 #
@@ -255,11 +264,11 @@ licensing details are also redistributed.
 # the version number.
 #
 #
-\end{verbatim}
+\end{minted}
 
 \newpage
 \section{Usage}
-\label{sec:orgfe25e14}
+\label{sec:org2882603}
 \subsection{Demos}
 \label{sec:demos}
 A summary of the demos is found in Table~\ref{tab:demos}.
@@ -273,14 +282,14 @@ PhotoModeler text export file. Two examples are included in the
 toolbox: \texttt{Roma} and \texttt{Cam}.
 
 \paragraph{\texttt{Roma}}
-\label{sec:org18043bf}
+\label{sec:orgaa99904}
 
 \texttt{loadplotdemo('roma')} loads a modified PhotoModeler text export file
 of the 60-camera, 26000-point project used
 in~\citet{Borlin2013:Bundle}. The camera network, as computed by
 PhotoModeler, is plotted with camera 1 aligned to the cardinal axes.
-The result should look like Figure~\ref{fig:roma}. The figure is
-a standard Matlab 3D figure and may, e.g., be rotated or zoomed using
+The result should look like Figure~\ref{fig:roma}. The figure is a
+standard Matlab 3D figure and may, e.g., be rotated or zoomed using
 the camera toolbar.
 
 \paragraph{\texttt{Cam}}
@@ -288,8 +297,8 @@ the camera toolbar.
 \texttt{loadplotdemo('cam')} demo loads a modified PhotoModeler text export
 file of a 21-camera, 100-point camera calibration project. The camera
 network, as computed by PhotoModeler, is plotted and should look like
-Figure~\ref{fig:camcalib}. The figure is a standard Matlab 3D
-figure and may, e.g., be rotated or zoomed using the camera toolbar.
+Figure~\ref{fig:camcalib}. The figure is a standard Matlab 3D figure and
+may, e.g., be rotated or zoomed using the camera toolbar.
 
 
 \begin{figure*}[tbp]
@@ -307,7 +316,7 @@ The figure generated by the \texttt{loadplotdemo('cam')} demo.}
 \end{figure*}
 
 \subsubsection{Camera calibration}
-\label{sec:org943dfd6}
+\label{sec:orga3503b5}
 
 The \texttt{camcaldemo} demo loads the camera calibration export file from
 Section~\ref{sec:camcaldata} and runs a camera calibration. The
@@ -332,7 +341,7 @@ the result and may also provide clues on how to improve a network when
 the bundle did converge.
 
 \paragraph{Evolution plots}
-\label{sec:orgf3823bd}
+\label{sec:orgc79c87b}
 
 \begin{figure}[tbp]
 \centering
@@ -350,13 +359,13 @@ Network configuration after convergence, with camera center trace lines. In this
 
 The evolution plots are collected in
 figures~\ref{fig:camx0}--\ref{fig:gnatrace}.
-Figures~\ref{fig:camx0}--\ref{fig:camxfinal} shows a snapshot of
-the 3D trace figure at the beginning and end of the iterations. As
-default, the evolution is presented iteration by iteration with
-intervening presses of the return key. The figure window is
-interactive and may be rotated, zoomed, etc. In this example, it is
-clear in Figure~\ref{fig:camxfinal} that one camera station had
-poorer initial values than the rest.
+Figures~\ref{fig:camx0}--\ref{fig:camxfinal} shows a snapshot of the 3D trace
+figure at the beginning and end of the iterations. As default, the
+evolution is presented iteration by iteration with intervening presses
+of the return key. The figure window is interactive and may be
+rotated, zoomed, etc. In this example, it is clear in
+Figure~\ref{fig:camxfinal} that one camera station had poorer initial
+values than the rest.
 
 \begin{figure}[tbp]
 \centering
@@ -379,19 +388,19 @@ Evolution of EO parameters during the iteration sequence.}
 Evolution of OP parameters during the iteration sequence.}
 \end{figure}
 
-Figures~\ref{fig:IOtrace}--\ref{fig:OPtrace} contain three plots
-showing the evolution of the internal orientation (IO), external
-orientation (EO), and object point (OP), respectively, during the
-iterations. The IO plot is split into a focal/principal point panel
-and a radial and tangential distortion panel, where the radial
-distortion parameters are scaled to provide more information. The EO
-plot contains a camera center panel and an \(\omega\)-\(\phi\)-\(\kappa\) Euler
-angle panel. The EO and OP plots are interactive. Lines in the plots
-or legends may be selected and all corresponding lines will be
-highlighted. In the top panel of Figure~\ref{fig:EOtrace}, the
-motion of one camera stands out. Clicking that line reveals that it
-belongs to camera station~21, which can be further investigated
-to decide if it should be excluded from the calibration.
+Figures~\ref{fig:IOtrace}--\ref{fig:OPtrace} contain three plots showing the
+evolution of the internal orientation (IO), external orientation (EO),
+and object point (OP), respectively, during the iterations. The IO
+plot is split into a focal/principal point panel and a radial and
+tangential distortion panel, where the radial distortion parameters
+are scaled to provide more information. The EO plot contains a camera
+center panel and an \(\omega\)-\(\phi\)-\(\kappa\) Euler angle panel. The EO and
+OP plots are interactive. Lines in the plots or legends may be
+selected and all corresponding lines will be highlighted. In the top
+panel of Figure~\ref{fig:EOtrace}, the motion of one camera stands out.
+Clicking that line reveals that it belongs to camera station~21,
+which can be further investigated to decide if it should be excluded
+from the calibration.
 
 \begin{figure}[tbp]
 \centering
@@ -408,7 +417,7 @@ the first two iterations. For further details on the damping,
 see~\citet{Borlin2013:Bundle}.
 
 \paragraph{Quality plots}
-\label{sec:orga7d207f}
+\label{sec:org819b08f}
 
 \begin{figure}[tbp]
 \centering
@@ -432,46 +441,47 @@ Plots of input/output statistics: Object point statistics.}
 \end{figure}
 
 The quality plots are gathered in
-figures~\ref{fig:ccamCoverage}--\ref{fig:ccamOPstats}. Per-image
-quality statistics is shown in Figure~\ref{fig:ccamImstats}. The
-statistics presented for each image are the image coverage
-(rectangular coverage, convex hull coverage, and radial coverage); the
-number of measured points; the average (RMS) point residual; and the
-standard deviations for the EO parameters for the camera stations. In
-this example, the data does not give any obvious support to exclude
-the suspected image~21 from the calibration.
+figures~\ref{fig:ccamCoverage}--\ref{fig:ccamOPstats}. Per-image quality
+statistics is shown in Figure~\ref{fig:ccamImstats}. The statistics
+presented for each image are the image coverage (rectangular coverage,
+convex hull coverage, and radial coverage); the number of measured
+points; the average (RMS) point residual; and the standard deviations
+for the EO parameters for the camera stations. In this example, the
+data does not give any obvious support to exclude the suspected
+image~21 from the calibration.
 
 The image coverage is detailed in a separate
-Figure~\ref{fig:ccamCoverage}. The plotted data is selectable.
-All observations from a specific image, including their convex hull,
-will be highlighted when a point or line is selected.
+Figure~\ref{fig:ccamCoverage}. The plotted data is selectable. All
+observations from a specific image, including their convex hull, will
+be highlighted when a point or line is selected.
 
-Finally, the per-OP quality statistics in
-Figure~\ref{fig:ccamOPstats} show the number of observations per
-OP; the maximum ray intersection angle; the average (RMS) point
-residual; and the OP coordinate standard deviation. The presentation
-may be zoomed to show only a subset of the OPs by activating the
-``zoom'' function of the figure window.
+Finally, the per-OP quality statistics in Figure~\ref{fig:ccamOPstats}
+show the number of observations per OP; the maximum ray intersection
+angle; the average (RMS) point residual; and the OP coordinate
+standard deviation. The presentation may be zoomed to show only a
+subset of the OPs by activating the ``zoom'' function of the figure
+window.
 
 \paragraph{Result file}
-\label{sec:org899e7d4}
+\label{sec:org7d13e46}
 
-The result file is modelled after the PhotoModeler result file.
-The result file is listed in Appendix~\ref{sec:resultFile}.
+The result file is modelled after the PhotoModeler result file. The
+result file of a successful run is listed in
+Appendix~\ref{sec:resultFile}.
 
 \subsubsection{Lens distortion models}
-\label{sec:orge3daee3}
+\label{sec:org0514317}
 
 The \texttt{camcaldemo\_allmodels} demo calibrates the camera using
 each of the available lens distortion models. A result file is
 generate for each model.
 
 \subsubsection{Bundle adjustment}
-\label{sec:org86b39c4}
+\label{sec:org0f19d6b}
 
 \paragraph{\texttt{Roma}}
-\label{sec:org9b285c0}
-The \texttt{romabundledemo} function loads the project from
+\label{sec:orge252d26}
+\sloppy The \texttt{romabundledemo} function loads the project from
 Section~\ref{sec:loadplotdemo} and present essentially the same plots and
 the \texttt{camcaldemo}. This demo uses the PhotoModeler file as input
 to the bundle adjustment that runs a few iterations until convergence.
@@ -487,7 +497,7 @@ are also included. In the latter, the principal point is image-variant
 whereas the other IO parameters are block-invariant.
 
 \paragraph{\texttt{Prague'16}}
-\label{sec:org65f6415}
+\label{sec:org96913d6}
 The \texttt{prague2016\_pm} function displays six projects that
 compare the result of the bundle adjustment procedure in DBAT and the
 results of PhotoModeler \citep{Borlin2016:External}. Similarily, the
@@ -500,24 +510,24 @@ estimation results than in \citet{Borlin2016:External}. However, the
 conclusions remain valid.
 
 \paragraph{\texttt{Hamburg'17}}
-\label{sec:org5b07d4d}
+\label{sec:orga608e04}
 The \texttt{stpierrebundledemo\_ps} function runs a self-calibration
 bundle on a Photoscan project included in the StPierre data set.
 
 \paragraph{\texttt{Prior camera observations}}
-\label{sec:orgd7b7d2f}
+\label{sec:orge95db4d}
 The \texttt{sxb\_prior\_eo} demo shows how to include prior
 observations of the camera positions in the bundle.
 
 \subsubsection{Error detection}
-\label{sec:orgdab61e3}
+\label{sec:orgd452a54}
 
 Three demos are included to illustrate the error detection
 capabilities of \texttt{sprank} (\texttt{dmperm}) and
 \texttt{spnrank}. All are modelled from \texttt{camcaldemo}.
 
 \paragraph{Missing observations}
-\label{sec:orgdeb962b}
+\label{sec:org9d3b212}
 
 The \texttt{camcaldemo\_missing\_obs} demo contains a data file where the image
 observations of two object points (id 13 and 60, respectively) have
@@ -528,7 +538,7 @@ of both points number 12 and 59 (with id 13 and 60, respectively) are
 indeed listed as suspicious.
 
 \paragraph{Single-ray observations}
-\label{sec:org7ff8113}
+\label{sec:org46ccc6f}
 
 The \texttt{camcaldemo\_1ray} demo contains a data file that contains
 only one observation of object point with id 88. Since two
@@ -539,7 +549,7 @@ file (Section~\ref{sec:singleRayResultFile}) lists one coordinate of
 point 87 (with id 88) as suspicious.
 
 \paragraph{Missing datum}
-\label{sec:org9c9a547}
+\label{sec:org3b01879}
 
 The \texttt{camcaldemo\_no\_datum} demo contains a demo where no datum
 has been specified. As in the previous problems, the result is a
@@ -593,14 +603,17 @@ Demo & Description & Datum & Self-calibration\\
 \texttt{stpierrebundledemo\_ps} & Photoscan post-processing & Weighted ctrl pts from psz file & yes\\
 \hline
 \texttt{sxb\_prior\_eo} & Use of prior camera positions in bundle & Weighted ctrl pts, cam pos from text file & no\\
+\hline
+\texttt{rundbatdemos} & XML scripts & Varies & varies\\
 \end{tabular}
 \end{sidewaystable}
 
+\newpage
 \subsection{Using your own data}
-\label{sec:org1c96f52}
+\label{sec:org4565938}
 
 \subsubsection{Photoscan/Metashape}
-\label{sec:orgcb1016b}
+\label{sec:org89a4d21}
 
 DBAT can read native Photoscan Archive (\texttt{.psz}) files. DBAT
 cannot read Photoscan Project (\texttt{.psx}) files. If you have a
@@ -616,14 +629,14 @@ observations of the camera positions are acknowledged and used in the
 bundle.
 
 \paragraph{Known limitations}
-\label{sec:org9a6bde7}
+\label{sec:orgb4566a0}
 
 DBAT cannot handle all Photoscan coordinate systems. If you get
 strange results, you may have to convert to Local Coordinates.
 \texttt{loadplotpsz} may be useful for debugging the input.
 
 \subsubsection{PhotoModeler}
-\label{sec:org888a2f9}
+\label{sec:org9d9e503}
 
 This section describes how to import you own data using PhotoModeler
 text export files. If you have another type of input file, you may be
@@ -633,7 +646,7 @@ and request an import function. Althought we cannot guarantee
 anything, we may adhere to the request, time permitting.
 
 \paragraph{Export from PhotoModeler}
-\label{sec:org8d5951f}
+\label{sec:org77b1bd5}
 
 To import a PhotoModeler project into the toolbox, the following steps
 are valid in PhotoModeler Scanner 2012:
@@ -671,7 +684,7 @@ line was modified to:
 \end{itemize}
 
 \paragraph{Loading into Matlab}
-\label{sec:orge4071b2}
+\label{sec:org8321be1}
 
 \begin{itemize}
 \item In Matlab, run steps 1.1-1.2 under \texttt{TESTING THE INSTALLATION} from
@@ -682,7 +695,7 @@ camera and rotated to have +Z 'up', should now have been generated.
 \end{itemize}
 
 \paragraph{Using the bundle adjustment of DBAT}
-\label{sec:org02394bf}
+\label{sec:orgd61c0a5}
 
 Modify either of the demo functions or the demo XML files to match
 what you want to do. The interesting results may either be in the
@@ -690,24 +703,422 @@ plots or in the result file.
 
 \subsection{XML scripts}
 \label{sec:xml}
-The scripting language is not yet described in this manual. The
-supplied scripts are presented in
-Appendix~\ref{sec:XMLdemoScripts}. To run one of the supplied
-scripts, start \texttt{rundbatscript} without any argument. You will be asked
-about the location of the script to run.
+The XML scripting language allow the user to use most of the features
+of DBAT without writing or modifying any Matlab code. The processing
+is controlled via scripts written in the XML language.
+\subsubsection{The XML language}
+\label{sec:org4b7efa7}
+The XML (eXtensible Markup Language) language \footnote{\url{https://en.wikipedia.org/wiki/XML}} is a structured,
+text-based, markup language. The data components are called \emph{elements}
+that contain \emph{content} delineated by \emph{tags}. Elements may have
+\emph{attributes} that consist of name-value pairs within the opening tag.
+For instance, the element
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operation min_rays="2">check_ray_count</operation>
+\end{minted}
+has the content \texttt{check\_ray\_count}, is surrounded by the tag
+\texttt{operation} and has an argument named \texttt{min\_rays} with a value of \texttt{2}.
+In DBAT, the argument \texttt{min\_rays} with value \texttt{2} will be passed on to
+the operation \texttt{check\_ray\_count}. 
+
+The content of one element may be one or more other elements. Thus,
+elements may be grouped recursively. For instance, in
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operations>
+  <operation>spatial_resection</operation>
+  <operation>forward_intersection</operation>
+  <operation>bundle_adjustment</operation>
+</operations>
+\end{minted}
+the element \texttt{operations} contain three elements \texttt{operation}, that have
+the content \texttt{spatial\_resection}, \texttt{forward\_intersection}, and
+\texttt{bundle\_adjustment}, respectively. This is used in DBAT XML files to
+organize group similar elements together.
+
+\subsubsection{The DBAT XML file}
+\label{sec:orgb2109bc}
+
+The DBAT function \texttt{rundbatscript} processes a main XML script. The
+script is organized into four major parts: metadata, input,
+processing, and output.
+
+\paragraph{XML comments}
+\label{sec:orgbd99ad9}
+The XML language supports comments on the form
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<!-- Your comment goes here. -->
+\end{minted}
+As of Matlab Version: 9.4.0.813654 (R2018a), the Matlab XML parser (or
+rather, the Java XML parser used by Matlab), has a bug in the comment
+parser. As a workaround, surround comments with the \texttt{<c>} tag instead,
+as in
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<c>
+  Your comment goes here.
+</c>
+\end{minted}
+\paragraph{Metadata}
+\label{sec:org06ffe35}
+The metadata section has the tag \texttt{<meta>}. As the name suggests, it is
+intended to be used for project metadata. However, the data is not
+processed by DBAT and any data may be stored there. Thus, the metadata
+section can be extended with any tag. Since the XML language is
+standardized, other software may interact with the DBAT XML files for
+e.g. storage or searching.
+
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<meta>
+  <name>Camcaldemo</name>
+  <date>2019-10-23</date>
+  <author>Niclas Börlin</author>
+  <version>1.0</version>
+  <project>DBAT</project>
+  <project_unit>m</project_unit>
+  <purpose>
+    Demonstrate camera calibration using the scripting feature of
+    DBAT. See also camcaldemo.m in the demo folder.
+  </purpose>
+  ...
+</meta>
+\end{minted}
+
+For more examples of metadata blocks, see the example scripts in
+Appendix~\ref{sec:XMLdemoScripts}.
+\paragraph{Input}
+\label{sec:orga0ce36c}
+The input section uses the \texttt{<input>} tag and specifies what data to
+use for the processing, including camera specifications, control
+information, other prior observations, image lists and image
+observations. The camera information, image list and image
+observations are mandatory. Some information may be stored in separate
+XML or text files. See Section~\ref{sec:fileOrganisation} for a
+discussion of path names. For a general discussion on text file
+formats, see Section~\ref{sec:textFormat}.
+
+\begin{description}
+\item[{Cameras}] The camera section uses the \texttt{<cameras>} tag. The camera
+information may be specified directly in the main XML
+file, as in
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<cameras>
+  <camera>
+    <c>Camera specification goes here</c>
+  </camera>
+  <camera>
+    <c>Another specification goes here</c>
+  </camera>
+</cameras>
+\end{minted}
+or in a separate camera file, as in
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<cameras>
+  <file>cameras/camera.xml</file>
+</cameras>
+\end{minted}
+For a list of all camera parameters, consult
+Appendix~\ref{sec:camSpec}. For an example of a camera file, see
+Appendix~\ref{sec:camFileExample}.
+\item[{Control points}] The control point section uses the \texttt{<ctrl\_pts>}
+tag. Control points are stored in
+''comma-separated'' text files. The parsing of the
+text files are controlled via a \texttt{format}
+attribute. Furthermore, the control points may be
+filtered to remove unused control points or points
+used as check points. In the example below, the
+control points with id 351 and 410 are removed
+from the control point list. For a full list of
+the supported format components, see
+Appendix~\ref{sec:ctrlFormat}. For an example
+control point file, see
+Appendix~\ref{sec:ctrlExample}.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<ctrl_pts>
+  <file format="id,label,x,y,z,sx,sy,sz">
+    reference/sxb-control.txt
+  </file>
+  <filter id="351,410">remove</filter>
+</ctrl_pts>
+\end{minted}
+\item[{Check points}] The check point section uses the \texttt{<check\_pts>} tag
+and uses the same format as the control point
+section. If any point is used as both control and
+check point, an error is signalled. In the example
+below, the points excluded as control points above
+are used as check points.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<check_pts>
+  <file format="id,label,x,y,z,sx,sy,sz">
+    reference/sxb-control.txt
+  </file>
+  <filter id="351,410">keep</filter>
+</check_pts>
+\end{minted}
+\item[{Images}] The image list section uses the \texttt{<images>} tag. The
+information is stored in a comma-separated text file. The
+supported format components are listed in
+Appendix~\ref{sec:imageFormat}. For an example image list
+file, see Appendix~\ref{sec:imageExample}. In the example
+below, any relative path name in the \texttt{images.txt} file is
+relative to the DBAT installation directory (see
+Section~\ref{sec:fileOrganisation}).
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<images image_base_dir="$DBAT">
+  <file format="id,path">images/images.txt</file>
+</images>
+\end{minted}
+The image files are not needed for DBAT computations.
+Thus, a non-present image file will only trigger an error
+if the image is needed for plotting of, e.g., image
+observations.
+\item[{Prior EO observations}] The prior EO observations section uses the
+\texttt{<prior\_eo>} tag. The data is stored in a comma-separated text
+file. In addition to the camera position, camera angles can be
+specified, in which case angle units must be specified. The
+supported format components are listed in
+Appendix~\ref{sec:eoFormat}. An example EO file is presented in
+see Appendix~\ref{sec:eoExample}.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<prior_eo>
+  <file format="id,x,y,z,omega,phi,kappa" units="degrees">
+    prior/initial_eo.txt
+  </file>
+</prior_eo>
+\end{minted}
+Prior EO observations may be used as prior observations and/or as
+initial values for the bundle.
+\item[{Image observations}] The image observations section uses the
+\texttt{<image\_pts>} tag. The image observations are stored in
+comma-separated text files. Multiple files may be specified, as
+in the example below. The standard deviations may be read from
+the text files or specified via attributes to the \texttt{file} tag. The
+supported format components are listed in
+Appendix~\ref{sec:imagePtsFormat}.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<image_pts>
+  <file format="id,im,x,y" sxy="0.5">
+    measurements/markpts.txt
+  </file>
+  <file format="id,im,x,y" sxy="1.0">
+    measurements/smartpts.txt
+  </file>
+</image_pts>
+\end{minted}
+\end{description}
+\paragraph{Processing}
+\label{sec:org6490bef}
+
+The processing section uses a single \texttt{<operations>} tag containing one
+or more \texttt{<operation>} tags. The listed operations will be executed in
+sequence. The operations are of seven types: Sanity checks, filtering,
+set initial values, specify parameters to estimate, set the datum,
+pre-bundle computation, and execute the bundle proper.
+
+\begin{description}
+\item[{Sanity checks}] The sanity check operations include:
+\begin{itemize}
+\item Check ray count. Verify that no object point has too few rays. The
+minimum number of rays is specified via an attribute, as in
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operation min_rays="2">check_ray_count</operation>
+\end{minted}
+An error will be thrown if an object point has fewer than the
+specified number of rays. A control point may have one fewer ray
+without triggering an error.
+\item Future sanity checks include check ray angles, check object point
+projections, check structural rank and check numerical rank.
+\end{itemize}
+\item[{Filtering}] Future filtering operations include:
+\begin{itemize}
+\item Filter on ray count. Remove any object points
+and associated image observations that have too few rays.
+\item Filter on intersection angle. Remove any object points that have
+too low intersection angle. For this filtering to be applied,
+camera and object point positions must have been estimated.
+\end{itemize}
+\item[{Specify parameters to estimate}] The \texttt{<set\_bundle\_estimate\_params>}
+section specifies what parameters should be estimated by the
+bundle. The section is structured into IO, EO, and OP
+subsections. Within each subsection, the specifications are
+parsed in sequence. In the example below, all EO and OP
+parameters are estimated, as are all camera parameters except
+skew. See Appendix~\ref{sec:setBundleEstimateParams} for a
+complete specification of the section.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<set_bundle_estimate_params>
+  <io>
+    <all>true</all>
+    <skew>false</skew>
+  </io>
+  <eo>true</eo>
+  <op>true</op>
+</set_bundle_estimate_params>
+\end{minted}
+\item[{Set initial values}] The \texttt{<set\_initial\_values>} operation specifies
+initial values for the bundle. This should be used if the initial
+values are not computed by other means, e.g., by spatial
+intersection or forward intersection. Often, the initial values
+may be set to values loaded in the \texttt{input} section. In the
+example below, the IO and OP parameters are set to their
+pre-loaded values. No values are specified for the EO parameters,
+and they must be estimated by, e.g., spatial intersection. See
+Appendix~\ref{sec:setInitialValues} for a complete specification.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<set_initial_values>
+  <io>loaded</io>
+  <op>loaded</op>
+</set_initial_values>
+\end{minted}
+\item[{Set datum}] Usually, the datum is set via control points. For a
+control-point-free project, it is possible to set up
+the project for dependent relative orientation instead.
+In that case, the EO parameters of one camera is fixed
+together with a position coordinate of another camera.
+In the example below, camera number 1 is used as the
+reference camera. The coordinate of the second camera
+is set to make the baseline as long as possible. If the
+baseline parameter is \texttt{x}, \texttt{y}, or \texttt{z}, the coordinate
+selection for the second camera is restricted to that
+coordinate.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operation>
+  <set_datum ref_cam="1" ref_base="longest">depend</set_datum>
+</operation>
+\end{minted}
+\item[{Pre-bundle computations}] The pre-bundle computations include
+\begin{description}
+\item[{Spatial resection}] Estimate external orientation parameters by
+spatial resection. The operation will fail if IO parameters are
+unset or too few control points are visible in some image.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operation>spatial_resection</operation>
+\end{minted}
+\item[{Forward intersection}] Compute OP coordinates using forward
+intersection. Only the object points that are to be estimated
+by the bundle are computed. The operation will fail unless the
+IO and EO parameters are set and that at least two image points
+are present for every object point.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operation>forward_intersection</operation>
+\end{minted}
+\end{description}
+\item[{The bundle proper}] Execute the bundle adjustment procedure. All
+parameters must have initial values and the parameters to
+estimate must have been set.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<operation>bundle_adjustment</operation>
+\end{minted}
+\end{description}
+\paragraph{Output}
+\label{sec:orgb30317e}
+The output section specifies what plots (\texttt{<plots>}) and files
+(\texttt{<files>}) should be produced after the completion of the processing.
+A complete list of the plots that can be produced is given in
+Appendix~\ref{sec:plots}. A list of the output files that can be
+generated is presented in Appendix~\ref{sec:outputFiles}.
+\paragraph{File organisation}
+\label{sec:fileOrganisation}
+\sloppy
+The \texttt{<input>} and output \texttt{<files>} tags support the attribute
+\texttt{base\_dir} that is used to simplify the organisation of files that
+belong to the same project. If the \texttt{base\_dir} attribute is specified,
+any relative path name \footnote{Path names can be absolute or relative. An absolute
+path name starts with a root symbol (backslash \texttt{\textbackslash{}} on Windows, slash
+\texttt{/} on other operating systems) or or a drive letter followed by a
+colon, e.g. \texttt{C:\textbackslash{}}. A relative path starts with something else.} in the subblock is assumed to
+be rooted in \texttt{base\_dir}. For instance, the block
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<input base_dir="C:/projects/sxb">
+  ...
+  <ctrl_pts>
+    <file format="id,label,x,y,z,sx,sy,sz">
+      reference/sxb-control.txt
+    </file>
+  </ctrl_pts>
+  ...
+</input>
+\end{minted}
+will load the control points from the file
+\texttt{C:/projects/sxb/reference/sxb-control.txt}. The \texttt{base\_dir} attribute
+can be any path. Furthermore, \texttt{base\_dir} can be specified to be
+relative to the special directories listed below.
+
+\sloppy
+\begin{description}
+\item[{\texttt{\$DBAT}}] The root of the DBAT installation, i.e., the directory
+that contains the \texttt{README.txt} file.
+\item[{\texttt{\$HOME}}] The home directory of the user, as known to Matlab via
+the \texttt{user.home} Java property \footnote{The Matlab command is
+\texttt{char(java.lang.System.getProperty('user.home'))}.}. This
+is typically \texttt{C:\textbackslash{}Users\textbackslash{}username} on Windows,
+\texttt{/Users/username} on Mac/OS X, and \texttt{/home/username} on
+Linux, where 'username' is the current user name.
+\item[{\texttt{\$HERE}}] The directory containing the XML file in use.
+\end{description}
+
+\sloppy
+Furthermore, the \texttt{images} tag supports another tag \texttt{image\_base\_dir}
+that can be used to specify a root directory for the images. For instance,
+the block
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<input base_dir="C:/projects/sxb">
+  ...
+  <images image_base_dir="Z:/server/project_images/sxb">
+    <file format="id,path">images/images.txt</file>
+  </images>
+  ...
+</input>
+\end{minted}
+specifies that any relative path name loaded from \texttt{images.txt} is
+relative to the path \texttt{Z:/server/project\_images/sxb}. Note that the
+path \texttt{images/images.txt} is relative to the input \texttt{base\_dir}, i.e.,
+the full path name is \texttt{C:/projects/sxb/images/images.txt}.
+
+\paragraph{Text files and format strings}
+\label{sec:textFormat}
+Several types of data is stored in ''comma-separated'' text files.
+DBAT uses format strings to indicate what data is to be read or
+written to each file. As default, the text files may include comment
+lines starting with the hash (\texttt{\#}) character. The non-comment lines
+contain the specified information, separated by commas \footnote{The DBAT back-end supports other separators and comment
+characters. This support is not yet implemented in the DBAT front-end
+XML parser.}. The
+elements of the format are numeric or strings. Please note that any
+string cannot contain the separator character, i.e. a comma.
+
+To avoid processing incorrect data, DBAT will require that each data
+line conforms to the format. If too few or too many elements are
+present on a data line, DBAT will signal an error. To allow some
+flexibility of what data to use, the format keyword \texttt{ignored} may be
+used to indicate that a data item is present, but should be ignored.
+For instance, if the data stored in a control point file corresponds
+to the format \texttt{"id,label,x,y,z,sx,sy,sz"}, but the standard deviations
+should be ignored, the format string
+\texttt{"id,label,x,y,z,ignored,ignored,ignored"} should be used.
+
+\subsubsection{Example scripts}
+\label{sec:org58dcc27}
+
+\sloppy 
+The supplied scripts are presented in
+Appendix~\ref{sec:XMLdemoScripts}. To run one of the supplied scripts,
+call \texttt{rundbatscript} with either of the strings \texttt{camcaldemo},
+\texttt{romabundledemo}, or \texttt{sxb} as arguments. If you wish to locate a
+script yourself, start \texttt{rundbatscript} without any argument and you
+will be asked about the location of the script to run.
 
 \newpage
+
+\section{References}
+\label{sec:org8c05fe9}
+
 \bibliography{ref}
 
 \newpage
 \appendix
 
-\section{Appendices}
-\label{sec:org49d567c}
-
-\subsection{License}
+\section{License}
 \label{sec:license}
-\begin{verbatim}
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{text}
 # == LICENSE ==
 #
 # Copyright (C) 2013-2019, Niclas Börlin, niclas.borlin@cs.umu.se (*),
@@ -787,9 +1198,9 @@ about the location of the script to run.
 #     DOI: 10.5194/isprs-archives-XLII-2-W17-69-2019.
 #
 #
-\end{verbatim}
+\end{minted}
 
-\subsection{Enabling text export from PhotoModeler}
+\section{Enabling text export from PhotoModeler}
 \label{sec:enableTextExport}
 Some versions of PhotoModeler do not have the text file export option
 enabled by default. In that case, the following steps worked in
@@ -804,15 +1215,17 @@ toolbar\ldots{}}.
 clicking on the \emph{Export Text File} button.
 \end{itemize}
 
-\subsection{Rotation model}
-\label{sec:org2d28715}
+\section{Rotation model}
+\label{sec:org6c2d735}
 
 Currently, the only supported rotation model is the omega-phi-kappa
 Euler angle rotation model \citep[Ch. 2.1.2.3]{McGlone2004:Manual}.
 
+\section{Result files}
+\label{sec:orgbdd24c8}
 \subsection{Result file with missing observations}
 \label{sec:missingObsResultFile}
-\begin{verbatim}
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{text}
 Damped Bundle Adjustment Toolbox result file
    Project Name: Bundle Soln PhotoModeler Calibration Project
    Problems and suggestions:
@@ -831,11 +1244,11 @@ Damped Bundle Adjustment Toolbox result file
 .
 .
 .
-\end{verbatim}
+\end{minted}
 
 \subsection{Result file with single-ray observations}
 \label{sec:singleRayResultFile}
-\begin{verbatim}
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{text}
 Damped Bundle Adjustment Toolbox result file
    Project Name: Bundle Soln PhotoModeler Calibration Project
    Problems and suggestions:
@@ -849,11 +1262,11 @@ Damped Bundle Adjustment Toolbox result file
 .
 .
 .
-\end{verbatim}
+\end{minted}
 
 \subsection{Result file with missing datum}
 \label{sec:missingDatumResultFile}
-\begin{verbatim}
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{text}
 Damped Bundle Adjustment Toolbox result file
    Project Name: Bundle Soln PhotoModeler Calibration Project
    Problems and suggestions:
@@ -1020,11 +1433,12 @@ Damped Bundle Adjustment Toolbox result file
 .
 .
 .
-\end{verbatim}
+\end{minted}
 
+\newpage
 \subsection{Successful result file example}
 \label{sec:resultFile}
-\begin{verbatim}
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{text}
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln PhotoModeler Calibration Project
@@ -1630,14 +2044,398 @@ Damped Bundle Adjustment Toolbox result file
       Check measurements
          none
 End of result file
-\end{verbatim}
+\end{minted}
 
+\newpage
+\section{XML}
+\label{sec:org9bd6f88}
+\subsection{XML input section}
+\label{sec:org6f66a90}
+\subsubsection{Camera specification}
+\label{sec:camSpec}
+The tags below are used to specify camera information. 
+\paragraph{Descriptive parameters}
+\label{sec:org589e7f9}
+The following parameters describe the camera type and projection
+model:
+\begin{description}
+\item[{id}] Integer. The camera number used if multiple cameras are used.
+Not currently supported.
+\item[{name}] A string describing the camera.
+\item[{unit}] A string with the unit used to describe the camera
+parameters. Currently, only \texttt{mm} is supported.
+\item[{image}] The width and height of the image, in pixels, separated by
+a comma.
+\item[{sensor}] The sensor width and height, in camera units, separated by
+a comma. The special string \texttt{auto} may be used for the
+sensor width, in which case the sensor width is computed
+to match the \texttt{aspect}. See also \texttt{aspect}.
+\item[{focal}] The nominal focal length in camera units.
+\item[{nK}] The number of radial lens distortion coefficients. Can also be
+specified implicitly via the \texttt{K} tag.
+\item[{nP}] The number of tangential lens distortion coefficients. Can
+also be specified implicitly via the \texttt{P} tag.
+\item[{calibrated}] String \texttt{yes} or \texttt{no}, indicating whether the camera
+is calibrated.
+\item[{model}] Integer denoting the  projection model to be used by DBAT.
+\end{description}
+\paragraph{Calibration parameters}
+\label{sec:org976a343}
+The following parameters can be estimated by the bundle:
+\begin{description}
+\item[{cc}] The camera constant.
+\item[{pp}] The principal point coordinates, separated by a comma. The
+special string \texttt{default} will set the principal point to the
+center of the image.
+\item[{aspect}] The pixel aspect ratio, i.e., width/height. The special
+string \texttt{auto} can be used to compute the aspect ratio from
+the sensor and image sizes. See also \texttt{sensor}.
+\item[{skew}] The skew, i.e., the non-orthogonality of the image axis.
+\item[{K}] The radial lens distortion coefficients values, separated by
+commas.
+\item[{P}] The tangential lens distortion coefficients values, separated
+by commas.
+\end{description}
+\subsubsection{Camera file example}
+\label{sec:camFileExample}
+The following file is an example of a file with a calibrated camera.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<?xml version="1.0" encoding="utf-8"?>
+<document dbat_camera_version="1.0">
+   <cameras>
+      <camera>
+         <id>1</id>
+         <name>Canon EOS 5D Mark II</name>
+         <unit>mm</unit>
+         <calibrated>yes</calibrated>
+         <sensor>auto,24</sensor>
+         <image>5616,3744</image>
+         <aspect>1</aspect>
+         <focal>7.5</focal>
+         <model>3</model>
+         <nK>3</nK>
+         <nP>2</nP>
+         <cc>24.3581</cc>
+         <pp>18.1143,-12</pp>
+         <skew>0</skew>
+         <K>-2.174e-4,1.518e-7,0</K>
+         <P>0,0</P>
+      </camera>
+   </cameras>
+</document>
+\end{minted}
+\subsubsection{Control point format}
+\label{sec:ctrlFormat}
+The following strings are supported in control/check point format
+strings:
+\begin{center}
+\begin{tabular}{l|l}
+Name & Description\\
+\hline
+\texttt{id} & integer id for the control point\\
+\texttt{label} & string with the name of the control point\\
+\texttt{ignored} & field to be ignored\\
+\texttt{x}, \texttt{y}, \texttt{z} & numeric fields with x, y, or, z coordinates of the control point\\
+\texttt{sx}, \texttt{sy}, \texttt{sz} & numeric fields with standard deviations of individual coordinates\\
+\texttt{sxy} & numeric field with the planimetric standard deviation\\
+\texttt{sxyz} & numeric field with the standard deviation for all coordinates\\
+\end{tabular}
+\end{center}
+Please note that any string component cannot contain the separator
+character (comma as default).
+\subsubsection{Control point file example}
+\label{sec:ctrlExample}
+The following file is an example of a control point file.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{text}
+# Id, Name, X, Y, Z, sigmaX, sigmaY, sigmaZ
+317, B2.16, 999604.580, 112344.443, 139.453, 0.02, 0.02, 0.04
+375, B3.05, 999619.041, 112370.818, 138.97, 0.02, 0.02, 0.04
+403, B3.09, 999170.674, 112692.548, 139.64, 0.02, 0.02, 0.04
+410, B3.11, 999974.432, 112476.893, 139.72, 0.02, 0.02, 0.04
+422, B3.13, 1000126.748, 112179.093, 138.54, 0.02, 0.02, 0.04
+428, B3.14, 999971.948, 112044.540, 139.55, 0.02, 0.02, 0.04
+333, B4.1, 1000134.50, 112591.16, 138.01, 0.02, 0.02, 0.04
+347, B4.5, 1000460.33, 112765.82, 139.45, 0.02, 0.02, 0.04
+\end{minted}
+\subsubsection{Image list format}
+\label{sec:imageFormat}
+The following strings are supported in the image list format strings:
+\begin{center}
+\begin{tabular}{l|l}
+Name & Description\\
+\hline
+\texttt{id} & integer id for the image id\\
+\texttt{path} & string with the path to the image file\\
+\texttt{label} & string with the label to use for the image\\
+\texttt{ignored} & field to be ignored\\
+\end{tabular}
+\end{center}
+If no label is specified in the format string, the last path component
+is used. Please note that any string components cannot contain the
+separator character (comma as default).
+\subsubsection{Image list file example}
+\label{sec:imageExample}
+The following file is an example of a image list file.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{text}
+# id, path
+1, data/prague2016/sxb/images/8811.jpg
+2, data/prague2016/sxb/images/8936.jpg
+3, data/prague2016/sxb/images/8937.jpg
+4, data/prague2016/sxb/images/8938.jpg
+5, data/prague2016/sxb/images/9111.jpg
+\end{minted}
+
+\newpage
+\subsubsection{Prior EO observation format}
+\label{sec:eoFormat}
+The following strings are supported in the prior EO observation format
+strings:
+\begin{center}
+\begin{tabular}{l|l}
+Name & Description\\
+\hline
+\texttt{id} & integer id corresponding to the image id\\
+\texttt{ignored} & field to be ignored\\
+\texttt{x}, \texttt{y}, \texttt{z} & numeric fields with x, y, or, z coordinates of the control point\\
+\texttt{sx}, \texttt{sy}, \texttt{sz} & numeric fields with standard deviations of individual coordinates\\
+\texttt{sxy} & numeric field with the planimetric standard deviation\\
+\texttt{sxyz} & numeric field with the standard deviation for all coordinates\\
+\texttt{omega}, \texttt{phi}, \texttt{kappa} & numeric fields with camera angles\\
+\texttt{so}, \texttt{sp}, \texttt{sk} & numeric fields with individual angle standard deviations\\
+\texttt{sang} & numeric field with common angle standard deviation\\
+\end{tabular}
+\end{center}
+
+If any angles are specified in the format string, angle units must be
+specified via the \texttt{units} attribute. Supported angle units are
+\texttt{degrees}, \texttt{radians}, and \texttt{gon}.
+\subsubsection{Prior EO observation file example}
+\label{sec:eoExample}
+The following file is part of a file with prior EO observations.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{text}
+# Initial EO values for the romabundledemo script demo
+ 1,  1.86, -19.22,  -6.49,   39.43,  7.46,  99.59
+ 2,  1.97, -19.39,  -6.45,   40.85, -0.68,   9.61
+ 3,  1.57, -18.08,  -5.02,   42.47,  3.25,   8.53
+ 4,  1.24, -16.93,  -2.65,   41.84,  0.98,   8.63
+ 5,  0.45, -14.60,  -0.73,   40.82,  0.20,  10.35
+ 6, -0.09, -12.49,   1.20,   32.81, -0.17,   8.40
+ 7, -0.09,  -8.47,   2.02,   23.81, -2.03,   5.42
+ 8, -0.36,  -5.72,   2.30,   15.97, -2.18,   3.20
+\end{minted}
+\subsubsection{Image observation format}
+\label{sec:imagePtsFormat}
+The following strings are supported in the image observation format
+strings:
+\begin{center}
+\begin{tabular}{l|l}
+Name & Description\\
+\hline
+\texttt{id} & integer corresponding to the point id\\
+\texttt{im} & integer corresponding to the image id\\
+\texttt{ignored} & field to be ignored\\
+\texttt{x}, \texttt{y} & numeric fields with x, y, or, z coordinates of the control point\\
+\texttt{sx}, \texttt{sy} & numeric fields with standard deviations of individual coordinates\\
+\texttt{sxy} & numeric field with the planimetric standard deviation\\
+\end{tabular}
+\end{center}
+\subsection{Operations}
+\label{sec:org0e6c5d9}
+\subsubsection{Specify parameters to estimate}
+\label{sec:setBundleEstimateParams}
+The \texttt{<set\_bundle\_estimate\_params>} section has \texttt{<io>}, \texttt{<eo>}, and
+\texttt{<op>} subsections. Within each subsection, parameter names,
+individual or groups, are listed with a \texttt{true} or \texttt{false} string as
+content. For the EO and OP parameters, the string \texttt{default} may be
+used to indicate that all parameters except parameters with fixed
+prior observations, including control points, should be estimated.
+The tags within the subsections are parsed and executed in
+sequence. Thus, in the example below, all camera parameters are
+estimated except skew.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<set_bundle_estimate_params>
+  <io>
+    <all>true</all>
+    <skew>false</skew>
+  </io>
+  <eo>
+    <all>true</all>
+  </eo>
+  <op>
+    <all>true</all>
+  </op>
+</set_bundle_estimate_params>
+\end{minted}
+If the same string applies to all parameters in a subblock, the block
+may be abbreviated. In the example below, none of the IO parameters,
+all of the EO parameters, and all non-fixed OP parameters are
+estimated.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<set_bundle_estimate_params>
+  <io>false</io>
+  <eo>true</eo>
+  <op>default</op>
+</set_bundle_estimate_params>
+\end{minted}
+The table below contains all tags that may be used to specify what
+parameters to estimate.
+\begin{center}
+\begin{tabular}{l|l}
+IO  parameters & \\
+\hline
+\texttt{cc} & The camera constant\\
+\texttt{pp} & The principal point\\
+\texttt{px}, \texttt{py} & The x- and y- components of the principal point\\
+\texttt{aspect} & The pixel aspect ratio\\
+\texttt{skew} & The image axis off-orthogonal parameter\\
+\texttt{K} & All radial lens distortion coefficients\\
+\texttt{K1}, \texttt{K2}, \texttt{K3} & Individual radial lens distortion coefficients\\
+\texttt{P} & All tangential lens distortion coefficients\\
+\texttt{P1}, \texttt{P2} & Individual tangential lens distortion coefficients\\
+\texttt{all} & All camera parameters\\
+\hline
+EO parameters & \\
+\hline
+\texttt{x}, \texttt{y}, \texttt{z} & Individual coordinates\\
+\texttt{pos} & All coordinates\\
+\texttt{angles} & All angles\\
+\texttt{all} & All external orientation parameters\\
+\hline
+OP parameters & \\
+\hline
+\texttt{x}, \texttt{y}, \texttt{z} & Individual coordinates\\
+\texttt{all} & All coordinates\\
+\end{tabular}
+\end{center}
+
+If parameter \(K_i\) is set to be estimated, so is \(K_1\), \ldots{},
+\(K_{i-1}\). Similarly, if parameter \(K_i\) is set to not be estimated,
+so is \(K_{i+1}\), \ldots{} The same is true for the \(P\) parameters, except
+that \(P_1\) and \(P_2\) are always estimated together.
+
+\subsubsection{Specify initial values}
+\label{sec:setInitialValues}
+The \texttt{<set\_initial\_values>} section is similarly organized as the
+\texttt{<set\_bundle\_estimate\_params>}. Thus, it has \texttt{<io>}, \texttt{<eo>}, and
+\texttt{<op>} subsections and the tags within each subsection are parsed and
+executed in sequence.
+
+The only content for the EO and OP sections is the string \texttt{loaded},
+which means that prior observations loaded by the input section are
+used as initial values. The \texttt{loaded} string may also be used for the
+IO parameters. Otherwise, IO parameters may be set to specified
+constant values or default values. For the principal point, radial,
+and tangential distortion coefficients, multiple values (2, \texttt{nK}, and
+\texttt{nP}, respectively) should be entered separated by commas. The string
+\texttt{focal} can be used for the camera constant to use the nominal focal
+length as an initial value. The string \texttt{default} can be used for all
+parameters with meanings in the table below:
+
+\begin{center}
+\begin{tabular}{l|l}
+Parameter & Default value\\
+\hline
+\texttt{cc} & \texttt{focal}\\
+\texttt{pp} & The center of the image\\
+\texttt{aspect} & 1\\
+\texttt{skew} & 0\\
+\texttt{K} & List of \texttt{nK} zeros\\
+\texttt{P} & List of \texttt{nP} zeros\\
+\texttt{all} & All values above\\
+\end{tabular}
+\end{center}
+
+\subsection{XML output section}
+\label{sec:org9b3029f}
+\subsubsection{Plots}
+\label{sec:plots}
+The plots that may be generated by DBAT include
+\begin{description}
+\item[{Images with observations}] Plot an image together with any image
+observations. The image to plot must be specified with the \texttt{id} attribute.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<plot id="1">image</plot>
+\end{minted}
+\item[{Image statistics}] Statistics for each image, including image
+coverage, point count, camera ray angles, point residuals and
+posterior standard deviations. See Figure~\ref{fig:ccamImstats} for
+an example.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<plot>image_stats</plot>
+\end{minted}
+\item[{Object point statistics}] Statistics for each object point,
+including the ray count, the maximum ray intersection angle, the
+image residuals, and the posterior standard deviations. The
+attribute \texttt{max\_op} specifies the maximum number of object points
+to be plotted. See Figure~\ref{fig:ccamOPstats} for an example.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<plot max_op="1000">op_stats</plot>
+\end{minted}
+\item[{Image coverage}] How much of each image is covered by the image
+point measurements. The attribute \texttt{convex\_hull}
+specifies whether the convex hull of the image
+coverage should be plotted. See
+Figure~\ref{fig:ccamCoverage} for an example.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<plot convex_hull="true">coverage</plot>
+\end{minted}
+\item[{Parameter evolution (1D)}] The evolution of the estimated
+parameters during the bundle iterations. See
+figures~\ref{fig:IOtrace}--\ref{fig:OPtrace} for examples.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<plot>params</plot>
+\end{minted}
+\item[{Camera network evolution (3D)}] The evolution of the EO and OP
+parameters during the bundle iterations. The attribute \texttt{cam\_size}
+is used to specify the camera size in object units. See
+Figure~\ref{fig:camxfinal} for an example.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<plot cam_size="0.1">iteration_trace</plot>
+\end{minted}
+\end{description}
+\subsubsection{Files}
+\label{sec:outputFiles}
+The output files to be generated are listed inside the \texttt{<files>} tag.
+The \texttt{<files>} tag may include a \texttt{base\_dir} specification, see
+Section~\ref{sec:fileOrganisation}. The output files include:
+\begin{description}
+\item[{Report file}] A Photomodeler-style text report file. See
+Appendix~\ref{sec:resultFile} for an example.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<report>
+  <file>result/report.txt</file>
+</report>
+\end{minted}
+\item[{Posterior camera file}] A camera file (see appendices~\ref{sec:camSpec}
+and~\ref{sec:camFileExample}) with the post-bundle estimated parameters.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<io>
+  <file>result/c4040z.xml</file>
+</io>
+\end{minted}
+\item[{Posterior EO file}] A text file with the estimated EO parameters,
+including posterior standard deviations.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<eo>
+  <file>result/camera_stations.txt</file>
+</eo>
+\end{minted}
+\item[{List of largest residuals}] A text file with the image observations
+with the highest post-bundle image residuals. The attribute
+\texttt{top\_count} determine how many residuals are written.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single,fontsize=\small]{xml}
+<image_residuals top_count="50">
+  <file>result/top_residuals.txt</file>
+</image_residuals>
+\end{minted}
+\end{description}
+\newpage
 \subsection{XML demo scripts}
 \label{sec:XMLdemoScripts}
 \subsubsection{\texttt{camcaldemo.xml}}
-\label{sec:org0804607}
-
-\begin{verbatim}
+\label{sec:org7b7a6b2}
+The file below is an example of a camera calibration project.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{xml}
 <?xml version="1.0" encoding="UTF-8"?>
 <document dbat_script_version="1.0.0">
   <c>
@@ -1649,13 +2447,26 @@ End of result file
       Note: The meta section section is optional and can contain anything.
       One possible use is for bookkeeping purposes.
     </c>
+
     <name>Camcaldemo</name>
-    <date>2019-10-23</date>
+    <date>2019-12-04</date>
     <author>Niclas Börlin</author>
-    <version>1.0</version>
+    <version>1.1</version>
     <version_history>
-      <version>1.0, 2019-10-23: Stub.</version>
+      <version>
+        1.0, 2019-10-02: Version presented at LC3D 2019 in Strasbourg.
+      </version>
+      <version>
+        1.1, 2019-12-04: Updated metadata with UUID, datum, control points.
+      </version>
     </version_history>
+
+    <c>
+      Note: The UUID should be unique for each script! The DBAT
+      function uuid may be used to generate a new UUID.
+    </c>
+    <uuid>9401c56c-d102-4363-8791-589a7af8ec6a</uuid>
+
     <project>DBAT</project>
     <project_unit>m</project_unit>
     <purpose>
@@ -1666,8 +2477,14 @@ End of result file
       Software used to generate the data files, e.g., the image
       measurements.
     </software>
+    <datum>
+      This project uses fixed control points. To use weighted control
+      points, load the file reference/camcal-weighted with format
+      string "id,label,x,y,z,sxyz" instead.
+    </datum>
     <control_points>
-      Information about how the control points were measured...
+      The control points in this project are synthetic, i.e., they are
+      assumed to have specific coordinates.
     </control_points>
   </meta>
 
@@ -1685,8 +2502,7 @@ End of result file
     </c>
 
     <ctrl_pts>
-      <file format="id,label,x,y,z">reference/camcal-fixed.txt
-      </file>
+      <file format="id,label,x,y,z">reference/camcal-fixed.txt</file>
     </ctrl_pts>
 
     <images image_base_dir="$DBAT">
@@ -1730,7 +2546,6 @@ End of result file
         <io>
           <all>true</all>
           <skew>false</skew>
-          <aspect>false</aspect>
         </io>
         <eo>
           <all>true</all>
@@ -1770,14 +2585,58 @@ End of result file
     </files>
   </output>
 </document>
-\end{verbatim}
+\end{minted}
 
 \subsubsection{\texttt{romabundledemo.xml}}
-\label{sec:org1aeacd5}
-
-\begin{verbatim}
+\label{sec:org1c16ca7}
+The file below is an example of a control-point-free bundle adjustment
+project with self-calibration and listed EO parameters as initial
+values.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{xml}
 <?xml version="1.0" encoding="UTF-8"?>
 <document dbat_script_version="1.0">
+  <c>
+    NOTE: XML comments <!-- --> is not supported. Use a c (comment)
+    block instead.
+  </c>
+  <meta>
+    <c>
+      Note: The meta section section is optional and can contain anything.
+      One possible use is for bookkeeping purposes.
+    </c>
+
+    <name>Romabundledemo</name>
+    <date>2019-12-04</date>
+    <author>Niclas Börlin</author>
+    <version>1.1</version>
+    <version_history>
+      <version>
+        1.0, 2019-10-02: Version presented at LC3D 2019 in Strasbourg.
+      </version>
+      <version>
+        1.1, 2019-12-04: Added metadata section.
+      </version>
+    </version_history>
+
+    <c>
+      Note: The UUID should be unique for each script! The DBAT
+      function uuid may be used to generate a new UUID.
+    </c>
+    <uuid>899cf814-70df-4a60-8485-f9d01155037a</uuid>
+
+    <project>DBAT</project>
+    <project_unit>m</project_unit>
+    <purpose>
+      Demonstrate self-calibration bundle adjustment without control
+      points using the scripting feature of DBAT. See also
+      romabundledemo_selfcal.m in the demo folder.
+    </purpose>
+    <datum>
+      The project contains no control points. Instead, dependent
+      relative orientation is used as the datum for the bundle.
+    </datum>
+  </meta>
+
   <input base_dir="$HERE">
 
     <c>No control points</c>
@@ -1805,6 +2664,8 @@ End of result file
       <set_initial_values>
         <io>
           <all>loaded</all>
+          <aspect>1</aspect>
+          <skew>0</skew>
         </io>
         <eo>
           <all>loaded</all>
@@ -1850,14 +2711,60 @@ End of result file
     </files>
   </output>
 </document>
-\end{verbatim}
+\end{minted}
 
 \subsubsection{\texttt{sxb.xml}}
-\label{sec:orgb39835c}
-
-\begin{verbatim}
+\label{sec:org84c0b99}
+The file below is an example of a small aerial bundle adjustment
+project with check points and multiple image measurement files.
+\begin{minted}[autogobble,fontsize=\tiny,frame=single]{xml}
 <?xml version="1.0" encoding="UTF-8"?>
 <document dbat_script_version="1.0">
+  <c>
+    NOTE: XML comments <!-- --> is not supported. Use a c (comment)
+    block instead.
+  </c>
+  <meta>
+    <c>
+      Note: The meta section section is optional and can contain anything.
+      One possible use is for bookkeeping purposes.
+    </c>
+
+    <name>Romabundledemo</name>
+    <date>2019-12-04</date>
+    <author>Niclas Börlin</author>
+    <version>1.1</version>
+    <version_history>
+      <version>
+        1.0, 2019-10-02: Version presented at LC3D 2019 in Strasbourg.
+      </version>
+      <version>
+        1.1, 2019-12-04: Added metadata section.
+      </version>
+    </version_history>
+
+    <c>
+      Note: The UUID should be unique for each script! The DBAT
+      function uuid may be used to generate a new UUID.
+    </c>
+    <uuid>71de6bef-a46d-451e-b9b2-6919b73b8a1f</uuid>
+
+    <project>DBAT</project>
+    <project_unit>m</project_unit>
+    <purpose>
+      Demonstrate bundle adjustment on a small aerial project over the
+      city of Strasbourg (SXB) with control and check points using the
+      scripting feature of DBAT. Illustrates that the same file can be
+      used for control points and check points. Also illustrates that
+      multiple image measurement files may be specified and that the
+      standard deviation of the image observations can be overridden
+      in the XML file.
+    </purpose>
+    <datum>
+      Measured control points.
+    </datum>
+  </meta>
+
   <input base_dir="$HERE">
 
     <ctrl_pts>
@@ -1871,7 +2778,7 @@ End of result file
       <filter id="351,410">keep</filter>
     </check_pts>
 
-    <images>
+    <images image_base_dir="$DBAT">
       <file format="id,path">images/images.txt</file>
     </images>
 
@@ -1908,9 +2815,7 @@ End of result file
     </operation>
     <operation>
       <set_bundle_estimate_params>
-        <io>
-          <all>false</all>
-        </io>
+        <io>false</io>
         <eo>
           <all>true</all>
         </eo>
@@ -1939,19 +2844,8 @@ End of result file
       <report>
         <file>result/report.txt</file>
       </report>
-      <c>
-        <top_residuals>
-          <name>result/top_residuals.txt</name>
-        </top_residuals>
-        <op format="x,y,z,sx,sy,sz">
-          <name>result/op.txt</name>
-        </op>
-        <eo>
-          <name>result/eo.txt</name>
-        </eo>
-      </c>
     </files>
   </output>
 </document>
-\end{verbatim}
+\end{minted}
 \end{document}

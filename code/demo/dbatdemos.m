@@ -4,21 +4,21 @@
 %    Call:
 %        LOADPLOTDEMO('ROMA') or LOADPLOTDEMO('CAM')
 %    Data files:
-%        DBATHOME/code/demos/data/dbat
+%        DBATHOME/data/demos/data/dbat
 %
 %
 % romabundledemo - Run bundle on Roma data set.
 %    Call:
 %        ROMABUNDLEDEMO
 %    Data files:
-%        DBATHOME/code/demos/data/dbat
+%        DBATHOME/data/demos/data/dbat
 %
 %
 % camcaldemo - Camera calibration example.
 %    Call:
 %        CAMCALDEMO
 %    Data files:
-%        DBATHOME/code/demos/data/dbat
+%        DBATHOME/data/demos/data/dbat
 %
 %
 % Prague 2016:
@@ -27,8 +27,8 @@
 %            'S1'-'S4', and ORIENT is TRUE or FALSE, or
 %        PRAGUE2016_PS(L), where L is 'S5'
 %    Data files:
-%        DBATHOME/code/demos/data/prague2016/cam (C1-C2)
-%        DBATHOME/code/demos/data/prague2016/sxb (S1-S5)
+%        DBATHOME/data/demos/data/prague2016/cam (C1-C2)
+%        DBATHOME/data/demos/data/prague2016/sxb (S1-S5)
 %
 % Photoscan post-processing:
 %    Call:
@@ -37,15 +37,19 @@
 %        semi-local coordinates (translation, scaling, no
 %        rotation). Use PSZNAME='' to use the Prague 2016 SXB data set.
 %    Data files:
-%        DBATHOME/code/demos/data/prague2016/sxb/psprojects
+%        DBATHOME/data/demos/data/prague2016/sxb/psprojects
 %
 % stpierrebundledemo_ps - Run bundle on StPierre data set from Photoscan.
 %    Call:
 %        STPIERREBUNDLEDEMO_PS
 %    Data files:
-%        DBATHOME/code/demos/data/hamburg2017/stpierre
+%        DBATHOME/data/demos/data/hamburg2017/stpierre
 %
-%
+% rundbatscript - Run DBAT XML scripts.
+%    Call:
+%        RUNDBATSCRIPT
+%    Data files:
+%        DBATHOME/data/scripts
 
 % Run help if function is called.
 help(mfilename)

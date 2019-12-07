@@ -58,7 +58,7 @@
       <filter id="351,410">keep</filter>
     </check_pts>
          
-    <images>
+    <images image_base_dir="$DBAT">
       <file format="id,path">images/images.txt</file>
     </images>
 
@@ -95,9 +95,7 @@
     </operation>
     <operation>
       <set_bundle_estimate_params>
-        <io>
-          <all>false</all>
-        </io>
+        <io>false</io>
         <eo>
           <all>true</all>
         </eo>
@@ -126,17 +124,6 @@
       <report>
         <file>result/report.txt</file>
       </report>
-      <c>
-        <top_residuals>
-          <name>result/top_residuals.txt</name>
-        </top_residuals>
-        <op format="x,y,z,sx,sy,sz">
-          <name>result/op.txt</name>
-        </op>
-        <eo>
-          <name>result/eo.txt</name>
-        </eo>
-      </c>
     </files>
   </output>
 </document>
