@@ -60,15 +60,15 @@ Damped Bundle Adjustment Toolbox result file
             Format height:
                Value: 77.976 mm
             K1 - radial distortion 1:
-               Value: 0 mm^(-3)
+               Value: -0 mm^(-3)
             K2 - radial distortion 2:
-               Value: 0 mm^(-5)
+               Value: -0 mm^(-5)
             K3 - radial distortion 3:
-               Value: 0 mm^(-7)
+               Value: -0 mm^(-7)
             P1 - decentering distortion 1:
-               Value: 0 mm^(-3)
+               Value: -0 mm^(-3)
             P2 - decentering distortion 2:
-               Value: 0 mm^(-3)
+               Value: -0 mm^(-3)
             as - off-unit aspect parameter:
                Value: 0 
             sk - skew:

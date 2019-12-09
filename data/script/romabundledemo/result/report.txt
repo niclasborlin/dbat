@@ -74,11 +74,11 @@ Damped Bundle Adjustment Toolbox result file
                Significance: p=1.00
                Cumulative significance:p=1.00
             K3 - radial distortion 3:
-               Value:        0 mm^(-7)
+               Value:        -0 mm^(-7)
             P1 - decentering distortion 1:
-               Value:        0 mm^(-3)
+               Value:        -0 mm^(-3)
             P2 - decentering distortion 2:
-               Value:        0 mm^(-3)
+               Value:        -0 mm^(-3)
             as - off-unit aspect parameter:
                Value:        0 
             sk - skew:
