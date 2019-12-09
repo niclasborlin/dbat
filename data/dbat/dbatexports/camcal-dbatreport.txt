@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln PhotoModeler Calibration Project
-      Computation UUID : 2a0eba2e-38c9-4625-a46d-f42674db9af5
+      Computation UUID : 08bac37e-33f2-43f2-b581-32df2721bd22
       Input file name  : /home/niclas/dbat/data/dbat/pmexports/camcal-pmexport.txt
       Ctrl pt file     : /home/niclas/dbat/data/dbat/ref/camcal-fixed.txt
    Problems and suggestions:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        07-Dec-2019 02:54:01
-      DBAT version:           0.9.1.1 (2019-12-07)
+      Last Bundle Run:        10-Dec-2019 00:09:11
+      DBAT version:           0.9.1.2 (2019-12-09)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -41,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 9
          First error:          30873.9
          Last error:           98.556
-         Execution time (s):   1.99
+         Execution time (s):   0.74
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

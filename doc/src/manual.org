@@ -23,8 +23,8 @@
 #+latex_header: \usepackage[round]{natbib}
 #+latex_header: \bibliographystyle{abbrvnat}
 
-#+latex_header: \newcommand{\dbatversion}{0.9.1.1}
-#+latex_header: \newcommand{\dbatdate}{Dec 07, 2019}
+#+latex_header: \newcommand{\dbatversion}{0.9.1.2}
+#+latex_header: \newcommand{\dbatdate}{Dec 09, 2019}
 
 #+latex_header: \setcounter{secnumdepth}{4}
 
@@ -194,6 +194,16 @@ the distribution and in Appendix\nbsp[[#sec:license]]. In summary:
 
 #+ATTR_LATEX: :options fontsize=\small,frame=none
 #+INCLUDE: "../../INSTALL.txt" src text
+
+\newpage
+* Change log (from the file ChangeLog.txt)
+  :PROPERTIES:
+  :ALT_TITLE: Change log
+  :CUSTOM_ID: sec:changeLog
+  :END:
+
+#+ATTR_LATEX: :options fontsize=\small,frame=none
+#+INCLUDE: "../../ChangeLog.txt" src text
 
 \newpage
 * Usage
@@ -1073,7 +1083,7 @@ Euler angle rotation model \citep[Ch. 2.1.2.3]{McGlone2004:Manual}.
    :CUSTOM_ID: sec:resultFile
    :END:
 
- #+INCLUDE: "./ill/camcal-dbatreport.txt" src text
+#+INCLUDE: "../../data/dbat/dbatexports/camcal-dbatreport.txt" src text
 
 \newpage
 * XML
@@ -1427,12 +1437,14 @@ Section\nbsp[[#sec:fileOrganisation]]. The output files include:
 The file below is an example of a camera calibration project.
 #+INCLUDE: "../../data/script/camcaldemo/camcaldemo.xml" src xml
 
+\newpage
 *** =romabundledemo.xml=
 The file below is an example of a control-point-free bundle adjustment
 project with self-calibration and listed EO parameters as initial
 values.
 #+INCLUDE: "../../data/script/romabundledemo/romabundledemo.xml" src xml
 
+\newpage
 *** =sxb.xml=
 The file below is an example of a small aerial bundle adjustment
 project with check points and multiple image measurement files.
