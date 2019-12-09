@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Camcaldemo
-      Computation UUID : 4c2ddb09-1fe4-4f3c-a103-baf7698f6c5c
+      Computation UUID : 1769be0b-f7e8-4671-9a39-80d6597bcdd3
       Input file name  : /home/niclas/dbat/data/script/camcaldemo/camcaldemo.xml
       Ctrl pt file     : /home/niclas/dbat/data/script/camcaldemo/reference/camcal-fixed.txt
    Problems and suggestions:
@@ -11,7 +11,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera parameter has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        07-Dec-2019 03:04:49
+      Last Bundle Run:        09-Dec-2019 23:49:08
       DBAT version:           0.9.1.1 (2019-12-07)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
@@ -41,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 8
          First error:          28805.9
          Last error:           98.556
-         Execution time (s):   1.51
+         Execution time (s):   1.2
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

@@ -9,12 +9,15 @@ classdef DBATCamera
         AspectRatio {mustBeNumericScalar} = nan
         Skew {mustBeNumericScalar} = nan
         CameraConstant {mustBeNumericScalar} = nan
+        Model {mustBeNumericScalar} = nan
+        UsePMConversion = true
+        Calibrated {mustBeLogicalScalar}  = false
+        CalibrationInfo {mustBeStruct} = struct
+    end
+    properties (Access = private)
         PrincipalPoint {mustBe2Vector} = nan(1,2)
         K {mustBeNumericVector} = nan(1,0)
         P {mustBeNumericVector} = nan(1,0)
-        Model {mustBeNumericScalar} = nan
-        Calibrated {mustBeLogicalScalar}  = false
-        CalibrationInfo {mustBeStruct} = struct
     end
     
     methods
@@ -51,6 +54,43 @@ classdef DBATCamera
             fprintf('%20s: %s\n','Calibrated',noYes{double(obj.Calibrated)+1});
         end
         
+        % Return -1 if UsePMConversion=true, otherwise +1.
+        function val=PMSign(obj)
+            if obj.UsePMConversion
+                val=-1;
+            else
+                val=+1;
+            end
+        end
+
+        % Create set/get function to convert py, K, P to match
+        % Photomodeler's external format.
+        function val = GetStorablePrincipalPoint(obj)
+            val=obj.PrincipalPoint;
+            val(2)=val(2)*PMSign(obj);
+        end
+        
+        function obj = SetStorablePrincipalPoint(obj,val)
+            val(2)=val(2)*PMSign(obj);
+            obj.PrincipalPoint=val;
+        end
+
+        function val = GetStorableK(obj)
+            val=obj.K*PMSign(obj);
+        end
+        
+        function obj = SetStorableK(obj,val)
+            obj.K=PMSign(obj)*val;
+        end
+        
+        function val = GetStorableP(obj)
+            val=obj.P*PMSign(obj);
+        end
+        
+        function obj = SetStorableP(obj,val)
+            obj.P=PMSign(obj)*val;
+        end
+        
         % Return the aspect difference, i.e., one minus the aspect.
         function v=AspectDiff(obj)
             v=1-obj.AspectRatio;
@@ -80,22 +120,34 @@ classdef DBATCamera
         function value=nP(obj)
             value=length(obj.P);
         end
+
+        function value=GetInternalPrincipalPoint(obj)
+            value=obj.PrincipalPoint;
+        end
         
+        function value=GetInternalK(obj)
+            value=obj.K;
+        end
+            
+        function value=GetInternalP(obj)
+            value=obj.P;
+        end
+            
         % Return an XML struct to be saved to file.
         function xml=XMLStruct(obj)
             if isempty(obj.K)
                 Kstring='';
             else
-                Kstring=sprintf('%.18g,',obj.K);
+                Kstring=sprintf('%.18g,',GetStorableK(obj));
                 Kstring(end)=[];
             end
             if isempty(obj.P)
                 Pstring='';
             else
-                Pstring=sprintf('%.18g,',obj.P);
+                Pstring=sprintf('%.18g,',GetStorableP(obj));
                 Pstring(end)=[];
             end
-       
+            
             noYes={'no','yes'};
             
             cam=struct('id',XMLText('%d',obj.Id),...
@@ -110,7 +162,8 @@ classdef DBATCamera
                        'nK',XMLText('%d',nK(obj)),...
                        'nP',XMLText('%d',nP(obj)),...
                        'cc',XMLText('%.18g',obj.CameraConstant),...
-                       'pp',XMLText('%.18g,%.18g',obj.PrincipalPoint),...
+                       'pp',XMLText('%.18g,%.18g',...
+                                    GetStorablePrincipalPoint(obj)),...
                        'skew',XMLText('%.18g',obj.Skew),...
                        'K',XMLText(Kstring),...
                        'P',XMLText(Pstring));

@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Romabundledemo
-      Computation UUID : 35b72dd1-4424-45ca-8a8f-ffa9889e9550
+      Computation UUID : 875e8b65-32e7-4f74-92e1-9e6f7ee258ca
       Input file name  : /home/niclas/dbat/data/script/sxb/sxb.xml
       Ctrl pt file     : /home/niclas/dbat/data/script/sxb/reference/sxb-control.txt
    Problems and suggestions:
@@ -11,7 +11,7 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        07-Dec-2019 03:06:33
+      Last Bundle Run:        09-Dec-2019 23:55:58
       DBAT version:           0.9.1.1 (2019-12-07)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
@@ -41,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 4
          First error:          61.0871
          Last error:           41.8527
-         Execution time (s):   0.88
+         Execution time (s):   0.09
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -60,15 +60,15 @@ Damped Bundle Adjustment Toolbox result file
             Format height:
                Value: 77.976 mm
             K1 - radial distortion 1:
-               Value: -0 mm^(-3)
+               Value: 0 mm^(-3)
             K2 - radial distortion 2:
-               Value: -0 mm^(-5)
+               Value: 0 mm^(-5)
             K3 - radial distortion 3:
-               Value: -0 mm^(-7)
+               Value: 0 mm^(-7)
             P1 - decentering distortion 1:
-               Value: -0 mm^(-3)
+               Value: 0 mm^(-3)
             P2 - decentering distortion 2:
-               Value: -0 mm^(-3)
+               Value: 0 mm^(-3)
             as - off-unit aspect parameter:
                Value: 0 
             sk - skew:
