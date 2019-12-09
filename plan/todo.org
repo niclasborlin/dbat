@@ -13,3 +13,4 @@
 - IDeas:
   - Given IO, EO, simulate observations, estimate post cov
 
+- Pass meta XML to report file

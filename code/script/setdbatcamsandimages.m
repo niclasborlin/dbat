@@ -35,11 +35,12 @@ s.EO.id=ims.id;
 % Extract camera values from structure.
 
 cc=cellfun(@(x)x.CameraConstant,cams);
-pp=cell2mat(cellfun(@(x)x.PrincipalPoint',cams,'UniformOutput',false));
+pp=cell2mat(cellfun(@(x)GetInternalPrincipalPoint(x)',cams, ...
+                    'UniformOutput',false));
 skew=cellfun(@(x)x.Skew,cams);
 aspectDiff=cellfun(@(x)AspectDiff(x),cams);
-K=cell2mat(cellfun(@(x)x.K',cams,'UniformOutput',false));
-P=cell2mat(cellfun(@(x)x.P',cams,'UniformOutput',false));
+K=cell2mat(cellfun(@(x)GetInternalK(x)',cams,'UniformOutput',false));
+P=cell2mat(cellfun(@(x)GetInternalP(x)',cams,'UniformOutput',false));
 
 s=setcamvals(s,'prior','cc',cc(:,camNo),'pp',pp(:,camNo), ...
                'as', aspectDiff(:,camNo),'sk',skew(:,camNo), ...

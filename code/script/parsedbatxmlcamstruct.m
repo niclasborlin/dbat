@@ -127,35 +127,39 @@ for i=1:length(s)
             end
           case 'nK'
             nK=sscanf(e.nK.Text,'%d')';
-            if length(cam.K)>nK
-                cam.K=cam.K(1:nK);
-            elseif length(cam.K)<nK
-                cam.K(end+1:nK)=nan;
+            K=GetStorableK(cam);
+            if length(K)>nK
+                K=K(1:nK);
+            elseif length(K)<nK
+                K(end+1:nK)=nan;
             end
+            cam=SetStorableK(cam,K);
           case 'K'
             K=sscanf(e.K.Text,'%f,')';
-            cam.K=K;
+            cam=SetStorableK(cam,K);
           case 'nP'
             nP=sscanf(e.nP.Text,'%d')';
-            if length(cam.P)>nP
-                cam.P=cam.P(1:nP);
-            elseif length(cam.P)<nP
-                cam.P(end+1:nP)=nan;
+            P=GetStorableP(cam);
+            if length(P)>nP
+                P=P(1:nP);
+            elseif length(P)<nP
+                P(end+1:nP)=nan;
             end
+            cam=SetStorableP(cam,P);
           case 'P'
             P=sscanf(e.P.Text,'%f,')';
-            cam.P=P;
+            cam=SetStorableP(cam,P);
           case 'model'
             cam.Model=sscanf(e.model.Text,'%d');
           case 'skew'
             cam.Skew=sscanf(e.skew.Text,'%f');
           case 'pp'
             if strcmp(strip(e.pp.Text),'default')
-                cam.PrincipalPoint=evalsensor(cam)/2;
+                cam=SetStorablePrincipalPoint(cam,evalsensor(cam)/2);
             else
-                cam.PrincipalPoint=sscanf(e.pp.Text,'%f,')';
+                cam=SetStorablePrincipalPoint(cam,sscanf(e.pp.Text,'%f,')');
             end
-            if length(cam.PrincipalPoint)~=2
+            if length(GetStorablePrincipalPoint(cam))~=2
                 error(['DBAT camera XML error: Wrong number of principal ' ...
                        'point values: %s'],e.pp.Text);
             end
@@ -163,11 +167,11 @@ for i=1:length(s)
             if strcmp(strip(e.all.Text),'default')
                 % Use default for all parameters
                 cam.CameraConstant=cam.FocalLength;
-                cam.PrincipalPoint=evalsensor(cam)/2;
+                cam=SetStorablePrincipalPoint(cam,evalsensor(cam)/2);
                 cam.AspectRatio=1;
                 cam.Skew=0;
-                cam.K=zeros(size(cam.K));
-                cam.P=zeros(size(cam.P));
+                cam=SetStorableK(cam,zeros(1,nK(cam)));
+                cam=SetStorableP(cam,zeros(1,nP(cam)));
             else
                 error(['DBAT camera XML error: Bad string for ''all''' ...
                        'directive: %s'],e.all.Text);
@@ -186,26 +190,26 @@ for i=1:length(s)
     cams{i}=cam;
 end
 
-nK=cellfun(@(x)length(x.K),cams);
-nP=cellfun(@(x)length(x.P),cams);
+nKall=cellfun(@(x)x.nK,cams);
+nPall=cellfun(@(x)x.nP,cams);
 
-if min(nK)~=max(nK)
+if min(nKall)~=max(nKall)
     % Upgrade all cameras with short K vectors.
-    mK=max(nK);
-    for i=find(nK<mK)'
-        K=cams{i}.K;
+    mK=max(nKall);
+    for i=find(nKall<mK)'
+        K=GetStorableK(cams{i});
         K(end+1:mK)=nan;
-        cams{i}.K=K;
+        cams{i}=SetStorableK(cams{i},K);
     end
 end
 
-if min(nP)~=max(nP)
+if min(nPall)~=max(nPall)
     % Upgrade all cameras with short P vectors.
-    mP=max(nP);
-    for i=find(nP<mP)'
-        P=cams{i}.P;
+    mP=max(nPall);
+    for i=find(nPall<mP)'
+        P=GetStorableP(cams{i});
         P(end+1:mP)=nan;
-        cams{i}.P=P;
+        cams{i}=SetStorableP(cams{i},P);
     end
 end
 
@@ -233,6 +237,3 @@ if isnan(sensor(1))
     imageSize=cam.ImageSize;
     sensor(1)=cam.AspectRatio*sensor(2)*imageSize(1)/imageSize(2);
 end
-
-
-
