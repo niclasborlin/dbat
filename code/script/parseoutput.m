@@ -179,10 +179,14 @@ function PlotIterationTrace(s,op)
 
 doPause='on';
 camSize=1;
+refCam=nan;
 
 if isfield(op,'Attributes')
     if isfield(op.Attributes,'cam_size')
         camSize=sscanf(op.Attributes.cam_size,'%f');
+    end
+    if isfield(op.Attributes,'ref_cam')
+        refCam=sscanf(op.Attributes.ref_cam,'%d');
     end
 end
 
@@ -190,9 +194,12 @@ fig=tagfigure('trace');
 damping=s.bundle.info.damping.name;
 fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         damping,double(fig));
-h=plotnetwork(s,s.bundle.info,'title',...
-              ['Damping: ',damping,'. Iteration %d of %d'], ...
-              'axes',fig,'pause',doPause,'camsize',camSize); 
+args={'title',['Damping: ',damping,'. Iteration %d of %d'], ...
+      'axes',fig,'pause',doPause,'camsize',camSize};
+if ~isnan(refCam)
+    args={'trans','up','align',refCam,args{:}};
+end
+h=plotnetwork(s,s.bundle.info,args{:});
 
 
 function PlotCoverage(s,op)
