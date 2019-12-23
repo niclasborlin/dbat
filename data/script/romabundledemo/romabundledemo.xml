@@ -104,7 +104,7 @@
   <output>
     <plots>
       <plot id="1">image</plot>
-      <plot cam_size="0.1">iteration_trace</plot>
+      <plot cam_size="1" ref_cam="1">iteration_trace</plot>
     </plots>
     <files base_dir="$HERE">
       <report>
