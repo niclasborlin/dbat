@@ -90,8 +90,7 @@ if strcmp(sel,'EO') || strcmp(sel,'struct')
             else
                 camStr=sprintf('-%d',i);
             end
-            EOtypes(:,i)=cellfun(@(x)[x,camStr],EOtypes(:,i),...
-                                 'uniformoutput',false);
+            EOtypes(:,i)=strcat(EOtypes(:,i),camStr);
         end
     end
 end
@@ -101,26 +100,29 @@ if strcmp(sel,'OP') || strcmp(sel,'struct')
     if size(s.OP.val,2)>1
         OPtypes=repmat(OPtypes,1,size(s.OP.val,2));
         if any(s.prior.OP.isCtrl)
-            OPtypes(:,s.prior.OP.isCtrl)=repmat({'CX','CY','CZ'}',1,nnz(s.prior.OP.isCtrl));
+            OPtypes(:,s.prior.OP.isCtrl)=repmat({'CX','CY','CZ'}',1,...
+                                                nnz(s.prior.OP.isCtrl));
         end
         if any(s.prior.OP.isCheck)
-            OPtypes(:,s.prior.OP.isCheck)=repmat({'HX','HY','HZ'}',1,nnz(s.prior.OP.isCheck));
+            OPtypes(:,s.prior.OP.isCheck)=repmat({'HX','HY','HZ'}',1,...
+                                                 nnz(s.prior.OP.isCheck));
         end
         
-        for i=1:size(s.OP.val,2)
-            % Id for this OP.
-            OPstr=sprintf('-%d',i);
-            if s.OP.id(i)~=i
-                OPstr=[OPstr,sprintf('/%d',s.OP.id(i))];
+        if ~all(isnan(s.OP.id))
+            for i=1:size(s.OP.val,2)
+                % Id for this OP.
+                OPstr=sprintf('-%d',i);
+                if s.OP.id(i)~=i
+                    OPstr=[OPstr,sprintf('/%d',s.OP.id(i))];
+                end
+                if s.OP.rawId(i)~=s.OP.id(i)
+                    OPstr=[OPstr,sprintf('/%d',s.OP.rawId(i))];
+                end
+                if ~isempty(s.OP.label{i})
+                    OPstr=[OPstr,'-',s.OP.label{i}];
+                end
+                OPtypes(:,i)=strcat(OPtypes(:,i),OPstr);
             end
-            if s.OP.rawId(i)~=s.OP.id(i)
-                OPstr=[OPstr,sprintf('/%d',s.OP.rawId(i))];
-            end
-            if ~isempty(s.OP.label{i})
-                OPstr=[OPstr,'-',s.OP.label{i}];
-            end
-            OPtypes(:,i)=cellfun(@(x)[x,OPstr],OPtypes(:,i),...
-                                 'uniformoutput',false);
         end
     end
 end

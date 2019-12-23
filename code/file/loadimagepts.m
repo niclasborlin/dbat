@@ -94,14 +94,16 @@ while ~feof(fid)
               length(parts), length(fmtParts));
     end
 
-    if ~ishandle(h)
-        % Waitbar closed, abort.
-        fclose(fid);
-        err='Aborted by user';
-        if nargout<2, error(err); else return; end
-    elseif rem(lineNo+1,1000)==0
-        % Update progressbar every 1000 input lines.
-        waitbar(ftell(fid)/sz,h);
+    if rem(lineNo+1,1000)==0
+        if ~ishandle(h)
+            % Waitbar closed, abort.
+            fclose(fid);
+            err='Aborted by user';
+            if nargout<2, error(err); else return; end
+        else
+            % Update progressbar every 1000 input lines.
+            waitbar(ftell(fid)/sz,h);
+        end
     end
     
     ii=nan;
