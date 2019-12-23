@@ -178,10 +178,10 @@ function PlotIterationTrace(s,op)
 % Plot iteration trace.
 
 doPause='on';
-camSize=nan;
+camSize=1;
 
 if isfield(op,'Attributes')
-    if isfield(op.Attributes,'can_size')
+    if isfield(op.Attributes,'cam_size')
         camSize=sscanf(op.Attributes.cam_size,'%f');
     end
 end
@@ -192,7 +192,7 @@ fprintf('Displaying bundle iteration playback for method %s in figure %d.\n',...
         damping,double(fig));
 h=plotnetwork(s,s.bundle.info,'title',...
               ['Damping: ',damping,'. Iteration %d of %d'], ...
-              'axes',fig,'pause',doPause,'camsize',0.1); 
+              'axes',fig,'pause',doPause,'camsize',camSize); 
 
 
 function PlotCoverage(s,op)
