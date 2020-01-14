@@ -1,4 +1,4 @@
-function pts=loadimagepts2(fName,fmt,sep,cmt)
+function pts=loadimagepts(fName,fmt,sep,cmt)
 %LOADIMAGEPTS Load image points from text file.
 %
 %   PTS=LOADIMAGEPTS(FNAME,FORMAT) loads 2D image point information
@@ -165,7 +165,7 @@ std=zeros(2,numDataLines);
 i=0;
 
 % Read data blocks from file
-blockSize=100;
+blockSize=10000;
 while ~feof(fid)
     [A,cnt]=fscanf(fid,scanfString,[fieldsToRead,blockSize]);
     rows=floor(cnt/fieldsToRead);
