@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Romabundledemo
-      Computation UUID : 74247ab6-18fc-4a21-bdf5-2204558ab758
+      Computation UUID : 3d96223e-23c9-490e-b0ff-cd4d1e68b696
       Input file name  : /home/niclas/dbat/data/script/sxb/sxb.xml
       Ctrl pt file     : /home/niclas/dbat/data/script/sxb/reference/sxb-control.txt
    Problems and suggestions:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        10-Dec-2019 00:01:57
-      DBAT version:           0.9.1.2 (2019-12-09)
+      Last Bundle Run:        14-Jan-2020 21:54:06
+      DBAT version:           0.9.1.3 (2020-01-14)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -41,7 +41,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 4
          First error:          61.0871
          Last error:           41.8527
-         Execution time (s):   0.08
+         Execution time (s):   0.89
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -60,15 +60,15 @@ Damped Bundle Adjustment Toolbox result file
             Format height:
                Value: 77.976 mm
             K1 - radial distortion 1:
-               Value: -0 mm^(-3)
+               Value: 0 mm^(-3)
             K2 - radial distortion 2:
-               Value: -0 mm^(-5)
+               Value: 0 mm^(-5)
             K3 - radial distortion 3:
-               Value: -0 mm^(-7)
+               Value: 0 mm^(-7)
             P1 - decentering distortion 1:
-               Value: -0 mm^(-3)
+               Value: 0 mm^(-3)
             P2 - decentering distortion 2:
-               Value: -0 mm^(-3)
+               Value: 0 mm^(-3)
             as - off-unit aspect parameter:
                Value: 0 
             sk - skew:

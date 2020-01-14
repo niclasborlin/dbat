@@ -23,8 +23,8 @@
 #+latex_header: \usepackage[round]{natbib}
 #+latex_header: \bibliographystyle{abbrvnat}
 
-#+latex_header: \newcommand{\dbatversion}{0.9.1.2}
-#+latex_header: \newcommand{\dbatdate}{Dec 09, 2019}
+#+latex_header: \newcommand{\dbatversion}{0.9.1.3}
+#+latex_header: \newcommand{\dbatdate}{Jan 14, 2020}
 
 #+latex_header: \setcounter{secnumdepth}{4}
 

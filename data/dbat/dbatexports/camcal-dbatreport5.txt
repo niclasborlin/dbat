@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln PhotoModeler Calibration Project
-      Computation UUID : aa9ea758-0278-443a-85d7-da0989a6bd76
+      Computation UUID : 6c01794a-a255-4962-80fb-7a1b53e47cff
       Input file name  : /home/niclas/dbat/data/dbat/pmexports/camcal-pmexport5.txt
       Ctrl pt file     : /home/niclas/dbat/data/dbat/ref/camcal-fixed.txt
    Problems and suggestions:
@@ -13,8 +13,8 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the camera station parameters has a high correlation (see below).
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        07-Dec-2019 02:54:21
-      DBAT version:           0.9.1.1 (2019-12-07)
+      Last Bundle Run:        14-Jan-2020 21:43:26
+      DBAT version:           0.9.1.3 (2020-01-14)
       MATLAB version:         9.4.0.813654 (R2018a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              trillian
@@ -43,7 +43,7 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 6
          First error:          254.75
          Last error:           18.4099
-         Execution time (s):   0.52
+         Execution time (s):   0.12
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
