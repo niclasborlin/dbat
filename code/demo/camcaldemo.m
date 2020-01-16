@@ -39,7 +39,7 @@ inputDir=fullfile(fileparts(dbatroot),'data','dbat');
 % PhotoModeler text export file and report file.
 inputFile=fullfile(inputDir,'pmexports','camcal-pmexport.txt');
 % Report file name.
-reportFile=fullfile(inputDir,'dbatexports','camcal-dbatreport.txt');;
+reportFile=fullfile(inputDir,'dbatexports','camcal-dbatreport.txt');
 % Control point file
 cptFile=fullfile(inputDir,'ref','camcal-fixed.txt');
 
