@@ -61,9 +61,9 @@ end
 
 %fix=2;
 
-for fix=2 % 1:length(files)
+for fix=1:length(files)
     
-    f=files{fix};
+    f=files{fix}
 
     Z=load(fullfile(dataDir,f));
 
@@ -89,6 +89,7 @@ for fix=2 % 1:length(files)
 
     estOP=s.bundle.est.OP;
 
+    disp('Start')
     clear Z s E
 
     if doProfile
@@ -98,32 +99,29 @@ for fix=2 % 1:length(files)
 
     startClock=now;
 
-    JTJ=e.final.weighted.J'*e.final.weighted.J;
-    N=JTJ;
-
-    Nperm=N(p,p);
+    Jp=e.final.weighted.J(:,p);
+    Nperm=Jp'*Jp;
 
     prepClock=now;
     prepTime=(prepClock-startClock)*86400;
 
     % Perform Cholesky on permuted J'*J.
-    [LT,fail]=chol(Nperm);
+    [L,fail]=chol(Nperm,'lower');
 
     cholClock=now;
     cholTime=(cholClock-prepClock)*86400;
 
     if fail==0
-        L=LT';
         % Number of OP parameters
         nOP=nnz(bixOP);
         % Extract blocks of L = [ A, 0; B, C].
         % Diagonal OP block of L
-        LA=LT(1:nOP,1:nOP)';
+        LA=L(1:nOP,1:nOP);
         % Diagonal non-OP block of L
-        LC=full(LT(nOP+1:end,nOP+1:end))';
+        LC=full(L(nOP+1:end,nOP+1:end));
         % Subdiagonal block
-        LBsparse=LT(1:nOP,nOP+1:end)';
-        LB=full(LBsparse);
+        LBsparse=L(nOP+1:end,1:nOP);
+        LB=[];
     else
         warning(['Posterior covariance matrix was not positive definite. ' ...
                  'Results will be inaccurate.'])
@@ -137,9 +135,8 @@ for fix=2 % 1:length(files)
     Lblocks=struct('LA',LA,'LB',LB,'LBsparse',LBsparse,'LC',LC);
     e.final.factorized=struct('p',p,'L',L,'fail',fail,'Lblocks',Lblocks);
     ok=~fail;
-    
+
     CC=VectorizedCOPsparse(Lblocks,estOP,true);
-    CC=VectorizedCOP(Lblocks,estOP,false);
 
     compClock=now;
     compTime=(compClock-cholClock)*86400;
