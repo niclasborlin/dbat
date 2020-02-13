@@ -73,7 +73,7 @@ fprintf('done.\n');
 
 h=plotnetwork(s0,'title','Initial network from PhotoScan', ...
               'axes',tagfigure([mfilename,'-initnetwork']),'camsize',camSz);
-h=plotimagestats(tagfigure([mfilename,'-initimstat']),s0);
+%h=plotimagestats(tagfigure([mfilename,'-initimstat']),s0);
 pause(0.01);
 
 s0PreFilt=s0;
@@ -81,7 +81,7 @@ s0PreFilt=s0;
 if minRays>0 || minAngle>0
     fprintf('Filtering OP...');
     if minRays>0
-        tooFewRayPts=sum(s0.vis,2)<minRays & ~s0.isCtrl;
+        tooFewRayPts=sum(s0.IP.vis,2)'<minRays & ~s0.prior.OP.isCtrl;
     else
         tooFewRayPts=false;
     end
@@ -89,14 +89,14 @@ if minRays>0 || minAngle>0
     if minAngle>0
         rayAng=angles(s0,'Computing OP ray angles')*180/pi;
 
-        tooNarrowAnglePts=rayAng<minAngle & ~s0.isCtrl;
+        tooNarrowAnglePts=rayAng<minAngle & ~s0.prior.OP.isCtrl;
     else
         tooNarrowAnglePts=false;
     end
 
     % Remove bad points.
     badPts=tooFewRayPts | tooNarrowAnglePts;
-    ids2remove=s0.OPid(badPts);
+    ids2remove=s0.OP.id(badPts);
     prob.objPts(ismember(prob.objPts(:,1),ids2remove),:)=[];
     prob.markPts(ismember(prob.markPts(:,2),ids2remove),:)=[];
     fprintf('done.\n');
