@@ -1,3 +1,5 @@
+doProfile=true;
+
 dataDir=fullfile(fileparts(dbatroot),'data','test');
 
 files={'camcaldemo.mat',...
@@ -59,73 +61,97 @@ end
 
 %fix=2;
 
-f=files{fix}
-
-Z=load(fullfile(dataDir,f));
-
-s=Z.s;
-e=Z.E;
-clear Z
-
-% Permute OP first, then EO, then IO.
+for fix=2 % 1:length(files)
     
-% IO blocks.
-[i,j]=ind2sub(size(s.bundle.est.IO),s.bundle.serial.IO.src);
-bixIO=full(sparse(i,j,s.bundle.serial.IO.dest,size(s.bundle.est.IO,1),size(s.bundle.est.IO,2)));
-% EO blocks.
-[i,j]=ind2sub(size(s.bundle.est.EO),s.bundle.serial.EO.src);
-bixEO=full(sparse(i,j,s.bundle.serial.EO.dest,size(s.bundle.est.EO,1),size(s.bundle.est.EO,2)));
-% OP blocks.
-[i,j]=ind2sub(size(s.bundle.est.OP),s.bundle.serial.OP.src);
-bixOP=full(sparse(i,j,s.bundle.serial.OP.dest,size(s.bundle.est.OP,1),size(s.bundle.est.OP,2)));
+    f=files{fix};
 
-%p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
-p=[bixOP(:);bixEO(:);bixIO(:)];
-p=p(p~=0);
+    Z=load(fullfile(dataDir,f));
 
-estOP=s.bundle.est.OP;
+    s=Z.s;
+    e=Z.E;
+    clear Z
 
-clear Z s E
+    % Permute OP first, then EO, then IO.
+    
+    % IO blocks.
+    [i,j]=ind2sub(size(s.bundle.est.IO),s.bundle.serial.IO.src);
+    bixIO=full(sparse(i,j,s.bundle.serial.IO.dest,size(s.bundle.est.IO,1),size(s.bundle.est.IO,2)));
+    % EO blocks.
+    [i,j]=ind2sub(size(s.bundle.est.EO),s.bundle.serial.EO.src);
+    bixEO=full(sparse(i,j,s.bundle.serial.EO.dest,size(s.bundle.est.EO,1),size(s.bundle.est.EO,2)));
+    % OP blocks.
+    [i,j]=ind2sub(size(s.bundle.est.OP),s.bundle.serial.OP.src);
+    bixOP=full(sparse(i,j,s.bundle.serial.OP.dest,size(s.bundle.est.OP,1),size(s.bundle.est.OP,2)));
 
-profile off
-profile on
-tic
-JTJ=e.final.weighted.J'*e.final.weighted.J;
-N=JTJ;
+    %p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
+    p=[bixOP(:);bixEO(:);bixIO(:)];
+    p=p(p~=0);
 
-Nperm=N(p,p);
-% Perform Cholesky on permuted J'*J.
-[LT,fail]=chol(Nperm);
+    estOP=s.bundle.est.OP;
 
-if fail==0
-    L=LT';
-    % Number of OP parameters
-    nOP=nnz(bixOP);
-    % Extract blocks of L = [ A, 0; B, C].
-    % Diagonal OP block of L
-    LA=LT(1:nOP,1:nOP)';
-    % Diagonal non-OP block of L
-    LC=full(LT(nOP+1:end,nOP+1:end))';
-    % Subdiagonal block
-    LB=full(LT(1:nOP,nOP+1:end))';
-else
-    warning(['Posterior covariance matrix was not positive definite. ' ...
-             'Results will be inaccurate.'])
-    n=size(JTJ,1);
-    L=sparse(1:n,1:n,nan,n,n);
-    LA=[];
-    LB=[];
-    LC=[];
+    clear Z s E
+
+    if doProfile
+        profile off
+        profile on
+    end
+
+    startClock=now;
+
+    JTJ=e.final.weighted.J'*e.final.weighted.J;
+    N=JTJ;
+
+    Nperm=N(p,p);
+
+    prepClock=now;
+    prepTime=(prepClock-startClock)*86400;
+
+    % Perform Cholesky on permuted J'*J.
+    [LT,fail]=chol(Nperm);
+
+    cholClock=now;
+    cholTime=(cholClock-prepClock)*86400;
+
+    if fail==0
+        L=LT';
+        % Number of OP parameters
+        nOP=nnz(bixOP);
+        % Extract blocks of L = [ A, 0; B, C].
+        % Diagonal OP block of L
+        LA=LT(1:nOP,1:nOP)';
+        % Diagonal non-OP block of L
+        LC=full(LT(nOP+1:end,nOP+1:end))';
+        % Subdiagonal block
+        LBsparse=LT(1:nOP,nOP+1:end)';
+        LB=full(LBsparse);
+    else
+        warning(['Posterior covariance matrix was not positive definite. ' ...
+                 'Results will be inaccurate.'])
+        n=size(JTJ,1);
+        L=sparse(1:n,1:n,nan,n,n);
+        LA=[];
+        LB=[];
+        LBsparse=[];
+        LC=[];
+    end
+    Lblocks=struct('LA',LA,'LB',LB,'LBsparse',LBsparse,'LC',LC);
+    e.final.factorized=struct('p',p,'L',L,'fail',fail,'Lblocks',Lblocks);
+    ok=~fail;
+    
+    CC=VectorizedCOPsparse(Lblocks,estOP,true);
+    CC=VectorizedCOP(Lblocks,estOP,false);
+
+    compClock=now;
+    compTime=(compClock-cholClock)*86400;
+
+    totalTime=(compClock-startClock)*86400;
+
+    fprintf('|%s | %d| %.1f | %.1f | %.1f | %.1f |\n',f,nnz(Lblocks.LBsparse),prepTime,cholTime,compTime,totalTime);
 end
-Lblocks=struct('LA',LA,'LB',LB,'LC',LC);
-e.final.factorized=struct('p',p,'L',L,'fail',fail,'Lblocks',Lblocks);
-ok=~fail;
 
-CC=VectorizedCOP(Lblocks,estOP);
-toc
-
-profile report
-
+if doProfile
+     profile report
+end
 asfdd
 
 if size(N,1)<500
