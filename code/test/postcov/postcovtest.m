@@ -61,7 +61,7 @@ end
 
 %fix=2;
 
-for fix=1:length(files)
+for fix=1 % 1:length(files)
     
     f=files{fix}
 

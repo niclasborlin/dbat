@@ -1,6 +1,4 @@
-function CC=VectorizedCOPsparse(Lblocks,calc,useSparseLB)
-
-useSparseLB=true;
+function CC=VectorizedCOP(Lblocks,calc)
 
 % L = [LA, 0; LB, LC]. LA is square diagonal block corresponding to
 % the OPs. LC is square diagonal block corresponding to the non-OPs.
@@ -17,17 +15,17 @@ LC=Lblocks.LC;
 % With U = [UA, 0; UB, UC] blocked as L, we are only interested in
 % UA and UB.
 
-if useSparseLB
-    LB=Lblocks.LBsparse;
-else
-    LB=Lblocks.LB;
-end
+LB=Lblocks.LBsparse;
 
-% Invert LA. Actually faster than LA\speye(size(LA)).
+% Invert LA. Is actually faster than LA\speye(size(LA)).
 UA=inv(LA);
 
 LBUA=LB*UA;
 UB=-LC\LBUA;
+
+if any(~calc)
+    % Expand 
+end
 
 % Extract staggered columns of U with stride 3
 ua1=UA(:,1:3:end);
@@ -41,6 +39,10 @@ ub3=UB(:,3:3:end);
 % U'*U = [u11 u12 u13
 %         u12 u22 u23
 %         u13 u23 u33]
+
+% Pre-allocate vector for all elements, not just the one to be
+% estimated.
+ud0=zeros(size(calc));
 
 % Compute diagonal elements of U'*U. ud contains 3 elements per
 % block [u11 u22 u33]
