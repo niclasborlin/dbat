@@ -10,9 +10,9 @@ files={'camcaldemo.mat',...
        'sewu-filt35.mat'
       };
 
-fix=2;
+%fix=1;
 
-f=files{fix};
+f=files{fix}
 Z=load(fullfile(dataDir,f));
 s=Z.s;
 e=Z.E;
@@ -63,57 +63,54 @@ Swap=@(A,m,n)A([m+1:m+n,1:m],[m+1:m+n,1:m]);
 
 sparsity=@(A)nnz(A)/numel(A);
 
-Nf=Swap(Nperm,nEO,nOP);
-
-% Nkk correspond to points, Npp to cameras
-Nkk=Blk11(Nf,nOP,nEO);
-Npp=Blk22(Nf,nOP,nEO);
-Nkp=Blk12(Nf,nOP,nEO);
-Npk=Nkp';
-
-% Spp correspond to cameras, Skk to points.
-Spp=Npp-Npk*(Nkk\Nkp);
-Skk=Nkk-Nkp*(Npp\Npk);
-
-Nfi=inv(Nf);
-Cpp=Blk22(Nfi,nOP,nEO);
-Ckk=Blk11(Nfi,nOP,nEO);
-
-abserr=@(A,B)norm(A-B,'fro');
-relerr=@(A,B)abserr(A,B)/norm(A,'fro');
-
-% Try with restricted symamd reordering.
-p=symamd(Nf);
-p2=[p(p<=nOP),p(p>nOP)];
-Nf2=Nf(p2,p2);
-Nkk2=Blk11(Nf2,nOP,nEO);
-Npp2=Blk22(Nf2,nOP,nEO);
-Nkp2=Blk12(Nf2,nOP,nEO);
-Npk2=Nkp2';
-
-% Spp correspond to cameras, Skk to points.
-Spp2=Npp2-Npk2*(Nkk2\Nkp2);
-Skk2=Nkk2-Nkp2*(Npp2\Npk2);
-
-
-%abserr(inv(Spp),Cpp)
-%abserr(inv(Skk),Ckk)
-
-% Wolf, Dewitt based on EO, OP ordering
+startClock=now;
 
 A=Blk11(Nperm,nEO,nOP);
-B=Blk12(Nperm,nEO,nOP);
 D=Blk22(Nperm,nEO,nOP);
+B=Blk12(Nperm,nEO,nOP);
+
+if sparseB
+    B=sparse(B);
+else
+    B=full(B);
+end
+
+%sparsity(B)
+
+prepClock=now;
+prepTime=(prepClock-startClock)*86400;
 
 DL=chol(D,'lower');
 DLi=inv(DL);
 
 Di=DLi'*DLi;
 
-C1=inv(A-B*Di*B');
+diClock=now;
+diTime=(diClock-prepClock)*86400;
+
+C1=inv(full(A-B*Di*B'));
+
+c1Clock=now;
+c1Time=(c1Clock-diClock)*86400;
 
 BDi=B*Di;
 
-C2=Di+BDi'*C1*BDi;
+C2f=diagblkouter(C1,BDi,3);
+C2=Di+C2f;
 
-C22=inv(D-B'*inv(A)*B);
+c2Clock=now;
+c2Time=(c2Clock-c1Clock)*86400;
+
+totalTime=(c2Clock-startClock)*86400;
+
+allTimes=[diTime,c1Time,c2Time,totalTime]
+
+abserr=@(A,B)norm(A-B,'fro');
+relerr=@(A,B)abserr(A,B)/norm(A,'fro');
+
+if fix==1
+    C2check=extractdiagblocks(Blk22(inv(Nperm),nEO,nOP),3);
+
+    abserr(C2check,C2)
+    relerr(C2check,C2)
+end

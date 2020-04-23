@@ -12,7 +12,7 @@ files={'camcaldemo.mat',...
 
 fix=2;
 
-f=files{fix};
+f=files{fix}
 Z=load(fullfile(dataDir,f));
 s=Z.s;
 e=Z.E;
@@ -31,6 +31,25 @@ if selfCal
 else
     str='No';
 end
+
+vis=s.IP.vis;
+
+map=spalloc(nOP,nOP,sum(sum(vis,1).^2));
+
+for i=1:size(s.IP.vis,2)
+    im=s.IP.vis(:,i);
+    map(im,im)=1;
+end
+
+pc=symamd(map);
+figure(1)
+subplot(1,2,1)
+spy(map)
+subplot(1,2,2)
+spy(map(pc,pc))
+
+% Expand to 3 elements per point
+pc3=repmat((pc-1)*3,3,1)+repmat((1:3)',1,length(pc));
 
 % IO blocks.
 [i,j]=ind2sub(size(s.bundle.est.IO),s.bundle.serial.IO.src);
@@ -63,57 +82,67 @@ Swap=@(A,m,n)A([m+1:m+n,1:m],[m+1:m+n,1:m]);
 
 sparsity=@(A)nnz(A)/numel(A);
 
-Nf=Swap(Nperm,nEO,nOP);
-
-% Nkk correspond to points, Npp to cameras
-Nkk=Blk11(Nf,nOP,nEO);
-Npp=Blk22(Nf,nOP,nEO);
-Nkp=Blk12(Nf,nOP,nEO);
-Npk=Nkp';
-
-% Spp correspond to cameras, Skk to points.
-Spp=Npp-Npk*(Nkk\Nkp);
-Skk=Nkk-Nkp*(Npp\Npk);
-
-Nfi=inv(Nf);
-Cpp=Blk22(Nfi,nOP,nEO);
-Ckk=Blk11(Nfi,nOP,nEO);
-
-abserr=@(A,B)norm(A-B,'fro');
-relerr=@(A,B)abserr(A,B)/norm(A,'fro');
-
-% Try with restricted symamd reordering.
-p=symamd(Nf);
-p2=[p(p<=nOP),p(p>nOP)];
-Nf2=Nf(p2,p2);
-Nkk2=Blk11(Nf2,nOP,nEO);
-Npp2=Blk22(Nf2,nOP,nEO);
-Nkp2=Blk12(Nf2,nOP,nEO);
-Npk2=Nkp2';
-
-% Spp correspond to cameras, Skk to points.
-Spp2=Npp2-Npk2*(Nkk2\Nkp2);
-Skk2=Nkk2-Nkp2*(Npp2\Npk2);
-
-
-%abserr(inv(Spp),Cpp)
-%abserr(inv(Skk),Ckk)
-
-% Wolf, Dewitt based on EO, OP ordering
+startClock=now;
 
 A=Blk11(Nperm,nEO,nOP);
-B=Blk12(Nperm,nEO,nOP);
 D=Blk22(Nperm,nEO,nOP);
+B=Blk12(Nperm,nEO,nOP);
+
+if sparseB
+    B=sparse(B);
+else
+    B=full(B);
+end
+
+%sparsity(B)
+
+prepClock=now;
+prepTime=(prepClock-startClock)*86400;
 
 DL=chol(D,'lower');
 DLi=inv(DL);
 
 Di=DLi'*DLi;
 
-C1=inv(A-B*Di*B');
+diClock=now;
+diTime=(diClock-prepClock)*86400;
+
+C1=inv(full(A-B*Di*B'));
+
+c1Clock=now;
+c1Time=(c1Clock-diClock)*86400;
 
 BDi=B*Di;
 
-C2=Di+BDi'*C1*BDi;
+C2f=diagblkouter(C1,BDi,3);
+C2=Di+C2f;
 
-C22=inv(D-B'*inv(A)*B);
+c2Clock=now;
+c2Time=(c2Clock-c1Clock)*86400;
+
+totalTime=(c2Clock-startClock)*86400;
+
+allTimes=[diTime,c1Time,c2Time,totalTime]
+
+abserr=@(A,B)norm(A-B,'fro');
+relerr=@(A,B)abserr(A,B)/norm(A,'fro');
+
+if fix==1
+    C2check=extractdiagblocks(Blk22(inv(Nperm),nEO,nOP),3);
+
+    abserr(C2check,C2)
+    relerr(C2check,C2)
+end
+
+N2=Swap(Nperm,nEO,nOP);
+
+if length(pc3(:))>nOP
+    warning('Trimming pc3')
+    pc3=pc3(1:nOP);
+end
+
+pc3full=[pc3(:);(length(pc3(:))+1:size(N2,1))'];
+N3=N2(pc3full,pc3full);
+
+L2=chol(N2,'lower');
+L3=chol(N3,'lower');

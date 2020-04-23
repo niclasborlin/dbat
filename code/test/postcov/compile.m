@@ -1,1 +1,1 @@
-mex -R2018a CFLAGS='$CFLAGS -Wall' diagblkouter.c
+mex -R2018a CFLAGS='$CFLAGS -Wall' icpc_mex.c

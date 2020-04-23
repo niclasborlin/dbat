@@ -1,4 +1,4 @@
-function C=diagblkouter(A,B,BT,n)
+function C=diagblkouter(A,B,n)
 %DIAGBLKOUTER Perform an outer product, keeping only diagonal blocks.
 %
 %   C=DIAGBLKOUTER(A,B,N) computes the N-by-N diagonal blocks of the
@@ -7,9 +7,6 @@ function C=diagblkouter(A,B,BT,n)
 %   columns of B is an integer multiple of N. The return matrix C is
 %   sparse with N-by-N diagonal blocks.
 %
-%   C=DIAGBLKOUTER(A,B,BT,N) computes the same result for sparse B,
-%   where BT is assumed to be BT=B'.
-%
-%   No test is performed as to whether A is symmetric not that BT=B.'.
+%   No test is performed as to whether A is symmetric.
     
 error('MEX file not found.');

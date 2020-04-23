@@ -1,0 +1,151 @@
+* Diagonal only
+
+UB=-LC\LBUA; % -inv(LC)*LBUA
+
+sum(UB.^2,1)
+
+* Main algorithm:
+- For each block column i in LB and diagonal block in LA
+  - Compute UA=inv(LA).
+    - LA is input sparse 3-by-3 in array with 3-by-3 diagonal blocks.
+    - UA is buffer compact lower diagonal.
+  - Compute LBUA=LB*UA.
+    - LB is input sparse M-by-3.
+    - LBUA is buffer full M-by-3.
+  - Solve UB=-(LC\LBUA).
+    - LC is input sparse M-by-M lower triangular.
+    - UB is buffer full M-by-3.
+  - If only diagonal elements are requested:
+    - Output C is sparse diagonal with N elements.
+    - Compute sum(UA.^2,1) and store in output block of value vector of C.
+    - Compute sum(UB.^2,1) and add to output block.
+
+** Compute UA=inv(LA)
+
+- Below, A=LA, D=UA=inv(LA).
+
+- Equations
+  | D11 |     |     |   | A11 |     |     |   | 1 |   |   |
+  | D21 | D22 |     | * | A21 | A22 |     | = |   | 1 |   |
+  | D31 | D32 | D33 |   | A31 | A32 | A33 |   |   |   | 1 |
+
+  | D11 A11 |   |         |   |         |   | 1 |
+  | D21 A11 | + | D22 A21 | + |         | = | 0 |
+  | D31 A11 |   | D32 A21 |   | D33 A31 |   | 0 |
+
+  |         |   |         |   |         |   | 0 |
+  |         | + | D22 A22 | + |         | = | 1 |
+  |         |   | D32 A22 |   | D33 A32 |   | 0 |
+
+  |         |   |         |   |         |   | 0 |
+  |         | + |         | + |         | = | 0 |
+  |         |   |         |   | D33 A33 |   | 1 |
+- Computations
+  - D33 = 1/A33
+  - D22 = 1/A22
+  - D32 = -D22 A32 / A22
+  - D11 = 1/A11
+  - D21 = -D22 A21 / A11
+  - D31 = (-D32 A21 - D33 A31) / A11
+
+** Compute LBUA = LB*UA
+
+- Below, y=LBUA, b=LB, A=UA.
+
+- Equations
+  | y11 | y12 | y13 |   | b11 | b12 | b13 |   | A11 |     |     |
+  | y21 | y22 | y23 |   | b21 | b22 | b23 |   | A21 | A22 |     |
+  | y31 | y32 | y33 | = | b31 | b32 | b33 | * | A31 | A32 | A33 |
+  | y41 | y42 | y43 |   | b41 | b42 | b43 |   |     |     |     |
+  | y51 | y52 | y53 |   | b51 | b52 | b53 |   |     |     |     |
+  | y61 | y62 | y63 |   | b61 | b62 | b63 |   |     |     |     |
+
+- Computations for each row
+  | y11 | = | A11 b11 | + | A21 b12 | + | A31 b13 |
+  | y12 | = |         |   | A22 b12 | + | A32 b13 |
+  | y13 | = |         |   |         |   | A33 b13 |
+
+** Solve UB=-LC\LBUA
+
+- LC * UB = -LBUA
+
+- Ignore minus sign, as the dot products will cancel them.
+
+- Below, y=LBUA, u=UB.
+
+- LBUA values will be computed row-by-row in a temporary buffer during
+  the computations.
+
+- Equations
+  | L11 |     |     |     |     |     |   | u11 | u12 | u13 |   | y11 | y12 | y13 |
+  | L21 | L22 |     |     |     |     |   | u21 | u22 | u23 |   | y21 | y22 | y23 |
+  | L31 | L32 | L33 |     |     |     | * | u31 | u32 | u33 | = | y31 | y32 | y33 |
+  | L41 | L42 | L43 | L44 |     |     |   | u41 | u42 | u43 |   | y41 | y42 | y43 |
+  | L51 | L52 | L53 | L54 | L55 |     |   | u51 | u52 | u53 |   | y51 | y52 | y53 |
+  | L61 | L62 | L63 | L64 | L65 | L66 |   | u61 | u62 | u63 |   | y61 | y62 | y63 |
+
+  | L11 u11 |         |         |         |         |         |   | y11 |
+  | L21 u11 | L22 u21 |         |         |         |         |   | y21 |
+  | L31 u11 | L32 u21 | L33 u31 |         |         |         | = | y31 |
+  | L41 u11 | L42 u21 | L43 u31 | L44 u41 |         |         |   | y41 |
+  | L51 u11 | L52 u21 | L53 u31 | L54 u41 | L55 u51 |         |   | y51 |
+  | L61 u11 | L62 u21 | L63 u31 | L64 u41 | L65 u51 | L66 u61 |   | y61 |
+
+- Computations
+  - Row 1
+    - L11 u11 = y11
+    - Computations
+      - u11 = (y11) / L11
+      - u12 = (y12) / L11
+      - u13 = (y13) / L11
+    - Compute dot products
+  - Row 2
+    - L21 u11 + L22 u21 = y21
+    - Computations
+      - u21 = (y21 - L21 u11) / L22
+      - u22 = (y22 - L22 u12) / L22
+      - u23 = (y23 - L23 u13) / L22
+    - Compute dot products
+  - Row 3
+    - L31 u11 + L32 u21 + L33 u31 = y31
+    - Computations
+      - u31 = (y31 - (L31 u11 + L32 u21)) / L33
+      - u32 = (y32 - (L31 u12 + L32 u22)) / L33
+      - u33 = (y33 - (L31 u13 + L32 u23)) / L33
+    - Compute dot products
+  - Row 4
+    - L41 u11 + L42 u21 + L43 u31 + L44 u41 = y41
+    - Computations
+      - u41 = (y41 - (L41 u11 + L42 u21 + L43 u31)) / L44
+      - u42 = (y42 - (L41 u12 + L42 u22 + L43 u31)) / L44
+      - u43 = (y43 - (L41 u13 + L42 u21 + L43 u31)) / L44
+    - Compute dot products
+
+  - for blk from 1 to last column step 3 do
+    - for i from 1 to last row do
+      - Compute y(1..3) values for block blk, row i
+      - for k from 1 to 3 do
+	- for j from 1 to i-1 do
+	  - y(k) -= L(i,j) u(j,k)
+	- u(i,k) = y(k) / L(i,i)
+    - Compute dot products
+
+
+
+* Inner products
+
+u1q=u11^2
+u2q=u22^2
+u3q=u33^2
+
+u1u2=u11u12
+u1u3=u11u13
+u2u3=u12u13
+
+
+| AA | AB | AC |
+| AB | BB | BC |
+| AC | BC | CC |
+
+
+
