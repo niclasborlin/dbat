@@ -15,58 +15,58 @@
 
 void spprint(const mxArray *mx)
 {
-	mwSize n;
-	mwIndex *ir, *jc;
-	mwIndex j, k;
-	double *pr;
-	if( !mxIsSparse(mx) ) return;
-	n = mxGetN(mx);
-	pr = mxGetDoubles(mx);
-	ir = mxGetIr(mx);
-	jc = mxGetJc(mx);
+    mwSize n;
+    mwIndex *ir, *jc;
+    mwIndex j, k;
+    double *pr;
+    if( !mxIsSparse(mx) ) return;
+    n = mxGetN(mx);
+    pr = mxGetDoubles(mx);
+    ir = mxGetIr(mx);
+    jc = mxGetJc(mx);
 
-	mexPrintf("colPtr = [ ");
-	for (j=0; j<=n; j++) {
-		mexPrintf("%ld",jc[j]);
-		if (j<n) {
-			mexPrintf(",");
-		}
-		mexPrintf(" ");
+    mexPrintf("colPtr = [ ");
+    for (j=0; j<=n; j++) {
+	mexPrintf("%ld",jc[j]);
+	if (j<n) {
+	    mexPrintf(",");
 	}
-	mexPrintf("]\n");
+	mexPrintf(" ");
+    }
+    mexPrintf("]\n");
 
-	mexPrintf("rowPtr = [ ");
-	for (k=0; k<jc[n]; k++) {
-		mexPrintf("%ld",ir[k]);
-		if (k<jc[n]-1) {
-			mexPrintf(",");
-		}
-		mexPrintf(" ");
+    mexPrintf("rowPtr = [ ");
+    for (k=0; k<jc[n]; k++) {
+	mexPrintf("%ld",ir[k]);
+	if (k<jc[n]-1) {
+	    mexPrintf(",");
 	}
-	mexPrintf("]\n");
+	mexPrintf(" ");
+    }
+    mexPrintf("]\n");
 
-	mexPrintf("val    = [ ");
-	for (k=0; k<jc[n]; k++) {
-		mexPrintf("%g",pr[k]);
-		if (k<jc[n]-1) {
-			mexPrintf(",");
-		}
-		mexPrintf(" ");
+    mexPrintf("val    = [ ");
+    for (k=0; k<jc[n]; k++) {
+	mexPrintf("%g",pr[k]);
+	if (k<jc[n]-1) {
+	    mexPrintf(",");
 	}
-	mexPrintf("]\n");
+	mexPrintf(" ");
+    }
+    mexPrintf("]\n");
 }
 
 /* The gateway function */
 void mexFunction(int nlhs, mxArray *plhs[],
                  int nrhs, const mxArray *prhs[])
 {
-	// Check for proper number of arguments.
-	if (nrhs!=1) {
-		mexErrMsgTxt("One input required.");
-	}
-	if (nlhs!=0) {
-		mexErrMsgTxt("Zero outputs required.");
-	}
+    // Check for proper number of arguments.
+    if (nrhs!=1) {
+	mexErrMsgTxt("One input required.");
+    }
+    if (nlhs!=0) {
+	mexErrMsgTxt("Zero outputs required.");
+    }
 
-	spprint(A);
+    spprint(A);
 }

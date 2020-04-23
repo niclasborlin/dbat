@@ -66,7 +66,7 @@ UBtime=(UBclock-LBUAclock)*86400;
 
 % Compute diagonal elements of U'*U. ud contains 3 elements per
 % block [u11 u22 u33]
-ud0=(sum(UA.^2,1)+sum(UB.^2,1))';
+ud0=(full(sum(UA.^2,1))+sum(UB.^2,1))';
 
 diagClock=now;
 diagTime=(diagClock-UBclock)*86400;
@@ -90,9 +90,9 @@ else
 
     % Compute the (1,2), (1,3), (2,3) elements of each block. Each
     % vector will contain one element per block.
-    u12=sum(ua1.*ua2,1)+sum(ub1.*ub2,1);
-    u13=sum(ua1.*ua3,1)+sum(ub1.*ub3,1);
-    u23=sum(ua2.*ua3,1)+sum(ub2.*ub3,1);
+    u12=full(sum(ua1.*ua2,1))+sum(ub1.*ub2,1);
+    u13=full(sum(ua1.*ua3,1))+sum(ub1.*ub3,1);
+    u23=full(sum(ua2.*ua3,1))+sum(ub2.*ub3,1);
 
     % Create superdiagonal vectors
     udm1=reshape([u12;u23;zeros(size(u12))],[],1);

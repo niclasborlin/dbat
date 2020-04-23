@@ -6,14 +6,14 @@ addpath('../sparseinv','-end');
 dataDir=fullfile('/scratch','althome','dbat_data');
 
 files={'camcaldemo.mat',...
+       'stpierre.mat',...
        'romabundledemo.mat',...
        'romabundledemo-selfcal.mat',...
        'romabundledemo-imagevariant.mat',...
        'vexcel.mat',...
-       'stpierre.mat',...
-       'sewu-filt35.mat',...
        'mit-2d-3ray.mat',...
        'mit-2d-strip-and-border-3ray.mat',...
+       'sewu-filt35.mat',...
        'mit-3d-xhatch-3ray.mat',...
        'mit-3lyr-3ray.mat'};
 
@@ -32,7 +32,7 @@ relerr=@(A,B)abserr(A,B)/norm(A,'fro');
 
 sparsity=@(A)nnz(A)/numel(A);
 
-for fix=2 % 1:length(files)
+for fix=1:length(files)
 
 f=files{fix}
 Z=load(fullfile(dataDir,f));
@@ -110,6 +110,12 @@ fprintf('.');
 spLB*100
 
 fprintf('.');
+% Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
+%[icipMex,C4mex]=time_icip_mex(NnoIO,0,nEO,nOP,false);
+icipMex=[0];
+C4mex=C4;
+
+fprintf('.');
 % Compute post OP cov with classic algorithm.
 [classicDiag,C1d]=time_classic(NnoIO,0,nEO,nOP,true,true);
 
@@ -124,12 +130,12 @@ if fix==1
     Ni=inv(N);
     C0=Ni(nIO+nEO+1:end,nIO+nEO+1:end);
     C0=mkblkdiag(C0,3);
-    C0d=diag(diag(C0noIO));
 
     % Use no-IO version for classic
     NinoIO=inv(NnoIO);
     C0noIO=NinoIO(nEO+1:end,nEO+1:end);
     C0noIO=mkblkdiag(C0noIO,3);
+    C0d=diag(diag(C0noIO));
     
     disp('Classic errors:')
     disp([abserr(C0noIO,C1),relerr(C0noIO,C1)])
@@ -143,6 +149,9 @@ if fix==1
     disp('ICIP errors:')
     disp([abserr(C0noIO,C4),relerr(C0noIO,C4)])
 
+    disp('ICIP-mex errors:')
+    disp([abserr(C0noIO,C4mex),relerr(C0noIO,C4mex)])
+
     disp('classic-diag errors:')
     disp([abserr(C0d,C1d),relerr(C0d,C1d)])
 
@@ -154,8 +163,9 @@ timeTable(fix,1)=classic(end);
 timeTable(fix,2)=siIOfirst(end);
 timeTable(fix,3)=siIOlast(end);
 timeTable(fix,4)=icip(end);
-timeTable(fix,5)=classicDiag(end);
-timeTable(fix,6)=icipDiag(end);
+timeTable(fix,5)=icipMex(end);
+timeTable(fix,6)=classicDiag(end);
+timeTable(fix,7)=icipDiag(end);
 
 timeTable
 
@@ -163,7 +173,8 @@ timeTables{fix,1}=classic;
 timeTables{fix,2}=siIOfirst;
 timeTables{fix,3}=siIOlast;
 timeTables{fix,4}=icip;
-timeTables{fix,5}=classicDiag;
-timeTables{fix,6}=icipDiag;
+timeTables{fix,5}=icipMex;
+timeTables{fix,6}=classicDiag;
+timeTables{fix,7}=icipDiag;
 
 end
