@@ -14,6 +14,7 @@ dataDir=fullfile('/scratch','niclas','dbat_data');
 files={'camcaldemo.mat',...
        'stpierre.mat',...
        'romabundledemo-selfcal.mat',...
+       'romabundledemo-imagevariant.mat',...
        'vexcel.mat',...
        'mit-2d-3ray.mat',...
        'sewu-filt35.mat',...
@@ -35,7 +36,7 @@ relerr=@(A,B)abserr(A,B)/norm(A,'fro');
 
 sparsity=@(A)nnz(A)/numel(A);
 
-for selfCal=[false,true]
+for selfCal=true %[false,true]
     selfCal
 
     timeTable=zeros(length(files),5);
@@ -128,8 +129,16 @@ for selfCal=[false,true]
             % Compute post OP cov with SI algorithm on OP-EO-IO permutation.
             [siIOlast,C3]=time_si(Nclassic,nIO,nEO,nOP,true);
         else
-            siIOfirst=0;
-            C2=C1;
+            
+            if nIO>0
+                % Swap IO, EO blocks
+                p=[nIO+1:nIO+nEO,1:nIO,nIO+nEO+1:nIO+nEO+nOP];
+                N2=Nclassic(p,p);
+                [siIOfirst,C2]=time_classic(N2,nIO,nEO,nOP,true,false);
+            else
+                siIOfirst=0;
+                C2=C1;
+            end
             siIOlast=0;
             C3=C1;
         end
