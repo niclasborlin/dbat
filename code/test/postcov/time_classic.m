@@ -5,9 +5,8 @@ function [times,C]=time_classic(N,nIO,nEO,nOP,sparseB,onlyDiag)
 % with Application in GIS", Ch. 17-12.
 
 if nIO>0
-    times=nan(1,5);
-    C=sparse(size(N,1),size(N,2));
-    return;
+    nEO=nEO+nIO;
+    nIO=0;
 end
 
 % N is partitioned EO-OP

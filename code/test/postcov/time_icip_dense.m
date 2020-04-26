@@ -1,4 +1,4 @@
-function [times,C,spLB,spLC]=time_icip(N,nIO,nEO,nOP,onlyDiag)
+function [times,C,spLB,spLC]=time_icip_dense(N,nIO,nEO,nOP,onlyDiag)
 %Returned times are [chol,extract,UA,LBUA,UB,diag,offDiag,combine,total];
 
 %N is IO-EO-OP on entry.
