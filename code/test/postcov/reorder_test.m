@@ -7,13 +7,13 @@ dataDir=fullfile('/scratch','niclas','dbat_data');
 
 files={'camcaldemo.mat',...
        'stpierre.mat',...
+       'romabundledemo.mat',...
        'romabundledemo-selfcal.mat',...
+       'romabundledemo-imagevariant.mat',...
        'vexcel.mat',...
        'mit-2d-3ray.mat',...
        'sewu-filt35.mat',...
-       'mit-3d-xhatch2-3ray.mat',...
        'mit-3d-xhatch-3ray.mat',...
-       'mit-2lyr-3ray.mat',...
        'mit-3lyr-3ray.mat'};
 
 %'mit-2d-strip-and-border-3ray.mat',...
@@ -32,7 +32,7 @@ relerr=@(A,B)abserr(A,B)/norm(A,'fro');
 
 sparsity=@(A)nnz(A)/numel(A);
 
-for fix=1:length(files)
+for fix=9 % 1:length(files)-1
 
 f=files{fix}
 Z=load(fullfile(dataDir,f));
@@ -66,9 +66,6 @@ Part11=@(A,m,n)A(1:m,1:m);
 Part12=@(A,m,n)A(1:m,m+1:m+n);
 Part22=@(A,m,n)A(m+1:m+n,m+1:m+n);
 
-% Re-partition to swap blocks of size M followed by N.
-Swap=@(A,m,n)A([m+1:m+n,1:m],[m+1:m+n,1:m]);
-
 nIO=nnz(bixIO);
 nOP=nnz(bixOP);
 nEO=nnz(bixEO);
@@ -77,10 +74,52 @@ numCams=size(s.EO.val,2);
 numOPs=size(s.OP.val,2);
 numIPs=size(s.IP.val,2);
 
+vis=s.IP.vis;
+
+nPts=size(vis,1);
+
+map=spalloc(nPts,nPts,sum(sum(vis,1).^2));
+
+for i=1:size(s.IP.vis,2)
+    i
+    im=s.IP.vis(:,i);
+    map(im,im)=1;
+    if rem(i,100)==0, spy(map), pause(0.1), end
+end
+spy(map)
+
+map2=zeros(size(vis,2));
+for i=1:size(s.IP.vis,1)
+    i
+    im=s.IP.vis(i,:);
+    map2(im,im)=1;
+    if rem(i,1000)==0, spy(map2), pause(0.1), end
+end
+spy(map2)
+
+pc=symamd(map);
+figure(1)
+spy([map,map(pc,pc)])
+
+pc2=symamd(map2);
+figure(2)
+spy([map2,map2(pc2,pc2)])
+
+% Expand to 3 elements per point
+pc3=repmat((pc-1)*3,3,1)+repmat((1:3)',1,length(pc));
+
+% Expand to 3 elements per image
+pc6=repmat((pc2-1)*6,6,1)+repmat((1:6)',1,length(pc2));
+
+nIO=nnz(s.bundle.serial.IO.src);
+nEO=nnz(s.bundle.serial.EO.src);
+nOP=nnz(s.bundle.serial.OP.src);
 clear s
 
 % Remove IO parameters
 NnoIO=N(nIO+1:end,nIO+1:end);
+
+pp=[pc6(:);numel(pc6)+pc3(:)];
 
 sp12=sparsity(Part12(NnoIO,nEO,nOP));
 
@@ -99,8 +138,6 @@ fprintf('.');
 % Compute post OP cov with classic algorithm.
 [classic,C1]=time_classic(NnoIO,0,nEO,nOP,true,false);
 
-[classicSelf,C1S]=time_classic(N,0,nIO+nEO,nOP,true,false);
-
 if 0
     fprintf('.');
     % Compute post OP cov with SI algorithm on IO-EO-OP permutation.
@@ -117,7 +154,7 @@ else
 end
 fprintf('.');
 % Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
-[icip,C4,spLB,spLC]=time_icip_dense(NnoIO,0,nEO,nOP,false);
+[icip,C4,spLB,spLC]=time_icip(NnoIO,0,nEO,nOP,false);
 
 sp12*100
 spLB*100
@@ -125,9 +162,9 @@ spLC*100
 
 fprintf('.');
 % Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
-%[icipSparse,C4sparse]=time_icip_sparse(NnoIO,0,nEO,nOP,false);
-icipSparse=0;
-C4sparse=C4;
+%[icipMex,C4mex]=time_icip_mex(NnoIO,0,nEO,nOP,false);
+icipMex=[0];
+C4mex=C4;
 
 fprintf('.');
 % Compute post OP cov with classic algorithm.
@@ -135,7 +172,7 @@ fprintf('.');
 
 fprintf('.');
 % ICIP on only the diagonal.
-[icipDiag,C4d]=time_icip_dense(NnoIO,0,nEO,nOP,true);
+[icipDiag,C4d]=time_icip(NnoIO,0,nEO,nOP,true);
 
 fprintf('\n');
 
@@ -163,8 +200,8 @@ if fix==1
     disp('ICIP errors:')
     disp([abserr(C0noIO,C4),relerr(C0noIO,C4)])
 
-    disp('ICIP-sparse errors:')
-    disp([abserr(C0noIO,C4sparse),relerr(C0noIO,C4sparse)])
+    disp('ICIP-mex errors:')
+    disp([abserr(C0noIO,C4mex),relerr(C0noIO,C4mex)])
 
     disp('classic-diag errors:')
     disp([abserr(C0d,C1d),relerr(C0d,C1d)])
@@ -175,10 +212,9 @@ end
 
 timeTable(fix,1)=classic(end);
 timeTable(fix,2)=siIOfirst(end);
-timeTable(fix,2)=classicSelf(end);
 timeTable(fix,3)=siIOlast(end);
 timeTable(fix,4)=icip(end);
-timeTable(fix,5)=icipSparse(end);
+timeTable(fix,5)=icipMex(end);
 timeTable(fix,6)=classicDiag(end);
 timeTable(fix,7)=icipDiag(end);
 timeTable(fix,[8:11])=[spVis,sp12,spLB,spLC];
@@ -187,10 +223,9 @@ timeTable
 
 timeTables{fix,1}=classic;
 timeTables{fix,2}=siIOfirst;
-timeTables{fix,2}=classicSelf;
 timeTables{fix,3}=siIOlast;
 timeTables{fix,4}={icip,spVis,sp12,spLB,spLC};
-timeTables{fix,5}=icipSparse;
+timeTables{fix,5}=icipMex;
 timeTables{fix,6}=classicDiag;
 timeTables{fix,7}=icipDiag;
 

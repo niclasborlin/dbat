@@ -37,11 +37,23 @@ vis=s.IP.vis;
 map=spalloc(nOP,nOP,sum(sum(vis,1).^2));
 
 for i=1:size(s.IP.vis,2)
+    i
     im=s.IP.vis(:,i);
     map(im,im)=1;
+    if rem(i,100)==0, spy(map), pause(0.1), end
+end
+spy(map)
+
+map2=zeros(size(vis,2));
+for i=1:size(s.IP.vis,1)
+    i
+    im=s.IP.vis(i,:);
+    map2(im,im)=1;
+    if rem(i,1000)==0, spy(map2), pause(0.1), end
 end
 
 pc=symamd(map);
+pc2=symamd(map2);
 figure(1)
 subplot(1,2,1)
 spy(map)
@@ -50,6 +62,9 @@ spy(map(pc,pc))
 
 % Expand to 3 elements per point
 pc3=repmat((pc-1)*3,3,1)+repmat((1:3)',1,length(pc));
+
+% Expand to 3 elements per image
+pc6=repmat((pc2-1)*6,6,1)+repmat((1:6)',1,length(pc2));
 
 % IO blocks.
 [i,j]=ind2sub(size(s.bundle.est.IO),s.bundle.serial.IO.src);

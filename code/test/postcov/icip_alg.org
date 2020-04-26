@@ -131,7 +131,6 @@ sum(UB.^2,1)
     - Compute dot products
 
 
-
 * Inner products
 
 u1q=u11^2
@@ -149,3 +148,63 @@ u2u3=u12u13
 
 
 
+* Classic cholesky
+
+C1 = (N. - N_ N:^{-1} N_^T)^{-1} 
+   = (A - B Di BT)i
+
+A is 6mx6m
+D is 3nx3n
+
+EE^T = D
+
+EiEi^T = Di
+
+L1=chol(C1);
+
+C1 = L1 L1'
+
+C2 = N:^{-1} + N:^{-1}N_^T C1 N_ N:^{-1} 
+   = Di + Di BT C1 B Di
+   = Di + Di BT L1 L1' B Di
+   = [ X = L1' B Di ]
+   = Di + X' X
+
+
+
+* Classic + self
+
+No self-cal
+
+| Nee | Neo |   | A  | B |
+| Noe | Noo | = | BT | D |
+
+With self-cal
+
+| Nii | Nie |   | Nio |
+| Nei | Nee |   | Neo |
+|-----+-----+---+-----|
+| Noi | Noe |   | Noo |
+
+If we block as above and have 
+
+| A | = | Nii | Nie |
+|   |   | Nei | Nee |
+|---+---+-----+-----|
+|   |   |     |     |
+| B | = | Nio |     |
+|   |   | Neo |     |
+
+we get the same algorithm.
+
+ C1 = (A - B Di BT)i
+
+ A is 6mx6m
+ D is 3nx3n
+
+ EE^T = D
+
+ EiEi^T = Di
+
+ C2 = N:^{-1} + N:^{-1}N_^T C1 N_ N:^{-1} 
+    = Di + Di BT C1 B Di
