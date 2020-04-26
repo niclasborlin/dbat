@@ -36,7 +36,7 @@ relerr=@(A,B)abserr(A,B)/norm(A,'fro');
 
 sparsity=@(A)nnz(A)/numel(A);
 
-for selfCal=true %[false,true]
+for selfCal=[true,false]
     selfCal
 
     timeTable=zeros(length(files),5);
