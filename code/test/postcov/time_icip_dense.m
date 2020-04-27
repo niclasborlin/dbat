@@ -43,7 +43,7 @@ LBUAtime=(LBUAclock-UAclock)*86400;
 
 blockSize=256*1024^2;
 
-blockCols=floor(min(round(blockSize/8/size(LB,1)),size(LB,2))/3)*3
+blockCols=floor(min(round(blockSize/8/size(LB,1)),size(LB,2))/3)*3;
 
 % Compute diagonal elements of U'*U. ud0 contains 3 elements per block
 % [u11 u22 u33]
