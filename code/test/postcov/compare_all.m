@@ -54,7 +54,7 @@ for selfCal=[true,false]
         JTJ=e.final.weighted.J'*e.final.weighted.J;
         N=JTJ;
         
-        clear Z e
+        clear Z
 
         % IO blocks.
         [i,j]=ind2sub(size(s.bundle.est.IO),s.bundle.serial.IO.src);
@@ -91,8 +91,6 @@ for selfCal=[true,false]
         numOPs=size(s.OP.val,2);
         numIPs=size(s.IP.val,2);
 
-        clear s
-
         sp12=sparsity(Blk23(N,nIO,nEO,nOP));
     
         if selfCal
@@ -107,15 +105,21 @@ for selfCal=[true,false]
 
         if dispProp
             if fix==1
-                fprintf('| Name | SC | Cams | OP | IP |\n');
+                fprintf('| Name | nIO | Cams | OP | IP |\n');
                 fprintf('|-\n');
             end
     
             % Name, nIO, nEO, nOP, nIP, sparsity(B)
-            fprintf('| %s | %d | %d | %d | %d | %.1f |\n',f,nIO>0,numCams,...
-                    numOPs,numIPs,sp12);
+            fprintf('| %s | %d | %d | %d | %d | %.1f |\n',f,nIO,numCams,...
+                    numOPs,numIPs,sp12*100);
         end
 
+        fprintf('.');
+        % Compute post OP cov with DBAT 0.9.1 algorithm.
+        [dbat091,CDBAT]=time_dbat_091(s,e);
+
+        clear s e
+        
         fprintf('.');
         % Compute post OP cov with classic algorithm.
         [classic,C1]=time_classic(Nclassic,nIO,nEO,nOP,true,false);
@@ -130,15 +134,8 @@ for selfCal=[true,false]
             [siIOlast,C3]=time_si(Nclassic,nIO,nEO,nOP,true);
         else
             
-            if nIO>0
-                % Swap IO, EO blocks
-                p=[nIO+1:nIO+nEO,1:nIO,nIO+nEO+1:nIO+nEO+nOP];
-                N2=Nclassic(p,p);
-                [siIOfirst,C2]=time_classic(N2,nIO,nEO,nOP,true,false);
-            else
-                siIOfirst=0;
-                C2=C1;
-            end
+            siIOfirst=0;
+            C2=C1;
             siIOlast=0;
             C3=C1;
         end
@@ -146,12 +143,6 @@ for selfCal=[true,false]
         fprintf('.');
         % Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
         [icip,C4,spLB,spLC]=time_icip_dense(Nclassic,nIO,nEO,nOP,false);
-
-        fprintf('.');
-        % Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
-        %[icipSparse,C4sparse]=time_icip_sparse(Nclassic,nIO,nEO,nOP,false);
-        icipSparse=0;
-        C4sparse=C4;
 
         fprintf('.');
         % Compute post OP cov with classic algorithm.
@@ -184,8 +175,8 @@ for selfCal=[true,false]
             disp('ICIP errors:')
             disp([abserr(C0,C4),relerr(C0,C4)])
 
-            disp('ICIP-sparse errors:')
-            disp([abserr(C0,C4sparse),relerr(C0,C4sparse)])
+            disp('DBAT 0.9.1 errors:')
+            disp([abserr(C0,CDBAT),relerr(C0,CDBAT)])
 
             disp('classic-diag errors:')
             disp([abserr(C0d,C1d),relerr(C0d,C1d)])
@@ -198,7 +189,7 @@ for selfCal=[true,false]
         timeTable(fix,2)=siIOfirst(end);
         timeTable(fix,3)=siIOlast(end);
         timeTable(fix,4)=icip(end);
-        timeTable(fix,5)=icipSparse(end);
+        timeTable(fix,5)=dbat091(end);
         timeTable(fix,6)=classicDiag(end);
         timeTable(fix,7)=icipDiag(end);
         timeTable(fix,[8:11])=[spVis,sp12,spLB,spLC];
@@ -209,7 +200,7 @@ for selfCal=[true,false]
         timeTables{fix,2}=siIOfirst;
         timeTables{fix,3}=siIOlast;
         timeTables{fix,4}={icip,spVis,sp12,spLB,spLC};
-        timeTables{fix,5}=icipSparse;
+        timeTables{fix,5}=dbat091;
         timeTables{fix,6}=classicDiag;
         timeTables{fix,7}=icipDiag;
 
