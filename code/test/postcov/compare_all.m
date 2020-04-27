@@ -42,6 +42,9 @@ for selfCal=[true,false]
     timeTable=zeros(length(files),5);
     timeTables=cell(length(files),5);
 
+    absErrTable=zeros(7,7,length(files));
+    relErrTable=zeros(7,7,length(files));
+
     for fix=1:length(files)
         
         f=files{fix}
@@ -124,7 +127,7 @@ for selfCal=[true,false]
         % Compute post OP cov with classic algorithm.
         [classic,C1]=time_classic(Nclassic,nIO,nEO,nOP,true,false);
 
-        if 0
+        if 1
             fprintf('.');
             % Compute post OP cov with SI algorithm on IO-EO-OP permutation.
             [siIOfirst,C2]=time_si(Nclassic,nIO,nEO,nOP,false);
@@ -151,6 +154,9 @@ for selfCal=[true,false]
         fprintf('.');
         % ICIP on only the diagonal.
         [icipDiag,C4d]=time_icip_dense(Nclassic,nIO,nEO,nOP,true);
+
+        fprintf('.');
+        [lep,Clep]=time_lep(Nclassic,nIO,nEO,nOP);
 
         fprintf('\n');
 
@@ -184,7 +190,22 @@ for selfCal=[true,false]
             disp('ICIP-diag errors:')
             disp([abserr(C0d,C4d),relerr(C0d,C4d)])
         end
+        
+        % Collect all matrices and compare.
+        CC={C1,C2,C3,C4,CDBAT,C1d,C4d};
+        isDiag=[false(1,5),true(1,2)];
+        
+        for j=1:length(CC)
+            for i=1:length(CC)
+                if isDiag(i)==isDiag(j)
+                    absErrTable(i,j,fix)=abserr(CC{i},CC{j});
+                    relErrTable(i,j,fix)=relerr(CC{i},CC{j});
+                end
+            end
+        end
 
+        lepErr=trace(C1)/trace(Clep)
+        
         timeTable(fix,1)=classic(end);
         timeTable(fix,2)=siIOfirst(end);
         timeTable(fix,3)=siIOlast(end);
@@ -192,8 +213,12 @@ for selfCal=[true,false]
         timeTable(fix,5)=dbat091(end);
         timeTable(fix,6)=classicDiag(end);
         timeTable(fix,7)=icipDiag(end);
-        timeTable(fix,[8:11])=[spVis,sp12,spLB,spLC];
+        timeTable(fix,8)=lep(end);
+        timeTable(fix,[9:12])=[spVis,sp12,spLB,spLC];
 
+        absErrTable(:,:,fix)
+        relErrTable(:,:,fix)
+        
         timeTable
 
         timeTables{fix,1}=classic;
@@ -203,8 +228,15 @@ for selfCal=[true,false]
         timeTables{fix,5}=dbat091;
         timeTables{fix,6}=classicDiag;
         timeTables{fix,7}=icipDiag;
+        timeTables{fix,8}=lep;
 
     end
-    
-    save(['result_',host,'.mat'],'files','timeTable','timeTables','selfCal');
+
+    if selfCal
+        saveFile=['result_',host,'_self.mat'];
+    else
+        saveFile=['result_',host,'.mat'];
+    end
+    save(saveFile,'files','timeTable','timeTables','selfCal','absErrTable',...
+         'relErrTable');
 end
