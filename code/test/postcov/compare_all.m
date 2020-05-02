@@ -217,7 +217,7 @@ for selfCal=[true,false]
         timeTable(fix,6)=classicDiag(end);
         timeTable(fix,7)=icipDiag(end);
         timeTable(fix,8)=lep(end);
-        timeTable(fix,[9:12])=[spVis,sp12,spLB,spLC];
+        timeTable(fix,[9:12])=[spVis,sp12,spLB,spLC,spUB];
 
         absErrTable(:,:,fix)
         relErrTable(:,:,fix)
