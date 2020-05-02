@@ -1,4 +1,4 @@
-function [times,C,spLB,spLC]=time_icip_dense(N,nIO,nEO,nOP,onlyDiag)
+function [times,C,spLB,spLC,spUB]=time_icip_dense(N,nIO,nEO,nOP,onlyDiag)
 %Returned times are [chol,extract,UA,LBUA,UB,diag,offDiag,combine,total];
 
 %N is IO-EO-OP on entry.
@@ -80,6 +80,9 @@ end
 % Reset timers.
 UBtime=0;
 
+nnzUB=0;
+numelUB=0;
+
 for base=1:blockCols:size(LBUA,2)
     % Columns in this block.
     ix=base:min(base+blockCols-1,size(UA,2));
@@ -87,6 +90,9 @@ for base=1:blockCols:size(LBUA,2)
     LBUAblk=LBUA(:,ix);
     UB=-LC\LBUAblk;
 
+    nnzUB=nnzUB+nnz(UB);
+    numelUB=numelUB+numel(UB);
+    
     stopClock=now;
     stopTime=(stopClock-lapClock)*86400;
 
@@ -126,7 +132,10 @@ for base=1:blockCols:size(LBUA,2)
         offDiagTime=offDiagTime+stopTime;
         lapClock=stopClock;
     end
+    
 end
+
+spUB=nnzUB/numelUB;
 
 if onlyDiag
     C=spdiags(ud0(:),0,length(ud0),length(ud0));

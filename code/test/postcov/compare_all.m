@@ -16,7 +16,6 @@ dataDir=fullfile('/scratch','niclas','dbat_data');
 files={'camcaldemo.mat',...
        'stpierre.mat',...
        'romabundledemo-selfcal.mat',...
-       'romabundledemo-imagevariant.mat',...
        'vexcel.mat',...
        'mit-2d-3ray.mat',...
        'sewu-filt35.mat',...
@@ -121,15 +120,17 @@ for selfCal=[true,false]
 
         fprintf('.');
         % Compute post OP cov with DBAT 0.9.1 algorithm.
-        [dbat091,CDBAT]=time_dbat_091(s,e);
+        %[dbat091,CDBAT]=time_dbat_091(s,e);
+        dbat091=0;
 
         clear s e
         
         fprintf('.');
         % Compute post OP cov with classic algorithm.
         [classic,C1]=time_classic(Nclassic,nIO,nEO,nOP,true,false);
+        CDBAT=C1;
 
-        if 1
+        if 0
             fprintf('.');
             % Compute post OP cov with SI algorithm on IO-EO-OP permutation.
             [siIOfirst,C2]=time_si(Nclassic,nIO,nEO,nOP,false);
@@ -147,7 +148,7 @@ for selfCal=[true,false]
         
         fprintf('.');
         % Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
-        [icip,C4,spLB,spLC]=time_icip_dense(Nclassic,nIO,nEO,nOP,false);
+        [icip,C4,spLB,spLC,spUB]=time_icip_dense(Nclassic,nIO,nEO,nOP,false);
 
         fprintf('.');
         % Compute post OP cov with classic algorithm.
@@ -226,7 +227,7 @@ for selfCal=[true,false]
         timeTables{fix,1}=classic;
         timeTables{fix,2}=siIOfirst;
         timeTables{fix,3}=siIOlast;
-        timeTables{fix,4}={icip,spVis,sp12,spLB,spLC};
+        timeTables{fix,4}={icip,spVis,sp12,spLB,spLC,spUB};
         timeTables{fix,5}=dbat091;
         timeTables{fix,6}=classicDiag;
         timeTables{fix,7}=icipDiag;
