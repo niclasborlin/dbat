@@ -14,9 +14,9 @@ addpath('../sparseinv','-end');
 dataDir=fullfile('/scratch','niclas','dbat_data');
 
 files={'camcaldemo.mat',...
-       'stpierre.mat',...
-       'romabundledemo-selfcal.mat',...
        'vexcel.mat',...
+       'romabundledemo-selfcal.mat',...
+       'stpierre.mat',...
        'mit-2d-3ray.mat',...
        'sewu-filt35.mat',...
        'mit-3d-xhatch2-3ray.mat',...
@@ -95,13 +95,16 @@ for selfCal=[true,false]
         numOPs=size(s.OP.val,2);
         numIPs=size(s.IP.val,2);
 
-        sp12=sparsity(Blk23(N,nIO,nEO,nOP));
-    
         if selfCal
             Nclassic=N;
+            mixBlock=[Blk13(N,nIO,nEO,nOP);Blk23(N,nIO,nEO,nOP)];
+            sp11=sparsity(Blk13(N,nIO,nEO,nOP))
+            sp12=sparsity(mixBlock);
         else
             % Remove IO parameters
             Nclassic=N(nIO+1:end,nIO+1:end);
+            mixBlock=Blk23(N,nIO,nEO,nOP);
+            sp12=sparsity(mixBlock);
             nIO=0;
         end        
         ix=[nIO+nEO+1:size(Nclassic,2),nIO+1:nIO+nEO,1:nIO];
@@ -130,14 +133,16 @@ for selfCal=[true,false]
         [classic,C1]=time_classic(Nclassic,nIO,nEO,nOP,true,false);
         CDBAT=C1;
 
-        if 0
+        if 1
             fprintf('.');
             % Compute post OP cov with SI algorithm on IO-EO-OP permutation.
             [siIOfirst,C2]=time_si(Nclassic,nIO,nEO,nOP,false);
             
             fprintf('.');
             % Compute post OP cov with SI algorithm on OP-EO-IO permutation.
-            [siIOlast,C3]=time_si(Nclassic,nIO,nEO,nOP,true);
+            %[siIOlast,C3]=time_si(Nclassic,nIO,nEO,nOP,true);
+            siIOlast=0;
+            C3=C1;
         else
             
             siIOfirst=0;
@@ -148,15 +153,19 @@ for selfCal=[true,false]
         
         fprintf('.');
         % Compute post OP cov with CIP algorithm on OP-EO-IO permutation.
-        [icip,C4,spLB,spLC,spUB]=time_icip_dense(Nclassic,nIO,nEO,nOP,false);
+        [icip,C4,spLB,spLC,spUB,spKC]=time_icip_dense(Nclassic,nIO,nEO,nOP,false);
 
         fprintf('.');
         % Compute post OP cov with classic algorithm.
-        [classicDiag,C1d]=time_classic(Nclassic,nIO,nEO,nOP,true,true);
-
+        %[classicDiag,C1d]=time_classic(Nclassic,nIO,nEO,nOP,true,true);
+        classicDiag=0;
+        C1d=C1;
+        
         fprintf('.');
         % ICIP on only the diagonal.
-        [icipDiag,C4d]=time_icip_dense(Nclassic,nIO,nEO,nOP,true);
+        %[icipDiag,C4d]=time_icip_dense(Nclassic,nIO,nEO,nOP,true);
+        icipDiag=0;
+        C4d=C4;
 
         fprintf('.');
         [lep,Clep]=time_lep(Nclassic,nIO,nEO,nOP);
@@ -217,8 +226,10 @@ for selfCal=[true,false]
         timeTable(fix,6)=classicDiag(end);
         timeTable(fix,7)=icipDiag(end);
         timeTable(fix,8)=lep(end);
-        timeTable(fix,[9:12])=[spVis,sp12,spLB,spLC,spUB];
+        timeTable(fix,[9:14])=[spVis,sp12,spLB,spLC,spUB,spKC];
 
+        spLB/sp12
+        
         absErrTable(:,:,fix)
         relErrTable(:,:,fix)
         
@@ -227,7 +238,7 @@ for selfCal=[true,false]
         timeTables{fix,1}=classic;
         timeTables{fix,2}=siIOfirst;
         timeTables{fix,3}=siIOlast;
-        timeTables{fix,4}={icip,spVis,sp12,spLB,spLC,spUB};
+        timeTables{fix,4}={icip,spVis,sp12,spLB,spLC,spUB,spKC};
         timeTables{fix,5}=dbat091;
         timeTables{fix,6}=classicDiag;
         timeTables{fix,7}=icipDiag;
@@ -243,3 +254,5 @@ for selfCal=[true,false]
     save(saveFile,'files','timeTable','timeTables','selfCal','absErrTable',...
          'relErrTable');
 end
+
+diary off

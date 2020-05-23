@@ -1,4 +1,4 @@
-function [times,C,spLB,spLC,spUB,spKC]=time_icip_dense(N,nIO,nEO,nOP,onlyDiag)
+function [times,C,spLB,spLC,spUB]=time_icip_sparse2(N,nIO,nEO,nOP,onlyDiag)
 %Returned times are [chol,extract,UA,LBUA,UB,diag,offDiag,combine,total];
 
 %N is IO-EO-OP on entry.
@@ -17,17 +17,14 @@ cholTime=(cholClock-startClock)*86400;
 % Diagonal OP block of L
 LA=L(1:nOP,1:nOP);
 % Diagonal non-OP block of L
-LCs=L(nOP+1:end,nOP+1:end);
-LC=full(LCs);
+LC=full(L(nOP+1:end,nOP+1:end));
 % Subdiagonal block
 LB=L(nOP+1:end,1:nOP);
 
+LC=sparse(LC);
+
 spLB=nnz(LB)/numel(LB);
 spLC=nnz(LC)/numel(LC);
-
-KC=inv(LCs);
-
-spKC=nnz(KC)/numel(KC);
 
 extractClock=now;
 extractTime=(extractClock-cholClock)*86400;
@@ -95,6 +92,8 @@ for base=1:blockCols:size(LBUA,2)
     LBUAblk=LBUA(:,ix);
     UB=-LC\LBUAblk;
 
+    UB=sparse(UB);
+    
     nnzUB=nnzUB+nnz(UB);
     numelUB=numelUB+numel(UB);
     
