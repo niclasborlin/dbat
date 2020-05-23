@@ -201,6 +201,8 @@ if isempty(iters)
     end
 end
 
+if islogical(EOplot), EOplot=find(EOplot); end
+
 camIters(any(isnan(camIters)))=[];
 
 if ~isempty(E)
@@ -221,7 +223,7 @@ else
 end
 
 % Camera centers.
-camC=cell(size(EOplot));
+camC=cell(nnz(EOplot));
 
 % Store EO for all cameras that should be plotted.
 EOsave=nan(size(s.EO.val,1),size(s.EO.val,2),length(iters));
@@ -285,7 +287,7 @@ for iter=iters
     for ci=plotCamIters
         % Plot cameras.
         EO=EOsave(:,:,ci==iters);
-        for i=find(EOplot)
+        for i=EOplot
             % Get camera icon.
             [cam,camCol]=cameraicon(camSize);
             cam(:,:,3)=-cam(:,:,3);
