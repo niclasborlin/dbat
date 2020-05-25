@@ -287,7 +287,8 @@ for iter=iters
     for ci=plotCamIters
         % Plot cameras.
         EO=EOsave(:,:,ci==iters);
-        for i=EOplot
+        for EOi=1:length(EOplot)
+            i=EOplot(EOi);
             % Get camera icon.
             [cam,camCol]=cameraicon(camSize);
             cam(:,:,3)=-cam(:,:,3);
@@ -300,7 +301,7 @@ for iter=iters
             if all(isfinite(CC))
 
                 if ci==iter
-                    camC{i}(:,end+1)=CC;
+                    camC{EOi}(:,end+1)=CC;
                 end
         
                 % Camera orientation.
@@ -315,8 +316,8 @@ for iter=iters
                 hold(ax,'on');
                 surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol,...
                      'tag',sprintf('iter%d',ci),'userdata',i);
-                line(camC{i}(1,:),camC{i}(2,:),camC{i}(3,:),'marker','x',...
-                     'parent',ax);
+                line(camC{EOi}(1,:),camC{EOi}(2,:),camC{EOi}(3,:),...
+                     'marker','x','parent',ax);
                 hold(ax,'off');
             end
         end
