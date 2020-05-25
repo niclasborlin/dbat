@@ -317,7 +317,7 @@ for iter=iters
                 surf(ax,cam1(:,:,1),cam1(:,:,2),cam1(:,:,3),camCol,...
                      'tag',sprintf('iter%d',ci),'userdata',i);
                 line(camC{EOi}(1,:),camC{EOi}(2,:),camC{EOi}(3,:),...
-                     'marker','x','parent',ax);
+                     'marker','x','parent',ax,'userdata',i);
                 hold(ax,'off');
             end
         end
