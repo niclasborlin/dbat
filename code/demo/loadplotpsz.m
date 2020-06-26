@@ -73,7 +73,7 @@ fprintf('done.\n');
 
 h=plotnetwork(s0,'title','Initial network from PhotoScan', ...
               'axes',tagfigure([mfilename,'-initnetwork']),'camsize',camSz);
-%h=plotimagestats(tagfigure([mfilename,'-initimstat']),s0);
+h=plotimagestats(tagfigure([mfilename,'-initimstat']),s0);
 pause(0.01);
 
 s0PreFilt=s0;

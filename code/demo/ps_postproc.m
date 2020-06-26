@@ -71,14 +71,14 @@ s0.IO.model.distModel(:)=-1;
 resultFile1=fullfile(inputDir,[inputName,'-psstats-prefilt.txt']);
 fprintf('Writing report file %s...',resultFile1);
 desc1='Initial, unfiltered statitistics';
-%writestats(s0PreFilt,resultFile1,desc1);
+writestats(s0PreFilt,resultFile1,desc1);
 fprintf('done.\n');
 
 resultFile2=fullfile(inputDir,[inputName,'-psstats-postfilt.txt']);
 fprintf('Writing report file %s...',resultFile2);
 desc2=sprintf('Filtered statitistics with minRays=%d, minAngle=%g',...
               minRays,minAngle);
-%s0=writestats(s0,resultFile2,desc2);
+s0=writestats(s0,resultFile2,desc2);
 fprintf('done.\n');
 
 % Should the camera be self-calibrated?
@@ -131,7 +131,7 @@ damping='gna';
 fprintf('Running the bundle with damping %s...\n',damping);
 
 % Run the bundle.
-[result,ok,iters,sigma0,E]=bundle(s,damping,0,'trace');
+[result,ok,iters,sigma0,E]=bundle(s,damping,20,'trace');
     
 if ok
     fprintf('Bundle ok after %d iterations with sigma0=%.2f (%.2f pixels)\n',...

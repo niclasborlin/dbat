@@ -1,5 +1,5 @@
 # This is the README file for the Damped Bundle Adjustment Toolbox
-# v0.9.1.4 for Matlab (R), below called the Toolbox.
+# v0.9.2.0 for Matlab (R), below called the Toolbox.
 #
 # == LICENSE (short version) ==
 #
@@ -173,11 +173,15 @@
 #     "Flexible Photogrammetric Computations using Modular Bundle Adjustment",
 #     Photogrammetric Engineering and Remote Sensing, vol. 85(5):361-369.
 #     DOI: 10.14358/PERS.85.5.361.
-# Börlin, Murtiyoso, P. Grussenmeyer (2019).
+# Börlin, Murtiyoso, Grussenmeyer (2019).
 #     "Implementing Functional Modularity for Processing of General
 #     Photogrammetric Data with the Damped Bundle Adjustment Toolbox (DBAT)",
 #     ISPRS Archives, XLII-2/W17, p. 69-75.
 #     DOI: 10.5194/isprs-archives-XLII-2-W17-69-2019.
+# Börlin, Murtiyoso, Grussenmeyer (2020).
+#     "Efficient Computation of Posterior Covariance in Bundle Adjustment
+#     in DBAT for Projects with Large Number of Object Points". To appear
+#     in the ISPRS Archives.
 #
 #
 # == CONTRIBUTIONS ==

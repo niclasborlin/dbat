@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln PhotoModeler Calibration Project
-      Computation UUID : cede210e-62c7-4339-80c1-9a3ef291e33e
+      Computation UUID : a5c97b18-5ea2-4c12-b9a4-4231c9740fea
       Input file name  : /home/niclas/dbat/data/prague2016/cam/pmexports/weighted-with-orient-pmexport.txt
       Ctrl pt file     : /home/niclas/dbat/data/prague2016/cam/ref/ctrlpts-weighted.txt
    Problems and suggestions:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        26-Jun-2020 11:01:44
-      DBAT version:           0.9.1.4 (2020-06-26)
+      Last Bundle Run:        27-Jun-2020 01:18:20
+      DBAT version:           0.9.2.0 (2020-06-27)
       MATLAB version:         9.8.0.1323502 (R2020a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -42,11 +42,11 @@ Damped Bundle Adjustment Toolbox result file
          First error:          460.624
          Last error:           98.3715
       Execution times (s):
-         Bundle:        0.18
-         Post-cov prep: 0.03
+         Bundle:        0.20
+         Post-cov prep: 0.01
          Post-cov CIO:  0.00
-         Post-cov CEO:  0.00
-         Post-cov COP:  0.01
+         Post-cov CEO:  0.01
+         Post-cov COP:  0.00
       Lens distortion models:
          Backward (Photogrammetry) model 1
       Cameras:

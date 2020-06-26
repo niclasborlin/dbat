@@ -1,5 +1,9 @@
 Summary changelog file for release.
 
+Release 0.9.2.0, Jun 27, 2020.
+- Speed up computations of posterior covariance of object points by
+  some orders of magnitude as described in the Nice 2020 paper.
+
 Release 0.9.1.4, Jun 26, 2020.
 - Add timing of posterior covariance computations.
 - Fix camera plot bugs in plotnetworks.

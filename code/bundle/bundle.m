@@ -490,11 +490,7 @@ E.redundancy=dof;
 E.s0=s0;
 E.sigmas=sigmas;
 
-%[fp,name,~]=fileparts(s.proj.fileName);
 
-%save(fullfile(fp,[name,'-',s.proj.UUID,'.mat']),'-v7.3','s','E')
-
-%sadfds
 function [f,J,JJ]=both_brown_res(x,s)
 
 if nargout<2

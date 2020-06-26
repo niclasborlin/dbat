@@ -23,8 +23,8 @@
 #+latex_header: \usepackage[round]{natbib}
 #+latex_header: \bibliographystyle{abbrvnat}
 
-#+latex_header: \newcommand{\dbatversion}{0.9.1.4}
-#+latex_header: \newcommand{\dbatdate}{Jun 26, 2020}
+#+latex_header: \newcommand{\dbatversion}{0.9.2.0}
+#+latex_header: \newcommand{\dbatdate}{Jun 27, 2020}
 
 #+latex_header: \setcounter{secnumdepth}{4}
 
@@ -66,8 +66,8 @@ The purpose of the Damped Bundle Adjustment toolbox is to be a
 high-level toolbox for photogrammetry in general and bundle adjustment
 in particular. It is the hope of the authors that the high-level
 nature of the code will inspire algorithm development. The code is
-written in Matlab and is verified to work with Matlab version 9.5
-(release R2018b). The intention is that at least the computation
+written in Matlab and is verified to work with Matlab version 9.8
+(release R20200a). The intention is that at least the computation
 routines will be Octave-compatible. This has however not been tested
 yet.
 
@@ -120,7 +120,7 @@ parentheses):
     \citep{Borlin2013:Bundle,Borlin2014:Camera,Borlin2016:External}.
   - Posterior covariance calculations (=bundle_cov=) from the bundle
     result, including correlations and significance levels, point and
-    image quality statistics.
+    image quality statistics\citep{Borlin2020:Efficient}.
 - Analysis of camera networks, including:
   - Detection of structural rank deficiency (Matlab's =dmperm=,
     =sprank=). Useful as a sanity check on input data. Structural rank
@@ -180,7 +180,7 @@ the distribution and in Appendix\nbsp[[#sec:license]]. In summary:
   long as you give due credit. Specifically, if you use the code, or
   derivatives thereof, for scientific publications, you should refer
   to on or more of the papers
-  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External,Borlin2018:Modular,Borlin2019:Implementing,Borlin2019:Flexible}
+  \citet{Borlin2013:Bundle,Borlin2013:Experiments,Borlin2014:Camera,Borlin2016:External,Borlin2018:Modular,Borlin2019:Implementing,Borlin2019:Flexible,Borlin2020:Efficient}
   that the code is based on.
 - You may modify and redistribute the code as long as the
   licensing details are also redistributed.
@@ -788,7 +788,7 @@ formats, see Section\nbsp[[#sec:textFormat]].
        </prior_eo>
      #+END_SRC
      Prior EO observations may be used as prior observations and/or as
-     initial values for the bundle.
+     initial values for the bundle. \newpage
 - Image observations :: The image observations section uses the
      =<image_pts>= tag. The image observations are stored in
      comma-separated text files. Multiple files may be specified, as
@@ -944,7 +944,7 @@ relative to the special directories listed below.
 
 [fn:relativePath] Path names can be absolute or relative. An absolute
 path name starts with a root symbol (backslash =\= on Windows, slash
-=/= on other operating systems) or or a drive letter followed by a
+=/= on other operating systems) or a drive letter followed by a
 colon, e.g. =C:\=. A relative path starts with something else.
 
 

@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln 
-      Computation UUID : 43e9453d-9c56-49b9-8335-9688a1c60f18
+      Computation UUID : bc8372f6-57c4-4541-86b5-b53285e0300c
       Input file name  : /home/niclas/dbat/data/prague2016/sxb/pmexports/f-op0-no-orient-pmexport.txt
       Ctrl pt file     : /home/niclas/dbat/data/prague2016/sxb/ref/ctrlpts-fixed.txt
    Problems and suggestions:
@@ -11,8 +11,8 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          One or more of the camera station parameters has a high correlation (see below).
    Information from last bundle
-      Last Bundle Run:        26-Jun-2020 11:01:50
-      DBAT version:           0.9.1.4 (2020-06-26)
+      Last Bundle Run:        27-Jun-2020 01:18:26
+      DBAT version:           0.9.2.0 (2020-06-27)
       MATLAB version:         9.8.0.1323502 (R2020a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
       Host name:              slartibartfast
@@ -42,8 +42,8 @@ Damped Bundle Adjustment Toolbox result file
          First error:          10.4471
          Last error:           8.33522
       Execution times (s):
-         Bundle:        0.03
-         Post-cov prep: 0.01
+         Bundle:        0.05
+         Post-cov prep: 0.00
          Post-cov CIO:  0.00
          Post-cov CEO:  0.00
          Post-cov COP:  0.00
