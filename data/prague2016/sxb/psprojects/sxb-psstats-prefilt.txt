@@ -2,7 +2,7 @@ Initial, unfiltered statitistics
 
 Project file: /home/niclas/dbat/data/prague2016/sxb/psprojects/sxb.psz
 
-Execution time stamp: 2020-06-26 10:44:53
+Execution time stamp: 2020-06-26 11:03:03
 
 Total # OP          : 1166
 Total # CP          : 16
