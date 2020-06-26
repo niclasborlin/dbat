@@ -1,4 +1,4 @@
-function s=bundle_result_file(s,e,f,COP)
+function s=bundle_result_file(s,e,f)
 %BUNDLE_RESULT_FILE Generate result file of bundle run.
 %
 %   S=BUNDLE_RESULT_FILE(S,E,F), where S and E are BUNDLE return structs
@@ -7,9 +7,6 @@ function s=bundle_result_file(s,e,f,COP)
 %   of the estimation process, and the quality of the result.
 %   Returns the structure S updated with posterior standard
 %   deviations and covariances.
-%
-%   S=BUNDLE_RESULT_FILE(S,E,F,COP) supplies a pre-computed OP covariance
-%   matrix COP.
 %
 %See also: BUNDLE, BUNDLE_COV. 
 
@@ -90,15 +87,30 @@ else
     end
 end
 
+if isempty(e.final.factorized)
+    % Pre-factorize posterior covariance matrix for speed.
+    e=bundle_cov(s,e,'prepare');
+end
+
+if isempty(s.post.cov.times)
+    s.post.cov.times.prep=e.final.factorized.prepTime;
+end
+
 % Check if we have any large correlations.
+stopWatch=cputime;
 [iio,jio,vio,CIO]=high_io_correlations(s,e,corrThreshold,true);
+s.post.cov.times.CIO=cputime-stopWatch;
+
+stopWatch=cputime;
 [ieo,jeo,keo,veo,CEO]=high_eo_correlations(s,e,corrThreshold);
-if nargin<4
-    if ~isempty(s.post.cov.COP)
-        COP=s.post.cov.COP;
-    else
-        COP=bundle_cov(s,e,'COP');
-    end
+s.post.cov.times.CEO=cputime-stopWatch;
+
+if ~isempty(s.post.cov.COP)
+    COP=s.post.cov.COP;
+else
+    stopWatch=cputime;
+    COP=bundle_cov(s,e,'COP');
+    s.post.cov.times.COP=cputime-stopWatch;
 end
 [iop,jop,kop,vop]=high_op_correlations(s,e,corrThreshold,COP);
 
@@ -249,7 +261,18 @@ values={
     'Number of iterations:','%d',e.usedIters,
     'First error:','%g',e.res(1),
     'Last error:','%g',e.res(end),
-    'Execution time (s):','%g',e.time
+    };
+
+pretty_print(fid,p3,values);
+
+fprintf(fid,[p2,'Execution times (s):\n']);
+
+values={
+    'Bundle:','%.2f',e.time,
+    'Post-cov prep:','%.2f',s.post.cov.times.prep,
+    'Post-cov CIO:','%.2f',s.post.cov.times.CIO,
+    'Post-cov CEO:','%.2f',s.post.cov.times.CEO,
+    'Post-cov COP:','%.2f',s.post.cov.times.COP,
     };
 
 pretty_print(fid,p3,values);

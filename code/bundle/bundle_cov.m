@@ -61,6 +61,9 @@ if doPrepare && ~isempty(e.final.factorized)
 end
 
 if isempty(e.final.factorized) || doPrepare
+    % Time the preparation.
+    stopWatch=cputime;
+    
     % We may need J'*J many times. Precalculate and prefactor.
     JTJ=e.final.weighted.J'*e.final.weighted.J;
     
@@ -76,36 +79,21 @@ if isempty(e.final.factorized) || doPrepare
     [i,j]=ind2sub(size(s.bundle.est.OP),s.bundle.serial.OP.src);
     bixOP=full(sparse(i,j,s.bundle.serial.OP.dest,size(s.bundle.est.OP,1),size(s.bundle.est.OP,2)));
 
-    %p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
-    % Permute OP first, then EO, then IO.
-    p=[bixOP(:);bixEO(:);bixIO(:)];
-    p=p(p~=0);
+    p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
 
     % Perform Cholesky on permuted J'*J.
     [LT,fail]=chol(JTJ(p,p));
 
     if fail==0
         L=LT';
-        % Number of OP parameters
-        nOP=nnz(bixOP);
-        % Extract blocks of L = [ A, 0; B, C].
-        % Diagonal OP block of L
-        LA=LT(1:nOP,1:nOP)';
-        % Diagonal non-OP block of L
-        LC=full(LT(nOP+1:end,nOP+1:end))';
-        % Subdiagonal block
-        LB=full(LT(1:nOP,nOP+1:end))';
     else
         warning(['Posterior covariance matrix was not positive definite. ' ...
                  'Results will be inaccurate.'])
         n=size(JTJ,1);
         L=sparse(1:n,1:n,nan,n,n);
-        LA=[];
-        LB=[];
-        LC=[];
     end
-    Lblocks=struct('LA',LA,'LB',LB,'LC',LC);
-    e.final.factorized=struct('p',p,'L',L,'fail',fail,'Lblocks',Lblocks);
+    prepTime=cputime-stopWatch;
+    e.final.factorized=struct('p',p,'L',L,'fail',fail,'prepTime',prepTime);
     ok=~fail;
     if doPrepare
         varargout{1}=e;
@@ -114,7 +102,6 @@ if isempty(e.final.factorized) || doPrepare
 else
     p=e.final.factorized.p;
     L=e.final.factorized.L;
-    Lblocks=e.final.factorized.Lblocks;
     fail=e.final.factorized.fail;
 end
 
@@ -203,31 +190,8 @@ for i=1:length(varargin)
         if ~isempty(s.post.cov.COP)
             C=s.post.cov.COP;
         else
-            tic
             C=BlockDiagonalC(L,p,s.bundle.est.OP,s.bundle.deserial.OP.src,...
                              memLimit,'Computing OP covariances');
-            toc
-            tic
-            CC=VectorizedCOP(Lblocks,s.bundle.est.OP);
-            toc
-            
-            cm2=full(diag(C,-2));
-            ccm2=full(diag(CC,-2));
-            cm1=full(diag(C,-1));
-            ccm1=full(diag(CC,-1));
-            c0=full(diag(C,0));
-            cc0=full(diag(CC,0));
-            c1=full(diag(C,1));
-            cc1=full(diag(CC,1));
-            c2=full(diag(C,2));
-            cc2=full(diag(CC,2));
-
-            dm2=abs(cm2-ccm2)./abs(cm2);
-            dm1=abs(cm1-ccm1)./abs(cm1);
-            d0=abs(c0-cc0)./abs(c0);
-            d1=abs(c1-cc1)./abs(c1);
-            d2=abs(c2-cc2)./abs(c2);
-            max([max(dm2),max(dm1),max(d0),max(d1),max(d2)])
         end
     end
     varargout{i}=e.s0^2*C; %#ok<*AGROW>
@@ -332,69 +296,3 @@ for j=1:bsCols:size(ix,2)
 end
 if ishandle(h), close(h), end
 %etime(clock,start)
-
-function CC=VectorizedCOP(Lblocks,calc)
-
-% L = [LA, 0; LB, LC]. LA is square diagonal block corresponding to
-% the OPs. LC is square diagonal block corresponding to the non-OPs.
-% LB is rectangular subdiagonal block. LA is sparse block-diagonal
-% with lower triangular 3-by-3 blocks. LB is dense. LC is dense lower
-% triangular.
-LA=Lblocks.LA;
-LB=Lblocks.LB;
-LC=Lblocks.LC;
-
-% So, L*L'=J'*J.
-% We want inv(J'*J) = inv(L*L') = inv(L')*inv(L) = U'*U.
-
-% With U = [UA, 0; UB, UC] blocked as L, we are only interested in
-% UA and UB.
-
-LCs=sparse(LC);
-
-% Invert LA. Actually faster than LA\speye(size(LA)).
-UA=inv(LA);
-UB=-(LC\(LB*UA));
-
-% Extract staggered columns of U with stride 3
-ua1=UA(:,1:3:end);
-ua2=UA(:,2:3:end);
-ua3=UA(:,3:3:end);
-ub1=UB(:,1:3:end);
-ub2=UB(:,2:3:end);
-ub3=UB(:,3:3:end);
-
-% Each diagonal 3-by-3 block of
-% U'*U = [u11 u12 u13
-%         u12 u22 u23
-%         u13 u23 u33]
-
-% Compute diagonal elements of U'*U. ud contains 3 elements per
-% block [u11 u22 u33]
-ud0=(sum(UA.^2,1)+sum(UB.^2,1))';
-
-% Compute the (1,2), (1,3), (2,3) elements of each block. Each
-% vector will contain one element per block.
-u12=sum(ua1.*ua2,1)+sum(ub1.*ub2,1);
-u13=sum(ua1.*ua3,1)+sum(ub1.*ub3,1);
-u23=sum(ua2.*ua3,1)+sum(ub2.*ub3,1);
-
-% Create superdiagonal vectors
-udm1=reshape([u12;u23;zeros(size(u12))],[],1);
-udm2=reshape([u13;zeros(2,length(u13))],[],1);
-ud1=reshape([zeros(size(u12));u12;u23],[],1);
-ud2=reshape([zeros(2,length(u13));u13],[],1);
-
-% Preallocate place for all diagonals, including those
-% corresponding to unestimated OPs.
-
-ud=zeros(numel(calc),5);
-if ~isempty(udm2)
-    ud(calc(:),1)=udm2;
-    ud(calc(:),2)=udm1;
-    ud(calc(:),3)=ud0;
-    ud(calc(:),4)=ud1;
-    ud(calc(:),5)=ud2;
-end
-
-CC=spdiags(ud,-2:2,size(ud,1),size(ud,1));
