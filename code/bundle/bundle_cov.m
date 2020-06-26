@@ -61,6 +61,9 @@ if doPrepare && ~isempty(e.final.factorized)
 end
 
 if isempty(e.final.factorized) || doPrepare
+    % Time the preparation.
+    stopWatch=cputime;
+    
     % We may need J'*J many times. Precalculate and prefactor.
     JTJ=e.final.weighted.J'*e.final.weighted.J;
     
@@ -89,7 +92,8 @@ if isempty(e.final.factorized) || doPrepare
         n=size(JTJ,1);
         L=sparse(1:n,1:n,nan,n,n);
     end
-    e.final.factorized=struct('p',p,'L',L,'fail',fail);
+    prepTime=cputime-stopWatch;
+    e.final.factorized=struct('p',p,'L',L,'fail',fail,'prepTime',prepTime);
     ok=~fail;
     if doPrepare
         varargout{1}=e;

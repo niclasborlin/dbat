@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln 
-      Computation UUID : 5d41dd10-233f-4f71-8d74-e3bf452125e6
+      Computation UUID : 10b9f333-9bc7-487e-bb17-4597e70fbab5
       Input file name  : /home/niclas/dbat/data/dbat/pmexports/roma-pmexport.txt
    Problems and suggestions:
       Project Problems:
@@ -12,11 +12,11 @@ Damped Bundle Adjustment Toolbox result file
          One or more of the object point coordinates has a high correlation.
          One or more estimated lens and/or affine distortion coefficients failed significance test (see below).
    Information from last bundle
-      Last Bundle Run:        14-Jan-2020 21:41:47
+      Last Bundle Run:        26-Jun-2020 10:41:55
       DBAT version:           0.9.1.3 (2020-01-14)
-      MATLAB version:         9.4.0.813654 (R2018a)
+      MATLAB version:         9.8.0.1323502 (R2020a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              trillian
+      Host name:              slartibartfast
       Status:                 OK
       Sigma0:                 0.502538
       Sigma0 (pixels):        0.502538
@@ -42,7 +42,12 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 5
          First error:          8608.51
          Last error:           160.245
-         Execution time (s):   14.76
+      Execution times (s):
+         Bundle:        12.42
+         Post-cov prep: 1.02
+         Post-cov CIO:  0.05
+         Post-cov CEO:  0.06
+         Post-cov COP:  14.14
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:

@@ -1,7 +1,7 @@
 Damped Bundle Adjustment Toolbox result file
    Project
       Name             : Bundle Soln PhotoModeler Calibration Project
-      Computation UUID : 0f098e3d-7456-43a2-9ceb-421a19b0a2a4
+      Computation UUID : af45bd4c-6593-4827-9a4a-abe09e659e00
       Input file name  : /home/niclas/dbat/data/dbat/pmexports/camcal-pmexport-missing-obs.txt
       Ctrl pt file     : /home/niclas/dbat/data/dbat/ref/camcal-fixed.txt
    Problems and suggestions:
@@ -18,11 +18,11 @@ Damped Bundle Adjustment Toolbox result file
       Problems related to the processing: (1)
          Bundle failed with code -4 (see below for details).
    Information from last bundle
-      Last Bundle Run:        14-Jan-2020 21:44:13
+      Last Bundle Run:        26-Jun-2020 10:43:05
       DBAT version:           0.9.1.3 (2020-01-14)
-      MATLAB version:         9.4.0.813654 (R2018a)
+      MATLAB version:         9.8.0.1323502 (R2020a)
       Host system:            GLNXA64 (endian=L, max #elems=281474976710655)
-      Host name:              trillian
+      Host name:              slartibartfast
       Status:                 fail (code -4: Normal matrix is structurally rank deficient)
       Sigma0:                 499.142
       Sigma0 (pixels):        49.9142
@@ -48,7 +48,12 @@ Damped Bundle Adjustment Toolbox result file
          Number of iterations: 0
          First error:          30118.6
          Last error:           30118.6
-         Execution time (s):   0.23
+      Execution times (s):
+         Bundle:        0.02
+         Post-cov prep: 0.01
+         Post-cov CIO:  0.02
+         Post-cov CEO:  0.01
+         Post-cov COP:  0.02
       Lens distortion models:
          Backward (Photogrammetry) model 3
       Cameras:
@@ -478,22 +483,22 @@ Damped Bundle Adjustment Toolbox result file
                   Deviation: NaN ou
             Photo 21: P8250041.JPG
                Omega:
-                  Value:     -19.957573 deg
+                  Value:     -19.957592 deg
                   Deviation: NaN deg
                Phi:
-                  Value:     48.009796 deg
+                  Value:     48.009842 deg
                   Deviation: NaN deg
                Kappa:
-                  Value:     -167.093271 deg
+                  Value:     -167.093246 deg
                   Deviation: NaN deg
                Xc:
-                  Value:     1.541746 ou
+                  Value:     1.541747 ou
                   Deviation: NaN ou
                Yc:
                   Value:     1.000131 ou
                   Deviation: NaN ou
                Zc:
-                  Value:     1.007702 ou
+                  Value:     1.007701 ou
                   Deviation: NaN ou
    Quality
       Photographs
@@ -529,13 +534,13 @@ Damped Bundle Adjustment Toolbox result file
       Point Marking Residuals
          Overall point RMS: 66.815 pixels
          Mark point residuals:
-            Maximum: 864.727 pixels (OP 88 on photo 21)
+            Maximum: 864.728 pixels (OP 88 on photo 21)
          Object point residuals (RMS over all images of a point):
             Minimum: 3.196 pixels (OP 1002 over 21 images)
             Maximum: 212.759 pixels (OP 88 over 17 images)
          Photo residuals (RMS over all points in an image):
             Minimum: 8.540 pixels (photo 3 over 98 points)
-            Maximum: 299.146 pixels (photo 21 over 98 points)
+            Maximum: 299.147 pixels (photo 21 over 98 points)
       Point Precision
          Total standard deviation (RMS of X/Y/Z std):
             Minimum: NaN (OP 2)
