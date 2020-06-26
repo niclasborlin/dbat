@@ -79,21 +79,37 @@ if isempty(e.final.factorized) || doPrepare
     [i,j]=ind2sub(size(s.bundle.est.OP),s.bundle.serial.OP.src);
     bixOP=full(sparse(i,j,s.bundle.serial.OP.dest,size(s.bundle.est.OP,1),size(s.bundle.est.OP,2)));
 
-    p=blkcolperm(JTJ,bixIO,bixEO,bixOP);
+    % Permute OP first, then EO, then IO.
+    p=[bixOP(:);bixEO(:);bixIO(:)];
+    p=p(p~=0);
 
     % Perform Cholesky on permuted J'*J.
     [LT,fail]=chol(JTJ(p,p));
 
     if fail==0
         L=LT';
+        % Number of OP parameters
+        nOP=nnz(bixOP);
+        % Extract blocks of L = [ A, 0; B, C].
+        % Diagonal OP block of L
+        LA=LT(1:nOP,1:nOP)';
+        % Diagonal non-OP block of L
+        LC=full(LT(nOP+1:end,nOP+1:end))';
+        % Subdiagonal block
+        LB=full(LT(1:nOP,nOP+1:end))';
     else
         warning(['Posterior covariance matrix was not positive definite. ' ...
                  'Results will be inaccurate.'])
         n=size(JTJ,1);
         L=sparse(1:n,1:n,nan,n,n);
+        LA=[];
+        LB=[];
+        LC=[];
     end
+    Lblocks=struct('LA',LA,'LB',LB,'LC',LC);
     prepTime=cputime-stopWatch;
-    e.final.factorized=struct('p',p,'L',L,'fail',fail,'prepTime',prepTime);
+    e.final.factorized=struct('p',p,'L',L,'Lblocks',Lblocks,'fail',fail,...
+                              'prepTime',prepTime);
     ok=~fail;
     if doPrepare
         varargout{1}=e;
@@ -102,6 +118,7 @@ if isempty(e.final.factorized) || doPrepare
 else
     p=e.final.factorized.p;
     L=e.final.factorized.L;
+    Lblocks=e.final.factorized.Lblocks;
     fail=e.final.factorized.fail;
 end
 
@@ -190,8 +207,7 @@ for i=1:length(varargin)
         if ~isempty(s.post.cov.COP)
             C=s.post.cov.COP;
         else
-            C=BlockDiagonalC(L,p,s.bundle.est.OP,s.bundle.deserial.OP.src,...
-                             memLimit,'Computing OP covariances');
+            C=VectorizedCOP(Lblocks,s.bundle.est.OP);
         end
     end
     varargout{i}=e.s0^2*C; %#ok<*AGROW>
@@ -296,3 +312,167 @@ for j=1:bsCols:size(ix,2)
 end
 if ishandle(h), close(h), end
 %etime(clock,start)
+
+function C=VectorizedCOP(Lblocks,calc)
+
+% L = [LA, 0; LB, LC]. LA is square diagonal block corresponding to
+% the OPs. LC is square diagonal block corresponding to the non-OPs.
+% LB is rectangular subdiagonal block. LA is sparse block-diagonal
+% with lower triangular 3-by-3 blocks. LB is dense. LC is dense lower
+% triangular.
+LA=Lblocks.LA;
+LB=Lblocks.LB;
+LC=Lblocks.LC;
+
+% Early return if prior error signalled by empty LA.
+if isempty(LA)
+    nans=zeros(numel(calc),1);
+    nans(calc)=nan;
+    C=spdiags(nans,0,numel(calc),numel(calc));
+    return;
+end
+
+% So, L*L'=J'*J.
+% We want inv(J'*J) = inv(L*L') = inv(L')*inv(L) = K'*K.
+
+% With K = [KA, 0; KB, KC] blocked as L, we are only interested in
+% P=KA and Q=KB.
+
+% Invert LA. Actually faster than LA\speye(size(LA)).
+P=inv(LA);
+
+% Compute LB*inv(LA).
+LBP=LB*P; %#ok<MINV>
+
+% Indices of elements that have been estimated. The index calcIx(i)
+% indicates what element in COP the column P(:,i) corresponds to.
+calcIx=find(calc(:));
+% Indices for elements in each row
+ixIs1=rem(calcIx-1,3)==0;
+calcIx1=find(calc(1,:));
+ixIs2=rem(calcIx-1,3)==1;
+calcIx2=find(calc(2,:));
+ixIs3=rem(calcIx-1,3)==2;
+calcIx3=find(calc(3,:));
+
+% Compute diagonal elements of P'*P. c0 contains 3 elements per block
+% [c11 c22 c33]. Introduce zeros for covariances that are not to be
+% computed.
+if all(calc(:))
+    c0=full(sum(P.^2,1));
+else
+    c0=zeros(1,numel(calc));
+    c0(calcIx)=full(sum(P.^2,1));
+end
+    
+if false && onlyDiag
+    c12=[];
+    c13=[];
+    c23=[];
+else
+    % Compute off-diagonal elements
+    if all(calc(:))
+        % Extract staggered columns of P with stride 3
+        p1=P(:,1:3:end);
+        p2=P(:,2:3:end);
+        p3=P(:,3:3:end);
+    else
+        % Extract staggered columns of P with stride 3. Expand with zeros for
+        % elements that have not been estimated.
+        p1=sparse(size(P,1),size(calc,2));
+        p2=p1;
+        p3=p1;
+        p1(:,calcIx1)=P(:,ixIs1);
+        p2(:,calcIx2)=P(:,ixIs2);
+        p3(:,calcIx3)=P(:,ixIs3);
+    end        
+
+    % Compute the (1,2), (1,3), (2,3) elements of each block. Each
+    % vector will contain one element per block.
+    c12=full(sum(p1.*p2,1));
+    c13=full(sum(p1.*p3,1));
+    c23=full(sum(p2.*p3,1));
+end
+
+% Computing Q directly may cause out of memory. Accept blocks of about
+% 256MB.
+
+blockSize=256*1024^2;
+blockCols=floor(min(round(blockSize/8/size(LB,1)),size(LB,2))/3)*3;
+
+% Index of first column in calcIx to use.
+baseIx=1;
+
+while baseIx<=length(calcIx)
+    % Corresponding base column in calc
+    baseCalcCol=floor((calcIx(baseIx)-1)/3)+1;
+    % Look blockCols forward.
+    lastIx=min(baseIx+blockCols-1,length(calcIx));
+    % Corresponding column in calc
+    lastCalcCol=floor((calcIx(lastIx)-1)/3)+1;
+    % Adjust to include all elements of last column.
+    lastIx=find(calcIx<=lastCalcCol*3,1,'last');
+    
+    % Columns in LBP in this block.
+    ix=baseIx:lastIx;
+    % Corresponding columns in c0
+    cix=calcIx(ix);
+    % Corresponding columns in cols
+    calcCols=baseCalcCol:lastCalcCol;
+
+    LBPblk=LBP(:,ix);
+    Q=-LC\LBPblk;
+
+    % Update c0 elements with diagonal elements of Q'*Q.
+    c0(cix)=c0(cix)+sum(Q.^2,1);
+
+    if true || ~onlyDiag
+        % Compute off-diagonal elements
+        if all(calc(:))
+            % Extract staggered columns of Q with stride 3
+            q1=Q(:,1:3:end);
+            q2=Q(:,2:3:end);
+            q3=Q(:,3:3:end);
+        else
+            % Extract staggered columns of Q with stride 3. Expand with zeros for
+            % elements that have not been estimated.
+            q1=zeros(size(Q,1),length(calcCols));
+            q2=q1;
+            q3=q1;
+            q1(:,calc(1,calcCols))=Q(:,rem(cix-1,3)==0);
+            q2(:,calc(2,calcCols))=Q(:,rem(cix-1,3)==1);
+            q3(:,calc(3,calcCols))=Q(:,rem(cix-1,3)==2);
+        end        
+
+        % Compute the (1,2), (1,3), (2,3) elements of each block. Each
+        % vector will contain one element per block.
+        c12(calcCols)=c12(calcCols)+sum(q1.*q2,1);
+        c13(calcCols)=c13(calcCols)+sum(q1.*q3,1);
+        c23(calcCols)=c23(calcCols)+sum(q2.*q3,1);
+    end
+
+    baseIx=lastIx+1;
+end
+
+if false && onlyDiag
+    C=spdiags(ud0(:),0,length(ud0),length(ud0));
+else
+    % Create subdiagonal vectors...
+    cdm1=reshape([c12;c23;zeros(size(c12))],[],1);
+    cdm2=reshape([c13;zeros(2,length(c13))],[],1);
+    % ...and superdiagonal vectors
+    cd1=reshape([zeros(size(c12));c12;c23],[],1);
+    cd2=reshape([zeros(2,length(c13));c13],[],1);
+
+    % Preallocate place for all diagonals, including those
+    % corresponding to unestimated OPs.
+
+    cd=zeros(numel(calc),5);
+    cd(:,1)=cdm2;
+    cd(:,2)=cdm1;
+    cd(:,3)=c0;
+    cd(:,4)=cd1;
+    cd(:,5)=cd2;
+
+    C=spdiags(cd,-2:2,size(cd,1),size(cd,1));
+end
